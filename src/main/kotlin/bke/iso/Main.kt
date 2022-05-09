@@ -21,6 +21,14 @@ fun main() {
             override fun dispose() {
                 engine.stop()
             }
-        }, Lwjgl3ApplicationConfiguration()
+        },
+        buildLwjgl3Config(engine)
     )
+}
+
+private fun buildLwjgl3Config(engine: Engine): Lwjgl3ApplicationConfiguration {
+    val config = engine.resolveConfig()
+    return Lwjgl3ApplicationConfiguration().apply {
+        setWindowedMode(config.width, config.height)
+    }
 }

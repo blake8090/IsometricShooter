@@ -8,9 +8,12 @@ class Engine {
 
     private val container = IocContainer()
 
+    init {
+        container.registerFromClassPath("bke.iso")
+    }
+
     fun start() {
         log.info("Starting up")
-        container.registerFromClassPath("bke.iso")
     }
 
     fun update(deltaTime: Float) {
@@ -19,4 +22,8 @@ class Engine {
     fun stop() {
         log.info("Shutting down")
     }
+
+    fun resolveConfig(): Config =
+        container.getService<ConfigService>()
+            .resolveConfig()
 }
