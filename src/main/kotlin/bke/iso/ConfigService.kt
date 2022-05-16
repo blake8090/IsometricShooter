@@ -1,7 +1,5 @@
 package bke.iso
 
-import bke.iso.ioc.Service
-
 data class Config(
     val width: Int = 800,
     val height: Int = 600,

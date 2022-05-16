@@ -23,6 +23,8 @@ group = 'bke.iso'
 version = '1.0'
 
 dependencies {
+    implementation 'io.github.libktx:ktx-async:1.10.0-rc1'
+
     implementation 'com.badlogicgames.gdx:gdx-backend-lwjgl3:1.10.0'
     implementation 'com.badlogicgames.gdx:gdx-platform:1.10.0:natives-desktop'
 
@@ -32,6 +34,7 @@ dependencies {
 
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'

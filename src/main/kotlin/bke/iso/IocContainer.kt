@@ -1,4 +1,4 @@
-package bke.iso.ioc
+package bke.iso
 
 import org.reflections.Reflections
 import org.reflections.scanners.Scanners
@@ -24,6 +24,7 @@ annotation class Service
 class IocContainer {
     private val log = LoggerFactory.getLogger(IocContainer::class.java)
     private val bindingMap = mutableMapOf<KClass<*>, Binding<*>>()
+    private val instanceMap = mutableMapOf<KClass<*>, Any>()
 
     init {
         registerService<IocContainer>()
@@ -59,7 +60,8 @@ class IocContainer {
     fun <T : Any> getService(interfaceClass: KClass<T>): T {
         val binding = bindingMap[interfaceClass]
             ?: throw MissingBindingException("No binding found for class ${interfaceClass.simpleName}")
-        return interfaceClass.cast(createInstance(binding.implementationClass))
+        val serviceClass = binding.implementationClass
+        return interfaceClass.cast(instanceMap.getOrPut(serviceClass) { createInstance(serviceClass) })
     }
 
     inline fun <reified T : Any> getService(): T = getService(T::class)
