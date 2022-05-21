@@ -4,7 +4,7 @@ import bke.iso.IocContainer
 import bke.iso.Service
 import kotlin.reflect.KClass
 
-open class System {
+abstract class System {
     open fun init() {}
     open fun update(deltaTime: Float) {}
 }

@@ -16,7 +16,7 @@ class Engine {
     fun start() {
         log.info("Starting up")
         container.getService<AssetService>().loadAllAssets()
-        container.getService<SystemService>().registerSystems(setOf(RenderSystem::class))
+        container.getService<SystemService>().registerSystems(mutableSetOf(RenderSystem::class))
     }
 
     fun update(deltaTime: Float) {
