@@ -1,4 +1,6 @@
-package bke.iso
+package bke.iso.util
+
+import bke.iso.Service
 
 @Service
 class Globals {

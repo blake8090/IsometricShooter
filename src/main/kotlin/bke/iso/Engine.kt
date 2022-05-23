@@ -3,6 +3,7 @@ package bke.iso
 import bke.iso.asset.AssetService
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
+import bke.iso.util.Globals
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import org.slf4j.LoggerFactory

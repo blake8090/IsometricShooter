@@ -1,4 +1,4 @@
-package bke.iso
+package bke.iso.util
 
 data class Point(
     var x: Float = 0f,

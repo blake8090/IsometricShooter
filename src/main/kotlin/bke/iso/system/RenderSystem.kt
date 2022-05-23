@@ -2,8 +2,8 @@ package bke.iso.system
 
 import bke.iso.asset.AssetService
 import bke.iso.MapService
-import bke.iso.Point
-import bke.iso.cartesianToIsometric
+import bke.iso.util.Point
+import bke.iso.util.cartesianToIsometric
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
