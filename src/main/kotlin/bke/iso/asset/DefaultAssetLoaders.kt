@@ -7,7 +7,10 @@ import kotlin.reflect.KClass
 
 @AssetLoader(["png", "jpg"])
 class TextureLoader : BaseAssetLoader<Texture>() {
-    override fun loadAsset(file: FilePointer): Texture = Texture(FileHandle(file.getFile()))
+    override fun loadAsset(file: FilePointer): Texture {
+        val fileHandle = FileHandle(file.getRawFile())
+        return Texture(fileHandle)
+    }
 
     override fun getAssetType(): KClass<Texture> =
         Texture::class

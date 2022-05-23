@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.isSubclassOf
 
-// TODO: unit tests
+// TODO: add unit tests for failure scenarios
 @Service
 class AssetService(
     private val globals: Globals,

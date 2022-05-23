@@ -10,8 +10,7 @@ class FilePointer(private val file: File) {
     fun getExtension() = file.extension
     fun getNameWithoutExtension() = file.nameWithoutExtension
     fun isDirectory() = file.isDirectory
-    // TODO: Rename this to something better
-    fun getFile() = file
+    fun getRawFile() = file
 }
 
 @Service
