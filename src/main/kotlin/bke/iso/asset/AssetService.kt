@@ -80,7 +80,7 @@ class AssetService(
         assetCache[name] = asset
 
         log.info(
-            "Loaded asset '{}' as {} from directory '{}'",
+            "Loaded asset '{}' as {} from file '{}'",
             name,
             assetType.simpleName,
             file.getPath()
