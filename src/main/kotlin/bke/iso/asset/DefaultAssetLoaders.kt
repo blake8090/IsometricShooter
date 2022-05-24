@@ -1,6 +1,6 @@
 package bke.iso.asset
 
-import bke.iso.FilePointer
+import bke.iso.util.FilePointer
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import kotlin.reflect.KClass

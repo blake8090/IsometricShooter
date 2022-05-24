@@ -1,6 +1,6 @@
 package bke.iso.asset
 
-import bke.iso.FilePointer
+import bke.iso.util.FilePointer
 import bke.iso.util.Globals
 import bke.iso.IocContainer
 import bke.iso.asset.test.Document

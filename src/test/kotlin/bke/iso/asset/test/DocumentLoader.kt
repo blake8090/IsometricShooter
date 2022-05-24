@@ -1,6 +1,6 @@
 package bke.iso.asset.test
 
-import bke.iso.FilePointer
+import bke.iso.util.FilePointer
 import bke.iso.asset.AssetLoader
 import bke.iso.asset.BaseAssetLoader
 import kotlin.reflect.KClass

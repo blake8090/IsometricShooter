@@ -1,0 +1,11 @@
+[[templates]]
+name = "floor"
+symbol = "."
+texture = "floor"
+collidable = false
+
+[[templates]]
+name = "wall"
+symbol = "#"
+texture = "wall"
+collidable = true

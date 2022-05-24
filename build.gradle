@@ -32,6 +32,9 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
 
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-toml', version: '2.13.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
+
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'

@@ -1,6 +1,6 @@
 package bke.iso.asset
 
-import bke.iso.FilePointer
+import bke.iso.util.FilePointer
 import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.CLASS)

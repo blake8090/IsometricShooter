@@ -1,6 +1,7 @@
 package bke.iso.asset
 
 import bke.iso.*
+import bke.iso.util.FilePointer
 import bke.iso.util.Globals
 import bke.iso.util.getLogger
 import org.reflections.Reflections
