@@ -3,12 +3,9 @@ package bke.iso
 import bke.iso.asset.AssetService
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
-import bke.iso.util.FilePointer
-import bke.iso.util.Globals
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import org.slf4j.LoggerFactory
-import java.io.File
 
 class Engine {
     private val log = LoggerFactory.getLogger(Engine::class.java)
@@ -38,15 +35,11 @@ class Engine {
             .resolveConfig()
 
     private fun loadAssets() {
-        val assetLoader = container.getService<AssetService>()
-        val globals = container.getService<Globals>()
+        val assetService = container.getService<AssetService>()
+        assetService.setupAssetLoaders("bke.iso")
         val loadingStartTime = System.currentTimeMillis()
         KtxAsync.launch {
-            File(globals.assetsDirectory)
-                .walkTopDown()
-                .map(::FilePointer)
-                .forEach(assetLoader::loadAsset)
-
+            assetService.loadAssets("assets")
             val loadingEndTime = System.currentTimeMillis()
             log.info("Loaded assets in ${loadingEndTime - loadingStartTime} millis")
         }

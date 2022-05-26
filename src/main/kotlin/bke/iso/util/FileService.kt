@@ -9,12 +9,17 @@ class FilePointer(private val file: File) {
     fun getPath(): String = file.path
     fun getExtension() = file.extension
     fun getNameWithoutExtension() = file.nameWithoutExtension
-    fun isDirectory() = file.isDirectory
     fun getRawFile() = file
 }
 
 @Service
 class FileService {
+    fun getFiles(path: String) =
+        File(path)
+            .walkTopDown()
+            .map(::FilePointer)
+            .toList()
+
     fun getFile(path: String) = FilePointer(File(path))
 
     // TODO: error handling?
