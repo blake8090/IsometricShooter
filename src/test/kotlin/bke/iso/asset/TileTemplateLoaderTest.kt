@@ -1,22 +1,70 @@
 package bke.iso.asset
 
-import bke.iso.util.FileService
+import bke.iso.util.FilePointer
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
+import java.io.File
 
 internal class TileTemplateLoaderTest {
-    private val fileService = FileService()
-    private val tileTemplateLoader = TileTemplateLoader(fileService)
+    private val tileTemplateLoader = TileTemplateLoader()
 
     @Test
     fun `should return tile templates`() {
-        val path = this.javaClass.classLoader.getResource("base.tiles").path
-        val file = fileService.getFile(path)
+        val files = mutableListOf(getResource("tile-templates/valid.toml"))
 
-        val tileTemplates = tileTemplateLoader.loadAsset(file)
-            ?: fail("Expected tileTemplates to not be null")
-        assertThat(tileTemplates.templates).containsExactly(
+        val tileTemplates = TileTemplateLoader().loadAssets(files)
+
+        assertThat(tileTemplates.values).containsExactlyInAnyOrder(
+            TileTemplate(
+                name = "floor",
+                symbol = '.',
+                texture = "floor",
+                collidable = false,
+            ),
+            TileTemplate(
+                name = "wall",
+                symbol = '#',
+                texture = "wall",
+                collidable = true
+            )
+        )
+    }
+
+    @Test
+    fun `should skip invalid templates`() {
+        val files = mutableListOf(
+            getResource("tile-templates/valid.toml"),
+            getResource("tile-templates/invalid.toml")
+        )
+
+        val tileTemplates = TileTemplateLoader().loadAssets(files)
+
+        assertThat(tileTemplates.values).containsExactlyInAnyOrder(
+            TileTemplate(
+                name = "floor",
+                symbol = '.',
+                texture = "floor",
+                collidable = false,
+            ),
+            TileTemplate(
+                name = "wall",
+                symbol = '#',
+                texture = "wall",
+                collidable = true
+            )
+        )
+    }
+
+    @Test
+    fun `should skip templates with duplicate names`() {
+        val files = mutableListOf(
+            getResource("tile-templates/valid.toml"),
+            getResource("tile-templates/duplicate.toml")
+        )
+
+        val tileTemplates = TileTemplateLoader().loadAssets(files)
+
+        assertThat(tileTemplates.values).containsExactlyInAnyOrder(
             TileTemplate(
                 name = "floor",
                 symbol = '.',
@@ -34,6 +82,14 @@ internal class TileTemplateLoaderTest {
 
     @Test
     fun `should return type`() {
-        assertThat(tileTemplateLoader.getAssetType()).isEqualTo(TileTemplates::class)
+        assertThat(tileTemplateLoader.getAssetType()).isEqualTo(TileTemplate::class)
+    }
+
+    private fun getResource(name: String): FilePointer {
+        val path = this.javaClass
+            .classLoader
+            .getResource(name)
+            .path
+        return FilePointer(File(path))
     }
 }

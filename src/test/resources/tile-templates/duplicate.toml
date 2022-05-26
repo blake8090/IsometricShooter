@@ -1,0 +1,4 @@
+[floor]
+symbol = "."
+texture = "floor"
+collidable = false

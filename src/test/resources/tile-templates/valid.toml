@@ -1,11 +1,9 @@
-[[templates]]
-name = "floor"
+[floor]
 symbol = "."
 texture = "floor"
 collidable = false
 
-[[templates]]
-name = "wall"
+[wall]
 symbol = "#"
 texture = "wall"
 collidable = true
