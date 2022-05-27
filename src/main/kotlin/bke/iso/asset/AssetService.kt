@@ -40,11 +40,28 @@ class AssetService(
     }
 
     @Suppress("UNCHECKED_CAST")
+    fun <T : Any> getAllAssets(type: KClass<T>): List<T> {
+        val cache = assetCacheByType[type]
+            ?: throw IllegalArgumentException(
+                "Attempted to retrieve all assets with unknown asset type '${type.simpleName}'"
+            )
+        return cache.values.toList() as List<T>
+    }
+
+    @Suppress("UNCHECKED_CAST")
     fun loadAssets(basePath: String) {
-        // TODO: assert not blank
+        if (basePath.isEmpty()) {
+            log.warn("Base path cannot be empty")
+            return
+        }
+
+        log.info("Loading assets in base path '$basePath'")
+        val loadingStartTime = System.currentTimeMillis()
         for ((path, assetLoader) in assetLoaderByPath) {
             loadAssetsInPath("$basePath/${path}", assetLoader as BaseAssetLoader<Any>)
         }
+        val loadingEndTime = System.currentTimeMillis()
+        log.info("Finished loading assets in base path '$basePath' in ${loadingEndTime - loadingStartTime} millis")
     }
 
     private inline fun <reified T : Any> setupAssetLoader(type: KClass<BaseAssetLoader<T>>) {
@@ -73,6 +90,9 @@ class AssetService(
     }
 
     private inline fun <reified T : Any> loadAssetsInPath(path: String, assetLoader: BaseAssetLoader<T>) {
+        val typeName = assetLoader.getAssetType().simpleName
+        log.info("Loading '$typeName' assets in path '$path'")
+
         val annotation = assetLoader::class.findAnnotation<AssetLoader>()
             ?: throw IllegalArgumentException("Expected AssetLoader annotation on type ${assetLoader::class.simpleName}")
         val files = fileService.getFiles(path)
@@ -81,12 +101,11 @@ class AssetService(
 
         val assetsByName = assetLoader.loadAssets(files)
         val assetCache = assetCacheByType[assetLoader.getAssetType()]
-            ?: throw IllegalArgumentException("Expected cache for asset type ${assetLoader.getAssetType().simpleName}")
+            ?: throw IllegalArgumentException("Expected cache for asset type $typeName")
         for ((name, asset) in assetsByName) {
             if (!assetCache.containsKey(name)) {
                 assetCache[name] = asset
-                // TODO: finish writing warn message
-                log.info("loaded...")
+                log.info("Asset loaded - type: '$typeName' name: '$name'")
             } else {
                 // TODO: finish writing warn message
                 log.warn("Duplicate asset ...")

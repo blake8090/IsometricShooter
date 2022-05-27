@@ -8,10 +8,14 @@ class FilePointer(private val file: File) {
     fun getExtension() = file.extension
     fun getNameWithoutExtension() = file.nameWithoutExtension
     fun getRawFile() = file
+    fun readText() = file.readText()
 }
 
 @Service
 class FileService {
+    /**
+     * Returns a list of all files in the given path, including subdirectories
+     */
     fun getFiles(path: String) =
         File(path)
             .walkTopDown()

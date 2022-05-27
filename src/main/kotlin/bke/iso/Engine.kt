@@ -1,6 +1,7 @@
 package bke.iso
 
 import bke.iso.asset.AssetService
+import bke.iso.map.MapService
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
 import kotlinx.coroutines.launch
@@ -20,6 +21,8 @@ class Engine {
         log.info("Starting up")
         container.getService<SystemService>().registerSystems(mutableSetOf(RenderSystem::class))
         loadAssets()
+
+        container.getService<MapService>().loadMap("test")
     }
 
     fun update(deltaTime: Float) {
@@ -35,13 +38,12 @@ class Engine {
             .resolveConfig()
 
     private fun loadAssets() {
-        val assetService = container.getService<AssetService>()
-        assetService.setupAssetLoaders("bke.iso")
-        val loadingStartTime = System.currentTimeMillis()
-        KtxAsync.launch {
-            assetService.loadAssets("assets")
-            val loadingEndTime = System.currentTimeMillis()
-            log.info("Loaded assets in ${loadingEndTime - loadingStartTime} millis")
+        container.getService<AssetService>().apply {
+            // TODO: use globals
+            setupAssetLoaders("bke.iso")
+            KtxAsync.launch {
+                loadAssets("assets")
+            }
         }
     }
 }

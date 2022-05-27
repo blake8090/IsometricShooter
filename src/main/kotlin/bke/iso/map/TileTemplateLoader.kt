@@ -1,5 +1,7 @@
-package bke.iso.asset
+package bke.iso.map
 
+import bke.iso.asset.AssetLoader
+import bke.iso.asset.BaseAssetLoader
 import bke.iso.util.FilePointer
 import bke.iso.util.getLogger
 import com.fasterxml.jackson.core.JsonProcessingException
@@ -16,7 +18,7 @@ data class TileTemplate(
     val collidable: Boolean = false
 )
 
-@AssetLoader("tiles", ["dat"])
+@AssetLoader("tiles", ["toml"])
 class TileTemplateLoader : BaseAssetLoader<TileTemplate>() {
     private val log = getLogger(this)
     private val mapper = TomlMapper()
@@ -35,6 +37,7 @@ class TileTemplateLoader : BaseAssetLoader<TileTemplate>() {
 
                 try {
                     val tileTemplate = mapper.treeToValue(node, TileTemplate::class.java)
+                    // TODO: guard against symbol collisions
                     // ensures that the TOML node name corresponds to the template name
                     assets[name] = tileTemplate.copy(name = name)
                 } catch (e: JsonProcessingException) {
