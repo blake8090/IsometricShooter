@@ -1,9 +1,9 @@
 package bke.iso
 
 import bke.iso.asset.AssetService
-import bke.iso.map.MapService
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
+import bke.iso.world.World
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import org.slf4j.LoggerFactory
@@ -22,7 +22,7 @@ class Engine {
         container.getService<SystemService>().registerSystems(mutableSetOf(RenderSystem::class))
         loadAssets()
 
-        container.getService<MapService>().loadMap("test")
+        container.getService<World>().loadMap("test")
     }
 
     fun update(deltaTime: Float) {
