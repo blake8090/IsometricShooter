@@ -39,6 +39,9 @@ class AssetService(
         return cache[name] as T?
     }
 
+    inline fun <reified T : Any> getAsset(name: String) =
+        getAsset(name, T::class)
+
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getAllAssets(type: KClass<T>): List<T> {
         val cache = assetCacheByType[type]

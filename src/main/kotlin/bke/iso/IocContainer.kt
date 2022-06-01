@@ -11,6 +11,7 @@ class MissingBindingException(message: String) : RuntimeException(message)
 class MissingConstructorException(message: String) : RuntimeException(message)
 class DuplicateBindingException(message: String) : RuntimeException(message)
 
+// TODO: rename this to "Singleton"
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Service

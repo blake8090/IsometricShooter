@@ -3,7 +3,10 @@ package bke.iso
 import bke.iso.asset.AssetService
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
+import bke.iso.world.TextureComponent
 import bke.iso.world.World
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import org.slf4j.LoggerFactory
@@ -12,6 +15,8 @@ class Engine {
     private val log = LoggerFactory.getLogger(Engine::class.java)
 
     private val container = IocContainer()
+
+    private var entityId = 0
 
     init {
         container.registerFromClassPath("bke.iso")
@@ -22,11 +27,32 @@ class Engine {
         container.getService<SystemService>().registerSystems(mutableSetOf(RenderSystem::class))
         loadAssets()
 
-        container.getService<World>().loadMap("test")
+        val world = container.getService<World>()
+        world.loadMap("test")
+        world.createEntity(listOf(TextureComponent("circle")))
+            ?.let { entityId = it }
     }
 
     fun update(deltaTime: Float) {
         container.getService<SystemService>().update(deltaTime)
+
+        var dx = 0f
+        var dy = 0f
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            dy = -1f
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            dy = 1f
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            dx = -1f
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            dx = 1f
+        }
+
+        val world = container.getService<World>()
+        val speed = 1f
+        world.moveEntity(entityId, (speed * dx) * deltaTime, (speed * dy) * deltaTime)
     }
 
     fun stop() {
@@ -47,4 +73,3 @@ class Engine {
         }
     }
 }
-
