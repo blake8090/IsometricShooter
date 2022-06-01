@@ -3,20 +3,12 @@ package bke.iso.world
 import bke.iso.Service
 import bke.iso.asset.AssetService
 import bke.iso.util.getLogger
+import bke.iso.world.asset.MapData
+import bke.iso.world.asset.TileTemplate
 import com.badlogic.gdx.math.Vector2
 import kotlin.reflect.KClass
 
-data class Tile(
-    var texture: String,
-    var collidable: Boolean = false
-) {
-    constructor(template: TileTemplate) : this(template.texture, template.collidable)
-}
 
-/**
- * Represents a location on the world grid.
- */
-data class Location(val x: Int, val y: Int)
 
 @Service
 class World(private val assetService: AssetService) {

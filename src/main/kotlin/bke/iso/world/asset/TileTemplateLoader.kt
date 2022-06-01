@@ -1,4 +1,4 @@
-package bke.iso.world
+package bke.iso.world.asset
 
 import bke.iso.asset.AssetLoader
 import bke.iso.asset.BaseAssetLoader

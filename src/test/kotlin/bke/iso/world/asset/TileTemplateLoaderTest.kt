@@ -1,7 +1,5 @@
-package bke.iso.asset
+package bke.iso.world.asset
 
-import bke.iso.world.TileTemplate
-import bke.iso.world.TileTemplateLoader
 import bke.iso.util.FilePointer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

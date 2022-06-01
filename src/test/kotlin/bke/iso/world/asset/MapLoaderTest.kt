@@ -1,8 +1,6 @@
-package bke.iso.map
+package bke.iso.world.asset
 
 import bke.iso.util.FilePointer
-import bke.iso.world.MapData
-import bke.iso.world.MapLoader
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
