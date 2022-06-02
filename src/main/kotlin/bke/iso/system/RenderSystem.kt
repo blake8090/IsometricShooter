@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 class RenderSystem(
     private val assetService: AssetService,
@@ -23,30 +24,29 @@ class RenderSystem(
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         drawMap()
-
-        val location = Location(0, 0)
-        val start = world.worldToScreen(location, offset)
-        val end = world.worldToScreen(Location(1, 0), offset)
-        drawLine(start, end, 1, Color.GREEN)
     }
 
     private fun drawMap() {
-        val data = world.getAllDataByLocation()[0]!!
-        // drawing one y line
-
-        // draw tiles && entities
         batch.begin()
-
-        for ((location, tile, entities) in data) {
-            tile?.let { drawTile(tile, location) }
-            entities.forEach(this::drawEntity)
+        world.forEachLocation { location, tile, ids ->
+            tile?.let { drawTile(it, location) }
+            ids.forEach(this::drawEntity)
         }
         batch.end()
+
+        drawLine(
+            world.getEntityScreenPos(Vector3(0f, 0f, 0f), offset),
+            world.getEntityScreenPos(Vector3(1f, 0f, 0f), offset),
+            1,
+            Color.GREEN
+        )
+
+        drawCircle(world.getEntityScreenPos(Vector3(0f, 0f, 0f), offset), 20f, Color.RED)
     }
 
     private fun drawTile(tile: Tile, location: Location) {
         val texture = assetService.getAsset(tile.texture, Texture::class) ?: return
-        val pos = world.worldToScreen(location, offset)
+        val pos = world.locationToScreenPos(location, offset)
         batch.draw(texture, pos.x, pos.y)
     }
 
@@ -55,7 +55,8 @@ class RenderSystem(
         val textureComponent = world.getEntityComponent(id, TextureComponent::class) ?: return
         val texture = assetService.getAsset(textureComponent.name, Texture::class) ?: return
 
-        val screenPos = world.worldToScreen(Vector2(positionComponent.x, positionComponent.y), offset)
+        val screenPos =
+            world.getEntityScreenPos(Vector3(positionComponent.x, positionComponent.y, 0f), offset)
         batch.draw(texture, screenPos.x, screenPos.y)
     }
 
@@ -68,24 +69,11 @@ class RenderSystem(
         // resets line width to default
         Gdx.gl.glLineWidth(1f)
     }
-}
 
-//fun DrawDebugLine(start: Vector2?, end: Vector2?, lineWidth: Int, color: Color?, projectionMatrix: Matrix4?) {
-//    Gdx.gl.glLineWidth(lineWidth.toFloat())
-//    debugRenderer.projectionMatrix = projectionMatrix
-//    debugRenderer.begin(ShapeRenderer.ShapeType.Line)
-//    debugRenderer.color = color
-//    debugRenderer.line(start, end)
-//    debugRenderer.end()
-//    Gdx.gl.glLineWidth(1f)
-//}
-//
-//fun DrawDebugLine(start: Vector2?, end: Vector2?, projectionMatrix: Matrix4?) {
-//    Gdx.gl.glLineWidth(2f)
-//    debugRenderer.projectionMatrix = projectionMatrix
-//    debugRenderer.begin(ShapeRenderer.ShapeType.Line)
-//    debugRenderer.color = Color.WHITE
-//    debugRenderer.line(start, end)
-//    debugRenderer.end()
-//    Gdx.gl.glLineWidth(1f)
-//}
+    private fun drawCircle(pos: Vector2, size: Float, color: Color) {
+        shapeRenderer.color = color
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+        shapeRenderer.circle(pos.x, pos.y, size)
+        shapeRenderer.end()
+    }
+}

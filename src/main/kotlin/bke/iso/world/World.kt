@@ -6,9 +6,8 @@ import bke.iso.util.getLogger
 import bke.iso.world.asset.MapData
 import bke.iso.world.asset.TileTemplate
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import kotlin.reflect.KClass
-
-
 
 @Service
 class World(private val assetService: AssetService) {
@@ -23,21 +22,25 @@ class World(private val assetService: AssetService) {
         get() = tileHeight / 2
 
     private val entityDatabase = EntityDatabase()
-    private val locationByEntityId = mutableMapOf<Int, Location>()
+    private val worldGrid = WorldGrid()
 
-    // TODO: Make this its own class
-    private val grid = mutableMapOf<Location, GridData>()
+    fun getTile(location: Location) =
+        worldGrid.getTile(location)
+
+    fun setTile(tile: Tile, location: Location) =
+        worldGrid.setTile(tile, location)
 
     fun createEntity(x: Float = 0f, y: Float = 0f): Int? =
         entityDatabase.createEntity()
             ?.apply { setEntityPosition(this, x, y) }
 
     fun createEntity(components: List<Component>, x: Float = 0f, y: Float = 0f): Int? {
-        val id = createEntity(x, y)
-        if (id != null) {
-            components.forEach { component -> setEntityComponent(id, component) }
-        }
-        return id
+        return createEntity(x, y)
+            ?.apply {
+                components.forEach { component ->
+                    setEntityComponent(this, component)
+                }
+            }
     }
 
     fun <T : Component> getEntityComponent(id: Int, componentType: KClass<T>): T? =
@@ -56,20 +59,13 @@ class World(private val assetService: AssetService) {
             positionComponent = PositionComponent()
             entityDatabase.setComponent(id, positionComponent)
         }
+
         positionComponent.x = x
         positionComponent.y = y
-
-        //val location = Location((x + .toInt(), (y).toInt())
-        val location = Location(x.toInt(), y.toInt())
-        val oldLocation = locationByEntityId[id]
-        if (oldLocation != null && location != oldLocation) {
-            log.debug("removing entity $id from $oldLocation to $location")
-            getOrCreateGridData(oldLocation).entities.remove(id)
-            locationByEntityId.remove(id)
-        }
-        getOrCreateGridData(location).entities.add(id)
-        locationByEntityId[id] = location
-        getOrCreateGridData(location).entities.add(id)
+        worldGrid.updateEntityLocation(
+            id,
+            Vector3(positionComponent.x, positionComponent.y, 0f)
+        )
     }
 
     fun moveEntity(id: Int, dx: Float = 0f, dy: Float = 0f) {
@@ -84,25 +80,12 @@ class World(private val assetService: AssetService) {
         )
     }
 
-    fun getAllDataByLocation() =
-        grid.entries
-            .groupBy({ entry -> entry.key.y }, { entry -> Triple(entry.key, entry.value.tile, entry.value.entities) })
-            .toSortedMap()
-
-    fun forEachTile(action: (Location, Tile?, Set<Int>) -> Unit) {
-        grid.entries
-            .sortedBy { entry -> entry.key.y }
+    fun forEachLocation(action: (Location, Tile?, Set<Int>) -> Unit) {
+        worldGrid.getAll()
             .forEach { (location, data) ->
                 action.invoke(location, data.tile, data.entities)
             }
     }
-
-    fun setTile(tile: Tile, location: Location) {
-        getOrCreateGridData(location).tile = tile
-    }
-
-    private fun getOrCreateGridData(location: Location) =
-        grid.getOrPut(location) { GridData() }
 
     fun loadMap(name: String) {
         val map = assetService.getAsset<MapData>(name)
@@ -114,7 +97,7 @@ class World(private val assetService: AssetService) {
         val templatesBySymbol = assetService.getAllAssets(TileTemplate::class)
             .associateBy { template -> template.symbol }
 
-        grid.clear()
+        worldGrid.clear()
 
         for ((y, columns) in map.rows.withIndex()) {
             for ((x, symbol) in columns.withIndex()) {
@@ -129,30 +112,36 @@ class World(private val assetService: AssetService) {
         log.info("Successfully loaded map '$name'")
     }
 
-    fun worldToScreen(location: Location, offset: Vector2 = Vector2()): Vector2 =
-        worldToScreen(Vector2(location.x.toFloat(), location.y.toFloat()), offset)
-
-    // TODO: test this
-    fun worldToScreen(pos: Vector2, offset: Vector2 = Vector2()): Vector2 {
-        // By swapping x and y and then negating them, we're now working  with vectors
-        // in an isometric coordinate system where the origin is in the top left corner
-        val isoPos = Vector2(pos.y * -1, pos.x * -1)
-        val screenPos = Vector2(
-            (isoPos.x - isoPos.y) * (tileWidth / 2).toFloat(),
-            (isoPos.x + isoPos.y) * (tileHeight / 2).toFloat()
+    // TODO: move these to another class
+    fun locationToScreenPos(location: Location, offset: Vector2 = Vector2()): Vector2 {
+        val worldPos = Vector3(
+            location.x.toFloat(),
+            location.y.toFloat(),
+            0f
         )
-        return screenPos.add(offset)
+        val screenPos = toScreen(worldPos)
+        screenPos.add(offset)
+        screenPos.x -= halfTileWidth
+        screenPos.y -= tileHeight
+        return screenPos
     }
 
-// TODO: test this
-//    fun screenToWorld(pos: Vector2): Vector2 =
-//        Vector2(
-//            ((pos.x / halfTileWidth + pos.y / halfTileWidth) / 2),
-//            (pos.y / halfTileHeight - (pos.x / halfTileHeight)) / 2
-//        )
+    fun getEntityScreenPos(entityPos: Vector3, offset: Vector2 = Vector2()): Vector2 {
+        val screenPos = toScreen(entityPos)
+        screenPos.add(offset)
+        return screenPos
+    }
 
-    private data class GridData(
-        var tile: Tile? = null,
-        val entities: MutableSet<Int> = mutableSetOf()
-    )
+    private fun toScreen(worldPos: Vector3): Vector2 {
+        // TODO: reword this comment
+        // By swapping x and y and then negating them, we're now working  with vectors
+        // in an isometric coordinate system where the origin is in the top left corner.
+        val screenPos = Vector2(
+            (worldPos.y - worldPos.x) * -1,
+            (worldPos.y + worldPos.x) * -1,
+        )
+        screenPos.x *= halfTileWidth
+        screenPos.y *= halfTileHeight
+        return screenPos
+    }
 }

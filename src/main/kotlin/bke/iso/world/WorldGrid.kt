@@ -1,5 +1,6 @@
 package bke.iso.world
 
+import bke.iso.util.getLogger
 import bke.iso.world.asset.TileTemplate
 import com.badlogic.gdx.math.Vector3
 
@@ -21,6 +22,7 @@ data class LocationData(
 data class Location(val x: Int, val y: Int)
 
 class WorldGrid {
+    private val log = getLogger(this)
     private val grid = mutableMapOf<Location, LocationData>()
     private val locationByEntityId = mutableMapOf<Int, Location>()
 
@@ -43,10 +45,19 @@ class WorldGrid {
                 ?.entities
                 ?.remove(id)
             locationByEntityId.remove(id)
+            log.debug("moving entity $id from $oldLocation to $newLocation")
         }
         grid.getOrPut(newLocation) { LocationData() }
             .entities
             .add(id)
         locationByEntityId[id] = newLocation
+    }
+
+    fun getAll() =
+        grid.map { entry -> Pair(entry.key, entry.value) }
+
+    fun clear() {
+        grid.clear()
+        locationByEntityId.clear()
     }
 }

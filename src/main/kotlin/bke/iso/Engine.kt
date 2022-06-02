@@ -51,7 +51,7 @@ class Engine {
         }
 
         val world = container.getService<World>()
-        val speed = 1f
+        val speed = 2f
         world.moveEntity(entityId, (speed * dx) * deltaTime, (speed * dy) * deltaTime)
     }
 
