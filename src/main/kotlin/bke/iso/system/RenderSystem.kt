@@ -2,6 +2,9 @@ package bke.iso.system
 
 import bke.iso.asset.AssetService
 import bke.iso.world.*
+import bke.iso.world.entity.Entity
+import bke.iso.world.entity.PositionComponent
+import bke.iso.world.entity.TextureComponent
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -33,14 +36,6 @@ class RenderSystem(
             ids.forEach(this::drawEntity)
         }
         batch.end()
-
-        drawLine(
-            world.getEntityScreenPos(Vector3(0f, 0f, 0f), offset),
-            world.getEntityScreenPos(Vector3(1f, 0f, 0f), offset),
-            1,
-            Color.GREEN
-        )
-
         drawCircle(world.getEntityScreenPos(Vector3(0f, 0f, 0f), offset), 20f, Color.RED)
     }
 
@@ -50,18 +45,51 @@ class RenderSystem(
         batch.draw(texture, pos.x, pos.y)
     }
 
-    private fun drawEntity(id: Int) {
-        val positionComponent = world.getEntityComponent(id, PositionComponent::class) ?: return
-        val textureComponent = world.getEntityComponent(id, TextureComponent::class) ?: return
-        val texture = assetService.getAsset(textureComponent.name, Texture::class) ?: return
+    private fun drawEntity(entity: Entity) {
+        val positionComponent = entity.getComponent<PositionComponent>() ?: return
+        val texture = entity.getComponent<TextureComponent>()
+            ?.let { assetService.getAsset<Texture>(it.name) }
+            ?: return
 
         val screenPos =
             world.getEntityScreenPos(Vector3(positionComponent.x, positionComponent.y, 0f), offset)
         batch.draw(texture, screenPos.x, screenPos.y)
+
+        // draw debug bounding square
+        batch.end()
+        // top
+        drawLine(
+            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            1f,
+            Color.GREEN
+        )
+        // bottom
+        drawLine(
+            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y + 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y + 0.5f, 0f), offset),
+            1f,
+            Color.GREEN
+        )
+        // left
+        drawLine(
+            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y + 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            1f,
+            Color.GREEN
+        )
+        // right
+        drawLine(
+            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y + 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            1f,
+            Color.GREEN
+        )
+        batch.begin()
     }
 
-    private fun drawLine(start: Vector2, end: Vector2, width: Int, color: Color) {
-        Gdx.gl.glLineWidth(width.toFloat())
+    private fun drawLine(start: Vector2, end: Vector2, width: Float, color: Color) {
+        Gdx.gl.glLineWidth(width)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         shapeRenderer.color = color
         shapeRenderer.line(start, end)

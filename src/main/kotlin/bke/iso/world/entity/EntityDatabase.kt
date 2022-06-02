@@ -1,4 +1,4 @@
-package bke.iso.world
+package bke.iso.world.entity
 
 import bke.iso.util.getLogger
 import kotlin.reflect.KClass

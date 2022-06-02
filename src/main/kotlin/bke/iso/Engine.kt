@@ -3,7 +3,8 @@ package bke.iso
 import bke.iso.asset.AssetService
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
-import bke.iso.world.TextureComponent
+import bke.iso.world.entity.Entity
+import bke.iso.world.entity.TextureComponent
 import bke.iso.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -16,7 +17,7 @@ class Engine {
 
     private val container = IocContainer()
 
-    private var entityId = 0
+    private lateinit var entity: Entity
 
     init {
         container.registerFromClassPath("bke.iso")
@@ -29,8 +30,8 @@ class Engine {
 
         val world = container.getService<World>()
         world.loadMap("test")
-        world.createEntity(listOf(TextureComponent("circle")))
-            ?.let { entityId = it }
+
+        entity = world.createEntity(TextureComponent("circle"))!!
     }
 
     fun update(deltaTime: Float) {
@@ -50,9 +51,8 @@ class Engine {
             dx = 1f
         }
 
-        val world = container.getService<World>()
         val speed = 2f
-        world.moveEntity(entityId, (speed * dx) * deltaTime, (speed * dy) * deltaTime)
+        entity.move((speed * dx) * deltaTime, (speed * dy) * deltaTime)
     }
 
     fun stop() {

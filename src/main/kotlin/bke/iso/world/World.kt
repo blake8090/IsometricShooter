@@ -5,9 +5,11 @@ import bke.iso.asset.AssetService
 import bke.iso.util.getLogger
 import bke.iso.world.asset.MapData
 import bke.iso.world.asset.TileTemplate
+import bke.iso.world.entity.Component
+import bke.iso.world.entity.Entity
+import bke.iso.world.entity.EntityDatabase
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import kotlin.reflect.KClass
 
 @Service
 class World(private val assetService: AssetService) {
@@ -30,60 +32,39 @@ class World(private val assetService: AssetService) {
     fun setTile(tile: Tile, location: Location) =
         worldGrid.setTile(tile, location)
 
-    fun createEntity(x: Float = 0f, y: Float = 0f): Int? =
+    fun createEntity() =
         entityDatabase.createEntity()
-            ?.apply { setEntityPosition(this, x, y) }
+            ?.let(this::getEntity)
 
-    fun createEntity(components: List<Component>, x: Float = 0f, y: Float = 0f): Int? {
-        return createEntity(x, y)
-            ?.apply {
-                components.forEach { component ->
-                    setEntityComponent(this, component)
-                }
-            }
+    fun createEntity(vararg components: Component, pos: Vector3 = Vector3()): Entity? {
+        val entity = createEntity() ?: return null
+        components.forEach(entity::setComponent)
+        entity.setPosition(pos)
+        return entity
     }
 
-    fun <T : Component> getEntityComponent(id: Int, componentType: KClass<T>): T? =
-        entityDatabase.getComponent(id, componentType)
-
-    fun <T : Component> setEntityComponent(id: Int, component: T) =
-        entityDatabase.setComponent(id, component)
-
-    fun setEntityPosition(id: Int, x: Float, y: Float) {
+    fun getEntity(id: Int) =
         if (!entityDatabase.contains(id)) {
-            return
+            null
+        } else {
+            Entity(
+                id,
+                entityDatabase,
+                worldGrid
+            )
         }
 
-        var positionComponent = entityDatabase.getComponent<PositionComponent>(id)
-        if (positionComponent == null) {
-            positionComponent = PositionComponent()
-            entityDatabase.setComponent(id, positionComponent)
-        }
-
-        positionComponent.x = x
-        positionComponent.y = y
-        worldGrid.updateEntityLocation(
-            id,
-            Vector3(positionComponent.x, positionComponent.y, 0f)
-        )
-    }
-
-    fun moveEntity(id: Int, dx: Float = 0f, dy: Float = 0f) {
-        if (dx == 0f && dy == 0f) {
-            return
-        }
-        val positionComponent = entityDatabase.getComponent<PositionComponent>(id) ?: return
-        setEntityPosition(
-            id,
-            positionComponent.x + dx,
-            positionComponent.y + dy
-        )
-    }
-
-    fun forEachLocation(action: (Location, Tile?, Set<Int>) -> Unit) {
+    fun forEachLocation(action: (Location, Tile?, Set<Entity>) -> Unit) {
         worldGrid.getAll()
             .forEach { (location, data) ->
-                action.invoke(location, data.tile, data.entities)
+                action.invoke(
+                    location,
+                    data.tile,
+                    data.entities
+                        .map(this::getEntity)
+                        .filterNotNull()
+                        .toSet()
+                )
             }
     }
 
