@@ -11,6 +11,7 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.20'
+    id 'application'
 }
 
 apply plugin: 'io.github.fvarrui.javapackager.plugin'
@@ -55,6 +56,15 @@ compileKotlin {
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = '1.8'
+}
+
+application {
+    mainClass = "bke.iso.MainKt"
+}
+
+task start(type: JavaExec, dependsOn: test) {
+    mainClass.set("bke.iso.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
 }
 
 task packageWindowsExe(type: PackageTask, dependsOn: build) {
