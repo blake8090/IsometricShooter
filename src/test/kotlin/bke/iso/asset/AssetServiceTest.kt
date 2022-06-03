@@ -1,6 +1,6 @@
 package bke.iso.asset
 
-import bke.iso.IocContainer
+import bke.iso.ServiceContainer
 import bke.iso.util.FilePointer
 import bke.iso.util.FileService
 import bke.iso.util.ReflectionService
@@ -42,7 +42,7 @@ internal class AssetServiceTest {
     fun `should return assets using a given list of asset loaders`() {
         val basePath = "data"
 
-        val container = mock(IocContainer::class.java)
+        val container = mock(ServiceContainer::class.java)
         `when`(container.createInstance(DocumentLoader::class)).thenReturn(DocumentLoader())
         `when`(container.createInstance(EntityLoader::class)).thenReturn(EntityLoader())
 
@@ -73,7 +73,7 @@ internal class AssetServiceTest {
         val basePath = "data"
         val basePackage = "bke.io.asset"
 
-        val container = mock(IocContainer::class.java)
+        val container = mock(ServiceContainer::class.java)
         `when`(container.createInstance(DocumentLoader::class)).thenReturn(DocumentLoader())
         `when`(container.createInstance(EntityLoader::class)).thenReturn(EntityLoader())
 

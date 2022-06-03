@@ -1,6 +1,6 @@
 package bke.iso.util
 
-import bke.iso.Service
+import bke.iso.Singleton
 import java.io.File
 
 class FilePointer(private val file: File) {
@@ -11,7 +11,7 @@ class FilePointer(private val file: File) {
     fun readText() = file.readText()
 }
 
-@Service
+@Singleton
 class FileService {
     /**
      * Returns a list of all files in the given path, including subdirectories

@@ -8,9 +8,9 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 
 // TODO: add unit tests for failure scenarios
-@Service
+@Singleton
 class AssetService(
-    private val container: IocContainer,
+    private val container: ServiceContainer,
     private val fileService: FileService,
     private val reflectionService: ReflectionService
 ) {

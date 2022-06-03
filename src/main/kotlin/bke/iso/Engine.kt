@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 class Engine {
     private val log = LoggerFactory.getLogger(Engine::class.java)
 
-    private val container = IocContainer()
+    private val container = ServiceContainer()
 
     private lateinit var entity: Entity
 

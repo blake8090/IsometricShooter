@@ -1,7 +1,7 @@
 package bke.iso.system
 
-import bke.iso.IocContainer
-import bke.iso.Service
+import bke.iso.ServiceContainer
+import bke.iso.Singleton
 import kotlin.reflect.KClass
 
 abstract class System {
@@ -9,8 +9,8 @@ abstract class System {
     open fun update(deltaTime: Float) {}
 }
 
-@Service
-class SystemService(private val container: IocContainer) {
+@Singleton
+class SystemService(private val container: ServiceContainer) {
     private val systems = mutableSetOf<System>()
 
     fun registerSystems(systemClasses: Set<KClass<out System>>) {

@@ -6,7 +6,7 @@ data class Config(
     val fullScreen: Boolean = false
 )
 
-@Service
+@Singleton
 class ConfigService {
     fun resolveConfig(): Config {
         // todo: search files

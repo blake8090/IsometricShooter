@@ -11,29 +11,28 @@ class MissingBindingException(message: String) : RuntimeException(message)
 class MissingConstructorException(message: String) : RuntimeException(message)
 class DuplicateBindingException(message: String) : RuntimeException(message)
 
-// TODO: rename this to "Singleton"
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Service
+annotation class Singleton
 
 // TODO: add unit tests
-class IocContainer {
-    private val log = LoggerFactory.getLogger(IocContainer::class.java)
+class ServiceContainer {
+    private val log = LoggerFactory.getLogger(ServiceContainer::class.java)
 
     private val implementationByInterfaceMap = mutableMapOf<KClass<*>, KClass<*>>()
     private val instanceMap = mutableMapOf<KClass<*>, Any>()
 
     init {
-        registerService(IocContainer::class)
-        instanceMap[IocContainer::class] = this
+        registerService(ServiceContainer::class)
+        instanceMap[ServiceContainer::class] = this
     }
 
     /**
-     * Searches the given [classPath] for classes annotated with [Service] and registers them as services.
+     * Searches the given [classPath] for classes annotated with [Singleton] and registers them as services.
      */
     fun registerFromClassPath(classPath: String) {
         Reflections(classPath, Scanners.TypesAnnotated)
-            .getTypesAnnotatedWith(Service::class.java)
+            .getTypesAnnotatedWith(Singleton::class.java)
             .filterNotNull()
             .forEach { clazz -> registerService(clazz.kotlin) }
     }

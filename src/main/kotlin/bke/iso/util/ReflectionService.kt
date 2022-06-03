@@ -1,12 +1,12 @@
 package bke.iso.util
 
-import bke.iso.Service
+import bke.iso.Singleton
 import org.reflections.Reflections
 import org.reflections.scanners.Scanners
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
-@Service
+@Singleton
 class ReflectionService {
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> findSubTypesWithAnnotation(

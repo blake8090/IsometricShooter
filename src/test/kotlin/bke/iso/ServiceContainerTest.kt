@@ -2,7 +2,7 @@ package bke.iso
 
 import org.junit.jupiter.api.Test
 
-internal class IocContainerTest {
+internal class ServiceContainerTest {
 
     @Test
     fun registerFromClassPath() {

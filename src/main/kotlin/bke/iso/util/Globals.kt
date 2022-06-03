@@ -1,8 +1,8 @@
 package bke.iso.util
 
-import bke.iso.Service
+import bke.iso.Singleton
 
-@Service
+@Singleton
 class Globals {
     val basePackage = "bke.iso"
     val assetsDirectory = "assets"

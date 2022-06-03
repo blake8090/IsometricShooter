@@ -1,6 +1,6 @@
 package bke.iso.world
 
-import bke.iso.Service
+import bke.iso.Singleton
 import bke.iso.asset.AssetService
 import bke.iso.util.getLogger
 import bke.iso.world.asset.MapData
@@ -11,7 +11,7 @@ import bke.iso.world.entity.EntityDatabase
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
-@Service
+@Singleton
 class World(private val assetService: AssetService) {
     private val log = getLogger(this)
 
