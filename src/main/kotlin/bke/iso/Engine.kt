@@ -31,7 +31,8 @@ class Engine {
         val world = container.getService<World>()
         world.loadMap("test")
 
-        entity = world.createEntity(TextureComponent("circle"))!!
+        // TODO: should this return a non-null?
+        entity = world.createEntity(TextureComponent("player"))!!
     }
 
     fun update(deltaTime: Float) {

@@ -5,5 +5,5 @@ collidable = false
 
 [wall]
 symbol = "#"
-texture = "wall"
+texture = "wall3"
 collidable = true

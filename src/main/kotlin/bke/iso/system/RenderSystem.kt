@@ -14,13 +14,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
+// TODO: should this be a system?
 class RenderSystem(
     private val assetService: AssetService,
     private val world: World
 ) : System() {
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
-    private val offset = Vector2(200f, 200f)
+    private val offset = Vector2(500f, 500f)
 
     override fun update(deltaTime: Float) {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
@@ -53,37 +54,44 @@ class RenderSystem(
 
         val screenPos =
             world.getEntityScreenPos(Vector3(positionComponent.x, positionComponent.y, 0f), offset)
-        batch.draw(texture, screenPos.x, screenPos.y)
+        // TODO: add a sprite origin component to entities to abstract this offset
+        batch.draw(texture, screenPos.x - 32f, screenPos.y)
 
         // draw debug bounding square
         batch.end()
+        // TODO: Add a method to render iso rectangles
         // top
         drawLine(
-            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y - 0.5f, 0f), offset),
-            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x - 1f, positionComponent.y - 1f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 1f, positionComponent.y - 1f, 0f), offset),
             1f,
             Color.GREEN
         )
         // bottom
         drawLine(
-            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y + 0.5f, 0f), offset),
-            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y + 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x - 1f, positionComponent.y + 1f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 1f, positionComponent.y + 1f, 0f), offset),
             1f,
             Color.GREEN
         )
         // left
         drawLine(
-            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y + 0.5f, 0f), offset),
-            world.getEntityScreenPos(Vector3(positionComponent.x - 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x - 1f, positionComponent.y + 1f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x - 1f, positionComponent.y - 1f, 0f), offset),
             1f,
             Color.GREEN
         )
         // right
         drawLine(
-            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y + 0.5f, 0f), offset),
-            world.getEntityScreenPos(Vector3(positionComponent.x + 0.5f, positionComponent.y - 0.5f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 1f, positionComponent.y + 1f, 0f), offset),
+            world.getEntityScreenPos(Vector3(positionComponent.x + 1f, positionComponent.y - 1f, 0f), offset),
             1f,
             Color.GREEN
+        )
+        drawCircle(
+            world.getEntityScreenPos(Vector3(positionComponent.x + 0.0f, positionComponent.y + 0.0f, 0f), offset),
+            2f,
+            Color.RED
         )
         batch.begin()
     }
