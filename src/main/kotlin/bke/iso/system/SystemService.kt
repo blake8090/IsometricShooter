@@ -1,7 +1,7 @@
 package bke.iso.system
 
-import bke.iso.ServiceContainer
-import bke.iso.Singleton
+import bke.iso.di.ServiceContainer
+import bke.iso.di.Singleton
 import kotlin.reflect.KClass
 
 abstract class System {

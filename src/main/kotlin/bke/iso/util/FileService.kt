@@ -1,6 +1,6 @@
 package bke.iso.util
 
-import bke.iso.Singleton
+import bke.iso.di.Singleton
 import java.io.File
 
 class FilePointer(private val file: File) {

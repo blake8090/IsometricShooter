@@ -1,6 +1,6 @@
 package bke.iso.world
 
-import bke.iso.Singleton
+import bke.iso.di.Singleton
 import bke.iso.asset.AssetService
 import bke.iso.util.getLogger
 import bke.iso.world.asset.MapData

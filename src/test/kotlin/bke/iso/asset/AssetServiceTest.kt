@@ -1,6 +1,6 @@
 package bke.iso.asset
 
-import bke.iso.ServiceContainer
+import bke.iso.di.ServiceContainer
 import bke.iso.util.FilePointer
 import bke.iso.util.FileService
 import bke.iso.util.ReflectionService
@@ -36,7 +36,6 @@ class EntityLoader : BaseAssetLoader<Entity>() {
     override fun getAssetType(): KClass<Entity> = Entity::class
 }
 
-
 internal class AssetServiceTest {
     @Test
     fun `should return assets using a given list of asset loaders`() {
@@ -59,7 +58,7 @@ internal class AssetServiceTest {
         `when`(fileService.getFiles("$basePath/ent")).thenReturn(entityFiles)
 
         val assetService = AssetService(container, fileService, mock(ReflectionService::class.java))
-        assetService.setupAssetLoaders(listOf(DocumentLoader::class, EntityLoader::class))
+        assetService.setupAssetLoaders(setOf(DocumentLoader::class, EntityLoader::class))
         assetService.loadAssets(basePath)
 
         assertThat(assetService.getAsset("doc1", Document::class)).isEqualTo(Document("abc"))
@@ -90,11 +89,11 @@ internal class AssetServiceTest {
         `when`(fileService.getFiles("$basePath/ent")).thenReturn(entityFiles)
 
         val reflectionService = mock(ReflectionService::class.java)
-        `when`(reflectionService.findSubTypesWithAnnotation(basePackage, AssetLoader::class, BaseAssetLoader::class))
-            .thenReturn(listOf(DocumentLoader::class, EntityLoader::class))
+        `when`(reflectionService.findSubTypesWithAnnotation<BaseAssetLoader<*>, AssetLoader>(basePackage))
+            .thenReturn(setOf(DocumentLoader::class, EntityLoader::class))
 
         val assetService = AssetService(container, fileService, reflectionService)
-        assetService.setupAssetLoaders(basePackage)
+        assetService.setupAssetLoadersInPackage(basePackage)
         assetService.loadAssets(basePath)
 
         assertThat(assetService.getAsset("doc1", Document::class)).isEqualTo(Document("abc"))

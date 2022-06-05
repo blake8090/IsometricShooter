@@ -1,6 +1,7 @@
 package bke.iso
 
 import bke.iso.asset.AssetService
+import bke.iso.di.ServiceContainer
 import bke.iso.system.RenderSystem
 import bke.iso.system.SystemService
 import bke.iso.world.entity.Entity
@@ -67,7 +68,7 @@ class Engine {
     private fun loadAssets() {
         container.getService<AssetService>().apply {
             // TODO: use globals
-            setupAssetLoaders("bke.iso")
+            setupAssetLoadersInPackage("bke.iso")
             KtxAsync.launch {
                 loadAssets("assets")
             }

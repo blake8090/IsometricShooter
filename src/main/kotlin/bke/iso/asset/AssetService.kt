@@ -1,6 +1,7 @@
 package bke.iso.asset
 
-import bke.iso.*
+import bke.iso.di.ServiceContainer
+import bke.iso.di.Singleton
 import bke.iso.util.FileService
 import bke.iso.util.ReflectionService
 import bke.iso.util.getLogger
@@ -19,16 +20,38 @@ class AssetService(
     private val assetLoaderByPath = mutableMapOf<String, BaseAssetLoader<*>>()
     private val assetCacheByType = mutableMapOf<KClass<*>, MutableMap<String, Any>>()
 
-    @Suppress("UNCHECKED_CAST")
-    fun setupAssetLoaders(basePackage: String) {
-        val types =
-            reflectionService.findSubTypesWithAnnotation(basePackage, AssetLoader::class, BaseAssetLoader::class)
-        setupAssetLoaders(types as List<KClass<BaseAssetLoader<Any>>>)
-    }
+    fun setupAssetLoadersInPackage(basePackage: String) =
+        reflectionService.findSubTypesWithAnnotation<BaseAssetLoader<*>, AssetLoader>(basePackage)
+            .forEach(this::setupAssetLoader)
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Any> setupAssetLoaders(types: List<KClass<out BaseAssetLoader<out T>>>) =
-        types.forEach { type -> setupAssetLoader(type as KClass<BaseAssetLoader<Any>>) }
+    fun setupAssetLoaders(types: Set<KClass<out BaseAssetLoader<out Any>>>) =
+        types.forEach(this::setupAssetLoader)
+
+    private inline fun <reified T : Any> setupAssetLoader(type: KClass<out BaseAssetLoader<out T>>) {
+        val annotation = type.findAnnotation<AssetLoader>()
+            ?: throw IllegalArgumentException("Expected AssetLoader annotation on type ${type.simpleName}")
+
+        val path = annotation.path
+        // TODO: rewrite messages and use proper exception types
+        if (path.isBlank()) {
+            throw IllegalArgumentException("Asset loader ${type.simpleName} is missing a path")
+        } else if (assetLoaderByPath.containsKey(path)) {
+            throw IllegalArgumentException("Asset loader ${type.simpleName} is missing a path")
+        } else if (annotation.fileExtensions.isEmpty()) {
+            throw IllegalArgumentException("Asset loader ${type.simpleName} is missing file extensions")
+        }
+
+        val assetLoader = container.createInstance(type)
+        assetLoaderByPath[path] = assetLoader
+        assetCacheByType.putIfAbsent(assetLoader.getAssetType(), mutableMapOf())
+
+        log.info(
+            "Setup asset loader '{}' for path '{}' and type '{}'",
+            type.simpleName,
+            path,
+            assetLoader.getAssetType().simpleName
+        )
+    }
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getAsset(name: String, type: KClass<T>): T? {
@@ -65,31 +88,6 @@ class AssetService(
         }
         val loadingEndTime = System.currentTimeMillis()
         log.info("Finished loading assets in base path '$basePath' in ${loadingEndTime - loadingStartTime} millis")
-    }
-
-    private inline fun <reified T : Any> setupAssetLoader(type: KClass<BaseAssetLoader<T>>) {
-        val annotation = type.findAnnotation<AssetLoader>()
-            ?: throw IllegalArgumentException("Expected AssetLoader annotation on type ${type.simpleName}")
-
-        val path = annotation.path
-        if (path.isBlank()) {
-            throw IllegalArgumentException("Asset loader ${type.simpleName} is missing a path")
-        } else if (assetLoaderByPath.containsKey(path)) {
-            throw IllegalArgumentException("Asset loader ${type.simpleName} is missing a path")
-        } else if (annotation.fileExtensions.isEmpty()) {
-            throw IllegalArgumentException("Asset loader ${type.simpleName} is missing file extensions")
-        }
-
-        val assetLoader = container.createInstance(type)
-        assetLoaderByPath[path] = assetLoader
-        assetCacheByType.putIfAbsent(assetLoader.getAssetType(), mutableMapOf())
-
-        log.info(
-            "Setup asset loader '{}' for path '{}' and type '{}'",
-            type.simpleName,
-            path,
-            assetLoader.getAssetType().simpleName
-        )
     }
 
     private inline fun <reified T : Any> loadAssetsInPath(path: String, assetLoader: BaseAssetLoader<T>) {

@@ -1,5 +1,7 @@
 package bke.iso
 
+import bke.iso.di.Singleton
+
 data class Config(
     val width: Int = 1280,
     val height: Int = 720,

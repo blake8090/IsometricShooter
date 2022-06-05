@@ -1,6 +1,6 @@
 package bke.iso.util
 
-import bke.iso.Singleton
+import bke.iso.di.Singleton
 
 @Singleton
 class Globals {

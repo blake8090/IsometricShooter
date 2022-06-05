@@ -1,23 +1,22 @@
 package bke.iso.util
 
-import bke.iso.Singleton
+import bke.iso.di.Singleton
 import org.reflections.Reflections
-import org.reflections.scanners.Scanners
 import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
 
 @Singleton
 class ReflectionService {
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Any> findSubTypesWithAnnotation(
-        basePackage: String,
-        annotation: KClass<out Annotation>,
-        baseType: KClass<T>
-    ): List<KClass<out T>> {
-        return Reflections(basePackage, Scanners.TypesAnnotated)
+    fun findTypesWithAnnotation(basePackage: String, annotation: KClass<out Annotation>): Set<KClass<out Any>> =
+        Reflections(basePackage)
             .getTypesAnnotatedWith(annotation.java)
             .map { javaClass -> javaClass.kotlin }
-            .filter { type -> type.isSubclassOf(baseType) }
-            .map { type -> type as KClass<T> }
-    }
+            .toSet()
+
+    inline fun <reified T : Annotation> findTypesWithAnnotation(basePackage: String): Set<KClass<out Any>> =
+        findTypesWithAnnotation(basePackage, T::class)
+
+    inline fun <reified T : Any, reified U : Annotation> findSubTypesWithAnnotation(basePackage: String): Set<KClass<out T>> =
+        findTypesWithAnnotation<U>(basePackage)
+            .filterIsInstance<KClass<out T>>()
+            .toSet()
 }

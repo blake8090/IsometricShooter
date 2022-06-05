@@ -1,7 +1,6 @@
-package bke.iso
+package bke.iso.di
 
 import org.reflections.Reflections
-import org.reflections.scanners.Scanners
 import org.slf4j.LoggerFactory
 import java.lang.RuntimeException
 import kotlin.reflect.KClass
@@ -10,10 +9,6 @@ import kotlin.reflect.cast
 class MissingBindingException(message: String) : RuntimeException(message)
 class MissingConstructorException(message: String) : RuntimeException(message)
 class DuplicateBindingException(message: String) : RuntimeException(message)
-
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Singleton
 
 // TODO: add unit tests
 class ServiceContainer {
@@ -30,12 +25,11 @@ class ServiceContainer {
     /**
      * Searches the given [classPath] for classes annotated with [Singleton] and registers them as services.
      */
-    fun registerFromClassPath(classPath: String) {
-        Reflections(classPath, Scanners.TypesAnnotated)
+    fun registerFromClassPath(classPath: String) =
+        Reflections(classPath)
             .getTypesAnnotatedWith(Singleton::class.java)
-            .filterNotNull()
-            .forEach { clazz -> registerService(clazz.kotlin) }
-    }
+            .map { javaClass -> javaClass.kotlin }
+            .forEach { type -> registerService(type) }
 
     /**
      * Given an [implementationClass], registers a service with the interface the same as the implementation.
