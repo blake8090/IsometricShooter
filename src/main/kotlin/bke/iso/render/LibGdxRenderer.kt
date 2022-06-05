@@ -1,7 +1,10 @@
-package bke.iso.system
+package bke.iso.render
 
 import bke.iso.asset.AssetService
-import bke.iso.world.*
+import bke.iso.di.SingletonImpl
+import bke.iso.world.Location
+import bke.iso.world.Tile
+import bke.iso.world.World
 import bke.iso.world.entity.Entity
 import bke.iso.world.entity.PositionComponent
 import bke.iso.world.entity.TextureComponent
@@ -14,16 +17,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
-// TODO: should this be a system?
-class RenderSystem(
+@SingletonImpl(Renderer::class)
+class LibGdxRenderer(
     private val assetService: AssetService,
     private val world: World
-) : System() {
+) : Renderer {
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
     private val offset = Vector2(500f, 500f)
 
-    override fun update(deltaTime: Float) {
+    override fun render() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 

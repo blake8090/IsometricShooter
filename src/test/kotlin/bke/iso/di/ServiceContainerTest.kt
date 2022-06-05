@@ -1,9 +1,29 @@
 package bke.iso.di
 
+import bke.iso.di.test.ExampleSingletonService
+import bke.iso.di.test.Rectangle
+import bke.iso.di.test.Shape
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+/*
+TODO: resolve the following issues:
+ - test negative states (duplicate implementation, missing binding, duplicate binding)
+ - test createInstance
+ - dependency handling is NOT currently tested!
+ - test exception thrown when implementation class not instance of interface class
+ */
 internal class ServiceContainerTest {
+    @Test
+    fun `should register services in classpath`() {
+        val container = ServiceContainer()
+        container.registerFromClassPath("bke.iso.di.test")
+
+        // should not throw an exception
+        container.getService<ExampleSingletonService>()
+        val shape = container.getService<Shape>()
+        assertThat(shape).isInstanceOf(Rectangle::class.java)
+    }
 
     @Test
     fun `should register service`() {
@@ -20,18 +40,13 @@ internal class ServiceContainerTest {
 
     @Test
     fun `should return instance of implementation type given an interface type`() {
-        abstract class Animal {
-            abstract fun getType(): String
-        }
-
-        class Cat : Animal() {
-            override fun getType() = "cat"
-        }
+        abstract class Animal
+        class Cat : Animal()
 
         val container = ServiceContainer()
         container.registerService(Animal::class, Cat::class)
 
         val service = container.getService<Animal>()
-        assertThat(service.getType()).isEqualTo("cat")
+        assertThat(service).isInstanceOf(Cat::class.java)
     }
 }

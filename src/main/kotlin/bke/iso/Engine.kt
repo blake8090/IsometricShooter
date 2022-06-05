@@ -2,7 +2,7 @@ package bke.iso
 
 import bke.iso.asset.AssetService
 import bke.iso.di.ServiceContainer
-import bke.iso.system.RenderSystem
+import bke.iso.render.Renderer
 import bke.iso.system.SystemService
 import bke.iso.world.entity.Entity
 import bke.iso.world.entity.TextureComponent
@@ -26,7 +26,6 @@ class Engine {
 
     fun start() {
         log.info("Starting up")
-        container.getService<SystemService>().registerSystems(mutableSetOf(RenderSystem::class))
         loadAssets()
 
         val world = container.getService<World>()
@@ -55,6 +54,8 @@ class Engine {
 
         val speed = 2f
         entity.move((speed * dx) * deltaTime, (speed * dy) * deltaTime)
+
+        container.getService<Renderer>().render()
     }
 
     fun stop() {

@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory
 import java.lang.RuntimeException
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.isSubclassOf
 
 class MissingBindingException(message: String) : RuntimeException(message)
 class MissingConstructorException(message: String) : RuntimeException(message)
@@ -25,11 +27,20 @@ class ServiceContainer {
     /**
      * Searches the given [classPath] for classes annotated with [Singleton] and registers them as services.
      */
-    fun registerFromClassPath(classPath: String) =
+    fun registerFromClassPath(classPath: String) {
         Reflections(classPath)
             .getTypesAnnotatedWith(Singleton::class.java)
             .map { javaClass -> javaClass.kotlin }
             .forEach { type -> registerService(type) }
+
+        Reflections(classPath)
+            .getTypesAnnotatedWith(SingletonImpl::class.java)
+            .map { javaClass -> javaClass.kotlin }
+            .forEach { type ->
+                val annotation = type.findAnnotation<SingletonImpl>()!!
+                registerService(annotation.interfaceType, type)
+            }
+    }
 
     /**
      * Given an [implementationClass], registers a service with the interface the same as the implementation.
@@ -42,7 +53,12 @@ class ServiceContainer {
      *
      * @throws DuplicateBindingException if the interface class has already been registered
      */
-    fun <T : Any, U : T> registerService(interfaceClass: KClass<T>, implementationClass: KClass<U>) {
+    fun <T : Any> registerService(interfaceClass: KClass<T>, implementationClass: KClass<out Any>) {
+        if (!implementationClass.isSubclassOf(interfaceClass)) {
+            throw IllegalArgumentException("not even a subtype")
+            // todo: test this
+        }
+
         if (implementationByInterfaceMap.containsKey(interfaceClass)) {
             throw DuplicateBindingException(
                 "Interface class ${interfaceClass.simpleName} has already been"
