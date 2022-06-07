@@ -7,8 +7,10 @@ import bke.iso.system.SystemService
 import bke.iso.world.entity.Entity
 import bke.iso.world.entity.TextureComponent
 import bke.iso.world.World
+import bke.iso.world.entity.PositionComponent
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.math.Vector3
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import org.slf4j.LoggerFactory
@@ -30,13 +32,24 @@ class Engine {
 
         val world = container.getService<World>()
         world.loadMap("test")
-
         player = world.createEntity(TextureComponent("player"))
     }
 
     fun update(deltaTime: Float) {
         container.getService<SystemService>().update(deltaTime)
 
+        updatePlayer(deltaTime)
+        player.findComponent<PositionComponent>()?.let { positionComponent ->
+            val world = container.getService<World>()
+            val pos =
+                world.getEntityScreenPos(Vector3(positionComponent.x, positionComponent.y, 0f))
+            container.getService<Renderer>().setCameraPos(pos.x, pos.y)
+        }
+
+        container.getService<Renderer>().render()
+    }
+
+    private fun updatePlayer(deltaTime: Float) {
         var dx = 0f
         var dy = 0f
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -53,8 +66,6 @@ class Engine {
 
         val speed = 2f
         player.move((speed * dx) * deltaTime, (speed * dy) * deltaTime)
-
-        container.getService<Renderer>().render()
     }
 
     fun stop() {

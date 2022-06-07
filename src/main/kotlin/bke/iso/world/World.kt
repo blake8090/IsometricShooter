@@ -94,6 +94,7 @@ class World(private val assetService: AssetService) {
     }
 
     // TODO: move these to another class
+    //  - figure out best parameter types to reduce reliance on Gdx Vector3s?
     fun locationToScreenPos(location: Location, offset: Vector2 = Vector2()): Vector2 {
         val worldPos = Vector3(
             location.x.toFloat(),
