@@ -9,11 +9,11 @@ class Entity(
     private val entityDatabase: EntityDatabase,
     private val worldGrid: WorldGrid
 ) {
-    fun <T : Component> getComponent(componentType: KClass<T>): T? =
-        entityDatabase.getComponent(id, componentType)
+    fun <T : Component> findComponent(componentType: KClass<T>): T? =
+        entityDatabase.findComponent(id, componentType)
 
-    inline fun <reified T : Component> getComponent() =
-        getComponent(T::class)
+    inline fun <reified T : Component> findComponent() =
+        findComponent(T::class)
 
     fun <T : Component> setComponent(component: T) =
         entityDatabase.setComponent(id, component)
@@ -23,7 +23,7 @@ class Entity(
             return
         }
 
-        var positionComponent = entityDatabase.getComponent<PositionComponent>(id)
+        var positionComponent = entityDatabase.findComponent<PositionComponent>(id)
         if (positionComponent == null) {
             positionComponent = PositionComponent()
             entityDatabase.setComponent(id, positionComponent)
@@ -44,7 +44,7 @@ class Entity(
         if (dx == 0f && dy == 0f) {
             return
         }
-        val positionComponent = entityDatabase.getComponent<PositionComponent>(id) ?: return
+        val positionComponent = entityDatabase.findComponent<PositionComponent>(id) ?: return
         setPosition(
             positionComponent.x + dx,
             positionComponent.y + dy

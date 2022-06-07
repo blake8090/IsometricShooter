@@ -18,7 +18,7 @@ class Engine {
 
     private val container = ServiceContainer()
 
-    private lateinit var entity: Entity
+    private lateinit var player: Entity
 
     init {
         container.registerFromClassPath("bke.iso")
@@ -31,8 +31,7 @@ class Engine {
         val world = container.getService<World>()
         world.loadMap("test")
 
-        // TODO: should this return a non-null?
-        entity = world.createEntity(TextureComponent("player"))!!
+        player = world.createEntity(TextureComponent("player"))
     }
 
     fun update(deltaTime: Float) {
@@ -53,7 +52,7 @@ class Engine {
         }
 
         val speed = 2f
-        entity.move((speed * dx) * deltaTime, (speed * dy) * deltaTime)
+        player.move((speed * dx) * deltaTime, (speed * dy) * deltaTime)
 
         container.getService<Renderer>().render()
     }

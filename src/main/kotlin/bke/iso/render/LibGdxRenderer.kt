@@ -50,8 +50,8 @@ class LibGdxRenderer(
     }
 
     private fun drawEntity(entity: Entity) {
-        val positionComponent = entity.getComponent<PositionComponent>() ?: return
-        val texture = entity.getComponent<TextureComponent>()
+        val positionComponent = entity.findComponent<PositionComponent>() ?: return
+        val texture = entity.findComponent<TextureComponent>()
             ?.let { assetService.getAsset<Texture>(it.name) }
             ?: return
 
