@@ -4,15 +4,6 @@ import bke.iso.util.getLogger
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
-open class Component
-
-data class PositionComponent(
-    var x: Float = 0f,
-    var y: Float = 0f
-) : Component()
-
-data class TextureComponent(var name: String) : Component()
-
 class EntityDatabase {
     private val log = getLogger(this)
 
