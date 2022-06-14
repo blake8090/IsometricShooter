@@ -10,7 +10,6 @@ import bke.iso.world.World
 import bke.iso.world.entity.PositionComponent
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.math.Vector3
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import org.slf4j.LoggerFactory
@@ -41,8 +40,7 @@ class Engine {
         updatePlayer(deltaTime)
         player.findComponent<PositionComponent>()?.let { positionComponent ->
             val world = container.getService<World>()
-            val pos =
-                world.getEntityScreenPos(Vector3(positionComponent.x, positionComponent.y, 0f))
+            val pos = world.unitConverter.worldToScreen(positionComponent)
             container.getService<Renderer>().setCameraPos(pos.x, pos.y)
         }
 

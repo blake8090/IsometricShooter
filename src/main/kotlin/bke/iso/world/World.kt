@@ -8,7 +8,6 @@ import bke.iso.world.asset.TileTemplate
 import bke.iso.world.entity.Component
 import bke.iso.world.entity.Entity
 import bke.iso.world.entity.EntityDatabase
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlin.reflect.KClass
 
@@ -17,12 +16,8 @@ class World(private val assetService: AssetService) {
     private val log = getLogger(this)
 
     val tileWidth: Int = 64
-    val halfTileWidth: Int
-        get() = tileWidth / 2
-
     val tileHeight: Int = 32
-    val halfTileHeight: Int
-        get() = tileHeight / 2
+    val unitConverter = UnitConverter(tileWidth, tileHeight)
 
     private val entityDatabase = EntityDatabase()
     private val worldGrid = WorldGrid()
@@ -91,39 +86,5 @@ class World(private val assetService: AssetService) {
             }
         }
         log.info("Successfully loaded map '$name'")
-    }
-
-    // TODO: move these to another class
-    //  - figure out best parameter types to reduce reliance on Gdx Vector3s?
-    fun locationToScreenPos(location: Location, offset: Vector2 = Vector2()): Vector2 {
-        val worldPos = Vector3(
-            location.x.toFloat(),
-            location.y.toFloat(),
-            0f
-        )
-        val screenPos = toScreen(worldPos)
-        screenPos.add(offset)
-        screenPos.x -= halfTileWidth
-        screenPos.y -= tileHeight
-        return screenPos
-    }
-
-    fun getEntityScreenPos(entityPos: Vector3, offset: Vector2 = Vector2()): Vector2 {
-        val screenPos = toScreen(entityPos)
-        screenPos.add(offset)
-        return screenPos
-    }
-
-    private fun toScreen(worldPos: Vector3): Vector2 {
-        // TODO: reword this comment
-        // By swapping x and y and then negating them, we're now working  with vectors
-        // in an isometric coordinate system where the origin is in the top left corner.
-        val screenPos = Vector2(
-            (worldPos.y - worldPos.x) * -1,
-            (worldPos.y + worldPos.x) * -1,
-        )
-        screenPos.x *= halfTileWidth
-        screenPos.y *= halfTileHeight
-        return screenPos
     }
 }
