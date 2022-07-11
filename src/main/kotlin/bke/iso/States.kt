@@ -1,0 +1,41 @@
+package bke.iso
+
+import bke.iso.di.ServiceContainer
+import bke.iso.di.Singleton
+import bke.iso.system.System
+import kotlin.reflect.KClass
+
+abstract class State {
+    private val systems = this.getSystems()
+
+    open fun start() {}
+
+    open fun stop() {}
+
+    open fun input(deltaTime: Float) {}
+
+    open fun update(deltaTime: Float) {}
+
+    fun updateSystems(deltaTime: Float) {
+        systems.forEach { system -> system.update(deltaTime) }
+    }
+
+    open fun draw(deltaTime: Float) {}
+
+    abstract fun getSystems(): Set<System>
+}
+
+@Singleton
+class StateService(private val container: ServiceContainer) {
+    private var state: State? = null
+
+    fun withCurrentState(action: (State) -> Unit) =
+        state?.let(action::invoke)
+
+    fun <T : State> changeState(type: KClass<out T>) {
+        state?.stop()
+        val newState = container.createInstance(type)
+        newState.start()
+        state = newState
+    }
+}

@@ -29,7 +29,8 @@ fun main() {
 }
 
 private fun buildLwjgl3Config(engine: Engine): Lwjgl3ApplicationConfiguration {
-    val config = engine.resolveConfig()
+//    val config = engine.resolveConfig()
+    val config = engine.container.getService<ConfigService>().resolveConfig()
     return Lwjgl3ApplicationConfiguration().apply {
         setWindowedMode(config.width, config.height)
     }
