@@ -22,7 +22,7 @@ data class LocationData(
 data class Location(val x: Int, val y: Int)
 
 class WorldGrid {
-    private val log = getLogger(this)
+    private val log = getLogger()
     private val grid = mutableMapOf<Location, LocationData>()
     private val locationByEntityId = mutableMapOf<Int, Location>()
 

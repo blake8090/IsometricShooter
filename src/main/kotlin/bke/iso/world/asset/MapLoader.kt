@@ -12,7 +12,7 @@ data class MapData(
 
 @AssetLoader("maps", ["map"])
 class MapLoader : BaseAssetLoader<MapData>() {
-    private val log = getLogger(this)
+    private val log = getLogger()
 
     override fun loadAssets(files: List<FilePointer>): Map<String, MapData> {
         val assets = mutableMapOf<String, MapData>()

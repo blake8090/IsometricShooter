@@ -15,7 +15,7 @@ class AssetService(
     private val fileService: FileService,
     private val reflectionService: ReflectionService
 ) {
-    private val log = getLogger(this)
+    private val log = getLogger()
 
     private val assetLoaderByPath = mutableMapOf<String, BaseAssetLoader<*>>()
     private val assetCacheByType = mutableMapOf<KClass<*>, MutableMap<String, Any>>()

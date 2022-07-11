@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 
 @Singleton
 class World(private val assetService: AssetService) {
-    private val log = getLogger(this)
+    private val log = getLogger()
 
     val tileWidth: Int = 64
     val tileHeight: Int = 32

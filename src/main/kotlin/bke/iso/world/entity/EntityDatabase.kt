@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
 class EntityDatabase {
-    private val log = getLogger(this)
+    private val log = getLogger()
 
     private val entityIds = mutableSetOf<Int>()
     private val componentByEntityId = mutableMapOf<Pair<Int, KClass<out Component>>, Component>()

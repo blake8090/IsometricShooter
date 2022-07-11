@@ -20,7 +20,7 @@ data class TileTemplate(
 
 @AssetLoader("tiles", ["toml"])
 class TileTemplateLoader : BaseAssetLoader<TileTemplate>() {
-    private val log = getLogger(this)
+    private val log = getLogger()
     private val mapper = TomlMapper()
 
     override fun loadAssets(files: List<FilePointer>): Map<String, TileTemplate> {
