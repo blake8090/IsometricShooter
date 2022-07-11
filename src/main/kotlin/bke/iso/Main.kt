@@ -6,32 +6,30 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import ktx.async.KtxAsync
 
-fun main() {
-    val engine = Engine()
+class App : ApplicationAdapter() {
+    private val engine = Engine()
 
-    Lwjgl3Application(
-        object : ApplicationAdapter() {
-            override fun create() {
-                KtxAsync.initiate()
-                engine.start()
-            }
+    override fun create() {
+        KtxAsync.initiate()
+        engine.start()
+    }
 
-            override fun render() {
-                engine.update(Gdx.graphics.deltaTime)
-            }
+    override fun render() {
+        engine.update(Gdx.graphics.deltaTime)
+    }
 
-            override fun dispose() {
-                engine.stop()
-            }
-        },
-        buildLwjgl3Config(engine)
-    )
+    override fun dispose() {
+        engine.stop()
+    }
+
+    fun buildConfig(): Lwjgl3ApplicationConfiguration =
+        Lwjgl3ApplicationConfiguration().apply {
+            val config = engine.container.getService<ConfigService>().resolveConfig()
+            setWindowedMode(config.width, config.height)
+        }
 }
 
-private fun buildLwjgl3Config(engine: Engine): Lwjgl3ApplicationConfiguration {
-//    val config = engine.resolveConfig()
-    val config = engine.container.getService<ConfigService>().resolveConfig()
-    return Lwjgl3ApplicationConfiguration().apply {
-        setWindowedMode(config.width, config.height)
-    }
+fun main() {
+    val app = App()
+    Lwjgl3Application(app, app.buildConfig())
 }
