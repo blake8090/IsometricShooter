@@ -1,9 +1,6 @@
 package bke.iso
 
-import bke.iso.di.ServiceContainer
-import bke.iso.di.Singleton
 import bke.iso.system.System
-import kotlin.reflect.KClass
 
 abstract class State {
     private val systems = this.getSystems()
@@ -25,17 +22,21 @@ abstract class State {
     abstract fun getSystems(): Set<System>
 }
 
-@Singleton
-class StateService(private val container: ServiceContainer) {
-    private var state: State? = null
-
-    fun withCurrentState(action: (State) -> Unit) =
-        state?.let(action::invoke)
-
-    fun <T : State> changeState(type: KClass<out T>) {
-        state?.stop()
-        val newState = container.createInstance(type)
-        newState.start()
-        state = newState
-    }
+class NoState : State() {
+    override fun getSystems(): Set<System> = emptySet()
 }
+
+//@Singleton
+//class StateService(private val container: ServiceContainer) {
+//    private var state: State? = null
+//
+//    fun withCurrentState(action: (State) -> Unit) =
+//        state?.let(action::invoke)
+//
+//    fun <T : State> changeState(type: KClass<out T>) {
+//        state?.stop()
+//        val newState = container.createInstance(type)
+//        newState.start()
+//        state = newState
+//    }
+//}
