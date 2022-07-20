@@ -6,16 +6,11 @@ import bke.iso.util.getLogger
 import java.util.Stack
 import kotlin.reflect.KClass
 
-typealias EventHandler = (KClass<*>) -> Unit
-
-open class Event
-
 @Singleton
 class Engine(private val container: ServiceContainer) {
     private val log = getLogger()
 
-    var state = NoState()
-        set(value) = changeState(value)
+    private var state: State = NoState()
 
     private val events = Stack<Event>()
     private val handlers: Map<KClass<*>, EventHandler> = mutableMapOf()
@@ -26,14 +21,10 @@ class Engine(private val container: ServiceContainer) {
 
     // todo: have state react to emitted events
     fun update(deltaTime: Float) {
-//        val stateService = container.getService<StateService>()
-//        // todo:
-//        stateService.withCurrentState { state ->
-//            state.input(deltaTime)
-//            state.updateSystems(deltaTime)
-//            // todo: handle events here?
-//            state.draw(deltaTime)
-//        }
+        state.input(deltaTime)
+        state.updateSystems(deltaTime)
+        // todo: handle events here?
+        state.draw(deltaTime)
     }
 
     fun stop() {
@@ -41,27 +32,16 @@ class Engine(private val container: ServiceContainer) {
         state.stop()
     }
 
+    fun setState(newState: State) {
+        log.debug("Setting state ${state.javaClass.simpleName} to ${newState.javaClass.simpleName}")
+        state.stop()
+        state = newState
+        newState.start()
+    }
+
     fun <T : Event> emitEvent(event: T) =
         events.push(event)
 
     fun handleEvent(handler: EventHandler) {
-
-    }
-
-    private fun changeState(state: State) {
-        TODO("Not yet implemented")
     }
 }
-
-/*
-
-engine {
-    start()
-    update()
-    stop()
-    setState()
-    emitEvent()
-    handleEvent()
-}
-
- */

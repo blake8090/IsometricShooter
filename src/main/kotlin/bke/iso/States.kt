@@ -25,18 +25,3 @@ abstract class State {
 class NoState : State() {
     override fun getSystems(): Set<System> = emptySet()
 }
-
-//@Singleton
-//class StateService(private val container: ServiceContainer) {
-//    private var state: State? = null
-//
-//    fun withCurrentState(action: (State) -> Unit) =
-//        state?.let(action::invoke)
-//
-//    fun <T : State> changeState(type: KClass<out T>) {
-//        state?.stop()
-//        val newState = container.createInstance(type)
-//        newState.start()
-//        state = newState
-//    }
-//}
