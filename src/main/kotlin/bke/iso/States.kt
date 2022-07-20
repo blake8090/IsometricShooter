@@ -1,10 +1,9 @@
 package bke.iso
 
 import bke.iso.system.System
+import kotlin.reflect.KClass
 
 abstract class State {
-    private val systems = this.getSystems()
-
     open fun start() {}
 
     open fun stop() {}
@@ -13,15 +12,11 @@ abstract class State {
 
     open fun update(deltaTime: Float) {}
 
-    fun updateSystems(deltaTime: Float) {
-        systems.forEach { system -> system.update(deltaTime) }
-    }
-
     open fun draw(deltaTime: Float) {}
 
-    abstract fun getSystems(): Set<System>
+    abstract fun getSystems(): Set<KClass<System>>
 }
 
-class NoState : State() {
-    override fun getSystems(): Set<System> = emptySet()
+class EmptyState : State() {
+    override fun getSystems(): Set<KClass<System>> = emptySet()
 }
