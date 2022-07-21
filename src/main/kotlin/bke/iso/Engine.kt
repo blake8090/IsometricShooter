@@ -2,7 +2,6 @@ package bke.iso
 
 import bke.iso.di.ServiceContainer
 import bke.iso.di.Singleton
-import bke.iso.system.System
 import bke.iso.util.getLogger
 import kotlin.reflect.KClass
 
@@ -10,7 +9,7 @@ import kotlin.reflect.KClass
 class Engine(private val container: ServiceContainer) {
     private val log = getLogger()
 
-    private val systems: MutableSet<System> = mutableSetOf()
+    val eventHandlers = EventHandlers()
     private var state: State = EmptyState()
 
     fun start() {
@@ -21,6 +20,7 @@ class Engine(private val container: ServiceContainer) {
     // todo: have state react to emitted events
     fun update(deltaTime: Float) {
         state.input(deltaTime)
+        state.updateSystems(deltaTime)
         state.update(deltaTime)
         state.draw(deltaTime)
     }
@@ -31,18 +31,11 @@ class Engine(private val container: ServiceContainer) {
     }
 
     fun changeState(stateType: KClass<State>) {
-        log.debug("Changing state from '${state.javaClass.simpleName}' to '${stateType.simpleName}'")
-
         val newState = container.createInstance(stateType)
-        val newSystems = newState.getSystems()
-            .map(container::createInstance)
-
+        newState.setup(container)
         state.stop()
-        newState.start()
-        systems.clear()
-        systems.addAll(newSystems)
-
         state = newState
+        newState.start()
         log.debug("Changed to state '${newState.javaClass.simpleName}")
     }
 }
