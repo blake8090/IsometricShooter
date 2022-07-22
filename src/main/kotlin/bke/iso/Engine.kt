@@ -17,7 +17,6 @@ class Engine(private val container: ServiceContainer) {
         log.debug("Current state is '${state.javaClass.simpleName}' by default")
     }
 
-    // todo: have state react to emitted events
     fun update(deltaTime: Float) {
         state.input(deltaTime)
         state.updateSystems(deltaTime)
