@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 open class Event
 
-private interface EventHandler<T : Event> {
+interface EventHandler<T : Event> {
     fun handle(event: T)
 }
 
@@ -23,4 +23,19 @@ class EventHandlers {
 
     inline fun <reified T : Event> handleEvent(noinline action: (T) -> Unit) =
         handleEvent(T::class, action)
+
+    fun <T : Event> run(event: T, eventType: KClass<T>) {
+        findHandlers(eventType)
+            .forEach { eventHandler -> eventHandler.handle(event) }
+    }
+
+    inline fun <reified T : Event> run(event: T) =
+        run(event, T::class)
+
+    private fun <T : Event> findHandlers(eventType: KClass<T>): Set<EventHandler<T>> {
+        return handlersByType[eventType]
+            ?.filterIsInstance<EventHandler<T>>()
+            ?.toSet()
+            ?: emptySet()
+    }
 }

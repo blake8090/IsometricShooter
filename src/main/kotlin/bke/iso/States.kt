@@ -11,7 +11,7 @@ abstract class State {
     val eventHandlers = EventHandlers()
     private val systems = mutableSetOf<System>()
 
-    protected open fun getSystems(): Set<KClass<System>> = emptySet()
+    protected open fun getSystems(): Set<KClass<out System>> = emptySet()
 
     fun setup(container: ServiceContainer) {
         val types = getSystems()
@@ -19,7 +19,10 @@ abstract class State {
             log.debug("Loading systems: $types")
             systems.clear()
             types.map(container::createInstance)
-                .forEach(systems::add)
+                .forEach { system ->
+                    system.init()
+                    systems.add(system)
+                }
         }
     }
 

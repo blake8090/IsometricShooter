@@ -30,7 +30,16 @@ class Engine(private val container: ServiceContainer) {
         state.stop()
     }
 
-    fun changeState(stateType: KClass<State>) {
+    fun <T : Event> emitEvent(caller: Any, eventType: KClass<T>, event: T) {
+        log.debug("Class '${caller.javaClass.simpleName}' is emitting event '$event' of type '${eventType.simpleName}'")
+        state.eventHandlers.run(event, eventType)
+        eventHandlers.run(event, eventType)
+    }
+
+    inline fun <reified T : Event> emitEvent(caller: Any, event: T) =
+        emitEvent(caller, T::class, event)
+
+    fun changeState(stateType: KClass<out State>) {
         val newState = container.createInstance(stateType)
         newState.setup(container)
         state.stop()
