@@ -55,7 +55,9 @@ class ServiceContainer {
      */
     fun <T : Any> registerService(interfaceClass: KClass<T>, implementationClass: KClass<out Any>) {
         if (!implementationClass.isSubclassOf(interfaceClass)) {
-            throw IllegalArgumentException("not even a subtype")
+            throw IllegalArgumentException(
+                "Class '${implementationClass.simpleName}' is not a subtype of '${interfaceClass.simpleName}'"
+            )
             // todo: test this
         }
 
