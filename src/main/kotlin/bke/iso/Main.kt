@@ -1,6 +1,8 @@
 package bke.iso
 
-import bke.iso.di.ServiceContainer
+import bke.iso.engine.ConfigService
+import bke.iso.engine.Engine
+import bke.iso.engine.di.ServiceContainer
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
