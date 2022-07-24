@@ -16,8 +16,7 @@ TODO: resolve the following issues:
 internal class ServiceContainerTest {
     @Test
     fun `should register services in classpath`() {
-        val container = ServiceContainer()
-        container.registerFromClassPath("bke.iso.engine.di.test")
+        val container = ServiceContainer("bke.iso.engine.di.test")
 
         // should not throw an exception
         container.getService<ExampleSingletonService>()

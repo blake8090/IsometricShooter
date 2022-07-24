@@ -15,6 +15,9 @@ class Engine(private val container: ServiceContainer) {
     fun start() {
         log.info("Starting up")
         log.debug("Current state is '${state.javaClass.simpleName}' by default")
+
+        val gameInfo = container.getService<GameInfo>()
+        changeState(gameInfo.defaultState)
     }
 
     fun update(deltaTime: Float) {

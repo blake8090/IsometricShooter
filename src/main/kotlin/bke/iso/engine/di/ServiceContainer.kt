@@ -13,21 +13,24 @@ class MissingConstructorException(message: String) : RuntimeException(message)
 class DuplicateBindingException(message: String) : RuntimeException(message)
 
 // TODO: add unit tests
-class ServiceContainer {
+class ServiceContainer(classPath: String = "") {
     private val log = LoggerFactory.getLogger(ServiceContainer::class.java)
 
     private val implementationByInterfaceMap = mutableMapOf<KClass<*>, KClass<*>>()
     private val instanceMap = mutableMapOf<KClass<*>, Any>()
 
     init {
+        if (classPath.isNotBlank()) {
+            registerFromClassPath(classPath)
+        }
         registerService(ServiceContainer::class)
         instanceMap[ServiceContainer::class] = this
     }
 
     /**
-     * Searches the given [classPath] for classes annotated with [Singleton] and registers them as services.
+     * Searches the given [classPath] for annotated classes and registers them as services.
      */
-    fun registerFromClassPath(classPath: String) {
+    private fun registerFromClassPath(classPath: String) {
         Reflections(classPath)
             .getTypesAnnotatedWith(Singleton::class.java)
             .map { javaClass -> javaClass.kotlin }
