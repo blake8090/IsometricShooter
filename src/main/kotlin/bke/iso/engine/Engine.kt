@@ -1,7 +1,9 @@
 package bke.iso.engine
 
+import bke.iso.engine.asset.AssetService
 import bke.iso.engine.di.ServiceContainer
 import bke.iso.engine.di.Singleton
+import bke.iso.engine.render.Renderer
 import bke.iso.engine.util.getLogger
 import kotlin.reflect.KClass
 
@@ -14,6 +16,7 @@ class Engine(private val container: ServiceContainer) {
 
     fun start() {
         log.info("Starting up")
+        container.getService<AssetService>().setupAssetLoadersInPackage("bke.iso")
         log.debug("Current state is '${state.javaClass.simpleName}' by default")
 
         val gameInfo = container.getService<GameInfo>()
@@ -24,7 +27,7 @@ class Engine(private val container: ServiceContainer) {
         state.input(deltaTime)
         state.updateSystems(deltaTime)
         state.update(deltaTime)
-        state.draw(deltaTime)
+        container.getService<Renderer>().render()
     }
 
     fun stop() {

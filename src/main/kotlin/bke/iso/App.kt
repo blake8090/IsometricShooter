@@ -34,6 +34,7 @@ class App : ApplicationAdapter() {
 
         val appConfig = Lwjgl3ApplicationConfiguration()
         appConfig.setTitle(gameInfo.windowTitle)
+        appConfig.useVsync(false)
 
         if (!config.fullScreen) {
             appConfig.setWindowedMode(config.width, config.height)
