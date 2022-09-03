@@ -1,17 +1,21 @@
-package bke.iso.v2.app
+package bke.iso.v2.app.service
 
+import bke.iso.engine.util.getLogger
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 class Services {
+    private val log = getLogger()
     private val cache = ServiceCache()
 
     init {
         cache.add(Services::class) { this }
     }
 
-    fun <T : Any> register(type: KClass<T>) =
+    fun <T : Any> register(type: KClass<T>) {
         cache.add(type) { createInstance(type) }
+        log.debug("Registered service ${type.simpleName}")
+    }
 
     fun <T : Any> get(type: KClass<T>): T =
         cache.get(type)

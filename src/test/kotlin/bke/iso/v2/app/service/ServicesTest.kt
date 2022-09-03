@@ -1,4 +1,4 @@
-package bke.iso.v2.app
+package bke.iso.v2.app.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

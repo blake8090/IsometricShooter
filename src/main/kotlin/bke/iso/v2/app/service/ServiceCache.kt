@@ -1,4 +1,4 @@
-package bke.iso.v2.app
+package bke.iso.v2.app.service
 
 import java.lang.RuntimeException
 import kotlin.reflect.KClass
