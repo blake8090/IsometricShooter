@@ -1,6 +1,5 @@
 package bke.iso.v2.app.service
 
-import bke.iso.engine.di.Singleton
 import org.reflections.Reflections
 
 @Target(AnnotationTarget.CLASS)
@@ -10,7 +9,7 @@ annotation class Service
 class ServiceScanner {
     fun scanClasspath(classPath: String): List<Class<*>> {
         return Reflections(classPath)
-            .getTypesAnnotatedWith(Singleton::class.java)
+            .getTypesAnnotatedWith(Service::class.java)
             .filterNotNull()
     }
 }

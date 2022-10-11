@@ -4,9 +4,11 @@ import bke.iso.engine.di.ServiceContainer
 import bke.iso.engine.util.FilePointer
 import bke.iso.engine.util.FileService
 import bke.iso.engine.util.getLogger
+import bke.iso.v2.app.service.Service
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
+@Service
 class Assets(
     private val container: ServiceContainer,
     private val fileService: FileService

@@ -1,9 +1,11 @@
 package bke.iso.v2.engine
 
+import bke.iso.v2.app.service.Service
 import java.lang.IllegalArgumentException
 import java.util.UUID
 import kotlin.reflect.KClass
 
+@Service
 class Entities {
     private val components = mutableMapOf<UUID, ComponentMap>()
     private val deletedIds = mutableListOf<UUID>()
