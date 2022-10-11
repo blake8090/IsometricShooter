@@ -1,7 +1,7 @@
 package bke.iso.v2.engine.assets
 
-import bke.iso.engine.util.FilePointer
 import bke.iso.engine.util.getLogger
+import bke.iso.v2.engine.FilePointer
 import kotlin.reflect.KClass
 
 data class Asset<T>(

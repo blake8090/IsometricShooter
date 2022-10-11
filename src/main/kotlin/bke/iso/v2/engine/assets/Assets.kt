@@ -1,17 +1,17 @@
 package bke.iso.v2.engine.assets
 
-import bke.iso.engine.di.ServiceContainer
-import bke.iso.engine.util.FilePointer
-import bke.iso.engine.util.FileService
 import bke.iso.engine.util.getLogger
 import bke.iso.v2.app.service.Service
+import bke.iso.v2.app.service.Services
+import bke.iso.v2.engine.FilePointer
+import bke.iso.v2.engine.Filesystem
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
 @Service
 class Assets(
-    private val container: ServiceContainer,
-    private val fileService: FileService
+    private val services: Services,
+    private val filesystem: Filesystem
 ) {
     private val log = getLogger()
 
@@ -22,11 +22,11 @@ class Assets(
         if (loaderByExtension.containsKey(extension)) {
             throw IllegalArgumentException("duplicate extension")
         }
-        loaderByExtension[extension] = container.createInstance(loaderType)
+        loaderByExtension[extension] = services.createInstance(loaderType)
     }
 
     fun load(path: String) {
-        fileService.getFiles(path)
+        filesystem.getFiles(path)
             .groupBy(FilePointer::getExtension)
             .forEach { (extension, files) ->
                 val loader = loaderByExtension[extension]
