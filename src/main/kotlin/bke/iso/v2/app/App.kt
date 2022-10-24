@@ -2,7 +2,9 @@ package bke.iso.v2.app
 
 import bke.iso.v2.app.service.ServiceScanner
 import bke.iso.v2.app.service.Services
+import bke.iso.v2.engine.Engine
 import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import ktx.async.KtxAsync
 
@@ -17,10 +19,15 @@ class App : ApplicationAdapter() {
 
     override fun create() {
         KtxAsync.initiate()
+        services.get<Engine>().start()
     }
 
     override fun render() {
-        super.render()
+        services.get<Engine>().update(Gdx.graphics.deltaTime)
+    }
+
+    override fun dispose() {
+        services.get<Engine>().stop()
     }
 
     fun buildConfig(): Lwjgl3ApplicationConfiguration {
