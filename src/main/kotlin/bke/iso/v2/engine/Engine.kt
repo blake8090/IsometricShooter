@@ -7,7 +7,7 @@ import bke.iso.v2.app.service.Service
 class Engine {
     private val log = getLogger()
 
-    fun start() {
+    fun start(gameData: GameData) {
         log.info("Starting up")
         // TODO: add asset loaders here
     }

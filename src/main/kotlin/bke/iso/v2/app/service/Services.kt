@@ -14,7 +14,7 @@ class Services {
 
     fun <T : Any> register(type: KClass<T>) {
         cache.add(type) { createInstance(type) }
-        log.debug("Registered service ${type.simpleName}")
+        log.debug("Registered service '${type.simpleName}'")
     }
 
     fun <T : Any> get(type: KClass<T>): T =
