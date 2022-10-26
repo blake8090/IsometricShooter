@@ -7,7 +7,7 @@ abstract class GameConfig
 
 abstract class GameData(
     val windowTitle: String,
-//    val systems: List<System>,
-    val assetLoaders: List<AssetLoader<*>>,
-    val gameConfig: KClass<out GameConfig>
+    val gameConfig: KClass<out GameConfig>,
+    val defaultState: KClass<out State>,
+    val assetLoaders: List<AssetLoader<*>>
 )

@@ -7,6 +7,7 @@ class IsometricShooterConfig : GameConfig()
 
 class IsometricShooter : GameData(
     windowTitle = "Isometric Shooter",
-    assetLoaders = emptyList(),
-    gameConfig = IsometricShooterConfig::class
+    gameConfig = IsometricShooterConfig::class,
+    defaultState = GameState::class,
+    assetLoaders = emptyList()
 )
