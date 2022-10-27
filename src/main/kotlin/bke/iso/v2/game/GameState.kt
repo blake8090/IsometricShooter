@@ -2,9 +2,18 @@ package bke.iso.v2.game
 
 import bke.iso.v2.engine.State
 import bke.iso.v2.engine.log
+import bke.iso.v2.engine.world.Tile
+import bke.iso.v2.engine.world.World
 
-class GameState : State() {
+class GameState(private val world: World) : State() {
     override fun start() {
-        log.info("starting up")
+        log.debug("building world")
+        val tile = Tile("floor")
+        for (y in 0..5) {
+            for (x in 0..10) {
+                world.setTile(tile, x, y)
+            }
+        }
+        log.debug("startup complete")
     }
 }

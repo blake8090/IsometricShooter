@@ -29,6 +29,7 @@ class Engine(private val services: Services) {
 
     fun update(deltaTime: Float) {
         state.update(deltaTime)
+        services.get<Renderer>().render()
     }
 
     fun stop() {

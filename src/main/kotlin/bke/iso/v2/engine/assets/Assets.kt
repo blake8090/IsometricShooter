@@ -56,8 +56,8 @@ class Assets(
 
     fun <T : Any> get(name: String, type: KClass<T>): T? {
         val cache = cacheByType.getOrPut(type) { mutableMapOf() }
-        val asset = cache[name]
-        return type.safeCast(asset)
+        val asset = cache[name] ?: return null
+        return type.safeCast(asset.asset)
     }
 
     inline fun <reified T : Any> get(name: String): T? =

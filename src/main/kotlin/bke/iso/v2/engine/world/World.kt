@@ -7,6 +7,10 @@ data class Tile(val texture: String)
 
 @Service
 class World {
+    private val tileWidth: Int = 64
+    private val tileHeight: Int = 32
+    val unitConverter = UnitConverter(tileWidth, tileHeight)
+
     private val grid = WorldGrid()
 
     fun setTile(tile: Tile, x: Int, y: Int) {
