@@ -3,6 +3,8 @@ package bke.iso.v2.engine
 import bke.iso.engine.util.getLogger
 import bke.iso.v2.app.service.Service
 import bke.iso.v2.app.service.Services
+import bke.iso.v2.engine.assets.Assets
+import bke.iso.v2.engine.assets.TextureLoader
 import kotlin.reflect.KClass
 
 @Service
@@ -13,7 +15,15 @@ class Engine(private val services: Services) {
 
     fun start(gameData: GameData) {
         log.info("Starting up")
-        // TODO: add asset loaders here
+
+        with(services.get<Assets>()) {
+            addLoader("png", TextureLoader::class)
+            addLoader("jpg", TextureLoader::class)
+            // TODO: add loaders from game data
+            // TODO: loading screen?
+            load("assets")
+        }
+
         changeState(gameData.defaultState)
     }
 

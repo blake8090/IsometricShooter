@@ -4,6 +4,7 @@ import bke.iso.v2.app.service.ServiceScanner
 import bke.iso.v2.app.service.Services
 import bke.iso.v2.engine.Engine
 import bke.iso.v2.engine.GameData
+import ch.qos.logback.classic.Level
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
@@ -13,6 +14,7 @@ class App(private val gameData: GameData) : ApplicationAdapter() {
     private val services = Services()
 
     init {
+        configureLogback(Level.DEBUG)
         ServiceScanner()
             .scanClasspath("bke.iso")
             .forEach { javaClass -> services.register(javaClass.kotlin) }

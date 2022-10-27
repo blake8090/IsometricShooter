@@ -17,11 +17,22 @@ class FilePointer(private val file: File) {
 @Service
 class Filesystem {
     /**
-     * Returns a list of all files in the given path, including subdirectories
+     * Returns a list of all files in the given path, including subdirectories.
+     * Given path is relative to the current working directory.
      */
-    fun getFiles(path: String) =
+    fun getFiles(path: String): List<FilePointer> =
         File(path)
             .walkTopDown()
+            .filter(File::isFile)
             .map(::FilePointer)
             .toList()
+
+    /**
+     * Returns the full canonical path as a [String], relative to the program's current working directory.
+     * @param path a relative path, e.g. `"assets"`
+     * @return the full canonical path, e.g. `"C:/program/assets"`
+     */
+    fun getCanonicalPath(path: String): String =
+        File(".", path)
+            .canonicalPath
 }
