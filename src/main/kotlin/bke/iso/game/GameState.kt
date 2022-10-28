@@ -1,68 +1,80 @@
 package bke.iso.game
 
+import bke.iso.engine.Renderer
 import bke.iso.engine.State
-import bke.iso.engine.asset.AssetService
-import bke.iso.engine.render.Renderer
-import bke.iso.engine.util.getLogger
+import bke.iso.engine.assets.Assets
+import bke.iso.engine.log
+import bke.iso.engine.world.Sprite
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.PositionComponent
-import bke.iso.engine.world.entity.TextureComponent
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import kotlin.system.measureTimeMillis
+import java.util.UUID
 
 class GameState(
     private val world: World,
-    private val assetService: AssetService,
+    private val assets: Assets,
     private val renderer: Renderer
 ) : State() {
-    private val log = getLogger()
-
-    private lateinit var player: Entity
+    private lateinit var player: UUID
+    private val speed = 2f
 
     override fun start() {
-        log.info("Starting game state")
-        load()
-        player = world.createEntity(TextureComponent("player"))
+        log.debug("building world")
+
+        loadMap()
+
+        // TODO: add components and position to create method for convenience
+        player = world.entities.create()
+        world.entities.addComponent(player, Sprite("player"))
+        world.entities.setPos(player, 3f, 2f)
+
+        log.debug("finished!")
     }
 
-    override fun stop() {
-    }
-
-    override fun input(deltaTime: Float) {
+    override fun update(deltaTime: Float) {
         var dx = 0f
         var dy = 0f
+
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            dy = -1f
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             dy = 1f
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            dy = -1f
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             dx = -1f
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             dx = 1f
         }
-        val speed = 2f
-        player.move((speed * dx) * deltaTime, (speed * dy) * deltaTime)
+
+        world.entities.move(
+            player,
+            (speed * dx) * deltaTime,
+            (speed * dy) * deltaTime
+        )
+
+        world.entities.getPos(player)
+            ?.let { renderer.setCameraPos(it.x, it.y) }
     }
 
-    override fun update(deltaTime: Float) {
-        player.findComponent<PositionComponent>()?.let { positionComponent ->
-            val pos = world.unitConverter.worldToScreen(positionComponent)
-            renderer.setCameraPos(pos.x, pos.y)
+    private fun loadMap() {
+        val mapData = assets.get<MapData>("test")
+            ?: throw IllegalArgumentException("expected map asset")
+
+        mapData.tiles.forEach { (location, tile) ->
+            world.setTile(tile, location.x, location.y)
+        }
+
+        mapData.walls.forEach { location ->
+            createWall(location.x.toFloat(), location.y.toFloat())
         }
     }
 
-    private fun load() {
-        val assetLoadingTime = measureTimeMillis {
-            assetService.loadAssets("assets")
+    private fun createWall(x: Float, y: Float) {
+        world.entities.apply {
+            val wall = create()
+            setPos(wall, x, y)
+            addComponent(wall, Sprite("wall2"))
         }
-        log.info("Loaded assets in $assetLoadingTime ms")
-
-        val mapLoadingTime = measureTimeMillis {
-            world.loadMap("test")
-        }
-        log.info("Loaded map in $mapLoadingTime ms")
     }
 }

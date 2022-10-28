@@ -1,10 +1,17 @@
 package bke.iso.game
 
-import bke.iso.engine.GameInfo
-import bke.iso.engine.di.SingletonImpl
+import bke.iso.engine.GameConfig
+import bke.iso.engine.GameData
+import bke.iso.engine.assets.Assets
 
-@SingletonImpl(GameInfo::class)
-class IsometricShooter : GameInfo(
-    windowTitle = "Isometric Shooter",
-    defaultState = GameState::class
-)
+class IsometricShooterConfig : GameConfig()
+
+class IsometricShooter : GameData() {
+    override val windowTitle = "Isometric Shooter"
+    override val gameConfig = IsometricShooterConfig::class
+    override val defaultState = GameState::class
+
+    override fun addAssetLoaders(assets: Assets) {
+        assets.addLoader("map", MapLoader::class)
+    }
+}

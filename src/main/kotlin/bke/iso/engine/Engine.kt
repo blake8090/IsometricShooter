@@ -1,33 +1,32 @@
 package bke.iso.engine
 
-import bke.iso.engine.asset.AssetService
-import bke.iso.engine.di.ServiceContainer
-import bke.iso.engine.di.Singleton
-import bke.iso.engine.render.Renderer
-import bke.iso.engine.util.getLogger
+import bke.iso.app.service.Service
+import bke.iso.app.service.Services
+import bke.iso.engine.assets.Assets
+import bke.iso.engine.assets.TextureLoader
 import kotlin.reflect.KClass
 
-@Singleton
-class Engine(private val container: ServiceContainer) {
-    private val log = getLogger()
-
-    val eventHandlers = EventHandlers()
+@Service
+class Engine(private val services: Services) {
     private var state: State = EmptyState()
 
-    fun start() {
+    fun start(gameData: GameData) {
         log.info("Starting up")
-        container.getService<AssetService>().setupAssetLoadersInPackage("bke.iso")
-        log.debug("Current state is '${state.javaClass.simpleName}' by default")
 
-        val gameInfo = container.getService<GameInfo>()
-        changeState(gameInfo.defaultState)
+        with(services.get<Assets>()) {
+            addLoader("png", TextureLoader::class)
+            addLoader("jpg", TextureLoader::class)
+            gameData.addAssetLoaders(this)
+            // TODO: loading screen?
+            load("assets")
+        }
+
+        changeState(gameData.defaultState)
     }
 
     fun update(deltaTime: Float) {
-        state.input(deltaTime)
-        state.updateSystems(deltaTime)
         state.update(deltaTime)
-        container.getService<Renderer>().render()
+        services.get<Renderer>().render()
     }
 
     fun stop() {
@@ -35,21 +34,13 @@ class Engine(private val container: ServiceContainer) {
         state.stop()
     }
 
-    fun <T : Event> emitEvent(caller: Any, eventType: KClass<T>, event: T) {
-        log.debug("Class '${caller.javaClass.simpleName}' is emitting event '$event' of type '${eventType.simpleName}'")
-        state.eventHandlers.run(event, eventType)
-        eventHandlers.run(event, eventType)
-    }
-
-    inline fun <reified T : Event> emitEvent(caller: Any, event: T) =
-        emitEvent(caller, T::class, event)
-
-    fun changeState(stateType: KClass<out State>) {
-        val newState = container.createInstance(stateType)
-        newState.setup(container)
+    fun changeState(newState: KClass<out State>) {
+        log.debug(
+            "Switching state from '${this.state::class.simpleName}' "
+                    + "to '${newState.simpleName}'"
+        )
         state.stop()
-        state = newState
-        newState.start()
-        log.debug("Changed to state '${newState.javaClass.simpleName}")
+        state = services.createInstance(newState)
+        state.start()
     }
 }
