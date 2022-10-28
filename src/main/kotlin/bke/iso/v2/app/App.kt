@@ -38,7 +38,7 @@ class App(private val gameData: GameData) : ApplicationAdapter() {
         config.setTitle(gameData.windowTitle)
         config.useVsync(false)
         // TODO: load this from application config
-        config.setWindowedMode(1280, 720)
+        config.setWindowedMode(1920, 1080)
         return config
     }
 }

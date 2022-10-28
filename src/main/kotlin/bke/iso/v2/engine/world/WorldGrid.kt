@@ -1,5 +1,6 @@
 package bke.iso.v2.engine.world
 
+import bke.iso.v2.engine.log
 import java.util.*
 
 /**
@@ -9,35 +10,32 @@ data class Location(val x: Int, val y: Int)
 
 class WorldGrid {
     /**
-     * A 2D grid of tiles and entities.
-     *
-     * Each location, i.e. (3, 1), contains exactly one tile and multiple entities.
-     *
-     * Locations in the grid are first sorted by their y value, and then the x value.
-     * This allows for properly rendering elements in an isometric projection.
-     */
-    private val dataByLocation =
-        mutableMapOf<Location, GridData>()
-            .toSortedMap(
-                compareBy<Location> { it.y }.thenBy { it.x }
-            )
-
-    /**
      * Maps an entity ID to a location.
-     * Used for keeping track of entities and their locations within the world grid.
+     * Provides a quick reference to a particular location when entity positions are updated.
      */
     private val locationByEntity = mutableMapOf<UUID, Location>()
+
+    private val entitiesByLocation = mutableMapOf<Location, MutableSet<UUID>>()
+        .toSortedMap(
+            compareByDescending(Location::y)
+                .thenBy(Location::x)
+        )
+
+    private val tileByLocation = mutableMapOf<Location, Tile>()
+        .toSortedMap(
+            compareByDescending(Location::y)
+                .thenBy(Location::x)
+        )
 
     fun setEntityLocation(id: UUID, location: Location) {
         val oldLocation = locationByEntity[id]
         if (oldLocation != null && oldLocation != location) {
-            dataByLocation[oldLocation]
-                ?.entities
-                ?.remove(id)
+            entitiesByLocation[oldLocation]?.remove(id)
+            log.trace("Moving entity $id from $oldLocation to $location")
         }
 
-        dataByLocation.getOrPut(location) { GridData() }
-            .entities
+        entitiesByLocation
+            .getOrPut(location) { mutableSetOf() }
             .add(id)
 
         locationByEntity[id] = location
@@ -45,26 +43,21 @@ class WorldGrid {
 
     // TODO: remove entity
 
-    fun getTile(location: Location): Tile? =
-        dataByLocation[location]
-            ?.tile
-
     fun setTile(location: Location, tile: Tile) {
-        dataByLocation
-            .getOrPut(location) { GridData() }
-            .tile = tile
+        tileByLocation[location] = tile
     }
 
     // TODO: remove tile
 
-    fun forEach(action: (Location, Tile?, Set<UUID>) -> Unit) {
-        dataByLocation.forEach { (location, data) ->
-            action.invoke(location, data.tile, data.entities.toSet())
+    fun forEachTile(action: (Location, Tile) -> Unit) {
+        for ((location, tile) in tileByLocation) {
+            action.invoke(location, tile)
         }
     }
-}
 
-private class GridData {
-    var tile: Tile? = null
-    val entities = mutableListOf<UUID>()
+    fun forEachEntity(action: (Location, Set<UUID>) -> Unit) {
+        for ((location, entities) in entitiesByLocation) {
+            action.invoke(location, entities)
+        }
+    }
 }

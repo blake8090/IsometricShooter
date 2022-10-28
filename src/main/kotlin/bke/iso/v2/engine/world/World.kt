@@ -16,6 +16,9 @@ class World {
         grid.setTile(Location(x, y), tile)
     }
 
-    fun forEach(action: (Location, Tile?, Set<UUID>) -> Unit) =
-        grid.forEach(action)
+    fun forEachTile(action: (Location, Tile) -> Unit) =
+        grid.forEachTile(action)
+
+    fun forEachEntity(action: (Location, Set<UUID>) -> Unit) =
+        grid.forEachEntity(action)
 }

@@ -31,9 +31,15 @@ class Renderer(
         batch.projectionMatrix = camera.combined
         shapeRenderer.projectionMatrix = camera.combined
 
+        renderWorld()
+    }
+
+    private fun renderWorld() {
         batch.begin()
-        world.forEach { location, tile, entities ->
-            tile?.let { drawTile(tile, location) }
+        world.forEachTile { location, tile ->
+            drawTile(tile, location)
+        }
+        world.forEachEntity { _, entities ->
             entities.forEach(this::drawEntity)
         }
         batch.end()
@@ -41,8 +47,8 @@ class Renderer(
 
     private fun drawTile(tile: Tile, location: Location) {
         val texture = assets.get<Texture>(tile.texture) ?: return
-        val pos = world.units.tileToScreen(location)
-        batch.draw(texture, pos.x, pos.y)
+        val screenPos = world.units.worldToScreen(location)
+        batch.draw(texture, screenPos.x, screenPos.y)
     }
 
     private fun drawEntity(id: UUID) {
