@@ -4,13 +4,6 @@ import bke.iso.engine.util.getLogger
 import bke.iso.v2.engine.FilePointer
 import kotlin.reflect.KClass
 
-data class Asset<T>(
-    val name: String,
-    val asset: T
-)
-
-typealias AssetMap<T> = MutableMap<String, Asset<T>>
-
 abstract class AssetLoader<T : Any> {
     private val log = getLogger()
 

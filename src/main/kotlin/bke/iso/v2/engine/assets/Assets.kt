@@ -8,6 +8,13 @@ import bke.iso.v2.engine.log
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
+data class Asset<T>(
+    val name: String,
+    val asset: T
+)
+
+typealias AssetMap<T> = MutableMap<String, Asset<T>>
+
 @Service
 class Assets(
     private val services: Services,
