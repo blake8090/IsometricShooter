@@ -34,31 +34,24 @@ class Assets(
     fun load(path: String) {
         log.info("Loading assets from path: '${filesystem.getCanonicalPath(path)}'")
 
-        filesystem.getFiles(path)
+        val filesByExtension = filesystem
+            .getFiles(path)
             .groupBy(FilePointer::getExtension)
-            .forEach(this::loadFilesByExtension)
-    }
 
-    private fun loadFilesByExtension(extension: String, files: List<FilePointer>) {
-        val loader = loaderByExtension[extension]
-        if (loader == null) {
-            log.warn("No asset loader for file extension '$extension' was defined, skipping ${files.size} files")
-            return
-        }
-
-        files.forEach {
-            log.trace("loading file: '${it.getPath()}'")
-            loadAssets(loader, files)
+        for ((extension, files) in filesByExtension) {
+            val loader = loaderByExtension[extension]
+            if (loader != null) {
+                log.info("Loading ${files.size} '.$extension' file(s) as type '${loader.getType().simpleName}'")
+                loadAssets(loader, files)
+            } else {
+                log.warn("No asset loader for file extension '.$extension' was defined, skipping ${files.size} file(s)")
+            }
         }
     }
 
     private fun <T : Any> loadAssets(loader: AssetLoader<T>, files: List<FilePointer>) {
         val cache = cacheByType.getOrPut(loader.getType()) { mutableMapOf() }
-        loader.load(files)
-            .forEach { (name, asset) ->
-                cache[name] = asset
-                log.info("Loaded asset '${asset.name}' of type '${loader.getType().simpleName}'")
-            }
+        loader.load(files).forEach(cache::set)
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T? {

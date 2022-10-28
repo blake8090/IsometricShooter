@@ -1,12 +1,10 @@
 package bke.iso.v2.engine.assets
 
-import bke.iso.engine.util.getLogger
 import bke.iso.v2.engine.FilePointer
+import bke.iso.v2.engine.log
 import kotlin.reflect.KClass
 
 abstract class AssetLoader<T : Any> {
-    private val log = getLogger()
-
     abstract fun getType(): KClass<T>
 
     protected abstract fun load(file: FilePointer): List<Asset<T>>
@@ -20,6 +18,7 @@ abstract class AssetLoader<T : Any> {
                     log.warn("Duplicate asset '${asset.name}' from file '${file.getPath()}'")
                 } else {
                     assets[asset.name] = asset
+                    log.info("Loaded asset '${asset.name}' as type '${getType().simpleName}' from file '${file.getPath()}'")
                 }
             }
         }

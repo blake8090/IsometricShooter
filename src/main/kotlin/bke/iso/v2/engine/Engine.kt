@@ -19,7 +19,7 @@ class Engine(private val services: Services) {
         with(services.get<Assets>()) {
             addLoader("png", TextureLoader::class)
             addLoader("jpg", TextureLoader::class)
-            // TODO: add loaders from game data
+            gameData.addAssetLoaders(this)
             // TODO: loading screen?
             load("assets")
         }
