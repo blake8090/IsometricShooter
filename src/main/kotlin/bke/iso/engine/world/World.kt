@@ -3,7 +3,7 @@ package bke.iso.engine.world
 import bke.iso.app.service.Service
 import java.util.*
 
-data class Tile(val texture: String)
+data class Tile(val sprite: Sprite)
 
 @Service
 class World {

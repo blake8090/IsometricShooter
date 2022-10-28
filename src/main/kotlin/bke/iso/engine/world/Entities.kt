@@ -25,6 +25,7 @@ class Entities(private val grid: WorldGrid) {
     fun setPos(id: UUID, x: Float, y: Float) {
         posById[id] = Vector2(x, y)
 
+        // TODO: handle negative coords - ceil instead of floor?
         val location = Location(x.toInt(), y.toInt())
         grid.setEntityLocation(id, location)
     }

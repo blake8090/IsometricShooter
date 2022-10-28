@@ -66,46 +66,73 @@ class Renderer(
     }
 
     private fun drawTile(tile: Tile, location: Location) {
-        val texture = assets.get<Texture>(tile.texture) ?: return
         val screenPos = world.units.worldToScreen(location)
-        batch.draw(texture, screenPos.x, screenPos.y)
+        drawSprite(tile.sprite, screenPos)
     }
 
     private fun drawEntity(id: UUID) {
-        val pos = world.entities.getPos(id) ?: return
+        val pos = world.entities.getPos(id)
+            ?.let { world.units.worldToScreen(it) }
+            ?: return
         val sprite = world.entities.getComponent(id, Sprite::class) ?: return
+        drawSprite(sprite, pos)
+    }
+
+    private fun drawSprite(sprite: Sprite, pos: Vector2) {
         val texture = assets.get<Texture>(sprite.texture) ?: return
-        val screenPos = world.units.worldToScreen(pos.x, pos.y)
-        batch.draw(texture, screenPos.x, screenPos.y)
+        val finalPos = pos.sub(sprite.offset)
+        batch.draw(texture, finalPos.x, finalPos.y)
     }
 
     private fun drawEntityDebug(id: UUID) {
-        val pos = world.entities.getPos(id) ?: return
+        val pos = world.entities.getPos(id)
+            ?.let { world.units.worldToScreen(it) }
+            ?: return
         drawDebugCircle(pos.x, pos.y, 2f, Color.RED)
-        drawDebugRectangle(pos.x, pos.y, 1f, 1f)
+
+        // draw texture bounds
+        val sprite = world.entities.getComponent(id, Sprite::class) ?: return
+        val texture = assets.get<Texture>(sprite.texture) ?: return
+        drawDebugRectangle(
+            pos.x - sprite.offset.x,
+            pos.y - sprite.offset.y,
+            texture.width.toFloat(),
+            texture.height.toFloat(),
+            Color.GREEN
+        )
     }
 
     private fun drawTileDebug(location: Location) {
-        drawDebugCircle(location.x.toFloat(), location.y.toFloat(), 2f, Color.CYAN)
+        val pos = world.units.worldToScreen(location)
+        drawDebugCircle(pos.x, pos.y, 2f, Color.CYAN)
     }
 
-    private fun drawDebugCircle(x: Float, y: Float, size: Float, color: Color) {
+    private fun drawDebugCircle(
+        x: Float,
+        y: Float,
+        size: Float,
+        color: Color
+    ) {
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
-        val pos = world.units.worldToScreen(x, y)
-
-        shapeRenderer.circle(pos.x, pos.y, size)
+        shapeRenderer.circle(x, y, size)
         shapeRenderer.end()
     }
 
-    private fun drawDebugRectangle(x: Float, y: Float, width: Float, height: Float) {
-        val topLeft = world.units.worldToScreen(Vector2(x, y + height))
-        val topRight = world.units.worldToScreen(Vector2(x + width, y + height))
-        val bottomLeft = world.units.worldToScreen(Vector2(x, y))
-        val bottomRight = world.units.worldToScreen(Vector2(x + width, y))
+    private fun drawDebugRectangle(
+        x: Float,
+        y: Float,
+        width: Float,
+        height: Float,
+        color: Color
+    ) {
+        val topLeft = Vector2(x, y + height)
+        val topRight = Vector2(x + width, y + height)
+        val bottomLeft = Vector2(x, y)
+        val bottomRight = Vector2(x + width, y)
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
-        shapeRenderer.color = Color.GREEN
+        shapeRenderer.color = color
         shapeRenderer.line(topLeft, topRight)
         shapeRenderer.line(bottomLeft, bottomRight)
         shapeRenderer.line(topLeft, bottomLeft)

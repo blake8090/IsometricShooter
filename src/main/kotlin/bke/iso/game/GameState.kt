@@ -8,6 +8,7 @@ import bke.iso.engine.world.Sprite
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.math.Vector2
 import java.util.UUID
 
 class GameState(
@@ -25,7 +26,7 @@ class GameState(
 
         // TODO: add components and position to create method for convenience
         player = world.entities.create()
-        world.entities.addComponent(player, Sprite("player"))
+        world.entities.addComponent(player, Sprite("player", Vector2(32f, 0f)))
         world.entities.setPos(player, 3f, 2f)
 
         log.debug("finished!")
@@ -74,7 +75,7 @@ class GameState(
         world.entities.apply {
             val wall = create()
             setPos(wall, x, y)
-            addComponent(wall, Sprite("wall2"))
+            addComponent(wall, Sprite("wall2", Vector2(0f, 16f)))
         }
     }
 }

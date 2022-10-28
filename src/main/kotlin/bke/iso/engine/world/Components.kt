@@ -1,7 +1,10 @@
 package bke.iso.engine.world
 
+import com.badlogic.gdx.math.Vector2
+
 open class Component
 
 data class Sprite(
-    var texture: String
+    val texture: String,
+    val offset: Vector2 = Vector2()
 ) : Component()

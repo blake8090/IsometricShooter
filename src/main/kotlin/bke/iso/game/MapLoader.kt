@@ -4,7 +4,9 @@ import bke.iso.engine.FilePointer
 import bke.iso.engine.assets.Asset
 import bke.iso.engine.assets.AssetLoader
 import bke.iso.engine.world.Location
+import bke.iso.engine.world.Sprite
 import bke.iso.engine.world.Tile
+import com.badlogic.gdx.math.Vector2
 import kotlin.reflect.KClass
 
 data class MapData(
@@ -13,7 +15,8 @@ data class MapData(
 )
 
 class MapLoader : AssetLoader<MapData>() {
-    private val floor = Tile("floor")
+    private val spriteOffset = Vector2(0f, 16f)
+    private val floor = Tile(Sprite("floor", spriteOffset))
 
     override fun getType(): KClass<MapData> =
         MapData::class
