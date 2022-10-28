@@ -14,7 +14,7 @@ class App(private val gameData: GameData) : ApplicationAdapter() {
     private val services = Services()
 
     init {
-        configureLogback(Level.DEBUG)
+        configureLogback(Level.TRACE)
         ServiceScanner()
             .scanClasspath("bke.iso")
             .forEach { javaClass -> services.register(javaClass.kotlin) }

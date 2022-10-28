@@ -19,4 +19,10 @@ class Units(private val tileWidth: Int, private val tileHeight: Int) {
         val y2: Float = (y * tileHeight / 2) - (x * tileHeight / 2)
         return Vector2(x2, y2)
     }
+
+    /**
+     * Converts a precise position in the world to a [Vector2] for use with the LibGDX API.
+     */
+    fun worldToScreen(pos: Vector2): Vector2 =
+        worldToScreen(pos.x, pos.y)
 }

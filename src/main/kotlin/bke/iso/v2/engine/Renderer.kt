@@ -7,11 +7,13 @@ import bke.iso.v2.engine.world.Sprite
 import bke.iso.v2.engine.world.Tile
 import bke.iso.v2.engine.world.World
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import java.util.UUID
 
 @Service
@@ -45,10 +47,22 @@ class Renderer(
         world.forEachTile { location, tile ->
             drawTile(tile, location)
         }
+        // todo: draw boundaries for tiles, for debugging entity location switching
         world.forEachEntity { _, entities ->
             entities.forEach(this::drawEntity)
         }
         batch.end()
+
+        renderDebugInfo()
+    }
+
+    private fun renderDebugInfo() {
+        world.forEachTile { location, _ ->
+            drawTileDebug(location)
+        }
+        world.forEachEntity { _, entities ->
+            entities.forEach(this::drawEntityDebug)
+        }
     }
 
     private fun drawTile(tile: Tile, location: Location) {
@@ -61,8 +75,41 @@ class Renderer(
         val pos = world.entities.getPos(id) ?: return
         val sprite = world.entities.getComponent(id, Sprite::class) ?: return
         val texture = assets.get<Texture>(sprite.texture) ?: return
-
         val screenPos = world.units.worldToScreen(pos.x, pos.y)
         batch.draw(texture, screenPos.x, screenPos.y)
+    }
+
+    private fun drawEntityDebug(id: UUID) {
+        val pos = world.entities.getPos(id) ?: return
+        drawDebugCircle(pos.x, pos.y, 2f, Color.RED)
+        drawDebugRectangle(pos.x, pos.y, 1f, 1f)
+    }
+
+    private fun drawTileDebug(location: Location) {
+        drawDebugCircle(location.x.toFloat(), location.y.toFloat(), 2f, Color.CYAN)
+    }
+
+    private fun drawDebugCircle(x: Float, y: Float, size: Float, color: Color) {
+        shapeRenderer.color = color
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
+        val pos = world.units.worldToScreen(x, y)
+
+        shapeRenderer.circle(pos.x, pos.y, size)
+        shapeRenderer.end()
+    }
+
+    private fun drawDebugRectangle(x: Float, y: Float, width: Float, height: Float) {
+        val topLeft = world.units.worldToScreen(Vector2(x, y + height))
+        val topRight = world.units.worldToScreen(Vector2(x + width, y + height))
+        val bottomLeft = world.units.worldToScreen(Vector2(x, y))
+        val bottomRight = world.units.worldToScreen(Vector2(x + width, y))
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+        shapeRenderer.color = Color.GREEN
+        shapeRenderer.line(topLeft, topRight)
+        shapeRenderer.line(bottomLeft, bottomRight)
+        shapeRenderer.line(topLeft, bottomLeft)
+        shapeRenderer.line(topRight, bottomRight)
+        shapeRenderer.end()
     }
 }

@@ -53,6 +53,11 @@ class Entities(private val grid: WorldGrid) {
         }
         return componentsById[id]?.get(type)
     }
+
+    fun <T : Component> hasComponent(id: UUID, type: KClass<T>): Boolean =
+        componentsById[id]
+            ?.has(type)
+            ?: false
 }
 
 private class ComponentMap {
@@ -65,4 +70,7 @@ private class ComponentMap {
     fun <T : Component> get(type: KClass<T>): T? {
         return type.safeCast(components[type])
     }
+
+    fun <T : Component> has(type: KClass<T>): Boolean =
+        components.containsKey(type)
 }

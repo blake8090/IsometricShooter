@@ -19,6 +19,8 @@ class World {
     fun forEachTile(action: (Location, Tile) -> Unit) =
         grid.forEachTile(action)
 
+    // TODO: flat map this, to iterate on the following:
+    //  (location, pos, entityId)
     fun forEachEntity(action: (Location, Set<UUID>) -> Unit) =
         grid.forEachEntity(action)
 }
