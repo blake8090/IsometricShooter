@@ -1,34 +1,32 @@
 package bke.iso.v2.game
 
+import bke.iso.v2.engine.Renderer
 import bke.iso.v2.engine.State
+import bke.iso.v2.engine.assets.Assets
 import bke.iso.v2.engine.log
 import bke.iso.v2.engine.world.Sprite
-import bke.iso.v2.engine.world.Tile
 import bke.iso.v2.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import java.util.UUID
 
-class GameState(private val world: World) : State() {
+class GameState(
+    private val world: World,
+    private val assets: Assets,
+    private val renderer: Renderer
+) : State() {
     private lateinit var player: UUID
     private val speed = 2f
 
     override fun start() {
         log.debug("building world")
 
-        val tile = Tile("floor")
-        for (y in 0..5) {
-            for (x in 0..10) {
-                world.setTile(tile, x, y)
-            }
-        }
+        loadMap()
 
         // TODO: add components and position to create method for convenience
         player = world.entities.create()
-        world.entities.addComponent(player, Sprite("circle"))
+        world.entities.addComponent(player, Sprite("player"))
         world.entities.setPos(player, 3f, 2f)
-
-        createWall(3f, 1f)
 
         log.debug("finished!")
     }
@@ -54,6 +52,22 @@ class GameState(private val world: World) : State() {
             (speed * dx) * deltaTime,
             (speed * dy) * deltaTime
         )
+
+        world.entities.getPos(player)
+            ?.let { renderer.setCameraPos(it.x, it.y) }
+    }
+
+    private fun loadMap() {
+        val mapData = assets.get<MapData>("test")
+            ?: throw IllegalArgumentException("expected map asset")
+
+        mapData.tiles.forEach { (location, tile) ->
+            world.setTile(tile, location.x, location.y)
+        }
+
+        mapData.walls.forEach { location ->
+            createWall(location.x.toFloat(), location.y.toFloat())
+        }
     }
 
     private fun createWall(x: Float, y: Float) {

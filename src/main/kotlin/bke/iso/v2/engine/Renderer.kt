@@ -23,6 +23,12 @@ class Renderer(
     private val shapeRenderer = ShapeRenderer()
     private val camera = OrthographicCamera(1280f, 720f)
 
+    fun setCameraPos(x: Float, y: Float) {
+        val screenPos = world.units.worldToScreen(x, y)
+        camera.position.x = screenPos.x
+        camera.position.y = screenPos.y
+    }
+
     fun render() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)

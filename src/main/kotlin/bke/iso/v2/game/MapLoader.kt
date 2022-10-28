@@ -31,8 +31,8 @@ class MapLoader : AssetLoader<MapData>() {
             for ((x, char) in row.withIndex()) {
                 val location = Location(x, y)
                 when (fromSymbol(char)) {
-                    MapObjects.FLOOR -> walls.add(location)
-                    MapObjects.WALL -> tiles[location] = floor
+                    MapObjects.FLOOR -> tiles[location] = floor
+                    MapObjects.WALL -> walls.add(location)
                 }
             }
         }
