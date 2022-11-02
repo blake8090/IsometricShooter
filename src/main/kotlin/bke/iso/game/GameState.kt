@@ -4,19 +4,17 @@ import bke.iso.engine.Renderer
 import bke.iso.engine.State
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.log
-import bke.iso.engine.world.Sprite
-import bke.iso.engine.world.World
+import bke.iso.engine.world.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
-import java.util.UUID
 
 class GameState(
     private val world: World,
     private val assets: Assets,
     private val renderer: Renderer
 ) : State() {
-    private lateinit var player: UUID
+    private lateinit var player: Entity
     private val speed = 2f
 
     override fun start() {
@@ -24,10 +22,21 @@ class GameState(
 
         loadMap()
 
-        // TODO: add components and position to create method for convenience
         player = world.entities.create()
-        world.entities.addComponent(player, Sprite("player", Vector2(32f, 0f)))
-        world.entities.setPos(player, 3f, 2f)
+            .addComponent(
+                Sprite(
+                    "player",
+                    Vector2(32f, 0f)
+                )
+            )
+            .addComponent(
+                CollisionBox(
+                    -0.25f,
+                    -0.25f,
+                    0.5f,
+                    0.5f
+                )
+            )
 
         log.debug("finished!")
     }
@@ -48,14 +57,13 @@ class GameState(
             dx = 1f
         }
 
-        world.entities.move(
-            player,
+        player.move(
             (speed * dx) * deltaTime,
             (speed * dy) * deltaTime
         )
 
-        world.entities.getPos(player)
-            ?.let { renderer.setCameraPos(it.x, it.y) }
+        val pos = player.getPos()
+        renderer.setCameraPos(pos.x, pos.y)
     }
 
     private fun loadMap() {
@@ -72,10 +80,9 @@ class GameState(
     }
 
     private fun createWall(x: Float, y: Float) {
-        world.entities.apply {
-            val wall = create()
-            setPos(wall, x, y)
-            addComponent(wall, Sprite("wall2", Vector2(0f, 16f)))
-        }
+        world.entities.create(x, y)
+            .addComponent(Sprite("wall2", Vector2(0f, 16f)))
+            .addComponent(Bounds(1f, 1f))
+            .addComponent(CollisionBox(0f, 0f, 1f, 1f))
     }
 }

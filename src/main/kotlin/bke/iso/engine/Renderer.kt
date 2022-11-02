@@ -2,10 +2,7 @@ package bke.iso.engine
 
 import bke.iso.app.service.Service
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.world.Location
-import bke.iso.engine.world.Sprite
-import bke.iso.engine.world.Tile
-import bke.iso.engine.world.World
+import bke.iso.engine.world.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -91,15 +88,72 @@ class Renderer(
         drawDebugCircle(pos.x, pos.y, 2f, Color.RED)
 
         // draw texture bounds
-        val sprite = world.entities.getComponent(id, Sprite::class) ?: return
-        val texture = assets.get<Texture>(sprite.texture) ?: return
-        drawDebugRectangle(
-            pos.x - sprite.offset.x,
-            pos.y - sprite.offset.y,
-            texture.width.toFloat(),
-            texture.height.toFloat(),
-            Color.GREEN
+//        val sprite = world.entities.getComponent(id, Sprite::class) ?: return
+//        val texture = assets.get<Texture>(sprite.texture) ?: return
+//        drawDebugRectangle(
+//            pos.x - sprite.offset.x,
+//            pos.y - sprite.offset.y,
+//            texture.width.toFloat(),
+//            texture.height.toFloat(),
+//            Color.GREEN
+//        )
+        drawEntityBounds(id)
+        drawCollisionBox(id)
+    }
+
+    private fun drawEntityBounds(id: UUID) {
+        val pos = world.entities.getPos(id) ?: return
+        val bounds = world.entities.getComponent(id, Bounds::class) ?: return
+
+        val bottomLeft = world.units.worldToScreen(pos)
+        val bottomRight = world.units.worldToScreen(pos.x + bounds.width, pos.y)
+        val topLeft = world.units.worldToScreen(pos.x, pos.y + bounds.length)
+        val topRight = world.units.worldToScreen(pos.x + bounds.width, pos.y + bounds.length)
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+        shapeRenderer.color = Color.GREEN
+        shapeRenderer.line(topLeft, topRight)
+        shapeRenderer.line(bottomLeft, bottomRight)
+        shapeRenderer.line(topLeft, bottomLeft)
+        shapeRenderer.line(topRight, bottomRight)
+        shapeRenderer.end()
+    }
+
+    private fun drawCollisionBox(id: UUID) {
+        val pos = world.entities.getPos(id) ?: return
+        val collisionBox = world.entities.getComponent(id, CollisionBox::class) ?: return
+
+        val start = Vector2(
+            pos.x + collisionBox.x,
+            pos.y + collisionBox.y
         )
+
+        val bottomLeft = world.units.worldToScreen(start)
+        val bottomRight = world.units
+            .worldToScreen(
+                start.x + collisionBox.width,
+                start.y
+            )
+        val topLeft = world.units
+            .worldToScreen(
+                start.x,
+                start.y + collisionBox.length
+            )
+        val topRight = world.units
+            .worldToScreen(
+                start.x + collisionBox.width,
+                start.y + collisionBox.length
+            )
+//        val topLeft = world.units.worldToScreen(pos.x, pos.y + bounds.length)
+//        val topRight = world.units.worldToScreen(pos.x + bounds.width, pos.y + bounds.length)
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+        shapeRenderer.color = Color.GREEN
+        shapeRenderer.line(topLeft, topRight)
+        shapeRenderer.line(bottomLeft, bottomRight)
+        shapeRenderer.line(topLeft, bottomLeft)
+        shapeRenderer.line(topRight, bottomRight)
+        shapeRenderer.end()
     }
 
     private fun drawTileDebug(location: Location) {

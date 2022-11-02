@@ -10,10 +10,10 @@ class Entities(private val grid: WorldGrid) {
     private val posById = mutableMapOf<UUID, Vector2>()
     private val componentsById = mutableMapOf<UUID, ComponentMap>()
 
-    fun create(): UUID {
+    fun create(x: Float = 0f, y: Float = 0f): Entity {
         val id = UUID.randomUUID()
-        setPos(id, 0f, 0f)
-        return id
+        setPos(id, x, y)
+        return Entity(id, this)
     }
 
     /**
