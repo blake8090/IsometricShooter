@@ -1,6 +1,8 @@
-package bke.iso.engine.world
+package bke.iso.engine.entity
 
 import bke.iso.engine.log
+import bke.iso.engine.world.Location
+import bke.iso.engine.world.WorldGrid
 import com.badlogic.gdx.math.Vector2
 import java.util.*
 import kotlin.reflect.KClass

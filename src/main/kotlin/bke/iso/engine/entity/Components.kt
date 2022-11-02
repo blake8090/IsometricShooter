@@ -1,4 +1,4 @@
-package bke.iso.engine.world
+package bke.iso.engine.entity
 
 import com.badlogic.gdx.math.Vector2
 

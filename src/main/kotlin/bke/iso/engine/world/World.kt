@@ -1,6 +1,9 @@
 package bke.iso.engine.world
 
 import bke.iso.app.service.Service
+import bke.iso.engine.entity.Entities
+import bke.iso.engine.entity.Entity
+import bke.iso.engine.entity.Sprite
 
 data class Tile(val sprite: Sprite)
 

@@ -4,7 +4,7 @@ import bke.iso.engine.FilePointer
 import bke.iso.engine.assets.Asset
 import bke.iso.engine.assets.AssetLoader
 import bke.iso.engine.world.Location
-import bke.iso.engine.world.Sprite
+import bke.iso.engine.entity.Sprite
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.math.Vector2
 import kotlin.reflect.KClass
