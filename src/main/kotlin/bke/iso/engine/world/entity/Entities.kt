@@ -1,4 +1,4 @@
-package bke.iso.engine.entity
+package bke.iso.engine.world.entity
 
 import bke.iso.engine.log
 import bke.iso.engine.world.Location

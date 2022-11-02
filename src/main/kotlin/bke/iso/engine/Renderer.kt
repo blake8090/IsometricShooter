@@ -2,9 +2,9 @@ package bke.iso.engine
 
 import bke.iso.app.service.Service
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.entity.CollisionBox
-import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.Sprite
+import bke.iso.engine.world.entity.CollisionBox
+import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.entity.Sprite
 import bke.iso.engine.world.*
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color

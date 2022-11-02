@@ -3,10 +3,10 @@ package bke.iso.game
 import bke.iso.engine.Renderer
 import bke.iso.engine.State
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.entity.Bounds
-import bke.iso.engine.entity.CollisionBox
-import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.Sprite
+import bke.iso.engine.world.entity.Bounds
+import bke.iso.engine.world.entity.CollisionBox
+import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.entity.Sprite
 import bke.iso.engine.log
 import bke.iso.engine.world.*
 import com.badlogic.gdx.Gdx
