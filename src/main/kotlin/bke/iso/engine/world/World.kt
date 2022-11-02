@@ -1,7 +1,6 @@
 package bke.iso.engine.world
 
 import bke.iso.app.service.Service
-import java.util.*
 
 data class Tile(val sprite: Sprite)
 
@@ -19,8 +18,11 @@ class World {
     fun forEachTile(action: (Location, Tile) -> Unit) =
         grid.forEachTile(action)
 
-    // TODO: flat map this, to iterate on the following:
-    //  (location, pos, entityId)
-    fun forEachEntity(action: (Location, Set<UUID>) -> Unit) =
-        grid.forEachEntity(action)
+    fun forEachEntity(action: (Location, Entity) -> Unit) {
+        grid.forEachEntity { location, entityIds ->
+            entityIds.forEach { id ->
+                action.invoke(location, Entity(id, entities))
+            }
+        }
+    }
 }
