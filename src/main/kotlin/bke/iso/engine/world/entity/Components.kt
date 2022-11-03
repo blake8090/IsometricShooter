@@ -9,11 +9,6 @@ data class Sprite(
     val offset: Vector2 = Vector2()
 ) : Component()
 
-data class Bounds(
-    val width: Float,
-    val length: Float
-) : Component()
-
 /**
  * Defines a collision box as a 2D rectangle.
  * @param x x position of the bottom-left corner of the box, relative to an entity's origin

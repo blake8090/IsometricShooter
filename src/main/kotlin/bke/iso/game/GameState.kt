@@ -3,7 +3,6 @@ package bke.iso.game
 import bke.iso.engine.Renderer
 import bke.iso.engine.State
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.world.entity.Bounds
 import bke.iso.engine.world.entity.CollisionBox
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Sprite
@@ -86,7 +85,6 @@ class GameState(
     private fun createWall(x: Float, y: Float) {
         world.entities.create(x, y)
             .addComponent(Sprite("wall2", Vector2(0f, 16f)))
-            .addComponent(Bounds(1f, 1f))
             .addComponent(CollisionBox(0f, 0f, 1f, 1f))
     }
 }
