@@ -7,26 +7,30 @@ import bke.iso.engine.assets.TextureLoader
 import kotlin.reflect.KClass
 
 @Service
-class Engine(private val services: Services) {
+class Engine(
+    private val services: Services,
+    private val assets: Assets,
+    private val renderer: Renderer,
+    private val input: Input
+) {
     private var state: State = EmptyState()
 
     fun start(gameData: GameData) {
         log.info("Starting up")
 
-        with(services.get<Assets>()) {
-            addLoader("png", TextureLoader::class)
-            addLoader("jpg", TextureLoader::class)
-            gameData.addAssetLoaders(this)
-            // TODO: loading screen?
-            load("assets")
-        }
+        assets.addLoader("png", TextureLoader::class)
+        assets.addLoader("jpg", TextureLoader::class)
+        gameData.addAssetLoaders(assets)
+        // TODO: loading screen?
+        assets.load("assets")
 
         changeState(gameData.defaultState)
     }
 
     fun update(deltaTime: Float) {
+        input.update()
         state.update(deltaTime)
-        services.get<Renderer>().render()
+        renderer.render()
     }
 
     fun stop() {

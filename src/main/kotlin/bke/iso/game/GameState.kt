@@ -1,5 +1,6 @@
 package bke.iso.game
 
+import bke.iso.engine.Input
 import bke.iso.engine.Renderer
 import bke.iso.engine.State
 import bke.iso.engine.assets.Assets
@@ -8,14 +9,15 @@ import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Sprite
 import bke.iso.engine.log
 import bke.iso.engine.world.*
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
+import kotlin.system.measureTimeMillis
 
 class GameState(
     private val world: World,
     private val assets: Assets,
-    private val renderer: Renderer
+    private val renderer: Renderer,
+    private val input: Input
 ) : State() {
     private lateinit var player: Entity
     private val speed = 2f
@@ -23,41 +25,51 @@ class GameState(
     override fun start() {
         log.debug("building world")
 
-        loadMap()
-
-        player = world.entities.create()
-            .addComponent(
-                Sprite(
-                    "player",
-                    Vector2(32f, 0f)
+        val loadingTime = measureTimeMillis {
+            loadMap()
+            player = world.entities.create()
+                .addComponent(
+                    Sprite(
+                        "player",
+                        Vector2(32f, 0f)
+                    )
                 )
-            )
-            .addComponent(
-                CollisionBox(
-                    -0.25f,
-                    -0.25f,
-                    0.5f,
-                    0.5f
+                .addComponent(
+                    CollisionBox(
+                        -0.25f,
+                        -0.25f,
+                        0.5f,
+                        0.5f
+                    )
                 )
-            )
+        }
+        log.debug("built world in $loadingTime ms")
 
-        log.debug("finished!")
+        log.debug("binding actions")
+        input.bind(Keys.LEFT, "moveLeft")
+        input.bind(Keys.RIGHT, "moveRight")
+        input.bind(Keys.UP, "moveUp")
+        input.bind(Keys.DOWN, "moveDown")
     }
 
     override fun update(deltaTime: Float) {
         var dx = 0f
         var dy = 0f
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            dy = 1f
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            dy = -1f
+        input.onAction("moveLeft") { axis ->
+            dx = axis * -1
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            dx = -1f
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            dx = 1f
+        input.onAction("moveRight") { axis ->
+            dx = axis
+        }
+
+        input.onAction("moveUp") { axis ->
+            dy = axis
+        }
+
+        input.onAction("moveDown") { axis ->
+            dy = axis * -1
         }
 
         player.move(
