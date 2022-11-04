@@ -2,10 +2,9 @@ package bke.iso.engine
 
 import bke.iso.app.service.Service
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.world.entity.CollisionBox
-import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Sprite
-import bke.iso.engine.world.*
+import bke.iso.engine.entity.Entities
+import bke.iso.engine.entity.Entity
+import bke.iso.engine.entity.Sprite
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -17,15 +16,17 @@ import com.badlogic.gdx.math.Vector2
 
 @Service
 class Renderer(
-    private val world: World,
+    private val entities: Entities,
+    private val tiles: Tiles,
+    private val units: Units,
     private val assets: Assets
 ) {
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1280f, 720f)
-    private val debugRenderer = DebugRenderer(world)
+    private val debugRenderer = DebugRenderer(units, tiles, entities)
 
     fun setCameraPos(x: Float, y: Float) {
-        val screenPos = world.units.worldToScreen(x, y)
+        val screenPos = units.worldToScreen(x, y)
         camera.position.x = screenPos.x
         camera.position.y = screenPos.y
     }
@@ -43,21 +44,23 @@ class Renderer(
 
     private fun renderWorld() {
         batch.begin()
-        world.forEachTile { location, tile ->
+        tiles.forEachTile { location, tile ->
             drawTile(tile, location)
         }
-        world.forEachEntity { _, entity -> drawEntity(entity) }
+        entities.getAll()
+            .forEach(this::drawEntity)
         batch.end()
     }
 
     private fun drawTile(tile: Tile, location: Location) {
-        val screenPos = world.units.worldToScreen(location)
+        val screenPos = units.worldToScreen(location)
         drawSprite(tile.sprite, screenPos)
     }
 
     private fun drawEntity(entity: Entity) {
-        val pos = world.units.worldToScreen(entity.getPos())
-        val sprite = entity.getComponent<Sprite>() ?: return
+        val pos = units.worldToScreen(entity.getPos())
+        val component = entity.getComponent<Sprite>()
+        val sprite = component ?: return
         drawSprite(sprite, pos)
     }
 
@@ -68,14 +71,18 @@ class Renderer(
     }
 }
 
-private class DebugRenderer(private val world: World) {
+private class DebugRenderer(
+    private val units: Units,
+    private val tiles: Tiles,
+    private val entities: Entities
+) {
     private val shapeRenderer = ShapeRenderer()
 
     fun render(camera: OrthographicCamera) {
         shapeRenderer.projectionMatrix = camera.combined
 
-        world.forEachTile { location, _ ->
-            val screenPos = world.units.worldToScreen(location)
+        tiles.forEachTile { location, _ ->
+            val screenPos = units.worldToScreen(location)
             drawCircle(
                 screenPos.x,
                 screenPos.y,
@@ -84,7 +91,7 @@ private class DebugRenderer(private val world: World) {
             )
         }
 
-        world.forEachEntity { _, entity ->
+        for (entity in entities.getAll()) {
             val pos = entity.getPos()
             drawWorldCircle(pos.x, pos.y, 3f, Color.RED)
             drawCollisionBox(entity)
@@ -92,15 +99,15 @@ private class DebugRenderer(private val world: World) {
     }
 
     private fun drawCollisionBox(entity: Entity) {
-        val collisionBox = entity.getComponent<CollisionBox>() ?: return
-        val pos = entity.getPos()
-        drawWorldRectangle(
-            pos.x + collisionBox.x,
-            pos.y + collisionBox.y,
-            collisionBox.width,
-            collisionBox.length,
-            Color.GREEN
-        )
+//        val collisionBox = entity.getComponent<CollisionBox>() ?: return
+//        val pos = entity.getPos()
+//        drawWorldRectangle(
+//            pos.x + collisionBox.x,
+//            pos.y + collisionBox.y,
+//            collisionBox.width,
+//            collisionBox.length,
+//            Color.GREEN
+//        )
     }
 
     private fun drawCircle(
@@ -121,7 +128,7 @@ private class DebugRenderer(private val world: World) {
         size: Float,
         color: Color
     ) {
-        val screenPos = world.units.worldToScreen(x, y)
+        val screenPos = units.worldToScreen(x, y)
         drawCircle(screenPos.x, screenPos.y, size, color)
     }
 
@@ -167,10 +174,10 @@ private class DebugRenderer(private val world: World) {
         val topLeft = Vector2(x, y + length)
         val topRight = Vector2(x + width, y + length)
         drawRectangle(
-            world.units.worldToScreen(bottomLeft),
-            world.units.worldToScreen(bottomRight),
-            world.units.worldToScreen(topLeft),
-            world.units.worldToScreen(topRight),
+            units.worldToScreen(bottomLeft),
+            units.worldToScreen(bottomRight),
+            units.worldToScreen(topLeft),
+            units.worldToScreen(topRight),
             color
         )
     }

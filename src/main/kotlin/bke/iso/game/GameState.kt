@@ -1,20 +1,17 @@
 package bke.iso.game
 
-import bke.iso.engine.Input
-import bke.iso.engine.Renderer
-import bke.iso.engine.State
+import bke.iso.engine.*
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.world.entity.CollisionBox
-import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Sprite
-import bke.iso.engine.log
-import bke.iso.engine.world.*
+import bke.iso.engine.entity.Entities
+import bke.iso.engine.entity.Entity
+import bke.iso.engine.entity.Sprite
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import kotlin.system.measureTimeMillis
 
 class GameState(
-    private val world: World,
+    private val entities: Entities,
+    private val tiles: Tiles,
     private val assets: Assets,
     private val renderer: Renderer,
     private val input: Input
@@ -27,7 +24,7 @@ class GameState(
 
         val loadingTime = measureTimeMillis {
             loadMap()
-            player = world.entities.create()
+            player = entities.create()
                 .addComponent(
                     Sprite(
                         "player",
@@ -35,11 +32,13 @@ class GameState(
                     )
                 )
                 .addComponent(
-                    CollisionBox(
-                        -0.25f,
-                        -0.25f,
-                        0.5f,
-                        0.5f
+                    Collision(
+                        CollisionBox(
+                            -0.25f,
+                            -0.25f,
+                            0.5f,
+                            0.5f
+                        )
                     )
                 )
         }
@@ -86,7 +85,7 @@ class GameState(
             ?: throw IllegalArgumentException("expected map asset")
 
         mapData.tiles.forEach { (location, tile) ->
-            world.setTile(tile, location.x, location.y)
+            tiles.setTile(tile, location)
         }
 
         mapData.walls.forEach { location ->
@@ -95,8 +94,13 @@ class GameState(
     }
 
     private fun createWall(x: Float, y: Float) {
-        world.entities.create(x, y)
+        entities.create(x, y)
             .addComponent(Sprite("wall2", Vector2(0f, 16f)))
-            .addComponent(CollisionBox(0f, 0f, 1f, 1f))
+            .addComponent(
+                Collision(
+                    CollisionBox(0f, 0f, 1f, 1f),
+                    true
+                )
+            )
     }
 }

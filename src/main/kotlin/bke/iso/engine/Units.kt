@@ -1,9 +1,19 @@
-package bke.iso.engine.world
+package bke.iso.engine
 
+import bke.iso.app.service.Service
 import com.badlogic.gdx.math.Vector2
 
+data class Location(
+    val x: Int,
+    val y: Int
+)
+
 // TODO: Add unit tests
-class Units(private val tileWidth: Int, private val tileHeight: Int) {
+@Service
+class Units {
+    private val tileWidth: Int = 64
+    private val tileHeight: Int = 32
+
     /**
      * Converts a location on the world grid to a [Vector2] for use with the LibGDX API.
      */

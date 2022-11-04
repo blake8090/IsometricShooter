@@ -1,5 +1,6 @@
-package bke.iso.engine.world.entity
+package bke.iso.engine.entity
 
+import bke.iso.engine.Velocity
 import com.badlogic.gdx.math.Vector2
 import java.util.UUID
 import kotlin.reflect.KClass
@@ -13,7 +14,6 @@ class Entity(
 ) {
     fun getPos(): Vector2 =
         entities.getPos(id)
-            ?: throw IllegalArgumentException("Entity id $id no longer exists!")
 
     fun setPos(x: Float, y: Float): Entity {
         entities.setPos(id, x, y)
@@ -21,7 +21,7 @@ class Entity(
     }
 
     fun move(dx: Float, dy: Float): Entity {
-        entities.move(id, dx, dy)
+        entities.addComponent(id, Velocity(dx, dy))
         return this
     }
 
