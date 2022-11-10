@@ -8,6 +8,7 @@ import kotlin.reflect.KClass
 /**
  * Facade class around [Entities], providing methods for a particular entity ID.
  */
+// TODO: no logic should be in this class, should just be a passthru to [Entities]
 class Entity(
     val id: UUID,
     private val entities: Entities,
@@ -20,8 +21,22 @@ class Entity(
         return this
     }
 
+    fun setX(x: Float): Entity {
+        val pos = getPos()
+        setPos(x, pos.y)
+        return this
+    }
+
+    fun setY(y: Float): Entity {
+        val pos = getPos()
+        setPos(pos.x, y)
+        return this
+    }
+
     fun move(dx: Float, dy: Float): Entity {
-        entities.addComponent(id, Velocity(dx, dy))
+        if (dx != 0f || dy != 0f) {
+            entities.addComponent(id, Velocity(dx, dy))
+        }
         return this
     }
 
@@ -41,6 +56,9 @@ class Entity(
 
     inline fun <reified T : Component> hasComponent(): Boolean =
         hasComponent(T::class)
+
+    fun <T : Component> removeComponent(type: KClass<T>) =
+        entities.removeComponent(id, type)
 
     override fun toString(): String =
         id.toString()

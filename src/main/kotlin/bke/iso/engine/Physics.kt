@@ -3,8 +3,8 @@ package bke.iso.engine
 import bke.iso.app.service.Service
 import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entities
-import java.util.UUID
-import kotlin.math.ceil
+import bke.iso.engine.entity.Entity
+import com.badlogic.gdx.math.Rectangle
 
 data class Velocity(
     val dx: Float = 0f,
@@ -34,38 +34,111 @@ data class Collision(
 class Physics(private val entities: Entities) {
     fun update(deltaTime: Float) {
         entities.withComponent(Velocity::class) { entity, velocity ->
-            val pos = entity.getPos()
-
-            entity.setPos(
-                pos.x + (velocity.dx * deltaTime),
-                pos.y + (velocity.dy * deltaTime)
-            )
+            moveX(entity, velocity.dx * deltaTime)
+            moveY(entity, velocity.dy * deltaTime)
+            entity.removeComponent(Velocity::class)
         }
     }
 
-    private fun getEntitiesInRange(
-        x: Float,
-        y: Float,
-        width: Float,
-        length: Float
-    ): Set<UUID> {
-        /*
-        location steps:
-        ceil((maxX - minX) + 1)
-         */
-        val maxX = x + width
-        val stepsX = ceil(maxX - x).toInt()
+    private fun moveX(entity: Entity, dx: Float) {
+        if (dx == 0f) {
+            return
+        }
 
-        val maxY = y + length
-        val stepsY = ceil(maxY - y).toInt()
+        val data = checkCollisionPath(entity, dx, 0f)
+        if (data == null) {
+            entity.setX(entity.getPos().x + dx)
+            return
+        }
 
-        val ids = mutableSetOf<UUID>()
-        for (locationY in 0..stepsY) {
-            for (locationX in 0..stepsX) {
-                entities.findAllInLocation(Location(locationX, locationY))
-                    .forEach(ids::add)
+        log.trace("collided with entity ${data.collidedEntity}")
+        val x =
+            if (data.collidedArea.x > data.area.x) {
+                (data.collidedArea.x - data.area.width)
+            } else {
+                (data.collidedArea.x + data.collidedArea.width)
+            }
+        entity.setX(x)
+    }
+
+    private fun moveY(entity: Entity, dy: Float) {
+        if (dy == 0f) {
+            return
+        }
+
+        val data = checkCollisionPath(entity, 0f, dy)
+        if (data == null) {
+            entity.setY(entity.getPos().y + dy)
+            return
+        }
+
+        log.trace("collided with entity ${data.collidedEntity}")
+        if (data.collidedArea.y > data.area.y) {
+            entity.setY(data.collidedArea.y - data.area.height)
+        } else {
+            entity.setY(data.collidedArea.y + data.collidedArea.height)
+        }
+    }
+
+    private fun checkCollisionPath(entity: Entity, dx: Float, dy: Float): CollisionData? {
+        val collisionArea = getCollisionArea(entity) ?: return null
+        val projectedCollisionArea = Rectangle(collisionArea)
+        projectedCollisionArea.x += dx
+        projectedCollisionArea.y += dy
+
+        val entitiesInArea = getEntitiesInArea(projectedCollisionArea)
+            .filter { otherEntity -> otherEntity.id != entity.id }
+
+        for (otherEntity in entitiesInArea) {
+            val otherCollisionArea = getCollisionArea(otherEntity) ?: continue
+            if (projectedCollisionArea.overlaps(otherCollisionArea)) {
+                return CollisionData(projectedCollisionArea, otherEntity, otherCollisionArea)
             }
         }
-        return ids
+
+        return null
     }
+
+    private fun getCollisionArea(entity: Entity): Rectangle? {
+        val collision = entity.getComponent<Collision>() ?: return null
+        val pos = entity.getPos()
+        return Rectangle(
+            pos.x + collision.box.x,
+            pos.y + collision.box.y,
+            collision.box.width,
+            collision.box.length
+        )
+    }
+
+    // TODO: test negative coordinates, move to units?
+    private fun getLocationsInArea(area: Rectangle): Set<Location> {
+        val start = Location(area.x, area.y)
+        val end = Location(
+            area.x + area.width,
+            area.y + area.height
+        )
+
+        val locations = mutableSetOf<Location>()
+        for (x in start.x..end.x) {
+            for (y in start.y..end.y) {
+                locations.add(Location(x, y))
+            }
+        }
+        return locations
+    }
+
+    // TODO: move this to entities.search
+    private fun getEntitiesInArea(area: Rectangle): List<Entity> {
+        val locations = getLocationsInArea(area)
+//        log.trace("Found the following locations in area: $locations")
+        return locations
+            .flatMap(entities::findAllInLocation)
+            .map { id -> Entity(id, entities) }
+    }
+
+    private class CollisionData(
+        val area: Rectangle,
+        val collidedEntity: Entity,
+        val collidedArea: Rectangle
+    )
 }

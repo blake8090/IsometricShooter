@@ -34,8 +34,11 @@ class GameState(
                 .addComponent(
                     Collision(
                         CollisionBox(
-                            -0.25f,
-                            -0.25f,
+                            // TODO: reimplement bounding box offsets!
+//                            -0.25f,
+//                            -0.25f,
+                            0f,
+                            0f,
                             0.5f,
                             0.5f
                         )

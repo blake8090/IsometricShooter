@@ -103,6 +103,13 @@ class Entities {
             ?.containsKey(type)
             ?: false
 
+    fun <T : Component> removeComponent(id: UUID, type: KClass<T>) {
+        val data = dataById[id]
+            ?: throw IllegalArgumentException("Entity ID '$id' does not exist")
+        data.components.remove(type)
+        idsByComponentType[type]?.remove(id)
+    }
+
     fun <T : Component> withComponent(type: KClass<T>, action: (Entity, T) -> Unit) {
         val ids = idsByComponentType[type] ?: return
         for (id in ids) {

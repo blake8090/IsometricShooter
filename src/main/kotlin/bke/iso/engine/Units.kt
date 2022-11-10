@@ -2,11 +2,18 @@ package bke.iso.engine
 
 import bke.iso.app.service.Service
 import com.badlogic.gdx.math.Vector2
+import kotlin.math.floor
 
 data class Location(
     val x: Int,
     val y: Int
-)
+) {
+    constructor(x: Float, y: Float) :
+            this(
+                floor(x).toInt(),
+                floor(y).toInt()
+            )
+}
 
 // TODO: Add unit tests
 @Service
