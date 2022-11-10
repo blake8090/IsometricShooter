@@ -11,7 +11,8 @@ class Engine(
     private val services: Services,
     private val assets: Assets,
     private val renderer: Renderer,
-    private val input: Input
+    private val input: Input,
+    private val physics: Physics
 ) {
     private var state: State = EmptyState()
 
@@ -30,6 +31,7 @@ class Engine(
     fun update(deltaTime: Float) {
         input.update()
         state.update(deltaTime)
+        physics.update(deltaTime)
         renderer.render()
     }
 

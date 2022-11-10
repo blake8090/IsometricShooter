@@ -41,4 +41,7 @@ class Entity(
 
     inline fun <reified T : Component> hasComponent(): Boolean =
         hasComponent(T::class)
+
+    override fun toString(): String =
+        id.toString()
 }

@@ -99,15 +99,17 @@ private class DebugRenderer(
     }
 
     private fun drawCollisionBox(entity: Entity) {
-//        val collisionBox = entity.getComponent<CollisionBox>() ?: return
-//        val pos = entity.getPos()
-//        drawWorldRectangle(
-//            pos.x + collisionBox.x,
-//            pos.y + collisionBox.y,
-//            collisionBox.width,
-//            collisionBox.length,
-//            Color.GREEN
-//        )
+        val collisionBox = entity.getComponent<Collision>()
+            ?.box
+            ?: return
+        val pos = entity.getPos()
+        drawWorldRectangle(
+            pos.x + collisionBox.x,
+            pos.y + collisionBox.y,
+            collisionBox.width,
+            collisionBox.length,
+            Color.GREEN
+        )
     }
 
     private fun drawCircle(

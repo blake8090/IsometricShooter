@@ -33,7 +33,14 @@ data class Collision(
 @Service
 class Physics(private val entities: Entities) {
     fun update(deltaTime: Float) {
-        // TODO: block entity from moving into negative coordinates?
+        entities.withComponent(Velocity::class) { entity, velocity ->
+            val pos = entity.getPos()
+
+            entity.setPos(
+                pos.x + (velocity.dx * deltaTime),
+                pos.y + (velocity.dy * deltaTime)
+            )
+        }
     }
 
     private fun getEntitiesInRange(

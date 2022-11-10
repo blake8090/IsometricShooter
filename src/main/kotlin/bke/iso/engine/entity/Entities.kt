@@ -92,6 +92,9 @@ class Entities {
         val data = dataById[id]
             ?: throw IllegalArgumentException("Entity ID '$id' does not exist")
         data.components[component::class] = component
+        idsByComponentType
+            .getOrPut(component::class) { mutableSetOf() }
+            .add(id)
     }
 
     fun <T : Component> hasComponent(id: UUID, type: KClass<T>): Boolean =
@@ -99,6 +102,14 @@ class Entities {
             ?.components
             ?.containsKey(type)
             ?: false
+
+    fun <T : Component> withComponent(type: KClass<T>, action: (Entity, T) -> Unit) {
+        val ids = idsByComponentType[type] ?: return
+        for (id in ids) {
+            val component = getComponent(id, type) ?: continue
+            action.invoke(Entity(id, this), component)
+        }
+    }
 
     fun <A : Component, B : Component> withComponents(
         typeA: KClass<A>,

@@ -17,7 +17,7 @@ class GameState(
     private val input: Input
 ) : State() {
     private lateinit var player: Entity
-    private val speed = 2f
+    private val playerSpeed = 200f
 
     override fun start() {
         log.debug("building world")
@@ -41,6 +41,7 @@ class GameState(
                         )
                     )
                 )
+            log.debug("Player entity id: ${player.id}")
         }
         log.debug("built world in $loadingTime ms")
 
@@ -72,8 +73,8 @@ class GameState(
         }
 
         player.move(
-            (speed * dx) * deltaTime,
-            (speed * dy) * deltaTime
+            (playerSpeed * dx) * deltaTime,
+            (playerSpeed * dy) * deltaTime
         )
 
         val pos = player.getPos()
