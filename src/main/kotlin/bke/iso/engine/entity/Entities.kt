@@ -5,7 +5,6 @@ import bke.iso.engine.Location
 import bke.iso.engine.log
 import com.badlogic.gdx.math.Vector2
 import java.util.*
-import kotlin.math.floor
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
@@ -31,19 +30,12 @@ class Entities {
         val data = EntityData()
         data.pos = Vector2(x, y)
 
-        // TODO: better off as a constructor on Location
-        val location = toLocation(x, y)
+        val location = Location(x, y)
         data.location = location
         dataById[id] = data
         updateLocation(id, location)
         return Entity(id, this)
     }
-
-    private fun toLocation(x: Float, y: Float) =
-        Location(
-            floor(x).toInt(),
-            floor(y).toInt()
-        )
 
     private fun updateLocation(id: UUID, location: Location) {
         val oldLocation = locationById[id]
@@ -71,7 +63,7 @@ class Entities {
         val data = dataById[id]
             ?: throw IllegalArgumentException("Entity ID '$id' does not exist")
         data.pos = pos
-        updateLocation(id, toLocation(pos.x, pos.y))
+        updateLocation(id, Location(pos))
     }
 
     fun setPos(id: UUID, x: Float, y: Float) =

@@ -13,6 +13,8 @@ data class Location(
                 floor(x).toInt(),
                 floor(y).toInt()
             )
+
+    constructor(pos: Vector2) : this(pos.x, pos.y)
 }
 
 // TODO: Add unit tests
