@@ -47,8 +47,10 @@ class Renderer(
         tiles.forEachTile { location, tile ->
             drawTile(tile, location)
         }
-        entities.getAll()
-            .forEach(this::drawEntity)
+
+        for (entity in entities) {
+            drawEntity(entity)
+        }
         batch.end()
     }
 
@@ -91,7 +93,7 @@ private class DebugRenderer(
             )
         }
 
-        for (entity in entities.getAll()) {
+        for (entity in entities) {
             val pos = entity.getPos()
             drawWorldCircle(pos.x, pos.y, 3f, Color.RED)
             drawCollisionBox(entity)

@@ -1,18 +1,13 @@
 package bke.iso.engine.entity
 
-import bke.iso.engine.Velocity
 import com.badlogic.gdx.math.Vector2
-import java.util.UUID
+import java.util.*
 import kotlin.reflect.KClass
 
 /**
  * Facade class around [Entities], providing methods for a particular entity ID.
  */
-// TODO: no logic should be in this class, should just be a passthru to [Entities]
-class Entity(
-    val id: UUID,
-    private val entities: Entities,
-) {
+class Entity(val id: UUID, private val entities: Entities) {
     fun getPos(): Vector2 =
         entities.getPos(id)
 
@@ -33,32 +28,28 @@ class Entity(
         return this
     }
 
-    fun move(dx: Float, dy: Float): Entity {
-        if (dx != 0f || dy != 0f) {
-            entities.addComponent(id, Velocity(dx, dy))
-        }
-        return this
-    }
-
     fun <T : Component> addComponent(component: T): Entity {
-        entities.addComponent(id, component)
+        entities.components[id] = component
         return this
     }
 
     fun <T : Component> getComponent(type: KClass<T>): T? =
-        entities.getComponent(id, type)
+        entities.components[id, type]
 
     inline fun <reified T : Component> getComponent(): T? =
         getComponent(T::class)
 
     fun <T : Component> hasComponent(type: KClass<T>): Boolean =
-        entities.hasComponent(id, type)
+        entities.components.contains(id to type)
 
     inline fun <reified T : Component> hasComponent(): Boolean =
         hasComponent(T::class)
 
     fun <T : Component> removeComponent(type: KClass<T>) =
-        entities.removeComponent(id, type)
+        entities.components.remove(id, type)
+
+    inline fun <reified T : Component> removeComponent() =
+        removeComponent(T::class)
 
     override fun toString(): String =
         id.toString()

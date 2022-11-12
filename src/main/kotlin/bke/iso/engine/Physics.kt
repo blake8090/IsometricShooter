@@ -33,7 +33,7 @@ data class Collision(
 @Service
 class Physics(private val entities: Entities) {
     fun update(deltaTime: Float) {
-        entities.withComponent(Velocity::class) { entity, velocity ->
+        entities.Search().withComponent(Velocity::class) { entity, velocity ->
             moveX(entity, velocity.dx * deltaTime)
             moveY(entity, velocity.dy * deltaTime)
             entity.removeComponent(Velocity::class)
@@ -132,7 +132,7 @@ class Physics(private val entities: Entities) {
         val locations = getLocationsInArea(area)
 //        log.trace("Found the following locations in area: $locations")
         return locations
-            .flatMap(entities::findAllInLocation)
+            .flatMap(entities.Search()::atLocation)
             .map { id -> Entity(id, entities) }
     }
 

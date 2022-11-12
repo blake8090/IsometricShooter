@@ -17,7 +17,7 @@ class GameState(
     private val input: Input
 ) : State() {
     private lateinit var player: Entity
-    private val playerSpeed = 200f
+    private val playerSpeed = 5f
 
     override fun start() {
         log.debug("building world")
@@ -75,10 +75,7 @@ class GameState(
             dy = axis * -1
         }
 
-        player.move(
-            (playerSpeed * dx) * deltaTime,
-            (playerSpeed * dy) * deltaTime
-        )
+        player.addComponent(Velocity(playerSpeed * dx, playerSpeed * dy))
 
         val pos = player.getPos()
         renderer.setCameraPos(pos.x, pos.y)
