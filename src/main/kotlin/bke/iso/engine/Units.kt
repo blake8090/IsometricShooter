@@ -1,27 +1,20 @@
 package bke.iso.engine
 
-import bke.iso.app.service.Service
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.floor
 
-data class Location(
-    val x: Int,
-    val y: Int
-) {
+data class Location(val x: Int, val y: Int) {
     constructor(x: Float, y: Float) :
             this(
                 floor(x).toInt(),
                 floor(y).toInt()
             )
-
-    constructor(pos: Vector2) : this(pos.x, pos.y)
 }
 
 // TODO: Add unit tests
-@Service
-class Units {
-    private val tileWidth: Int = 64
-    private val tileHeight: Int = 32
+object Units {
+    private const val tileWidth: Int = 64
+    private const val tileHeight: Int = 32
 
     /**
      * Converts a location on the world grid to a [Vector2] for use with the LibGDX API.

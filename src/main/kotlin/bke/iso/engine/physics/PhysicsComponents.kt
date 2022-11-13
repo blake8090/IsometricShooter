@@ -4,16 +4,16 @@ import bke.iso.engine.entity.Component
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
+data class Velocity(
+    val dx: Float = 0f,
+    val dy: Float = 0f
+) : Component()
+
 data class CollisionBounds(
     val width: Float,
     val length: Float,
     val offset: Vector2 = Vector2()
 )
-
-data class Velocity(
-    val dx: Float = 0f,
-    val dy: Float = 0f
-) : Component()
 
 data class Collision(
     val bounds: CollisionBounds,
