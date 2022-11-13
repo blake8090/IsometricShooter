@@ -30,8 +30,12 @@ class EntityComponents {
         idsByType[type]?.remove(id)
     }
 
-    fun <T : Component> addAll(id: UUID, vararg components: T) =
-        components.forEach { component -> set(id, component) }
+    fun <T : Component> removeAll(type: KClass<T>) {
+        idsByType[type]?.forEach { id ->
+            remove(id, type)
+        }
+        idsByType.remove(type)
+    }
 
     fun <T : Component> getIdsWith(type: KClass<T>): Set<UUID> =
         idsByType[type]

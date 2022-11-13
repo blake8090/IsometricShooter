@@ -5,6 +5,9 @@ import bke.iso.engine.assets.Assets
 import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
+import bke.iso.engine.physics.Collision
+import bke.iso.engine.physics.CollisionBounds
+import bke.iso.engine.physics.Velocity
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import kotlin.system.measureTimeMillis
@@ -17,14 +20,14 @@ class GameState(
     private val input: Input
 ) : State() {
     private lateinit var player: Entity
-    private val playerSpeed = 5f
+    private val playerSpeed = 10f
 
     override fun start() {
         log.debug("building world")
 
         val loadingTime = measureTimeMillis {
             loadMap()
-            player = entities.create()
+            player = entities.create(1f, 0f)
                 .addComponent(
                     Sprite(
                         "player",
@@ -33,14 +36,10 @@ class GameState(
                 )
                 .addComponent(
                     Collision(
-                        CollisionBox(
-                            // TODO: reimplement bounding box offsets!
-//                            -0.25f,
-//                            -0.25f,
-                            0f,
-                            0f,
+                        CollisionBounds(
                             0.5f,
-                            0.5f
+                            0.5f,
+                            Vector2(-0.25f, -0.25f)
                         )
                     )
                 )
@@ -99,7 +98,10 @@ class GameState(
             .addComponent(Sprite("wall2", Vector2(0f, 16f)))
             .addComponent(
                 Collision(
-                    CollisionBox(0f, 0f, 1f, 1f),
+                    CollisionBounds(
+                        1f,
+                        1f
+                    ),
                     true
                 )
             )

@@ -2,8 +2,10 @@ package bke.iso.engine.entity
 
 import bke.iso.app.service.Service
 import bke.iso.engine.Location
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import java.util.*
+import kotlin.math.floor
 import kotlin.reflect.KClass
 
 @Service
@@ -39,17 +41,29 @@ class Entities {
             .map(this::getEntity)
             .iterator()
 
-    inner class Search {
-        fun atLocation(location: Location): Set<UUID> =
-            locations[location]
+    fun inArea(area: Rectangle): List<Entity> {
+        val xMin = floor(area.x).toInt()
+        val xMax = floor(area.x + area.width).toInt()
 
-        fun <T : Component> withComponent(type: KClass<T>, action: (Entity, T) -> Unit) {
-            val matchingEntities = components.getIdsWith(type)
-                .map(this@Entities::getEntity)
-            for (entity in matchingEntities) {
-                val component = entity.getComponent(type) ?: continue
-                action.invoke(entity, component)
+        val yMin = floor(area.y).toInt()
+        val yMax = floor(area.y + area.height).toInt()
+
+        val idsInArea = mutableSetOf<UUID>()
+        for (y in yMin..yMax) {
+            for (x in xMin..xMax) {
+                val idsAtLocation = locations[Location(x, y)]
+                idsInArea.addAll(idsAtLocation)
             }
+        }
+
+        return idsInArea.map(this::getEntity)
+    }
+
+    fun <T : Component> withComponent(type: KClass<T>, action: (Entity, T) -> Unit) {
+        for (id in components.getIdsWith(type)) {
+            val component = components[id, type]
+                ?: throw IllegalArgumentException("Expected entity id '$id' to have component '${type.simpleName}'")
+            action.invoke(getEntity(id), component)
         }
     }
 }

@@ -5,13 +5,18 @@ import bke.iso.engine.assets.Assets
 import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
+import bke.iso.engine.physics.Collision
+import bke.iso.engine.physics.CollisionProjection
+import bke.iso.engine.physics.getCollisionArea
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
 @Service
@@ -83,6 +88,9 @@ private class DebugRenderer(
     fun render(camera: OrthographicCamera) {
         shapeRenderer.projectionMatrix = camera.combined
 
+        Gdx.gl.glEnable(GL30.GL_BLEND)
+        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA)
+
         tiles.forEachTile { location, _ ->
             val screenPos = units.worldToScreen(location)
             drawCircle(
@@ -96,24 +104,27 @@ private class DebugRenderer(
         for (entity in entities) {
             val pos = entity.getPos()
             drawWorldCircle(pos.x, pos.y, 3f, Color.RED)
-            drawCollisionBox(entity)
+            drawCollisionAreas(entity)
         }
+
+        Gdx.gl.glDisable(GL30.GL_BLEND)
     }
 
-    private fun drawCollisionBox(entity: Entity) {
-        val collisionBox = entity.getComponent<Collision>()
-            ?.box
-            ?: return
+    private fun drawCollisionAreas(entity: Entity) {
+        val collision = entity.getComponent<Collision>() ?: return
         val pos = entity.getPos()
-        drawWorldRectangle(
-            pos.x + collisionBox.x,
-            pos.y + collisionBox.y,
-            collisionBox.width,
-            collisionBox.length,
-            Color.GREEN
-        )
+
+        val collisionArea = getCollisionArea(pos, collision.bounds)
+        drawWorldRectangle(collisionArea, Color.GREEN)
+
+        val collisionProjection = entity.getComponent<CollisionProjection>() ?: return
+        collisionProjection.xProjection
+            ?.let { area -> drawWorldRectangle(area, Color.RED) }
+        collisionProjection.yProjection
+            ?.let { area -> drawWorldRectangle(area, Color.RED) }
     }
 
+    // TODO: Cleanup drawing methods...
     private fun drawCircle(
         x: Float,
         y: Float,
@@ -152,20 +163,7 @@ private class DebugRenderer(
         shapeRenderer.end()
     }
 
-    private fun drawRectangle(
-        x: Float,
-        y: Float,
-        width: Float,
-        length: Float,
-        color: Color
-    ) {
-        val bottomLeft = Vector2(x, y)
-        val bottomRight = Vector2(x + width, y)
-        val topLeft = Vector2(x, y + length)
-        val topRight = Vector2(x + width, y + length)
-        drawRectangle(bottomLeft, bottomRight, topLeft, topRight, color)
-    }
-
+    // TODO: Investigate drawing polygons (or lines) instead?
     private fun drawWorldRectangle(
         x: Float,
         y: Float,
@@ -182,6 +180,16 @@ private class DebugRenderer(
             units.worldToScreen(bottomRight),
             units.worldToScreen(topLeft),
             units.worldToScreen(topRight),
+            color
+        )
+    }
+
+    private fun drawWorldRectangle(rectangle: Rectangle, color: Color) {
+        drawWorldRectangle(
+            rectangle.x,
+            rectangle.y,
+            rectangle.width,
+            rectangle.height,
             color
         )
     }
