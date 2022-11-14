@@ -9,6 +9,7 @@ import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.CollisionBounds
 import bke.iso.engine.physics.CollisionEvent
 import bke.iso.engine.physics.Velocity
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import kotlin.system.measureTimeMillis
@@ -56,6 +57,11 @@ class GameState(
     }
 
     override fun update(deltaTime: Float) {
+        // TODO: use input service
+        if (Gdx.input.isKeyJustPressed(Keys.M)) {
+            renderer.toggleDebug()
+        }
+
         entities.withComponent(CollisionEvent::class) { entity, collisionEvent ->
             log.trace("entity $entity has collided with ${collisionEvent.ids.size} ids")
         }

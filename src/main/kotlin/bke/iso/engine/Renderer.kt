@@ -29,11 +29,16 @@ class Renderer(
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1280f, 720f)
     private val debugRenderer = DebugRenderer(tiles, entities)
+    private var debugEnabled = true
 
     fun setCameraPos(x: Float, y: Float) {
         val screenPos = Units.worldToScreen(x, y)
         camera.position.x = screenPos.x
         camera.position.y = screenPos.y
+    }
+
+    fun toggleDebug() {
+        debugEnabled = !debugEnabled
     }
 
     fun render() {
@@ -44,7 +49,9 @@ class Renderer(
         batch.projectionMatrix = camera.combined
 
         renderWorld()
-        debugRenderer.render(camera)
+        if (debugEnabled) {
+            debugRenderer.render(camera)
+        }
     }
 
     private fun renderWorld() {
