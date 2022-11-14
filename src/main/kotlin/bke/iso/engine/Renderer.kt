@@ -31,8 +31,8 @@ class Renderer(
     private val debugRenderer = DebugRenderer(tiles, entities)
     private var debugEnabled = true
 
-    fun setCameraPos(x: Float, y: Float) {
-        val screenPos = Units.worldToScreen(x, y)
+    fun setCameraPos(pos: Vector2) {
+        val screenPos = Units.worldToScreen(pos)
         camera.position.x = screenPos.x
         camera.position.y = screenPos.y
     }

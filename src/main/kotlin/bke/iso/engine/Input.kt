@@ -2,28 +2,80 @@ package bke.iso.engine
 
 import bke.iso.app.service.Service
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input.Keys
+
+enum class KeyState {
+    UP,
+    DOWN,
+    PRESSED,
+    RELEASED
+}
 
 @Service
 class Input {
-    private val bindings = mutableMapOf<Int, String>()
-    private val axisValueByAction = mutableMapOf<String, Float>()
+    private val keysPreviousFrame = mutableMapOf<Int, Boolean>()
+    private val keysCurrentFrame = mutableMapOf<Int, Boolean>()
+    private val keyBindings = mutableMapOf<String, KeyBinding>()
 
-    fun bind(keycode: Int, actionName: String) {
-        bindings[keycode] = actionName
-        log.debug("Bound key '${Keys.toString(keycode)}' to action '$actionName'")
+    fun bind(actionName: String, key: Int, state: KeyState, negateAxis: Boolean = false) {
+        val keyBinding = KeyBinding(key, state, negateAxis)
+        keyBindings[actionName] = keyBinding
+        log.debug("Bound '$actionName' to $keyBinding")
     }
 
     fun update() {
-        axisValueByAction.clear()
-        bindings.forEach { (keycode, actionName) ->
-            if (Gdx.input.isKeyPressed(keycode)) {
-                axisValueByAction[actionName] = 1f
-            }
+        keysPreviousFrame.clear()
+        keysPreviousFrame.putAll(keysCurrentFrame)
+        keysCurrentFrame.clear()
+
+        keyBindings.values
+            .map(KeyBinding::key)
+            .associateWith(Gdx.input::isKeyPressed)
+            .forEach(keysCurrentFrame::put)
+    }
+
+    fun pollAction(actionName: String): Float {
+        val keyBinding = keyBindings[actionName] ?: return 0f
+        if (keyBinding.state !in getKeyStates(keyBinding.key)) {
+            return 0f
+        }
+
+        return if (keyBinding.negateAxis) {
+            -1f
+        } else {
+            1f
         }
     }
 
-    fun onAction(actionName: String, handler: (Float) -> Unit) =
-        axisValueByAction[actionName]
-            ?.let(handler::invoke)
+    fun pollActions(vararg actionName: String): Float =
+        actionName.map(this::pollAction)
+            .firstOrNull { axis -> axis != 0f }
+            ?: 0f
+
+    private fun getKeyStates(key: Int): List<KeyState> {
+        val previousFrame = keysPreviousFrame[key] ?: false
+        val currentFrame = keysCurrentFrame[key] ?: false
+        val states = mutableListOf<KeyState>()
+
+        if (currentFrame) {
+            states.add(KeyState.DOWN)
+        } else {
+            states.add(KeyState.UP)
+        }
+
+        if (currentFrame && !previousFrame) {
+            states.add(KeyState.PRESSED)
+        }
+
+        if (!currentFrame && previousFrame) {
+            states.add(KeyState.RELEASED)
+        }
+
+        return states
+    }
 }
+
+private data class KeyBinding(
+    val key: Int,
+    val state: KeyState,
+    val negateAxis: Boolean = false
+)

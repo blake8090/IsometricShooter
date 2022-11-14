@@ -9,7 +9,6 @@ import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.CollisionBounds
 import bke.iso.engine.physics.CollisionEvent
 import bke.iso.engine.physics.Velocity
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import kotlin.system.measureTimeMillis
@@ -22,7 +21,8 @@ class GameState(
     private val input: Input
 ) : State() {
     private lateinit var player: Entity
-    private val playerSpeed = 10f
+    private val playerWalkSpeed = 4f
+    private val playerRunSpeed = 8f
 
     override fun start() {
         log.debug("building world")
@@ -50,15 +50,17 @@ class GameState(
         log.debug("built world in $loadingTime ms")
 
         log.debug("binding actions")
-        input.bind(Keys.LEFT, "moveLeft")
-        input.bind(Keys.RIGHT, "moveRight")
-        input.bind(Keys.UP, "moveUp")
-        input.bind(Keys.DOWN, "moveDown")
+        input.bind("moveLeft", Keys.LEFT, KeyState.DOWN, true)
+        input.bind("moveRight", Keys.RIGHT, KeyState.DOWN)
+        input.bind("moveUp", Keys.UP, KeyState.DOWN)
+        input.bind("moveDown", Keys.DOWN, KeyState.DOWN, true)
+        input.bind("run", Keys.SHIFT_LEFT, KeyState.DOWN)
+        input.bind("toggleDebug", Keys.M, KeyState.PRESSED)
     }
 
     override fun update(deltaTime: Float) {
         // TODO: use input service
-        if (Gdx.input.isKeyJustPressed(Keys.M)) {
+        if (input.pollAction("toggleDebug") != 0f) {
             renderer.toggleDebug()
         }
 
@@ -69,29 +71,17 @@ class GameState(
     }
 
     private fun updatePlayer() {
-        var dx = 0f
-        var dy = 0f
+        renderer.setCameraPos(player.getPos())
 
-        input.onAction("moveLeft") { axis ->
-            dx = axis * -1
+        val dx = input.pollActions("moveLeft", "moveRight")
+        val dy = input.pollActions("moveUp", "moveDown")
+
+        var speed = playerWalkSpeed
+        if (input.pollAction("run") == 1f) {
+            speed = playerRunSpeed
         }
 
-        input.onAction("moveRight") { axis ->
-            dx = axis
-        }
-
-        input.onAction("moveUp") { axis ->
-            dy = axis
-        }
-
-        input.onAction("moveDown") { axis ->
-            dy = axis * -1
-        }
-
-        player.addComponent(Velocity(playerSpeed * dx, playerSpeed * dy))
-
-        val pos = player.getPos()
-        renderer.setCameraPos(pos.x, pos.y)
+        player.addComponent(Velocity(dx * speed, dy * speed))
     }
 
     private fun loadMap() {
