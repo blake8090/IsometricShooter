@@ -3,7 +3,6 @@ package bke.iso.engine.physics
 import bke.iso.app.service.Service
 import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.log
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
@@ -19,6 +18,7 @@ fun getCollisionArea(position: Vector2, bounds: CollisionBounds): Rectangle =
 class Physics(private val entities: Entities) {
     fun update(deltaTime: Float) {
         entities.components.removeAll(CollisionProjection::class)
+        entities.components.removeAll(CollisionEvent::class)
 
         entities.withComponent(Velocity::class) { entity, velocity ->
             val dx = velocity.dx * deltaTime
@@ -59,10 +59,10 @@ class Physics(private val entities: Entities) {
     ): Float {
         val pos = entity.getPos()
         val collisions = findCollisions(entity, projectedCollisionArea)
+        recordCollisionEvent(entity, collisions)
         val solidCollision = collisions.firstOrNull(CollisionInfo::solid)
             ?: return pos.y + dy
 
-        log.trace("Entity $entity has collided with solid entity ${solidCollision.entity}")
         val collisionArea = getCollisionArea(pos, bounds)
         val otherCollisionArea = solidCollision.collisionArea
         return if (otherCollisionArea.y > collisionArea.y) {
@@ -80,10 +80,10 @@ class Physics(private val entities: Entities) {
     ): Float {
         val pos = entity.getPos()
         val collisions = findCollisions(entity, projectedCollisionArea)
+        recordCollisionEvent(entity, collisions)
         val solidCollision = collisions.firstOrNull(CollisionInfo::solid)
             ?: return pos.x + dx
 
-        log.trace("Entity $entity has collided with solid entity ${solidCollision.entity}")
         val collisionArea = getCollisionArea(pos, bounds)
         val otherCollisionArea = solidCollision.collisionArea
         return if (otherCollisionArea.x > collisionArea.x) {
@@ -128,6 +128,20 @@ class Physics(private val entities: Entities) {
             projectedArea.height -= dy
         }
         return projectedArea
+    }
+
+    private fun recordCollisionEvent(entity: Entity, collisions: List<CollisionInfo>) {
+        val ids = collisions.map { collisionInfo -> collisionInfo.entity.id }
+        if (ids.isEmpty()) {
+            return
+        }
+
+        val collisionEvent = entity.getComponent<CollisionEvent>()
+        if (collisionEvent == null) {
+            entity.addComponent(CollisionEvent(ids.toMutableSet()))
+            return
+        }
+        collisionEvent.ids.addAll(ids)
     }
 }
 

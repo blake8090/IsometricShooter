@@ -3,6 +3,7 @@ package bke.iso.engine.physics
 import bke.iso.engine.entity.Component
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import java.util.UUID
 
 data class Velocity(
     val dx: Float = 0f,
@@ -29,3 +30,5 @@ data class CollisionProjection(
     val xProjection: Rectangle? = null,
     val yProjection: Rectangle? = null
 ) : Component()
+
+data class CollisionEvent(val ids: MutableSet<UUID>) : Component()

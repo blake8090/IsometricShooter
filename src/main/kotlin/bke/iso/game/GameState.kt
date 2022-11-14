@@ -7,6 +7,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.CollisionBounds
+import bke.iso.engine.physics.CollisionEvent
 import bke.iso.engine.physics.Velocity
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
@@ -55,6 +56,13 @@ class GameState(
     }
 
     override fun update(deltaTime: Float) {
+        entities.withComponent(CollisionEvent::class) { entity, collisionEvent ->
+            log.trace("entity $entity has collided with ${collisionEvent.ids.size} ids")
+        }
+        updatePlayer()
+    }
+
+    private fun updatePlayer() {
         var dx = 0f
         var dy = 0f
 
