@@ -5,10 +5,15 @@ import bke.iso.engine.assets.Assets
 import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
+import bke.iso.engine.input.Input
+import bke.iso.engine.input.InputState
+import bke.iso.engine.input.KeyBinding
+import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.CollisionBounds
 import bke.iso.engine.physics.CollisionEvent
 import bke.iso.engine.physics.Velocity
+import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import kotlin.system.measureTimeMillis
@@ -50,18 +55,22 @@ class GameState(
         log.debug("built world in $loadingTime ms")
 
         log.debug("binding actions")
-        input.bind("moveLeft", Keys.LEFT, KeyState.DOWN, true)
-        input.bind("moveRight", Keys.RIGHT, KeyState.DOWN)
-        input.bind("moveUp", Keys.UP, KeyState.DOWN)
-        input.bind("moveDown", Keys.DOWN, KeyState.DOWN, true)
-        input.bind("run", Keys.SHIFT_LEFT, KeyState.DOWN)
-        input.bind("toggleDebug", Keys.M, KeyState.PRESSED)
+        input.bind("toggleDebug", KeyBinding(Keys.M, InputState.PRESSED))
+        input.bind("moveLeft", KeyBinding(Keys.LEFT, InputState.DOWN, true))
+        input.bind("moveRight", KeyBinding(Keys.RIGHT, InputState.DOWN))
+        input.bind("moveUp", KeyBinding(Keys.UP, InputState.DOWN))
+        input.bind("moveDown", KeyBinding(Keys.DOWN, InputState.DOWN, true))
+        input.bind("run", KeyBinding(Keys.SHIFT_LEFT, InputState.DOWN))
+        input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
     }
 
     override fun update(deltaTime: Float) {
-        // TODO: use input service
-        if (input.pollAction("toggleDebug") != 0f) {
+        input.onAction("toggleDebug") {
             renderer.toggleDebug()
+        }
+
+        input.onAction("shoot") {
+            log.debug("shoot action")
         }
 
         entities.withComponent(CollisionEvent::class) { entity, collisionEvent ->
@@ -73,14 +82,13 @@ class GameState(
     private fun updatePlayer() {
         renderer.setCameraPos(player.getPos())
 
-        val dx = input.pollActions("moveLeft", "moveRight")
-        val dy = input.pollActions("moveUp", "moveDown")
+        val dx = input.poll("moveLeft", "moveRight")
+        val dy = input.poll("moveUp", "moveDown")
 
         var speed = playerWalkSpeed
-        if (input.pollAction("run") == 1f) {
+        input.onAction("run") {
             speed = playerRunSpeed
         }
-
         player.addComponent(Velocity(dx * speed, dy * speed))
     }
 

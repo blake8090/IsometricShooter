@@ -4,6 +4,7 @@ import bke.iso.app.service.Service
 import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
+import bke.iso.engine.input.Input
 import bke.iso.engine.physics.Physics
 import kotlin.reflect.KClass
 
