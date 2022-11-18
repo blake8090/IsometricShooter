@@ -30,26 +30,12 @@ class GameState(
     private val playerRunSpeed = 8f
 
     override fun start() {
-        log.debug("building world")
+        renderer.mouseCursor = Sprite("cursor", Vector2(16f, 16f))
 
+        log.debug("building world")
         val loadingTime = measureTimeMillis {
             loadMap()
-            player = entities.create(1f, 0f)
-                .addComponent(
-                    Sprite(
-                        "player",
-                        Vector2(32f, 0f)
-                    )
-                )
-                .addComponent(
-                    Collision(
-                        CollisionBounds(
-                            0.5f,
-                            0.5f,
-                            Vector2(-0.25f, -0.25f)
-                        )
-                    )
-                )
+            player = createPlayer()
             log.debug("Player entity id: ${player.id}")
         }
         log.debug("built world in $loadingTime ms")
@@ -107,7 +93,7 @@ class GameState(
 
     private fun createWall(x: Float, y: Float) {
         entities.create(x, y)
-            .addComponent(Sprite("wall2", Vector2(0f, 16f)))
+            .addComponent(Sprite("wall3", Vector2(0f, 16f)))
             .addComponent(
                 Collision(
                     CollisionBounds(
@@ -118,4 +104,22 @@ class GameState(
                 )
             )
     }
+
+    private fun createPlayer() =
+        entities.create(1f, 0f)
+            .addComponent(
+                Sprite(
+                    "player",
+                    Vector2(32f, 0f)
+                )
+            )
+            .addComponent(
+                Collision(
+                    CollisionBounds(
+                        0.5f,
+                        0.5f,
+                        Vector2(-0.25f, -0.25f)
+                    )
+                )
+            )
 }

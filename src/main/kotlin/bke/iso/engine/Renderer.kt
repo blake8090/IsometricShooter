@@ -5,6 +5,7 @@ import bke.iso.engine.assets.Assets
 import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
+import bke.iso.engine.input.Input
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.CollisionProjection
 import bke.iso.engine.physics.getCollisionArea
@@ -19,17 +20,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 @Service
 class Renderer(
     private val entities: Entities,
     private val tiles: Tiles,
-    private val assets: Assets
+    private val assets: Assets,
+    private val input: Input
 ) {
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1280f, 720f)
     private val debugRenderer = DebugRenderer(tiles, entities)
-    private var debugEnabled = true
+    private var debugEnabled = false
+
+    var mouseCursor: Sprite? = null
 
     fun setCameraPos(pos: Vector2) {
         val screenPos = Units.worldToScreen(pos)
@@ -48,14 +53,20 @@ class Renderer(
         camera.update()
         batch.projectionMatrix = camera.combined
 
+        batch.begin()
         renderWorld()
+        batch.end()
+
         if (debugEnabled) {
             debugRenderer.render(camera)
         }
+
+        batch.begin()
+        drawMouseCursor()
+        batch.end()
     }
 
     private fun renderWorld() {
-        batch.begin()
         tiles.forEachTile { location, tile ->
             drawTile(tile, location)
         }
@@ -63,7 +74,6 @@ class Renderer(
         for (entity in entities) {
             drawEntity(entity)
         }
-        batch.end()
     }
 
     private fun drawTile(tile: Tile, location: Location) {
@@ -82,6 +92,16 @@ class Renderer(
         val texture = assets.get<Texture>(sprite.texture) ?: return
         val finalPos = pos.sub(sprite.offset)
         batch.draw(texture, finalPos.x, finalPos.y)
+    }
+
+    private fun drawMouseCursor() {
+        mouseCursor
+            ?.let { sprite ->
+                val mousePos = input.getMousePos()
+                val pos = camera.unproject(Vector3(mousePos.x, mousePos.y, 0f))
+                drawSprite(sprite, Vector2(pos.x, pos.y))
+            }
+            ?: return
     }
 }
 

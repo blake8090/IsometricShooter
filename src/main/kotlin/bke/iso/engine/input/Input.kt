@@ -2,6 +2,8 @@ package bke.iso.engine.input
 
 import bke.iso.app.service.Service
 import bke.iso.engine.log
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Vector2
 
 enum class InputState {
     UP,
@@ -46,4 +48,10 @@ class Input {
             func.invoke(axis)
         }
     }
+
+    fun getMousePos() =
+        Vector2(
+            Gdx.input.x.toFloat(),
+            Gdx.input.y.toFloat()
+        )
 }
