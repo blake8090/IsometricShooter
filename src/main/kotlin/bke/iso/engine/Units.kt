@@ -26,15 +26,26 @@ object Units {
     /**
      * Converts a precise position in the world to a [Vector2] for use with the LibGDX API.
      */
-    fun worldToScreen(x: Float, y: Float): Vector2 {
-        val x2: Float = (x * tileWidth / 2) + (y * tileWidth / 2)
-        val y2: Float = (y * tileHeight / 2) - (x * tileHeight / 2)
-        return Vector2(x2, y2)
-    }
+    fun worldToScreen(x: Float, y: Float) =
+        Vector2(
+            (x + y) * (tileWidth / 2),
+            (y - x) * (tileHeight / 2)
+        )
 
     /**
      * Converts a precise position in the world to a [Vector2] for use with the LibGDX API.
      */
     fun worldToScreen(pos: Vector2): Vector2 =
         worldToScreen(pos.x, pos.y)
+
+    fun screenToWorld(pos: Vector2): Vector2 {
+        val w = tileWidth / 2
+        val h = tileHeight / 2
+        val mapX = (pos.x / w) - (pos.y / h)
+        val mapY = (pos.y / h) + (pos.x / w)
+        return Vector2(
+            mapX / 2,
+            mapY / 2
+        )
+    }
 }

@@ -94,11 +94,15 @@ class Renderer(
         batch.draw(texture, finalPos.x, finalPos.y)
     }
 
+    // TODO: should the Renderer own this method?
+    fun unproject(pos: Vector2): Vector3 =
+        camera.unproject(Vector3(pos.x, pos.y, 0f))
+
     private fun drawMouseCursor() {
         mouseCursor
             ?.let { sprite ->
                 val mousePos = input.getMousePos()
-                val pos = camera.unproject(Vector3(mousePos.x, mousePos.y, 0f))
+                val pos = unproject(mousePos)
                 drawSprite(sprite, Vector2(pos.x, pos.y))
             }
             ?: return

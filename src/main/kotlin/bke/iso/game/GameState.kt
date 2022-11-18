@@ -9,10 +9,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.physics.Collision
-import bke.iso.engine.physics.CollisionBounds
-import bke.iso.engine.physics.CollisionEvent
-import bke.iso.engine.physics.Velocity
+import bke.iso.engine.physics.*
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
@@ -57,6 +54,9 @@ class GameState(
 
         input.onAction("shoot") {
             log.debug("shoot action")
+            val pos = renderer.unproject(input.getMousePos())
+            val worldPos = Units.screenToWorld(Vector2(pos.x, pos.y))
+            createBullet(worldPos)
         }
 
         entities.withComponent(CollisionEvent::class) { entity, collisionEvent ->
@@ -119,6 +119,18 @@ class GameState(
                         0.5f,
                         0.5f,
                         Vector2(-0.25f, -0.25f)
+                    )
+                )
+            )
+
+    private fun createBullet(pos: Vector2) =
+        entities.create(pos.x, pos.y)
+            .addComponent(Sprite("circle"))
+            .addComponent(
+                Collision(
+                    CollisionBounds(
+                        0.25f,
+                        0.25f
                     )
                 )
             )
