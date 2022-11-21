@@ -9,10 +9,11 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.physics.*
+import bke.iso.engine.system.*
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
+import kotlin.reflect.KClass
 import kotlin.system.measureTimeMillis
 
 class GameState(
@@ -47,6 +48,13 @@ class GameState(
         input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
     }
 
+    override fun getSystems(): List<KClass<out System>> =
+        listOf(
+            MovementSystem::class,
+            CollisionSystem::class,
+            PhysicsSystem::class
+        )
+
     override fun update(deltaTime: Float) {
         input.onAction("toggleDebug") {
             renderer.toggleDebug()
@@ -59,8 +67,8 @@ class GameState(
             createBullet(worldPos)
         }
 
-        entities.withComponent(CollisionEvent::class) { entity, collisionEvent ->
-            log.trace("entity $entity has collided with ${collisionEvent.ids.size} ids")
+        entities.withComponent(CollisionEvents::class) { entity, collisionEvents ->
+            log.trace("entity $entity has collided with ${collisionEvents.events.size} other entities")
         }
         updatePlayer()
     }

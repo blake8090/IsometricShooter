@@ -5,7 +5,7 @@ import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
 import bke.iso.engine.input.Input
-import bke.iso.engine.physics.Physics
+import bke.iso.engine.system.System
 import kotlin.reflect.KClass
 
 @Service
@@ -14,9 +14,9 @@ class Engine(
     private val assets: Assets,
     private val renderer: Renderer,
     private val input: Input,
-    private val physics: Physics
 ) {
     private var state: State = EmptyState()
+    private val stateSystems = mutableListOf<System>()
 
     fun start(gameData: GameData) {
         log.info("Starting up")
@@ -30,10 +30,15 @@ class Engine(
         changeState(gameData.defaultState)
     }
 
+    /**
+     * Main game loop
+     */
     fun update(deltaTime: Float) {
         input.update()
+
         state.update(deltaTime)
-        physics.update(deltaTime)
+        stateSystems.forEach { system -> system.update(deltaTime)  }
+
         renderer.render()
     }
 
@@ -49,6 +54,15 @@ class Engine(
         )
         state.stop()
         state = services.createInstance(newState)
+
+        stateSystems.clear()
+        state.getSystems()
+            .map { type -> services.createInstance(type) }
+            .forEach { system ->
+                stateSystems.add(system)
+                log.debug("Added system '${system::class.simpleName}'")
+            }
+
         state.start()
     }
 }

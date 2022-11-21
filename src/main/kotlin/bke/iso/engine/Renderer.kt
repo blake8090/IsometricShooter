@@ -6,9 +6,7 @@ import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
 import bke.iso.engine.input.Input
-import bke.iso.engine.physics.Collision
-import bke.iso.engine.physics.CollisionProjection
-import bke.iso.engine.physics.getCollisionArea
+import bke.iso.engine.system.CollisionFrameData
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -136,16 +134,11 @@ private class DebugRenderer(
     }
 
     private fun drawCollisionAreas(entity: Entity) {
-        val collision = entity.getComponent<Collision>() ?: return
-        val pos = entity.getPos()
-
-        val collisionArea = getCollisionArea(pos, collision.bounds)
-        drawWorldRectangle(collisionArea, Color.GREEN)
-
-        val collisionProjection = entity.getComponent<CollisionProjection>() ?: return
-        collisionProjection.xProjection
+        val frameData = entity.getComponent<CollisionFrameData>() ?: return
+        drawWorldRectangle(frameData.collisionArea, Color.GREEN)
+        frameData.projectedAreaX
             ?.let { area -> drawWorldRectangle(area, Color.RED) }
-        collisionProjection.yProjection
+        frameData.projectedAreaY
             ?.let { area -> drawWorldRectangle(area, Color.RED) }
     }
 

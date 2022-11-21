@@ -59,7 +59,7 @@ class Entities {
         return idsInArea.map(this::getEntity)
     }
 
-    fun <T : Component> withComponent(type: KClass<T>, action: (Entity, T) -> Unit) {
+    fun <T : Component> withComponent(type: KClass<out T>, action: (Entity, T) -> Unit) {
         for (id in components.getIdsWith(type)) {
             val component = components[id, type]
                 ?: throw IllegalArgumentException("Expected entity id '$id' to have component '${type.simpleName}'")
