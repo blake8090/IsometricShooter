@@ -12,8 +12,8 @@ data class Velocity(
 class PhysicsSystem(private val entities: Entities) : System {
     override fun update(deltaTime: Float) {
         entities.withComponent(Velocity::class) { entity, velocity ->
-            entity.setY(calculateY(entity, velocity.dy))
-            entity.setX(calculateX(entity, velocity.dx))
+            entity.setY(calculateY(entity, velocity.dy * deltaTime))
+            entity.setX(calculateX(entity, velocity.dx * deltaTime))
         }
     }
 
@@ -28,7 +28,7 @@ class PhysicsSystem(private val entities: Entities) : System {
         val collisionArea = collisionFrameData.collisionArea
         val otherCollisionArea = solidCollision.collisionArea
         return if (otherCollisionArea.y > collisionArea.y) {
-            (otherCollisionArea.y + collision.bounds.offset.y)
+            (otherCollisionArea.y - collision.bounds.length - collision.bounds.offset.y)
         } else {
             (otherCollisionArea.y + otherCollisionArea.height - collision.bounds.offset.y)
         }
@@ -45,7 +45,7 @@ class PhysicsSystem(private val entities: Entities) : System {
         val collisionArea = collisionFrameData.collisionArea
         val otherCollisionArea = solidCollision.collisionArea
         return if (otherCollisionArea.x > collisionArea.x) {
-            (otherCollisionArea.x + collision.bounds.offset.x)
+            (otherCollisionArea.x - collision.bounds.length - collision.bounds.offset.x)
         } else {
             (otherCollisionArea.x + otherCollisionArea.width - collision.bounds.offset.x)
         }

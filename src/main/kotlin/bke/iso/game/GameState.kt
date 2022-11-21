@@ -2,14 +2,14 @@ package bke.iso.game
 
 import bke.iso.engine.*
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.entity.Entities
-import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.Sprite
 import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.system.*
+import bke.iso.game.system.PlayerCameraSystem
+import bke.iso.game.system.PlayerInputSystem
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
@@ -17,26 +17,17 @@ import kotlin.reflect.KClass
 import kotlin.system.measureTimeMillis
 
 class GameState(
-    private val entities: Entities,
     private val tiles: Tiles,
     private val assets: Assets,
     private val renderer: Renderer,
-    private val input: Input
+    private val input: Input,
+    private val entityFactory: EntityFactory
 ) : State() {
-    private lateinit var player: Entity
-    private val playerWalkSpeed = 4f
-    private val playerRunSpeed = 8f
 
     override fun start() {
         renderer.mouseCursor = Sprite("cursor", Vector2(16f, 16f))
 
-        log.debug("building world")
-        val loadingTime = measureTimeMillis {
-            loadMap()
-            player = createPlayer()
-            log.debug("Player entity id: ${player.id}")
-        }
-        log.debug("built world in $loadingTime ms")
+        buildWorld()
 
         log.debug("binding actions")
         input.bind("toggleDebug", KeyBinding(Keys.M, InputState.PRESSED))
@@ -50,40 +41,20 @@ class GameState(
 
     override fun getSystems(): List<KClass<out System>> =
         listOf(
-            MovementSystem::class,
+            PlayerInputSystem::class,
             CollisionSystem::class,
-            PhysicsSystem::class
+            PhysicsSystem::class,
+            PlayerCameraSystem::class
         )
 
-    override fun update(deltaTime: Float) {
-        input.onAction("toggleDebug") {
-            renderer.toggleDebug()
+    private fun buildWorld() {
+        log.debug("building world")
+        val loadingTime = measureTimeMillis {
+            loadMap()
+            val player = entityFactory.createPlayer()
+            log.debug("Player id: ${player.id}")
         }
-
-        input.onAction("shoot") {
-            log.debug("shoot action")
-            val pos = renderer.unproject(input.getMousePos())
-            val worldPos = Units.screenToWorld(Vector2(pos.x, pos.y))
-            createBullet(worldPos)
-        }
-
-        entities.withComponent(CollisionEvents::class) { entity, collisionEvents ->
-            log.trace("entity $entity has collided with ${collisionEvents.events.size} other entities")
-        }
-        updatePlayer()
-    }
-
-    private fun updatePlayer() {
-        renderer.setCameraPos(player.getPos())
-
-        val dx = input.poll("moveLeft", "moveRight")
-        val dy = input.poll("moveUp", "moveDown")
-
-        var speed = playerWalkSpeed
-        input.onAction("run") {
-            speed = playerRunSpeed
-        }
-        player.addComponent(Velocity(dx * speed, dy * speed))
+        log.debug("built world in $loadingTime ms")
     }
 
     private fun loadMap() {
@@ -95,51 +66,7 @@ class GameState(
         }
 
         mapData.walls.forEach { location ->
-            createWall(location.x.toFloat(), location.y.toFloat())
+            entityFactory.createWall(location.x.toFloat(), location.y.toFloat())
         }
     }
-
-    private fun createWall(x: Float, y: Float) {
-        entities.create(x, y)
-            .addComponent(Sprite("wall3", Vector2(0f, 16f)))
-            .addComponent(
-                Collision(
-                    CollisionBounds(
-                        1f,
-                        1f
-                    ),
-                    true
-                )
-            )
-    }
-
-    private fun createPlayer() =
-        entities.create(1f, 0f)
-            .addComponent(
-                Sprite(
-                    "player",
-                    Vector2(32f, 0f)
-                )
-            )
-            .addComponent(
-                Collision(
-                    CollisionBounds(
-                        0.5f,
-                        0.5f,
-                        Vector2(-0.25f, -0.25f)
-                    )
-                )
-            )
-
-    private fun createBullet(pos: Vector2) =
-        entities.create(pos.x, pos.y)
-            .addComponent(Sprite("circle"))
-            .addComponent(
-                Collision(
-                    CollisionBounds(
-                        0.25f,
-                        0.25f
-                    )
-                )
-            )
 }

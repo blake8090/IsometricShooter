@@ -56,8 +56,8 @@ class CollisionSystem(private val entities: Entities) : System {
             val collisions = findCollisions(entity, collision, collisionArea)
 
             val velocity = entity.getComponent<Velocity>()
-            val dx = velocity?.dx ?: 0f
-            val dy = velocity?.dy ?: 0f
+            val dx = (velocity?.dx ?: 0f) * deltaTime
+            val dy = (velocity?.dy ?: 0f) * deltaTime
             val projection = projectCollisionArea(collisionArea, dx, dy)
 
             val projectedAreaX = projection.first
