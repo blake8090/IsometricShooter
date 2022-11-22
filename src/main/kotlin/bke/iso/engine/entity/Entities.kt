@@ -2,6 +2,7 @@ package bke.iso.engine.entity
 
 import bke.iso.app.service.Service
 import bke.iso.engine.Location
+import bke.iso.engine.log
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import java.util.*
@@ -12,6 +13,7 @@ import kotlin.reflect.KClass
 class Entities {
     private val posById = mutableMapOf<UUID, Vector2>()
     private val locations = EntityLocations()
+    private val deletedIds = mutableSetOf<UUID>()
 
     val components = EntityComponents()
 
@@ -19,6 +21,10 @@ class Entities {
         val id = UUID.randomUUID()
         setPos(id, x, y)
         return getEntity(id)
+    }
+
+    fun delete(id: UUID) {
+        deletedIds.add(id)
     }
 
     fun getEntity(id: UUID): Entity {
@@ -40,6 +46,16 @@ class Entities {
         locations.getSortedIds()
             .map(this::getEntity)
             .iterator()
+
+    fun update() {
+        for (id in deletedIds) {
+            components.delete(id)
+            locations.delete(id)
+            posById.remove(id)
+            log.debug("Deleted entity '$id'")
+        }
+        deletedIds.clear()
+    }
 
     fun inArea(area: Rectangle): List<Entity> {
         val xMin = floor(area.x).toInt()

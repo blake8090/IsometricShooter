@@ -37,6 +37,18 @@ class EntityComponents {
         idsByType.remove(type)
     }
 
+    fun delete(id: UUID) {
+        val keys = components.keys
+            .filter { (entityId, _) -> entityId == id  }
+
+        for (pair in keys) {
+            val entityId = pair.first
+            val type = pair.second
+            idsByType[type]?.remove(entityId)
+            components.remove(pair)
+        }
+    }
+
     fun <T : Component> getIdsWith(type: KClass<T>): Set<UUID> =
         idsByType[type]
             ?.toSet()

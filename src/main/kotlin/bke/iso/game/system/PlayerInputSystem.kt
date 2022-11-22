@@ -21,16 +21,26 @@ class PlayerInputSystem(
     private val runSpeed = 5f
 
     override fun update(deltaTime: Float) {
+        val player = entities.components
+            .getIdsWith(PlayerComponent::class)
+            .firstOrNull()
+            ?.let(entities::getEntity)
+            ?: return
+
         input.onAction("toggleDebug") {
             renderer.toggleDebug()
         }
 
         input.onAction("shoot") {
             log.debug("shoot action")
-            val pos = renderer.unproject(input.getMousePos())
-            val worldPos = Units.screenToWorld(Vector2(pos.x, pos.y))
-            val bullet = entityFactory.createBullet(worldPos)
-            bullet.addComponent(Velocity(1f, 1f))
+            val screenPos = renderer.unproject(input.getMousePos())
+            val worldPos = Units.screenToWorld(Vector2(screenPos.x, screenPos.y))
+            entityFactory.createBullet(
+                player.getPos(),
+                player.id,
+                worldPos,
+                50f
+            )
         }
 
         movePlayer()

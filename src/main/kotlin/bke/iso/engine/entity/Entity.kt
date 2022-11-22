@@ -33,6 +33,13 @@ class Entity(val id: UUID, private val entities: Entities) {
         return this
     }
 
+    fun <T : Component> addComponents(vararg components: T): Entity {
+        components.forEach { component ->
+            entities.components[id] = component
+        }
+        return this
+    }
+
     fun <T : Component> getComponent(type: KClass<T>): T? =
         entities.components[id, type]
 

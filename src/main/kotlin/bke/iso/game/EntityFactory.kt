@@ -6,8 +6,9 @@ import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Sprite
 import bke.iso.engine.system.Collision
 import bke.iso.engine.system.CollisionBounds
-import bke.iso.engine.system.Velocity
+import bke.iso.game.system.BulletComponent
 import com.badlogic.gdx.math.Vector2
+import java.util.*
 
 class PlayerComponent : Component()
 
@@ -46,10 +47,16 @@ class EntityFactory(private val entities: Entities) {
                 )
             )
 
-    fun createBullet(pos: Vector2) =
+    fun createBullet(
+        pos: Vector2,
+        shooter: UUID,
+        target: Vector2,
+        speed: Float
+    ) =
         entities.create(pos.x, pos.y)
-            .addComponent(Sprite("circle"))
-            .addComponent(
+            .addComponents(
+                BulletComponent(shooter, target, speed),
+                Sprite("circle", Vector2(16f, 16f)),
                 Collision(
                     CollisionBounds(
                         0.25f,
@@ -57,5 +64,4 @@ class EntityFactory(private val entities: Entities) {
                     )
                 )
             )
-            .addComponent(Velocity(0.1f, 0f))
 }

@@ -34,4 +34,12 @@ class EntityLocations {
         idsByLocation
             .flatMap { entry -> entry.value }
             .toSet()
+
+    fun delete(id: UUID) {
+        locationById[id]?.let { location ->
+            idsByLocation[location]
+                ?.remove(id)
+        }
+        locationById.remove(id)
+    }
 }

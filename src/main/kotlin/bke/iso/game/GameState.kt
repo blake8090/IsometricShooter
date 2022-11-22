@@ -8,6 +8,7 @@ import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.system.*
+import bke.iso.game.system.BulletSystem
 import bke.iso.game.system.PlayerCameraSystem
 import bke.iso.game.system.PlayerInputSystem
 import com.badlogic.gdx.Input.Buttons
@@ -42,6 +43,7 @@ class GameState(
     override fun getSystems(): List<KClass<out System>> =
         listOf(
             PlayerInputSystem::class,
+            BulletSystem::class,
             CollisionSystem::class,
             PhysicsSystem::class,
             PlayerCameraSystem::class

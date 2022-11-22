@@ -4,6 +4,7 @@ import bke.iso.app.service.Service
 import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
+import bke.iso.engine.entity.Entities
 import bke.iso.engine.input.Input
 import bke.iso.engine.system.System
 import kotlin.reflect.KClass
@@ -14,6 +15,7 @@ class Engine(
     private val assets: Assets,
     private val renderer: Renderer,
     private val input: Input,
+    private val entities: Entities
 ) {
     private var state: State = EmptyState()
     private val stateSystems = mutableListOf<System>()
@@ -38,6 +40,7 @@ class Engine(
 
         state.update(deltaTime)
         stateSystems.forEach { system -> system.update(deltaTime)  }
+        entities.update()
 
         renderer.render()
     }
