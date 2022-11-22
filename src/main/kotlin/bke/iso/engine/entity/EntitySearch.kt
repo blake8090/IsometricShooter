@@ -1,4 +1,4 @@
-package bke.iso.engine.v2.entity
+package bke.iso.engine.entity
 
 import bke.iso.engine.Location
 import java.util.*

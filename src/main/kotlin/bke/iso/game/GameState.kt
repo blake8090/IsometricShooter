@@ -8,7 +8,7 @@ import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.v2.entity.EntityService
+import bke.iso.engine.entity.EntityService
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import kotlin.system.measureTimeMillis

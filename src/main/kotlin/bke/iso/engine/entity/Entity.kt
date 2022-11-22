@@ -1,63 +1,59 @@
 package bke.iso.engine.entity
 
-import com.badlogic.gdx.math.Vector2
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
+import kotlin.reflect.safeCast
 
-/**
- * Facade class around [Entities], providing methods for a particular entity ID.
- */
-class Entity(val id: UUID, private val entities: Entities) {
-    fun getPos(): Vector2 =
-        entities.getPos(id)
+class Entity(
+    val id: UUID,
+    private val callback: EntityService.Callback
+) {
+    var name: String = ""
 
-    fun setPos(x: Float, y: Float): Entity {
-        entities.setPos(id, x, y)
-        return this
-    }
-
-    fun setX(x: Float): Entity {
-        val pos = getPos()
-        setPos(x, pos.y)
-        return this
-    }
-
-    fun setY(y: Float): Entity {
-        val pos = getPos()
-        setPos(pos.x, y)
-        return this
-    }
-
-    fun <T : Component> addComponent(component: T): Entity {
-        entities.components[id] = component
-        return this
-    }
-
-    fun <T : Component> addComponents(vararg components: T): Entity {
-        components.forEach { component ->
-            entities.components[id] = component
+    var x: Float = 0f
+        set(value) {
+            callback.positionChanged(id, value, y)
+            field = value
         }
-        return this
+
+    var y: Float = 0f
+        set(value) {
+            callback.positionChanged(id, x, value)
+            field = value
+        }
+
+    private val components = mutableMapOf<KClass<out Component>, Component>()
+
+    fun <T : Component> add(vararg components: T) {
+        for (component in components) {
+            this.components[component::class] = component
+            callback.componentAdded(id, component::class)
+        }
     }
 
-    fun <T : Component> getComponent(type: KClass<T>): T? =
-        entities.components[id, type]
+    fun <T : Component> get(type: KClass<T>): T? =
+        type.safeCast(components[type])
 
-    inline fun <reified T : Component> getComponent(): T? =
-        getComponent(T::class)
+    inline fun <reified T : Component> get(): T? =
+        get(T::class)
 
-    fun <T : Component> hasComponent(type: KClass<T>): Boolean =
-        entities.components.contains(id to type)
+    fun <T : Component> remove(type: KClass<T>) {
+        components.remove(type)
+        callback.componentRemoved(id, type)
+    }
 
-    inline fun <reified T : Component> hasComponent(): Boolean =
-        hasComponent(T::class)
+    inline fun <reified T : Component> remove() =
+        remove(T::class)
 
-    fun <T : Component> removeComponent(type: KClass<T>) =
-        entities.components.remove(id, type)
+    fun removeAll() =
+        components.keys.forEach { type -> remove(type) }
 
-    inline fun <reified T : Component> removeComponent() =
-        removeComponent(T::class)
+    fun <T : Component> has(type: KClass<T>) =
+        components.contains(type)
 
-    override fun toString(): String =
-        id.toString()
+    inline fun <reified T : Component> has() =
+        has(T::class)
+
+    fun delete() =
+        callback.entityDeleted(id)
 }

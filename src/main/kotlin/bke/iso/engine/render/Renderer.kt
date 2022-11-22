@@ -4,8 +4,8 @@ import bke.iso.app.service.Service
 import bke.iso.engine.*
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.input.Input
-import bke.iso.engine.v2.entity.Entity
-import bke.iso.engine.v2.entity.EntityService
+import bke.iso.engine.entity.Entity
+import bke.iso.engine.entity.EntityService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
