@@ -1,17 +1,20 @@
 package bke.iso.game
 
+import bke.iso.engine.Game
 import bke.iso.engine.GameConfig
-import bke.iso.engine.GameData
-import bke.iso.engine.assets.Assets
+import bke.iso.engine.State
+import kotlin.reflect.KClass
 
 class IsometricShooterConfig : GameConfig()
 
-class IsometricShooter : GameData() {
-    override val windowTitle = "Isometric Shooter"
-    override val gameConfig = IsometricShooterConfig::class
-    override val defaultState = GameState::class
+class IsometricShooterGame : Game {
+    override val windowTitle: String
+        get() = "Isometric Shooter"
+    override val gameConfig: KClass<out GameConfig>
+        get() = IsometricShooterConfig::class
+    override val initialState: KClass<out State>
+        get() = GameState::class
 
-    override fun addAssetLoaders(assets: Assets) {
-        assets.addLoader("map", MapLoader::class)
+    override fun setup() {
     }
 }

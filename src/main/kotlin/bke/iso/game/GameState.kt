@@ -7,14 +7,9 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.system.*
-import bke.iso.game.system.BulletSystem
-import bke.iso.game.system.PlayerCameraSystem
-import bke.iso.game.system.PlayerInputSystem
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
-import kotlin.reflect.KClass
 import kotlin.system.measureTimeMillis
 
 class GameState(
@@ -39,15 +34,6 @@ class GameState(
         input.bind("run", KeyBinding(Keys.SHIFT_LEFT, InputState.DOWN))
         input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
     }
-
-    override fun getSystems(): List<KClass<out System>> =
-        listOf(
-            PlayerInputSystem::class,
-            BulletSystem::class,
-            CollisionSystem::class,
-            PhysicsSystem::class,
-            PlayerCameraSystem::class
-        )
 
     private fun buildWorld() {
         log.debug("building world")
