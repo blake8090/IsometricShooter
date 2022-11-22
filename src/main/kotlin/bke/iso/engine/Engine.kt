@@ -5,6 +5,9 @@ import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
 import bke.iso.engine.entity.Entities
+import bke.iso.engine.event.EventService
+import bke.iso.engine.event.TestEvent
+import bke.iso.engine.event.TestEventHandler
 import bke.iso.engine.input.Input
 import bke.iso.engine.system.System
 import kotlin.reflect.KClass
@@ -30,11 +33,20 @@ class Engine(
         assets.load("assets")
 
         changeState(gameData.defaultState)
+
+        testEventHandlers()
+    }
+
+    private fun testEventHandlers() {
+        val eventService = services.get<EventService>()
+        eventService.addHandler(TestEventHandler::class)
+        eventService.fire(TestEvent("this is a test message!"))
     }
 
     /**
      * Main game loop
      */
+    // TODO: set deltaTime in public var
     fun update(deltaTime: Float) {
         input.update()
 
@@ -50,6 +62,7 @@ class Engine(
         state.stop()
     }
 
+    // TODO: use setter
     fun changeState(newState: KClass<out State>) {
         log.debug(
             "Switching state from '${this.state::class.simpleName}' "
