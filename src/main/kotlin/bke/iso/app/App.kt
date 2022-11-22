@@ -9,15 +9,18 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import ktx.async.KtxAsync
+import kotlin.reflect.KClass
 
-class App(private val game: Game) : ApplicationAdapter() {
+class App(gameClass: KClass<out Game>) : ApplicationAdapter() {
     private val services = Services()
+    private val game: Game
 
     init {
         configureLogback(Level.TRACE)
         ServiceScanner()
             .scanClasspath("bke.iso")
             .forEach { javaClass -> services.register(javaClass.kotlin) }
+        game = services.createInstance(gameClass)
     }
 
     override fun create() {

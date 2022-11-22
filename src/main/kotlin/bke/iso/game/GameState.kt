@@ -2,14 +2,15 @@ package bke.iso.game
 
 import bke.iso.engine.*
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.entity.Sprite
 import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.render.Renderer
+import bke.iso.engine.render.Sprite
+import bke.iso.engine.v2.entity.EntityService
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.math.Vector2
 import kotlin.system.measureTimeMillis
 
 class GameState(
@@ -17,11 +18,11 @@ class GameState(
     private val assets: Assets,
     private val renderer: Renderer,
     private val input: Input,
-    private val entityFactory: EntityFactory
+    private val entityService: EntityService
 ) : State() {
 
     override fun start() {
-        renderer.mouseCursor = Sprite("cursor", Vector2(16f, 16f))
+//        renderer.mouseCursor = Sprite("cursor", Vector2(16f, 16f))
 
         buildWorld()
 
@@ -39,8 +40,8 @@ class GameState(
         log.debug("building world")
         val loadingTime = measureTimeMillis {
             loadMap()
-            val player = entityFactory.createPlayer()
-            log.debug("Player id: ${player.id}")
+//            val player = entityFactory.createPlayer()
+//            log.debug("Player id: ${player.id}")
         }
         log.debug("built world in $loadingTime ms")
     }
@@ -54,7 +55,8 @@ class GameState(
         }
 
         mapData.walls.forEach { location ->
-            entityFactory.createWall(location.x.toFloat(), location.y.toFloat())
+            val wall = entityService.create(location)
+            wall.add(Sprite("wall3", 0f, 16f))
         }
     }
 }

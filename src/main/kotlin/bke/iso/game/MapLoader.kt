@@ -5,8 +5,7 @@ import bke.iso.engine.Location
 import bke.iso.engine.Tile
 import bke.iso.engine.assets.Asset
 import bke.iso.engine.assets.AssetLoader
-import bke.iso.engine.entity.Sprite
-import com.badlogic.gdx.math.Vector2
+import bke.iso.engine.render.Sprite
 import kotlin.reflect.KClass
 
 data class MapData(
@@ -15,8 +14,7 @@ data class MapData(
 )
 
 class MapLoader : AssetLoader<MapData>() {
-    private val spriteOffset = Vector2(0f, 16f)
-    private val floor = Tile(Sprite("floor", spriteOffset))
+    private val floorSprite = Sprite("floor", 0f, 16f)
 
     override fun getType(): KClass<MapData> =
         MapData::class
@@ -34,7 +32,7 @@ class MapLoader : AssetLoader<MapData>() {
             for ((x, char) in row.withIndex()) {
                 val location = Location(x, y)
                 when (fromSymbol(char)) {
-                    MapObjects.FLOOR -> tiles[location] = floor
+                    MapObjects.FLOOR -> tiles[location] = Tile(floorSprite)
                     MapObjects.WALL -> walls.add(location)
                 }
             }
