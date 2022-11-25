@@ -8,6 +8,7 @@ import bke.iso.engine.event.EventService
 import bke.iso.engine.event.TestEvent
 import bke.iso.engine.event.TestEventHandler
 import bke.iso.engine.input.Input
+import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.render.Renderer
 import kotlin.reflect.KClass
 
@@ -16,7 +17,7 @@ class Engine(
     private val services: Services,
     private val assets: Assets,
     private val renderer: Renderer,
-    private val input: Input
+    private val input: Input,
 ) {
     var deltaTime: Float = 0f
         private set
@@ -25,16 +26,20 @@ class Engine(
 
     fun start(game: Game) {
         log.info("Starting up")
-        game.setup()
+        setupEventHandlers()
         assets.addLoader("png", TextureLoader::class)
         assets.addLoader("jpg", TextureLoader::class)
+
+        log.debug("initializing game '${game::class.simpleName}'")
+        game.setup()
+
         assets.load("assets")
         changeState(game.initialState)
-        testEventHandlers()
     }
 
-    private fun testEventHandlers() {
+    private fun setupEventHandlers() {
         val eventService = services.get<EventService>()
+        eventService.addHandler(MovementHandler::class)
         eventService.addHandler(TestEventHandler::class)
         eventService.fire(TestEvent("this is a test message!"))
     }

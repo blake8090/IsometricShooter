@@ -2,6 +2,7 @@ package bke.iso.game
 
 import bke.iso.engine.*
 import bke.iso.engine.assets.Assets
+import bke.iso.engine.entity.Component
 import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
@@ -9,16 +10,21 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
+import bke.iso.engine.event.EventService
+import bke.iso.engine.physics.MoveEvent
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import kotlin.system.measureTimeMillis
+
+class Player : Component()
 
 class GameState(
     private val tiles: Tiles,
     private val assets: Assets,
     private val renderer: Renderer,
     private val input: Input,
-    private val entityService: EntityService
+    private val entityService: EntityService,
+    private val eventService: EventService
 ) : State() {
 
     override fun start() {
@@ -36,12 +42,22 @@ class GameState(
         input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
     }
 
+    override fun update(deltaTime: Float) {
+        entityService.search.withComponent(Player::class) { player, _ ->
+            val speed = 10f
+            val dx = input.poll("moveLeft", "moveRight")
+            val dy = input.poll("moveUp", "moveDown")
+            if (dx != 0f || dy != 0f) {
+                eventService.fire(MoveEvent(player, dx * speed, dy * speed))
+            }
+        }
+    }
+
     private fun buildWorld() {
         log.debug("building world")
         val loadingTime = measureTimeMillis {
             loadMap()
-//            val player = entityFactory.createPlayer()
-//            log.debug("Player id: ${player.id}")
+            createPlayer()
         }
         log.debug("built world in $loadingTime ms")
     }
@@ -58,5 +74,14 @@ class GameState(
             val wall = entityService.create(location)
             wall.add(Sprite("wall3", 0f, 16f))
         }
+    }
+
+    private fun createPlayer() {
+        val player = entityService.create()
+        player.add(
+            Sprite("player", 0f, 16f),
+            Player()
+        )
+        log.debug("Player id: ${player.id}")
     }
 }

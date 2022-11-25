@@ -62,9 +62,11 @@ class EntityService {
         val entity = get(id) ?: return
         val currentLocation = Location(entity.x, entity.y)
         val newLocation = Location(x, y)
-        idsByLocation[currentLocation]?.remove(id)
+        if (newLocation != currentLocation) {
+            idsByLocation[currentLocation]?.remove(id)
+            log.trace("Moved entity '$id' from '$currentLocation' to '$newLocation'")
+        }
         idsByLocation.getOrPut(newLocation) { mutableSetOf() }.add(id)
-        log.trace("Moved entity '$id' from '$currentLocation' to '$newLocation'")
     }
 
     inner class Callback {
