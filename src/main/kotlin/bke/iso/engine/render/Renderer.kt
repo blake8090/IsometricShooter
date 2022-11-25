@@ -19,12 +19,12 @@ class Renderer(
     private val entityService: EntityService,
     private val tiles: Tiles,
     private val assets: Assets,
-    private val input: Input
+    private val input: Input,
+    private val debugRenderer: DebugRenderer
 ) {
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1280f, 720f)
-    private val debugRenderer = DebugRenderer(tiles)
-    private var debugEnabled = false
+    private var debugEnabled = true
 
 //    var mouseCursor: Sprite? = null
 
