@@ -2,15 +2,11 @@ package bke.iso.engine.event
 
 import bke.iso.app.service.Service
 import bke.iso.app.service.Services
-import bke.iso.engine.Engine
 import bke.iso.engine.log
 import kotlin.reflect.KClass
 
 @Service
-class EventService(
-    private val services: Services,
-    private val engine: Engine
-) {
+class EventService(private val services: Services) {
     private val handlers = mutableMapOf<KClass<out Event>, MutableList<EventHandler<out Event>>>()
 
     fun <T : Event> addHandler(eventType: KClass<T>, handlerType: KClass<out EventHandler<T>>) {
@@ -24,7 +20,7 @@ class EventService(
 
     fun <T : Event> fire(event: T, type: KClass<T>) {
         for (eventHandler in getEventHandlers(type)) {
-            eventHandler.handle(engine.deltaTime, event)
+            eventHandler.handle(event)
         }
     }
 

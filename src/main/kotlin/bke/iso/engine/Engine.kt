@@ -5,8 +5,6 @@ import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
 import bke.iso.engine.event.EventService
-import bke.iso.engine.event.TestEvent
-import bke.iso.engine.event.TestEventHandler
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.render.Renderer
@@ -40,8 +38,6 @@ class Engine(
     private fun setupEventHandlers() {
         val eventService = services.get<EventService>()
         eventService.addHandler(MovementHandler::class)
-        eventService.addHandler(TestEventHandler::class)
-        eventService.fire(TestEvent("this is a test message!"))
     }
 
     /**
