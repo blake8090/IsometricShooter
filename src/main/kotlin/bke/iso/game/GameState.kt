@@ -11,6 +11,8 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
+import bke.iso.engine.physics.Bounds
+import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.MoveEvent
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
@@ -44,7 +46,7 @@ class GameState(
 
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Player::class) { player, _ ->
-            val speed = 10f
+            val speed = 9f
             val dx = input.poll("moveLeft", "moveRight")
             val dy = input.poll("moveUp", "moveDown")
             if (dx != 0f || dy != 0f) {
@@ -72,15 +74,25 @@ class GameState(
 
         mapData.walls.forEach { location ->
             val wall = entityService.create(location)
-            wall.add(Sprite("wall3", 0f, 16f))
+            wall.add(
+                Sprite("wall3", 0f, 16f),
+                Collision(
+                    Bounds(1f, 1f, 0f, 0f),
+                    true
+                )
+            )
         }
     }
 
     private fun createPlayer() {
         val player = entityService.create()
         player.add(
-            Sprite("player", 0f, 16f),
-            Player()
+            Sprite("player", 32f, 0f),
+            Player(),
+            Collision(
+                Bounds(0.5f, 0.5f, -0.25f, -0.25f),
+                false
+            )
         )
         log.debug("Player id: ${player.id}")
     }

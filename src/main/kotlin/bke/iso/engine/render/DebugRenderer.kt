@@ -1,25 +1,24 @@
 package bke.iso.engine.render
 
 import bke.iso.app.service.Service
-import bke.iso.engine.Tiles
-import bke.iso.engine.Units
+import bke.iso.engine.*
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
-//import bke.iso.engine.physics.Collision
-//import bke.iso.engine.physics.CollisionService
+import bke.iso.engine.physics.CollisionService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.Polygon
 import com.badlogic.gdx.math.Rectangle
 
 @Service
 class DebugRenderer(
     private val tiles: Tiles,
     private val entityService: EntityService,
-//    private val collisionService: CollisionService
+    private val collisionService: CollisionService
 ) {
     private val shapeRenderer = ShapeRenderer()
 
@@ -44,9 +43,9 @@ class DebugRenderer(
     }
 
     private fun drawCollisionAreas(entity: Entity) {
-//        val collision = entity.get<Collision>() ?: return
-//        val collisionArea = collisionService.getCollisionArea(entity, collision)
-//        drawWorldRectangle(collisionArea, Color.GREEN)
+        val collisionData = collisionService.findCollisionData(entity) ?: return
+        val polygon = Units.toScreen(collisionData.area)
+        drawPolygon(polygon, Color.GREEN)
     }
 
     private fun drawWorldCircle(circle: Circle, color: Color) {
@@ -54,6 +53,13 @@ class DebugRenderer(
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
         shapeRenderer.circle(pos.x, pos.y, circle.radius)
+        shapeRenderer.end()
+    }
+
+    private fun drawPolygon(polygon: Polygon, color: Color) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+        shapeRenderer.color = color
+        shapeRenderer.polygon(polygon.transformedVertices)
         shapeRenderer.end()
     }
 

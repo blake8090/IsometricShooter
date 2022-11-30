@@ -1,5 +1,6 @@
 package bke.iso.engine
 
+import com.badlogic.gdx.math.Polygon
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.floor
 
@@ -38,7 +39,20 @@ object Units {
     fun worldToScreen(pos: Vector2): Vector2 =
         worldToScreen(pos.x, pos.y)
 
-    fun screenToWorld(pos: Vector2): Vector2 {
+    fun toScreen(polygon: Polygon): Polygon {
+        val vertices = polygon.vertices
+            .toList()
+            .zipWithNext()
+            .map { pair -> worldToScreen(pair.first, pair.second) }
+            .flatMap { vector -> listOf(vector.x, vector.y) }
+            .toFloatArray()
+        val screenPolygon = Polygon(vertices)
+        val pos = worldToScreen(polygon.x, polygon.y)
+        screenPolygon.setPosition(pos.x, pos.y)
+        return screenPolygon
+    }
+
+    fun toWorld(pos: Vector2): Vector2 {
         val w = tileWidth / 2
         val h = tileHeight / 2
         val mapX = (pos.x / w) - (pos.y / h)
