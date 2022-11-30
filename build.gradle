@@ -26,8 +26,8 @@ version = '1.0'
 dependencies {
     implementation 'io.github.libktx:ktx-async:1.10.0-rc1'
 
-    implementation 'com.badlogicgames.gdx:gdx-backend-lwjgl3:1.10.0'
-    implementation 'com.badlogicgames.gdx:gdx-platform:1.10.0:natives-desktop'
+    implementation 'com.badlogicgames.gdx:gdx-backend-lwjgl3:1.11.0'
+    implementation 'com.badlogicgames.gdx:gdx-platform:1.11.0:natives-desktop'
 
     implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.11'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
