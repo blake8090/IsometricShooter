@@ -46,7 +46,7 @@ class GameState(
 
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Player::class) { player, _ ->
-            val speed = 9f
+            val speed = 5f
             val dx = input.poll("moveLeft", "moveRight")
             val dy = input.poll("moveUp", "moveDown")
             if (dx != 0f || dy != 0f) {

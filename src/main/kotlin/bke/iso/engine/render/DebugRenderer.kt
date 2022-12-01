@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Polygon
-import com.badlogic.gdx.math.Rectangle
 
 @Service
 class DebugRenderer(
@@ -44,7 +43,18 @@ class DebugRenderer(
 
     private fun drawCollisionAreas(entity: Entity) {
         val collisionData = collisionService.findCollisionData(entity) ?: return
-        val polygon = Units.toScreen(collisionData.area)
+        val area = collisionData.area
+        val vertices = listOf(
+            Units.worldToScreen(area.x, area.y),
+            Units.worldToScreen(area.x, area.y + area.height),
+            Units.worldToScreen(area.x + area.width, area.y + area.height),
+            Units.worldToScreen(area.x + area.width, area.y)
+        )
+        val polygon = Polygon(
+            vertices
+                .flatMap { listOf(it.x, it.y) }
+                .toFloatArray()
+        )
         drawPolygon(polygon, Color.GREEN)
     }
 
@@ -60,33 +70,6 @@ class DebugRenderer(
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         shapeRenderer.color = color
         shapeRenderer.polygon(polygon.transformedVertices)
-        shapeRenderer.end()
-    }
-
-    private fun drawWorldRectangle(rectangle: Rectangle, color: Color) {
-        val bottomLeft = Units.worldToScreen(
-            rectangle.x,
-            rectangle.y
-        )
-        val bottomRight = Units.worldToScreen(
-            rectangle.x + rectangle.width,
-            rectangle.y
-        )
-        val topLeft = Units.worldToScreen(
-            rectangle.x,
-            rectangle.y + rectangle.height
-        )
-        val topRight = Units.worldToScreen(
-            rectangle.x + rectangle.width,
-            rectangle.y + rectangle.height
-        )
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
-        shapeRenderer.color = color
-        shapeRenderer.line(topLeft, topRight)
-        shapeRenderer.line(bottomLeft, bottomRight)
-        shapeRenderer.line(topLeft, bottomLeft)
-        shapeRenderer.line(topRight, bottomRight)
         shapeRenderer.end()
     }
 }
