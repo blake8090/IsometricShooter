@@ -7,6 +7,7 @@ import bke.iso.engine.assets.TextureLoader
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.MovementHandler
+import bke.iso.engine.physics.PhysicsController
 import bke.iso.engine.render.Renderer
 import kotlin.reflect.KClass
 
@@ -21,13 +22,15 @@ class Engine(
         private set
 
     private var state: State = EmptyState()
+
+    private val engineControllers = mutableSetOf<Controller>()
     private val stateControllers = mutableSetOf<Controller>()
 
     fun start(game: Game) {
         log.info("Starting up")
         setupEventHandlers()
-        assets.addLoader("png", TextureLoader::class)
-        assets.addLoader("jpg", TextureLoader::class)
+        setupControllers()
+        setupAssetLoaders()
 
         log.debug("initializing game '${game::class.simpleName}'")
         game.setup()
@@ -41,15 +44,25 @@ class Engine(
         eventService.addHandler(MovementHandler::class)
     }
 
+    private fun setupControllers() {
+        engineControllers.add(services.createInstance(PhysicsController::class))
+    }
+
+    private fun setupAssetLoaders() {
+        assets.addLoader("png", TextureLoader::class)
+        assets.addLoader("jpg", TextureLoader::class)
+    }
+
     /**
      * Main game loop
      */
     fun update(deltaTime: Float) {
         this.deltaTime = deltaTime
         input.update()
-        stateControllers.forEach { controller ->
-            controller.update(deltaTime)
-        }
+
+        engineControllers.forEach { controller -> controller.update(deltaTime) }
+        stateControllers.forEach { controller -> controller.update(deltaTime) }
+
         renderer.render()
     }
 

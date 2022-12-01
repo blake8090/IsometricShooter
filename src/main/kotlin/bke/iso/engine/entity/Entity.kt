@@ -22,6 +22,9 @@ class Entity(
             field = value
         }
 
+    var vx: Float = 0f
+    var vy: Float = 0f
+
     private val components = mutableMapOf<KClass<out Component>, Component>()
 
     fun <T : Component> add(vararg components: T) {

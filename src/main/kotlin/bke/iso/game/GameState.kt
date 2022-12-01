@@ -11,7 +11,6 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
-import bke.iso.game.controller.Player
 import bke.iso.game.controller.PlayerController
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
@@ -27,7 +26,7 @@ class GameState(
     override val controllers = setOf(PlayerController::class)
 
     override fun start() {
-//        renderer.mouseCursor = Sprite("cursor", Vector2(16f, 16f))
+        renderer.cursor = Sprite("cursor", 16f, 16f)
 
         buildWorld()
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
+// TODO: rename to RenderService for consistency
 @Service
 class Renderer(
     private val entityService: EntityService,
@@ -26,7 +27,7 @@ class Renderer(
     private val camera = OrthographicCamera(1280f, 720f)
     private var debugEnabled = true
 
-//    var mouseCursor: Sprite? = null
+    var cursor: Sprite? = null
 
     fun setCameraPos(pos: Vector2) {
         camera.position.x = pos.x
@@ -85,12 +86,9 @@ class Renderer(
         camera.unproject(Vector3(pos.x, pos.y, 0f))
 
     private fun drawMouseCursor() {
-//        mouseCursor
-//            ?.let { sprite ->
-//                val mousePos = input.getMousePos()
-//                val pos = unproject(mousePos)
-//                drawSprite(sprite, Vector2(pos.x, pos.y))
-//            }
-//            ?: return
+        cursor?.let { sprite ->
+            val pos = unproject(input.getMousePos())
+            drawSprite(sprite, Vector2(pos.x, pos.y))
+        }
     }
 }

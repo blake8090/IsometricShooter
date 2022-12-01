@@ -87,6 +87,7 @@ class CollisionService(private val entityService: EntityService) {
 //        val deltaBottom = (secondArea.y + secondArea.height) - area.y
 //        log.trace("deltaLeft: $deltaLeft, deltaRight: $deltaRight, deltaTop: $deltaTop, deltaBottom: $deltaBottom")
 
+        // TODO: add extension to clean this up
         val center = Vector2()
         val secondCenter = Vector2()
         area.getCenter(center)
