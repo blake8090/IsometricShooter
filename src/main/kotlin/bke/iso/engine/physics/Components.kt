@@ -9,7 +9,7 @@ data class Bounds(
     val offsetY: Float
 )
 
-class Collision(
+data class Collision(
     val bounds: Bounds,
     val solid: Boolean
 ) : Component()

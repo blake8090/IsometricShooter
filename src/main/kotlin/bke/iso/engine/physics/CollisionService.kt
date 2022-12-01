@@ -5,7 +5,8 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.log
 import com.badlogic.gdx.math.Rectangle
-import java.util.Collections.min
+import com.badlogic.gdx.math.Vector2
+import kotlin.math.abs
 
 data class CollisionData(
     val entity: Entity,
@@ -14,10 +15,18 @@ data class CollisionData(
     val solid: Boolean,
 )
 
+data class CollisionDetails(
+    val entity: Entity,
+    val area: Rectangle,
+    val solid: Boolean,
+    val side: CollisionSide
+)
+
 data class CollisionResult(
-    val collisionData: CollisionData,
-    val collisions: Set<CollisionData>,
-    val solidCollisions: Set<CollisionData>
+    val area: Rectangle,
+    val bounds: Bounds,
+    val collisions: Set<CollisionDetails>,
+    val solidCollisions: Set<CollisionDetails>
 )
 
 enum class CollisionSide {
@@ -31,44 +40,95 @@ enum class CollisionSide {
 @Service
 class CollisionService(private val entityService: EntityService) {
     // TODO: ensure that solid collisions block other collisions behind that solid object!
-    fun checkCollisions(entity: Entity): CollisionResult? {
+
+    // TODO: step thru dx and dy
+    fun checkProjectedCollisions(entity: Entity, dx: Float, dy: Float): CollisionResult? {
+        val collisionData = findCollisionData(entity) ?: return null
+        val projectedArea = Rectangle(collisionData.area)
+        projectedArea.x += dx
+        projectedArea.y += dy
+        return checkCollisions(entity, projectedArea)
+    }
+
+    private fun checkCollisions(entity: Entity, area: Rectangle): CollisionResult? {
         val collisionData = findCollisionData(entity) ?: return null
         val collisions = entityService.search
-            .inArea(collisionData.area)
-            .mapNotNull(this::findCollisionData)
-            .filter { otherData -> collided(collisionData, otherData) }
+            .inArea(area)
+            .mapNotNull { otherEntity -> getCollisionDetails(entity, area, otherEntity) }
 
         return CollisionResult(
-            collisionData,
-            collisions.filter { data -> !data.solid }.toSet(),
-            collisions.filter { data -> data.solid }.toSet()
+            area,
+            collisionData.bounds,
+            collisions.filter { details -> !details.solid }.toSet(),
+            collisions.filter { details -> details.solid }.toSet()
         )
     }
 
-    private fun collided(collisionData: CollisionData, other: CollisionData): Boolean {
-        if (collisionData.entity == other.entity) {
-            return false
+    private fun getCollisionDetails(entity: Entity, area: Rectangle, otherEntity: Entity): CollisionDetails? {
+        if (entity == otherEntity) {
+            return null
         }
-        val area = collisionData.area
-        val secondArea = other.area
-        val side = calculateCollisionSide(area, secondArea)
-        log.trace("collided on side $side")
-        return area.overlaps(secondArea)
+        val collisionData = findCollisionData(otherEntity)
+        if (collisionData == null || !area.overlaps(collisionData.area)) {
+            return null
+        }
+        return CollisionDetails(
+            otherEntity,
+            collisionData.area,
+            collisionData.solid,
+            calculateCollisionSide(area, collisionData.area)
+        )
     }
 
-    private fun calculateCollisionSide(area: Rectangle, secondArea: Rectangle): CollisionSide {
+    fun calculateCollisionSide(area: Rectangle, secondArea: Rectangle): CollisionSide {
+//        val deltaLeft = (secondArea.x + secondArea.width) - area.x
+//        val deltaRight = (area.x + area.width) - secondArea.x
+//        val deltaTop = (area.y + area.height) - secondArea.y
+//        val deltaBottom = (secondArea.y + secondArea.height) - area.y
+//        log.trace("deltaLeft: $deltaLeft, deltaRight: $deltaRight, deltaTop: $deltaTop, deltaBottom: $deltaBottom")
+
+        val center = Vector2()
+        val secondCenter = Vector2()
+        area.getCenter(center)
+        secondArea.getCenter(secondCenter)
+        val diffX = abs(center.x - secondCenter.x)
+        val diffY = abs(center.y - secondCenter.y)
+        log.trace("diffX: $diffX, diffY: $diffY")
+
+        return if (diffX > diffY) {
+            getCollisionSideX(area, secondArea)
+        } else if (diffY > diffX) {
+            getCollisionSideY(area, secondArea)
+        } else {
+            CollisionSide.CORNER
+        }
+
+//        return when (min(listOf(deltaLeft, deltaRight, deltaTop, deltaBottom))) {
+//            deltaLeft -> CollisionSide.LEFT
+//            deltaRight -> CollisionSide.RIGHT
+//            deltaTop -> CollisionSide.TOP
+//            deltaBottom -> CollisionSide.BOTTOM
+//            else -> CollisionSide.CORNER
+//        }
+    }
+
+    private fun getCollisionSideX(area: Rectangle, secondArea: Rectangle): CollisionSide {
         val deltaLeft = (secondArea.x + secondArea.width) - area.x
         val deltaRight = (area.x + area.width) - secondArea.x
+        return if (deltaLeft < deltaRight) {
+            CollisionSide.LEFT
+        } else {
+            CollisionSide.RIGHT
+        }
+    }
+
+    private fun getCollisionSideY(area: Rectangle, secondArea: Rectangle): CollisionSide {
         val deltaTop = (area.y + area.height) - secondArea.y
         val deltaBottom = (secondArea.y + secondArea.height) - area.y
-        log.trace("deltaLeft: $deltaLeft, deltaRight: $deltaRight, deltaTop: $deltaTop, deltaBottom: $deltaBottom")
-
-        return when (min(listOf(deltaLeft, deltaRight, deltaTop, deltaBottom))) {
-            deltaLeft -> CollisionSide.LEFT
-            deltaRight -> CollisionSide.RIGHT
-            deltaTop -> CollisionSide.TOP
-            deltaBottom -> CollisionSide.BOTTOM
-            else -> CollisionSide.CORNER
+        return if (deltaTop < deltaBottom) {
+            CollisionSide.TOP
+        } else {
+            CollisionSide.BOTTOM
         }
     }
 
