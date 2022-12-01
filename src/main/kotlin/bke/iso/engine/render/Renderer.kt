@@ -29,9 +29,8 @@ class Renderer(
 //    var mouseCursor: Sprite? = null
 
     fun setCameraPos(pos: Vector2) {
-        val screenPos = Units.worldToScreen(pos)
-        camera.position.x = screenPos.x
-        camera.position.y = screenPos.y
+        camera.position.x = pos.x
+        camera.position.y = pos.y
     }
 
     fun toggleDebug() {

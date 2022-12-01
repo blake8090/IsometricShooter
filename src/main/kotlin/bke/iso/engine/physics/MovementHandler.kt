@@ -41,8 +41,6 @@ class MovementHandler(
 
                     else -> {
                         log.trace("Corner collision...?")
-                        dx = 0f
-                        dy = 0f
                     }
                 }
             }

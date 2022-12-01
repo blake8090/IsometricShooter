@@ -21,6 +21,7 @@ class Engine(
         private set
 
     private var state: State = EmptyState()
+    private val stateControllers = mutableSetOf<Controller>()
 
     fun start(game: Game) {
         log.info("Starting up")
@@ -46,7 +47,9 @@ class Engine(
     fun update(deltaTime: Float) {
         this.deltaTime = deltaTime
         input.update()
-        state.update(deltaTime)
+        stateControllers.forEach { controller ->
+            controller.update(deltaTime)
+        }
         renderer.render()
     }
 
@@ -63,5 +66,10 @@ class Engine(
         state.stop()
         state = services.createInstance(newState)
         state.start()
+
+        stateControllers.clear()
+        state.controllers
+            .map { type -> services.createInstance(type) }
+            .forEach(stateControllers::add)
     }
 }

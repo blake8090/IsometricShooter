@@ -2,7 +2,6 @@ package bke.iso.game
 
 import bke.iso.engine.*
 import bke.iso.engine.assets.Assets
-import bke.iso.engine.entity.Component
 import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
@@ -10,15 +9,13 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
-import bke.iso.engine.event.EventService
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
-import bke.iso.engine.physics.MoveEvent
+import bke.iso.game.controller.Player
+import bke.iso.game.controller.PlayerController
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import kotlin.system.measureTimeMillis
-
-class Player : Component()
 
 class GameState(
     private val tiles: Tiles,
@@ -26,8 +23,8 @@ class GameState(
     private val renderer: Renderer,
     private val input: Input,
     private val entityService: EntityService,
-    private val eventService: EventService
 ) : State() {
+    override val controllers = setOf(PlayerController::class)
 
     override fun start() {
 //        renderer.mouseCursor = Sprite("cursor", Vector2(16f, 16f))
@@ -42,17 +39,6 @@ class GameState(
         input.bind("moveDown", KeyBinding(Keys.DOWN, InputState.DOWN, true))
         input.bind("run", KeyBinding(Keys.SHIFT_LEFT, InputState.DOWN))
         input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
-    }
-
-    override fun update(deltaTime: Float) {
-        entityService.search.withComponent(Player::class) { player, _ ->
-            val speed = 5f
-            val dx = input.poll("moveLeft", "moveRight")
-            val dy = input.poll("moveUp", "moveDown")
-            if (dx != 0f || dy != 0f) {
-                eventService.fire(MoveEvent(player, dx * speed, dy * speed))
-            }
-        }
     }
 
     private fun buildWorld() {

@@ -1,11 +1,15 @@
 package bke.iso.engine
 
-abstract class State {
-    open fun start() {}
+import kotlin.reflect.KClass
 
-    open fun update(deltaTime: Float) {}
+abstract class State {
+    abstract val controllers: Set<KClass<out Controller>>
+
+    open fun start() {}
 
     open fun stop() {}
 }
 
-class EmptyState : State()
+class EmptyState : State() {
+    override val controllers: Set<KClass<out Controller>> = emptySet()
+}
