@@ -4,7 +4,8 @@ import bke.iso.app.service.Service
 import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
-import bke.iso.engine.event.EventService
+import bke.iso.engine.event.Event
+import bke.iso.engine.event.EventHandlerMap
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.physics.PhysicsController
@@ -24,7 +25,10 @@ class Engine(
     private var state: State = EmptyState()
 
     private val engineControllers = mutableSetOf<Controller>()
-    private val stateControllers = mutableSetOf<Controller>()
+    private val gameControllers = mutableSetOf<Controller>()
+
+    private val engineEventHandlers = EventHandlerMap()
+    private val gameEventHandlers = EventHandlerMap()
 
     fun start(game: Game) {
         log.info("Starting up")
@@ -40,8 +44,7 @@ class Engine(
     }
 
     private fun setupEventHandlers() {
-        val eventService = services.get<EventService>()
-        eventService.addHandler(MovementHandler::class)
+        engineEventHandlers.add(services.createInstance(MovementHandler::class))
     }
 
     private fun setupControllers() {
@@ -60,8 +63,8 @@ class Engine(
         this.deltaTime = deltaTime
         input.update()
 
+        gameControllers.forEach { controller -> controller.update(deltaTime) }
         engineControllers.forEach { controller -> controller.update(deltaTime) }
-        stateControllers.forEach { controller -> controller.update(deltaTime) }
 
         renderer.render()
     }
@@ -80,9 +83,20 @@ class Engine(
         state = services.createInstance(newState)
         state.start()
 
-        stateControllers.clear()
-        state.controllers
-            .map { type -> services.createInstance(type) }
-            .forEach(stateControllers::add)
+        gameControllers.clear()
+        for (controllerType in state.controllers) {
+            val controller = services.createInstance(controllerType)
+            gameControllers.add(controller)
+        }
+
+        gameEventHandlers.clear()
+        for (handlerType in state.eventHandlers) {
+            val handler = services.createInstance(handlerType)
+            gameEventHandlers.add(handler)
+        }
+    }
+
+    fun <T : Event> fireEvent(event: T) {
+        engineEventHandlers.fire(event, event::class)
     }
 }

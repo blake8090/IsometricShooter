@@ -25,8 +25,7 @@ data class CollisionDetails(
 data class CollisionResult(
     val area: Rectangle,
     val bounds: Bounds,
-    val collisions: Set<CollisionDetails>,
-    val solidCollisions: Set<CollisionDetails>
+    val collisions: Set<CollisionDetails>
 )
 
 enum class CollisionSide {
@@ -55,12 +54,12 @@ class CollisionService(private val entityService: EntityService) {
         val collisions = entityService.search
             .inArea(area)
             .mapNotNull { otherEntity -> getCollisionDetails(entity, area, otherEntity) }
+            .toSet()
 
         return CollisionResult(
             area,
             collisionData.bounds,
-            collisions.filter { details -> !details.solid }.toSet(),
-            collisions.filter { details -> details.solid }.toSet()
+            collisions
         )
     }
 

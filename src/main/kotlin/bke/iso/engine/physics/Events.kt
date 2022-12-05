@@ -8,3 +8,8 @@ data class MoveEvent(
     val dx: Float,
     val dy: Float
 ) : Event()
+
+data class CollisionEvent(
+    val entity: Entity,
+    val collisionDetails: CollisionDetails
+) : Event()
