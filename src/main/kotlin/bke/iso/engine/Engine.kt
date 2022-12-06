@@ -4,6 +4,7 @@ import bke.iso.app.service.Service
 import bke.iso.app.service.Services
 import bke.iso.engine.assets.Assets
 import bke.iso.engine.assets.TextureLoader
+import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandlerMap
 import bke.iso.engine.input.Input
@@ -66,6 +67,7 @@ class Engine(
         gameControllers.forEach { controller -> controller.update(deltaTime) }
         engineControllers.forEach { controller -> controller.update(deltaTime) }
 
+        services.get<EntityService>().update()
         renderer.render()
     }
 
@@ -98,5 +100,6 @@ class Engine(
 
     fun <T : Event> fireEvent(event: T) {
         engineEventHandlers.fire(event, event::class)
+        gameEventHandlers.fire(event, event::class)
     }
 }

@@ -25,6 +25,9 @@ class Entity(
     var vx: Float = 0f
     var vy: Float = 0f
 
+    var deleted = false
+        private set
+
     private val components = mutableMapOf<KClass<out Component>, Component>()
 
     fun <T : Component> add(vararg components: T) {
@@ -49,7 +52,9 @@ class Entity(
         remove(T::class)
 
     fun removeAll() =
-        components.keys.forEach { type -> remove(type) }
+        components.keys
+            .toList()
+            .forEach { type -> remove(type) }
 
     fun <T : Component> has(type: KClass<T>) =
         components.contains(type)
@@ -57,8 +62,10 @@ class Entity(
     inline fun <reified T : Component> has() =
         has(T::class)
 
-    fun delete() =
+    fun delete() {
         callback.entityDeleted(id)
+        deleted = true
+    }
 
     override fun equals(other: Any?): Boolean {
         return (other is Entity) && other.id == id

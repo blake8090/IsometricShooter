@@ -10,6 +10,8 @@ class MovementHandler(
     private val engine: Engine,
     private val collisionService: CollisionService,
 ) : EventHandler<MoveEvent> {
+    override val type = MoveEvent::class
+
     override fun handle(event: MoveEvent) {
         val entity = event.entity
         val delta = Vector2(
@@ -22,7 +24,7 @@ class MovementHandler(
             val bounds = result.bounds
             for (collisionDetails in result.collisions) {
                 resolveCollision(entity, bounds, collisionDetails, delta)
-                //engine.fire(CollisionEvent(entity, collisionDetails))
+                engine.fireEvent(CollisionEvent(entity, collisionDetails))
             }
         }
 

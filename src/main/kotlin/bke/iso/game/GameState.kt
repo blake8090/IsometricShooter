@@ -9,14 +9,11 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
-import bke.iso.engine.event.Event
-import bke.iso.engine.event.EventHandler
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
 import bke.iso.game.controller.PlayerController
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
-import kotlin.reflect.KClass
 import kotlin.system.measureTimeMillis
 
 class GameState(
@@ -27,7 +24,7 @@ class GameState(
     private val entityService: EntityService,
 ) : State() {
     override val controllers = setOf(PlayerController::class)
-    override val eventHandlers: Set<KClass<out EventHandler<out Event>>> = emptySet()
+    override val eventHandlers = setOf(BulletCollisionHandler::class)
 
     override fun start() {
         renderer.cursor = Sprite("cursor", 16f, 16f)

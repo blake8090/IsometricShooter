@@ -42,6 +42,11 @@ class EntityService {
             .flatMap { (_, ids) -> ids }
             .mapNotNull(this::get)
 
+    fun update() {
+        deletedIds.forEach(this::delete)
+        deletedIds.clear()
+    }
+
     private fun delete(id: UUID) {
         val entity = get(id) ?: return
         entity.removeAll()
