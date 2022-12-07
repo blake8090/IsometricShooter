@@ -25,7 +25,7 @@ class Renderer(
 ) {
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1280f, 720f)
-    private var debugEnabled = true
+    private var debugEnabled = false
 
     var cursor: Sprite? = null
 

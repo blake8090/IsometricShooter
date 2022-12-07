@@ -28,6 +28,10 @@ class PlayerController(
         entityService.search.withComponent(Player::class) { entity, _ ->
             updatePlayerEntity(entity)
 
+            input.onAction("toggleDebug") {
+                renderer.toggleDebug()
+            }
+
             input.onAction("shoot") {
                 val mousePos = renderer.unproject(input.getMousePos())
                 val target = Units.toWorld(Vector2(mousePos.x, mousePos.y))
