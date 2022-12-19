@@ -4,9 +4,9 @@ import bke.iso.engine.Controller
 import bke.iso.engine.Engine
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
-import bke.iso.game.BulletType
+import bke.iso.game.event.BulletType
 import bke.iso.game.Player
-import bke.iso.game.ShootEvent
+import bke.iso.game.event.ShootEvent
 import bke.iso.game.Turret
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.max

@@ -14,6 +14,9 @@ import bke.iso.engine.physics.Collision
 import bke.iso.game.controller.BulletController
 import bke.iso.game.controller.PlayerController
 import bke.iso.game.controller.TurretController
+import bke.iso.game.event.BulletCollisionHandler
+import bke.iso.game.event.DamageHandler
+import bke.iso.game.event.ShootHandler
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import kotlin.system.measureTimeMillis
@@ -33,7 +36,8 @@ class GameState(
 
     override val eventHandlers = setOf(
         BulletCollisionHandler::class,
-        ShootHandler::class
+        ShootHandler::class,
+        DamageHandler::class
     )
 
     override fun start() {
@@ -91,7 +95,8 @@ class GameState(
             Collision(
                 Bounds(0.5f, 0.5f, -0.25f, -0.25f),
                 false
-            )
+            ),
+            Health(15f)
         )
         log.debug("Player id: ${player.id}")
     }
@@ -104,7 +109,8 @@ class GameState(
             Collision(
                 Bounds(0.5f, 0.5f, -0.25f, -0.25f),
                 false
-            )
+            ),
+            Health(10f)
         )
     }
 }

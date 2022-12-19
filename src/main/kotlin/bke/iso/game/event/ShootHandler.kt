@@ -1,4 +1,4 @@
-package bke.iso.game
+package bke.iso.game.event
 
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
@@ -7,6 +7,7 @@ import bke.iso.engine.event.EventHandler
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.Sprite
+import bke.iso.game.Bullet
 import com.badlogic.gdx.math.Vector2
 
 enum class BulletType {

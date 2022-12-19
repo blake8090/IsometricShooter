@@ -1,10 +1,12 @@
-package bke.iso.game
+package bke.iso.game.event
 
+import bke.iso.engine.Engine
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.log
 import bke.iso.engine.physics.CollisionEvent
+import bke.iso.game.Bullet
 
-class BulletCollisionHandler : EventHandler<CollisionEvent> {
+class BulletCollisionHandler(private val engine: Engine) : EventHandler<CollisionEvent> {
     override val type = CollisionEvent::class
 
     override fun handle(event: CollisionEvent) {
@@ -19,5 +21,6 @@ class BulletCollisionHandler : EventHandler<CollisionEvent> {
 
         log.trace("bullet collided")
         entity.delete()
+        engine.fireEvent(DamageEvent(entity, otherEntity, 5f))
     }
 }

@@ -8,9 +8,9 @@ import bke.iso.engine.entity.EntityService
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.MoveEvent
 import bke.iso.engine.render.Renderer
-import bke.iso.game.BulletType
+import bke.iso.game.event.BulletType
 import bke.iso.game.Player
-import bke.iso.game.ShootEvent
+import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.math.Vector2
 
 class PlayerController(

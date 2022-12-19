@@ -14,3 +14,5 @@ data class Bullet(
 class Turret() : Component() {
     var coolDownTime: Float = 0f
 }
+
+data class Health(var value: Float) : Component()
