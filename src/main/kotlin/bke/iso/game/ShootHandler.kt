@@ -41,7 +41,7 @@ class ShootHandler(private val entityService: EntityService) : EventHandler<Shoo
         bullet.vx = direction.x * speed
         bullet.vy = direction.y * speed
         bullet.add(
-            Bullet(shooter.id),
+            Bullet(shooter.id, pos),
             Sprite("bullet", 8f, 8f),
             Collision(
                 Bounds(0.25f, 0.25f, 0f, -0.25f),

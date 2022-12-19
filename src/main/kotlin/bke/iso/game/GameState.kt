@@ -11,7 +11,9 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
+import bke.iso.game.controller.BulletController
 import bke.iso.game.controller.PlayerController
+import bke.iso.game.controller.TurretController
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
 import kotlin.system.measureTimeMillis
@@ -23,7 +25,11 @@ class GameState(
     private val input: Input,
     private val entityService: EntityService,
 ) : State() {
-    override val controllers = setOf(PlayerController::class)
+    override val controllers = setOf(
+        PlayerController::class,
+        TurretController::class,
+        BulletController::class
+    )
 
     override val eventHandlers = setOf(
         BulletCollisionHandler::class,
@@ -74,6 +80,7 @@ class GameState(
         }
 
         createTurret(7.5f, 13.5f)
+        createTurret(18.5f, 10.5f)
     }
 
     private fun createPlayer() {
@@ -93,6 +100,7 @@ class GameState(
         val turret = entityService.create(x, y)
         turret.add(
             Sprite("turret", 16f, 0f),
+            Turret(),
             Collision(
                 Bounds(0.5f, 0.5f, -0.25f, -0.25f),
                 false

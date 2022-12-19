@@ -10,9 +10,14 @@ class BulletCollisionHandler : EventHandler<CollisionEvent> {
     override fun handle(event: CollisionEvent) {
         val entity = event.entity
         val bullet = entity.get<Bullet>() ?: return
-        if (bullet.shooterId != event.collisionDetails.entity.id) {
-            log.trace("bullet collided")
-            entity.delete()
+        val otherEntity = event.collisionDetails.entity
+
+        // bullets should not collide with the shooter or other bullets
+        if (bullet.shooterId == otherEntity.id || otherEntity.has<Bullet>()) {
+            return
         }
+
+        log.trace("bullet collided")
+        entity.delete()
     }
 }
