@@ -72,6 +72,8 @@ class GameState(
                 )
             )
         }
+
+        createTurret(7.5f, 13.5f)
     }
 
     private fun createPlayer() {
@@ -85,5 +87,16 @@ class GameState(
             )
         )
         log.debug("Player id: ${player.id}")
+    }
+
+    private fun createTurret(x: Float, y: Float) {
+        val turret = entityService.create(x, y)
+        turret.add(
+            Sprite("turret", 16f, 0f),
+            Collision(
+                Bounds(0.5f, 0.5f, -0.25f, -0.25f),
+                false
+            )
+        )
     }
 }
