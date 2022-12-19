@@ -24,7 +24,11 @@ class GameState(
     private val entityService: EntityService,
 ) : State() {
     override val controllers = setOf(PlayerController::class)
-    override val eventHandlers = setOf(BulletCollisionHandler::class)
+
+    override val eventHandlers = setOf(
+        BulletCollisionHandler::class,
+        ShootHandler::class
+    )
 
     override fun start() {
         renderer.cursor = Sprite("cursor", 16f, 16f)
