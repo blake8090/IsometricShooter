@@ -36,25 +36,25 @@ class MovementHandler(
         if (!collision.data.solid) {
             return
         }
-        val solidArea = collision.data.area
+        val box = collision.data.box
         when (collision.side) {
             CollisionSide.TOP -> {
-                entity.y = solidArea.y - bounds.length - bounds.offsetY
+                entity.y = box.y - bounds.length - bounds.offsetY
                 delta.y = 0f
             }
 
             CollisionSide.BOTTOM -> {
-                entity.y = (solidArea.y + solidArea.height) - bounds.offsetY
+                entity.y = (box.y + box.height) - bounds.offsetY
                 delta.y = 0f
             }
 
             CollisionSide.LEFT -> {
-                entity.x = (solidArea.x + solidArea.width) - bounds.offsetX
+                entity.x = (box.x + box.width) - bounds.offsetX
                 delta.x = 0f
             }
 
             CollisionSide.RIGHT -> {
-                entity.x = solidArea.x - bounds.length - bounds.offsetX
+                entity.x = box.x - bounds.length - bounds.offsetX
                 delta.x = 0f
             }
 

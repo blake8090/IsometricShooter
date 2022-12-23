@@ -11,7 +11,7 @@ import kotlin.math.abs
 data class CollisionData(
     val entity: Entity,
     val bounds: Bounds,
-    val area: Rectangle,
+    val box: Rectangle,
     val solid: Boolean,
 )
 
@@ -42,7 +42,7 @@ class CollisionService(private val entityService: EntityService) {
     //  - ensure that solid collisions block other collisions behind that solid object!
     fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float): EntityCollisionResult? {
         val collisionData = findCollisionData(entity) ?: return null
-        val projection = Rectangle(collisionData.area)
+        val projection = Rectangle(collisionData.box)
         projection.x += dx
         projection.y += dy
 
@@ -51,11 +51,11 @@ class CollisionService(private val entityService: EntityService) {
             .asSequence()
             .filter { otherEntity -> otherEntity != entity }
             .mapNotNull(this::findCollisionData)
-            .filter { data -> data.area.overlaps(projection) }
+            .filter { data -> data.box.overlaps(projection) }
             .map { data ->
                 BoxCollision(
                     data,
-                    calculateCollisionSide(projection, data.area)
+                    calculateCollisionSide(projection, data.box)
                 )
             }
             .toSet()
