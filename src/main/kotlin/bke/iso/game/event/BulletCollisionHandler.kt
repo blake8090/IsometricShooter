@@ -12,7 +12,7 @@ class BulletCollisionHandler(private val engine: Engine) : EventHandler<Collisio
     override fun handle(event: CollisionEvent) {
         val entity = event.entity
         val bullet = entity.get<Bullet>() ?: return
-        val otherEntity = event.collisionDetails.entity
+        val otherEntity = event.collisionData.entity
 
         // bullets should not collide with the shooter or other bullets
         if (bullet.shooterId == otherEntity.id || otherEntity.has<Bullet>()) {

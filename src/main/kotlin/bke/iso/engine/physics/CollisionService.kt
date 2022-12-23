@@ -15,19 +15,6 @@ data class CollisionData(
     val solid: Boolean,
 )
 
-data class CollisionDetails(
-    val entity: Entity,
-    val area: Rectangle,
-    val solid: Boolean,
-    val side: CollisionSide
-)
-
-data class CollisionResult(
-    val area: Rectangle,
-    val bounds: Bounds,
-    val collisions: Set<CollisionDetails>
-)
-
 enum class CollisionSide {
     LEFT,
     RIGHT,
@@ -36,47 +23,52 @@ enum class CollisionSide {
     CORNER
 }
 
+data class BoxCollision(
+    val data: CollisionData,
+    val side: CollisionSide
+)
+
+data class EntityCollisionResult(
+    val bounds: Bounds,
+    val box: Rectangle,
+    val collisions: Set<BoxCollision>
+)
+
 @Service
 class CollisionService(private val entityService: EntityService) {
-    // TODO: ensure that solid collisions block other collisions behind that solid object!
 
-    // TODO: step thru dx and dy
-    fun checkProjectedCollisions(entity: Entity, dx: Float, dy: Float): CollisionResult? {
+    // TODO:
+    //  - step thru dx and dy
+    //  - ensure that solid collisions block other collisions behind that solid object!
+    fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float): EntityCollisionResult? {
         val collisionData = findCollisionData(entity) ?: return null
-        val projectedArea = Rectangle(collisionData.area)
-        projectedArea.x += dx
-        projectedArea.y += dy
-        return checkCollisions(entity, projectedArea)
-    }
+        val projection = Rectangle(collisionData.area)
+        projection.x += dx
+        projection.y += dy
 
-    private fun checkCollisions(entity: Entity, area: Rectangle): CollisionResult? {
-        val collisionData = findCollisionData(entity) ?: return null
         val collisions = entityService.search
-            .inArea(area)
-            .mapNotNull { otherEntity -> getCollisionDetails(entity, area, otherEntity) }
+            .inArea(projection)
+            .asSequence()
+            .filter { otherEntity -> otherEntity != entity }
+            .mapNotNull(this::findCollisionData)
+            .filter { data -> data.area.overlaps(projection) }
+            .map { data ->
+                BoxCollision(
+                    data,
+                    calculateCollisionSide(projection, data.area)
+                )
+            }
             .toSet()
 
-        return CollisionResult(
-            area,
-            collisionData.bounds,
-            collisions
-        )
-    }
-
-    private fun getCollisionDetails(entity: Entity, area: Rectangle, otherEntity: Entity): CollisionDetails? {
-        if (entity == otherEntity) {
-            return null
+        return if (collisions.isNotEmpty()) {
+            EntityCollisionResult(
+                collisionData.bounds,
+                projection,
+                collisions
+            )
+        } else {
+            null
         }
-        val collisionData = findCollisionData(otherEntity)
-        if (collisionData == null || !area.overlaps(collisionData.area)) {
-            return null
-        }
-        return CollisionDetails(
-            otherEntity,
-            collisionData.area,
-            collisionData.solid,
-            calculateCollisionSide(area, collisionData.area)
-        )
     }
 
     fun calculateCollisionSide(area: Rectangle, secondArea: Rectangle): CollisionSide {

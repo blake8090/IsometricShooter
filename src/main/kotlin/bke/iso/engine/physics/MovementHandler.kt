@@ -19,12 +19,12 @@ class MovementHandler(
             event.dy * engine.deltaTime
         )
 
-        val result = collisionService.checkProjectedCollisions(entity, delta.x, delta.y)
+        val result = collisionService.predictEntityCollisions(entity, delta.x, delta.y)
         if (result != null) {
             val bounds = result.bounds
-            for (collisionDetails in result.collisions) {
-                resolveCollision(entity, bounds, collisionDetails, delta)
-                engine.fireEvent(CollisionEvent(entity, collisionDetails))
+            for (boxCollision in result.collisions) {
+                resolveCollision(entity, bounds, boxCollision, delta)
+                engine.fireEvent(CollisionEvent(entity, boxCollision.data))
             }
         }
 
@@ -32,12 +32,12 @@ class MovementHandler(
         entity.y += delta.y
     }
 
-    private fun resolveCollision(entity: Entity, bounds: Bounds, collisionDetails: CollisionDetails, delta: Vector2) {
-        if (!collisionDetails.solid) {
+    private fun resolveCollision(entity: Entity, bounds: Bounds, collision: BoxCollision, delta: Vector2) {
+        if (!collision.data.solid) {
             return
         }
-        val solidArea = collisionDetails.area
-        when (collisionDetails.side) {
+        val solidArea = collision.data.area
+        when (collision.side) {
             CollisionSide.TOP -> {
                 entity.y = solidArea.y - bounds.length - bounds.offsetY
                 delta.y = 0f
