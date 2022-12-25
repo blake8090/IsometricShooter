@@ -4,12 +4,20 @@ import com.badlogic.gdx.math.Polygon
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.floor
 
+// TODO: deprecate this file in favor of the following:
+//  - create "math" package
+//  - move screen/world conversion code to "Projection.kt"
+
+// TODO: Move to own file, as new constructors will need to be added
 data class Location(val x: Int, val y: Int) {
     constructor(x: Float, y: Float) :
             this(
                 floor(x).toInt(),
                 floor(y).toInt()
             )
+
+    fun toVector2() =
+        Vector2(x.toFloat(), y.toFloat())
 }
 
 // TODO: Add unit tests

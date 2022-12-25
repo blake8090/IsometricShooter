@@ -85,6 +85,7 @@ class GameState(
 
         createTurret(7.5f, 13.5f)
         createTurret(18.5f, 10.5f)
+        createTurret(3f, 3f)
     }
 
     private fun createPlayer() {

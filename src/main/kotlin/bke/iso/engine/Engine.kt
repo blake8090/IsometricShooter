@@ -10,6 +10,7 @@ import bke.iso.engine.event.EventHandlerMap
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.physics.PhysicsController
+import bke.iso.engine.render.DebugRenderer
 import bke.iso.engine.render.Renderer
 import kotlin.reflect.KClass
 
@@ -69,6 +70,7 @@ class Engine(
 
         services.get<EntityService>().update()
         renderer.render()
+        services.get<DebugRenderer>().clearDebugData()
     }
 
     fun stop() {

@@ -1,6 +1,7 @@
 package bke.iso.engine.render
 
 import bke.iso.engine.entity.Component
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 
@@ -10,11 +11,37 @@ data class Sprite(
     val offsetY: Float
 ) : Component()
 
+/**
+ * Contains shapes drawn when debug mode is active.
+ * This data is only for the current frame, and will be removed after rendering.
+ */
+data class DebugData(
+    val lines: MutableList<DebugLine> = mutableListOf(),
+    val rectangles: MutableList<DebugRectangle> = mutableListOf(),
+    val circles: MutableList<DebugCircle> = mutableListOf(),
+    val points: MutableList<DebugPoint> = mutableListOf()
+) : Component()
+
+// TODO: when implementing z-levels, change this to use a Segment
 data class DebugLine(
     val start: Vector2,
-    val end: Vector2
+    val end: Vector2,
+    val width: Float,
+    val color: Color
 ) : Component()
 
 data class DebugRectangle(
-    val rectangle: Rectangle
+    val rectangle: Rectangle,
+    val lineWidth: Float,
+    val color: Color
 ) : Component()
+
+data class DebugCircle(
+    val radius: Float,
+    val color: Color
+) : Component()
+
+data class DebugPoint(
+    val size: Float,
+    val color: Color
+)

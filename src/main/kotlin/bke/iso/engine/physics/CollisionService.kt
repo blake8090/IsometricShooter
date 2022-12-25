@@ -3,10 +3,16 @@ package bke.iso.engine.physics
 import bke.iso.app.service.Service
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
+import bke.iso.engine.getEdges
 import bke.iso.engine.log
+import bke.iso.engine.toVector2
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 data class CollisionData(
     val entity: Entity,
@@ -15,6 +21,7 @@ data class CollisionData(
     val solid: Boolean,
 )
 
+// TODO: inner class of BoxCollision?
 enum class CollisionSide {
     LEFT,
     RIGHT,
@@ -32,6 +39,11 @@ data class EntityCollisionResult(
     val bounds: Bounds,
     val box: Rectangle,
     val collisions: Set<BoxCollision>
+)
+
+data class SegmentCollision(
+    val data: CollisionData,
+    val distanceFromStart: Float
 )
 
 @Service
@@ -146,5 +158,62 @@ class CollisionService(private val entityService: EntityService) {
             bounds.width,
             bounds.length
         )
+    }
+
+    fun checkSegmentCollisions(segment: Segment): List<SegmentCollision> {
+        val collisions = mutableListOf<SegmentCollision>()
+        val rect = getSegmentRectangle(segment.a.toVector2(), segment.b.toVector2())
+        entityService.search
+            .inArea(rect)
+            .mapNotNull(this::findCollisionData)
+            .forEach { collisionData ->
+                val points = findIntersectionPoints(segment, collisionData.box)
+                if (points.isNotEmpty()) {
+                    val pos = Vector2(collisionData.entity.x, collisionData.entity.y)
+                    val distanceFromStart = segment.a.toVector2().dst(pos)
+                    collisions.add(
+                        SegmentCollision(
+                            collisionData,
+                            distanceFromStart
+                        )
+                    )
+                }
+            }
+        return collisions.sortedBy(SegmentCollision::distanceFromStart)
+    }
+
+    private fun getSegmentRectangle(start: Vector2, end: Vector2): Rectangle {
+        val min = Vector2(
+            min(start.x, end.x),
+            min(start.y, end.y)
+        )
+        val max = Vector2(
+            max(start.x, end.x),
+            max(start.y, end.y)
+        )
+        return Rectangle(
+            min.x,
+            min.y,
+            max.x - min.x,
+            max.y - min.y
+        )
+    }
+
+    fun findIntersectionPoints(segment: Segment, rectangle: Rectangle): List<Vector2> {
+        val points = mutableListOf<Vector2>()
+        for (edge in rectangle.getEdges()) {
+            val intersectionPoint = Vector2()
+            val intersected = Intersector.intersectSegments(
+                segment.a.toVector2(),
+                segment.b.toVector2(),
+                edge.a.toVector2(),
+                edge.b.toVector2(),
+                intersectionPoint
+            )
+            if (intersected) {
+                points.add(intersectionPoint)
+            }
+        }
+        return points
     }
 }

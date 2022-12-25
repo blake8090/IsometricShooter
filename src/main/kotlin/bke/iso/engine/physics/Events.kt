@@ -11,5 +11,6 @@ data class MoveEvent(
 
 data class CollisionEvent(
     val entity: Entity,
+    // TODO: we don't need collision data (for now...)
     val collisionData: CollisionData
 ) : Event()
