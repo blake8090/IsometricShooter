@@ -17,7 +17,8 @@ class PlayerController(
     private val engine: Engine,
     private val renderService: RenderService
 ) : Controller {
-    private val playerSpeed = 5f
+    private val playerWalkSpeed = 5f
+    private val playerRunSpeed = 10f
 
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Player::class) { entity, _ ->
@@ -39,7 +40,13 @@ class PlayerController(
         val dx = input.poll("moveLeft", "moveRight")
         val dy = input.poll("moveUp", "moveDown")
         if (dx != 0f || dy != 0f) {
-            engine.fireEvent(MoveEvent(entity, dx, dy, playerSpeed))
+            val speed =
+                if (input.poll("run") != 0f) {
+                    playerRunSpeed
+                } else {
+                    playerWalkSpeed
+                }
+            engine.fireEvent(MoveEvent(entity, dx, dy, speed))
         }
         renderService.setCameraPos(toScreen(entity.x, entity.y))
     }
