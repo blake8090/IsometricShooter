@@ -14,10 +14,7 @@ class MovementHandler(
 
     override fun handle(event: MoveEvent) {
         val entity = event.entity
-        val delta = Vector2(
-            event.dx * engine.deltaTime,
-            event.dy * engine.deltaTime
-        )
+        val delta = calculateDelta(event)
 
         val result = collisionService.predictEntityCollisions(entity, delta.x, delta.y)
         if (result != null) {
@@ -30,6 +27,14 @@ class MovementHandler(
 
         entity.x += delta.x
         entity.y += delta.y
+    }
+
+    private fun calculateDelta(event: MoveEvent): Vector2 {
+        val delta = Vector2(event.dx, event.dy).nor()
+        return Vector2(
+            delta.x * event.speed * engine.deltaTime,
+            delta.y * event.speed * engine.deltaTime
+        )
     }
 
     private fun resolveCollision(entity: Entity, bounds: Bounds, collision: BoxCollision, delta: Vector2) {

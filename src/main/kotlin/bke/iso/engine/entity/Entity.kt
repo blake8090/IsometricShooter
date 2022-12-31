@@ -22,9 +22,6 @@ class Entity(
             field = value
         }
 
-    var vx: Float = 0f
-    var vy: Float = 0f
-
     var deleted = false
         private set
 

@@ -6,7 +6,8 @@ import bke.iso.engine.event.Event
 data class MoveEvent(
     val entity: Entity,
     val dx: Float,
-    val dy: Float
+    val dy: Float,
+    val speed: Float
 ) : Event()
 
 data class CollisionEvent(

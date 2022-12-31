@@ -9,9 +9,9 @@ class PhysicsController(
     private val engine: Engine
 ) : Controller {
     override fun update(deltaTime: Float) {
-        for (entity in entityService.getAll()) {
-            if (entity.vx != 0f || entity.vy != 0f) {
-                engine.fireEvent(MoveEvent(entity, entity.vx, entity.vy))
+        entityService.search.withComponent(Velocity::class) { entity, velocity ->
+            if (velocity.x != 0f || velocity.y != 0f) {
+                engine.fireEvent(MoveEvent(entity, velocity.x, velocity.y, velocity.speed))
             }
         }
     }

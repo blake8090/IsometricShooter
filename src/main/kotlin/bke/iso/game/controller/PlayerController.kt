@@ -1,8 +1,6 @@
 package bke.iso.game.controller
 
-import bke.iso.engine.Controller
-import bke.iso.engine.Engine
-import bke.iso.engine.Units
+import bke.iso.engine.*
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.input.Input
@@ -41,9 +39,8 @@ class PlayerController(
         val dx = input.poll("moveLeft", "moveRight")
         val dy = input.poll("moveUp", "moveDown")
         if (dx != 0f || dy != 0f) {
-            engine.fireEvent(MoveEvent(entity, dx * playerSpeed, dy * playerSpeed))
+            engine.fireEvent(MoveEvent(entity, dx, dy, playerSpeed))
         }
-        val cameraPos = Units.worldToScreen(entity.x, entity.y)
-        renderer.setCameraPos(cameraPos)
+        renderer.setCameraPos(toScreen(entity.x, entity.y))
     }
 }

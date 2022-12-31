@@ -6,6 +6,7 @@ import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
+import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Sprite
 import bke.iso.game.Bullet
 import com.badlogic.gdx.math.Vector2
@@ -39,11 +40,10 @@ class ShootHandler(private val entityService: EntityService) : EventHandler<Shoo
         }
 
         val bullet = entityService.create(pos.x, pos.y)
-        bullet.vx = direction.x * speed
-        bullet.vy = direction.y * speed
         bullet.add(
             Bullet(shooter.id, pos),
             Sprite("bullet", 8f, 8f),
+            Velocity(direction.x, direction.y, speed),
             Collision(
                 Bounds(0.25f, 0.25f, 0f, -0.25f),
                 false
