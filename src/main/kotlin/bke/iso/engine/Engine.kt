@@ -11,14 +11,14 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.physics.PhysicsController
 import bke.iso.engine.render.DebugRenderer
-import bke.iso.engine.render.Renderer
+import bke.iso.engine.render.RenderService
 import kotlin.reflect.KClass
 
 @Service
 class Engine(
     private val services: Services,
     private val assets: Assets,
-    private val renderer: Renderer,
+    private val renderService: RenderService,
     private val input: Input,
 ) {
     var deltaTime: Float = 0f
@@ -69,7 +69,7 @@ class Engine(
         engineControllers.forEach { controller -> controller.update(deltaTime) }
 
         services.get<EntityService>().update()
-        renderer.render()
+        renderService.render()
         services.get<DebugRenderer>().clearDebugData()
     }
 

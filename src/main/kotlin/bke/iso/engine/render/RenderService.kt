@@ -14,9 +14,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
-// TODO: rename to RenderService for consistency
 @Service
-class Renderer(
+class RenderService(
     private val entityService: EntityService,
     private val tiles: Tiles,
     private val assets: Assets,

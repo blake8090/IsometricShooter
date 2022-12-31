@@ -6,7 +6,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.render.Renderer
+import bke.iso.engine.render.RenderService
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.physics.Bounds
@@ -24,7 +24,7 @@ import kotlin.system.measureTimeMillis
 class GameState(
     private val tiles: Tiles,
     private val assets: Assets,
-    private val renderer: Renderer,
+    private val renderService: RenderService,
     private val input: Input,
     private val entityService: EntityService,
 ) : State() {
@@ -41,7 +41,7 @@ class GameState(
     )
 
     override fun start() {
-        renderer.cursor = Sprite("cursor", 16f, 16f)
+        renderService.cursor = Sprite("cursor", 16f, 16f)
 
         buildWorld()
 
