@@ -49,10 +49,10 @@ class GameState(
 
         log.debug("binding actions")
         input.bind("toggleDebug", KeyBinding(Keys.M, InputState.PRESSED))
-        input.bind("moveLeft", KeyBinding(Keys.LEFT, InputState.DOWN, true))
-        input.bind("moveRight", KeyBinding(Keys.RIGHT, InputState.DOWN))
-        input.bind("moveUp", KeyBinding(Keys.UP, InputState.DOWN))
-        input.bind("moveDown", KeyBinding(Keys.DOWN, InputState.DOWN, true))
+        input.bind("moveLeft", KeyBinding(Keys.A, InputState.DOWN, true))
+        input.bind("moveRight", KeyBinding(Keys.D, InputState.DOWN))
+        input.bind("moveUp", KeyBinding(Keys.W, InputState.DOWN))
+        input.bind("moveDown", KeyBinding(Keys.S, InputState.DOWN, true))
         input.bind("run", KeyBinding(Keys.SHIFT_LEFT, InputState.DOWN))
         input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
     }
