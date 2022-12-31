@@ -32,6 +32,7 @@ data class DebugLine(
 
 data class DebugRectangle(
     val rectangle: Rectangle,
+    // TODO: implement line width
     val lineWidth: Float,
     val color: Color
 ) : Component()
@@ -42,6 +43,7 @@ data class DebugCircle(
 ) : Component()
 
 data class DebugPoint(
+    val pos: Vector2,
     val size: Float,
     val color: Color
 )

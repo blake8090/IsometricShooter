@@ -7,11 +7,17 @@ import bke.iso.engine.entity.EntityService
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.DebugCircle
 import bke.iso.engine.render.DebugData
+import bke.iso.engine.render.DebugLine
 import bke.iso.engine.render.DebugPoint
 import bke.iso.game.Player
 import bke.iso.game.Turret
+import bke.iso.game.event.BulletType
+import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.max
 
 class TurretController(
@@ -24,21 +30,57 @@ class TurretController(
 
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Turret::class) { entity, turret ->
-            turret.coolDownTime = max(0f, turret.coolDownTime - deltaTime)
-
             val debugData = getDebugData(entity)
             debugData.circles.add(DebugCircle(visionRadius, Color.GOLD))
 
-            val playerEntity = entityService.getAll()
-                .firstOrNull { it.has<Player>() }
-                ?: return@withComponent
+            turret.coolDownTime = max(0f, turret.coolDownTime - deltaTime)
 
-            val visionRange = Circle(entity.x, entity.y, visionRadius)
-            if (visionRange.contains(playerEntity.x, playerEntity.y)) {
-                getDebugData(playerEntity)
-                    .points
-                    .add(DebugPoint(2f, Color.YELLOW))
+            val target = findTarget(entity)
+            if (turret.coolDownTime == 0f && target != null) {
+                engine.fireEvent(ShootEvent(entity, target, BulletType.TURRET))
+                turret.coolDownTime = coolDownSeconds
             }
+        }
+    }
+
+    private fun findTarget(turretEntity: Entity): Vector2? {
+        val playerEntity = entityService.getAll()
+            .firstOrNull { entity -> entity.has<Player>() }
+            ?: return null
+
+        val pos = Vector2(turretEntity.x, turretEntity.y)
+        val playerPos = Vector2(playerEntity.x, playerEntity.y)
+
+        if (!Circle(pos, visionRadius).contains(playerPos)) {
+            return null
+        }
+
+        val debugData = getDebugData(turretEntity)
+        debugData.lines.add(
+            DebugLine(
+                pos,
+                playerPos,
+                1f,
+                Color.RED
+            )
+        )
+
+        val turretToPlayer = Segment(
+            Vector3(pos, 0f),
+            Vector3(playerPos, 0f)
+        )
+        val collision = collisionService.checkSegmentCollisions(turretToPlayer)
+            .firstOrNull { turretEntity != it.data.entity }
+            ?: return null
+
+        for (point in collisionService.findIntersectionPoints(turretToPlayer, collision.data.box)) {
+            debugData.points.add(DebugPoint(point, 2f, Color.YELLOW))
+        }
+
+        return if (playerEntity == collision.data.entity) {
+            playerPos
+        } else {
+            null
         }
     }
 
@@ -50,64 +92,4 @@ class TurretController(
         }
         return debugData
     }
-
-//    private fun updateTurret(entity: Entity, turret: Turret, deltaTime: Float) {
-//        if (turret.coolDownTime > 0f) {
-//            turret.coolDownTime = max(0f, turret.coolDownTime - deltaTime)
-//        }
-//
-//        // TODO: targeting is dependent on player.
-//        //  add support for targeting any enemy entity
-//        val playerPos = findPlayerPos() ?: return
-//        val pos = Vector2(entity.x, entity.y)
-//        entity.add(DebugLine(pos, playerPos))
-//        entity.add(DebugRectangle(getSegmentRectangle(pos, playerPos)))
-//
-//        entity.add(DebugCircle(Circle(pos, visionRadius), Color.GOLD))
-//
-//        val turretToPlayer = Segment(
-//            Vector3(pos.x, pos.y, 0f),
-//            Vector3(playerPos.x, playerPos.y, 0f)
-//        )
-//        collisionService.checkSegmentCollisions(turretToPlayer)
-//            .firstOrNull { collision ->
-//                val otherEntity = collision.data.entity
-//                entity != otherEntity && entityIsInRange(entity, otherEntity)
-//            }?.let { collision ->
-//                val otherEntity = collision.data.entity
-//
-//                otherEntity.add(
-//                    DebugPoints(
-//                        collisionService.findIntersectionPoints(turretToPlayer, collision.data.box)
-//                    )
-//                )
-//
-//                if (otherEntity.has<Player>() && turret.coolDownTime == 0f) {
-//                    engine.fireEvent(ShootEvent(entity, playerPos, BulletType.TURRET))
-//                    turret.coolDownTime = coolDownTime
-//                }
-//            }
-//    }
-
-//    private fun entityIsInRange(turretEntity: Entity, entity: Entity) =
-//        Vector2(turretEntity.x, turretEntity.y)
-//            .dst(entity.x, entity.y) <= visionRadius
-//
-//
-//    private fun getSegmentRectangle(start: Vector2, end: Vector2): Rectangle {
-//        val min = Vector2(
-//            min(start.x, end.x),
-//            min(start.y, end.y)
-//        )
-//        val max = Vector2(
-//            max(start.x, end.x),
-//            max(start.y, end.y)
-//        )
-//        return Rectangle(
-//            min.x,
-//            min.y,
-//            max.x - min.x,
-//            max.y - min.y
-//        )
-//    }
 }

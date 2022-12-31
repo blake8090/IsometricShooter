@@ -25,6 +25,9 @@ fun toScreen(x: Float, y: Float) =
         (y - x) * HALF_TILE_HEIGHT
     )
 
+fun toScreen(vector2: Vector2) =
+    toScreen(vector2.x, vector2.y)
+
 /**
  * Given a [Circle] defined in world units, returns a [Circle] defined in screen units.
  */

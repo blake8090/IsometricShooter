@@ -49,6 +49,13 @@ class DebugRenderer(
     private fun drawDebugData(entity: Entity) {
         val debugData = entity.get<DebugData>() ?: return
 
+        for (line in debugData.lines) {
+            shapeRenderer.color = line.color
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+            shapeRenderer.line(toScreen(line.start), toScreen(line.end))
+            shapeRenderer.end()
+        }
+
         for (debugCircle in debugData.circles) {
             val radius = debugCircle.radius
             val ratio = getIsometricRatio()
@@ -62,7 +69,7 @@ class DebugRenderer(
         }
 
         for (point in debugData.points) {
-            val circle = Circle(entity.x, entity.y, point.size)
+            val circle = Circle(point.pos, point.size)
             drawCircle(toScreen(circle), point.color)
         }
     }
