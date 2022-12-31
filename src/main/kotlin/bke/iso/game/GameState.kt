@@ -16,6 +16,7 @@ import bke.iso.game.controller.PlayerController
 import bke.iso.game.controller.TurretController
 import bke.iso.game.event.BulletCollisionHandler
 import bke.iso.game.event.DamageHandler
+import bke.iso.game.event.DrawHealthHandler
 import bke.iso.game.event.ShootHandler
 import com.badlogic.gdx.Input.Buttons
 import com.badlogic.gdx.Input.Keys
@@ -37,7 +38,8 @@ class GameState(
     override val eventHandlers = setOf(
         BulletCollisionHandler::class,
         ShootHandler::class,
-        DamageHandler::class
+        DamageHandler::class,
+        DrawHealthHandler::class
     )
 
     override fun start() {
@@ -97,7 +99,8 @@ class GameState(
                 Bounds(0.5f, 0.5f, -0.25f, -0.25f),
                 false
             ),
-            Health(15f)
+            Health(5f),
+            HealthBar(18f, -64f)
         )
         log.debug("Player id: ${player.id}")
     }
@@ -111,7 +114,8 @@ class GameState(
                 Bounds(0.5f, 0.5f, -0.25f, -0.25f),
                 false
             ),
-            Health(10f)
+            Health(3f),
+            HealthBar(16f, -36f)
         )
     }
 }

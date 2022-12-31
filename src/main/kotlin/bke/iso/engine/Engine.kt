@@ -18,7 +18,8 @@ import kotlin.reflect.KClass
 class Engine(
     private val services: Services,
     private val assets: Assets,
-    private val renderService: RenderService,
+    // TODO: fix stack overflow error - circular dependency between renderService and engine
+//    private val renderService: RenderService,
     private val input: Input,
 ) {
     var deltaTime: Float = 0f
@@ -69,7 +70,7 @@ class Engine(
         engineControllers.forEach { controller -> controller.update(deltaTime) }
 
         services.get<EntityService>().update()
-        renderService.render()
+        services.get<RenderService>().render()
         services.get<DebugRenderer>().clearDebugData()
     }
 

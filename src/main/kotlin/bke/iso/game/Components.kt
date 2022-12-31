@@ -15,4 +15,12 @@ class Turret() : Component() {
     var coolDownTime: Float = 0f
 }
 
-data class Health(var value: Float) : Component()
+data class Health(
+    val maxValue: Float,
+    var value: Float = maxValue
+) : Component()
+
+data class HealthBar(
+    val offsetX: Float,
+    val offsetY: Float
+) : Component()

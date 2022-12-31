@@ -20,7 +20,8 @@ class RenderService(
     private val tiles: Tiles,
     private val assets: Assets,
     private val input: Input,
-    private val debugRenderer: DebugRenderer
+    private val debugRenderer: DebugRenderer,
+    private val engine: Engine
 ) {
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1280f, 720f)
@@ -69,6 +70,7 @@ class RenderService(
         val sprite = entity.get<Sprite>() ?: return
         val pos = Units.worldToScreen(entity.x, entity.y)
         drawSprite(sprite, pos)
+        engine.fireEvent(DrawEntityEvent(entity, batch))
     }
 
     private fun drawSprite(sprite: Sprite, pos: Vector2) {
