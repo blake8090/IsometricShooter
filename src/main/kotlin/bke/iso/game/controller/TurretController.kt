@@ -25,8 +25,8 @@ class TurretController(
     private val collisionService: CollisionService,
     private val engine: Engine
 ) : Controller {
-    private val visionRadius = 4f
-    private val coolDownSeconds = 3f
+    private val visionRadius = 12f
+    private val coolDownSeconds = 0.5f
 
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Turret::class) { entity, turret ->

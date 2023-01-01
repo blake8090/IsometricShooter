@@ -9,8 +9,11 @@ import bke.iso.engine.render.Sprite
 import kotlin.reflect.KClass
 
 data class MapData(
-    val tiles: Map<Location, Tile>,
-    val walls: Set<Location>
+    val tiles: MutableMap<Location, Tile> = mutableMapOf(),
+    val walls: MutableSet<Location> = mutableSetOf(),
+    val boxes: MutableSet<Location> = mutableSetOf(),
+    val turrets: MutableSet<Location> = mutableSetOf(),
+    val players: MutableSet<Location> = mutableSetOf()
 )
 
 class MapLoader : AssetLoader<MapData>() {
@@ -20,41 +23,59 @@ class MapLoader : AssetLoader<MapData>() {
         MapData::class
 
     override fun load(file: FilePointer): List<Asset<MapData>> {
-        val tiles = mutableMapOf<Location, Tile>()
-        val walls = mutableSetOf<Location>()
-
         val rows = file.readText()
             .lines()
             .map(String::toList)
             .filter { chars -> chars.isNotEmpty() }
+            .reversed()
 
+        val mapData = MapData()
         for ((y, row) in rows.withIndex()) {
             for ((x, char) in row.withIndex()) {
-                val location = Location(x, y)
-                when (fromSymbol(char)) {
-                    MapObjects.FLOOR -> tiles[location] = Tile(floorSprite)
-                    MapObjects.WALL -> walls.add(location)
-                }
+                loadMapData(mapData, char, Location(x, y))
             }
         }
 
-        return listOf(
-            Asset(
-                file.getNameWithoutExtension(),
-                MapData(tiles, walls)
-            )
-        )
+        return listOf(Asset(file.getNameWithoutExtension(), mapData))
+    }
+
+    private fun loadMapData(mapData: MapData, char: Char, location: Location) {
+        when (fromSymbol(char)) {
+            MapObjects.FLOOR -> mapData.tiles[location] = Tile(floorSprite)
+            MapObjects.WALL -> mapData.walls.add(location)
+
+            MapObjects.BOX -> {
+                mapData.tiles[location] = Tile(floorSprite)
+                mapData.boxes.add(location)
+            }
+
+            MapObjects.TURRET -> {
+                mapData.tiles[location] = Tile(floorSprite)
+                mapData.turrets.add(location)
+            }
+
+            MapObjects.PLAYER -> {
+                mapData.tiles[location] = Tile(floorSprite)
+                mapData.players.add(location)
+            }
+        }
     }
 
     private fun fromSymbol(char: Char): MapObjects =
         when (char) {
             '.' -> MapObjects.FLOOR
             '#' -> MapObjects.WALL
+            'x' -> MapObjects.BOX
+            't' -> MapObjects.TURRET
+            'p' -> MapObjects.PLAYER
             else -> MapObjects.FLOOR
         }
 }
 
 private enum class MapObjects {
     FLOOR,
-    WALL
+    WALL,
+    BOX,
+    TURRET,
+    PLAYER
 }

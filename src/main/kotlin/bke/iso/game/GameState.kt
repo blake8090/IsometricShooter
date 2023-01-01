@@ -8,9 +8,6 @@ import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.entity.EntityService
-import bke.iso.engine.physics.Bounds
-import bke.iso.engine.physics.Collision
 import bke.iso.game.controller.BulletController
 import bke.iso.game.controller.PlayerController
 import bke.iso.game.controller.TurretController
@@ -27,7 +24,7 @@ class GameState(
     private val assets: Assets,
     private val renderService: RenderService,
     private val input: Input,
-    private val entityService: EntityService,
+    private val entityFactory: EntityFactory
 ) : State() {
     override val controllers = setOf(
         PlayerController::class,
@@ -59,10 +56,7 @@ class GameState(
 
     private fun buildWorld() {
         log.debug("building world")
-        val loadingTime = measureTimeMillis {
-            loadMap()
-            createPlayer()
-        }
+        val loadingTime = measureTimeMillis { loadMap() }
         log.debug("built world in $loadingTime ms")
     }
 
@@ -75,47 +69,19 @@ class GameState(
         }
 
         mapData.walls.forEach { location ->
-            val wall = entityService.create(location)
-            wall.add(
-                Sprite("wall3", 0f, 16f),
-                Collision(
-                    Bounds(1f, 1f, 0f, 0f),
-                    true
-                )
-            )
+            entityFactory.createWall(location.x.toFloat(), location.y.toFloat())
         }
 
-        createTurret(7.5f, 13.5f)
-        createTurret(18.5f, 10.5f)
-        createTurret(3f, 3f)
-    }
+        mapData.boxes.forEach { location ->
+            entityFactory.createBox(location.x.toFloat(), location.y.toFloat())
+        }
 
-    private fun createPlayer() {
-        val player = entityService.create()
-        player.add(
-            Sprite("player", 32f, 0f),
-            Player(),
-            Collision(
-                Bounds(0.5f, 0.5f, -0.25f, -0.25f),
-                false
-            ),
-            Health(5f),
-            HealthBar(18f, -64f)
-        )
-        log.debug("Player id: ${player.id}")
-    }
+        mapData.turrets.forEach { location ->
+            entityFactory.createTurret(location.x.toFloat(), location.y.toFloat())
+        }
 
-    private fun createTurret(x: Float, y: Float) {
-        val turret = entityService.create(x, y)
-        turret.add(
-            Sprite("turret", 16f, 0f),
-            Turret(),
-            Collision(
-                Bounds(0.5f, 0.5f, -0.25f, -0.25f),
-                false
-            ),
-            Health(3f),
-            HealthBar(16f, -36f)
-        )
+        mapData.players.forEach { location ->
+            entityFactory.createPlayer(location.x.toFloat(), location.y.toFloat())
+        }
     }
 }
