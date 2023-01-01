@@ -12,10 +12,10 @@ class EntitySearch(
 ) {
     fun inArea(rect: Rectangle): Set<Entity> {
         val startX = rect.x.toInt()
-        val endX = (rect.x + rect.width).toInt()
+        val endX = (rect.x + rect.width).toInt() + 1
 
         val startY = rect.y.toInt()
-        val endY = (rect.y + rect.height).toInt()
+        val endY = (rect.y + rect.height).toInt() + 1
 
         val entities = mutableSetOf<Entity>()
         for (x in startX..endX) {
