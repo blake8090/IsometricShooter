@@ -41,9 +41,11 @@ class GameState(
 
     override fun start() {
         renderService.cursor = Sprite("cursor", 16f, 16f)
-
         buildWorld()
+        setupInput()
+    }
 
+    private fun setupInput() {
         log.debug("binding actions")
         input.bind("toggleDebug", KeyBinding(Keys.M, InputState.PRESSED))
         input.bind("moveLeft", KeyBinding(Keys.A, InputState.DOWN, true))
