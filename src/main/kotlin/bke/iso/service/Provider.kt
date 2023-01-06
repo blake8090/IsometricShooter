@@ -2,14 +2,14 @@ package bke.iso.service
 
 import kotlin.reflect.KClass
 
-class Provider<T : Any>(private val serviceContainer: ServiceContainer) {
+class Provider<T : Any>(
+    private val container: ServiceContainer,
+    private val baseClass: KClass<T>
+) {
 
-    fun <U : T> get(subType: KClass<U>): U =
-        serviceContainer.get(subType)
+    fun get(): T =
+        container.get(baseClass)
+
+    fun <U : T> get(kClass: KClass<U>): U =
+        container.get(kClass)
 }
-
-inline fun <reified T : Any> Provider<T>.get() =
-    get(T::class)
-
-inline fun <reified T : Any> Provider<T>.type() =
-    T::class

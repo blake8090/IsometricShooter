@@ -1,133 +1,125 @@
 package bke.iso.service
 
 import kotlin.reflect.KClass
-import kotlin.reflect.KFunction
+import kotlin.reflect.KType
+import kotlin.reflect.cast
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.full.safeCast
 
-class ServiceContainer(services: Set<KClass<*>>) {
+class ServiceContainer(classes: Set<KClass<*>>) {
 
-    private val services: Map<KClass<*>, ServiceData>
-    private val singletons = mutableMapOf<KClass<*>, Any>()
+    private val services = mutableMapOf<KClass<*>, Service<*>>()
 
     init {
-        this.services = services.associateWith(this::toServiceData)
-        initialize()
-        validate()
+        classes.forEach { kClass ->
+            services[kClass] = createService(kClass, mutableSetOf())
+            services.values.forEach { service -> initialize(service) }
+        }
     }
 
-    private fun toServiceData(service: KClass<*>): ServiceData {
+    fun <T : Any> get(kClass: KClass<T>): T {
+        val service = services[kClass] ?: throw MissingServiceError()
+        val instance = when (service.lifetime) {
+            Lifetime.SINGLETON -> service.instance ?: throw Error()
+            Lifetime.TRANSIENT -> createInstance(service)
+        }
+        return kClass.cast(instance)
+    }
+
+    inline fun <reified T : Any> get() =
+        get(T::class)
+
+    fun <T : Any> getProvider(kClass: KClass<T>): Provider<T> =
+        Provider(this, kClass)
+
+    private fun <T : Any> createService(kClass: KClass<T>, createdServices: MutableSet<KClass<*>>): Service<*> {
+        if (!createdServices.add(kClass)) {
+            val str = createdServices
+                .map { service -> service.simpleName }
+                .joinToString()
+            throw Error("circular dependency: $str -> ${kClass.simpleName}")
+        }
+
         val lifetime =
-            if (service.hasAnnotation<Singleton>()) {
+            if (kClass.hasAnnotation<Singleton>()) {
                 Lifetime.SINGLETON
-            } else if (service.hasAnnotation<Transient>()) {
+            } else if (kClass.hasAnnotation<Transient>()) {
                 Lifetime.TRANSIENT
             } else {
-                throw IllegalArgumentException("gotta have annotations")
+                throw Error()
             }
-
-        // TODO: add support for implementing sub types
-        return ServiceData(service, lifetime)
+        val dependencies = kClass.primaryConstructor!!
+            .parameters
+            .map { parameter -> createDependency(parameter.type, createdServices) }
+            .toSet()
+        return Service(
+            kClass,
+            kClass,
+            lifetime,
+            dependencies
+        )
     }
 
-    private fun initialize() {
-        for ((service, data) in services) {
-            if (data.lifetime == Lifetime.SINGLETON) {
-                singletons[service] = createInstance(service)
+    private fun createDependency(kType: KType, createdServices: MutableSet<KClass<*>>): Dependency<*> {
+        var isProvider = false
+        val serviceClass =
+            if (kType.classifier == Provider::class) {
+                isProvider = true
+                kType.arguments.first()
+                    .type!!
+                    .classifier as KClass<*>
+            } else {
+                kType.classifier as KClass<*>
             }
+        return Dependency(
+            services.getOrPut(serviceClass) { createService(serviceClass, createdServices) },
+            isProvider
+        )
+    }
+
+    private fun <T : Any> initialize(service: Service<T>) {
+        if (service.lifetime == Lifetime.SINGLETON) {
+            service.instance = createInstance(service)
+        }
+        service.initialized = true
+    }
+
+    private fun <T : Any> resolveDependency(dependency: Dependency<T>): Any {
+        val service = dependency.service
+        if (!service.initialized) {
+            initialize(service)
+        }
+        return if (dependency.isProvider) {
+
+        } else {
+            get(service.implClass)
         }
     }
 
-    private fun validate() {
-        for ((service, data) in services) {
-            if (data.lifetime == Lifetime.SINGLETON && !singletons.containsKey(service)) {
-                throw IllegalArgumentException("Singleton '${service.simpleName}' does not have an instance")
-            }
-            getPrimaryConstructor(service)
-                .parameters
-                .map { parameter -> parameter.type.classifier }
-                .filterIsInstance<KClass<*>>()
-                .forEach(this::validate)
-        }
-    }
-
-    private fun validate(dependency: KClass<*>) {
-        if (dependency == Provider::class) {
-            // TODO: validate provider
-            return
-        }
-
-        val data = services[dependency]
-            ?: throw IllegalArgumentException("'${dependency.simpleName}' was not registered")
-
-        if (data.lifetime == Lifetime.SINGLETON && !singletons.containsKey(dependency)) {
-            throw IllegalArgumentException("Singleton '${dependency.simpleName}' does not have an instance")
-        }
-    }
-
-    private fun <T : Any> getPrimaryConstructor(type: KClass<T>): KFunction<T> =
-        type.primaryConstructor
-            ?: throw IllegalArgumentException("Expected constructor for class '${type.simpleName}'")
-
-    private fun <T : Any> createInstance(service: KClass<T>): T {
-        val constructor = getPrimaryConstructor(service)
-        val dependencies = constructor.parameters
-            .map { parameter -> parameter.type.classifier }
-            .filterIsInstance<KClass<*>>()
-            .map(this::resolveDependency)
+    private fun <T : Any> createInstance(service: Service<T>): T {
+        val dependencies = service.dependencies
+            .map { dependency -> resolveDependency(dependency) }
             .toTypedArray()
-        return constructor.call(*dependencies)
+        return service.implClass.primaryConstructor!!.call(*dependencies)
     }
-
-    private fun resolveDependency(dependency: KClass<*>): Any {
-        if (dependency == Provider::class) {
-            val provider = getPrimaryConstructor(dependency).call(this)
-            return Provider::class.safeCast(provider)
-                ?: throw IllegalArgumentException("lmao wtf...")
-        }
-
-        val data = services[dependency]
-            ?: throw IllegalArgumentException("'${dependency.simpleName}' was not registered")
-
-        return when (data.lifetime) {
-            Lifetime.SINGLETON -> singletons.getOrPut(dependency) { createInstance(dependency) }
-            Lifetime.TRANSIENT -> createInstance(dependency)
-        }
-    }
-
-    fun <T : Any> get(service: KClass<T>): T {
-        val instance = resolveDependency(service)
-        return service.safeCast(instance)
-            ?: throw IllegalArgumentException(
-                "Resolved instance '${instance::class.simpleName}' does not implement '${service.simpleName}"
-            )
-    }
-
-    inline fun <reified T : Any> get(): T =
-        get(T::class)
 }
+
+private data class Service<T : Any>(
+    val baseClass: KClass<T>,
+    val implClass: KClass<out T>,
+    val lifetime: Lifetime,
+    val dependencies: Set<Dependency<*>>
+) {
+    var instance: T? = null
+    var initialized = false
+}
+
+private data class Dependency<T : Any>(
+    val service: Service<T>,
+    val isProvider: Boolean
+)
 
 private enum class Lifetime {
     SINGLETON,
     TRANSIENT
 }
-
-private data class ServiceData(
-    val implementation: KClass<*>,
-    val lifetime: Lifetime
-)
-
-/*
-how is this instantiated?
-
-val container = container {
-    package("asd")
-    package("kfe")
-    services(
-        UserService::class,
-        UserController::class
-    )
-}
-
- */
