@@ -32,6 +32,9 @@ class ServiceContainer(classes: Set<KClass<*>>) {
     fun <T : Any> getProvider(kClass: KClass<T>): Provider<T> =
         Provider(this, kClass)
 
+    inline fun <reified T : Any> getProvider() =
+        getProvider(T::class    )
+
     private fun <T : Any> createService(kClass: KClass<T>, createdServices: MutableSet<KClass<*>>): Service<*> {
         if (!createdServices.add(kClass)) {
             val str = createdServices
@@ -90,7 +93,7 @@ class ServiceContainer(classes: Set<KClass<*>>) {
             initialize(service)
         }
         return if (dependency.isProvider) {
-
+            getProvider(service.implClass)
         } else {
             get(service.implClass)
         }
