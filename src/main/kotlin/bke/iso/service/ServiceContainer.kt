@@ -4,18 +4,20 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
 import kotlin.reflect.cast
+import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.primaryConstructor
 
 class ServiceContainer(classes: Set<KClass<*>>) {
 
     private val services = mutableMapOf<KClass<*>, Service<*>>()
+    private val instances = mutableMapOf<KClass<*>, Any>()
 
     init {
         classes.forEach { kClass ->
-            services[kClass] = createService(kClass, mutableSetOf())
-            services.values.forEach { service -> initialize(service) }
+            services[kClass] = createService(kClass)
         }
+        initialize()
     }
 
     /**
@@ -24,11 +26,16 @@ class ServiceContainer(classes: Set<KClass<*>>) {
      * @throws [NoServiceFoundException] if no service found for [kClass]
      */
     fun <T : Any> get(kClass: KClass<T>): T {
-        val service = services[kClass] ?: throw NoServiceFoundException("No service found for class ${kClass.simpleName}")
+        val service = services[kClass]
+            ?: throw IllegalArgumentException("No service found for class ${kClass.simpleName}")
+
         val instance = when (service.lifetime) {
-            Lifetime.SINGLETON -> service.instance ?: throw RuntimeException("Expected instance")
+            Lifetime.SINGLETON -> instances[service.implClass]
+                ?: throw RuntimeException("Expected instance for singleton ${kClass.simpleName}")
+
             Lifetime.TRANSIENT -> createInstance(service)
         }
+
         return kClass.cast(instance)
     }
 
@@ -42,32 +49,17 @@ class ServiceContainer(classes: Set<KClass<*>>) {
 
     /**
      * Returns a [Provider] of class [kClass].
-     *
-     * @throws [NoServiceFoundException] if no service found for class [T]
      */
-    fun <T : Any> getProvider(kClass: KClass<T>): Provider<T> {
-        if (!services.containsKey(kClass)) {
-            throw NoServiceFoundException("No service found for class ${kClass.simpleName}")
-        }
-        return Provider(this, kClass)
-    }
+    fun <T : Any> getProvider(kClass: KClass<T>): Provider<T> =
+        Provider(this, kClass)
 
     /**
      * Returns a [Provider] of class [T].
-     *
-     * @throws [NoServiceFoundException] if no service found for class [T]
      */
     inline fun <reified T : Any> getProvider() =
         getProvider(T::class)
 
-    private fun <T : Any> createService(kClass: KClass<T>, createdServices: MutableSet<KClass<*>>): Service<*> {
-        if (!createdServices.add(kClass)) {
-            val names = createdServices
-                .map { service -> service.simpleName }
-                .joinToString()
-            throw CircularDependencyException("Found circular dependency: $names -> ${kClass.simpleName}")
-        }
-
+    private fun <T : Any> createService(kClass: KClass<T>): Service<T> {
         val lifetime =
             if (kClass.hasAnnotation<Singleton>()) {
                 Lifetime.SINGLETON
@@ -79,72 +71,76 @@ class ServiceContainer(classes: Set<KClass<*>>) {
 
         val dependencies = kClass.primaryConstructor!!
             .parameters
-            .filter { parameter -> parameter.kind == KParameter.Kind.VALUE }
-            .map { parameter -> createDependency(parameter.type, createdServices) }
-            .toSet()
+            .filter { kParameter -> kParameter.kind == KParameter.Kind.VALUE }
+            .map { kParameter -> kParameter.type }
 
-        return Service(
-            kClass,
-            kClass,
-            lifetime,
-            dependencies
-        )
+        return Service(kClass, lifetime, dependencies)
     }
 
-    private fun createDependency(kType: KType, createdServices: MutableSet<KClass<*>>): Dependency<*> {
-        var isProvider = false
-        val serviceClass =
-            if (kType.classifier == Provider::class) {
-                isProvider = true
-                kType.arguments.first()
-                    .type!!
-                    .classifier as KClass<*>
-            } else {
-                kType.classifier as KClass<*>
+    private fun initialize() {
+        for ((_, service) in services) {
+            val initializedServices = mutableSetOf<Service<*>>()
+            initialize(service, initializedServices)
+        }
+    }
+
+    private fun <T : Any> initialize(service: Service<T>, initializedServices: MutableSet<Service<*>>) {
+        if (!initializedServices.add(service)) {
+            val names = initializedServices
+                .map { it.implClass.simpleName }
+                .joinToString()
+            throw CircularDependencyException("Found circular dependency: $names -> ${service.implClass.simpleName}")
+        }
+
+        for (dependency in service.dependencies) {
+            val dependencyClass = dependency.classifier as KClass<*>
+            if (dependencyClass == Provider::class) {
+                // providers will be used at run time, so no initialization necessary here
+                continue
             }
-        val service = services.getOrPut(serviceClass) {
-            createService(serviceClass, createdServices)
+            val dependencyService = services[dependencyClass]
+                ?: throw NoServiceFoundException("No service found for class ${dependencyClass.simpleName}")
+            initialize(dependencyService, initializedServices)
         }
-        return Dependency(service, isProvider)
-    }
 
-    private fun <T : Any> initialize(service: Service<T>) {
-        if (service.lifetime == Lifetime.SINGLETON) {
-            service.instance = createInstance(service)
-        }
-        service.initialized = true
-    }
-
-    private fun <T : Any> resolveDependency(dependency: Dependency<T>): Any {
-        val service = dependency.service
-        return if (dependency.isProvider) {
-            getProvider(service.implClass)
-        } else {
-            get(service.implClass)
+        if (service.lifetime == Lifetime.SINGLETON && !instances.containsKey(service.implClass)) {
+            instances[service.implClass] = createInstance(service)
         }
     }
 
     private fun <T : Any> createInstance(service: Service<T>): T {
         val dependencies = service.dependencies
-            .map { dependency -> resolveDependency(dependency) }
+            .map(this::resolveDependency)
             .toTypedArray()
-        return service.implClass.primaryConstructor!!.call(*dependencies)
+        try {
+            return if (dependencies.isEmpty()) {
+                service.implClass.createInstance()
+            } else {
+                service.implClass.primaryConstructor!!.call(*dependencies)
+            }
+        } catch (e: Exception) {
+            throw ServiceCreationException("Couldn't create instance of ${service.implClass.simpleName}: ${e.message}")
+        }
+    }
+
+    private fun resolveDependency(dependency: KType): Any {
+        val kClass = dependency.classifier as KClass<*>
+        return if (dependency.classifier == Provider::class) {
+            val projectedClass = dependency.arguments
+                .first()
+                .type!!
+                .classifier as KClass<*>
+            getProvider(projectedClass)
+        } else {
+            get(kClass)
+        }
     }
 }
 
 private data class Service<T : Any>(
-    val baseClass: KClass<T>,
     val implClass: KClass<out T>,
     val lifetime: Lifetime,
-    val dependencies: Set<Dependency<*>>
-) {
-    var instance: T? = null
-    var initialized = false
-}
-
-private data class Dependency<T : Any>(
-    val service: Service<T>,
-    val isProvider: Boolean
+    val dependencies: List<KType>
 )
 
 private enum class Lifetime {
