@@ -1,5 +1,6 @@
 package bke.iso.service
 
+import bke.iso.engine.log
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -74,6 +75,7 @@ class ServiceContainer(classes: Set<KClass<*>>) {
             .filter { kParameter -> kParameter.kind == KParameter.Kind.VALUE }
             .map { kParameter -> kParameter.type }
 
+        log.debug("Created $lifetime service '${kClass.simpleName}' with ${dependencies.size} dependencies")
         return Service(kClass, lifetime, dependencies)
     }
 

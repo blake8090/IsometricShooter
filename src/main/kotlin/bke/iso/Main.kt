@@ -1,7 +1,8 @@
 package bke.iso
 
-import bke.iso.app.App
-import bke.iso.game.IsometricShooterGame
+//import bke.iso.app.App
+//import bke.iso.game.IsometricShooterGame
+import bke.iso.v2.App
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
@@ -14,7 +15,8 @@ val LOG_LEVEL: Level = Level.TRACE
 
 fun main() {
     setupLogging()
-    val app = App(IsometricShooterGame::class)
+//    val app = App(IsometricShooterGame::class)
+    val app = App("Isometric Shooter")
     Lwjgl3Application(app, app.buildConfig())
 }
 
