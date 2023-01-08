@@ -1,37 +1,16 @@
 package bke.iso.service
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
 internal class ServiceContainerTest {
-    @Singleton
-    class CircularDependencyA(b: CircularDependencyB)
-
-    @Singleton
-    class CircularDependencyB(c: CircularDependencyC)
-
-    @Singleton
-    class CircularDependencyC(a: CircularDependencyA)
 
     @Test
-    fun whenCircularDependencyFound_thenError() {
-        val error = assertThrows<Error> {
-            ServiceContainer(
-                setOf(
-                    CircularDependencyA::class,
-                    CircularDependencyB::class,
-                    CircularDependencyC::class
-                )
-            )
-        }
-        assertThat(error.message).isEqualTo(
-            "circular dependency: CircularDependencyA, CircularDependencyB, CircularDependencyC -> CircularDependencyA"
-        )
-    }
-
-    @Test
+    @Suppress("UNUSED_PARAMETER")
     fun whenGivenServicesInAnyOrder_thenExpectNoError() {
         @Singleton
         class A
@@ -43,7 +22,7 @@ internal class ServiceContainerTest {
         class C(b: B)
 
         assertDoesNotThrow {
-            ServiceContainer(setOf(B::class, C::class, A::class))
+            ServiceContainer(setOf(A::class, C::class, B::class))
         }
     }
 
@@ -148,5 +127,78 @@ internal class ServiceContainerTest {
 
         val service = container.get<B>()
         assertThat(service.getValue()).isEqualTo(5)
+    }
+
+    @Nested
+    @DisplayName("Error Cases")
+    inner class ErrorCases {
+        @Nested
+        @DisplayName("Circular Dependency")
+        @Suppress("UNUSED_PARAMETER")
+        inner class CircularDependencyCase {
+            @Singleton
+            inner class A(b: B)
+
+            @Singleton
+            inner class B(c: C)
+
+            @Singleton
+            inner class C(a: A)
+
+            @Test
+            fun `Given list of classes with circular dependency, When create container, Then throw exception`() {
+                val error = assertThrows<CircularDependencyException> {
+                    ServiceContainer(setOf(A::class, B::class, C::class))
+                }
+                assertThat(error.message).isEqualTo("Found circular dependency: A, B, C -> A")
+            }
+        }
+
+        @Nested
+        @DisplayName("Nested Circular Dependency")
+        @Suppress("UNUSED_PARAMETER")
+        inner class NestedCircularDependencyCase {
+            @Singleton
+            inner class A(b: B)
+
+            @Singleton
+            inner class B(c: C, d: D)
+
+            @Singleton
+            inner class C
+
+            @Singleton
+            inner class D(a: A)
+
+            @Test
+            fun `Given list of classes with nested circular dependency, When create container, Then throw exception`() {
+                val error = assertThrows<CircularDependencyException> {
+                    ServiceContainer(setOf(A::class, B::class, C::class, D::class))
+                }
+                assertThat(error.message).isEqualTo("Found circular dependency: A, B, C, D -> A")
+            }
+        }
+
+        @Test
+        fun `Given no service registered, When getProvider(), Then throw exception`() {
+            @Singleton
+            class A
+
+            class B
+
+            assertThrows<NoServiceFoundException> {
+                val container = ServiceContainer(setOf(A::class))
+                container.getProvider<B>()
+            }
+        }
+
+        @Test
+        fun `Given no annotations on class, When create container, Then throw exception`() {
+            class A
+
+            assertThrows<MissingAnnotationsException> {
+                ServiceContainer(setOf(A::class))
+            }
+        }
     }
 }
