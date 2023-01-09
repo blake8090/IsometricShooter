@@ -1,16 +1,15 @@
 package bke.iso.v2.engine.system
 
 import bke.iso.service.Singleton
-import bke.iso.v2.engine.state.StateService
+import bke.iso.v2.engine.state.State
 
 @Singleton
-class SystemService(private val stateService: StateService) {
+class SystemService {
 
-//     private val baseSystems = listOf(...)
+    private val baseSystems = mutableListOf<System>()
 
-    fun update(deltaTime: Float) {
-        for (system in stateService.currentState.systems) {
-            system.update(deltaTime)
-        }
+    fun update(state: State, deltaTime: Float) {
+        baseSystems.forEach { system -> system.update(deltaTime) }
+        state.systems.forEach { system -> system.update(deltaTime) }
     }
 }
