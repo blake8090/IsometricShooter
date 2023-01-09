@@ -1,24 +1,45 @@
 package bke.iso.v2.game
 
 import bke.iso.engine.log
+import bke.iso.service.Provider
 import bke.iso.service.Transient
 import bke.iso.v2.engine.TileService
 import bke.iso.v2.engine.asset.AssetService
+import bke.iso.v2.engine.input.InputService
+import bke.iso.v2.engine.input.InputState
+import bke.iso.v2.engine.input.KeyBinding
+import bke.iso.v2.engine.input.MouseBinding
 import bke.iso.v2.engine.state.State
 import bke.iso.v2.engine.system.System
+import bke.iso.v2.game.system.PlayerSystem
+import com.badlogic.gdx.Input
 
 @Transient
 class GameState(
     private val assetService: AssetService,
     private val tileService: TileService,
-    private val entityFactory: EntityFactory
+    private val entityFactory: EntityFactory,
+    private val inputService: InputService,
+    systemProvider: Provider<System>
 ) : State() {
-    override val systems = emptySet<System>()
+    override val systems = setOf(systemProvider.get(PlayerSystem::class))
 
     override fun start() {
         log.debug("on start")
         assetService.load("assets")
+        bindInput()
         loadMap()
+    }
+
+    private fun bindInput() {
+        log.debug("binding actions")
+        inputService.bind("toggleDebug", KeyBinding(Input.Keys.M, InputState.PRESSED))
+        inputService.bind("moveLeft", KeyBinding(Input.Keys.A, InputState.DOWN, true))
+        inputService.bind("moveRight", KeyBinding(Input.Keys.D, InputState.DOWN))
+        inputService.bind("moveUp", KeyBinding(Input.Keys.W, InputState.DOWN))
+        inputService.bind("moveDown", KeyBinding(Input.Keys.S, InputState.DOWN, true))
+        inputService.bind("run", KeyBinding(Input.Keys.SHIFT_LEFT, InputState.DOWN))
+        inputService.bind("shoot", MouseBinding(Input.Buttons.LEFT, InputState.PRESSED))
     }
 
     private fun loadMap() {
