@@ -23,6 +23,11 @@ class AssetService(
     private val loaderByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val cacheByType = mutableMapOf<KClass<*>, AssetMap<*>>()
 
+    init {
+        addLoader("png", TextureLoader::class)
+        addLoader("jpg", TextureLoader::class)
+    }
+
     fun <T : Any> addLoader(extension: String, loaderType: KClass<out AssetLoader<T>>) {
         if (loaderByExtension.containsKey(extension)) {
             throw IllegalArgumentException("duplicate extension")

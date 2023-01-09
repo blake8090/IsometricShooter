@@ -1,12 +1,12 @@
 package bke.iso.v2.engine
 
-import bke.iso.app.service.Service
-import bke.iso.engine.render.Sprite
+import bke.iso.service.Singleton
 import bke.iso.v2.engine.math.Location
+import bke.iso.v2.engine.render.Sprite
 
 data class Tile(val sprite: Sprite)
 
-@Service
+@Singleton
 class TileService {
     private val tileByLocation = mutableMapOf<Location, Tile>()
         .toSortedMap(

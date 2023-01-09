@@ -1,6 +1,6 @@
 package bke.iso.v2.engine.render
 
-import bke.iso.engine.entity.Component
+import bke.iso.v2.engine.entity.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
