@@ -1,10 +1,12 @@
 package bke.iso.v2.engine.asset
 
+import bke.iso.service.Transient
 import bke.iso.v2.engine.FilePointer
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import kotlin.reflect.KClass
 
+@Transient
 class TextureLoader : AssetLoader<Texture>() {
     override fun getType(): KClass<Texture> =
         Texture::class
