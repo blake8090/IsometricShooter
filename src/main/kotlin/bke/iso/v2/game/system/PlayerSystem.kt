@@ -22,9 +22,9 @@ class PlayerSystem(
         entityService.search.withComponent(Player::class) { entity, _ ->
             updatePlayerEntity(entity, deltaTime)
 
-//            inputService.onAction("toggleDebug") {
-//                renderService.toggleDebug()
-//            }
+            inputService.onAction("toggleDebug") {
+                renderService.toggleDebugMode()
+            }
 
 //            inputService.onAction("shoot") {
 //                val mousePos = renderService.unproject(input.getMousePos())
