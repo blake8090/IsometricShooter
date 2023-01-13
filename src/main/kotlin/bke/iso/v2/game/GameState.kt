@@ -10,6 +10,7 @@ import bke.iso.v2.engine.input.InputService
 import bke.iso.v2.engine.input.InputState
 import bke.iso.v2.engine.input.KeyBinding
 import bke.iso.v2.engine.input.MouseBinding
+import bke.iso.v2.engine.render.RenderService
 import bke.iso.v2.engine.state.State
 import bke.iso.v2.engine.system.System
 import bke.iso.v2.game.event.ShootHandler
@@ -23,6 +24,7 @@ class GameState(
     private val tileService: TileService,
     private val entityFactory: EntityFactory,
     private val inputService: InputService,
+    private val renderService: RenderService,
     systemProvider: Provider<System>,
     private val handlerProvider: Provider<EventHandler<*>>
 ) : State() {
@@ -36,6 +38,7 @@ class GameState(
         log.debug("on start")
         eventHandlers.add(handlerProvider.get(ShootHandler::class))
         assetService.load("assets")
+        renderService.setCursor("cursor")
         bindInput()
         loadMap()
     }

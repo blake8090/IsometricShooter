@@ -48,6 +48,14 @@ class RenderService(
     fun unproject(pos: Vector2): Vector3 =
         camera.unproject(Vector3(pos.x, pos.y, 0f))
 
+    fun setCursor(textureName: String) {
+        val texture = assetService.get<Texture>(textureName) ?: return
+        texture.textureData.prepare()
+        val pixmap = texture.textureData.consumePixmap()
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0))
+        pixmap.dispose()
+    }
+
     fun render() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
