@@ -13,6 +13,8 @@ import bke.iso.v2.engine.input.MouseBinding
 import bke.iso.v2.engine.render.RenderService
 import bke.iso.v2.engine.state.State
 import bke.iso.v2.engine.system.System
+import bke.iso.v2.game.event.BulletCollisionHandler
+import bke.iso.v2.game.event.DamageHandler
 import bke.iso.v2.game.event.ShootHandler
 import bke.iso.v2.game.system.BulletSystem
 import bke.iso.v2.game.system.PlayerSystem
@@ -37,6 +39,8 @@ class GameState(
     override fun start() {
         log.debug("on start")
         eventHandlers.add(handlerProvider.get(ShootHandler::class))
+        eventHandlers.add(handlerProvider.get(DamageHandler::class))
+        eventHandlers.add(handlerProvider.get(BulletCollisionHandler::class))
         assetService.load("assets")
         renderService.setCursor("cursor")
         bindInput()
