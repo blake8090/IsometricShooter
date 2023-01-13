@@ -129,6 +129,50 @@ internal class ServiceContainerTest {
         assertThat(service.getValue()).isEqualTo(5)
     }
 
+    @Transient
+    interface ITransientService
+
+    @Singleton
+    interface ISingletonService
+
+    @Test
+    fun `Given an interface with annotations, When a class implements the interface, Then inherit annotations`() {
+        class A : ITransientService
+        class B : ISingletonService
+
+        val container = ServiceContainer(setOf(A::class, B::class))
+
+        val transientService = container.get<A>()
+        val transientService2 = container.get<A>()
+        assertThat(transientService).isNotSameAs(transientService2)
+
+        val singletonService = container.get<B>()
+        val singletonService2 = container.get<B>()
+        assertThat(singletonService).isSameAs(singletonService2)
+    }
+
+    @Test
+    fun `Given a base class with annotations, When a class extends the base class, Then inherit annotations`() {
+        @Transient
+        open class TransientService
+
+        @Singleton
+        open class SingletonService
+
+        class A : TransientService()
+        class B : SingletonService()
+
+        val container = ServiceContainer(setOf(A::class, B::class))
+
+        val transientService = container.get<A>()
+        val transientService2 = container.get<A>()
+        assertThat(transientService).isNotSameAs(transientService2)
+
+        val singletonService = container.get<B>()
+        val singletonService2 = container.get<B>()
+        assertThat(singletonService).isSameAs(singletonService2)
+    }
+
     @Nested
     @DisplayName("Error Cases")
     inner class ErrorCases {

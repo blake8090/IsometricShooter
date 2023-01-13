@@ -4,10 +4,7 @@ import bke.iso.engine.log
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
-import kotlin.reflect.cast
-import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.hasAnnotation
-import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.*
 
 class ServiceContainer(classes: Set<KClass<*>>) {
 
@@ -62,14 +59,7 @@ class ServiceContainer(classes: Set<KClass<*>>) {
         getProvider(T::class)
 
     private fun <T : Any> createService(kClass: KClass<T>): Service<T> {
-        val lifetime =
-            if (kClass.hasAnnotation<Singleton>()) {
-                Lifetime.SINGLETON
-            } else if (kClass.hasAnnotation<Transient>()) {
-                Lifetime.TRANSIENT
-            } else {
-                throw MissingAnnotationsException("No annotations found for class ${kClass.simpleName}")
-            }
+        val lifetime = getLifetime(kClass)
 
         val dependencies = kClass.primaryConstructor!!
             .parameters
@@ -80,8 +70,26 @@ class ServiceContainer(classes: Set<KClass<*>>) {
         return Service(kClass, lifetime, dependencies)
     }
 
+    private fun <T : Any> getLifetime(kClass: KClass<T>): Lifetime {
+        val annotations = mutableSetOf<Annotation>()
+        kClass.annotations.forEach(annotations::add)
+        kClass.superclasses
+            .flatMap(KClass<*>::annotations)
+            .forEach(annotations::add)
+
+        for (annotation in annotations) {
+            if (annotation is Singleton) {
+                return Lifetime.SINGLETON
+            } else if (annotation is Transient) {
+                return Lifetime.TRANSIENT
+            }
+        }
+
+        throw MissingAnnotationsException("No annotations found for class ${kClass.simpleName}")
+    }
+
     private fun validate() {
-        for ((kClass, service) in services) {
+        for ((kClass, _) in services) {
             traverse(kClass, kClass, mutableListOf())
         }
     }
