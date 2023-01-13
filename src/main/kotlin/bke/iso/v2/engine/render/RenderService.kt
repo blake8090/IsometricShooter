@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Polygon
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 @Singleton
 class RenderService(
@@ -43,6 +44,9 @@ class RenderService(
         camera.position.x = pos.x
         camera.position.y = pos.y
     }
+
+    fun unproject(pos: Vector2): Vector3 =
+        camera.unproject(Vector3(pos.x, pos.y, 0f))
 
     fun render() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)

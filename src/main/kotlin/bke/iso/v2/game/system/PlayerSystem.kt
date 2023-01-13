@@ -6,10 +6,14 @@ import bke.iso.v2.engine.entity.EntityService
 import bke.iso.v2.engine.event.EventService
 import bke.iso.v2.engine.input.InputService
 import bke.iso.v2.engine.math.toScreen
+import bke.iso.v2.engine.math.toWorld
 import bke.iso.v2.engine.physics.MoveEvent
 import bke.iso.v2.engine.render.RenderService
 import bke.iso.v2.engine.system.System
 import bke.iso.v2.game.Player
+import bke.iso.v2.game.event.BulletType
+import bke.iso.v2.game.event.ShootEvent
+import com.badlogic.gdx.math.Vector2
 
 @Transient
 class PlayerSystem(
@@ -26,11 +30,11 @@ class PlayerSystem(
                 renderService.toggleDebugMode()
             }
 
-//            inputService.onAction("shoot") {
-//                val mousePos = renderService.unproject(input.getMousePos())
-//                val target = Units.toWorld(Vector2(mousePos.x, mousePos.y))
-//                engine.fireEvent(ShootEvent(entity, target, BulletType.PLAYER))
-//            }
+            inputService.onAction("shoot") {
+                val mousePos = renderService.unproject(inputService.getMousePos())
+                val target = toWorld(Vector2(mousePos.x, mousePos.y))
+                eventService.fire(ShootEvent(entity, target, BulletType.PLAYER))
+            }
         }
     }
 

@@ -5,12 +5,15 @@ import bke.iso.service.Provider
 import bke.iso.service.Transient
 import bke.iso.v2.engine.TileService
 import bke.iso.v2.engine.asset.AssetService
+import bke.iso.v2.engine.event.EventHandler
 import bke.iso.v2.engine.input.InputService
 import bke.iso.v2.engine.input.InputState
 import bke.iso.v2.engine.input.KeyBinding
 import bke.iso.v2.engine.input.MouseBinding
 import bke.iso.v2.engine.state.State
 import bke.iso.v2.engine.system.System
+import bke.iso.v2.game.event.ShootHandler
+import bke.iso.v2.game.system.BulletSystem
 import bke.iso.v2.game.system.PlayerSystem
 import com.badlogic.gdx.Input
 
@@ -20,12 +23,18 @@ class GameState(
     private val tileService: TileService,
     private val entityFactory: EntityFactory,
     private val inputService: InputService,
-    systemProvider: Provider<System>
+    systemProvider: Provider<System>,
+    private val handlerProvider: Provider<EventHandler<*>>
 ) : State() {
-    override val systems = setOf(systemProvider.get(PlayerSystem::class))
+    // TODO: don't use override val, just have a protected val to avoid initialization issues
+    override val systems = setOf(
+        systemProvider.get(PlayerSystem::class),
+        systemProvider.get(BulletSystem::class)
+    )
 
     override fun start() {
         log.debug("on start")
+        eventHandlers.add(handlerProvider.get(ShootHandler::class))
         assetService.load("assets")
         bindInput()
         loadMap()

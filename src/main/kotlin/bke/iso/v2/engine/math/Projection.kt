@@ -1,5 +1,6 @@
 package bke.iso.v2.engine.math
 
+import bke.iso.engine.Units
 import com.badlogic.gdx.math.*
 import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.sqrt
@@ -51,6 +52,17 @@ fun toScreen(rect: Rectangle): Polygon {
         vertices
             .flatMap { listOf(it.x, it.y) }
             .toFloatArray()
+    )
+}
+
+fun toWorld(pos: Vector2): Vector2 {
+    val w = HALF_TILE_WIDTH
+    val h = HALF_TILE_HEIGHT
+    val mapX = (pos.x / w) - (pos.y / h)
+    val mapY = (pos.y / h) + (pos.x / w)
+    return Vector2(
+        mapX / 2,
+        mapY / 2
     )
 }
 
