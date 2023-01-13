@@ -1,5 +1,6 @@
 package bke.iso
 
+import bke.iso.engine.Engine
 import bke.iso.service.ServiceContainer
 import bke.iso.service.container
 import bke.iso.engine.Game
@@ -31,15 +32,15 @@ class App(
         container.get<SystemService>().start()
 
         val game = container.getProvider<Game>().get(gameClass)
-        container.get<bke.iso.engine.Engine>().start(game)
+        container.get<Engine>().start(game)
     }
 
     override fun dispose() {
-        container.get<bke.iso.engine.Engine>().stop()
+        container.get<Engine>().stop()
     }
 
     override fun render() {
-        container.get<bke.iso.engine.Engine>().update(Gdx.graphics.deltaTime)
+        container.get<Engine>().update(Gdx.graphics.deltaTime)
     }
 
     fun buildConfig(): Lwjgl3ApplicationConfiguration =
