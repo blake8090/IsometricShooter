@@ -15,9 +15,11 @@ import bke.iso.v2.engine.state.State
 import bke.iso.v2.engine.system.System
 import bke.iso.v2.game.event.BulletCollisionHandler
 import bke.iso.v2.game.event.DamageHandler
+import bke.iso.v2.game.event.DrawHealthHandler
 import bke.iso.v2.game.event.ShootHandler
 import bke.iso.v2.game.system.BulletSystem
 import bke.iso.v2.game.system.PlayerSystem
+import bke.iso.v2.game.system.TurretSystem
 import com.badlogic.gdx.Input
 
 @Transient
@@ -33,16 +35,21 @@ class GameState(
     // TODO: don't use override val, just have a protected val to avoid initialization issues
     override val systems = setOf(
         systemProvider.get(PlayerSystem::class),
-        systemProvider.get(BulletSystem::class)
+        systemProvider.get(BulletSystem::class),
+        systemProvider.get(TurretSystem::class)
     )
 
     override fun start() {
         log.debug("on start")
+
         eventHandlers.add(handlerProvider.get(ShootHandler::class))
         eventHandlers.add(handlerProvider.get(DamageHandler::class))
         eventHandlers.add(handlerProvider.get(BulletCollisionHandler::class))
+        eventHandlers.add(handlerProvider.get(DrawHealthHandler::class))
+
         assetService.load("assets")
         renderService.setCursor("cursor")
+
         bindInput()
         loadMap()
     }

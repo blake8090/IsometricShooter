@@ -8,6 +8,7 @@ import bke.iso.v2.engine.TileService
 import bke.iso.v2.engine.asset.AssetService
 import bke.iso.v2.engine.entity.Entity
 import bke.iso.v2.engine.entity.EntityService
+import bke.iso.v2.engine.event.EventService
 import bke.iso.v2.engine.math.toScreen
 import bke.iso.v2.engine.physics.CollisionData
 import bke.iso.v2.engine.physics.CollisionService
@@ -27,7 +28,8 @@ class RenderService(
     private val assetService: AssetService,
     private val tileService: TileService,
     private val entityService: EntityService,
-    private val collisionService: CollisionService
+    private val collisionService: CollisionService,
+    private val eventService: EventService
 ) {
 
     private val batch = SpriteBatch()
@@ -83,6 +85,7 @@ class RenderService(
         val sprite = entity.get<Sprite>() ?: return
         val pos = toScreen(entity.x, entity.y)
         drawSprite(sprite, pos)
+        eventService.fire(DrawEntityEvent(entity, batch))
     }
 
     private fun drawSprite(sprite: Sprite, pos: Vector2) {
@@ -105,6 +108,7 @@ class RenderService(
             drawPoint(markerPos, 2f, Color.RED)
             drawCollisionBoxes(entity)
             drawDebugData(entity)
+            entity.remove<DebugData>()
         }
     }
 
@@ -120,7 +124,7 @@ class RenderService(
         val debugData = entity.get<DebugData>() ?: return
 
         for (line in debugData.lines) {
-            drawLine(line.start, line.end, line.color)
+            drawLine(toScreen(line.start), toScreen(line.end), line.color)
         }
 
         for (circle in debugData.circles) {
@@ -154,7 +158,7 @@ class RenderService(
     private fun drawLine(start: Vector2, end: Vector2, color: Color) {
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
-        shapeRenderer.line(toScreen(start), (end))
+        shapeRenderer.line(start, end)
         shapeRenderer.end()
     }
 

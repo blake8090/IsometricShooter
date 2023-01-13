@@ -1,6 +1,5 @@
 package bke.iso.v2.engine.entity
 
-import bke.iso.engine.entity.Entity
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
