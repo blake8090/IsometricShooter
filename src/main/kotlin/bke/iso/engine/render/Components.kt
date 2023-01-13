@@ -23,7 +23,6 @@ data class DebugData(
 ) : Component()
 
 // TODO: when implementing z-levels, change this to use a Segment
-// TODO: implement width
 data class DebugLine(
     val start: Vector2,
     val end: Vector2,

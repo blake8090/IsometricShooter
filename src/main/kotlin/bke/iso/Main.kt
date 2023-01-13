@@ -2,8 +2,7 @@ package bke.iso
 
 //import bke.iso.app.App
 //import bke.iso.game.IsometricShooterGame
-import bke.iso.v2.App
-import bke.iso.v2.game.IsometricShooter
+import bke.iso.game.IsometricShooter
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext

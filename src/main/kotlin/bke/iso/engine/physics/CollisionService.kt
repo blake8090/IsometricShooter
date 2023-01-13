@@ -1,11 +1,11 @@
 package bke.iso.engine.physics
 
-import bke.iso.app.service.Service
+import bke.iso.engine.log
+import bke.iso.service.Singleton
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
-import bke.iso.engine.getEdges
-import bke.iso.engine.log
-import bke.iso.engine.toVector2
+import bke.iso.engine.math.getEdges
+import bke.iso.engine.math.toVector2
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
@@ -46,7 +46,7 @@ data class SegmentCollision(
     val distanceFromStart: Float
 )
 
-@Service
+@Singleton
 class CollisionService(private val entityService: EntityService) {
 
     // TODO:

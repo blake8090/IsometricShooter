@@ -1,16 +1,18 @@
 package bke.iso.game.event
 
-import bke.iso.engine.assets.Assets
+import bke.iso.service.Transient
+import bke.iso.engine.asset.AssetService
 import bke.iso.engine.event.EventHandler
+import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.DrawEntityEvent
-import bke.iso.engine.toScreen
 import bke.iso.game.Health
 import bke.iso.game.HealthBar
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
-class DrawHealthHandler(private val assets: Assets) : EventHandler<DrawEntityEvent> {
+@Transient
+class DrawHealthHandler(private val assetService: AssetService) : EventHandler<DrawEntityEvent> {
     private val healthBarWidth = 32f
     private val healthBarHeight = 8f
 
@@ -22,7 +24,7 @@ class DrawHealthHandler(private val assets: Assets) : EventHandler<DrawEntityEve
         val healthBar = entity.get<HealthBar>() ?: return
 
         val batch = event.batch
-        val pixel = assets.get<Texture>("pixel") ?: return
+        val pixel = assetService.get<Texture>("pixel") ?: return
         val pos = toScreen(entity.x, entity.y).sub(healthBar.offsetX, healthBar.offsetY)
 
         batch.withColor(Color.RED) {

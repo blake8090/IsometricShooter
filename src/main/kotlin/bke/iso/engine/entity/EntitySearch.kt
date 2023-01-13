@@ -1,6 +1,6 @@
 package bke.iso.engine.entity
 
-import bke.iso.engine.Location
+import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Rectangle
 import java.util.*
 import kotlin.reflect.KClass

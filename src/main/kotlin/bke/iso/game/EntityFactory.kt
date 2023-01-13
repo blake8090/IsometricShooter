@@ -1,12 +1,12 @@
 package bke.iso.game
 
-import bke.iso.app.service.Service
+import bke.iso.service.Singleton
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.Sprite
 
-@Service
+@Singleton
 class EntityFactory(private val entityService: EntityService) {
 
     fun createWall(x: Float, y: Float) =

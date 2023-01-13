@@ -1,108 +1,36 @@
 package bke.iso.engine
 
-import bke.iso.app.service.Service
-import bke.iso.app.service.Services
-import bke.iso.engine.assets.Assets
-import bke.iso.engine.assets.TextureLoader
+import bke.iso.service.Singleton
 import bke.iso.engine.entity.EntityService
-import bke.iso.engine.event.Event
-import bke.iso.engine.event.EventHandlerMap
-import bke.iso.engine.input.Input
-import bke.iso.engine.physics.MovementHandler
-import bke.iso.engine.physics.PhysicsController
-import bke.iso.engine.render.DebugRenderer
+import bke.iso.engine.input.InputService
 import bke.iso.engine.render.RenderService
-import kotlin.reflect.KClass
+import bke.iso.engine.state.StateService
+import bke.iso.engine.system.SystemService
 
-@Service
+@Singleton
 class Engine(
-    private val services: Services,
-    private val assets: Assets,
-    // TODO: fix stack overflow error - circular dependency between renderService and engine
-//    private val renderService: RenderService,
-    private val input: Input,
+    private val systemService: SystemService,
+    private val stateService: StateService,
+    private val renderService: RenderService,
+    private val inputService: InputService,
+    private val entityService: EntityService
 ) {
-    var deltaTime: Float = 0f
-        private set
-
-    private var state: State = EmptyState()
-
-    private val engineControllers = mutableSetOf<Controller>()
-    private val gameControllers = mutableSetOf<Controller>()
-
-    private val engineEventHandlers = EventHandlerMap()
-    private val gameEventHandlers = EventHandlerMap()
 
     fun start(game: Game) {
-        log.info("Starting up")
-        setupEventHandlers()
-        setupControllers()
-        setupAssetLoaders()
-
-        log.debug("initializing game '${game::class.simpleName}'")
+        log.info("Starting")
         game.setup()
-
-        assets.load("assets")
-        changeState(game.initialState)
+        stateService.setState(game.initialState)
     }
 
-    private fun setupEventHandlers() {
-        engineEventHandlers.add(services.createInstance(MovementHandler::class))
-    }
-
-    private fun setupControllers() {
-        engineControllers.add(services.createInstance(PhysicsController::class))
-    }
-
-    private fun setupAssetLoaders() {
-        assets.addLoader("png", TextureLoader::class)
-        assets.addLoader("jpg", TextureLoader::class)
-    }
-
-    /**
-     * Main game loop
-     */
     fun update(deltaTime: Float) {
-        this.deltaTime = deltaTime
-        input.update()
-
-        gameControllers.forEach { controller -> controller.update(deltaTime) }
-        engineControllers.forEach { controller -> controller.update(deltaTime) }
-
-        services.get<EntityService>().update()
-        services.get<RenderService>().render()
-        services.get<DebugRenderer>().clearDebugData()
+        inputService.update()
+        systemService.update(stateService.currentState, deltaTime)
+        stateService.update(deltaTime)
+        entityService.update()
+        renderService.render()
     }
 
     fun stop() {
-        log.info("Shutting down")
-        state.stop()
-    }
-
-    fun changeState(newState: KClass<out State>) {
-        log.debug(
-            "Switching state from '${this.state::class.simpleName}' "
-                    + "to '${newState.simpleName}'"
-        )
-        state.stop()
-        state = services.createInstance(newState)
-        state.start()
-
-        gameControllers.clear()
-        for (controllerType in state.controllers) {
-            val controller = services.createInstance(controllerType)
-            gameControllers.add(controller)
-        }
-
-        gameEventHandlers.clear()
-        for (handlerType in state.eventHandlers) {
-            val handler = services.createInstance(handlerType)
-            gameEventHandlers.add(handler)
-        }
-    }
-
-    fun <T : Event> fireEvent(event: T) {
-        engineEventHandlers.fire(event, event::class)
-        gameEventHandlers.fire(event, event::class)
+        log.info("Stopping")
     }
 }

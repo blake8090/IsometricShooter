@@ -10,14 +10,9 @@ class EventHandlerMap {
             .add(handler)
     }
 
-    fun clear() =
-        handlersByType.clear()
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Event> fire(event: T, type: KClass<out T>) {
-        val handlers = handlersByType[type] ?: emptyList()
-        for (handler in handlers) {
-            (handler as EventHandler<T>).handle(event)
-        }
+    fun <T : Event> fire(event: T) {
+        handlersByType[event::class]
+            ?.filterIsInstance<EventHandler<T>>()
+            ?.forEach { handler -> handler.handle(event) }
     }
 }

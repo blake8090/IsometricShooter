@@ -1,73 +1,76 @@
 package bke.iso.game
 
-import bke.iso.engine.*
-import bke.iso.engine.assets.Assets
-import bke.iso.engine.input.Input
+import bke.iso.engine.log
+import bke.iso.service.Provider
+import bke.iso.service.Transient
+import bke.iso.engine.TileService
+import bke.iso.engine.asset.AssetService
+import bke.iso.engine.event.EventHandler
+import bke.iso.engine.input.InputService
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.RenderService
-import bke.iso.engine.render.Sprite
-import bke.iso.game.controller.BulletController
-import bke.iso.game.controller.PlayerController
-import bke.iso.game.controller.TurretController
+import bke.iso.engine.state.State
+import bke.iso.engine.system.System
 import bke.iso.game.event.BulletCollisionHandler
 import bke.iso.game.event.DamageHandler
 import bke.iso.game.event.DrawHealthHandler
 import bke.iso.game.event.ShootHandler
-import com.badlogic.gdx.Input.Buttons
-import com.badlogic.gdx.Input.Keys
-import kotlin.system.measureTimeMillis
+import bke.iso.game.system.BulletSystem
+import bke.iso.game.system.PlayerSystem
+import bke.iso.game.system.TurretSystem
+import com.badlogic.gdx.Input
 
+@Transient
 class GameState(
-    private val tiles: Tiles,
-    private val assets: Assets,
+    private val assetService: AssetService,
+    private val tileService: TileService,
+    private val entityFactory: EntityFactory,
+    private val inputService: InputService,
     private val renderService: RenderService,
-    private val input: Input,
-    private val entityFactory: EntityFactory
+    systemProvider: Provider<System>,
+    private val handlerProvider: Provider<EventHandler<*>>
 ) : State() {
-    override val controllers = setOf(
-        PlayerController::class,
-        TurretController::class,
-        BulletController::class
-    )
-
-    override val eventHandlers = setOf(
-        BulletCollisionHandler::class,
-        ShootHandler::class,
-        DamageHandler::class,
-        DrawHealthHandler::class
+    // TODO: don't use override val, just have a protected val to avoid initialization issues
+    override val systems = setOf(
+        systemProvider.get(PlayerSystem::class),
+        systemProvider.get(BulletSystem::class),
+        systemProvider.get(TurretSystem::class)
     )
 
     override fun start() {
-        renderService.cursor = Sprite("cursor", 16f, 16f)
-        buildWorld()
-        setupInput()
+        log.debug("on start")
+
+        eventHandlers.add(handlerProvider.get(ShootHandler::class))
+        eventHandlers.add(handlerProvider.get(DamageHandler::class))
+        eventHandlers.add(handlerProvider.get(BulletCollisionHandler::class))
+        eventHandlers.add(handlerProvider.get(DrawHealthHandler::class))
+
+        assetService.load("assets")
+        renderService.setCursor("cursor")
+
+        bindInput()
+        loadMap()
     }
 
-    private fun setupInput() {
+    private fun bindInput() {
         log.debug("binding actions")
-        input.bind("toggleDebug", KeyBinding(Keys.M, InputState.PRESSED))
-        input.bind("moveLeft", KeyBinding(Keys.A, InputState.DOWN, true))
-        input.bind("moveRight", KeyBinding(Keys.D, InputState.DOWN))
-        input.bind("moveUp", KeyBinding(Keys.W, InputState.DOWN))
-        input.bind("moveDown", KeyBinding(Keys.S, InputState.DOWN, true))
-        input.bind("run", KeyBinding(Keys.SHIFT_LEFT, InputState.DOWN))
-        input.bind("shoot", MouseBinding(Buttons.LEFT, InputState.PRESSED))
-    }
-
-    private fun buildWorld() {
-        log.debug("building world")
-        val loadingTime = measureTimeMillis { loadMap() }
-        log.debug("built world in $loadingTime ms")
+        inputService.bind("toggleDebug", KeyBinding(Input.Keys.M, InputState.PRESSED))
+        inputService.bind("moveLeft", KeyBinding(Input.Keys.A, InputState.DOWN, true))
+        inputService.bind("moveRight", KeyBinding(Input.Keys.D, InputState.DOWN))
+        inputService.bind("moveUp", KeyBinding(Input.Keys.W, InputState.DOWN))
+        inputService.bind("moveDown", KeyBinding(Input.Keys.S, InputState.DOWN, true))
+        inputService.bind("run", KeyBinding(Input.Keys.SHIFT_LEFT, InputState.DOWN))
+        inputService.bind("shoot", MouseBinding(Input.Buttons.LEFT, InputState.PRESSED))
     }
 
     private fun loadMap() {
-        val mapData = assets.get<MapData>("test")
+        val mapData = assetService.get<MapData>("test")
             ?: throw IllegalArgumentException("expected map asset")
 
         mapData.tiles.forEach { (location, tile) ->
-            tiles.setTile(tile, location)
+            tileService.setTile(tile, location)
         }
 
         mapData.walls.forEach { location ->

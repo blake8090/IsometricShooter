@@ -7,7 +7,8 @@ data class MoveEvent(
     val entity: Entity,
     val dx: Float,
     val dy: Float,
-    val speed: Float
+    val speed: Float,
+    val deltaTime: Float
 ) : Event()
 
 data class CollisionEvent(

@@ -1,9 +1,10 @@
 package bke.iso.game.event
 
+import bke.iso.engine.log
+import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
-import bke.iso.engine.log
 import bke.iso.game.Health
 import bke.iso.game.Player
 import kotlin.math.max
@@ -14,6 +15,7 @@ data class DamageEvent(
     val amount: Float
 ) : Event()
 
+@Transient
 class DamageHandler : EventHandler<DamageEvent> {
     override val type = DamageEvent::class
 

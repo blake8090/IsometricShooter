@@ -1,12 +1,12 @@
 package bke.iso.engine.entity
 
-import bke.iso.app.service.Service
-import bke.iso.engine.Location
 import bke.iso.engine.log
+import bke.iso.engine.math.Location
+import bke.iso.service.Singleton
 import java.util.*
 import kotlin.reflect.KClass
 
-@Service
+@Singleton
 class EntityService {
     private val entityById = mutableMapOf<UUID, Entity>()
     private val deletedIds = mutableSetOf<UUID>()

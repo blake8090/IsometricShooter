@@ -1,14 +1,16 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.Engine
+import bke.iso.engine.log
+import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventHandler
-import bke.iso.engine.log
+import bke.iso.engine.event.EventService
 import com.badlogic.gdx.math.Vector2
 
+@Transient
 class MovementHandler(
-    private val engine: Engine,
     private val collisionService: CollisionService,
+    private val eventService: EventService
 ) : EventHandler<MoveEvent> {
     override val type = MoveEvent::class
 
@@ -21,7 +23,7 @@ class MovementHandler(
             val bounds = result.bounds
             for (boxCollision in result.collisions) {
                 resolveCollision(entity, bounds, boxCollision, delta)
-                engine.fireEvent(CollisionEvent(entity, boxCollision.data))
+                eventService.fire(CollisionEvent(entity, boxCollision.data))
             }
         }
 
@@ -32,8 +34,8 @@ class MovementHandler(
     private fun calculateDelta(event: MoveEvent): Vector2 {
         val delta = Vector2(event.dx, event.dy).nor()
         return Vector2(
-            delta.x * event.speed * engine.deltaTime,
-            delta.y * event.speed * engine.deltaTime
+            delta.x * event.speed * event.deltaTime,
+            delta.y * event.speed * event.deltaTime
         )
     }
 
