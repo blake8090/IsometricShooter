@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory
 val LOG_LEVEL: Level = Level.TRACE
 
 fun main() {
-    setupLogging()
+    TODO("fix false positive with circular dependency")
+//    setupLogging()
 //    val app = App(IsometricShooterGame::class)
-    val app = App("Isometric Shooter", IsometricShooter::class)
-    Lwjgl3Application(app, app.buildConfig())
+//    val app = App("Isometric Shooter", IsometricShooter::class)
+//    Lwjgl3Application(app, app.buildConfig())
 }
 
 private fun setupLogging() {

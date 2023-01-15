@@ -5,21 +5,24 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
 import kotlin.reflect.cast
-import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.functions
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.primaryConstructor
 
 class ServiceContainer(classes: Set<KClass<*>>) {
-
-    private val services = mutableMapOf<KClass<*>, Service<*>>()
-    private val instances = mutableMapOf<KClass<*>, Any>()
+    private val records = mutableMapOf<KClass<*>, ServiceRecord<*>>()
+    private val instances = mutableMapOf<KClass<*>, ServiceInstance<*>>()
 
     init {
         classes.forEach { kClass ->
-            services[kClass] = createService(kClass)
+            records[kClass] = register(kClass)
         }
-        validate()
-        services.values.forEach { service -> initialize(service) }
+
+        for (record in records.values) {
+            validate(record, mutableSetOf())
+        }
+
+        records.values.forEach(this::initialize)
     }
 
     /**
@@ -28,17 +31,10 @@ class ServiceContainer(classes: Set<KClass<*>>) {
      * @throws [NoServiceFoundException] if no service found for [kClass]
      */
     fun <T : Any> get(kClass: KClass<T>): T {
-        val service = services[kClass]
-            ?: throw IllegalArgumentException("No service found for class ${kClass.simpleName}")
-
-        val instance = when (service.lifetime) {
-            Lifetime.SINGLETON -> instances[service.implClass]
-                ?: throw RuntimeException("Expected instance for singleton ${kClass.simpleName}")
-
-            Lifetime.TRANSIENT -> createInstance(service)
-        }
-
-        return kClass.cast(instance)
+        val serviceRecord = records[kClass]
+            ?: throw NoServiceFoundException(kClass)
+        val serviceInstance = findServiceInstance(serviceRecord)
+        return kClass.cast(serviceInstance.instance)
     }
 
     /**
@@ -48,6 +44,21 @@ class ServiceContainer(classes: Set<KClass<*>>) {
      */
     inline fun <reified T : Any> get() =
         get(T::class)
+
+    private fun findServiceInstance(record: ServiceRecord<*>): ServiceInstance<*> {
+        return when (record.lifetime) {
+            Lifetime.SINGLETON -> {
+                val implClass = record.implClass
+                instances[implClass]
+                    ?: throw Error(
+                        "Expected instance of class {${implClass.simpleName} "
+                                + "for service ${record.baseClass.simpleName}"
+                    )
+            }
+
+            Lifetime.TRANSIENT -> createServiceInstance(record)
+        }
+    }
 
     /**
      * Returns a [Provider] of class [kClass].
@@ -61,7 +72,7 @@ class ServiceContainer(classes: Set<KClass<*>>) {
     inline fun <reified T : Any> getProvider() =
         getProvider(T::class)
 
-    private fun <T : Any> createService(kClass: KClass<T>): Service<T> {
+    private fun <T : Any> register(kClass: KClass<T>): ServiceRecord<T> {
         val lifetime =
             if (kClass.hasAnnotation<Singleton>()) {
                 Lifetime.SINGLETON
@@ -77,84 +88,103 @@ class ServiceContainer(classes: Set<KClass<*>>) {
             .map { kParameter -> kParameter.type }
 
         log.debug("Created $lifetime service '${kClass.simpleName}' with ${dependencies.size} dependencies")
-        return Service(kClass, lifetime, dependencies)
+        return ServiceRecord(kClass, kClass, lifetime, dependencies)
     }
 
-    private fun validate() {
-        for ((kClass, service) in services) {
-            traverse(kClass, kClass, mutableListOf())
+    private fun validate(record: ServiceRecord<*>, visitedRecords: MutableSet<ServiceRecord<*>>) {
+        if (!visitedRecords.add(record)) {
+            val names = visitedRecords
+                .map { it.baseClass.simpleName }
+                .joinToString()
+            throw CircularDependencyException("Found circular dependency: $names -> ${record.baseClass.simpleName}")
+        }
+
+        val serviceDependencies = record.dependencies
+            .map { kType -> kType.classifier as KClass<*> }
+            .filter { kClass -> kClass != Provider::class }
+
+        for (dependency in serviceDependencies) {
+            val dependencyRecord = records[dependency]
+                ?: throw NoServiceFoundException(dependency)
+            validate(dependencyRecord, visitedRecords)
         }
     }
 
-    private fun traverse(kClass: KClass<*>, head: KClass<*>, chain: MutableList<KClass<*>>) {
-        if (kClass == Provider::class) {
+    private fun initialize(record: ServiceRecord<*>) {
+        if (record.initialized) {
             return
-        } else if (chain.contains(head)) {
-            val names = chain.map { it.simpleName }.joinToString()
-            throw CircularDependencyException("Found circular dependency: ${head.simpleName} -> $names")
+        } else if (record.lifetime == Lifetime.SINGLETON) {
+            val serviceInstance = createServiceInstance(record)
+            // PostInit should be called in order of initialization - therefore, call the dependencies first
+            // TODO: add unit test to verify this behavior?
+            serviceInstance.dependencies.forEach(this::callPostInit)
+            callPostInit(serviceInstance)
+            instances[record.implClass] = serviceInstance
         }
-
-        val service = services[kClass]!!
-        for (dependency in service.dependencies) {
-            val dependencyClass = dependency.classifier as KClass<*>
-            chain.add(dependencyClass)
-            traverse(dependencyClass, head, chain)
-        }
+        record.initialized = true
     }
 
-    private fun <T : Any> initialize(service: Service<T>) {
-        for (dependency in service.dependencies) {
-            val dependencyClass = dependency.classifier as KClass<*>
-            if (dependencyClass == Provider::class) {
-                // providers will be used at run time, so no initialization necessary here
-                continue
-            }
-            val dependencyService = services[dependencyClass]
-                ?: throw NoServiceFoundException("No service found for class ${dependencyClass.simpleName}")
-            initialize(dependencyService)
-        }
-
-        if (service.lifetime == Lifetime.SINGLETON && !instances.containsKey(service.implClass)) {
-            instances[service.implClass] = createInstance(service)
-        }
-    }
-
-    private fun <T : Any> createInstance(service: Service<T>): T {
-        val dependencies = service.dependencies
-            .map(this::resolveDependency)
-            .toTypedArray()
-//        try {
-            return if (dependencies.isEmpty()) {
-                service.implClass.createInstance()
+    private fun createServiceInstance(record: ServiceRecord<*>): ServiceInstance<*> {
+        val serviceInstances = mutableListOf<ServiceInstance<*>>()
+        val parameters = record.dependencies.map { dependency ->
+            val kClass = dependency.classifier as KClass<*>
+            if (kClass == Provider::class) {
+                createProviderFromType(dependency)
             } else {
-                service.implClass.primaryConstructor!!.call(*dependencies)
+                val serviceInstance = resolveServiceDependency(kClass)
+                serviceInstances.add(serviceInstance)
+                serviceInstance.instance
             }
-//        } catch (e: Exception) {
-//            throw ServiceCreationException("Couldn't create instance of ${service.implClass.simpleName}: ${e.m}")
-//        }
+        }
+
+        val kClass = record.implClass
+        val constructor = kClass.primaryConstructor!!
+        val instance = constructor.call(*parameters.toTypedArray())
+        return ServiceInstance(instance, serviceInstances)
     }
 
-    private fun resolveDependency(dependency: KType): Any {
-        val kClass = dependency.classifier as KClass<*>
-        return if (dependency.classifier == Provider::class) {
-            val projectedClass = dependency.arguments
-                .first()
-                .type!!
-                .classifier as KClass<*>
-            getProvider(projectedClass)
-        } else {
-            get(kClass)
+    private fun createProviderFromType(kType: KType): Provider<*> {
+        val typeParameter = kType.arguments.first().type!!
+        return getProvider(typeParameter.classifier as KClass<*>)
+    }
+
+    private fun resolveServiceDependency(kClass: KClass<*>): ServiceInstance<*> {
+        val dependencyRecord = records[kClass] ?: throw NoServiceFoundException(kClass)
+        if (!dependencyRecord.initialized) {
+            initialize(dependencyRecord)
         }
+        return findServiceInstance(dependencyRecord)
+    }
+
+    private fun callPostInit(instance: ServiceInstance<*>) {
+        if (instance.postInitComplete || instance.instance::class == Provider::class) {
+            return
+        }
+
+        instance.dependencies.forEach(this::callPostInit)
+        // TODO: validate that only one function has PostInit annotation?
+        instance::class.functions
+            .firstOrNull { func -> func.hasAnnotation<PostInit>() }
+            ?.call(instance.instance)
+        instance.postInitComplete = true
     }
 }
-
-private data class Service<T : Any>(
-    val implClass: KClass<out T>,
-    val lifetime: Lifetime,
-    val dependencies: List<KType>
-)
 
 private enum class Lifetime {
     SINGLETON,
     TRANSIENT
 }
+
+private data class ServiceRecord<T : Any>(
+    val baseClass: KClass<T>,
+    val implClass: KClass<out T>,
+    val lifetime: Lifetime,
+    val dependencies: List<KType>,
+    var initialized: Boolean = false
+)
+
+private data class ServiceInstance<T : Any>(
+    val instance: T,
+    val dependencies: List<ServiceInstance<*>>,
+    var postInitComplete: Boolean = false
+)

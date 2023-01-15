@@ -150,7 +150,7 @@ internal class ServiceContainerTest {
                 val error = assertThrows<CircularDependencyException> {
                     ServiceContainer(setOf(A::class, B::class, C::class))
                 }
-                assertThat(error.message).isEqualTo("Found circular dependency: A -> B, C, A")
+                assertThat(error.message).isEqualTo("Found circular dependency: A, B, C -> A")
             }
         }
 
@@ -165,7 +165,7 @@ internal class ServiceContainerTest {
             inner class B(c: C, d: D)
 
             @Singleton
-            inner class C()
+            inner class C
 
             @Singleton
             inner class D(a: A)
@@ -175,7 +175,7 @@ internal class ServiceContainerTest {
                 val error = assertThrows<CircularDependencyException> {
                     ServiceContainer(setOf(A::class, B::class, C::class, D::class))
                 }
-                assertThat(error.message).isEqualTo("Found circular dependency: A -> B, C, D, A")
+                assertThat(error.message).isEqualTo("Found circular dependency: A, B, C, D -> A")
             }
         }
 
