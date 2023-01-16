@@ -49,30 +49,6 @@ internal class ServiceContainerTest {
     }
 
     @Test
-    fun whenGetTransientProvider_thenReturnUniqueInstance() {
-        @Transient
-        class Service
-
-        val container = ServiceContainer(setOf(Service::class))
-        val provider = container.getProvider<Service>()
-        val service = provider.get()
-        val service2 = provider.get()
-        assertThat(service).isNotSameAs(service2)
-    }
-
-    @Test
-    fun whenGetSingletonProvider_thenReturnSameInstance() {
-        @Singleton
-        class Service
-
-        val container = ServiceContainer(setOf(Service::class))
-        val provider = container.getProvider<Service>()
-        val service = provider.get()
-        val service2 = provider.get()
-        assertThat(service).isSameAs(service2)
-    }
-
-    @Test
     fun givenServices_thenInjectSingletonDependency() {
         @Singleton
         class SingletonService
@@ -150,7 +126,7 @@ internal class ServiceContainerTest {
                 val error = assertThrows<CircularDependencyException> {
                     ServiceContainer(setOf(A::class, B::class, C::class))
                 }
-                assertThat(error.message).isEqualTo("Found circular dependency: A, B, C -> A")
+                assertThat(error.message).isEqualTo("Found circular dependency: A -> B -> C -> A")
             }
         }
 
@@ -175,7 +151,42 @@ internal class ServiceContainerTest {
                 val error = assertThrows<CircularDependencyException> {
                     ServiceContainer(setOf(A::class, B::class, C::class, D::class))
                 }
-                assertThat(error.message).isEqualTo("Found circular dependency: A, B, C, D -> A")
+                assertThat(error.message).isEqualTo("Found circular dependency: A -> B -> D -> A")
+            }
+        }
+
+        /**
+         * A -> B, C
+         * B -> nothing
+         * C -> D -> E -> C
+         *
+         * A -> B, C -> D -> E -> C
+         */
+        @Nested
+        @DisplayName("Nested Circular Dependency")
+        @Suppress("UNUSED_PARAMETER")
+        inner class NestedCircularDependencyCase2 {
+            @Singleton
+            inner class A(b: B, c: C)
+
+            @Singleton
+            inner class B
+
+            @Singleton
+            inner class C(d: D)
+
+            @Singleton
+            inner class D(e: E)
+
+            @Singleton
+            inner class E(c: C)
+
+            @Test
+            fun `Given list of classes with nested circular dependency, When create container, Then throw exception`() {
+                val error = assertThrows<CircularDependencyException> {
+                    ServiceContainer(setOf(A::class, B::class, C::class, D::class, E::class))
+                }
+                assertThat(error.message).isEqualTo("Found circular dependency: A -> C -> D -> E -> C")
             }
         }
 

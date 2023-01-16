@@ -8,11 +8,11 @@ internal class ProviderTest {
     fun whenGet_thenCallGetBaseClass() {
         class A
 
-        val container = mock<ServiceContainer>()
-        val provider = Provider(container, A::class)
+        val cache = mock<ServiceCache>()
+        val provider = Provider(cache, A::class)
         provider.get()
 
-        verify(container, only()).get<A>()
+        verify(cache, only())[A::class]
     }
 
     @Test
@@ -20,10 +20,10 @@ internal class ProviderTest {
         open class A
         class B : A()
 
-        val container = mock<ServiceContainer>()
-        val provider = Provider(container, A::class)
+        val cache = mock<ServiceCache>()
+        val provider = Provider(cache, A::class)
         provider.get(B::class)
 
-        verify(container, only()).get<B>()
+        verify(cache, only())[B::class]
     }
 }

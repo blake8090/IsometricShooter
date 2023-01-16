@@ -31,7 +31,7 @@ class App(
         container.get<EventService>().start()
         container.get<SystemService>().start()
 
-        val game = container.getProvider<Game>().get(gameClass)
+        val game = container.get(gameClass)
         container.get<Engine>().start(game)
     }
 
