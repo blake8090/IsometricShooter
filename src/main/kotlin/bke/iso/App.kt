@@ -4,8 +4,6 @@ import bke.iso.engine.Engine
 import bke.iso.service.ServiceContainer
 import bke.iso.service.container
 import bke.iso.engine.Game
-import bke.iso.engine.event.EventService
-import bke.iso.engine.system.SystemService
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
@@ -26,10 +24,6 @@ class App(
             inPackage("bke.iso.engine")
             inPackage("bke.iso.game")
         }
-
-        // TODO: have a Service interface with post init methods
-        container.get<EventService>().start()
-        container.get<SystemService>().start()
 
         val game = container.get(gameClass)
         container.get<Engine>().start(game)

@@ -4,6 +4,7 @@ import bke.iso.service.Provider
 import bke.iso.service.Singleton
 import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.state.StateService
+import bke.iso.service.PostInit
 
 @Singleton
 class EventService(
@@ -13,7 +14,8 @@ class EventService(
 
     private val baseEventHandlers = EventHandlerMap()
 
-    fun start() {
+    @PostInit
+    fun setup() {
         baseEventHandlers.add(provider.get(MovementHandler::class))
     }
 

@@ -4,13 +4,15 @@ import bke.iso.service.Provider
 import bke.iso.service.Singleton
 import bke.iso.engine.physics.PhysicsSystem
 import bke.iso.engine.state.State
+import bke.iso.service.PostInit
 
 @Singleton
 class SystemService(private val systemProvider: Provider<System>) {
 
     private val baseSystems = mutableListOf<System>()
 
-    fun start() {
+    @PostInit
+    fun setup() {
         baseSystems.add(systemProvider.get(PhysicsSystem::class))
     }
 

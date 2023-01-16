@@ -3,6 +3,7 @@ package bke.iso.service
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.cast
+import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.functions
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.primaryConstructor
@@ -34,6 +35,7 @@ internal class ServiceCache {
     fun initialize() {
         validate()
         records.values.forEach(this::initialize)
+        instances.values.forEach(this::callPostInit)
     }
 
     private fun validate() {
@@ -65,11 +67,7 @@ internal class ServiceCache {
         if (record.initialized) {
             return
         } else if (record.lifetime == Lifetime.SINGLETON) {
-            val serviceInstance = createServiceInstance(record)
-            // PostInit should be called in order of initialization - therefore, call the dependencies first
-            // TODO: add unit test to verify this behavior?
-            callPostInit(serviceInstance)
-            instances[record.implClass] = serviceInstance
+            instances[record.implClass] = createServiceInstance(record)
         }
         record.initialized = true
     }
@@ -87,8 +85,13 @@ internal class ServiceCache {
             }
         }
 
-        val constructor = record.implClass.primaryConstructor!!
-        val instance = constructor.call(*parameters.toTypedArray())
+        val instance =
+            if (parameters.isEmpty()) {
+                record.implClass.createInstance()
+            } else {
+                val constructor = record.implClass.primaryConstructor!!
+                constructor.call(*parameters.toTypedArray())
+            }
         return ServiceInstance(instance, serviceInstances)
     }
 
@@ -105,19 +108,20 @@ internal class ServiceCache {
         return getServiceInstance(dependencyRecord)
     }
 
-    private fun callPostInit(instance: ServiceInstance<*>) {
-        if (instance.postInitComplete || instance.instance::class == Provider::class) {
+    private fun callPostInit(serviceInstance: ServiceInstance<*>) {
+        val instance = serviceInstance.instance
+        if (serviceInstance.postInitComplete || instance::class == Provider::class) {
             return
         }
 
         // PostInit should be called in order of initialization - therefore, call the dependencies first
         // TODO: add unit test to verify this behavior?
-        instance.dependencies.forEach(this::callPostInit)
+        serviceInstance.dependencies.forEach(this::callPostInit)
         // TODO: validate that only one function has PostInit annotation?
         instance::class.functions
             .firstOrNull { func -> func.hasAnnotation<PostInit>() }
-            ?.call(instance.instance)
-        instance.postInitComplete = true
+            ?.call(instance)
+        serviceInstance.postInitComplete = true
     }
 }
 
