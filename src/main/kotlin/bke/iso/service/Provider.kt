@@ -1,9 +1,9 @@
 package bke.iso.service
 
+import bke.iso.service.cache.ServiceCache
 import kotlin.reflect.KClass
 
-// TODO: rename to ServiceProvider for consistency
-class Provider<T : Any> internal constructor(
+class Provider<T : Any>(
     private val cache: ServiceCache,
     private val baseClass: KClass<T>
 ) {

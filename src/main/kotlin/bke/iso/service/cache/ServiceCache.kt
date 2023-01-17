@@ -1,13 +1,21 @@
 package bke.iso.service.cache
 
-import bke.iso.service.*
-import bke.iso.service.Lifetime
-import kotlin.reflect.*
+import bke.iso.service.CircularDependencyException
+import bke.iso.service.MissingAnnotationsException
+import bke.iso.service.NoServiceFoundException
+import bke.iso.service.Provider
+import bke.iso.service.Singleton
+import bke.iso.service.Transient
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.KType
+import kotlin.reflect.cast
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.jvmErasure
 
-class Cache {
+// TODO: rename to container, fix up API
+class ServiceCache {
 
     private val records = mutableMapOf<KClass<*>, Record<*>>()
 
@@ -16,6 +24,8 @@ class Cache {
             createRecord(kClass, mutableSetOf())
         }
         records.values.forEach(Record<*>::init)
+        // TODO: add unit test capturing why we need this
+        records.values.forEach(Record<*>::postInit)
     }
 
     operator fun <T : Any> get(kClass: KClass<T>): T {
@@ -61,7 +71,7 @@ class Cache {
 
     private fun createDependency(kType: KType, chain: MutableSet<KClass<*>>): Dependency<*> {
         val kClass = kType.jvmErasure
-        return if (kClass == NewProvider::class) {
+        return if (kClass == Provider::class) {
             val typeParameter = kType.arguments.first().type!!
             ProviderDependency(this, typeParameter.jvmErasure)
         } else {

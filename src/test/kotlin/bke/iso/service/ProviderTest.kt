@@ -1,7 +1,10 @@
 package bke.iso.service
 
+import bke.iso.service.cache.ServiceCache
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.only
+import org.mockito.Mockito.verify
 
 internal class ProviderTest {
     @Test

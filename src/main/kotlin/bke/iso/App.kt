@@ -1,40 +1,41 @@
 package bke.iso
 
 import bke.iso.engine.Engine
-import bke.iso.service.ServiceContainer
-import bke.iso.service.container
 import bke.iso.engine.Game
+import bke.iso.service.Singleton
+import bke.iso.service.Transient
+import bke.iso.service.cache.ServiceCache
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import ktx.async.KtxAsync
+import org.reflections.Reflections
 import kotlin.reflect.KClass
 
 class App(
     private val title: String,
     private val gameClass: KClass<out Game>
 ) : ApplicationAdapter() {
-    private lateinit var container: ServiceContainer
+    private lateinit var cache: ServiceCache
+    private lateinit var engine: Engine
 
     override fun create() {
         KtxAsync.initiate()
 
         // create container here since LibGdx is now initialized
-        container = container {
-            inPackage("bke.iso.engine")
-            inPackage("bke.iso.game")
-        }
+        cache = createCache()
 
-        val game = container.get(gameClass)
-        container.get<Engine>().start(game)
+        engine = cache[Engine::class]
+        val game = cache[gameClass]
+        engine.start(game)
     }
 
     override fun dispose() {
-        container.get<Engine>().stop()
+        engine.stop()
     }
 
     override fun render() {
-        container.get<Engine>().update(Gdx.graphics.deltaTime)
+        engine.update(Gdx.graphics.deltaTime)
     }
 
     fun buildConfig(): Lwjgl3ApplicationConfiguration =
@@ -44,4 +45,30 @@ class App(
             // TODO: load this from application config
             setWindowedMode(1920, 1080)
         }
+
+    private fun createCache(): ServiceCache {
+        val services = mutableSetOf<KClass<*>>()
+        services.addAll(findServices("bke.iso.engine"))
+        services.addAll(findServices("bke.iso.game"))
+        
+        val cache = ServiceCache()
+        cache.init(services)
+        return cache
+    }
+
+    private fun findServices(classPath: String): Set<KClass<*>> {
+        val services = mutableSetOf<KClass<*>>()
+
+        Reflections(classPath)
+            .getTypesAnnotatedWith(Singleton::class.java)
+            .map(Class<*>::kotlin)
+            .forEach(services::add)
+
+        Reflections(classPath)
+            .getTypesAnnotatedWith(Transient::class.java)
+            .map(Class<*>::kotlin)
+            .forEach(services::add)
+
+        return services
+    }
 }

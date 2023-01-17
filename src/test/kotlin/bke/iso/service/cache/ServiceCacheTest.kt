@@ -1,6 +1,10 @@
 package bke.iso.service.cache
 
-import bke.iso.service.*
+import bke.iso.service.CircularDependencyException
+import bke.iso.service.PostInit
+import bke.iso.service.Provider
+import bke.iso.service.Singleton
+import bke.iso.service.Transient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -8,7 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-internal class CacheTest {
+internal class ServiceCacheTest {
 
     @Test
     @Suppress("UNUSED_PARAMETER")
@@ -23,7 +27,7 @@ internal class CacheTest {
         class C(b: B)
 
         assertDoesNotThrow {
-            val cache = Cache()
+            val cache = ServiceCache()
             cache.init(setOf(A::class, C::class, B::class))
         }
     }
@@ -33,7 +37,7 @@ internal class CacheTest {
         @Transient
         class Service
 
-        val cache = Cache()
+        val cache = ServiceCache()
         cache.init(setOf(Service::class))
         val service = cache[Service::class]
         val service2 = cache[Service::class]
@@ -45,7 +49,7 @@ internal class CacheTest {
         @Singleton
         class Service
 
-        val cache = Cache()
+        val cache = ServiceCache()
         cache.init(setOf(Service::class))
         val service = cache[Service::class]
         val service2 = cache[Service::class]
@@ -63,7 +67,7 @@ internal class CacheTest {
         @Transient
         class AnotherTransientService(val singletonService: SingletonService)
 
-        val cache = Cache()
+        val cache = ServiceCache()
         cache.init(setOf(SingletonService::class, TransientService::class, AnotherTransientService::class))
         val service = cache[TransientService::class]
         val service2 = cache[AnotherTransientService::class]
@@ -81,7 +85,7 @@ internal class CacheTest {
         @Singleton
         class AnotherSingletonService(val transientService: TransientService)
 
-        val cache = Cache()
+        val cache = ServiceCache()
         cache.init(
             setOf(
                 SingletonService::class,
@@ -103,12 +107,12 @@ internal class CacheTest {
         }
 
         @Singleton
-        class B(private val provider: NewProvider<A>) {
+        class B(private val provider: Provider<A>) {
             fun getValue() =
                 provider.get().value
         }
 
-        val cache = Cache()
+        val cache = ServiceCache()
         cache.init(setOf(B::class, A::class))
 
         val service = cache[B::class]
@@ -131,7 +135,7 @@ internal class CacheTest {
         @Test
         fun `Given list of classes with circular dependency, When create container, Then throw exception`() {
             val error = assertThrows<CircularDependencyException> {
-                val cache = Cache()
+                val cache = ServiceCache()
                 cache.init(setOf(A::class, B::class, C::class))
             }
             assertThat(error.message).isEqualTo("Found circular dependency: A -> B -> C -> A")
@@ -153,7 +157,7 @@ internal class CacheTest {
         class D(a: A)
 
         init {
-            val cache = Cache()
+            val cache = ServiceCache()
             cache.init(setOf(A::class, B::class, C::class, D::class))
         }
     }
@@ -184,7 +188,7 @@ internal class CacheTest {
         class E(c: C)
 
         init {
-            val cache = Cache()
+            val cache = ServiceCache()
             cache.init(setOf(A::class, B::class, C::class, D::class, E::class))
         }
     }
@@ -209,7 +213,7 @@ internal class CacheTest {
             }
         }
 
-        val cache = Cache()
+        val cache = ServiceCache()
         cache.init(setOf(Service::class))
 
         val service = cache[Service::class]
@@ -219,7 +223,7 @@ internal class CacheTest {
     @Suppress("UNUSED_PARAMETER")
     class CircularProviderDependency {
         @Singleton
-        class A(private val provider: NewProvider<B>) {
+        class A(private val provider: Provider<B>) {
             @PostInit
             fun setup() {
                 provider.get()
@@ -230,7 +234,7 @@ internal class CacheTest {
         class B(a: A)
 
         init {
-            val cache = Cache()
+            val cache = ServiceCache()
             cache.init(setOf(B::class, A::class))
         }
     }

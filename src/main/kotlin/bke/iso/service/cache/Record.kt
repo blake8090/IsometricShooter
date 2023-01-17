@@ -1,11 +1,15 @@
 package bke.iso.service.cache
 
-import bke.iso.service.Lifetime
 import bke.iso.service.MissingInstanceException
 import bke.iso.service.ServiceCreationException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.primaryConstructor
+
+internal enum class Lifetime {
+    SINGLETON,
+    TRANSIENT
+}
 
 internal data class Record<T : Any>(
     val kClass: KClass<T>,
@@ -18,8 +22,11 @@ internal data class Record<T : Any>(
     fun init() {
         if (lifetime == Lifetime.SINGLETON) {
             instance = createInstance()
-            instance!!.callPostInit()
         }
+    }
+
+    fun postInit() {
+        instance?.callPostInit()
     }
 
     fun getInstance(): Instance<out T> =
