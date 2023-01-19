@@ -20,11 +20,8 @@ class ServiceCache {
     private val records = mutableMapOf<KClass<*>, Record<*>>()
 
     fun init(classes: Set<KClass<*>>) {
-        for (kClass in classes) {
-            createRecord(kClass, mutableSetOf())
-        }
+        classes.forEach { kClass -> createRecord(kClass, mutableSetOf()) }
         records.values.forEach(Record<*>::init)
-        // TODO: add unit test capturing why we need this
         records.values.forEach(Record<*>::postInit)
     }
 
@@ -45,15 +42,11 @@ class ServiceCache {
             return records[kClass]!!
         }
 
-        val dependencyTypes = kClass.primaryConstructor!!
+        val dependencies = kClass.primaryConstructor!!
             .parameters
-            .filter { kParameter -> kParameter.kind == KParameter.Kind.VALUE }
-            .map { kParameter -> kParameter.type }
-
-        val dependencies = mutableSetOf<Dependency<*>>()
-        for (kType in dependencyTypes) {
-            dependencies.add(createDependency(kType, chain))
-        }
+            .filter { param -> param.kind == KParameter.Kind.VALUE }
+            .map { param -> createDependency(param.type, chain) }
+            .toSet()
 
         val record = Record(kClass, getLifetime(kClass), dependencies)
         records[kClass] = record
@@ -76,7 +69,7 @@ class ServiceCache {
             ProviderDependency(this, typeParameter.jvmErasure)
         } else {
             val subChain = chain.toMutableSet()
-            RecordDependency(createRecord(kClass, subChain))
+            ServiceDependency(createRecord(kClass, subChain))
         }
     }
 }

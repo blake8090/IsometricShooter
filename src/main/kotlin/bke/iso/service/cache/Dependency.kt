@@ -3,11 +3,11 @@ package bke.iso.service.cache
 import bke.iso.service.Provider
 import kotlin.reflect.KClass
 
-internal interface Dependency<Any> {
+internal sealed interface Dependency<Any> {
     fun getInstance(): Any
 }
 
-internal class RecordDependency<T : Any>(private val record: Record<T>) : Dependency<T> {
+internal class ServiceDependency<T : Any>(private val record: Record<T>) : Dependency<T> {
 
     override fun getInstance(): T {
         return record.getInstance().value

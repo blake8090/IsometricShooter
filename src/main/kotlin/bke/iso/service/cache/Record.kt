@@ -32,15 +32,11 @@ internal data class Record<T : Any>(
     fun getInstance(): Instance<out T> =
         when (lifetime) {
             Lifetime.SINGLETON -> instance ?: throw MissingInstanceException(kClass, kClass)
-            Lifetime.TRANSIENT -> {
-                val instance = createInstance()
-                instance.callPostInit()
-                instance
-            }
+            Lifetime.TRANSIENT -> createInstance().apply { callPostInit() }
         }
 
     private fun createInstance(): Instance<out T> {
-        val params = dependencies.map { dependency -> dependency.getInstance() }
+        val params = dependencies.mapNotNull { dependency -> dependency.getInstance() }
         try {
             val value =
                 if (params.isEmpty()) {

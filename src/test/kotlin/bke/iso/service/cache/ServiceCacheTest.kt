@@ -240,7 +240,7 @@ internal class ServiceCacheTest {
     }
 
     @Test
-    fun givenCircularProviderDependency_whenPostInit_then() {
+    fun givenCircularProviderDependency_whenPostInit_thenDoNotThrowError() {
         assertDoesNotThrow {
             CircularProviderDependency()
         }
