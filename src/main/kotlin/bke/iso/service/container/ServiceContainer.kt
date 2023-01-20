@@ -1,0 +1,119 @@
+package bke.iso.service.container
+
+import bke.iso.service.CircularDependencyException
+import bke.iso.service.MissingAnnotationsException
+import bke.iso.service.MissingInstanceException
+import bke.iso.service.NoServiceFoundException
+import bke.iso.service.Provider
+import bke.iso.service.ServiceCreationException
+import bke.iso.service.Singleton
+import bke.iso.service.Transient
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.KType
+import kotlin.reflect.cast
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.jvm.jvmErasure
+
+class ServiceContainer {
+
+    private val records = mutableMapOf<KClass<*>, Record<*>>()
+    private val instances = mutableMapOf<KClass<*>, Instance<*>>()
+
+    fun init(classes: Set<KClass<*>>) {
+        classes.forEach { kClass -> createRecord(kClass, mutableSetOf()) }
+        records.values.forEach { record -> initRecord(record) }
+    }
+
+    fun <T : Any> get(kClass: KClass<T>): T {
+        val serviceInstance = resolveInstance(kClass)
+        serviceInstance.callPostInit()
+        return kClass.cast(serviceInstance.value)
+    }
+
+    inline fun <reified T : Any> get() =
+        get(T::class)
+
+    private fun getRecord(kClass: KClass<*>) =
+        records[kClass] ?: throw NoServiceFoundException(kClass)
+
+    private fun <T : Any> initRecord(record: Record<T>) {
+        if (record.lifetime == Lifetime.SINGLETON) {
+            instances[record.kClass] = createInstance(record)
+        }
+        record.initialized = true
+    }
+
+    private fun <T : Any> createRecord(kClass: KClass<T>, chain: MutableSet<KClass<*>>) {
+        if (!chain.add(kClass)) {
+            val names = chain.map { it.simpleName }.joinToString(" -> ")
+            val message = "Found circular dependency: $names -> ${kClass.simpleName}"
+            throw CircularDependencyException(message)
+        } else if (records.containsKey(kClass)) {
+            return
+        }
+
+        val dependencies = kClass.primaryConstructor!!
+            .parameters
+            .filter { param -> param.kind == KParameter.Kind.VALUE }
+            .map { param -> createDependency(param.type, chain) }
+
+        records[kClass] = Record(kClass, getLifetime(kClass), dependencies)
+    }
+
+    private fun getLifetime(kClass: KClass<*>): Lifetime =
+        if (kClass.hasAnnotation<Singleton>()) {
+            Lifetime.SINGLETON
+        } else if (kClass.hasAnnotation<Transient>()) {
+            Lifetime.TRANSIENT
+        } else {
+            throw MissingAnnotationsException("No annotations found for class ${kClass.simpleName}")
+        }
+
+    private fun createDependency(kType: KType, chain: MutableSet<KClass<*>>): () -> Instance<*> {
+        val kClass = kType.jvmErasure
+
+        if (kClass == Provider::class) {
+            val parameterizedClass = kType.arguments
+                .first()
+                .type!!
+                .jvmErasure
+            return { Instance(Provider(this, parameterizedClass), emptyList()) }
+        } else {
+            val subChain = chain.toMutableSet()
+            createRecord(kClass, subChain)
+            return { resolveInstance(kClass) }
+        }
+    }
+
+    private fun resolveInstance(kClass: KClass<*>): Instance<*> {
+        val record = getRecord(kClass)
+        return when (record.lifetime) {
+            Lifetime.SINGLETON -> instances[kClass] ?: throw MissingInstanceException(kClass, kClass)
+            Lifetime.TRANSIENT -> createInstance(record)
+        }
+    }
+
+    private fun <T : Any> createInstance(record: Record<T>): Instance<T> {
+        val kClass = record.kClass
+        val dependencies = record.dependencies.map { provider -> provider.invoke() }
+
+        try {
+            val params = dependencies
+                .map { instance -> instance.value }
+                .toTypedArray()
+
+            val instance = if (params.isEmpty()) {
+                kClass.createInstance()
+            } else {
+                kClass.primaryConstructor!!.call(*params)
+            }
+
+            return Instance(instance, dependencies)
+        } catch (e: Exception) {
+            throw ServiceCreationException("Error creating instance of service ${kClass.simpleName}:", e)
+        }
+    }
+}

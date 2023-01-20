@@ -4,7 +4,7 @@ import bke.iso.engine.Engine
 import bke.iso.engine.Game
 import bke.iso.service.Singleton
 import bke.iso.service.Transient
-import bke.iso.service.cache.ServiceCache
+import bke.iso.service.container.ServiceContainer
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
@@ -16,17 +16,18 @@ class App(
     private val title: String,
     private val gameClass: KClass<out Game>
 ) : ApplicationAdapter() {
-    private lateinit var cache: ServiceCache
+
+    private lateinit var container: ServiceContainer
     private lateinit var engine: Engine
 
     override fun create() {
         KtxAsync.initiate()
 
         // create container here since LibGdx is now initialized
-        cache = createCache()
+        container = createCache()
 
-        engine = cache[Engine::class]
-        val game = cache[gameClass]
+        engine = container.get()
+        val game = container.get(gameClass)
         engine.start(game)
     }
 
@@ -46,12 +47,12 @@ class App(
             setWindowedMode(1920, 1080)
         }
 
-    private fun createCache(): ServiceCache {
+    private fun createCache(): ServiceContainer {
         val services = mutableSetOf<KClass<*>>()
         services.addAll(findServices("bke.iso.engine"))
         services.addAll(findServices("bke.iso.game"))
-        
-        val cache = ServiceCache()
+
+        val cache = ServiceContainer()
         cache.init(services)
         return cache
     }

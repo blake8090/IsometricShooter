@@ -1,6 +1,6 @@
 package bke.iso.service
 
-import bke.iso.service.cache.ServiceCache
+import bke.iso.service.container.ServiceContainer
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.only
@@ -11,11 +11,11 @@ internal class ProviderTest {
     fun whenGet_thenCallGetBaseClass() {
         class A
 
-        val cache = mock<ServiceCache>()
+        val cache = mock<ServiceContainer>()
         val provider = Provider(cache, A::class)
         provider.get()
 
-        verify(cache, only())[A::class]
+        verify(cache, only()).get(A::class)
     }
 
     @Test
@@ -23,10 +23,10 @@ internal class ProviderTest {
         open class A
         class B : A()
 
-        val cache = mock<ServiceCache>()
+        val cache = mock<ServiceContainer>()
         val provider = Provider(cache, A::class)
         provider.get(B::class)
 
-        verify(cache, only())[B::class]
+        verify(cache, only()).get(B::class)
     }
 }
