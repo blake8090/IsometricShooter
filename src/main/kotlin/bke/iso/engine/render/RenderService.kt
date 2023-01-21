@@ -81,6 +81,11 @@ class RenderService(
         }
     }
 
+    fun dispose() {
+        batch.dispose()
+        shapeRenderer.dispose()
+    }
+
     private fun drawEntity(entity: Entity) {
         val sprite = entity.get<Sprite>() ?: return
         val pos = toScreen(entity.x, entity.y)

@@ -2,6 +2,8 @@ package bke.iso
 
 import bke.iso.engine.Engine
 import bke.iso.engine.Game
+import bke.iso.engine.asset.AssetService
+import bke.iso.engine.render.RenderService
 import bke.iso.service.Singleton
 import bke.iso.service.Transient
 import bke.iso.service.container.ServiceContainer
@@ -33,6 +35,8 @@ class App(
 
     override fun dispose() {
         engine.stop()
+        container.get<AssetService>().dispose()
+        container.get<RenderService>().dispose()
     }
 
     override fun render() {

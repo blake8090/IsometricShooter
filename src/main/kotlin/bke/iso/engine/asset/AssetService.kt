@@ -57,6 +57,14 @@ class AssetService(
         return cacheByModule[currentModule] ?: throw Error("module was not loaded")
     }
 
+    fun dispose() {
+        for ((module, cache) in cacheByModule) {
+            cache.dispose()
+            log.info("Disposed module '$module'")
+        }
+        cacheByModule.clear()
+    }
+
     fun loadModule(moduleName: String) {
         val path = Path(ASSETS_DIRECTORY, moduleName)
         if (path.notExists() || !path.isDirectory()) {

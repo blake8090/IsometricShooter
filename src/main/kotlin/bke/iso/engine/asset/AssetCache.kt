@@ -1,5 +1,7 @@
 package bke.iso.engine.asset
 
+import bke.iso.engine.log
+import com.badlogic.gdx.utils.Disposable
 import kotlin.reflect.KClass
 
 class AssetCache {
@@ -15,16 +17,16 @@ class AssetCache {
         assets[asset.name to kClass] = asset
     }
 
-    // TODO: https://trello.com/c/y3xqCRdG/27-dispose-everything-on-close
-//    fun dispose() {
-//        assets.values.forEach(this::dispose)
-//        assets.clear()
-//    }
-//
-//    private fun dispose(asset: Asset<*>) {
-//        val value = asset.value
-//        if (value is Disposable) {
-//            value.dispose()
-//        }
-//    }
+    fun dispose() {
+        assets.values.forEach(this::dispose)
+        assets.clear()
+    }
+
+    private fun dispose(asset: Asset<*>) {
+        val value = asset.value
+        if (value is Disposable) {
+            value.dispose()
+            log.info("Disposed asset - name: '${asset.name}', type: '${asset.value::class.simpleName}'")
+        }
+    }
 }
