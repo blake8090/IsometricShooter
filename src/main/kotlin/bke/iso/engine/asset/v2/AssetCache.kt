@@ -9,11 +9,21 @@ class AssetCache {
     fun <T : Any> get(name: String, kClass: KClass<T>): Asset<T>? =
         assets[name to kClass] as? Asset<T>
 
-    inline fun <reified T : Any> get(name: String): Asset<T>? =
-        get(name, T::class)
-
-    fun <T : Any> set(kClass: KClass<T>, asset: Asset<T>) {
+    fun <T : Any> add(asset: Asset<T>) {
+        val kClass = asset.value::class
         // TODO: notify if duplicate
         assets[asset.name to kClass] = asset
     }
+
+//    fun dispose() {
+//        assets.values.forEach(this::dispose)
+//        assets.clear()
+//    }
+//
+//    private fun dispose(asset: Asset<*>) {
+//        val value = asset.value
+//        if (value is Disposable) {
+//            value.dispose()
+//        }
+//    }
 }

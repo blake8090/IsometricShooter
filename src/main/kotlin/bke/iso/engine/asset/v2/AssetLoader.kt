@@ -1,10 +1,10 @@
 package bke.iso.engine.asset.v2
 
 import bke.iso.engine.FilePointer
+import kotlin.reflect.KClass
 
 interface AssetLoader<T : Any> {
-    fun load(file: FilePointer): Pair<String, T>
-}
+    fun assetType(): KClass<T>
 
-inline fun <reified T : Any> AssetLoader<T>.getType() =
-    T::class
+   fun load(file: FilePointer): Pair<String, T>
+}
