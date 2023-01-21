@@ -1,5 +1,6 @@
 package bke.iso.service.container
 
+import bke.iso.engine.log
 import bke.iso.service.CircularDependencyException
 import bke.iso.service.MissingAnnotationsException
 import bke.iso.service.MissingInstanceException
@@ -25,11 +26,11 @@ class ServiceContainer {
     fun init(classes: Set<KClass<*>>) {
         classes.forEach { kClass -> createRecord(kClass, mutableSetOf()) }
         records.values.forEach { record -> initRecord(record) }
+        instances.values.forEach(Instance<*>::callPostInit)
     }
 
     fun <T : Any> get(kClass: KClass<T>): T {
         val serviceInstance = resolveInstance(kClass)
-        serviceInstance.callPostInit()
         return kClass.cast(serviceInstance.value)
     }
 
@@ -60,7 +61,14 @@ class ServiceContainer {
             .filter { param -> param.kind == KParameter.Kind.VALUE }
             .map { param -> createDependency(param.type, chain) }
 
-        records[kClass] = Record(kClass, getLifetime(kClass), dependencies)
+        val lifetime = getLifetime(kClass)
+        val record = Record(kClass, lifetime, dependencies)
+        records[kClass] = record
+        log.debug(
+            "Created service record '${kClass.simpleName}'"
+                    + " with lifetime '$lifetime'"
+                    + " and '${dependencies.size}' dependencies"
+        )
     }
 
     private fun getLifetime(kClass: KClass<*>): Lifetime =
@@ -90,10 +98,13 @@ class ServiceContainer {
 
     private fun resolveInstance(kClass: KClass<*>): Instance<*> {
         val record = getRecord(kClass)
-        return when (record.lifetime) {
-            Lifetime.SINGLETON -> instances[kClass] ?: throw MissingInstanceException(kClass, kClass)
-            Lifetime.TRANSIENT -> createInstance(record)
-        }
+        val instance =
+            when (record.lifetime) {
+                Lifetime.SINGLETON -> instances[kClass] ?: throw MissingInstanceException(kClass, kClass)
+                Lifetime.TRANSIENT -> createInstance(record)
+            }
+        instance.callPostInit()
+        return instance
     }
 
     private fun <T : Any> createInstance(record: Record<T>): Instance<T> {

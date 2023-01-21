@@ -203,10 +203,34 @@ internal class ServiceContainerTest {
 
     @Suppress("UNUSED")
     @Test
-    fun whenInitialize_thenCallPostInit() {
+    fun givenSingletonService_whenInit_thenCallPostInit() {
         @Singleton
         class Service {
             var value = 5
+        }
+
+        @Singleton
+        class AnotherService(private val service: Service) {
+            @PostInit
+            fun setup() {
+                service.value = 2
+            }
+        }
+
+        val container = ServiceContainer()
+        container.init(setOf(Service::class, AnotherService::class))
+
+        val service = container.get<Service>()
+        assertThat(service.value).isEqualTo(2)
+    }
+
+    @Suppress("UNUSED")
+    @Test
+    fun givenTransientService_whenGet_thenCallPostInit() {
+        @Transient
+        class Service {
+            var value = 5
+                private set
 
             @PostInit
             fun setup() {
