@@ -1,7 +1,6 @@
 package bke.iso.engine.math
 
 import com.badlogic.gdx.math.*
-import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.sqrt
 
 const val TILE_WIDTH = 64
@@ -24,19 +23,6 @@ fun toScreen(x: Float, y: Float) =
 fun toScreen(vector2: Vector2) =
     toScreen(vector2.x, vector2.y)
 
-/**
- * Given a [Circle] defined in world units, returns a [Circle] defined in screen units.
- */
-fun toScreen(circle: Circle): Circle =
-    // TODO: should radius be converted as well?
-    Circle(
-        toScreen(circle.x, circle.y),
-        circle.radius
-    )
-
-// TODO: investigate using this approach instead:
-//  - return a Rectangle
-//  - add a method to convert a Rectangle to a Polygon
 /**
  * Converts a [Rectangle] defined in world units, to a [Polygon] with vertices defined in screen units.
  */
@@ -64,33 +50,3 @@ fun toWorld(pos: Vector2): Vector2 {
         mapY / 2
     )
 }
-
-fun Rectangle.getEdges() =
-    listOf(
-        // top
-        Segment(
-            Vector3(x, y + height, 0f),
-            Vector3(x + width, y + height, 0f)
-        ),
-
-        // bottom
-        Segment(
-            Vector3(x, y, 0f),
-            Vector3(x + width, y, 0f)
-        ),
-
-        // left
-        Segment(
-            Vector3(x, y, 0f),
-            Vector3(x, y + height, 0f)
-        ),
-
-        // right
-        Segment(
-            Vector3(x + width, y, 0f),
-            Vector3(x + width, y + height, 0f)
-        ),
-    )
-
-fun Vector3.toVector2() =
-    Vector2(x, y)
