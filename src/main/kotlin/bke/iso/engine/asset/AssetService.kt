@@ -3,68 +3,106 @@ package bke.iso.engine.asset
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
 import bke.iso.engine.log
+import bke.iso.service.PostInit
 import bke.iso.service.Provider
 import bke.iso.service.Singleton
+import kotlin.io.path.Path
+import kotlin.io.path.isDirectory
+import kotlin.io.path.notExists
+import kotlin.io.path.pathString
 import kotlin.reflect.KClass
-import kotlin.reflect.safeCast
 
-data class Asset<T>(
-    val name: String,
-    val asset: T
-)
-
-typealias AssetMap<T> = MutableMap<String, Asset<T>>
+private const val ASSETS_DIRECTORY = "assets"
 
 @Singleton
 class AssetService(
-    private val assetLoaderProvider: Provider<AssetLoader<*>>,
-    private val fileService: FileService
+    private val fileService: FileService,
+    private val provider: Provider<AssetLoader<*>>
 ) {
+
     private val loaderByExtension = mutableMapOf<String, AssetLoader<*>>()
-    private val cacheByType = mutableMapOf<KClass<*>, AssetMap<*>>()
 
-    init {
-        addLoader("png", TextureLoader::class)
-        addLoader("jpg", TextureLoader::class)
+    private val cacheByModule = mutableMapOf<String, AssetCache>()
+    private var currentModule: String? = null
+
+    @PostInit
+    fun setup() {
+        addLoader<TextureLoader>("png")
+        addLoader<TextureLoader>("jpg")
     }
 
-    fun <T : Any> addLoader(extension: String, loaderType: KClass<out AssetLoader<T>>) {
-        if (loaderByExtension.containsKey(extension)) {
-            throw IllegalArgumentException("duplicate extension")
+    fun <T : AssetLoader<*>> addLoader(extension: String, type: KClass<T>) {
+        val existingLoader = loaderByExtension[extension]
+        if (existingLoader != null) {
+            throw Error("Asset loader '${existingLoader::class.simpleName}' already defined for extension '$extension'")
         }
-        loaderByExtension[extension] = assetLoaderProvider.get(loaderType)
-        log.debug("added asset loader '${loaderType.simpleName}' for extension '$extension'")
+        loaderByExtension[extension] = provider.get(type)
     }
 
-    fun load(path: String) {
-        log.info("Loading assets from path: '${fileService.getCanonicalPath(path)}'")
+    inline fun <reified T : AssetLoader<*>> addLoader(extension: String) =
+        addLoader(extension, T::class)
 
-        val filesByExtension = fileService
-            .getFiles(path)
-            .groupBy(FilePointer::getExtension)
-
-        for ((extension, files) in filesByExtension) {
-            val loader = loaderByExtension[extension]
-            if (loader != null) {
-                log.info("Loading ${files.size} '.$extension' file(s) as type '${loader.getType().simpleName}'")
-                loadAssets(loader, files)
-            } else {
-                log.warn("No asset loader for file extension '.$extension' was defined, skipping ${files.size} file(s)")
-            }
-        }
-    }
-
-    private fun <T : Any> loadAssets(loader: AssetLoader<T>, files: List<FilePointer>) {
-        val cache = cacheByType.getOrPut(loader.getType()) { mutableMapOf() }
-        loader.load(files).forEach(cache::set)
-    }
-
-    fun <T : Any> get(name: String, type: KClass<T>): T? {
-        val cache = cacheByType.getOrPut(type) { mutableMapOf() }
-        val asset = cache[name] ?: return null
-        return type.safeCast(asset.asset)
-    }
+    fun <T : Any> get(name: String, kClass: KClass<T>): T? =
+        getCache()
+            .get(name, kClass)
+            ?.value
 
     inline fun <reified T : Any> get(name: String): T? =
         get(name, T::class)
+
+    private fun getCache(): AssetCache {
+        if (currentModule == null) {
+            throw Error("no module loaded")
+        }
+        return cacheByModule[currentModule] ?: throw Error("module was not loaded")
+    }
+
+    fun loadModule(moduleName: String) {
+        val path = Path(ASSETS_DIRECTORY, moduleName)
+        if (path.notExists() || !path.isDirectory()) {
+            throw Error("Module directory '$path' was not found")
+        }
+
+        val filesByExtension = fileService
+            .getFiles(path.pathString)
+            .groupBy(FilePointer::getExtension)
+        if (filesByExtension.isEmpty()) {
+            throw Error("No assets found in module '$path'")
+        }
+
+        // TODO: unload previously loaded module
+        cacheByModule[moduleName] = AssetCache()
+        currentModule = moduleName
+        filesByExtension.forEach(this::loadFiles)
+        log.info("Module '$moduleName' has been successfully loaded")
+    }
+
+    private fun loadFiles(extension: String, files: List<FilePointer>) {
+        val assetLoader = loaderByExtension[extension]
+        if (assetLoader == null) {
+            log.warn("No asset loader for file extension '.$extension' was defined, skipping ${files.size} file(s)")
+            return
+        }
+
+        val cache = cacheByModule[currentModule] ?: throw Error("Expected cache for module '$currentModule'")
+        val assets = files.map { file -> loadAsset(file, assetLoader) }
+        for (asset in assets) {
+            cache.add(asset)
+            log.info(
+                "Loaded asset - name: '${asset.name},"
+                        + " type: '${assetLoader.assetType().simpleName}',"
+                        + " path: '${asset.path}'"
+            )
+        }
+    }
+
+    private fun <T : Any> loadAsset(file: FilePointer, assetLoader: AssetLoader<T>): Asset<T> {
+        val (name, value) = assetLoader.load(file)
+        return Asset(
+            name,
+            file.getPath(),
+            file.getExtension(),
+            value
+        )
+    }
 }

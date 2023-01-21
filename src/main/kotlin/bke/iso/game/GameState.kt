@@ -36,6 +36,7 @@ class GameState(
 
     @PostInit
     fun setup() {
+        // TODO: add helper methods in State for adding systems and handlers
         systems.add(systemProvider.get(PlayerSystem::class))
         systems.add(systemProvider.get(BulletSystem::class))
         systems.add(systemProvider.get(TurretSystem::class))
@@ -47,11 +48,9 @@ class GameState(
     }
 
     override fun start() {
-        log.debug("on start")
-
-        assetService.load("assets")
+        // TODO: move this to a loading screen
+        assetService.loadModule("game")
         renderService.setCursor("cursor")
-
         bindInput()
         loadMap()
     }

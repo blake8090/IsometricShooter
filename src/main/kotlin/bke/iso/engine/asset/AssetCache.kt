@@ -1,4 +1,4 @@
-package bke.iso.engine.asset.v2
+package bke.iso.engine.asset
 
 import kotlin.reflect.KClass
 
@@ -15,6 +15,7 @@ class AssetCache {
         assets[asset.name to kClass] = asset
     }
 
+    // TODO: https://trello.com/c/y3xqCRdG/27-dispose-everything-on-close
 //    fun dispose() {
 //        assets.values.forEach(this::dispose)
 //        assets.clear()

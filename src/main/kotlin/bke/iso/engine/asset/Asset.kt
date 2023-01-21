@@ -1,4 +1,4 @@
-package bke.iso.engine.asset.v2
+package bke.iso.engine.asset
 
 data class Asset<T>(
     val name: String,
