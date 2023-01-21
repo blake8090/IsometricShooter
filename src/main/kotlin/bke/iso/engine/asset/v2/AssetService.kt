@@ -4,6 +4,7 @@ import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
 import bke.iso.engine.log
 import bke.iso.service.PostInit
+import bke.iso.service.Provider
 import bke.iso.service.Singleton
 import kotlin.io.path.Path
 import kotlin.io.path.isDirectory
@@ -14,7 +15,10 @@ import kotlin.reflect.KClass
 private const val ASSETS_DIRECTORY = "assets"
 
 @Singleton
-class AssetService2(private val fileService: FileService) {
+class AssetService2(
+    private val fileService: FileService,
+    private val provider: Provider<AssetLoader<*>>
+) {
 
     private val loaderByExtension = mutableMapOf<String, AssetLoader<*>>()
 
@@ -23,8 +27,21 @@ class AssetService2(private val fileService: FileService) {
 
     @PostInit
     fun setup() {
-//        loadModule("test")
+        addLoader<TextureLoader>("png")
+        addLoader<TextureLoader>("jpg")
+        loadModule("test")
     }
+
+    fun <T : AssetLoader<*>> addLoader(extension: String, type: KClass<T>) {
+        val existingLoader = loaderByExtension[extension]
+        if (existingLoader != null) {
+            throw Error("Asset loader '${existingLoader::class.simpleName}' already defined for extension '$extension'")
+        }
+        loaderByExtension[extension] = provider.get(type)
+    }
+
+    inline fun <reified T : AssetLoader<*>> addLoader(extension: String) =
+        addLoader(extension, T::class)
 
     fun <T : Any> get(name: String, kClass: KClass<T>): Asset<T>? =
         getCache().get(name, kClass)
@@ -68,9 +85,9 @@ class AssetService2(private val fileService: FileService) {
         for (asset in assets) {
             cache.add(asset)
             log.info(
-                "Loaded asset '${asset.name}"
-                        + " as type '${assetLoader.assetType().simpleName}'"
-                        + " from file '${asset.canonicalPath}'"
+                "Loaded asset - name: '${asset.name},"
+                        + " type: '${assetLoader.assetType().simpleName}',"
+                        + " path: '${asset.path}'"
             )
         }
     }
