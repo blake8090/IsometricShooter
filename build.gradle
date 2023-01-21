@@ -62,9 +62,12 @@ application {
     mainClass = "bke.iso.MainKt"
 }
 
-task start(type: JavaExec, dependsOn: test) {
+tasks.register('start', JavaExec) {
+    group "Application"
+    description "First run tests, then run application"
+    dependsOn test
     mainClass.set("bke.iso.MainKt")
-    classpath = sourceSets["main"].runtimeClasspath
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 task packageWindowsExe(type: PackageTask, dependsOn: build) {
