@@ -3,7 +3,7 @@ package bke.iso.engine.entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.service.Singleton
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 @Singleton

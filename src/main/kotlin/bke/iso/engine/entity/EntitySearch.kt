@@ -2,7 +2,7 @@ package bke.iso.engine.entity
 
 import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Rectangle
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 class EntitySearch(
