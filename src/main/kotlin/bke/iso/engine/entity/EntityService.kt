@@ -63,17 +63,11 @@ class EntityService {
     private fun onEntityDeleted(id: UUID) =
         deletedIds.add(id)
 
-    private fun onPositionChanged(id: UUID, x: Float, y: Float) {
-        val entity = get(id) ?: return
-        val currentLocation = Location(entity.x, entity.y)
-        val newLocation = Location(x, y)
-        if (newLocation != currentLocation) {
-            idsByLocation[currentLocation]?.remove(id)
-            log.trace("Moved entity '$id' from '$currentLocation' to '$newLocation'")
-        }
-        idsByLocation.getOrPut(newLocation) { mutableSetOf() }.add(id)
-    }
-
+    /**
+     * Used only by the [Entity] class to inform the [EntityService] on any changes,
+     * such as a component being added, position being changed, or entity being deleted.
+     * This allows the [EntityService] to keep all Entity records up to date.
+     */
     inner class Callback {
         fun <T : Component> componentAdded(id: UUID, type: KClass<T>) =
             onAddComponent(id, type)
@@ -84,8 +78,16 @@ class EntityService {
         fun entityDeleted(id: UUID) =
             onEntityDeleted(id)
 
-        fun positionChanged(id: UUID, x: Float, y: Float) {
-            onPositionChanged(id, x, y)
+        fun positionChanged(id: UUID, x: Float, y: Float, z: Float) {
+            // TODO: log if entity was not found
+            val entity = entityById[id] ?: return
+            val currentLocation = Location(entity.x, entity.y, entity.z)
+            val newLocation = Location(x, y, z)
+            if (newLocation != currentLocation) {
+                idsByLocation[currentLocation]?.remove(id)
+                log.trace("Moved entity '$id' from '$currentLocation' to '$newLocation'")
+            }
+            idsByLocation.getOrPut(newLocation) { mutableSetOf() }.add(id)
         }
     }
 }

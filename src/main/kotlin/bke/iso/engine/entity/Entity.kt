@@ -8,17 +8,24 @@ class Entity(
     val id: UUID,
     private val callback: EntityService.Callback
 ) {
+
     var name: String = ""
 
     var x: Float = 0f
         set(value) {
-            callback.positionChanged(id, value, y)
+            callback.positionChanged(id, value, y, z)
             field = value
         }
 
     var y: Float = 0f
         set(value) {
-            callback.positionChanged(id, x, value)
+            callback.positionChanged(id, x, value, z)
+            field = value
+        }
+
+    var z: Float = 0f
+        set(value) {
+            callback.positionChanged(id, x, y, value)
             field = value
         }
 
