@@ -10,6 +10,7 @@ import bke.iso.game.HealthBar
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Vector3
 
 @Transient
 class DrawHealthHandler(private val assetService: AssetService) : EventHandler<DrawEntityEvent> {
@@ -25,7 +26,9 @@ class DrawHealthHandler(private val assetService: AssetService) : EventHandler<D
 
         val batch = event.batch
         val pixel = assetService.get<Texture>("pixel") ?: return
-        val pos = toScreen(entity.x, entity.y).sub(healthBar.offsetX, healthBar.offsetY)
+        // TODO: add offsetZ to HealthBar
+        val offset = Vector3(healthBar.offsetX, healthBar.offsetY, 0f)
+        val pos = toScreen(entity.x, entity.y).sub(offset)
 
         batch.withColor(Color.RED) {
             batch.draw(pixel, pos.x, pos.y, healthBarWidth, healthBarHeight)

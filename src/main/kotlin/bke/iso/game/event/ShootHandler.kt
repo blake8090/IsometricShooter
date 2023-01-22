@@ -10,7 +10,7 @@ import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Sprite
 import bke.iso.game.Bullet
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 enum class BulletType {
     PLAYER,
@@ -19,7 +19,7 @@ enum class BulletType {
 
 data class ShootEvent(
     val shooter: Entity,
-    val target: Vector2,
+    val target: Vector3,
     val type: BulletType
 ) : Event()
 
@@ -34,8 +34,8 @@ class ShootHandler(private val entityService: EntityService) : EventHandler<Shoo
         val shooter = event.shooter
         val target = event.target
 
-        val pos = Vector2(shooter.x, shooter.y)
-        val direction = Vector2(target).sub(pos).nor()
+        val pos = Vector3(shooter.x, shooter.y, 0f)
+        val direction = Vector3(target).sub(pos).nor()
         val speed = when (event.type) {
             BulletType.PLAYER -> playerBulletSpeed
             BulletType.TURRET -> turretBulletSpeed

@@ -13,7 +13,7 @@ import bke.iso.engine.system.System
 import bke.iso.game.Player
 import bke.iso.game.event.BulletType
 import bke.iso.game.event.ShootEvent
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 @Transient
 class PlayerSystem(
@@ -31,8 +31,8 @@ class PlayerSystem(
             }
 
             inputService.onAction("shoot") {
-                val mousePos = renderService.unproject(inputService.getMousePos())
-                val target = toWorld(Vector2(mousePos.x, mousePos.y))
+                val mousePos = inputService.getMousePos()
+                val target = toWorld(renderService.unproject(Vector3(mousePos, 0f)))
                 eventService.fire(ShootEvent(entity, target, BulletType.PLAYER))
             }
         }

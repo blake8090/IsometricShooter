@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Polygon
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
 @Singleton
@@ -42,12 +41,12 @@ class RenderService(
         debugMode = !debugMode
     }
 
-    fun setCameraPos(pos: Vector2) {
+    fun setCameraPos(pos: Vector3) {
         camera.position.x = pos.x
         camera.position.y = pos.y
     }
 
-    fun unproject(pos: Vector2): Vector3 =
+    fun unproject(pos: Vector3): Vector3 =
         camera.unproject(Vector3(pos.x, pos.y, 0f))
 
     fun setCursor(textureName: String) {
@@ -93,18 +92,20 @@ class RenderService(
         eventService.fire(DrawEntityEvent(entity, batch))
     }
 
-    private fun drawSprite(sprite: Sprite, pos: Vector2) {
+    private fun drawSprite(sprite: Sprite, pos: Vector3) {
         val texture = assetService.get<Texture>(sprite.texture) ?: return
-        val offsetPos = Vector2(
+        val offsetPos = Vector3(
             pos.x - sprite.offsetX,
             pos.y - sprite.offsetY,
+            0f
         )
         batch.draw(texture, offsetPos.x, offsetPos.y)
     }
 
     private fun renderDebugMode() {
         tileService.forEachTile { location, _ ->
-            val markerPos = toScreen(location.toVector2())
+            // TODO: add a toScreen(Location) function
+            val markerPos = toScreen(location.toVector3())
             drawPoint(markerPos, 1f, Color.CYAN)
         }
 
@@ -146,7 +147,7 @@ class RenderService(
         }
     }
 
-    private fun drawPoint(pos: Vector2, size: Float, color: Color) {
+    private fun drawPoint(pos: Vector3, size: Float, color: Color) {
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
         shapeRenderer.circle(pos.x, pos.y, size)
@@ -160,14 +161,14 @@ class RenderService(
         shapeRenderer.end()
     }
 
-    private fun drawLine(start: Vector2, end: Vector2, color: Color) {
+    private fun drawLine(start: Vector3, end: Vector3, color: Color) {
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         shapeRenderer.line(start, end)
         shapeRenderer.end()
     }
 
-    private fun drawEllipse(pos: Vector2, width: Float, height: Float, color: Color) {
+    private fun drawEllipse(pos: Vector3, width: Float, height: Float, color: Color) {
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         shapeRenderer.ellipse(pos.x - (width/2), pos.y - (height/2), width, height)

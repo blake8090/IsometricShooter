@@ -9,6 +9,7 @@ import bke.iso.engine.math.toVector2
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.abs
 import kotlin.math.max
@@ -162,7 +163,7 @@ class CollisionService(private val entityService: EntityService) {
 
     fun checkSegmentCollisions(segment: Segment): List<SegmentCollision> {
         val collisions = mutableListOf<SegmentCollision>()
-        val rect = getSegmentRectangle(segment.a.toVector2(), segment.b.toVector2())
+        val rect = getSegmentRectangle(segment.a, segment.b)
         entityService.search
             .inArea(rect)
             .mapNotNull(this::findCollisionData)
@@ -182,7 +183,7 @@ class CollisionService(private val entityService: EntityService) {
         return collisions.sortedBy(SegmentCollision::distanceFromStart)
     }
 
-    private fun getSegmentRectangle(start: Vector2, end: Vector2): Rectangle {
+    private fun getSegmentRectangle(start: Vector3, end: Vector3): Rectangle {
         val min = Vector2(
             min(start.x, end.x),
             min(start.y, end.y)
@@ -199,8 +200,8 @@ class CollisionService(private val entityService: EntityService) {
         )
     }
 
-    fun findIntersectionPoints(segment: Segment, rectangle: Rectangle): List<Vector2> {
-        val points = mutableListOf<Vector2>()
+    fun findIntersectionPoints(segment: Segment, rectangle: Rectangle): List<Vector3> {
+        val points = mutableListOf<Vector3>()
         for (edge in rectangle.getEdges()) {
             val intersectionPoint = Vector2()
             val intersected = Intersector.intersectSegments(
@@ -211,7 +212,7 @@ class CollisionService(private val entityService: EntityService) {
                 intersectionPoint
             )
             if (intersected) {
-                points.add(intersectionPoint)
+                points.add(Vector3(intersectionPoint.x, intersectionPoint.y, 0f))
             }
         }
         return points

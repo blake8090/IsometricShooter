@@ -5,7 +5,7 @@ import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventService
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 @Transient
 class MovementHandler(
@@ -31,15 +31,16 @@ class MovementHandler(
         entity.y += delta.y
     }
 
-    private fun calculateDelta(event: MoveEvent): Vector2 {
-        val delta = Vector2(event.dx, event.dy).nor()
-        return Vector2(
+    private fun calculateDelta(event: MoveEvent): Vector3 {
+        val delta = Vector3(event.dx, event.dy, 0f).nor()
+        return Vector3(
             delta.x * event.speed * event.deltaTime,
-            delta.y * event.speed * event.deltaTime
+            delta.y * event.speed * event.deltaTime,
+            0f
         )
     }
 
-    private fun resolveCollision(entity: Entity, bounds: Bounds, collision: BoxCollision, delta: Vector2) {
+    private fun resolveCollision(entity: Entity, bounds: Bounds, collision: BoxCollision, delta: Vector3) {
         if (!collision.data.solid) {
             return
         }

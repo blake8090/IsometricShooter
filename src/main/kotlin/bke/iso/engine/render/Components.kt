@@ -3,7 +3,7 @@ package bke.iso.engine.render
 import bke.iso.engine.entity.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 
 data class Sprite(
     val texture: String,
@@ -24,8 +24,8 @@ data class DebugData(
 
 // TODO: when implementing z-levels, change this to use a Segment
 data class DebugLine(
-    val start: Vector2,
-    val end: Vector2,
+    val start: Vector3,
+    val end: Vector3,
     val width: Float,
     val color: Color
 ) : Component()
@@ -43,7 +43,7 @@ data class DebugCircle(
 ) : Component()
 
 data class DebugPoint(
-    val pos: Vector2,
+    val pos: Vector3,
     val size: Float,
     val color: Color
 )

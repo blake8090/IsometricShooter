@@ -4,6 +4,7 @@ import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
+import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.DebugCircle
 import bke.iso.engine.render.DebugData
@@ -16,7 +17,6 @@ import bke.iso.game.event.BulletType
 import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Circle
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.max
@@ -45,15 +45,16 @@ class TurretSystem(
         }
     }
 
-    private fun findTarget(turretEntity: Entity): Vector2? {
+    private fun findTarget(turretEntity: Entity): Vector3? {
         val playerEntity = entityService.getAll()
             .firstOrNull { entity -> entity.has<Player>() }
             ?: return null
 
-        val pos = Vector2(turretEntity.x, turretEntity.y)
-        val playerPos = Vector2(playerEntity.x, playerEntity.y)
+        val pos = Vector3(turretEntity.x, turretEntity.y, 0f)
+        val playerPos = Vector3(playerEntity.x, playerEntity.y, 0f)
 
-        if (!Circle(pos, visionRadius).contains(playerPos)) {
+        // TODO: use Sphere instead
+        if (!Circle(pos.toVector2(), visionRadius).contains(playerPos.toVector2())) {
             return null
         }
 
@@ -68,15 +69,15 @@ class TurretSystem(
         )
 
         val turretToPlayer = Segment(
-            Vector3(pos, 0f),
-            Vector3(playerPos, 0f)
+            pos,
+            playerPos
         )
         val collision = collisionService.checkSegmentCollisions(turretToPlayer)
             .firstOrNull { turretEntity != it.data.entity }
             ?: return null
 
         for (point in collisionService.findIntersectionPoints(turretToPlayer, collision.data.box)) {
-            debugData.points.add(DebugPoint(point, 2f, Color.YELLOW))
+            debugData.points.add(DebugPoint(Vector3(point), 2f, Color.YELLOW))
         }
 
         return if (playerEntity == collision.data.entity) {
