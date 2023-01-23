@@ -12,6 +12,7 @@ import bke.iso.game.Player
 import bke.iso.game.event.BulletType
 import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.math.Vector3
+import kotlin.math.max
 
 @Transient
 class PlayerSystem(
@@ -20,6 +21,11 @@ class PlayerSystem(
     private val eventService: EventService,
     private val renderService: RenderService
 ) : System {
+
+    private val walkSpeed = 5f
+    private val runSpeed = 10f
+    private val flySpeed = 3f
+
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Player::class) { entity, _ ->
             updatePlayerEntity(entity, deltaTime)
@@ -49,5 +55,11 @@ class PlayerSystem(
             eventService.fire(MoveEvent(entity, dx, dy, speed, deltaTime))
         }
         renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
+
+        val dz = inputService.poll("flyUp", "flyDown")
+        if (dz != 0f) {
+            val newZ = entity.z + (dz * flySpeed * deltaTime)
+            entity.z = max(newZ, 0f)
+        }
     }
 }

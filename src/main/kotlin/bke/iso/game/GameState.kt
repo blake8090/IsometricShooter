@@ -64,6 +64,9 @@ class GameState(
         inputService.bind("moveDown", KeyBinding(Input.Keys.S, InputState.DOWN, true))
         inputService.bind("run", KeyBinding(Input.Keys.SHIFT_LEFT, InputState.DOWN))
         inputService.bind("shoot", MouseBinding(Input.Buttons.LEFT, InputState.PRESSED))
+
+        inputService.bind("flyUp", KeyBinding(Input.Keys.E, InputState.DOWN))
+        inputService.bind("flyDown", KeyBinding(Input.Keys.Q, InputState.DOWN, true))
     }
 
     private fun loadMap() {
