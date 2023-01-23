@@ -11,7 +11,7 @@ data class Bullet(
     val startPos: Vector3
 ) : Component()
 
-class Turret() : Component() {
+class Turret : Component() {
     var coolDownTime: Float = 0f
 }
 
@@ -24,3 +24,5 @@ data class HealthBar(
     val offsetX: Float,
     val offsetY: Float
 ) : Component()
+
+data class BouncyBall(var velocityZ: Float = 0f) : Component()

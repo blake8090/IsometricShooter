@@ -39,8 +39,10 @@ class EntityService {
      */
     fun getAll(): List<Entity> =
         idsByLocation
-            .flatMap { (_, ids) -> ids }
-            .mapNotNull(this::get)
+            .flatMap { (_, ids) ->
+                ids.mapNotNull(this::get)
+                    .sortedWith(compareByDescending(Entity::y))
+            }
 
     fun update() {
         deletedIds.forEach(this::delete)

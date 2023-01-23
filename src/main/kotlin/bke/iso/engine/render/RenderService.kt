@@ -58,9 +58,11 @@ class RenderService(
 
     fun setCursor(textureName: String) {
         val texture = assetService.get<Texture>(textureName) ?: return
+        val xHotspot = texture.width / 2
+        val yHotspot = texture.height / 2
         texture.textureData.prepare()
         val pixmap = texture.textureData.consumePixmap()
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, 0, 0))
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot))
         pixmap.dispose()
     }
 
@@ -94,12 +96,10 @@ class RenderService(
 
     private fun drawEntity(entity: Entity) {
         val sprite = entity.get<Sprite>() ?: return
-        drawSprite(sprite, Vector3(entity.x, entity.y, entity.z))
-
         if (entity.z > 0f) {
             drawSprite(shadowSprite, Vector3(entity.x, entity.y, 0f))
         }
-
+        drawSprite(sprite, Vector3(entity.x, entity.y, entity.z))
         eventService.fire(DrawEntityEvent(entity, batch))
     }
 

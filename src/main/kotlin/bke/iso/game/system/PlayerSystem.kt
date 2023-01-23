@@ -8,6 +8,7 @@ import bke.iso.engine.input.InputService
 import bke.iso.engine.physics.MoveEvent
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.system.System
+import bke.iso.game.EntityFactory
 import bke.iso.game.Player
 import bke.iso.game.event.BulletType
 import bke.iso.game.event.ShootEvent
@@ -19,7 +20,8 @@ class PlayerSystem(
     private val entityService: EntityService,
     private val inputService: InputService,
     private val eventService: EventService,
-    private val renderService: RenderService
+    private val renderService: RenderService,
+    private val entityFactory: EntityFactory
 ) : System {
 
     private val walkSpeed = 5f
@@ -38,6 +40,12 @@ class PlayerSystem(
                 val mousePos = inputService.getMousePos()
                 val target = renderService.unproject(mousePos)
                 eventService.fire(ShootEvent(entity, target, BulletType.PLAYER))
+            }
+
+            inputService.onAction("placeBouncyBall") {
+                val mousePos = inputService.getMousePos()
+                val target = renderService.unproject(mousePos)
+                entityFactory.createBouncyBall(target.x, target.y)
             }
         }
     }

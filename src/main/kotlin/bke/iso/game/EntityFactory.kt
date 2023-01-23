@@ -54,4 +54,11 @@ class EntityFactory(private val entityService: EntityService) {
                 Health(5f),
                 HealthBar(18f, -64f)
             )
+
+    fun createBouncyBall(x: Float, y: Float) =
+        entityService.create(x, y)
+            .add(
+                Sprite("circle", 16f, 0f),
+                BouncyBall()
+            )
 }

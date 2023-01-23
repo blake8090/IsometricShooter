@@ -17,6 +17,7 @@ import bke.iso.game.event.BulletCollisionHandler
 import bke.iso.game.event.DamageHandler
 import bke.iso.game.event.DrawHealthHandler
 import bke.iso.game.event.ShootHandler
+import bke.iso.game.system.BouncyBallSystem
 import bke.iso.game.system.BulletSystem
 import bke.iso.game.system.PlayerSystem
 import bke.iso.game.system.TurretSystem
@@ -40,6 +41,7 @@ class GameState(
         systems.add(systemProvider.get(PlayerSystem::class))
         systems.add(systemProvider.get(BulletSystem::class))
         systems.add(systemProvider.get(TurretSystem::class))
+        systems.add(systemProvider.get(BouncyBallSystem::class))
 
         eventHandlers.add(handlerProvider.get(ShootHandler::class))
         eventHandlers.add(handlerProvider.get(DamageHandler::class))
@@ -67,6 +69,8 @@ class GameState(
 
         inputService.bind("flyUp", KeyBinding(Input.Keys.E, InputState.DOWN))
         inputService.bind("flyDown", KeyBinding(Input.Keys.Q, InputState.DOWN, true))
+
+        inputService.bind("placeBouncyBall", KeyBinding(Input.Keys.Z, InputState.PRESSED))
     }
 
     private fun loadMap() {
