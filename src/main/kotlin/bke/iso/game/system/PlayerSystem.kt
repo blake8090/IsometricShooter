@@ -45,7 +45,7 @@ class PlayerSystem(
             inputService.onAction("placeBouncyBall") {
                 val mousePos = inputService.getMousePos()
                 val target = renderService.unproject(mousePos)
-                entityFactory.createBouncyBall(target.x, target.y)
+                entityFactory.createBouncyBall(target.x, target.y, 0f)
             }
         }
     }

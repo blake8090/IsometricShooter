@@ -19,17 +19,18 @@ class EntityService {
 
     val search = EntitySearch(entityById, idsByComponent, idsByLocation)
 
-    fun create(x: Float = 0f, y: Float = 0f): Entity {
+    fun create(x: Float = 0f, y: Float = 0f, z: Float = 0f): Entity {
         val id = UUID.randomUUID()
         val entity = Entity(id, Callback())
         entityById[id] = entity
         entity.x = x
         entity.y = y
+        entity.z = z
         return entity
     }
 
     fun create(location: Location) =
-        create(location.x.toFloat(), location.y.toFloat())
+        create(location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
 
     fun get(id: UUID): Entity? =
         entityById[id]

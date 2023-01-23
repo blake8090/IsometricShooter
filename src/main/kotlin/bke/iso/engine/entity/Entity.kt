@@ -34,11 +34,12 @@ class Entity(
 
     private val components = mutableMapOf<KClass<out Component>, Component>()
 
-    fun <T : Component> add(vararg components: T) {
+    fun <T : Component> add(vararg components: T): Entity {
         for (component in components) {
             this.components[component::class] = component
             callback.componentAdded(id, component::class)
         }
+        return this
     }
 
     fun <T : Component> get(type: KClass<T>): T? =

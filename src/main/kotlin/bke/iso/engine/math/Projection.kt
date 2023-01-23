@@ -20,7 +20,7 @@ fun getIsometricRatio() =
 fun toScreen(x: Float, y: Float, z: Float) =
     Vector2(
         (x + y) * HALF_TILE_WIDTH,
-        (y - x) * HALF_TILE_HEIGHT + (z * TILE_HEIGHT)
+        (y - x) * HALF_TILE_HEIGHT + (z * 64)
     )
 
 fun toScreen(x: Float, y: Float) =

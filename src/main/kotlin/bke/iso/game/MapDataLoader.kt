@@ -16,22 +16,39 @@ data class MapData(
 )
 
 @Transient
-class MapLoader : AssetLoader<MapData> {
+class MapDataLoader : AssetLoader<MapData> {
     private val floorSprite = Sprite("floor", 0f, 16f)
 
     override fun assetType() = MapData::class
 
     override fun load(file: FilePointer): Pair<String, MapData> {
-        val rows = file.readText()
-            .lines()
-            .map(String::toList)
-            .filter { chars -> chars.isNotEmpty() }
-            .reversed()
+        val layers = mutableListOf<Layer>()
+        var currentLayer = Layer()
+        for (line in file.readText().lines()) {
+            when (line) {
+                "LAYER" -> currentLayer = Layer()
+
+                "END" -> {
+                    if (currentLayer.rows.isNotEmpty()) {
+                        layers.add(currentLayer)
+                    }
+                }
+
+                else -> {
+                    val chars = line.toList()
+                    if (chars.isNotEmpty()) {
+                        currentLayer.rows.add(chars)
+                    }
+                }
+            }
+        }
 
         val mapData = MapData()
-        for ((y, row) in rows.withIndex()) {
-            for ((x, char) in row.withIndex()) {
-                loadMapData(mapData, char, Location(x, y))
+        for ((z, layer) in layers.withIndex()) {
+            for ((y, row) in layer.rows.reversed().withIndex()) {
+                for ((x, char) in row.withIndex()) {
+                    loadMapData(mapData, char, Location(x, y, z))
+                }
             }
         }
 
@@ -47,4 +64,8 @@ class MapLoader : AssetLoader<MapData> {
             'p' -> mapData.players.add(location)
         }
     }
+}
+
+private class Layer {
+    val rows = mutableListOf<List<Char>>()
 }

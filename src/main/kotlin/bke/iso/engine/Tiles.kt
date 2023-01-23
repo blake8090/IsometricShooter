@@ -12,6 +12,7 @@ class TileService {
         .toSortedMap(
             compareByDescending(Location::y)
                 .thenBy(Location::x)
+                .thenByDescending(Location::z)
         )
 
     fun setTile(tile: Tile, location: Location) {

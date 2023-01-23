@@ -1,7 +1,9 @@
 package bke.iso.game
 
+import bke.iso.engine.entity.Entity
 import bke.iso.service.Singleton
 import bke.iso.engine.entity.EntityService
+import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.Sprite
@@ -9,8 +11,8 @@ import bke.iso.engine.render.Sprite
 @Singleton
 class EntityFactory(private val entityService: EntityService) {
 
-    fun createWall(x: Float, y: Float) =
-        entityService.create(x, y)
+    fun createWall(location: Location): Entity =
+        entityService.create(location)
             .add(
                 Sprite("wall3", 0f, 16f),
                 Collision(
@@ -19,8 +21,8 @@ class EntityFactory(private val entityService: EntityService) {
                 )
             )
 
-    fun createBox(x: Float, y: Float) =
-        entityService.create(x, y)
+    fun createBox(location: Location) =
+        entityService.create(location)
             .add(
                 Sprite("box", 16f, 8f),
                 Collision(
@@ -29,8 +31,8 @@ class EntityFactory(private val entityService: EntityService) {
                 )
             )
 
-    fun createTurret(x: Float, y: Float) =
-        entityService.create(x, y)
+    fun createTurret(location: Location) =
+        entityService.create(location)
             .add(
                 Sprite("turret", 16f, 0f),
                 Turret(),
@@ -42,8 +44,8 @@ class EntityFactory(private val entityService: EntityService) {
                 HealthBar(16f, -36f)
             )
 
-    fun createPlayer(x: Float, y: Float) =
-        entityService.create(x, y)
+    fun createPlayer(location: Location) =
+        entityService.create(location)
             .add(
                 Sprite("player", 32f, 0f),
                 Player(),
@@ -55,8 +57,8 @@ class EntityFactory(private val entityService: EntityService) {
                 HealthBar(18f, -64f)
             )
 
-    fun createBouncyBall(x: Float, y: Float) =
-        entityService.create(x, y)
+    fun createBouncyBall(x: Float, y: Float, z: Float) =
+        entityService.create(x, y, z)
             .add(
                 Sprite("circle", 16f, 0f),
                 BouncyBall()

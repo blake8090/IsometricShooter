@@ -9,7 +9,7 @@ class IsometricShooter(private val assetService: AssetService) : Game {
     override val initialState = GameState::class
 
     override fun setup() {
-        assetService.addLoader<MapLoader>("map")
+        assetService.addLoader<MapDataLoader>("map")
         // TODO: maybe load very first module here, for example "menu"
     }
 }

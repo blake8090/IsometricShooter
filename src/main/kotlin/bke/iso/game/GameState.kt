@@ -10,6 +10,7 @@ import bke.iso.engine.input.InputService
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.State
 import bke.iso.engine.system.System
@@ -54,7 +55,7 @@ class GameState(
         assetService.loadModule("game")
         renderService.setCursor("cursor")
         bindInput()
-        loadMap()
+        loadMap("zlevel_test")
     }
 
     private fun bindInput() {
@@ -73,28 +74,31 @@ class GameState(
         inputService.bind("placeBouncyBall", KeyBinding(Input.Keys.Z, InputState.PRESSED))
     }
 
-    private fun loadMap() {
-        val mapData = assetService.get<MapData>("test")
-            ?: throw IllegalArgumentException("expected map asset")
+    private fun loadMap(mapName: String) {
+        val mapData = assetService.get<MapData>(mapName)
+            ?: throw IllegalArgumentException("expected map asset '$mapName'")
 
         mapData.tiles.forEach { (location, tile) ->
             tileService.setTile(tile, location)
         }
 
         mapData.walls.forEach { location ->
-            entityFactory.createWall(location.x.toFloat(), location.y.toFloat())
+            val wall = entityFactory.createWall(location)
+            if (location.z > 0) {
+                wall.remove<Collision>()
+            }
         }
 
         mapData.boxes.forEach { location ->
-            entityFactory.createBox(location.x.toFloat(), location.y.toFloat())
+            entityFactory.createBox(location)
         }
 
         mapData.turrets.forEach { location ->
-            entityFactory.createTurret(location.x.toFloat(), location.y.toFloat())
+            entityFactory.createTurret(location)
         }
 
         mapData.players.forEach { location ->
-            entityFactory.createPlayer(location.x.toFloat(), location.y.toFloat())
+            entityFactory.createPlayer(location)
         }
     }
 }

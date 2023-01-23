@@ -27,7 +27,7 @@ class EntitySearch(
     }
 
     fun atLocation(x: Int, y: Int): List<Entity> =
-        idsByLocation[Location(x, y)]
+        idsByLocation[Location(x, y, 0)]
             ?.mapNotNull(entityById::get)
             ?: emptyList()
 
