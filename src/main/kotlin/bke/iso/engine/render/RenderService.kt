@@ -120,6 +120,13 @@ class RenderService(
             drawCollisionBoxes(entity)
             drawDebugData(entity)
             entity.remove<DebugData>()
+
+            if (entity.z != 0f) {
+                val start = Vector3(entity.x, entity.y, entity.z)
+                val end = Vector3(entity.x, entity.y, 0f)
+                drawPoint(end, 2f, Color.RED)
+                drawLine(start, end, Color.PURPLE)
+            }
         }
     }
 
