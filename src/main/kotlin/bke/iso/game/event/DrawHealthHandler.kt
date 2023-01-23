@@ -27,7 +27,7 @@ class DrawHealthHandler(private val assetService: AssetService) : EventHandler<D
         val batch = event.batch
         val pixel = assetService.get<Texture>("pixel") ?: return
         val offset = Vector2(healthBar.offsetX, healthBar.offsetY)
-        val pos = toScreen(entity.x, entity.y).sub(offset)
+        val pos = toScreen(entity.x, entity.y, entity.z).sub(offset)
 
         batch.withColor(Color.RED) {
             batch.draw(pixel, pos.x, pos.y, healthBarWidth, healthBarHeight)

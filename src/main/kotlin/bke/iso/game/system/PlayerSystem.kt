@@ -48,9 +48,9 @@ class PlayerSystem(
         if (dx != 0f || dy != 0f) {
             val speed =
                 if (inputService.poll("run") != 0f) {
-                    20f
+                    runSpeed
                 } else {
-                    10f
+                    walkSpeed
                 }
             eventService.fire(MoveEvent(entity, dx, dy, speed, deltaTime))
         }

@@ -39,16 +39,16 @@ class RenderService(
 
     private var debugMode = false
 
+    private val shadowSprite = Sprite("shadow", 16f, 16f)
+
     fun toggleDebugMode() {
         debugMode = !debugMode
     }
 
-    // todo: how does the z-axis affect the camera?
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
         camera.position.x = pos.x
         camera.position.y = pos.y
-//        camera.position.z = pos.z
     }
 
     fun unproject(screenCoords: Vector2): Vector3 {
@@ -95,6 +95,11 @@ class RenderService(
     private fun drawEntity(entity: Entity) {
         val sprite = entity.get<Sprite>() ?: return
         drawSprite(sprite, Vector3(entity.x, entity.y, entity.z))
+
+        if (entity.z > 0f) {
+            drawSprite(shadowSprite, Vector3(entity.x, entity.y, 0f))
+        }
+
         eventService.fire(DrawEntityEvent(entity, batch))
     }
 
