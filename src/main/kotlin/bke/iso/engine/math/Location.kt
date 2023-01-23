@@ -8,7 +8,7 @@ data class Location(val x: Int, val y: Int, val z: Int = 0) {
             this(
                 floor(x).toInt(),
                 floor(y).toInt(),
-                0
+                floor(z).toInt()
             )
 
     fun toVector3() =

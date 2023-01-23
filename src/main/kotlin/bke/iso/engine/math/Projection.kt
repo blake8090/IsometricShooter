@@ -2,6 +2,7 @@ package bke.iso.engine.math
 
 import com.badlogic.gdx.math.Polygon
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.sqrt
 
@@ -16,15 +17,17 @@ const val HALF_TILE_HEIGHT = TILE_HEIGHT / 2
 fun getIsometricRatio() =
     sqrt(TILE_WIDTH.toFloat() / TILE_HEIGHT.toFloat())
 
-fun toScreen(x: Float, y: Float, z: Float = 0f) =
-    Vector3(
+fun toScreen(x: Float, y: Float, z: Float) =
+    Vector2(
         (x + y) * HALF_TILE_WIDTH,
-        (y - x) * HALF_TILE_HEIGHT,
-        0f
+        (y - x) * HALF_TILE_HEIGHT
     )
 
-fun toScreen(vector: Vector3) =
-    toScreen(vector.x, vector.y)
+fun toScreen(x: Float, y: Float) =
+    toScreen(x, y, 0f)
+
+fun toScreen(worldPos: Vector3) =
+    toScreen(worldPos.x, worldPos.y, worldPos.z)
 
 /**
  * Converts a [Rectangle] defined in world units, to a [Polygon] with vertices defined in screen units.
@@ -43,11 +46,11 @@ fun toScreen(rect: Rectangle): Polygon {
     )
 }
 
-fun toWorld(pos: Vector3): Vector3 {
+fun toWorld(screenPos: Vector2): Vector3 {
     val w = HALF_TILE_WIDTH
     val h = HALF_TILE_HEIGHT
-    val mapX = (pos.x / w) - (pos.y / h)
-    val mapY = (pos.y / h) + (pos.x / w)
+    val mapX = (screenPos.x / w) - (screenPos.y / h)
+    val mapY = (screenPos.y / h) + (screenPos.x / w)
     return Vector3(
         mapX / 2,
         mapY / 2,

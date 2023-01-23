@@ -5,8 +5,6 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
-import bke.iso.engine.math.toScreen
-import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.MoveEvent
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.system.System
@@ -32,7 +30,7 @@ class PlayerSystem(
 
             inputService.onAction("shoot") {
                 val mousePos = inputService.getMousePos()
-                val target = toWorld(renderService.unproject(Vector3(mousePos, 0f)))
+                val target = renderService.unproject(mousePos)
                 eventService.fire(ShootEvent(entity, target, BulletType.PLAYER))
             }
         }
@@ -50,6 +48,6 @@ class PlayerSystem(
                 }
             eventService.fire(MoveEvent(entity, dx, dy, speed, deltaTime))
         }
-        renderService.setCameraPos(toScreen(entity.x, entity.y))
+        renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
     }
 }
