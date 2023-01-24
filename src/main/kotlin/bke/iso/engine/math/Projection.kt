@@ -6,22 +6,36 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.sqrt
 
-const val TILE_WIDTH = 64
-const val TILE_HEIGHT = 32
-const val HALF_TILE_WIDTH = TILE_WIDTH / 2
-const val HALF_TILE_HEIGHT = TILE_HEIGHT / 2
+/**
+ * Width of one tile in pixels
+ */
+const val TILE_SIZE_X = 64
+
+/**
+ * Length of one tile in pixels
+ */
+const val TILE_SIZE_Y = 32
+
+/**
+ * Height of one tile in pixels
+ */
+const val TILE_SIZE_Z = 64
 
 /**
  * Two to one ratio (64/32 = 2)
  */
 fun getIsometricRatio() =
-    sqrt(TILE_WIDTH.toFloat() / TILE_HEIGHT.toFloat())
+    sqrt(TILE_SIZE_X.toFloat() / TILE_SIZE_Y.toFloat())
 
-fun toScreen(x: Float, y: Float, z: Float) =
-    Vector2(
-        (x + y) * HALF_TILE_WIDTH,
-        (y - x) * HALF_TILE_HEIGHT + (z * 64)
+fun toScreen(x: Float, y: Float, z: Float): Vector2  {
+    val scaleX = TILE_SIZE_X / 2
+    val scaleY = TILE_SIZE_Y / 2
+    val height =  z * TILE_SIZE_Z
+    return Vector2(
+        (x + y) * scaleX,
+        (y - x) * scaleY + height
     )
+}
 
 fun toScreen(x: Float, y: Float) =
     toScreen(x, y, 0f)
@@ -47,8 +61,8 @@ fun toScreen(rect: Rectangle): Polygon {
 }
 
 fun toWorld(screenPos: Vector2): Vector3 {
-    val w = HALF_TILE_WIDTH
-    val h = HALF_TILE_HEIGHT
+    val w = TILE_SIZE_X / 2
+    val h = TILE_SIZE_Y / 2
     val mapX = (screenPos.x / w) - (screenPos.y / h)
     val mapY = (screenPos.y / h) + (screenPos.x / w)
     return Vector3(

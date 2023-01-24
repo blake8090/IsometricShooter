@@ -6,8 +6,8 @@ import bke.iso.engine.asset.AssetService
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
-import bke.iso.engine.math.TILE_HEIGHT
-import bke.iso.engine.math.TILE_WIDTH
+import bke.iso.engine.math.TILE_SIZE_X
+import bke.iso.engine.math.TILE_SIZE_Y
 import bke.iso.engine.math.getIsometricRatio
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
@@ -179,8 +179,8 @@ class RenderService(
 
     private fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color) {
         val ratio = getIsometricRatio()
-        val width = worldRadius * TILE_WIDTH * ratio
-        val height = worldRadius * TILE_HEIGHT * ratio
+        val width = worldRadius * TILE_SIZE_X * ratio
+        val height = worldRadius * TILE_SIZE_Y * ratio
         val pos = toScreen(worldPos)
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
