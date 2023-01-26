@@ -3,31 +3,32 @@ package bke.iso.engine
 import bke.iso.service.Singleton
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
-import java.util.TreeSet
 
 data class Tile(val sprite: Sprite)
 
-private typealias TileMap = TreeSet<TileRecord>
+private typealias TileMap = MutableMap<Location, Tile>
 
 @Singleton
 class TileService {
 
-    private val layers = sortedMapOf<Int, TileMap>()
+    private val layers = mutableMapOf<Int, TileMap>()
 
-    fun setTile(tile: Tile, location: Location) {
-        val tileMap = layers.getOrPut(location.z) { createTileMap() }
-        val record = TileRecord(location, tile)
-        if (tileMap.contains(record)) {
-            tileMap.remove(record)
-        }
-        tileMap.add(record)
+    fun setTile(location: Location, tile: Tile) {
+        val layer = layers.getOrPut(location.z) { mutableMapOf() }
+        layer[location] = tile
     }
 
-    private fun createTileMap(): TileMap =
-        TreeSet<TileRecord>(
-            compareByDescending<TileRecord> { record -> record.location.y }
-                .thenBy { record -> record.location.x }
-        )
+    fun layerCount() =
+        layers.filterValues { layer -> layer.isNotEmpty() }
+            .keys
+            .max()
+
+    fun forEachTileInLayer(z: Int, action: (Location, Tile) -> Unit) {
+        val layer = layers[z] ?: return
+        for ((location, tile) in layer) {
+            action.invoke(location, tile)
+        }
+    }
 
     fun forEachTile(action: (Location, Tile) -> Unit) {
         for ((_, layer) in layers) {
@@ -37,8 +38,3 @@ class TileService {
         }
     }
 }
-
-private data class TileRecord(
-    val location: Location,
-    val tile: Tile
-)

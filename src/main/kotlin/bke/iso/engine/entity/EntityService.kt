@@ -8,21 +8,19 @@ import kotlin.reflect.KClass
 
 @Singleton
 class EntityService {
-    private val entityById = mutableMapOf<UUID, Entity>()
-    private val deletedIds = mutableSetOf<UUID>()
-    private val idsByComponent = mutableMapOf<KClass<out Component>, MutableSet<UUID>>()
-    private val idsByLocation = mutableMapOf<Location, MutableSet<UUID>>()
-        .toSortedMap(
-            compareByDescending(Location::y)
-                .thenBy(Location::x)
-        )
 
-    val search = EntitySearch(entityById, idsByComponent, idsByLocation)
+    private val entities = mutableMapOf<UUID, Entity>()
+    private val entitiesByComponent = mutableMapOf<KClass<out Component>, MutableSet<Entity>>()
 
-    fun create(x: Float = 0f, y: Float = 0f, z: Float = 0f): Entity {
+    private val entityLocations = mutableMapOf<Location, MutableSet<Entity>>()
+    private val entityLayers = mutableMapOf<Int, MutableSet<Entity>>()
+
+    val search = EntitySearch(entitiesByComponent, entityLocations)
+
+    fun create(x: Float, y: Float, z: Float): Entity {
         val id = UUID.randomUUID()
         val entity = Entity(id, Callback())
-        entityById[id] = entity
+        entities[id] = entity
         entity.x = x
         entity.y = y
         entity.z = z
@@ -32,39 +30,38 @@ class EntityService {
     fun create(location: Location) =
         create(location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
 
-    fun get(id: UUID): Entity? =
-        entityById[id]
+    fun layerCount() =
+        entityLayers.filterValues { layer -> layer.isNotEmpty() }
+            .keys
+            .max()
 
     /**
-     * Returns all entities, sorted by each entity's Y position, then X position
+     * Returns a list of all entities in the given layer (z-axis).
+     *
+     * Entities are sorted by their y pos (top to bottom), and then by their x pos (left to right)
      */
-    fun getAll(): List<Entity> =
-        idsByLocation
-            .flatMap { (_, ids) ->
-                ids.mapNotNull(this::get)
-                    .sortedWith(compareByDescending(Entity::y))
-            }
+    fun getAllInLayer(z: Int) =
+        entityLayers[z]
+            ?.sortedWith(
+                // TODO: fix sorting order - use Location instead of raw Entity positions?
+                compareByDescending(Entity::y)
+                    .thenBy(Entity::x)
+            )
+            ?: emptyList()
+
+    fun getAll() =
+        entities.values.toList()
 
     fun update() {
-        deletedIds.forEach(this::delete)
-        deletedIds.clear()
+        val deletedEntries = entities.filterValues(Entity::deleted)
+        for ((id, entity) in deletedEntries) {
+            entity.removeAll()
+            val location = entity.getLocation()
+            entityLocations[location]?.remove(entity)
+            entityLayers[location.z]?.remove(entity)
+            entities.remove(id)
+        }
     }
-
-    private fun delete(id: UUID) {
-        val entity = get(id) ?: return
-        entity.removeAll()
-        idsByLocation[Location(entity.x, entity.y)]?.remove(id)
-        entityById.remove(id)
-    }
-
-    private fun <T : Component> onAddComponent(id: UUID, type: KClass<T>) =
-        idsByComponent.getOrPut(type) { mutableSetOf() }.add(id)
-
-    private fun <T : Component> onRemoveComponent(id: UUID, type: KClass<T>) =
-        idsByComponent[type]?.remove(id)
-
-    private fun onEntityDeleted(id: UUID) =
-        deletedIds.add(id)
 
     /**
      * Used only by the [Entity] class to inform the [EntityService] on any changes,
@@ -72,25 +69,32 @@ class EntityService {
      * This allows the [EntityService] to keep all Entity records up to date.
      */
     inner class Callback {
-        fun <T : Component> componentAdded(id: UUID, type: KClass<T>) =
-            onAddComponent(id, type)
 
-        fun <T : Component> componentRemoved(id: UUID, type: KClass<T>) =
-            onRemoveComponent(id, type)
+        fun <T : Component> onComponentAdded(entity: Entity, type: KClass<T>) {
+            entitiesByComponent
+                .getOrPut(type) { mutableSetOf() }
+                .add(entity)
+        }
 
-        fun entityDeleted(id: UUID) =
-            onEntityDeleted(id)
+        fun <T : Component> onComponentRemoved(entity: Entity, type: KClass<T>) {
+            entitiesByComponent[type]?.remove(entity)
+        }
 
-        fun positionChanged(id: UUID, x: Float, y: Float, z: Float) {
-            // TODO: log if entity was not found
-            val entity = entityById[id] ?: return
-            val currentLocation = Location(entity.x, entity.y, entity.z)
+        fun onPositionChanged(entity: Entity, x: Float, y: Float, z: Float) {
+            val currentLocation = entity.getLocation()
             val newLocation = Location(x, y, z)
-            if (newLocation != currentLocation) {
-                idsByLocation[currentLocation]?.remove(id)
-                log.trace("Moved entity '$id' from '$currentLocation' to '$newLocation'")
+            // TODO: check for x, y, and z changes separately
+            if (currentLocation != newLocation) {
+                entityLocations[currentLocation]?.remove(entity)
+                entityLayers[currentLocation.z]?.remove(entity)
+                log.trace("Moved entity '${entity.id}' from '$currentLocation' to '$newLocation'")
             }
-            idsByLocation.getOrPut(newLocation) { mutableSetOf() }.add(id)
+            entityLocations
+                .getOrPut(newLocation) { mutableSetOf() }
+                .add(entity)
+            entityLayers
+                .getOrPut(newLocation.z) { mutableSetOf() }
+                .add(entity)
         }
     }
 }

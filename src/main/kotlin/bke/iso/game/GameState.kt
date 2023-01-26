@@ -55,7 +55,7 @@ class GameState(
         assetService.loadModule("game")
         renderService.setCursor("cursor")
         bindInput()
-        loadMap("zlevel_test")
+        loadMap("test")
     }
 
     private fun bindInput() {
@@ -79,7 +79,7 @@ class GameState(
             ?: throw IllegalArgumentException("expected map asset '$mapName'")
 
         mapData.tiles.forEach { (location, tile) ->
-            tileService.setTile(tile, location)
+            tileService.setTile(location, tile)
         }
 
         mapData.walls.forEach { location ->

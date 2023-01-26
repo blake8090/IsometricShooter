@@ -1,10 +1,11 @@
 package bke.iso.engine.entity
 
+import bke.iso.engine.math.Location
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
-class Entity(
+data class Entity(
     val id: UUID,
     private val callback: EntityService.Callback
 ) {
@@ -13,19 +14,19 @@ class Entity(
 
     var x: Float = 0f
         set(value) {
-            callback.positionChanged(id, value, y, z)
+            callback.onPositionChanged(this, value, y, z)
             field = value
         }
 
     var y: Float = 0f
         set(value) {
-            callback.positionChanged(id, x, value, z)
+            callback.onPositionChanged(this, x, value, z)
             field = value
         }
 
     var z: Float = 0f
         set(value) {
-            callback.positionChanged(id, x, y, value)
+            callback.onPositionChanged(this, x, y, value)
             field = value
         }
 
@@ -37,7 +38,7 @@ class Entity(
     fun <T : Component> add(vararg components: T): Entity {
         for (component in components) {
             this.components[component::class] = component
-            callback.componentAdded(id, component::class)
+            callback.onComponentAdded(this, component::class)
         }
         return this
     }
@@ -50,7 +51,7 @@ class Entity(
 
     fun <T : Component> remove(type: KClass<T>) {
         components.remove(type)
-        callback.componentRemoved(id, type)
+        callback.onComponentRemoved(this, type)
     }
 
     inline fun <reified T : Component> remove() =
@@ -68,20 +69,9 @@ class Entity(
         has(T::class)
 
     fun delete() {
-        callback.entityDeleted(id)
         deleted = true
     }
 
-    override fun equals(other: Any?): Boolean {
-        return (other is Entity) && other.id == id
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + name.hashCode()
-        result = 31 * result + x.hashCode()
-        result = 31 * result + y.hashCode()
-        result = 31 * result + components.hashCode()
-        return result
-    }
+    fun getLocation() =
+        Location(x, y, z)
 }

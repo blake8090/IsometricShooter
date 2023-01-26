@@ -34,14 +34,14 @@ class ShootHandler(private val entityService: EntityService) : EventHandler<Shoo
         val shooter = event.shooter
         val target = event.target
 
-        val pos = Vector3(shooter.x, shooter.y, 0f)
+        val pos = Vector3(shooter.x, shooter.y, shooter.z)
         val direction = Vector3(target).sub(pos).nor()
         val speed = when (event.type) {
             BulletType.PLAYER -> playerBulletSpeed
             BulletType.TURRET -> turretBulletSpeed
         }
 
-        val bullet = entityService.create(pos.x, pos.y)
+        val bullet = entityService.create(pos.x, pos.y, pos.z)
         bullet.add(
             Bullet(shooter.id, pos),
             Sprite("bullet", 8f, 8f),

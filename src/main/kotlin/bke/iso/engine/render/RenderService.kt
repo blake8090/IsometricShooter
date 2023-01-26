@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import kotlin.math.max
 
 @Singleton
 class RenderService(
@@ -74,15 +75,17 @@ class RenderService(
         batch.projectionMatrix = camera.combined
         shapeRenderer.projectionMatrix = camera.combined
 
-        batch.begin()
-        tileService.forEachTile { location, tile ->
-            drawSprite(tile.sprite, location.toVector3())
+        val maxZ = max(entityService.layerCount(), tileService.layerCount())
+        var z = 0
+        while (z <= maxZ) {
+            batch.begin()
+            tileService.forEachTileInLayer(z) { location, tile ->
+                drawSprite(tile.sprite, location.toVector3())
+            }
+            entityService.getAllInLayer(z).forEach(this::drawEntity)
+            batch.end()
+            z++
         }
-        batch.end()
-
-        batch.begin()
-        entityService.getAll().forEach(this::drawEntity)
-        batch.end()
 
         if (debugMode) {
             renderDebugMode()

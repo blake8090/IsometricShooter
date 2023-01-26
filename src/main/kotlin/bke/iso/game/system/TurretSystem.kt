@@ -46,9 +46,7 @@ class TurretSystem(
     }
 
     private fun findTarget(turretEntity: Entity): Vector3? {
-        val playerEntity = entityService.getAll()
-            .firstOrNull { entity -> entity.has<Player>() }
-            ?: return null
+        val playerEntity = entityService.search.firstHavingComponent(Player::class) ?: return null
 
         val pos = Vector3(turretEntity.x, turretEntity.y, 0f)
         val playerPos = Vector3(playerEntity.x, playerEntity.y, 0f)
