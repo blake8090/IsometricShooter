@@ -1,12 +1,11 @@
 package bke.iso.engine.entity
 
-import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Rectangle
 import kotlin.reflect.KClass
 
 class EntitySearch(
     private val entitiesByComponent: Map<KClass<out Component>, MutableSet<Entity>>,
-    private val entityLocations: Map<Location, MutableSet<Entity>>
+    private val entityLocations: EntityLocations
 ) {
     fun inArea(rect: Rectangle): Set<Entity> {
         val startX = rect.x.toInt()
@@ -18,16 +17,11 @@ class EntitySearch(
         val entities = mutableSetOf<Entity>()
         for (x in startX..endX) {
             for (y in startY..endY) {
-                entities.addAll(atLocation(x, y))
+                entities.addAll(entityLocations.getAllAtLocation(x, y, 0))
             }
         }
         return entities
     }
-
-    fun atLocation(x: Int, y: Int): List<Entity> =
-        entityLocations[Location(x, y, 0)]
-            ?.toList()
-            ?: emptyList()
 
     // TODO: Finish writing out exceptions
     fun <T : Component> withComponent(type: KClass<out T>, action: (Entity, T) -> Unit) {

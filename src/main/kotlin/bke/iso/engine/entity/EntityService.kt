@@ -1,6 +1,5 @@
 package bke.iso.engine.entity
 
-import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.service.Singleton
 import java.util.UUID
@@ -11,9 +10,7 @@ class EntityService {
 
     private val entities = mutableMapOf<UUID, Entity>()
     private val entitiesByComponent = mutableMapOf<KClass<out Component>, MutableSet<Entity>>()
-
-    private val entityLocations = mutableMapOf<Location, MutableSet<Entity>>()
-    private val entityLayers = mutableMapOf<Int, MutableSet<Entity>>()
+    private val entityLocations = EntityLocations()
 
     val search = EntitySearch(entitiesByComponent, entityLocations)
 
@@ -31,9 +28,7 @@ class EntityService {
         create(location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
 
     fun layerCount() =
-        entityLayers.filterValues { layer -> layer.isNotEmpty() }
-            .keys
-            .max()
+        entityLocations.layerCount()
 
     /**
      * Returns a list of all entities in the given layer (z-axis).
@@ -41,13 +36,7 @@ class EntityService {
      * Entities are sorted by their y pos (top to bottom), and then by their x pos (left to right)
      */
     fun getAllInLayer(z: Int) =
-        entityLayers[z]
-            ?.sortedWith(
-                // TODO: fix sorting order - use Location instead of raw Entity positions?
-                compareByDescending(Entity::y)
-                    .thenBy(Entity::x)
-            )
-            ?: emptyList()
+        entityLocations.getAllInLayer(z)
 
     fun getAll() =
         entities.values.toList()
@@ -56,9 +45,7 @@ class EntityService {
         val deletedEntries = entities.filterValues(Entity::deleted)
         for ((id, entity) in deletedEntries) {
             entity.removeAll()
-            val location = entity.getLocation()
-            entityLocations[location]?.remove(entity)
-            entityLayers[location.z]?.remove(entity)
+            entityLocations.remove(entity)
             entities.remove(id)
         }
     }
@@ -81,20 +68,7 @@ class EntityService {
         }
 
         fun onPositionChanged(entity: Entity, x: Float, y: Float, z: Float) {
-            val currentLocation = entity.getLocation()
-            val newLocation = Location(x, y, z)
-            // TODO: check for x, y, and z changes separately
-            if (currentLocation != newLocation) {
-                entityLocations[currentLocation]?.remove(entity)
-                entityLayers[currentLocation.z]?.remove(entity)
-                log.trace("Moved entity '${entity.id}' from '$currentLocation' to '$newLocation'")
-            }
-            entityLocations
-                .getOrPut(newLocation) { mutableSetOf() }
-                .add(entity)
-            entityLayers
-                .getOrPut(newLocation.z) { mutableSetOf() }
-                .add(entity)
+            entityLocations.update(entity, x, y, z)
         }
     }
 }
