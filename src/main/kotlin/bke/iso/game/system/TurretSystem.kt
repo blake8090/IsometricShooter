@@ -6,10 +6,7 @@ import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.CollisionService
-import bke.iso.engine.render.DebugCircle
-import bke.iso.engine.render.DebugData
-import bke.iso.engine.render.DebugLine
-import bke.iso.engine.render.DebugPoint
+import bke.iso.engine.render.DebugRenderService
 import bke.iso.engine.system.System
 import bke.iso.game.Player
 import bke.iso.game.Turret
@@ -25,15 +22,15 @@ import kotlin.math.max
 class TurretSystem(
     private val entityService: EntityService,
     private val collisionService: CollisionService,
-    private val eventService: EventService
+    private val eventService: EventService,
+    private val debugRenderService: DebugRenderService
 ) : System {
     private val visionRadius = 12f
     private val coolDownSeconds = 0.5f
 
     override fun update(deltaTime: Float) {
         entityService.search.withComponent(Turret::class) { entity, turret ->
-            val debugData = getDebugData(entity)
-            debugData.circles.add(DebugCircle(visionRadius, Color.GOLD))
+            debugRenderService.addCircle(Vector3(entity.x, entity.y, entity.z), visionRadius, Color.GOLD)
 
             turret.coolDownTime = max(0f, turret.coolDownTime - deltaTime)
 
@@ -56,15 +53,7 @@ class TurretSystem(
             return null
         }
 
-        val debugData = getDebugData(turretEntity)
-        debugData.lines.add(
-            DebugLine(
-                pos,
-                playerPos,
-                1f,
-                Color.RED
-            )
-        )
+        debugRenderService.addLine(pos, playerPos, 1f, Color.RED)
 
         val turretToPlayer = Segment(
             pos,
@@ -75,7 +64,7 @@ class TurretSystem(
             ?: return null
 
         for (point in collisionService.findIntersectionPoints(turretToPlayer, collision.data.box)) {
-            debugData.points.add(DebugPoint(Vector3(point), 2f, Color.YELLOW))
+            debugRenderService.addPoint(Vector3(point), 2f, Color.YELLOW)
         }
 
         return if (playerEntity == collision.data.entity) {
@@ -83,14 +72,5 @@ class TurretSystem(
         } else {
             null
         }
-    }
-
-    private fun getDebugData(entity: Entity): DebugData {
-        var debugData = entity.get<DebugData>()
-        if (debugData == null) {
-            debugData = DebugData()
-            entity.add(debugData)
-        }
-        return debugData
     }
 }

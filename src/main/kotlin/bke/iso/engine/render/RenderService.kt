@@ -6,9 +6,6 @@ import bke.iso.engine.asset.AssetService
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
-import bke.iso.engine.math.TILE_SIZE_X
-import bke.iso.engine.math.TILE_SIZE_Y
-import bke.iso.engine.math.getIsometricRatio
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
@@ -19,8 +16,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
@@ -31,11 +26,12 @@ class RenderService(
     private val tileService: TileService,
     private val entityService: EntityService,
     private val collisionService: CollisionService,
-    private val eventService: EventService
+    private val eventService: EventService,
+    private val debugRenderService: DebugRenderService
 ) {
 
     private val batch = SpriteBatch()
-    private val shapeRenderer = ShapeRenderer()
+    private val shapeRenderHelper = ShapeRenderHelper()
     private val camera = OrthographicCamera(1920f, 1080f)
 
     private var debugMode = false
@@ -73,7 +69,7 @@ class RenderService(
 
         camera.update()
         batch.projectionMatrix = camera.combined
-        shapeRenderer.projectionMatrix = camera.combined
+        shapeRenderHelper.update(camera)
 
         val maxZ = max(entityService.layerCount(), tileService.layerCount())
         var z = 0
@@ -94,7 +90,7 @@ class RenderService(
 
     fun dispose() {
         batch.dispose()
-        shapeRenderer.dispose()
+        shapeRenderHelper.dispose()
     }
 
     private fun drawEntity(entity: Entity) {
@@ -114,80 +110,29 @@ class RenderService(
     }
 
     private fun renderDebugMode() {
+        // TODO: high cpu usage
         tileService.forEachTile { location, _ ->
-            drawPoint(location.toVector3(), 1f, Color.CYAN)
+            shapeRenderHelper.drawPoint(location.toVector3(), 1f, Color.CYAN)
         }
 
         for (entity in entityService.getAll()) {
-            drawPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
+            shapeRenderHelper.drawPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
             drawCollisionBoxes(entity)
-            drawDebugData(entity)
-            entity.remove<DebugData>()
+            debugRenderService.render(shapeRenderHelper)
 
             if (entity.z != 0f) {
                 val start = Vector3(entity.x, entity.y, entity.z)
                 val end = Vector3(entity.x, entity.y, 0f)
-                drawPoint(end, 2f, Color.RED)
-                drawLine(start, end, Color.PURPLE)
+                shapeRenderHelper.drawPoint(end, 2f, Color.RED)
+                shapeRenderHelper.drawLine(start, end, Color.PURPLE)
             }
         }
     }
 
+    // TODO: high cpu usage
     private fun drawCollisionBoxes(entity: Entity) {
         collisionService.findCollisionData(entity)
-            ?.let { collisionData -> drawRectangle(collisionData.box, Color.GREEN) }
+            ?.let { collisionData -> shapeRenderHelper.drawRectangle(collisionData.box, Color.GREEN) }
             ?: return
-    }
-
-    private fun drawDebugData(entity: Entity) {
-        val debugData = entity.get<DebugData>() ?: return
-
-        for (line in debugData.lines) {
-            drawLine(line.start, line.end, line.color)
-        }
-
-        for (circle in debugData.circles) {
-            drawCircle(Vector3(entity.x, entity.y, entity.z), circle.radius, circle.color)
-        }
-
-        for (point in debugData.points) {
-            drawPoint(point.pos, point.size, point.color)
-        }
-    }
-
-    private fun drawPoint(worldPos: Vector3, size: Float, color: Color) {
-        val pos = toScreen(worldPos)
-        shapeRenderer.color = color
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
-        shapeRenderer.circle(pos.x, pos.y, size)
-        shapeRenderer.end()
-    }
-
-    private fun drawRectangle(worldRect: Rectangle, color: Color) {
-        val polygon = toScreen(worldRect)
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
-        shapeRenderer.color = color
-        shapeRenderer.polygon(polygon.transformedVertices)
-        shapeRenderer.end()
-    }
-
-    private fun drawLine(start: Vector3, end: Vector3, color: Color) {
-        val startScreen = toScreen(start)
-        val endScreen = toScreen(end)
-        shapeRenderer.color = color
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
-        shapeRenderer.line(startScreen, endScreen)
-        shapeRenderer.end()
-    }
-
-    private fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color) {
-        val ratio = getIsometricRatio()
-        val width = worldRadius * TILE_SIZE_X * ratio
-        val height = worldRadius * TILE_SIZE_Y * ratio
-        val pos = toScreen(worldPos)
-        shapeRenderer.color = color
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
-        shapeRenderer.ellipse(pos.x - (width / 2), pos.y - (height / 2), width, height)
-        shapeRenderer.end()
     }
 }
