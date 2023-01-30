@@ -85,11 +85,9 @@ class DebugRenderService {
             shapeUtil.drawPoint(point.pos, point.size, point.color)
         }
         shapeUtil.end()
-
-        clear()
     }
 
-    private fun clear() {
+    fun clear() {
         lines.forEach(linePool::free)
         lines.clear()
 

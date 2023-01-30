@@ -3,7 +3,6 @@ package bke.iso.game
 import bke.iso.engine.log
 import bke.iso.service.Provider
 import bke.iso.service.Transient
-import bke.iso.engine.TileService
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.input.InputService
@@ -14,6 +13,7 @@ import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.State
 import bke.iso.engine.system.System
+import bke.iso.engine.world.WorldService
 import bke.iso.game.event.BulletCollisionHandler
 import bke.iso.game.event.DamageHandler
 import bke.iso.game.event.DrawHealthHandler
@@ -28,7 +28,7 @@ import com.badlogic.gdx.Input
 @Transient
 class GameState(
     private val assetService: AssetService,
-    private val tileService: TileService,
+    private val worldService: WorldService,
     private val entityFactory: EntityFactory,
     private val inputService: InputService,
     private val renderService: RenderService,
@@ -79,7 +79,7 @@ class GameState(
             ?: throw IllegalArgumentException("expected map asset '$mapName'")
 
         mapData.tiles.forEach { (location, tile) ->
-            tileService.setTile(location, tile)
+            worldService.setTile(location, tile)
         }
 
         mapData.walls.forEach { location ->

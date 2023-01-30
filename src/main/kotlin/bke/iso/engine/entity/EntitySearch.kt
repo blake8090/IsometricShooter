@@ -1,28 +1,10 @@
 package bke.iso.engine.entity
 
-import com.badlogic.gdx.math.Rectangle
 import kotlin.reflect.KClass
 
 class EntitySearch(
     private val entitiesByComponent: Map<KClass<out Component>, MutableSet<Entity>>,
-    private val entityLocations: EntityLocations
 ) {
-    fun inArea(rect: Rectangle): Set<Entity> {
-        val startX = rect.x.toInt()
-        val endX = (rect.x + rect.width).toInt() + 1
-
-        val startY = rect.y.toInt()
-        val endY = (rect.y + rect.height).toInt() + 1
-
-        val entities = mutableSetOf<Entity>()
-        for (x in startX..endX) {
-            for (y in startY..endY) {
-                entities.addAll(entityLocations.getAllAtLocation(x, y, 0))
-            }
-        }
-        return entities
-    }
-
     // TODO: Finish writing out exceptions
     fun <T : Component> withComponent(type: KClass<out T>, action: (Entity, T) -> Unit) {
         val entities = entitiesByComponent[type] ?: return

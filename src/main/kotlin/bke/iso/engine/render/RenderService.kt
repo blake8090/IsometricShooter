@@ -1,17 +1,18 @@
 package bke.iso.engine.render
 
 import bke.iso.service.Singleton
-import bke.iso.engine.TileService
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
+import bke.iso.engine.math.Location
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.render.shape.ShapeDrawerUtil
+import bke.iso.engine.world.Tile
+import bke.iso.engine.world.WorldService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -20,13 +21,11 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import kotlin.math.max
 
 @Singleton
 class RenderService(
     private val assetService: AssetService,
-    private val tileService: TileService,
-    private val entityService: EntityService,
+    private val worldService: WorldService,
     private val collisionService: CollisionService,
     private val eventService: EventService,
     private val debugRenderService: DebugRenderService
@@ -73,21 +72,26 @@ class RenderService(
         batch.projectionMatrix = camera.combined
         shapeUtil.update()
 
-        val maxZ = max(entityService.layerCount(), tileService.layerCount())
-        var z = 0
-        while (z <= maxZ) {
-            batch.begin()
-            tileService.forEachTileInLayer(z) { location, tile ->
-                drawSprite(tile.sprite, location.toVector3())
+        batch.begin()
+        // TODO: fix rendering issue - tile overlapping entities
+        for ((location, data) in worldService.getAll()) {
+            data.tile?.let { tile ->
+                drawTile(location, tile)
             }
-            entityService.getAllInLayer(z).forEach(this::drawEntity)
-            batch.end()
-            z++
+            data.entities
+                .sortedWith(
+                    compareByDescending(Entity::y)
+                        .thenBy(Entity::x)
+                )
+                .forEach(this::drawEntity)
         }
+        batch.end()
 
         if (debugMode) {
-            renderDebugMode()
+            debugRenderService.render(shapeUtil)
         }
+        // debug data still accumulates even when not in debug mode!
+        debugRenderService.clear()
     }
 
     fun dispose() {
@@ -102,6 +106,25 @@ class RenderService(
         }
         drawSprite(sprite, Vector3(entity.x, entity.y, entity.z))
         eventService.fire(DrawEntityEvent(entity, batch))
+        addEntityDebugData(entity)
+    }
+
+    private fun addEntityDebugData(entity: Entity) {
+        debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
+        collisionService.findCollisionData(entity)?.let { collisionData ->
+            debugRenderService.addRectangle(collisionData.box, 1f, Color.GREEN)
+        }
+        if (entity.z != 0f) {
+            val start = Vector3(entity.x, entity.y, 0f)
+            val end = Vector3(entity.x, entity.y, entity.z)
+            debugRenderService.addPoint(start, 2f, Color.RED)
+            debugRenderService.addLine(start, end, 1f, Color.PURPLE)
+        }
+    }
+
+    fun drawTile(location: Location, tile: Tile) {
+        drawSprite(tile.sprite, location.toVector3())
+        debugRenderService.addPoint(location.toVector3(), 1f, Color.CYAN)
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
@@ -109,27 +132,5 @@ class RenderService(
         val screenPos = toScreen(worldPos)
             .sub(sprite.offsetX, sprite.offsetY)
         batch.draw(texture, screenPos.x, screenPos.y)
-    }
-
-    private fun renderDebugMode() {
-        tileService.forEachTile { location, _ ->
-            debugRenderService.addPoint(location.toVector3(), 1f, Color.CYAN)
-        }
-
-        for (entity in entityService.getAll()) {
-            debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
-
-            collisionService.findCollisionData(entity)?.let { collisionData ->
-                debugRenderService.addRectangle(collisionData.box, 1f, Color.GREEN)
-            }
-
-            if (entity.z != 0f) {
-                val start = Vector3(entity.x, entity.y, 0f)
-                val end = Vector3(entity.x, entity.y, entity.z)
-                debugRenderService.addPoint(start, 2f, Color.RED)
-                debugRenderService.addLine(start, end, 1f, Color.PURPLE)
-            }
-        }
-        debugRenderService.render(shapeUtil)
     }
 }

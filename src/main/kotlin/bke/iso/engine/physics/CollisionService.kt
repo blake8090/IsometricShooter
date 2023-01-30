@@ -3,9 +3,9 @@ package bke.iso.engine.physics
 import bke.iso.engine.log
 import bke.iso.service.Singleton
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.math.getEdges
 import bke.iso.engine.math.toVector2
+import bke.iso.engine.world.WorldService
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
@@ -48,7 +48,7 @@ data class SegmentCollision(
 )
 
 @Singleton
-class CollisionService(private val entityService: EntityService) {
+class CollisionService(private val worldService: WorldService) {
 
     // TODO:
     //  - step thru dx and dy
@@ -59,8 +59,8 @@ class CollisionService(private val entityService: EntityService) {
         projection.x += dx
         projection.y += dy
 
-        val collisions = entityService.search
-            .inArea(projection)
+        val collisions = worldService
+            .findEntitiesInArea(projection)
             .asSequence()
             .filter { otherEntity -> otherEntity != entity }
             .mapNotNull(this::findCollisionData)
@@ -164,8 +164,7 @@ class CollisionService(private val entityService: EntityService) {
     fun checkSegmentCollisions(segment: Segment): List<SegmentCollision> {
         val collisions = mutableListOf<SegmentCollision>()
         val rect = getSegmentRectangle(segment.a, segment.b)
-        entityService.search
-            .inArea(rect)
+        worldService.findEntitiesInArea(rect)
             .mapNotNull(this::findCollisionData)
             .forEach { collisionData ->
                 val points = findIntersectionPoints(segment, collisionData.box)

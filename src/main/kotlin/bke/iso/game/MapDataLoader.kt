@@ -2,10 +2,10 @@ package bke.iso.game
 
 import bke.iso.service.Transient
 import bke.iso.engine.FilePointer
-import bke.iso.engine.Tile
 import bke.iso.engine.asset.AssetLoader
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.Tile
 
 data class MapData(
     val tiles: MutableMap<Location, Tile> = mutableMapOf(),

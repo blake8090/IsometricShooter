@@ -1,18 +1,18 @@
 package bke.iso.engine.entity
 
 import bke.iso.engine.math.Location
+import bke.iso.engine.world.WorldService
 import bke.iso.service.Singleton
 import java.util.UUID
 import kotlin.reflect.KClass
 
 @Singleton
-class EntityService {
+class EntityService(private val worldService: WorldService) {
 
     private val entities = mutableMapOf<UUID, Entity>()
     private val entitiesByComponent = mutableMapOf<KClass<out Component>, MutableSet<Entity>>()
-    private val entityLocations = EntityLocations()
 
-    val search = EntitySearch(entitiesByComponent, entityLocations)
+    val search = EntitySearch(entitiesByComponent)
 
     fun create(x: Float, y: Float, z: Float): Entity {
         val id = UUID.randomUUID()
@@ -27,25 +27,11 @@ class EntityService {
     fun create(location: Location) =
         create(location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
 
-    fun layerCount() =
-        entityLocations.layerCount()
-
-    /**
-     * Returns a list of all entities in the given layer (z-axis).
-     *
-     * Entities are sorted by their y pos (top to bottom), and then by their x pos (left to right)
-     */
-    fun getAllInLayer(z: Int) =
-        entityLocations.getAllInLayer(z)
-
-    fun getAll() =
-        entities.values.toList()
-
     fun update() {
         val deletedEntries = entities.filterValues(Entity::deleted)
         for ((id, entity) in deletedEntries) {
             entity.removeAll()
-            entityLocations.remove(entity)
+            worldService.removeEntity(entity)
             entities.remove(id)
         }
     }
@@ -68,7 +54,7 @@ class EntityService {
         }
 
         fun onPositionChanged(entity: Entity, x: Float, y: Float, z: Float) {
-            entityLocations.update(entity, x, y, z)
+            worldService.updateEntity(entity, x, y, z)
         }
     }
 }
