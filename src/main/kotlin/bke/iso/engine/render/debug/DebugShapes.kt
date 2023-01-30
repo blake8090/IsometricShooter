@@ -1,4 +1,4 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.debug
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle

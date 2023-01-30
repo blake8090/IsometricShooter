@@ -1,4 +1,4 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.shape
 
 import bke.iso.engine.math.TILE_SIZE_X
 import bke.iso.engine.math.TILE_SIZE_Y
@@ -10,15 +10,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 
-class ShapeRenderHelper {
+class DefaultShapeUtil(private val camera: Camera) : ShapeUtil {
 
     private val shapeRenderer = ShapeRenderer()
 
-    fun update(camera: Camera) {
+    override fun update() {
         shapeRenderer.projectionMatrix = camera.combined
     }
 
-    fun drawPoint(worldPos: Vector3, size: Float, color: Color) {
+    override fun drawPoint(worldPos: Vector3, size: Float, color: Color) {
         val pos = toScreen(worldPos)
         shapeRenderer.color = color
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
@@ -26,7 +26,7 @@ class ShapeRenderHelper {
         shapeRenderer.end()
     }
 
-    fun drawRectangle(worldRect: Rectangle, color: Color) {
+    override fun drawRectangle(worldRect: Rectangle, color: Color) {
         val polygon = toScreen(worldRect)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         shapeRenderer.color = color
@@ -34,7 +34,7 @@ class ShapeRenderHelper {
         shapeRenderer.end()
     }
 
-    fun drawLine(start: Vector3, end: Vector3, color: Color) {
+    override fun drawLine(start: Vector3, end: Vector3, color: Color) {
         val startScreen = toScreen(start)
         val endScreen = toScreen(end)
         shapeRenderer.color = color
@@ -43,7 +43,7 @@ class ShapeRenderHelper {
         shapeRenderer.end()
     }
 
-    fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color) {
+    override fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color) {
         val ratio = getIsometricRatio()
         val width = worldRadius * TILE_SIZE_X * ratio
         val height = worldRadius * TILE_SIZE_Y * ratio
@@ -54,7 +54,7 @@ class ShapeRenderHelper {
         shapeRenderer.end()
     }
 
-    fun dispose() {
+    override fun dispose() {
         shapeRenderer.dispose()
     }
 }

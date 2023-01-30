@@ -10,6 +10,8 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.CollisionService
+import bke.iso.engine.render.debug.DebugRenderService
+import bke.iso.engine.render.shape.DefaultShapeUtil
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -31,8 +33,8 @@ class RenderService(
 ) {
 
     private val batch = SpriteBatch()
-    private val shapeRenderHelper = ShapeRenderHelper()
     private val camera = OrthographicCamera(1920f, 1080f)
+    private val shapeUtil = DefaultShapeUtil(camera)
 
     private var debugMode = false
 
@@ -69,7 +71,7 @@ class RenderService(
 
         camera.update()
         batch.projectionMatrix = camera.combined
-        shapeRenderHelper.update(camera)
+        shapeUtil.update()
 
         val maxZ = max(entityService.layerCount(), tileService.layerCount())
         var z = 0
@@ -90,7 +92,7 @@ class RenderService(
 
     fun dispose() {
         batch.dispose()
-        shapeRenderHelper.dispose()
+        shapeUtil.dispose()
     }
 
     private fun drawEntity(entity: Entity) {
@@ -110,29 +112,25 @@ class RenderService(
     }
 
     private fun renderDebugMode() {
-        // TODO: high cpu usage
         tileService.forEachTile { location, _ ->
-            shapeRenderHelper.drawPoint(location.toVector3(), 1f, Color.CYAN)
+            debugRenderService.addPoint(location.toVector3(), 1f, Color.CYAN)
         }
 
         for (entity in entityService.getAll()) {
-            shapeRenderHelper.drawPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
-            drawCollisionBoxes(entity)
-            debugRenderService.render(shapeRenderHelper)
+            debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
+
+            collisionService.findCollisionData(entity)?.let { collisionData ->
+                debugRenderService.addRectangle(collisionData.box, 1f, Color.GREEN)
+            }
 
             if (entity.z != 0f) {
-                val start = Vector3(entity.x, entity.y, entity.z)
-                val end = Vector3(entity.x, entity.y, 0f)
-                shapeRenderHelper.drawPoint(end, 2f, Color.RED)
-                shapeRenderHelper.drawLine(start, end, Color.PURPLE)
+                val start = Vector3(entity.x, entity.y, 0f)
+                val end = Vector3(entity.x, entity.y, entity.z)
+                debugRenderService.addPoint(start, 2f, Color.RED)
+                debugRenderService.addLine(start, end, 1f, Color.PURPLE)
             }
         }
-    }
 
-    // TODO: high cpu usage
-    private fun drawCollisionBoxes(entity: Entity) {
-        collisionService.findCollisionData(entity)
-            ?.let { collisionData -> shapeRenderHelper.drawRectangle(collisionData.box, Color.GREEN) }
-            ?: return
+        debugRenderService.render(shapeUtil)
     }
 }

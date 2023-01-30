@@ -6,7 +6,7 @@ import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.CollisionService
-import bke.iso.engine.render.DebugRenderService
+import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
 import bke.iso.game.Player
 import bke.iso.game.Turret

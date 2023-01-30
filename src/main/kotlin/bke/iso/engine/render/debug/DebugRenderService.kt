@@ -1,5 +1,6 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.debug
 
+import bke.iso.engine.render.shape.ShapeUtil
 import bke.iso.service.Singleton
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
@@ -15,7 +16,6 @@ class DebugRenderService {
             DebugLine()
     }
 
-    // TODO: currently not used, should we remove this?
     private val rectangles = mutableListOf<DebugRectangle>()
     private val rectanglePool = object : Pool<DebugRectangle>() {
         override fun newObject() =
@@ -67,23 +67,27 @@ class DebugRenderService {
         points.add(point)
     }
 
-    fun render(shapeRenderHelper: ShapeRenderHelper) {
+    fun render(shapeUtil: ShapeUtil) {
         for (line in lines) {
-            shapeRenderHelper.drawLine(line.start, line.end, line.color)
+            shapeUtil.drawLine(line.start, line.end, line.color)
+        }
+
+        for (rect in rectangles) {
+            shapeUtil.drawRectangle(rect.rectangle, rect.color)
         }
 
         for (circle in circles) {
-            shapeRenderHelper.drawCircle(circle.pos, circle.radius, circle.color)
+            shapeUtil.drawCircle(circle.pos, circle.radius, circle.color)
         }
 
         for (point in points) {
-            shapeRenderHelper.drawPoint(point.pos, point.size, point.color)
+            shapeUtil.drawPoint(point.pos, point.size, point.color)
         }
 
-        reset()
+        clear()
     }
 
-    private fun reset() {
+    private fun clear() {
         lines.forEach(linePool::free)
         lines.clear()
 
