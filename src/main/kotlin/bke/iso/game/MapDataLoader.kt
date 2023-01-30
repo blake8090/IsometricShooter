@@ -56,6 +56,9 @@ class MapDataLoader : AssetLoader<MapData> {
     }
 
     private fun loadMapData(mapData: MapData, char: Char, location: Location) {
+        if (char == ',') {
+            return
+        }
         mapData.tiles[location] = Tile(floorSprite)
         when (char) {
             '#' -> mapData.walls.add(location)

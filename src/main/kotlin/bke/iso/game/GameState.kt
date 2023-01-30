@@ -55,7 +55,7 @@ class GameState(
         assetService.loadModule("game")
         renderService.setCursor("cursor")
         bindInput()
-        loadMap("test")
+        loadMap("zlevel_test")
     }
 
     private fun bindInput() {
