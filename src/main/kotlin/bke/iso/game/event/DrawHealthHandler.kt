@@ -9,7 +9,7 @@ import bke.iso.game.Health
 import bke.iso.game.HealthBar
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 
 @Transient
@@ -41,7 +41,7 @@ class DrawHealthHandler(private val assetService: AssetService) : EventHandler<D
     }
 }
 
-private fun SpriteBatch.withColor(color: Color, action: (SpriteBatch) -> Unit) {
+private fun PolygonSpriteBatch.withColor(color: Color, action: (PolygonSpriteBatch) -> Unit) {
     val originalColor = Color(this.color)
     this.color = color
     action.invoke(this)

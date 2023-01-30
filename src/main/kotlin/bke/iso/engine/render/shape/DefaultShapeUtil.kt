@@ -18,6 +18,12 @@ class DefaultShapeUtil(private val camera: Camera) : ShapeUtil {
         shapeRenderer.projectionMatrix = camera.combined
     }
 
+    override fun begin() {
+    }
+
+    override fun end() {
+    }
+
     override fun drawPoint(worldPos: Vector3, size: Float, color: Color) {
         val pos = toScreen(worldPos)
         shapeRenderer.color = color

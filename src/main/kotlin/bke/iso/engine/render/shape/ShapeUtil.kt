@@ -8,6 +8,10 @@ import com.badlogic.gdx.utils.Disposable
 interface ShapeUtil : Disposable {
     fun update()
 
+    fun begin()
+
+    fun end()
+
     fun drawPoint(worldPos: Vector3, size: Float, color: Color)
 
     fun drawRectangle(worldRect: Rectangle, color: Color)

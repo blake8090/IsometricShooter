@@ -11,13 +11,13 @@ import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.debug.DebugRenderService
-import bke.iso.engine.render.shape.DefaultShapeUtil
+import bke.iso.engine.render.shape.ShapeDrawerUtil
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
@@ -32,9 +32,9 @@ class RenderService(
     private val debugRenderService: DebugRenderService
 ) {
 
-    private val batch = SpriteBatch()
+    private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
-    private val shapeUtil = DefaultShapeUtil(camera)
+    private val shapeUtil = ShapeDrawerUtil(batch)
 
     private var debugMode = false
 
@@ -130,7 +130,6 @@ class RenderService(
                 debugRenderService.addLine(start, end, 1f, Color.PURPLE)
             }
         }
-
         debugRenderService.render(shapeUtil)
     }
 }

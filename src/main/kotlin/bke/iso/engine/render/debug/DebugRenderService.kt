@@ -68,6 +68,7 @@ class DebugRenderService {
     }
 
     fun render(shapeUtil: ShapeUtil) {
+        shapeUtil.begin()
         for (line in lines) {
             shapeUtil.drawLine(line.start, line.end, line.color)
         }
@@ -83,6 +84,7 @@ class DebugRenderService {
         for (point in points) {
             shapeUtil.drawPoint(point.pos, point.size, point.color)
         }
+        shapeUtil.end()
 
         clear()
     }

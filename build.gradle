@@ -18,6 +18,7 @@ apply plugin: 'io.github.fvarrui.javapackager.plugin'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 group = 'bke.iso'
@@ -39,6 +40,8 @@ dependencies {
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.22'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+
+    implementation "space.earlygrey:shapedrawer:2.5.0"
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
