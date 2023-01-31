@@ -19,7 +19,7 @@ class WorldService {
     val entities = Entities(grid)
 
     fun setTile(location: Location, sprite: Sprite) {
-        val tile = TileObject(sprite)
+        val tile = Tile(sprite)
         setup(tile, location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
     }
 
