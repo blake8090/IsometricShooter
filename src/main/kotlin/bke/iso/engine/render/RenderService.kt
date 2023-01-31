@@ -4,14 +4,14 @@ import bke.iso.service.Singleton
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
-import bke.iso.engine.math.Location
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.render.shape.ShapeDrawerUtil
-import bke.iso.engine.world.Tile
+import bke.iso.engine.world.TileObject
+import bke.iso.engine.world.WorldObject
 import bke.iso.engine.world.WorldService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -74,17 +74,31 @@ class RenderService(
 
         batch.begin()
         // TODO: fix rendering issue - tile overlapping entities
-        for ((location, data) in worldService.getAll()) {
-            data.tile?.let { tile ->
-                drawTile(location, tile)
+        val sortedObjects = worldService.getAllObjects()
+            .sortedWith(
+                compareBy(WorldObject::layer)
+                    .thenByDescending { it.y - it.x }
+//                    .thenByDescending(WorldObject::y)
+                    .thenBy(WorldObject::z)
+            )
+
+        sortedObjects.forEach { worldObject ->
+            when (worldObject) {
+                is Entity -> drawEntity(worldObject)
+                is TileObject -> drawTile(worldObject)
             }
-            data.entities
-                .sortedWith(
-                    compareByDescending(Entity::y)
-                        .thenBy(Entity::x)
-                )
-                .forEach(this::drawEntity)
         }
+//        for ((location, data) in worldService.getAll()) {
+//            data.tile?.let { tile ->
+//                drawTile(location, tile)
+//            }
+//            data.entities
+//                .sortedWith(
+//                    compareByDescending(Entity::y)
+//                        .thenBy(Entity::x)
+//                )
+//                .forEach(this::drawEntity)
+//        }
         batch.end()
 
         if (debugMode) {
@@ -122,10 +136,13 @@ class RenderService(
         }
     }
 
-    fun drawTile(location: Location, tile: Tile) {
-        drawSprite(tile.sprite, location.toVector3())
-        debugRenderService.addPoint(location.toVector3(), 1f, Color.CYAN)
+    fun drawTile(tileObject: TileObject) {
+        drawSprite(tileObject.sprite, Vector3(tileObject.x, tileObject.y, tileObject.z))
     }
+//    fun drawTile(location: Location, tile: Tile) {
+//        drawSprite(tile.sprite, location.toVector3())
+//        debugRenderService.addPoint(location.toVector3(), 1f, Color.CYAN)
+//    }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
         val texture = assetService.get<Texture>(sprite.texture) ?: return

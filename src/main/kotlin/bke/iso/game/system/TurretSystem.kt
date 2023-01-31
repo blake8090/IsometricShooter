@@ -2,12 +2,12 @@ package bke.iso.game.system
 
 import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
+import bke.iso.engine.world.WorldService
 import bke.iso.game.Player
 import bke.iso.game.Turret
 import bke.iso.game.event.BulletType
@@ -20,7 +20,7 @@ import kotlin.math.max
 
 @Transient
 class TurretSystem(
-    private val entityService: EntityService,
+    private val worldService: WorldService,
     private val collisionService: CollisionService,
     private val eventService: EventService,
     private val debugRenderService: DebugRenderService
@@ -29,7 +29,7 @@ class TurretSystem(
     private val coolDownSeconds = 0.5f
 
     override fun update(deltaTime: Float) {
-        entityService.search.withComponent(Turret::class) { entity, turret ->
+        worldService.entities.withComponent(Turret::class) { entity, turret ->
             debugRenderService.addCircle(Vector3(entity.x, entity.y, entity.z), visionRadius, Color.GOLD)
 
             turret.coolDownTime = max(0f, turret.coolDownTime - deltaTime)
@@ -43,7 +43,7 @@ class TurretSystem(
     }
 
     private fun findTarget(turretEntity: Entity): Vector3? {
-        val playerEntity = entityService.search.firstHavingComponent(Player::class) ?: return null
+        val playerEntity = worldService.entities.firstHavingComponent(Player::class) ?: return null
 
         val pos = Vector3(turretEntity.x, turretEntity.y, 0f)
         val playerPos = Vector3(playerEntity.x, playerEntity.y, 0f)

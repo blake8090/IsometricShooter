@@ -1,11 +1,11 @@
 package bke.iso.engine
 
 import bke.iso.service.Singleton
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.input.InputService
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.StateService
 import bke.iso.engine.system.SystemService
+import bke.iso.engine.world.WorldService
 
 @Singleton
 class Engine(
@@ -13,7 +13,7 @@ class Engine(
     private val stateService: StateService,
     private val renderService: RenderService,
     private val inputService: InputService,
-    private val entityService: EntityService
+    private val worldService: WorldService
 ) {
 
     fun start(game: Game) {
@@ -26,7 +26,7 @@ class Engine(
         inputService.update()
         systemService.update(stateService.currentState, deltaTime)
         stateService.update(deltaTime)
-        entityService.update()
+        worldService.update()
         renderService.render()
     }
 

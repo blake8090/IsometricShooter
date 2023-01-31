@@ -5,10 +5,11 @@ import bke.iso.service.Transient
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventService
 import bke.iso.engine.physics.CollisionEvent
+import bke.iso.engine.world.WorldService
 import bke.iso.game.Bullet
 
 @Transient
-class BulletCollisionHandler(private val eventService: EventService) : EventHandler<CollisionEvent> {
+class BulletCollisionHandler(private val eventService: EventService, private val worldService: WorldService) : EventHandler<CollisionEvent> {
     override val type = CollisionEvent::class
 
     private val bulletDamage = 1f
@@ -24,7 +25,7 @@ class BulletCollisionHandler(private val eventService: EventService) : EventHand
         }
 
         log.trace("bullet collided")
-        entity.delete()
+        worldService.delete(entity)
         eventService.fire(DamageEvent(entity, otherEntity, bulletDamage))
     }
 }

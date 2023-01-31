@@ -1,18 +1,17 @@
 package bke.iso.game
 
-import bke.iso.engine.entity.Entity
 import bke.iso.service.Singleton
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.WorldService
 
 @Singleton
-class EntityFactory(private val entityService: EntityService) {
+class EntityFactory(private val worldService: WorldService) {
 
-    fun createWall(location: Location): Entity =
-        entityService.create(location)
+    fun createWall(location: Location) =
+        worldService.createEntity(location)
             .add(
                 Sprite("wall3", 0f, 16f),
                 Collision(
@@ -22,7 +21,7 @@ class EntityFactory(private val entityService: EntityService) {
             )
 
     fun createBox(location: Location) =
-        entityService.create(location)
+        worldService.createEntity(location)
             .add(
                 Sprite("box", 16f, 8f),
                 Collision(
@@ -32,7 +31,7 @@ class EntityFactory(private val entityService: EntityService) {
             )
 
     fun createTurret(location: Location) =
-        entityService.create(location)
+        worldService.createEntity(location)
             .add(
                 Sprite("turret", 16f, 0f),
                 Turret(),
@@ -45,7 +44,7 @@ class EntityFactory(private val entityService: EntityService) {
             )
 
     fun createPlayer(location: Location) =
-        entityService.create(location)
+        worldService.createEntity(location)
             .add(
                 Sprite("player", 32f, 0f),
                 Player(),
@@ -58,7 +57,7 @@ class EntityFactory(private val entityService: EntityService) {
             )
 
     fun createBouncyBall(x: Float, y: Float, z: Float) =
-        entityService.create(x, y, z)
+        worldService.createEntity(x, y, z)
             .add(
                 Sprite("circle", 16f, 0f),
                 BouncyBall()

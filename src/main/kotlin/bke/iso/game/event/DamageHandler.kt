@@ -5,6 +5,7 @@ import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
+import bke.iso.engine.world.WorldService
 import bke.iso.game.Health
 import bke.iso.game.Player
 import kotlin.math.max
@@ -16,7 +17,7 @@ data class DamageEvent(
 ) : Event()
 
 @Transient
-class DamageHandler : EventHandler<DamageEvent> {
+class DamageHandler(private val worldService: WorldService) : EventHandler<DamageEvent> {
     override val type = DamageEvent::class
 
     override fun handle(event: DamageEvent) {
@@ -31,7 +32,7 @@ class DamageHandler : EventHandler<DamageEvent> {
         if (health.value == 0f) {
             log.trace("dead")
             if (!event.targetEntity.has<Player>()) {
-                event.targetEntity.delete()
+                worldService.delete(event.targetEntity)
             }
             // todo: fire death event!
         }

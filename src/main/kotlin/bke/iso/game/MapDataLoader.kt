@@ -5,10 +5,9 @@ import bke.iso.engine.FilePointer
 import bke.iso.engine.asset.AssetLoader
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.Tile
 
 data class MapData(
-    val tiles: MutableMap<Location, Tile> = mutableMapOf(),
+    val tiles: MutableMap<Location, Sprite> = mutableMapOf(),
     val walls: MutableSet<Location> = mutableSetOf(),
     val boxes: MutableSet<Location> = mutableSetOf(),
     val turrets: MutableSet<Location> = mutableSetOf(),
@@ -59,7 +58,7 @@ class MapDataLoader : AssetLoader<MapData> {
         if (char == ',') {
             return
         }
-        mapData.tiles[location] = Tile(floorSprite)
+        mapData.tiles[location] = floorSprite
         when (char) {
             '#' -> mapData.walls.add(location)
             'x' -> mapData.boxes.add(location)

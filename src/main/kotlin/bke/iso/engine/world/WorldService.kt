@@ -1,81 +1,99 @@
 package bke.iso.engine.world
 
+import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
 import bke.iso.service.Singleton
 import com.badlogic.gdx.math.Rectangle
-
-data class Tile(val sprite: Sprite)
+import java.util.UUID
 
 @Singleton
 class WorldService {
 
-    private val locationByEntity = mutableMapOf<Entity, Location>()
-    private val locations = mutableMapOf<Location, LocationData>()
+    private val deletedObjects = mutableSetOf<WorldObject>()
+    private val locationByObject = mutableMapOf<WorldObject, Location>()
+    private val grid = mutableMapOf<Location, MutableSet<WorldObject>>()
 
-    fun setTile(location: Location, tile: Tile) {
-        locations
-            .getOrPut(location) { LocationData() }
-            .tile = tile
+    val entities = Entities(grid)
+
+    fun setTile(location: Location, sprite: Sprite) {
+        val tile = TileObject(sprite)
+        setup(tile, location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
     }
 
-    fun updateEntity(entity: Entity, x: Float, y: Float, z: Float) {
-        val newLocation = Location(x, y, z)
-        val oldLocation = locationByEntity[entity]
-        if (oldLocation != null && oldLocation != newLocation) {
-            removeEntity(entity)
-            log.debug("Moving entity ${entity.id} from $oldLocation to $newLocation")
+    fun createEntity(x: Float, y: Float, z: Float): Entity {
+        val entity = Entity(UUID.randomUUID())
+        setup(entity, x, y, z)
+        return entity
+    }
+
+    fun createEntity(location: Location) =
+        createEntity(location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
+
+    private fun setup(worldObject: WorldObject, x: Float, y: Float, z: Float) {
+        worldObject.x = x
+        worldObject.y = y
+        worldObject.z = z
+        add(worldObject, x, y, z)
+        worldObject.positionListeners.add { obj ->
+            update(obj, obj.x, obj.y, obj.z)
         }
-        locationByEntity[entity] = newLocation
-        locations
-            .getOrPut(newLocation) { LocationData() }
-            .entities
-            .add(entity)
     }
 
-    fun removeEntity(entity: Entity) {
-        val location = locationByEntity[entity] ?: return
-        val data = locations[location] ?: return
-        data.entities.remove(entity)
-        locationByEntity.remove(entity)
-    }
-
-    fun getAll(): List<Pair<Location, LocationData>> =
-        locations.keys
-            .sortedWith(
-                compareByDescending(Location::y)
-                    .thenBy(Location::x)
-            ).mapNotNull { location ->
-                locations[location]?.let { data ->
-                    location to data
-                }
-            }
-
-    fun getEntitiesAt(x: Int, y: Int, z: Int): Set<Entity> =
-        locations[Location(x, y, z)]
-            ?.entities
-            ?: emptySet()
+    fun getAllObjects(): List<WorldObject> =
+        grid.flatMap { (_, objects) -> objects }
 
     fun findEntitiesInArea(rect: Rectangle): Set<Entity> {
         val startX = rect.x.toInt()
         val endX = (rect.x + rect.width).toInt() + 1
-
         val startY = rect.y.toInt()
         val endY = (rect.y + rect.height).toInt() + 1
 
         val entities = mutableSetOf<Entity>()
         for (x in startX..endX) {
             for (y in startY..endY) {
-                entities.addAll(getEntitiesAt(x, y, 0))
+                getObjectsAt(x, y, 0)
+                    .filterIsInstance<Entity>()
+                    .forEach(entities::add)
             }
         }
         return entities
     }
-}
 
-data class LocationData(
-    var tile: Tile? = null,
-    val entities: MutableSet<Entity> = mutableSetOf()
-)
+    fun getObjectsAt(x: Int, y: Int, z: Int): Set<WorldObject> =
+        grid[Location(x, y, z)]
+            ?: emptySet()
+
+    fun delete(worldObject: WorldObject) {
+        deletedObjects.add(worldObject)
+    }
+
+    fun update() {
+        // TODO: add delete function for objects?
+        deletedObjects.forEach(this::remove)
+        deletedObjects.clear()
+    }
+
+    private fun update(worldObject: WorldObject, x: Float, y: Float, z: Float) {
+        val newLocation = Location(x, y, z)
+        val oldLocation = locationByObject[worldObject]
+        if (oldLocation != null && oldLocation != newLocation) {
+            remove(worldObject)
+            log.debug("moved entity to location $newLocation")
+        }
+        add(worldObject, x, y, z)
+    }
+
+    private fun remove(worldObject: WorldObject) {
+        val location = locationByObject[worldObject] ?: return
+        grid[location]?.remove(worldObject)
+    }
+
+    private fun add(worldObject: WorldObject, x: Float, y: Float, z: Float) {
+        val location = Location(x, y, z)
+        grid.getOrPut(location) { mutableSetOf() }.add(worldObject)
+        locationByObject[worldObject] = location
+    }
+}

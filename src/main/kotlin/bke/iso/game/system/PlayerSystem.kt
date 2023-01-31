@@ -2,12 +2,12 @@ package bke.iso.game.system
 
 import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
 import bke.iso.engine.physics.MoveEvent
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.system.System
+import bke.iso.engine.world.WorldService
 import bke.iso.game.EntityFactory
 import bke.iso.game.Player
 import bke.iso.game.event.BulletType
@@ -17,7 +17,7 @@ import kotlin.math.max
 
 @Transient
 class PlayerSystem(
-    private val entityService: EntityService,
+    private val worldService: WorldService,
     private val inputService: InputService,
     private val eventService: EventService,
     private val renderService: RenderService,
@@ -29,7 +29,7 @@ class PlayerSystem(
     private val flySpeed = 3f
 
     override fun update(deltaTime: Float) {
-        entityService.search.withComponent(Player::class) { entity, _ ->
+        worldService.entities.withComponent(Player::class) { entity, _ ->
             updatePlayerEntity(entity, deltaTime)
 
             inputService.onAction("toggleDebug") {

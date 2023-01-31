@@ -2,13 +2,13 @@ package bke.iso.game.event
 
 import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.WorldService
 import bke.iso.game.Bullet
 import com.badlogic.gdx.math.Vector3
 
@@ -24,7 +24,7 @@ data class ShootEvent(
 ) : Event()
 
 @Transient
-class ShootHandler(private val entityService: EntityService) : EventHandler<ShootEvent> {
+class ShootHandler(private val worldService: WorldService) : EventHandler<ShootEvent> {
     override val type = ShootEvent::class
 
     private val playerBulletSpeed = 30f
@@ -41,7 +41,7 @@ class ShootHandler(private val entityService: EntityService) : EventHandler<Shoo
             BulletType.TURRET -> turretBulletSpeed
         }
 
-        val bullet = entityService.create(pos.x, pos.y, pos.z)
+        val bullet = worldService.createEntity(pos.x, pos.y, pos.z)
         bullet.add(
             Bullet(shooter.id, pos),
             Sprite("bullet", 8f, 8f),

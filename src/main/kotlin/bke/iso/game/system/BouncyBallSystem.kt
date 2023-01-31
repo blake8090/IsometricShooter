@@ -1,21 +1,21 @@
 package bke.iso.game.system
 
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.entity.EntityService
 import bke.iso.engine.system.System
+import bke.iso.engine.world.WorldService
 import bke.iso.game.BouncyBall
 import bke.iso.service.Transient
 import kotlin.math.max
 
 @Transient
-class BouncyBallSystem(private val entityService: EntityService) : System {
+class BouncyBallSystem(private val worldService: WorldService) : System {
 
     private val force = 5f
     private val gravity = 5f
     private val terminalVelocity = -5f
 
     override fun update(deltaTime: Float) {
-        entityService.search.withComponent(BouncyBall::class) { entity, bouncyBall ->
+        worldService.entities.withComponent(BouncyBall::class) { entity, bouncyBall ->
             if (onGround(entity)) {
                 bouncyBall.velocityZ = force
             }
