@@ -67,6 +67,75 @@ class ShapeDrawerUtil(batch: PolygonSpriteBatch) : ShapeUtil {
         shapeDrawer.ellipse(pos.x, pos.y, width, height)
     }
 
+    override fun drawBox(worldPos: Vector3, dimensions: Vector3, color: Color) {
+        val rect = Rectangle(worldPos.x, worldPos.y, dimensions.x, dimensions.y)
+
+        val bottomPolygon = toScreen(rect, worldPos.z)
+        shapeDrawer.setColor(color)
+        shapeDrawer.polygon(bottomPolygon)
+
+        if (dimensions.z > 0) {
+            val topPolygon = toScreen(rect, worldPos.z + dimensions.z)
+            shapeDrawer.polygon(topPolygon)
+
+            // bottom left
+            shapeDrawer.line(
+                toScreen(
+                    worldPos.x,
+                    worldPos.y,
+                    worldPos.z
+                ),
+                toScreen(
+                    worldPos.x,
+                    worldPos.y,
+                    worldPos.z + dimensions.z
+                )
+            )
+
+            // bottom right
+            shapeDrawer.line(
+                toScreen(
+                    worldPos.x + dimensions.x,
+                    worldPos.y,
+                    worldPos.z
+                ),
+                toScreen(
+                    worldPos.x + dimensions.x,
+                    worldPos.y,
+                    worldPos.z + dimensions.z
+                )
+            )
+
+            // top left
+            shapeDrawer.line(
+                toScreen(
+                    worldPos.x,
+                    worldPos.y + dimensions.y,
+                    worldPos.z
+                ),
+                toScreen(
+                    worldPos.x,
+                    worldPos.y + dimensions.y,
+                    worldPos.z + dimensions.z
+                )
+            )
+
+            // top right
+            shapeDrawer.line(
+                toScreen(
+                    worldPos.x + dimensions.x,
+                    worldPos.y + dimensions.y,
+                    worldPos.z
+                ),
+                toScreen(
+                    worldPos.x + dimensions.x,
+                    worldPos.y + dimensions.y,
+                    worldPos.z + dimensions.z
+                )
+            )
+        }
+    }
+
     override fun dispose() {
         texture.dispose()
     }

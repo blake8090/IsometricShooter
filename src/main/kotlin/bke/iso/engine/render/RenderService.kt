@@ -112,9 +112,21 @@ class RenderService(
 
     private fun addEntityDebugData(entity: Entity) {
         debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
+
         collisionService.findCollisionData(entity)?.let { collisionData ->
-            debugRenderService.addRectangle(collisionData.box, 1f, Color.GREEN)
+            val boxPosition = Vector3(
+                collisionData.box.x,
+                collisionData.box.y,
+                entity.z
+            )
+            val boxDimensions = Vector3(
+                collisionData.box.width,
+                collisionData.box.height,
+                1f // TODO: retrieve this from collision data
+            )
+            debugRenderService.addBox(boxPosition, boxDimensions, Color.GREEN)
         }
+
         if (entity.z != 0f) {
             val start = Vector3(entity.x, entity.y, 0f)
             val end = Vector3(entity.x, entity.y, entity.z)
@@ -123,7 +135,7 @@ class RenderService(
         }
     }
 
-    fun drawTile(tile: Tile) {
+    private fun drawTile(tile: Tile) {
         drawSprite(tile.sprite, Vector3(tile.x, tile.y, tile.z))
     }
 

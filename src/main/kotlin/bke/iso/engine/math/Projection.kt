@@ -46,12 +46,12 @@ fun toScreen(worldPos: Vector3) =
 /**
  * Converts a [Rectangle] defined in world units, to a [Polygon] with vertices defined in screen units.
  */
-fun toScreen(rect: Rectangle): Polygon {
+fun toScreen(rect: Rectangle, z: Float = 0f): Polygon {
     val vertices = listOf(
-        toScreen(rect.x, rect.y),
-        toScreen(rect.x, rect.y + rect.height),
-        toScreen(rect.x + rect.width, rect.y + rect.height),
-        toScreen(rect.x + rect.width, rect.y)
+        toScreen(rect.x, rect.y, z),
+        toScreen(rect.x, rect.y + rect.height, z),
+        toScreen(rect.x + rect.width, rect.y + rect.height, z),
+        toScreen(rect.x + rect.width, rect.y, z)
     )
     return Polygon(
         vertices

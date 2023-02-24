@@ -19,4 +19,6 @@ interface ShapeUtil : Disposable {
     fun drawLine(start: Vector3, end: Vector3, color: Color)
 
     fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color)
+
+    fun drawBox(worldPos: Vector3, dimensions: Vector3, color: Color)
 }

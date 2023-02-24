@@ -34,6 +34,12 @@ class DebugRenderService {
             DebugPoint()
     }
 
+    private val boxes = mutableListOf<DebugBox>()
+    private val boxPool = object : Pool<DebugBox>() {
+        override fun newObject() =
+            DebugBox()
+    }
+
     fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
         val line = linePool.obtain()
         line.start.set(start)
@@ -67,6 +73,14 @@ class DebugRenderService {
         points.add(point)
     }
 
+    fun addBox(pos: Vector3, dimensions: Vector3, color: Color) {
+        val box = boxPool.obtain()
+        box.pos.set(pos)
+        box.dimensions.set(dimensions)
+        box.color = color
+        boxes.add(box)
+    }
+
     fun render(shapeUtil: ShapeUtil) {
         shapeUtil.begin()
         for (line in lines) {
@@ -84,6 +98,10 @@ class DebugRenderService {
         for (point in points) {
             shapeUtil.drawPoint(point.pos, point.size, point.color)
         }
+
+        for (box in boxes) {
+            shapeUtil.drawBox(box.pos, box.dimensions, box.color)
+        }
         shapeUtil.end()
     }
 
@@ -99,5 +117,8 @@ class DebugRenderService {
 
         points.forEach(pointPool::free)
         points.clear()
+
+        boxes.forEach(boxPool::free)
+        boxes.clear()
     }
 }

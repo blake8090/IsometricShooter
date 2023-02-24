@@ -60,6 +60,8 @@ class DefaultShapeUtil(private val camera: Camera) : ShapeUtil {
         shapeRenderer.end()
     }
 
+    override fun drawBox(worldPos: Vector3, dimensions: Vector3, color: Color) {}
+
     override fun dispose() {
         shapeRenderer.dispose()
     }
