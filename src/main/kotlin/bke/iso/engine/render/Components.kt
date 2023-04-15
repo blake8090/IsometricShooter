@@ -7,3 +7,5 @@ data class Sprite(
     val offsetX: Float,
     val offsetY: Float
 ) : Component()
+
+class DrawShadow : Component()

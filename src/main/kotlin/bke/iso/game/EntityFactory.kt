@@ -4,6 +4,7 @@ import bke.iso.service.Singleton
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
+import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
 
@@ -53,13 +54,15 @@ class EntityFactory(private val worldService: WorldService) {
                     false
                 ),
                 Health(5f),
-                HealthBar(18f, -64f)
+                HealthBar(18f, -64f),
+                DrawShadow()
             )
 
     fun createBouncyBall(x: Float, y: Float, z: Float) =
         worldService.createEntity(x, y, z)
             .add(
                 Sprite("circle", 16f, 0f),
-                BouncyBall()
+                BouncyBall(),
+                DrawShadow()
             )
 }

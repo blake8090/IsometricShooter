@@ -102,7 +102,7 @@ class RenderService(
 
     private fun drawEntity(entity: Entity) {
         val sprite = entity.get<Sprite>() ?: return
-        if (entity.z > 0f) {
+        if (entity.z > 0f && entity.has<DrawShadow>()) {
             drawSprite(shadowSprite, Vector3(entity.x, entity.y, 0f))
         }
         drawSprite(sprite, Vector3(entity.x, entity.y, entity.z))

@@ -9,7 +9,6 @@ import bke.iso.engine.input.InputService
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.physics.Collision
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.State
 import bke.iso.engine.system.System
@@ -83,10 +82,7 @@ class GameState(
         }
 
         mapData.walls.forEach { location ->
-            val wall = entityFactory.createWall(location)
-            if (location.z > 0) {
-                wall.remove<Collision>()
-            }
+            entityFactory.createWall(location)
         }
 
         mapData.boxes.forEach { location ->
