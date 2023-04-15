@@ -5,6 +5,7 @@ import bke.iso.engine.entity.Component
 data class Bounds(
     val width: Float,
     val length: Float,
+    val height: Float,
     val offsetX: Float,
     val offsetY: Float
 )

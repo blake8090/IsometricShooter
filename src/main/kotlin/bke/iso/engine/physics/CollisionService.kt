@@ -18,6 +18,7 @@ import kotlin.math.min
 data class CollisionData(
     val entity: Entity,
     val bounds: Bounds,
+    // TODO: use a 3D box
     val box: Rectangle,
     val solid: Boolean,
 )

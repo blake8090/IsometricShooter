@@ -10,9 +10,9 @@ import kotlin.math.max
 @Transient
 class BouncyBallSystem(private val worldService: WorldService) : System {
 
-    private val force = 5f
-    private val gravity = 5f
-    private val terminalVelocity = -5f
+    private val force = 6f
+    private val gravity = 6f
+    private val terminalVelocity = -6f
 
     override fun update(deltaTime: Float) {
         worldService.entities.withComponent(BouncyBall::class) { entity, bouncyBall ->

@@ -19,7 +19,7 @@ const val TILE_SIZE_Y = 32
 /**
  * Height of one tile in pixels
  */
-const val TILE_SIZE_Z = 64
+const val TILE_SIZE_Z = 32
 
 /**
  * Two to one ratio (64/32 = 2)

@@ -16,7 +16,7 @@ class EntityFactory(private val worldService: WorldService) {
             .add(
                 Sprite("wall3", 0f, 16f),
                 Collision(
-                    Bounds(1f, 1f, 0f, 0f),
+                    Bounds(1f, 1f, 2f, 0f, 0f),
                     true
                 )
             )
@@ -26,7 +26,7 @@ class EntityFactory(private val worldService: WorldService) {
             .add(
                 Sprite("box", 16f, 8f),
                 Collision(
-                    Bounds(0.5f, 0.5f, -0.25f, -0.25f),
+                    Bounds(0.5f, 0.5f, 0.5f, -0.25f, -0.25f),
                     true
                 )
             )
@@ -37,7 +37,7 @@ class EntityFactory(private val worldService: WorldService) {
                 Sprite("turret", 16f, 0f),
                 Turret(),
                 Collision(
-                    Bounds(0.5f, 0.5f, -0.25f, -0.25f),
+                    Bounds(0.5f, 0.5f, 1f, -0.25f, -0.25f),
                     false
                 ),
                 Health(3f),
@@ -50,7 +50,7 @@ class EntityFactory(private val worldService: WorldService) {
                 Sprite("player", 32f, 0f),
                 Player(),
                 Collision(
-                    Bounds(0.5f, 0.5f, -0.25f, -0.25f),
+                    Bounds(0.5f, 0.5f, 2f, -0.25f, -0.25f),
                     false
                 ),
                 Health(5f),

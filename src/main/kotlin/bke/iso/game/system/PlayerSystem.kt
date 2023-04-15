@@ -26,7 +26,7 @@ class PlayerSystem(
 
     private val walkSpeed = 5f
     private val runSpeed = 10f
-    private val flySpeed = 3f
+    private val flySpeed = 4f
 
     override fun update(deltaTime: Float) {
         worldService.entities.withComponent(Player::class) { entity, _ ->

@@ -122,7 +122,7 @@ class RenderService(
             val boxDimensions = Vector3(
                 collisionData.box.width,
                 collisionData.box.height,
-                1f // TODO: retrieve this from collision data
+                collisionData.bounds.height
             )
             debugRenderService.addBox(boxPosition, boxDimensions, Color.GREEN)
         }

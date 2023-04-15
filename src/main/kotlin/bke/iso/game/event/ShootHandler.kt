@@ -47,7 +47,7 @@ class ShootHandler(private val worldService: WorldService) : EventHandler<ShootE
             Sprite("bullet", 8f, 8f),
             Velocity(direction.x, direction.y, speed),
             Collision(
-                Bounds(0.25f, 0.25f, 0f, -0.25f),
+                Bounds(0.25f, 0.25f, 0f, 0f, -0.25f),
                 false
             )
         )
