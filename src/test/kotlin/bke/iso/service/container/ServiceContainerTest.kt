@@ -266,6 +266,8 @@ internal class ServiceContainerTest {
 
     @Test
     fun givenCircularProviderDependency_whenPostInit_thenDoNotThrowError() {
+        // TODO: functions inside inner classes require a parameter for the inner class instance.
+        //  this fails the postInit validation
         assertDoesNotThrow {
             CircularProviderDependency()
         }

@@ -2,7 +2,7 @@ package bke.iso.service.container
 
 import bke.iso.engine.log
 import bke.iso.service.PostInit
-import bke.iso.service.PostInitConfigurationException
+//import bke.iso.service.PostInitConfigurationException
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.functions
 import kotlin.reflect.full.hasAnnotation
@@ -32,9 +32,10 @@ internal class ServiceInstance<T : Any>(val value: T) {
             .firstOrNull { func -> func.hasAnnotation<PostInit>() }
             ?: return null
 
-        if (func.parameters.isNotEmpty()) {
-            throw PostInitConfigurationException("The postInit function cannot have any parameters")
-        }
+        // TODO: fix issue with using postInit inside inner classes
+//        if (func.parameters.isNotEmpty()) {
+//            throw PostInitConfigurationException("The postInit function cannot have any parameters")
+//        }
         return func
     }
 }
