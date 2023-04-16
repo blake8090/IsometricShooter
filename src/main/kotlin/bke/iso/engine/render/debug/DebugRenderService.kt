@@ -1,5 +1,6 @@
 package bke.iso.engine.render.debug
 
+import bke.iso.engine.physics.collision.Box
 import bke.iso.engine.render.shape.ShapeUtil
 import bke.iso.service.Singleton
 import com.badlogic.gdx.graphics.Color
@@ -85,6 +86,12 @@ class DebugRenderService {
         box.dimensions.set(dimensions)
         box.color = color
         boxes.add(box)
+    }
+
+    fun addBox(box: Box, color: Color) {
+        for (segment in box.getSegments()) {
+            addLine(segment.a, segment.b, 1f, color)
+        }
     }
 
     fun addSphere(pos: Vector3, radius: Float, color: Color) {

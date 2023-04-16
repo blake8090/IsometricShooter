@@ -7,7 +7,7 @@ import bke.iso.engine.event.EventService
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.physics.CollisionService
+import bke.iso.engine.physics.collision.CollisionServiceV2
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.render.shape.ShapeDrawerUtil
 import bke.iso.engine.world.Tile
@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Vector3
 class RenderService(
     private val assetService: AssetService,
     private val worldService: WorldService,
-    private val collisionService: CollisionService,
+    private val collisionServiceV2: CollisionServiceV2,
     private val eventService: EventService,
     private val debugRenderService: DebugRenderService
 ) {
@@ -113,18 +113,8 @@ class RenderService(
     private fun addEntityDebugData(entity: Entity) {
         debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
 
-        collisionService.findCollisionData(entity)?.let { collisionData ->
-            val boxPosition = Vector3(
-                collisionData.box.x,
-                collisionData.box.y,
-                entity.z
-            )
-            val boxDimensions = Vector3(
-                collisionData.box.width,
-                collisionData.box.height,
-                collisionData.bounds.height
-            )
-            debugRenderService.addBox(boxPosition, boxDimensions, Color.GREEN)
+        collisionServiceV2.findCollisionData(entity)?.let { data ->
+            debugRenderService.addBox(data.box, Color.GREEN)
         }
 
         if (entity.z != 0f) {

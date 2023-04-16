@@ -4,9 +4,12 @@ import bke.iso.service.Singleton
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
+import bke.iso.engine.physics.collision.BoundsV2
+import bke.iso.engine.physics.collision.CollisionV2
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
+import com.badlogic.gdx.math.Vector3
 
 @Singleton
 class EntityFactory(private val worldService: WorldService) {
@@ -18,6 +21,10 @@ class EntityFactory(private val worldService: WorldService) {
                 Collision(
                     Bounds(1f, 1f, 2f, 0f, 0f),
                     true
+                ),
+                CollisionV2(
+                    BoundsV2(Vector3(1f, 1f, 2f), Vector3(0.5f, 0.5f, 0f)),
+                    true
                 )
             )
 
@@ -27,6 +34,10 @@ class EntityFactory(private val worldService: WorldService) {
                 Sprite("box", 16f, 8f),
                 Collision(
                     Bounds(0.5f, 0.5f, 0.5f, -0.25f, -0.25f),
+                    true
+                ),
+                CollisionV2(
+                    BoundsV2(Vector3(0.5f, 0.5f, 0.5f)),
                     true
                 )
             )
@@ -40,6 +51,10 @@ class EntityFactory(private val worldService: WorldService) {
                     Bounds(0.5f, 0.5f, 1f, -0.25f, -0.25f),
                     false
                 ),
+                CollisionV2(
+                    BoundsV2(Vector3(0.5f, 0.5f, 1f)),
+                    false
+                ),
                 Health(3f),
                 HealthBar(16f, -36f)
             )
@@ -51,6 +66,10 @@ class EntityFactory(private val worldService: WorldService) {
                 Player(),
                 Collision(
                     Bounds(0.5f, 0.5f, 2f, -0.25f, -0.25f),
+                    false
+                ),
+                CollisionV2(
+                    BoundsV2(Vector3(0.5f, 0.5f, 2f)),
                     false
                 ),
                 Health(5f),

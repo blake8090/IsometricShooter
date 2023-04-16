@@ -32,5 +32,17 @@ fun Rectangle.getEdges() =
         ),
     )
 
+fun Rectangle.getBottomLeft() =
+    Vector2(x, y)
+
+fun Rectangle.getBottomRight() =
+    Vector2(x + width, y)
+
+fun Rectangle.getTopLeft() =
+    Vector2(x, y + height)
+
+fun Rectangle.getTopRight() =
+    Vector2(x + width, y + height)
+
 fun Vector3.toVector2() =
     Vector2(x, y)
