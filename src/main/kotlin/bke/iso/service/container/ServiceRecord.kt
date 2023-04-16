@@ -7,10 +7,9 @@ internal enum class Lifetime {
     TRANSIENT
 }
 
-// TODO: rename to ServiceRecord?
-internal data class Record<T : Any>(
+internal data class ServiceRecord<T : Any>(
     val kClass: KClass<T>,
     val lifetime: Lifetime,
-    val dependencies: List<() -> Instance<*>>,
+    val dependencies: List<() -> ServiceInstance<*>>,
     var initialized: Boolean = false
 )

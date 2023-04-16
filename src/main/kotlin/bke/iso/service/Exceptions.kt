@@ -12,3 +12,5 @@ class MissingInstanceException(baseClass: KClass<*>, implClass: KClass<*>) :
     RuntimeException("Expected instance of class ${implClass.simpleName} for service ${baseClass.simpleName}")
 
 class ServiceCreationException(message: String, e: Exception): RuntimeException(message, e)
+
+class PostInitConfigurationException(message: String) : RuntimeException(message)

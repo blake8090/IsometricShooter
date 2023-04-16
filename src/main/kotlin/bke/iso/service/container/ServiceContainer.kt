@@ -20,17 +20,17 @@ import kotlin.reflect.jvm.jvmErasure
 
 class ServiceContainer {
 
-    private val records = mutableMapOf<KClass<*>, Record<*>>()
-    private val instances = mutableMapOf<KClass<*>, Instance<*>>()
+    private val records = mutableMapOf<KClass<*>, ServiceRecord<*>>()
+    private val instances = mutableMapOf<KClass<*>, ServiceInstance<*>>()
 
     fun init(classes: Set<KClass<*>>) {
         classes.forEach { kClass -> createRecord(kClass, mutableSetOf()) }
         records.values.forEach { record -> initRecord(record) }
-        instances.values.forEach(Instance<*>::callPostInit)
+        instances.values.forEach(ServiceInstance<*>::callPostInit)
     }
 
     fun <T : Any> get(kClass: KClass<T>): T {
-        val serviceInstance = resolveInstance(kClass)
+        val serviceInstance = findInstance(kClass)
         return kClass.cast(serviceInstance.value)
     }
 
@@ -40,7 +40,7 @@ class ServiceContainer {
     private fun getRecord(kClass: KClass<*>) =
         records[kClass] ?: throw NoServiceFoundException(kClass)
 
-    private fun <T : Any> initRecord(record: Record<T>) {
+    private fun <T : Any> initRecord(record: ServiceRecord<T>) {
         if (record.lifetime == Lifetime.SINGLETON) {
             instances[record.kClass] = createInstance(record)
         }
@@ -62,7 +62,7 @@ class ServiceContainer {
             .map { param -> createDependency(param.type, chain) }
 
         val lifetime = getLifetime(kClass)
-        val record = Record(kClass, lifetime, dependencies)
+        val record = ServiceRecord(kClass, lifetime, dependencies)
         records[kClass] = record
         log.debug(
             "Created service record '${kClass.simpleName}'"
@@ -80,7 +80,7 @@ class ServiceContainer {
             throw MissingAnnotationsException("No annotations found for class ${kClass.simpleName}")
         }
 
-    private fun createDependency(kType: KType, chain: MutableSet<KClass<*>>): () -> Instance<*> {
+    private fun createDependency(kType: KType, chain: MutableSet<KClass<*>>): () -> ServiceInstance<*> {
         val kClass = kType.jvmErasure
 
         if (kClass == Provider::class) {
@@ -88,15 +88,15 @@ class ServiceContainer {
                 .first()
                 .type!!
                 .jvmErasure
-            return { Instance(Provider(this, parameterizedClass), emptyList()) }
+            return { ServiceInstance(Provider(this, parameterizedClass)) }
         } else {
             val subChain = chain.toMutableSet()
             createRecord(kClass, subChain)
-            return { resolveInstance(kClass) }
+            return { findInstance(kClass) }
         }
     }
 
-    private fun resolveInstance(kClass: KClass<*>): Instance<*> {
+    private fun findInstance(kClass: KClass<*>): ServiceInstance<*> {
         val record = getRecord(kClass)
         val instance =
             when (record.lifetime) {
@@ -107,7 +107,7 @@ class ServiceContainer {
         return instance
     }
 
-    private fun <T : Any> createInstance(record: Record<T>): Instance<T> {
+    private fun <T : Any> createInstance(record: ServiceRecord<T>): ServiceInstance<T> {
         val kClass = record.kClass
         val dependencies = record.dependencies.map { provider -> provider.invoke() }
 
@@ -116,13 +116,14 @@ class ServiceContainer {
                 .map { instance -> instance.value }
                 .toTypedArray()
 
-            val instance = if (params.isEmpty()) {
-                kClass.createInstance()
-            } else {
-                kClass.primaryConstructor!!.call(*params)
-            }
+            val instance =
+                if (params.isEmpty()) {
+                    kClass.createInstance()
+                } else {
+                    kClass.primaryConstructor!!.call(*params)
+                }
 
-            return Instance(instance, dependencies)
+            return ServiceInstance(instance)
         } catch (e: Exception) {
             throw ServiceCreationException("Error creating instance of service ${kClass.simpleName}:", e)
         }

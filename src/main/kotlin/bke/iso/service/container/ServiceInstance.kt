@@ -2,12 +2,12 @@ package bke.iso.service.container
 
 import bke.iso.engine.log
 import bke.iso.service.PostInit
+import bke.iso.service.PostInitConfigurationException
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.functions
 import kotlin.reflect.full.hasAnnotation
 
-// TODO: rename to ServiceInstance
-internal class Instance<T : Any>(val value: T, private val dependencies: List<Instance<*>>) {
+internal class ServiceInstance<T : Any>(val value: T) {
 
     private var state = State.CREATED
 
@@ -18,7 +18,6 @@ internal class Instance<T : Any>(val value: T, private val dependencies: List<In
 
         state = State.POST_INIT
 
-        dependencies.forEach { instance -> instance.callPostInit() }
         val func = findPostInit()
         if (func != null) {
             log.debug("Instance '${value::class.simpleName}' - calling PostInit")
@@ -33,7 +32,9 @@ internal class Instance<T : Any>(val value: T, private val dependencies: List<In
             .firstOrNull { func -> func.hasAnnotation<PostInit>() }
             ?: return null
 
-        // TODO: validate function parameters
+        if (func.parameters.isNotEmpty()) {
+            throw PostInitConfigurationException("The postInit function cannot have any parameters")
+        }
         return func
     }
 }
