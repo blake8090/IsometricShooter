@@ -37,16 +37,21 @@ class GameState(
 
     @PostInit
     fun setup() {
-        // TODO: add helper methods in State for adding systems and handlers
-        systems.add(systemProvider.get(PlayerSystem::class))
-        systems.add(systemProvider.get(BulletSystem::class))
-        systems.add(systemProvider.get(TurretSystem::class))
-        systems.add(systemProvider.get(BouncyBallSystem::class))
+        addSystems(
+            systemProvider,
+            PlayerSystem::class,
+            BulletSystem::class,
+            TurretSystem::class,
+            BouncyBallSystem::class
+        )
 
-        eventHandlers.add(handlerProvider.get(ShootHandler::class))
-        eventHandlers.add(handlerProvider.get(DamageHandler::class))
-        eventHandlers.add(handlerProvider.get(BulletCollisionHandler::class))
-        eventHandlers.add(handlerProvider.get(DrawHealthHandler::class))
+        addHandlers(
+            handlerProvider,
+            ShootHandler::class,
+            DamageHandler::class,
+            BulletCollisionHandler::class,
+            DrawHealthHandler::class
+        )
     }
 
     override fun start() {
