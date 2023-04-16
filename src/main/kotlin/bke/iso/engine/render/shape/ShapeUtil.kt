@@ -21,4 +21,9 @@ interface ShapeUtil : Disposable {
     fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color)
 
     fun drawBox(worldPos: Vector3, dimensions: Vector3, color: Color)
+
+    /**
+     * Draws a 2D projection of a 3D isometric sphere.
+     */
+    fun drawSphere(worldPos: Vector3, worldRadius: Float, color: Color)
 }

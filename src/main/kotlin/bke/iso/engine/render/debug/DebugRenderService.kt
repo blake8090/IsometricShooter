@@ -40,6 +40,12 @@ class DebugRenderService {
             DebugBox()
     }
 
+    private val spheres = mutableListOf<DebugSphere>()
+    private val spherePool = object : Pool<DebugSphere>() {
+        override fun newObject() =
+            DebugSphere()
+    }
+
     fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
         val line = linePool.obtain()
         line.start.set(start)
@@ -81,6 +87,14 @@ class DebugRenderService {
         boxes.add(box)
     }
 
+    fun addSphere(pos: Vector3, radius: Float, color: Color) {
+        val sphere = spherePool.obtain()
+        sphere.pos.set(pos.x, pos.y, pos.z)
+        sphere.radius = radius
+        sphere.color = color
+        spheres.add(sphere)
+    }
+
     fun render(shapeUtil: ShapeUtil) {
         shapeUtil.begin()
         for (line in lines) {
@@ -102,6 +116,11 @@ class DebugRenderService {
         for (box in boxes) {
             shapeUtil.drawBox(box.pos, box.dimensions, box.color)
         }
+
+        for (sphere in spheres) {
+            shapeUtil.drawSphere(sphere.pos, sphere.radius, sphere.color)
+        }
+
         shapeUtil.end()
     }
 
@@ -120,5 +139,8 @@ class DebugRenderService {
 
         boxes.forEach(boxPool::free)
         boxes.clear()
+
+        spheres.forEach(spherePool::free)
+        spheres.clear()
     }
 }

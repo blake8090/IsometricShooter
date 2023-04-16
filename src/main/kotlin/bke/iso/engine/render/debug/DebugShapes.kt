@@ -51,3 +51,12 @@ data class DebugBox(
 
     override fun reset() {}
 }
+
+data class DebugSphere(
+    var pos: Vector3 = Vector3(),
+    var radius: Float = 0f,
+    var color: Color = Color.WHITE
+) : Poolable {
+
+    override fun reset() {}
+}

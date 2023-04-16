@@ -3,7 +3,6 @@ package bke.iso.game.system
 import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
-import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
@@ -13,7 +12,6 @@ import bke.iso.game.Turret
 import bke.iso.game.event.BulletType
 import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.max
@@ -30,7 +28,7 @@ class TurretSystem(
 
     override fun update(deltaTime: Float) {
         worldService.entities.withComponent(Turret::class) { entity, turret ->
-            debugRenderService.addCircle(Vector3(entity.x, entity.y, entity.z), visionRadius, Color.GOLD)
+            debugRenderService.addSphere(Vector3(entity.x, entity.y, entity.z), visionRadius, Color.GOLD)
 
             turret.coolDownTime = max(0f, turret.coolDownTime - deltaTime)
 
@@ -45,11 +43,9 @@ class TurretSystem(
     private fun findTarget(turretEntity: Entity): Vector3? {
         val playerEntity = worldService.entities.firstHavingComponent(Player::class) ?: return null
 
-        val pos = Vector3(turretEntity.x, turretEntity.y, 0f)
-        val playerPos = Vector3(playerEntity.x, playerEntity.y, 0f)
-
-        // TODO: use Sphere instead
-        if (!Circle(pos.toVector2(), visionRadius).contains(playerPos.toVector2())) {
+        val pos = Vector3(turretEntity.x, turretEntity.y, turretEntity.z)
+        val playerPos = Vector3(playerEntity.x, playerEntity.y, playerEntity.z)
+        if (pos.dst(playerPos) > visionRadius) {
             return null
         }
 
