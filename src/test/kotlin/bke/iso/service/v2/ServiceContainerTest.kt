@@ -1,19 +1,98 @@
 package bke.iso.service.v2
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 // TODO: finish tests
 class ServiceContainerTest {
 
     @Test
+    fun `when register, then register all services`() {
+        class A : TransientService
+        class B : TransientService
+        class C : TransientService
+
+        val container = ServiceContainer()
+        container.register(A::class, B::class, C::class)
+
+        assertDoesNotThrow {
+            container.get<A>()
+            container.get<B>()
+            container.get<C>()
+        }
+    }
+
+    @Test
+    @Suppress("UNUSED")
     fun `when register, given nested dependency chain, then register and link all services`() {
         class C : TransientService
-        class B(b: C) : TransientService
-        class A(c: B) : TransientService
+        class B(val c: C) : TransientService
+        class A(val b: B) : TransientService
 
         val container = ServiceContainer()
         container.register(A::class)
 
-        container.createInstance(A::class)
+        assertDoesNotThrow {
+            container.get<A>()
+            container.get<B>()
+            container.get<C>()
+        }
+    }
+
+    @Test
+    fun `when get, given a TransientService, then return a new instance`() {
+        class A : TransientService
+
+        val container = ServiceContainer()
+        container.register(A::class)
+
+        val a = container.get<A>()
+        val a2 = container.get<A>()
+        assertThat(a).isNotSameAs(a2)
+    }
+
+    @Test
+    fun `when get, given a SingletonService, then return the same instance`() {
+        class A : SingletonService
+
+        val container = ServiceContainer()
+        container.register(A::class)
+
+        val a = container.get<A>()
+        val a2 = container.get<A>()
+        assertThat(a).isSameAs(a2)
+    }
+
+    @Test
+    @Suppress("UNUSED")
+    fun `when register, given nested SingletonServices, then initialize all of them without errors`() {
+        class C : SingletonService
+        class B(val c: C) : SingletonService
+        class A(val b: B) : SingletonService
+
+        val container = ServiceContainer()
+        assertDoesNotThrow {
+            container.register(A::class, B::class)
+            container.get<A>()
+            container.get<B>()
+        }
+    }
+
+    @Test
+    @Suppress("UNUSED")
+    fun `when register, given singleton dependency, then use same instance`() {
+        class C : SingletonService
+        class B(val c: C) : TransientService
+        class A(val c: C) : TransientService
+
+        val container = ServiceContainer()
+
+        assertDoesNotThrow {
+            container.register(A::class, B::class, C::class)
+            val a = container.get<A>()
+            val b = container.get<B>()
+            assertThat(a.c).isSameAs(b.c)
+        }
     }
 }

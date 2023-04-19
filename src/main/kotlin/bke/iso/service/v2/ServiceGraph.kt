@@ -3,7 +3,7 @@ package bke.iso.service.v2
 import kotlin.reflect.KClass
 
 data class Node<T : Service>(
-    val type: KClass<T>,
+    val type: KClass<out T>,
     val parents: MutableSet<KClass<out Service>> = mutableSetOf(),
     val links: MutableSet<KClass<out Service>> = mutableSetOf(),
     var instance: T? = null
@@ -26,8 +26,8 @@ class ServiceGraph {
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Service> get(type: KClass<out T>): Node<out T> {
-        val node = nodes.filter { node -> node.type == type }
-            .firstOrNull()
+        val node = nodes
+            .firstOrNull { node -> node.type == type }
             ?: throw Error("Service ${type.simpleName} was not found")
         return node as Node<out T>
     }
