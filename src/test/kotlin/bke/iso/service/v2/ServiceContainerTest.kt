@@ -3,8 +3,8 @@ package bke.iso.service.v2
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
-// TODO: finish tests
 class ServiceContainerTest {
 
     @Test
@@ -66,7 +66,7 @@ class ServiceContainerTest {
 
     @Test
     @Suppress("UNUSED")
-    fun `when register, given nested SingletonServices, then initialize all of them without errors`() {
+    fun `when register, given nested SingletonServices, then initialize all of them without exceptions`() {
         class C : SingletonService
         class B(val c: C) : SingletonService
         class A(val b: B) : SingletonService
@@ -94,5 +94,36 @@ class ServiceContainerTest {
             val b = container.get<B>()
             assertThat(a.c).isSameAs(b.c)
         }
+    }
+
+    @Test
+    @Suppress("UNUSED")
+    fun `when register, given transient dependency, then use different instances`() {
+        class C : TransientService
+        class B(val c: C) : TransientService
+        class A(val c: C) : TransientService
+
+        val container = ServiceContainer()
+
+        assertDoesNotThrow {
+            container.register(A::class, B::class, C::class)
+            val a = container.get<A>()
+            val b = container.get<B>()
+            assertThat(a.c).isNotSameAs(b.c)
+        }
+    }
+
+    @Test
+    @Suppress("UNUSED")
+    fun `when register, given invalid dependency, then throw exception`() {
+        class B : TransientService
+        class A(val b: B, val num: Int) : TransientService
+
+        val container = ServiceContainer()
+
+        val exception = assertThrows<InvalidDependencyException> {
+            container.register(A::class, B::class)
+        }
+        assertThat(exception.message).isEqualTo("Service 'A' failed validation: Dependency 'Int' is not a Service")
     }
 }

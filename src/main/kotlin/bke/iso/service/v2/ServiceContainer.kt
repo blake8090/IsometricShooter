@@ -1,6 +1,6 @@
 package bke.iso.service.v2
 
-import java.lang.RuntimeException
+import java.lang.IllegalStateException
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -51,7 +51,10 @@ class ServiceContainer {
     private fun <T : Service> validateDependencies(type: KClass<T>, dependencies: List<KClass<*>>) {
         for (dependency in dependencies) {
             if (!dependency.isSubclassOf(Service::class)) {
-                throw Error("${type.simpleName} failed validation: Dependency ${dependency.simpleName} is not a service")
+                throw InvalidDependencyException(
+                    "Service '${type.simpleName}' failed validation: "
+                            + "Dependency '${dependency.simpleName}' is not a Service"
+                )
             }
         }
     }
@@ -77,7 +80,7 @@ class ServiceContainer {
     fun <T : Service> get(type: KClass<T>): T {
         val node = graph.get(type)
         return if (type.isSubclassOf(SingletonService::class)) {
-            node.instance ?: throw Error("Expected instance of singleton service ${type.simpleName}")
+            node.instance ?: throw IllegalStateException("Expected instance of singleton service ${type.simpleName}")
         } else {
             createInstance(type)
         }
@@ -109,6 +112,6 @@ class ServiceContainer {
                 type.primaryConstructor!!.call(*params)
             }
         } catch (e: Exception) {
-            throw RuntimeException("Error creating instance of ${type.simpleName}", e)
+            throw ServiceCreationException("Error creating instance of ${type.simpleName}", e)
         }
 }
