@@ -1,10 +1,7 @@
 package bke.iso.service.v2
 
-import java.lang.IllegalStateException
+import kotlin.IllegalStateException
 import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
-import kotlin.reflect.KType
-import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.jvmErasure
@@ -13,6 +10,7 @@ import kotlin.reflect.jvm.jvmErasure
 class ServiceContainer {
 
     private val graph = ServiceGraph()
+    private val creator = ServiceCreator(this, graph)
 
     /**
      *
@@ -28,32 +26,19 @@ class ServiceContainer {
         }
     }
 
-    private fun <T : Service> register(type: KClass<T>) {
-        graph.add(type)
+    private fun register(service: KClass<out Service>) {
+        graph.add(service)
 
-        val dependencies = getDependencies(type)
-        validateDependencies(type, dependencies)
-
-        val services = dependencies.filterIsInstance<KClass<Service>>()
-        for (service in services) {
-            if (!graph.contains(service)) {
-                register(service)
-            }
-            graph.link(type to service)
-        }
-    }
-
-    private fun <T : Service> getDependencies(type: KClass<T>): List<KClass<*>> =
-        type.primaryConstructor!!.parameters
-            .map(KParameter::type)
-            .map(KType::jvmErasure)
-
-    private fun <T : Service> validateDependencies(type: KClass<T>, dependencies: List<KClass<*>>) {
-        for (dependency in dependencies) {
-            if (!dependency.isSubclassOf(Service::class)) {
+        for (parameter in service.primaryConstructor!!.parameters) {
+            val kClass = parameter.type.jvmErasure
+            if (kClass.isSubclassOf(Service::class)) {
+                @Suppress("UNCHECKED_CAST")
+                register(kClass as KClass<out Service>)
+                graph.link(service to kClass)
+            } else if (kClass != ServiceProvider::class) {
                 throw InvalidDependencyException(
-                    "Service '${type.simpleName}' failed validation: "
-                            + "Dependency '${dependency.simpleName}' is not a Service"
+                    "Error registering '${service.simpleName}': "
+                            + "Parameter '${parameter.name}' must be either a Service or a ServiceProvider"
                 )
             }
         }
@@ -70,7 +55,7 @@ class ServiceContainer {
             .forEach { link -> initialize(link) }
 
         val type = node.type
-        val instance = createInstance(type)
+        val instance = creator.createInstance(type)
         node.instance = instance
     }
 
@@ -82,36 +67,10 @@ class ServiceContainer {
         return if (type.isSubclassOf(SingletonService::class)) {
             node.instance ?: throw IllegalStateException("Expected instance of singleton service ${type.simpleName}")
         } else {
-            createInstance(type)
+            creator.createInstance(type)
         }
     }
 
     inline fun <reified T : Service> get() =
         get(T::class)
-
-    @Suppress("UNCHECKED_CAST")
-    private fun resolveDependency(dependency: KClass<*>): Any {
-        if (dependency.isSubclassOf(TransientService::class)) {
-            return createInstance(dependency as KClass<Service>)
-        } else if (dependency.isSubclassOf(SingletonService::class)) {
-            val node = graph.get(dependency as KClass<Service>)
-            return node.instance!!
-        }
-        return Any()
-    }
-
-    private fun <T : Service> createInstance(type: KClass<out T>): T =
-        try {
-            val params = getDependencies(type)
-                .map(::resolveDependency)
-                .toTypedArray()
-
-            if (params.isEmpty()) {
-                type.createInstance()
-            } else {
-                type.primaryConstructor!!.call(*params)
-            }
-        } catch (e: Exception) {
-            throw ServiceCreationException("Error creating instance of ${type.simpleName}", e)
-        }
 }

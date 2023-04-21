@@ -9,6 +9,9 @@ data class Node<T : Service>(
     var instance: T? = null
 )
 
+/**
+ * A directed acyclic graph representing all services with their respective dependencies.
+ */
 class ServiceGraph {
 
     private val nodes = mutableSetOf<Node<*>>()
@@ -31,9 +34,6 @@ class ServiceGraph {
             ?: throw Error("Service ${type.simpleName} was not found")
         return node as Node<out T>
     }
-
-    inline fun <reified T : Service> get() =
-        get(T::class)
 
     fun getNodes(): Set<Node<*>> =
         nodes
