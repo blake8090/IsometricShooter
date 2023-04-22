@@ -54,9 +54,7 @@ class ServiceContainer {
             .map(graph::get)
             .forEach { link -> initialize(link) }
 
-        val type = node.type
-        val instance = creator.createInstance(type)
-        node.instance = instance
+        node.instance = createInstance(node.type)
     }
 
     /**
@@ -67,10 +65,22 @@ class ServiceContainer {
         return if (type.isSubclassOf(SingletonService::class)) {
             node.instance ?: throw IllegalStateException("Expected instance of singleton service ${type.simpleName}")
         } else {
-            creator.createInstance(type)
+            return createInstance(type)
         }
     }
 
     inline fun <reified T : Service> get() =
         get(T::class)
+
+    private fun <T : Service> createInstance(type: KClass<T>): T {
+        val instance = creator.createInstance(type)
+        instance.create()
+        return instance
+    }
+
+    fun dispose() {
+        graph.getNodes()
+            .mapNotNull(Node<*>::instance)
+            .forEach(Service::dispose)
+    }
 }

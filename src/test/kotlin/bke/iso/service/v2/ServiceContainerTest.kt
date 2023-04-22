@@ -126,7 +126,7 @@ class ServiceContainerTest {
     }
 
     @Test
-    fun `when register, given a ServiceProvider, then register service`() {
+    fun whenRegister_givenServiceProviderParam_thenRegisterService() {
         class B : TransientService {
             val num = 4
         }
@@ -141,5 +141,73 @@ class ServiceContainerTest {
 
         val a = container.get<A>()
         assertThat(a.getNum()).isEqualTo(4)
+    }
+
+    @Test
+    fun `when get, then call create`() {
+        class A : TransientService {
+            var num = 0
+                private set
+
+            override fun create() {
+                num = 10
+            }
+        }
+
+        val container = ServiceContainer()
+        container.register(A::class)
+
+        val a = container.get<A>()
+        assertThat(a.num).isEqualTo(10)
+    }
+
+    @Test
+    fun whenGet_givenServiceProvider_thenCallCreate() {
+        class A : TransientService {
+            var num = 0
+                private set
+
+            override fun create() {
+                num = 10
+            }
+        }
+
+        class B(private val provider: ServiceProvider<A>) : TransientService {
+            var num = 0
+                private set
+
+            override fun create() {
+                num = provider.get().num
+            }
+        }
+
+        val container = ServiceContainer()
+        container.register(A::class, B::class)
+
+        val b = container.get<B>()
+        assertThat(b.num).isEqualTo(10)
+    }
+
+    @Test
+    fun whenDispose_thenCallDispose() {
+        open class A : SingletonService {
+            var disposed = false
+                private set
+
+            override fun dispose() {
+                disposed = true
+            }
+        }
+
+        class B : A()
+
+        val container = ServiceContainer()
+        container.register(A::class, B::class)
+
+        val a = container.get<A>()
+        val b = container.get<B>()
+        container.dispose()
+        assertThat(a.disposed).isTrue
+        assertThat(b.disposed).isTrue
     }
 }
