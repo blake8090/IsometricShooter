@@ -6,7 +6,6 @@ import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.jvmErasure
 
-// TODO: write Javadocs
 class ServiceContainer {
 
     private val graph = ServiceGraph()

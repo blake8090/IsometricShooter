@@ -31,7 +31,7 @@ class ServiceGraph {
     fun <T : Service> get(type: KClass<out T>): Node<out T> {
         val node = nodes
             .firstOrNull { node -> node.type == type }
-            ?: throw Error("Service ${type.simpleName} was not found")
+            ?: throw ServiceNotFoundException("Service ${type.simpleName} was not found")
         return node as Node<out T>
     }
 

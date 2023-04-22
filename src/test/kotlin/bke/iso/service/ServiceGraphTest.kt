@@ -1,12 +1,61 @@
-package bke.iso.service.v2
+package bke.iso.service
 
-import bke.iso.service.ServiceGraph
-import bke.iso.service.TransientService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-// TODO: finish tests
 class ServiceGraphTest {
+
+    @Test
+    fun `when add, given duplicate, then throw exception`() {
+        class A : TransientService
+
+        val graph = ServiceGraph()
+        graph.add<A>()
+
+        assertThrows<DuplicateServiceException> {
+            graph.add<A>()
+        }
+    }
+
+    @Test
+    fun `when get, given service not in graph, then throw exception`() {
+        class A : TransientService
+        class B : TransientService
+
+        val graph = ServiceGraph()
+        graph.add<A>()
+
+        assertThrows<ServiceNotFoundException> {
+            graph.get(B::class)
+        }
+    }
+
+    @Test
+    fun `when contains, then return`() {
+        class A : TransientService
+        class B : TransientService
+
+        val graph = ServiceGraph()
+        graph.add<A>()
+
+        assertThat(graph.contains(A::class)).isTrue
+        assertThat(graph.contains(B::class)).isFalse
+    }
+
+    @Test
+    fun `when getNodes, then return`() {
+        class A : TransientService
+        class B : TransientService
+
+        val graph = ServiceGraph()
+        graph.add<A>()
+        graph.add<B>()
+
+        val a = graph.get(A::class)
+        val b = graph.get(B::class)
+        assertThat(graph.getNodes()).containsExactlyInAnyOrder(a, b)
+    }
 
     @Test
     fun `when link, given cycle, then throw exception`() {

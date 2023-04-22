@@ -1,11 +1,5 @@
-package bke.iso.service.v2
+package bke.iso.service
 
-import bke.iso.service.InvalidDependencyException
-import bke.iso.service.RegisterServiceException
-import bke.iso.service.ServiceContainer
-import bke.iso.service.ServiceProvider
-import bke.iso.service.SingletonService
-import bke.iso.service.TransientService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow

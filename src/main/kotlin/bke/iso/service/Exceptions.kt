@@ -10,3 +10,5 @@ class RegisterServiceException(type: KClass<*>, e: Exception) :
     RuntimeException("Error registering service '${type.simpleName}':", e)
 
 class DuplicateServiceException(message: String) : RuntimeException(message)
+
+class ServiceNotFoundException(message: String) : RuntimeException(message)
