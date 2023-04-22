@@ -12,7 +12,7 @@ import bke.iso.engine.render.shape.ShapeDrawerUtil
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.WorldObject
 import bke.iso.engine.world.WorldService
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20

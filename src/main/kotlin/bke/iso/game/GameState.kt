@@ -19,7 +19,7 @@ import bke.iso.game.system.BouncyBallSystem
 import bke.iso.game.system.BulletSystem
 import bke.iso.game.system.PlayerSystem
 import bke.iso.game.system.TurretSystem
-import bke.iso.service.v2.ServiceProvider
+import bke.iso.service.ServiceProvider
 import com.badlogic.gdx.Input
 
 class GameState(

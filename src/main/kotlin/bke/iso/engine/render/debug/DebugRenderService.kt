@@ -2,7 +2,7 @@ package bke.iso.engine.render.debug
 
 import bke.iso.engine.physics.collision.Box
 import bke.iso.engine.render.shape.ShapeUtil
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3

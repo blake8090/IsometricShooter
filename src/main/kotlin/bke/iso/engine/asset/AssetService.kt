@@ -3,8 +3,8 @@ package bke.iso.engine.asset
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
 import bke.iso.engine.log
-import bke.iso.service.v2.ServiceProvider
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.ServiceProvider
+import bke.iso.service.SingletonService
 import kotlin.io.path.Path
 import kotlin.io.path.isDirectory
 import kotlin.io.path.notExists

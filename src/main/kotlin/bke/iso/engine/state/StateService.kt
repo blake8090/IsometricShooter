@@ -1,7 +1,7 @@
 package bke.iso.engine.state
 
-import bke.iso.service.v2.ServiceProvider
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.ServiceProvider
+import bke.iso.service.SingletonService
 import kotlin.reflect.KClass
 
 class StateService(private val stateProvider: ServiceProvider<State>) : SingletonService {

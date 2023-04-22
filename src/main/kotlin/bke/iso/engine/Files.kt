@@ -1,6 +1,6 @@
 package bke.iso.engine
 
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import java.io.File
 
 /**

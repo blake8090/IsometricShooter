@@ -3,8 +3,8 @@ package bke.iso.engine.state
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventHandlerMap
 import bke.iso.engine.system.System
-import bke.iso.service.v2.ServiceProvider
-import bke.iso.service.v2.TransientService
+import bke.iso.service.ServiceProvider
+import bke.iso.service.TransientService
 import kotlin.reflect.KClass
 
 abstract class State : TransientService {

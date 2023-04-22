@@ -1,7 +1,7 @@
 package bke.iso.engine.asset
 
 import bke.iso.engine.FilePointer
-import bke.iso.service.v2.TransientService
+import bke.iso.service.TransientService
 import kotlin.reflect.KClass
 
 interface AssetLoader<T : Any> : TransientService {

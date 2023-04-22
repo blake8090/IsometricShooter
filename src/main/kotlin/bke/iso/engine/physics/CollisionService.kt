@@ -5,7 +5,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.math.getEdges
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.world.WorldService
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2

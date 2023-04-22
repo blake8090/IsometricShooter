@@ -1,6 +1,6 @@
 package bke.iso.engine.event
 
-import bke.iso.service.v2.TransientService
+import bke.iso.service.TransientService
 import kotlin.reflect.KClass
 
 open class Event

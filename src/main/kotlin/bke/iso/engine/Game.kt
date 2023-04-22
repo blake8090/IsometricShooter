@@ -1,7 +1,7 @@
 package bke.iso.engine
 
 import bke.iso.engine.state.State
-import bke.iso.service.v2.TransientService
+import bke.iso.service.TransientService
 import kotlin.reflect.KClass
 
 interface Game : TransientService {

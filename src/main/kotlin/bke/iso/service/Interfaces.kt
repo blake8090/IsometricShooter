@@ -1,4 +1,4 @@
-package bke.iso.service.v2
+package bke.iso.service
 
 sealed interface Service {
     fun create() {}

@@ -1,4 +1,4 @@
-package bke.iso.service.v2
+package bke.iso.service
 
 import kotlin.IllegalStateException
 import kotlin.reflect.KClass

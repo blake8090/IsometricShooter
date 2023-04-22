@@ -1,5 +1,7 @@
 package bke.iso.service.v2
 
+import bke.iso.service.ServiceGraph
+import bke.iso.service.TransientService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

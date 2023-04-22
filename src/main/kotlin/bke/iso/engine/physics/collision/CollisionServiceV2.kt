@@ -1,7 +1,7 @@
 package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Vector3
 
 class CollisionServiceV2 : SingletonService {

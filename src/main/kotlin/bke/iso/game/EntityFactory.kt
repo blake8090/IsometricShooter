@@ -8,7 +8,7 @@ import bke.iso.engine.physics.collision.CollisionV2
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Vector3
 
 class EntityFactory(private val worldService: WorldService): SingletonService {

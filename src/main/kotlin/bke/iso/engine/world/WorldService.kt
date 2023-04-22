@@ -5,7 +5,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Rectangle
 import java.util.UUID
 

@@ -5,7 +5,7 @@ import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.StateService
 import bke.iso.engine.system.SystemService
 import bke.iso.engine.world.WorldService
-import bke.iso.service.v2.SingletonService
+import bke.iso.service.SingletonService
 
 class Engine(
     private val systemService: SystemService,
