@@ -13,6 +13,7 @@ import bke.iso.engine.render.shape.ShapeDrawerUtil
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.WorldObject
 import bke.iso.engine.world.WorldService
+import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
@@ -29,7 +30,7 @@ class RenderService(
     private val collisionServiceV2: CollisionServiceV2,
     private val eventService: EventService,
     private val debugRenderService: DebugRenderService
-) {
+) : SingletonService {
 
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
@@ -95,7 +96,7 @@ class RenderService(
         debugRenderService.clear()
     }
 
-    fun dispose() {
+    override fun dispose() {
         batch.dispose()
         shapeUtil.dispose()
     }

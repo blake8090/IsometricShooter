@@ -9,10 +9,11 @@ import bke.iso.engine.physics.collision.CollisionV2
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
+import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.math.Vector3
 
 @Singleton
-class EntityFactory(private val worldService: WorldService) {
+class EntityFactory(private val worldService: WorldService): SingletonService {
 
     fun createWall(location: Location) =
         worldService.createEntity(location)

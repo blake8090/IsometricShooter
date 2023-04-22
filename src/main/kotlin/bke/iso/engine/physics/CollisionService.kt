@@ -6,6 +6,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.math.getEdges
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.world.WorldService
+import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
@@ -49,7 +50,7 @@ data class SegmentCollision(
 )
 
 @Singleton
-class CollisionService(private val worldService: WorldService) {
+class CollisionService(private val worldService: WorldService) : SingletonService {
 
     // TODO:
     //  - step thru dx and dy

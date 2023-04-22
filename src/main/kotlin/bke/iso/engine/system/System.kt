@@ -1,5 +1,7 @@
 package bke.iso.engine.system
 
-interface System {
+import bke.iso.service.v2.TransientService
+
+interface System : TransientService {
     fun update(deltaTime: Float)
 }

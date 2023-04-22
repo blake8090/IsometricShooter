@@ -1,19 +1,18 @@
 package bke.iso.engine.system
 
-import bke.iso.service.Provider
 import bke.iso.service.Singleton
 import bke.iso.engine.physics.PhysicsSystem
 import bke.iso.engine.state.State
-import bke.iso.service.PostInit
+import bke.iso.service.v2.ServiceProvider
+import bke.iso.service.v2.SingletonService
 
 @Singleton
-class SystemService(private val systemProvider: Provider<System>) {
+class SystemService(private val provider: ServiceProvider<System>) : SingletonService {
 
     private val baseSystems = mutableListOf<System>()
 
-    @PostInit
-    fun setup() {
-        baseSystems.add(systemProvider.get(PhysicsSystem::class))
+    override fun create() {
+        baseSystems.add(provider.get(PhysicsSystem::class))
     }
 
     fun update(state: State, deltaTime: Float) {

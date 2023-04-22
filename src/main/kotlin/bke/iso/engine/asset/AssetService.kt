@@ -3,9 +3,9 @@ package bke.iso.engine.asset
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
 import bke.iso.engine.log
-import bke.iso.service.PostInit
-import bke.iso.service.Provider
 import bke.iso.service.Singleton
+import bke.iso.service.v2.ServiceProvider
+import bke.iso.service.v2.SingletonService
 import kotlin.io.path.Path
 import kotlin.io.path.isDirectory
 import kotlin.io.path.notExists
@@ -17,16 +17,15 @@ private const val ASSETS_DIRECTORY = "assets"
 @Singleton
 class AssetService(
     private val fileService: FileService,
-    private val provider: Provider<AssetLoader<*>>
-) {
+    private val provider: ServiceProvider<AssetLoader<*>>
+) : SingletonService {
 
     private val loaderByExtension = mutableMapOf<String, AssetLoader<*>>()
 
     private val cacheByModule = mutableMapOf<String, AssetCache>()
     private var currentModule: String? = null
 
-    @PostInit
-    fun setup() {
+    override fun create() {
         addLoader<TextureLoader>("png")
         addLoader<TextureLoader>("jpg")
     }
@@ -57,7 +56,7 @@ class AssetService(
         return cacheByModule[currentModule] ?: throw Error("module was not loaded")
     }
 
-    fun dispose() {
+    override fun dispose() {
         for ((module, cache) in cacheByModule) {
             cache.dispose()
             log.info("Disposed module '$module'")

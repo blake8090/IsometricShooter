@@ -6,6 +6,7 @@ import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.StateService
 import bke.iso.engine.system.SystemService
 import bke.iso.engine.world.WorldService
+import bke.iso.service.v2.SingletonService
 
 @Singleton
 class Engine(
@@ -14,7 +15,7 @@ class Engine(
     private val renderService: RenderService,
     private val inputService: InputService,
     private val worldService: WorldService
-) {
+) : SingletonService {
 
     fun start(game: Game) {
         log.info("Starting")

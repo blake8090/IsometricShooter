@@ -2,6 +2,7 @@ package bke.iso.engine.input
 
 import bke.iso.engine.log
 import bke.iso.service.Singleton
+import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 
@@ -15,14 +16,14 @@ enum class InputState {
 open class Binding
 
 @Singleton
-class InputService {
+class InputService : SingletonService {
     private val keyInput = KeyInput()
     private val mouseInput = MouseInput()
     private val bindings = mutableMapOf<String, Binding>()
 
     fun <T : Binding> bind(actionName: String, binding: T) {
         bindings[actionName] = binding
-        log.debug("Bound '$actionName' to ${binding::class.simpleName} '$binding'")
+        log.debug("Bound '{}' to {} '{}'", actionName, binding::class.simpleName, binding)
     }
 
     fun update() {

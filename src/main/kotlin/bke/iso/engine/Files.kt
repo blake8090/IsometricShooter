@@ -1,6 +1,7 @@
 package bke.iso.engine
 
 import bke.iso.service.Singleton
+import bke.iso.service.v2.SingletonService
 import java.io.File
 
 /**
@@ -15,7 +16,7 @@ class FilePointer(private val file: File) {
 }
 
 @Singleton
-class FileService {
+class FileService : SingletonService {
     /**
      * Returns a list of all files in the given path, including subdirectories.
      * Given path is relative to the current working directory.
