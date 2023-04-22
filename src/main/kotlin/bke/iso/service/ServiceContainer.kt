@@ -13,7 +13,10 @@ class ServiceContainer {
     private val creator = ServiceCreator(this, graph)
 
     /**
+     * Registers all provided types as services.
+     * Instances are immediately created for all [SingletonService]s.
      *
+     * @throws RegisterServiceException when an exception occurs while registering a service
      */
     fun <T : Service> register(types: Set<KClass<out T>>) {
         for (type in types) {
@@ -33,6 +36,12 @@ class ServiceContainer {
             .forEach { it.create() }
     }
 
+    /**
+     * Registers all provided types as services.
+     * Instances are immediately created for all [SingletonService]s.
+     *
+     * @throws RegisterServiceException when an exception occurs while registering a service
+     */
     fun <T : Service> register(vararg types: KClass<out T>) =
         register(types.toSet())
 
@@ -72,7 +81,9 @@ class ServiceContainer {
     }
 
     /**
+     * Returns an instance of a [Service].
      *
+     * @throws IllegalStateException if an instance for a [SingletonService] was not found
      */
     fun <T : Service> get(type: KClass<T>): T {
         val node = graph.get(type)
@@ -83,6 +94,11 @@ class ServiceContainer {
         }
     }
 
+    /**
+     * Returns an instance of a [Service].
+     *
+     * @throws IllegalStateException if an instance for a [SingletonService] was not found
+     */
     inline fun <reified T : Service> get() =
         get(T::class)
 
@@ -92,6 +108,9 @@ class ServiceContainer {
         return instance
     }
 
+    /**
+     * Calls [Service.dispose] for all service instances.
+     */
     fun dispose() {
         graph.getNodes()
             .mapNotNull(Node<*>::instance)
