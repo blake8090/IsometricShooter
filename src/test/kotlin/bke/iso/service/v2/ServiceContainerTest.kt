@@ -118,11 +118,12 @@ class ServiceContainerTest {
 
         val container = ServiceContainer()
 
-        val exception = assertThrows<InvalidDependencyException> {
+        val exception = assertThrows<RegisterServiceException> {
             container.register(A::class, B::class)
         }
-        assertThat(exception.message)
-            .isEqualTo("Error registering 'A': Parameter 'num' must be either a Service or a ServiceProvider")
+        assertThat(exception.message).isEqualTo("Error registering service 'A':")
+        val cause = exception.cause as InvalidDependencyException
+        assertThat(cause.message).isEqualTo("Parameter 'num' must be either a Service or a ServiceProvider")
     }
 
     @Test

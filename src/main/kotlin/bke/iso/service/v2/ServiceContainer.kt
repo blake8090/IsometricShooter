@@ -16,7 +16,14 @@ class ServiceContainer {
      *
      */
     fun <T : Service> register(types: Set<KClass<out T>>) {
-        types.forEach(::register)
+        for (type in types) {
+            try {
+                register(type)
+            } catch (e: Exception) {
+                throw RegisterServiceException(type, e)
+            }
+        }
+
         for (node in graph.getNodes()) {
             initialize(node)
         }
@@ -40,8 +47,8 @@ class ServiceContainer {
                 graph.link(service to kClass)
             } else if (kClass != ServiceProvider::class) {
                 throw InvalidDependencyException(
-                    "Error registering '${service.simpleName}': "
-                            + "Parameter '${parameter.name}' must be either a Service or a ServiceProvider"
+                    "Parameter '${parameter.name}' must be"
+                            + " either a Service or a ServiceProvider"
                 )
             }
         }
