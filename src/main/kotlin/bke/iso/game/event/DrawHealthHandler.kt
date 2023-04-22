@@ -1,6 +1,5 @@
 package bke.iso.game.event
 
-import bke.iso.service.Transient
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.math.toScreen
@@ -12,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 
-@Transient
 class DrawHealthHandler(private val assetService: AssetService) : EventHandler<DrawEntityEvent> {
     private val healthBarWidth = 32f
     private val healthBarHeight = 8f

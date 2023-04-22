@@ -3,7 +3,6 @@ package bke.iso.engine.asset
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
 import bke.iso.engine.log
-import bke.iso.service.Singleton
 import bke.iso.service.v2.ServiceProvider
 import bke.iso.service.v2.SingletonService
 import kotlin.io.path.Path
@@ -14,7 +13,6 @@ import kotlin.reflect.KClass
 
 private const val ASSETS_DIRECTORY = "assets"
 
-@Singleton
 class AssetService(
     private val fileService: FileService,
     private val provider: ServiceProvider<AssetLoader<*>>

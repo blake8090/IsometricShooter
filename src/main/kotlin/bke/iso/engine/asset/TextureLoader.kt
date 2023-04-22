@@ -1,11 +1,9 @@
 package bke.iso.engine.asset
 
 import bke.iso.engine.FilePointer
-import bke.iso.service.Transient
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 
-@Transient
 class TextureLoader : AssetLoader<Texture> {
     override fun assetType() = Texture::class
 

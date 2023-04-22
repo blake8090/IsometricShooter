@@ -1,13 +1,11 @@
 package bke.iso.engine.physics
 
 import bke.iso.engine.log
-import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventService
 import com.badlogic.gdx.math.Vector3
 
-@Transient
 class MovementHandler(
     private val collisionService: CollisionService,
     private val eventService: EventService

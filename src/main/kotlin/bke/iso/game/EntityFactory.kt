@@ -1,6 +1,5 @@
 package bke.iso.game
 
-import bke.iso.service.Singleton
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collision
@@ -12,7 +11,6 @@ import bke.iso.engine.world.WorldService
 import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.math.Vector3
 
-@Singleton
 class EntityFactory(private val worldService: WorldService): SingletonService {
 
     fun createWall(location: Location) =

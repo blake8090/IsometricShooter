@@ -1,7 +1,6 @@
 package bke.iso.game.event
 
 import bke.iso.engine.log
-import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
@@ -16,7 +15,6 @@ data class DamageEvent(
     val amount: Float
 ) : Event()
 
-@Transient
 class DamageHandler(private val worldService: WorldService) : EventHandler<DamageEvent> {
     override val type = DamageEvent::class
 

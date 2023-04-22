@@ -1,6 +1,5 @@
 package bke.iso.engine
 
-import bke.iso.service.Singleton
 import bke.iso.engine.input.InputService
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.StateService
@@ -8,7 +7,6 @@ import bke.iso.engine.system.SystemService
 import bke.iso.engine.world.WorldService
 import bke.iso.service.v2.SingletonService
 
-@Singleton
 class Engine(
     private val systemService: SystemService,
     private val stateService: StateService,

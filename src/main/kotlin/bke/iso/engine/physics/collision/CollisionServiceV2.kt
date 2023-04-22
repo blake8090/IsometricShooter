@@ -1,11 +1,9 @@
 package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
-import bke.iso.service.Singleton
 import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.math.Vector3
 
-@Singleton
 class CollisionServiceV2 : SingletonService {
 
     fun findCollisionData(entity: Entity): EntityCollisionData? {

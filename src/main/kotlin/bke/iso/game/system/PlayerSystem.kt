@@ -1,6 +1,5 @@
 package bke.iso.game.system
 
-import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
@@ -15,7 +14,6 @@ import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
 
-@Transient
 class PlayerSystem(
     private val worldService: WorldService,
     private val inputService: InputService,

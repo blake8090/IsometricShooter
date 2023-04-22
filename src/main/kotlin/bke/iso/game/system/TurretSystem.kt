@@ -1,6 +1,5 @@
 package bke.iso.game.system
 
-import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.physics.CollisionService
@@ -16,7 +15,6 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.max
 
-@Transient
 class TurretSystem(
     private val worldService: WorldService,
     private val collisionService: CollisionService,

@@ -1,7 +1,6 @@
 package bke.iso.engine.input
 
 import bke.iso.engine.log
-import bke.iso.service.Singleton
 import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
@@ -15,7 +14,6 @@ enum class InputState {
 
 open class Binding
 
-@Singleton
 class InputService : SingletonService {
     private val keyInput = KeyInput()
     private val mouseInput = MouseInput()

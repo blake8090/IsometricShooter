@@ -2,14 +2,12 @@ package bke.iso.engine.render.debug
 
 import bke.iso.engine.physics.collision.Box
 import bke.iso.engine.render.shape.ShapeUtil
-import bke.iso.service.Singleton
 import bke.iso.service.v2.SingletonService
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Pool
 
-@Singleton
 class DebugRenderService : SingletonService {
 
     private val lines = mutableListOf<DebugLine>()

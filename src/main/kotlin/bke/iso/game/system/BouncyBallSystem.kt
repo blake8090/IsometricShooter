@@ -4,10 +4,8 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
 import bke.iso.game.BouncyBall
-import bke.iso.service.Transient
 import kotlin.math.max
 
-@Transient
 class BouncyBallSystem(private val worldService: WorldService) : System {
 
     private val force = 6f

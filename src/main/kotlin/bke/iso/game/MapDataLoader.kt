@@ -1,6 +1,5 @@
 package bke.iso.game
 
-import bke.iso.service.Transient
 import bke.iso.engine.FilePointer
 import bke.iso.engine.asset.AssetLoader
 import bke.iso.engine.math.Location
@@ -14,7 +13,6 @@ data class MapData(
     val players: MutableSet<Location> = mutableSetOf()
 )
 
-@Transient
 class MapDataLoader : AssetLoader<MapData> {
     private val floorSprite = Sprite("floor", 0f, 16f)
 

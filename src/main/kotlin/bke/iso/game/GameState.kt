@@ -1,7 +1,6 @@
 package bke.iso.game
 
 import bke.iso.engine.log
-import bke.iso.service.Transient
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.input.InputService
@@ -23,7 +22,6 @@ import bke.iso.game.system.TurretSystem
 import bke.iso.service.v2.ServiceProvider
 import com.badlogic.gdx.Input
 
-@Transient
 class GameState(
     private val assetService: AssetService,
     private val worldService: WorldService,

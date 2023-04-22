@@ -1,6 +1,5 @@
 package bke.iso.game.event
 
-import bke.iso.service.Transient
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
@@ -23,7 +22,6 @@ data class ShootEvent(
     val type: BulletType
 ) : Event()
 
-@Transient
 class ShootHandler(private val worldService: WorldService) : EventHandler<ShootEvent> {
     override val type = ShootEvent::class
 

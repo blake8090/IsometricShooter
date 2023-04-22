@@ -1,6 +1,5 @@
 package bke.iso.engine.render
 
-import bke.iso.service.Singleton
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
@@ -23,7 +22,6 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
-@Singleton
 class RenderService(
     private val assetService: AssetService,
     private val worldService: WorldService,
