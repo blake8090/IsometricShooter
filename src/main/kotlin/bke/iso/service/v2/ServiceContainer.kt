@@ -24,9 +24,13 @@ class ServiceContainer {
             }
         }
 
-        for (node in graph.getNodes()) {
-            initialize(node)
-        }
+        // before calling all the create methods, we have to make sure all singleton instances are initialized.
+        // this avoids issues with singleton services getting *other* singleton services from a ServiceProvider.
+        graph.getNodes().forEach{ node -> initialize(node) }
+
+        graph.getNodes()
+            .mapNotNull { it.instance }
+            .forEach { it.create() }
     }
 
     fun <T : Service> register(vararg types: KClass<out T>) =
@@ -64,7 +68,7 @@ class ServiceContainer {
             .map(graph::get)
             .forEach { link -> initialize(link) }
 
-        node.instance = createInstance(node.type)
+        node.instance = creator.createInstance(node.type)
     }
 
     /**

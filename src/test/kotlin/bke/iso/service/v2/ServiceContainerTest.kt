@@ -224,4 +224,26 @@ class ServiceContainerTest {
             container.register(A::class, B::class)
         }
     }
+
+    @Test
+    fun whenRegister_givenSingletonProvidedToAnotherSingletonInCreate_thenRegister() {
+        class A : SingletonService {
+            val num = 5
+        }
+
+        class B(private val provider: ServiceProvider<A>) : SingletonService {
+            var num = 0
+                private set
+
+            override fun create() {
+                num = provider.get().num
+            }
+        }
+
+        val container = ServiceContainer()
+
+        container.register(B::class, A::class)
+        val b = container.get<B>()
+        assertThat(b.num).isEqualTo(5)
+    }
 }
