@@ -19,7 +19,7 @@ class ServiceGraph {
     fun <T : Service> add(type: KClass<out T>): Node<out T> {
         val node = Node(type)
         if (!nodes.add(node)) {
-            throw Error("already present")
+            throw DuplicateServiceException("Service '${type.simpleName}' has already been added")
         }
         return node
     }

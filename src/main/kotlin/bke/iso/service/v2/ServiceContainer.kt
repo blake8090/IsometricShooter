@@ -15,18 +15,21 @@ class ServiceContainer {
     /**
      *
      */
-    fun <T : Service> register(vararg types: KClass<out T>) {
-        for (type in types) {
-            if (!graph.contains(type)) {
-                register(type)
-            }
-        }
+    fun <T : Service> register(types: Set<KClass<out T>>) {
+        types.forEach(::register)
         for (node in graph.getNodes()) {
             initialize(node)
         }
     }
 
+    fun <T : Service> register(vararg types: KClass<out T>) =
+        register(types.toSet())
+
     private fun register(service: KClass<out Service>) {
+        if (graph.contains(service)) {
+            return
+        }
+
         graph.add(service)
 
         for (parameter in service.primaryConstructor!!.parameters) {

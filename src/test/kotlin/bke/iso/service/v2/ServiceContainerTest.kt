@@ -210,4 +210,17 @@ class ServiceContainerTest {
         assertThat(a.disposed).isTrue
         assertThat(b.disposed).isTrue
     }
+
+    @Test
+    @Suppress("UNUSED")
+    fun `when register, given dependency service already registered, then skip`() {
+        class A : SingletonService
+
+        class B(val a: A) : SingletonService
+
+        val container = ServiceContainer()
+        assertDoesNotThrow {
+            container.register(A::class, B::class)
+        }
+    }
 }
