@@ -103,5 +103,13 @@ class GameState(
         mapData.platforms.forEach { location ->
             entityFactory.createPlatform(location)
         }
+
+        mapData.sideFences.forEach { location ->
+            entityFactory.createSideFence(location)
+        }
+
+        mapData.frontFences.forEach { location ->
+            entityFactory.createFrontFence(location)
+        }
     }
 }

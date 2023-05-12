@@ -12,7 +12,7 @@ import bke.iso.game.system.MovingPlatform
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Vector3
 
-class EntityFactory(private val worldService: WorldService): SingletonService {
+class EntityFactory(private val worldService: WorldService) : SingletonService {
 
     fun createWall(location: Location) =
         worldService.createEntity(location)
@@ -92,6 +92,26 @@ class EntityFactory(private val worldService: WorldService): SingletonService {
                 MovingPlatform(),
                 CollisionV2(
                     BoundsV2(Vector3(2f, 0.0f, 0f)),
+                    true
+                )
+            )
+
+    fun createSideFence(location: Location) =
+        worldService.createEntity(location)
+            .add(
+                Sprite("fence-side", 0f, 16f),
+                CollisionV2(
+                    BoundsV2(Vector3(0.1f, 1f, 1f), Vector3(0f, 0.5f, 0f)),
+                    true
+                )
+            )
+
+    fun createFrontFence(location: Location) =
+        worldService.createEntity(location)
+            .add(
+                Sprite("fence-front", 32f, 32f),
+                CollisionV2(
+                    BoundsV2(Vector3(1f, 0.1f, 1f), Vector3(0.5f, -0.05f, 0f)),
                     true
                 )
             )

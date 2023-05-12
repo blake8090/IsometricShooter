@@ -11,7 +11,9 @@ data class MapData(
     val boxes: MutableSet<Location> = mutableSetOf(),
     val turrets: MutableSet<Location> = mutableSetOf(),
     val players: MutableSet<Location> = mutableSetOf(),
-    val platforms: MutableSet<Location> = mutableSetOf()
+    val platforms: MutableSet<Location> = mutableSetOf(),
+    val sideFences: MutableSet<Location> = mutableSetOf(),
+    val frontFences: MutableSet<Location> = mutableSetOf()
 )
 
 class MapDataLoader : AssetLoader<MapData> {
@@ -68,6 +70,8 @@ class MapDataLoader : AssetLoader<MapData> {
             't' -> mapData.turrets.add(location)
             'p' -> mapData.players.add(location)
             '_' -> mapData.platforms.add(location)
+            '/' -> mapData.sideFences.add(location)
+            '=' -> mapData.frontFences.add(location)
         }
     }
 }
