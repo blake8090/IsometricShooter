@@ -8,6 +8,7 @@ import bke.iso.engine.physics.collision.CollisionV2
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
+import bke.iso.game.system.MovingPlatform
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Vector3
 
@@ -82,5 +83,16 @@ class EntityFactory(private val worldService: WorldService): SingletonService {
                 Sprite("circle", 16f, 0f),
                 BouncyBall(),
                 DrawShadow()
+            )
+
+    fun createPlatform(location: Location) =
+        worldService.createEntity(location)
+            .add(
+                Sprite("platform", 0f, 32f),
+                MovingPlatform(),
+                CollisionV2(
+                    BoundsV2(Vector3(2f, 0.0f, 0f)),
+                    true
+                )
             )
 }

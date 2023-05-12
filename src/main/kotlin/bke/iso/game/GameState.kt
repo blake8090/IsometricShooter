@@ -17,6 +17,7 @@ import bke.iso.game.event.DrawHealthHandler
 import bke.iso.game.event.ShootHandler
 import bke.iso.game.system.BouncyBallSystem
 import bke.iso.game.system.BulletSystem
+import bke.iso.game.system.MovingPlatformSystem
 import bke.iso.game.system.PlayerSystem
 import bke.iso.game.system.TurretSystem
 import bke.iso.service.ServiceProvider
@@ -38,7 +39,8 @@ class GameState(
             PlayerSystem::class,
             BulletSystem::class,
             TurretSystem::class,
-            BouncyBallSystem::class
+            BouncyBallSystem::class,
+            MovingPlatformSystem::class
         )
 
         addHandlers(
@@ -55,7 +57,7 @@ class GameState(
         assetService.loadModule("game")
         renderService.setCursor("cursor")
         bindInput()
-        loadMap("test")
+        loadMap("collision-test")
     }
 
     private fun bindInput() {
@@ -96,6 +98,10 @@ class GameState(
 
         mapData.players.forEach { location ->
             entityFactory.createPlayer(location)
+        }
+
+        mapData.platforms.forEach { location ->
+            entityFactory.createPlatform(location)
         }
     }
 }

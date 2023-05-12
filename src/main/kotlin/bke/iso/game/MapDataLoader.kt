@@ -10,7 +10,8 @@ data class MapData(
     val walls: MutableSet<Location> = mutableSetOf(),
     val boxes: MutableSet<Location> = mutableSetOf(),
     val turrets: MutableSet<Location> = mutableSetOf(),
-    val players: MutableSet<Location> = mutableSetOf()
+    val players: MutableSet<Location> = mutableSetOf(),
+    val platforms: MutableSet<Location> = mutableSetOf()
 )
 
 class MapDataLoader : AssetLoader<MapData> {
@@ -19,37 +20,41 @@ class MapDataLoader : AssetLoader<MapData> {
     override fun assetType() = MapData::class
 
     override fun load(file: FilePointer): Pair<String, MapData> {
-        val layers = mutableListOf<Layer>()
-        var currentLayer = Layer()
-        for (line in file.readText().lines()) {
-            when (line) {
-                "LAYER" -> currentLayer = Layer()
-
-                "END" -> {
-                    if (currentLayer.rows.isNotEmpty()) {
-                        layers.add(currentLayer)
-                    }
-                }
-
-                else -> {
-                    val chars = line.toList()
-                    if (chars.isNotEmpty()) {
-                        currentLayer.rows.add(chars)
-                    }
-                }
-            }
-        }
-
+        val layers = readLayers(file.readText().lines())
         val mapData = MapData()
         for ((z, layer) in layers.withIndex()) {
             for ((y, row) in layer.rows.reversed().withIndex()) {
                 for ((x, char) in row.withIndex()) {
-                    loadMapData(mapData, char, Location(x, y, z))
+                    loadMapData(mapData, char, Location(x, y, z + layer.zOffset))
                 }
             }
         }
 
         return file.getNameWithoutExtension() to mapData
+    }
+
+    private fun readLayers(lines: List<String>): List<Layer> {
+        val layers = mutableListOf<Layer>()
+        var currentLayer = Layer()
+
+        for (line in lines) {
+            if (line.equals("LAYER")) {
+                currentLayer = Layer()
+            } else if (line.startsWith("Z-OFFSET")) {
+                currentLayer.zOffset = line.substringAfter("Z-OFFSET").trim().toInt()
+            } else if (line.equals("END")) {
+                if (currentLayer.rows.isNotEmpty()) {
+                    layers.add(currentLayer)
+                }
+            } else {
+                val chars = line.toList()
+                if (chars.isNotEmpty()) {
+                    currentLayer.rows.add(chars)
+                }
+            }
+        }
+
+        return layers
     }
 
     private fun loadMapData(mapData: MapData, char: Char, location: Location) {
@@ -62,10 +67,12 @@ class MapDataLoader : AssetLoader<MapData> {
             'x' -> mapData.boxes.add(location)
             't' -> mapData.turrets.add(location)
             'p' -> mapData.players.add(location)
+            '_' -> mapData.platforms.add(location)
         }
     }
 }
 
 private class Layer {
+    var zOffset = 0
     val rows = mutableListOf<List<Char>>()
 }
