@@ -10,11 +10,12 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.State
 import bke.iso.engine.system.System
-import bke.iso.engine.world.WorldService
 import bke.iso.game.event.BulletCollisionHandler
 import bke.iso.game.event.DamageHandler
 import bke.iso.game.event.DrawHealthHandler
 import bke.iso.game.event.ShootHandler
+import bke.iso.game.map.GameMap
+import bke.iso.game.map.GameMapService
 import bke.iso.game.system.BouncyBallSystem
 import bke.iso.game.system.BulletSystem
 import bke.iso.game.system.MovingPlatformSystem
@@ -25,12 +26,11 @@ import com.badlogic.gdx.Input
 
 class GameState(
     private val assetService: AssetService,
-    private val worldService: WorldService,
-    private val entityFactory: EntityFactory,
+    private val gameMapService: GameMapService,
     private val inputService: InputService,
     private val renderService: RenderService,
     private val systemProvider: ServiceProvider<System>,
-    private val handlerProvider: ServiceProvider<EventHandler<*>>
+    private val handlerProvider: ServiceProvider<EventHandler<*>>,
 ) : State() {
 
     override fun create() {
@@ -77,39 +77,9 @@ class GameState(
     }
 
     private fun loadMap(mapName: String) {
-        val mapData = assetService.get<MapData>(mapName)
+        val gameMap = assetService.get<GameMap>(mapName)
             ?: throw IllegalArgumentException("expected map asset '$mapName'")
 
-        mapData.tiles.forEach { (location, tile) ->
-            worldService.setTile(location, tile)
-        }
-
-        mapData.walls.forEach { location ->
-            entityFactory.createWall(location)
-        }
-
-        mapData.boxes.forEach { location ->
-            entityFactory.createBox(location)
-        }
-
-        mapData.turrets.forEach { location ->
-            entityFactory.createTurret(location)
-        }
-
-        mapData.players.forEach { location ->
-            entityFactory.createPlayer(location)
-        }
-
-        mapData.platforms.forEach { location ->
-            entityFactory.createPlatform(location)
-        }
-
-        mapData.sideFences.forEach { location ->
-            entityFactory.createSideFence(location)
-        }
-
-        mapData.frontFences.forEach { location ->
-            entityFactory.createFrontFence(location)
-        }
+        gameMapService.load(gameMap)
     }
 }
