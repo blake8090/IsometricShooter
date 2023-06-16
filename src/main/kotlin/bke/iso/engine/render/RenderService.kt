@@ -72,19 +72,15 @@ class RenderService(
         shapeUtil.update()
 
         batch.begin()
-        val sortedObjects = worldService.getAllObjects()
-            .sortedWith(
-                compareBy(WorldObject::layer)
-                    .thenByDescending { it.y - it.x }
-                    .thenBy(WorldObject::z)
-            )
-
-        sortedObjects.forEach { worldObject ->
-            when (worldObject) {
-                is Entity -> drawEntity(worldObject)
-                is Tile -> drawTile(worldObject)
+        worldService.getAllObjects()
+            .map(::toDrawData)
+            .sortedBy(::getDepth)
+            .forEach {
+                when (val worldObject = it.obj) {
+                    is Entity -> drawEntity(worldObject)
+                    is Tile -> drawTile(worldObject)
+                }
             }
-        }
         batch.end()
 
         if (debugMode) {
@@ -98,6 +94,37 @@ class RenderService(
         batch.dispose()
         shapeUtil.dispose()
     }
+
+    private fun toDrawData(obj: WorldObject): DrawData {
+        val data = findCollisionData(obj)
+        val min = data?.box?.getMin() ?: Vector3(obj.x, obj.y, obj.z)
+        val max = data?.box?.getMax() ?: Vector3(obj.x, obj.y, obj.z)
+
+        if (obj is Tile) {
+            max.add(1f, 1f, 0f)
+        }
+
+        val center = Vector3(
+            (min.x + max.x) / 2f,
+            (min.y + max.y) / 2f,
+            (min.z + max.z) / 2f
+        )
+
+        return DrawData(obj, min, max, center)
+    }
+
+    private fun getDepth(data: DrawData): Float {
+        val dCenter = data.center.x - data.center.y + data.center.z
+        val dMax = data.max.x - data.max.y
+        val dMin = data.min.x - data.min.y
+        return dCenter + dMax + dMin + (1f * data.obj.layer)
+    }
+
+    private fun findCollisionData(worldObject: WorldObject) =
+        when (worldObject) {
+            is Entity -> collisionServiceV2.findCollisionData(worldObject)
+            else -> null
+        }
 
     private fun drawEntity(entity: Entity) {
         val sprite = entity.get<Sprite>() ?: return
@@ -135,3 +162,10 @@ class RenderService(
         batch.draw(texture, screenPos.x, screenPos.y)
     }
 }
+
+private data class DrawData(
+    val obj: WorldObject,
+    val min: Vector3,
+    val max: Vector3,
+    val center: Vector3
+)
