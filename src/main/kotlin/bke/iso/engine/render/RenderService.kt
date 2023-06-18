@@ -104,10 +104,13 @@ class RenderService(
             max.add(1f, 1f, 0f)
         }
 
+        val width = max.x - min.x
+        val length = max.y - min.y
+        val height = max.z - min.z
         val center = Vector3(
-            (min.x + max.x) / 2f,
-            (min.y + max.y) / 2f,
-            (min.z + max.z) / 2f
+            (min.x + width) / 2f,
+            (min.y + length) / 2f,
+            (min.z + height) / 2f
         )
 
         return DrawData(obj, min, max, center)
