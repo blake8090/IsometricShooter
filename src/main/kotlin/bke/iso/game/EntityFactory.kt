@@ -91,7 +91,7 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
                 Sprite("platform", 0f, 32f),
                 MovingPlatform(),
                 CollisionV2(
-                    BoundsV2(Vector3(2f, 0.0f, 0f)),
+                    BoundsV2(Vector3(2f, 1f, 0f), Vector3(1f, 0.5f, 0f)),
                     true
                 )
             )

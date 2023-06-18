@@ -118,9 +118,7 @@ class RenderService(
 
     private fun getDepth(data: DrawData): Float {
         val dCenter = data.center.x - data.center.y + data.center.z
-        val dMax = data.max.x - data.max.y
-        val dMin = data.min.x - data.min.y
-        return dCenter + dMax + dMin + (1f * data.obj.layer)
+        return dCenter + data.min.x - data.min.y
     }
 
     private fun findCollisionData(worldObject: WorldObject) =
