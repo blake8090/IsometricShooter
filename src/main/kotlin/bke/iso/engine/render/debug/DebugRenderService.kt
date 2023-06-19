@@ -1,7 +1,6 @@
 package bke.iso.engine.render.debug
 
 import bke.iso.engine.physics.collision.Box
-import bke.iso.engine.render.shape.ShapeUtil
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
@@ -101,33 +100,15 @@ class DebugRenderService : SingletonService {
         spheres.add(sphere)
     }
 
-    fun render(shapeUtil: ShapeUtil) {
-        shapeUtil.begin()
-        for (line in lines) {
-            shapeUtil.drawLine(line.start, line.end, line.color)
-        }
-
-        for (rect in rectangles) {
-            shapeUtil.drawRectangle(rect.rectangle, rect.color)
-        }
-
-        for (circle in circles) {
-            shapeUtil.drawCircle(circle.pos, circle.radius, circle.color)
-        }
-
-        for (point in points) {
-            shapeUtil.drawPoint(point.pos, point.size, point.color)
-        }
-
-        for (box in boxes) {
-            shapeUtil.drawBox(box.pos, box.dimensions, box.color)
-        }
-
-        for (sphere in spheres) {
-            shapeUtil.drawSphere(sphere.pos, sphere.radius, sphere.color)
-        }
-
-        shapeUtil.end()
+    fun render(shapeDrawer: DebugShapeDrawer) {
+        shapeDrawer.begin()
+        lines.forEach(shapeDrawer::drawLine)
+        rectangles.forEach(shapeDrawer::drawRectangle)
+        circles.forEach(shapeDrawer::drawCircle)
+        points.forEach(shapeDrawer::drawPoint)
+        boxes.forEach(shapeDrawer::drawBox)
+        spheres.forEach(shapeDrawer::drawSphere)
+        shapeDrawer.end()
     }
 
     fun clear() {

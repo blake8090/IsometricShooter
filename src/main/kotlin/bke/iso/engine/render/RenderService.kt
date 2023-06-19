@@ -8,7 +8,7 @@ import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.collision.CollisionServiceV2
 import bke.iso.engine.render.debug.DebugRenderService
-import bke.iso.engine.render.shape.ShapeDrawerUtil
+import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.WorldObject
 import bke.iso.engine.world.WorldService
@@ -32,7 +32,7 @@ class RenderService(
 
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
-    private val shapeUtil = ShapeDrawerUtil(batch)
+    private val shapeDrawer = DebugShapeDrawer(batch)//ShapeDrawerUtil(batch)
 
     private var debugMode = false
 
@@ -69,7 +69,7 @@ class RenderService(
 
         camera.update()
         batch.projectionMatrix = camera.combined
-        shapeUtil.update()
+        shapeDrawer.update()
 
         batch.begin()
         val drawData = worldService.getAllObjects().map(::toDrawData)
@@ -92,7 +92,7 @@ class RenderService(
         batch.end()
 
         if (debugMode) {
-            debugRenderService.render(shapeUtil)
+            debugRenderService.render(shapeDrawer)
         }
         // debug data still accumulates even when not in debug mode!
         debugRenderService.clear()
@@ -100,7 +100,7 @@ class RenderService(
 
     override fun dispose() {
         batch.dispose()
-        shapeUtil.dispose()
+        shapeDrawer.dispose()
     }
 
     private fun toDrawData(obj: WorldObject): DrawData {
