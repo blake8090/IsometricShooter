@@ -77,9 +77,7 @@ class RenderService(
             for ((j, b) in drawData.withIndex()) {
                 if (i == j) {
                     continue
-                }
-
-                if (inFront(a, b)) {
+                } else if (inFront(a, b)) {
                     a.objectsBehind.add(b)
                 } else if (inFront(b, a)) {
                     b.objectsBehind.add(a)
@@ -116,9 +114,9 @@ class RenderService(
         val length = max.y - min.y
         val height = max.z - min.z
         val center = Vector3(
-            (min.x + width) / 2f,
-            (min.y + length) / 2f,
-            (min.z + height) / 2f
+            min.x + (width / 2f),
+            min.y + (length / 2f),
+            min.z + (height / 2f)
         )
 
         return DrawData(obj, min, max, center)
@@ -134,6 +132,7 @@ class RenderService(
             return false
         }
 
+        // TODO: finish adding cases to fix rendering issues on y-axis
         if (a.max.z <= b.min.z) {
             return false
         }
