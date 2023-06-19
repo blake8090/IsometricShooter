@@ -50,6 +50,7 @@ class GameMapService(
             '_' -> entityFactory.createPlatform(location)
             '/' -> entityFactory.createSideFence(location)
             '=' -> entityFactory.createFrontFence(location)
+            '|' -> entityFactory.createPillar(location)
         }
     }
 }

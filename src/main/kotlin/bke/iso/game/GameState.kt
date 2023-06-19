@@ -63,6 +63,17 @@ class GameState(
         loadMap("collision-test")
         entityFactory.createLampPost(Location(4, 4, 0))
         entityFactory.createLampPost(Location(8, 4, 0))
+
+        entityFactory.createPillar(Location(12, 12, 0))
+            .apply {
+                x -= 0.5f
+                y += 0.5f
+            }
+        entityFactory.createPillar(Location(10, 12, 0))
+            .apply {
+                x -= 0.5f
+                y += 0.5f
+            }
     }
 
     private fun bindInput() {
