@@ -72,15 +72,23 @@ class RenderService(
         shapeUtil.update()
 
         batch.begin()
-        worldService.getAllObjects()
-            .map(::toDrawData)
-            .sortedBy(::getDepth)
-            .forEach {
-                when (val worldObject = it.obj) {
-                    is Entity -> drawEntity(worldObject)
-                    is Tile -> drawTile(worldObject)
+        val drawData = worldService.getAllObjects().map(::toDrawData)
+        for ((i, a) in drawData.withIndex()) {
+            for ((j, b) in drawData.withIndex()) {
+                if (i == j) {
+                    continue
+                }
+
+                if (inFront(a, b)) {
+                    a.objectsBehind.add(b)
+                } else if (inFront(b, a)) {
+                    b.objectsBehind.add(a)
                 }
             }
+        }
+        // for proper rendering, objects with nothing behind them must be drawn first
+        drawData.filter { it.objectsBehind.isEmpty() }.forEach(::draw)
+        drawData.forEach(::draw)
         batch.end()
 
         if (debugMode) {
@@ -116,8 +124,37 @@ class RenderService(
         return DrawData(obj, min, max, center)
     }
 
+    private fun inFront(a: DrawData, b: DrawData): Boolean {
+        // TODO: this fixes an odd rendering bug - can we somehow combine this into another condition for simplicity?
+        if (a.max.x <= b.min.x) {
+            return false
+        }
+
+        if (getDepth(a) < getDepth(b)) {
+            return false
+        }
+
+        if (a.max.z <= b.min.z) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun draw(data: DrawData) {
+        if (data.visited) {
+            return
+        }
+        data.visited = true
+        data.objectsBehind.forEach(::draw)
+        when (val worldObject = data.obj) {
+            is Entity -> drawEntity(worldObject)
+            is Tile -> drawTile(worldObject)
+        }
+    }
+
     private fun getDepth(data: DrawData): Float {
-        val dCenter = data.center.x - data.center.y + data.center.z
+        val dCenter = data.center.x - data.center.y
         return dCenter + data.min.x - data.min.y
     }
 
@@ -169,4 +206,7 @@ private data class DrawData(
     val min: Vector3,
     val max: Vector3,
     val center: Vector3
-)
+) {
+    val objectsBehind = mutableSetOf<DrawData>()
+    var visited = false
+}
