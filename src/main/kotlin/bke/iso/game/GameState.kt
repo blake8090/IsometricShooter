@@ -7,6 +7,7 @@ import bke.iso.engine.input.InputService
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.math.Location
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.State
 import bke.iso.engine.system.System
@@ -27,6 +28,7 @@ import com.badlogic.gdx.Input
 class GameState(
     private val assetService: AssetService,
     private val gameMapService: GameMapService,
+    private val entityFactory: EntityFactory,
     private val inputService: InputService,
     private val renderService: RenderService,
     private val systemProvider: ServiceProvider<System>,
@@ -57,7 +59,10 @@ class GameState(
         assetService.loadModule("game")
         renderService.setCursor("cursor")
         bindInput()
+
         loadMap("collision-test")
+        entityFactory.createLampPost(Location(4, 4, 0))
+        entityFactory.createLampPost(Location(8, 4, 0))
     }
 
     private fun bindInput() {

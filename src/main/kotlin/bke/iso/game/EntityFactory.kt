@@ -115,4 +115,18 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
                     true
                 )
             )
+
+    fun createLampPost(location: Location) =
+        worldService.createEntity(location)
+            .add(
+                Sprite("lamppost", 32f, 16f),
+                CollisionV2(
+                    BoundsV2(Vector3(0.25f, 0.25f, 2.1f), Vector3(0f, 0f, 0f)),
+                    true
+                ),
+                Collision(
+                    Bounds(0.25f, 0.25f, 2.1f, -0.125f, -0.125f),
+                    true
+                ),
+            )
 }
