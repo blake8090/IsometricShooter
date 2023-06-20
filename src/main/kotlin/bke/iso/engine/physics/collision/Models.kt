@@ -24,7 +24,7 @@ data class EntityBoxCollision(
     val side: BoxCollisionSide
 )
 
-data class ProjectedCollisions(
+data class PredictedCollisions(
     val projectedBox: Box,
     val collisions: Set<EntityBoxCollision>
 )

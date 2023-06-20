@@ -1,10 +1,12 @@
 package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
+import bke.iso.engine.world.WorldService
 import com.badlogic.gdx.math.Vector3
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
 import java.util.UUID
 
 class CollisionServiceV2Test {
@@ -13,7 +15,7 @@ class CollisionServiceV2Test {
     fun `when findCollisionData, given missing component, then return null`() {
         val entity = Entity(UUID.randomUUID())
 
-        val collisionService = CollisionServiceV2()
+        val collisionService = CollisionServiceV2(mock(WorldService::class.java))
         assertThat(collisionService.findCollisionData(entity)).isNull()
     }
 
@@ -32,7 +34,7 @@ class CollisionServiceV2Test {
             )
         )
 
-        val collisionService = CollisionServiceV2()
+        val collisionService = CollisionServiceV2(mock(WorldService::class.java))
         val data = collisionService.findCollisionData(entity) ?: fail("expected collision data")
         assertThat(data.bounds).isEqualTo(bounds)
         assertThat(data.box).isEqualTo(

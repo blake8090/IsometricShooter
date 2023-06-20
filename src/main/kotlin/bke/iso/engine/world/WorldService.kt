@@ -80,7 +80,7 @@ class WorldService : SingletonService {
         val oldLocation = locationByObject[worldObject]
         if (oldLocation != null && oldLocation != newLocation) {
             remove(worldObject)
-            log.debug("moved entity to location {}", newLocation)
+            log.trace("moved entity to location {}", newLocation)
         }
         add(worldObject, x, y, z)
     }

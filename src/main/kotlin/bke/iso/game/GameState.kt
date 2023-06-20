@@ -90,6 +90,7 @@ class GameState(
         inputService.bind("flyDown", KeyBinding(Input.Keys.Q, InputState.DOWN, true))
 
         inputService.bind("placeBouncyBall", KeyBinding(Input.Keys.Z, InputState.PRESSED))
+        inputService.bind("checkCollisions", KeyBinding(Input.Keys.C, InputState.PRESSED))
     }
 
     private fun loadMap(mapName: String) {
