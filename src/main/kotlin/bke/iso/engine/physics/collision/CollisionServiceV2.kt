@@ -40,13 +40,17 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
             box.height + dz
         )
 
-        val entities = findEntitiesInArea(projectedBox)
-            .filter { otherEntity -> otherEntity != entity }
-            .mapNotNull { other -> entityIntersects(other, box) }
+        val collisions = findEntityCollisions(projectedBox)
+            .filter { collision -> collision.entity != entity }
             .toSet()
 
-        return PredictedCollisions(projectedBox, entities)
+        return PredictedCollisions(projectedBox, collisions)
     }
+
+    fun findEntityCollisions(box: Box): Set<EntityBoxCollision> =
+        findEntitiesInArea(box)
+            .mapNotNull { entity -> checkEntityCollision(entity, box) }
+            .toSet()
 
     private fun findEntitiesInArea(box: Box): Set<Entity> {
         val min = box.getMin()
@@ -75,7 +79,7 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
         return entities
     }
 
-    private fun entityIntersects(entity: Entity, box: Box): EntityBoxCollision? {
+    private fun checkEntityCollision(entity: Entity, box: Box): EntityBoxCollision? {
         val data = findCollisionData(entity) ?: return null
         return if (boxesIntersect(data.box, box)) {
             EntityBoxCollision(entity, data, BoxCollisionSide.TOP)
