@@ -1,6 +1,6 @@
 package bke.iso.engine.render.debug
 
-import bke.iso.engine.physics.collision.Box
+import bke.iso.engine.math.Box
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle

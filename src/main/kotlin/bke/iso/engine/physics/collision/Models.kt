@@ -1,6 +1,7 @@
 package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
+import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 
 data class EntityCollisionData(
@@ -15,7 +16,8 @@ enum class BoxCollisionSide {
     LEFT,
     RIGHT,
     TOP,
-    BOTTOM
+    BOTTOM,
+    CORNER
 }
 
 data class EntityBoxCollision(

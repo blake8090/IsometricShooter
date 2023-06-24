@@ -1,9 +1,11 @@
 package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
+import bke.iso.engine.math.Box
 import bke.iso.engine.world.WorldService
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Vector3
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -34,10 +36,14 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
         val data = findCollisionData(entity) ?: return null
         val box = data.box
         val projectedBox = Box(
-            box.center,
-            box.width + dx,
-            box.length + dy,
-            box.height + dz
+            Vector3(
+                box.center.x + dx,
+                box.center.y + dy,
+                box.center.z + dz
+            ),
+            box.width,
+            box.length,
+            box.height
         )
 
         val entities = findEntitiesInArea(projectedBox)
@@ -57,7 +63,37 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
         if (!boxesIntersect(box, box2)) {
             return null
         }
-        return BoxCollisionSide.TOP
+
+        val diffX = abs(box.center.x - box2.center.x)
+        val diffY = abs(box.center.y - box2.center.y)
+        val diffZ = abs(box.center.z - box2.center.z)
+        return when (maxOf(diffX, diffY, diffZ)) {
+            diffX -> {
+                if (box.center.x - box2.center.x > 0) {
+                    BoxCollisionSide.RIGHT
+                } else {
+                    BoxCollisionSide.LEFT
+                }
+            }
+
+            diffY -> {
+                if (box.center.y - box2.center.y > 0) {
+                    BoxCollisionSide.BACK
+                } else {
+                    BoxCollisionSide.FRONT
+                }
+            }
+
+            diffZ -> {
+                if (box.center.z - box2.center.z > 0) {
+                    BoxCollisionSide.TOP
+                } else {
+                    BoxCollisionSide.BOTTOM
+                }
+            }
+
+            else -> BoxCollisionSide.CORNER
+        }
     }
 
     // TODO: move this to Box.kt?

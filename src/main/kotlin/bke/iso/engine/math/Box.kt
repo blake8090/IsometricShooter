@@ -1,9 +1,5 @@
-package bke.iso.engine.physics.collision
+package bke.iso.engine.math
 
-import bke.iso.engine.math.getBottomLeft
-import bke.iso.engine.math.getBottomRight
-import bke.iso.engine.math.getTopLeft
-import bke.iso.engine.math.getTopRight
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment

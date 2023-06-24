@@ -1,5 +1,6 @@
 package bke.iso.engine.physics.collision
 
+import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
