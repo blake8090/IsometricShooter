@@ -22,7 +22,7 @@ class PlayerSystem(
     private val eventService: EventService,
     private val renderService: RenderService,
     private val entityFactory: EntityFactory,
-    private val collisionServiceV2: CollisionServiceV2
+    private val collisionService: CollisionServiceV2
 ) : System {
 
     private val walkSpeed = 5f
@@ -50,7 +50,7 @@ class PlayerSystem(
             }
 
             inputService.onAction("checkCollisions") {
-                val predictedCollisions = collisionServiceV2.findProjectedCollisions(entity, 0f, 0f, 0f)
+                val predictedCollisions = collisionService.predictEntityCollisions(entity, 0f, 0f, 0f)
                 if (predictedCollisions != null) {
                     log.debug("found ${predictedCollisions.collisions.size} collisions in projected area")
                 }

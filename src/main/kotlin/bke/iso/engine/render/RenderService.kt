@@ -25,7 +25,7 @@ import com.badlogic.gdx.math.Vector3
 class RenderService(
     private val assetService: AssetService,
     private val worldService: WorldService,
-    private val collisionServiceV2: CollisionServiceV2,
+    private val collisionService: CollisionServiceV2,
     private val eventService: EventService,
     private val debugRenderService: DebugRenderService
 ) : SingletonService {
@@ -159,7 +159,7 @@ class RenderService(
 
     private fun findCollisionData(worldObject: WorldObject) =
         when (worldObject) {
-            is Entity -> collisionServiceV2.findCollisionData(worldObject)
+            is Entity -> collisionService.findCollisionData(worldObject)
             else -> null
         }
 
@@ -176,7 +176,7 @@ class RenderService(
     private fun addEntityDebugData(entity: Entity) {
         debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
 
-        collisionServiceV2.findCollisionData(entity)?.let { data ->
+        collisionService.findCollisionData(entity)?.let { data ->
             debugRenderService.addBox(data.box, Color.GREEN)
         }
 

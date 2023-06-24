@@ -4,7 +4,7 @@ import bke.iso.engine.entity.Entity
 import com.badlogic.gdx.math.Vector3
 
 data class EntityCollisionData(
-    val bounds: BoundsV2,
+    val bounds: Bounds,
     val box: Box,
     val solid: Boolean
 )

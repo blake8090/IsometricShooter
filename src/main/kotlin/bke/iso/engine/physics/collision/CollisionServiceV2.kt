@@ -10,7 +10,7 @@ import kotlin.math.floor
 class CollisionServiceV2(private val worldService: WorldService) : SingletonService {
 
     fun findCollisionData(entity: Entity): EntityCollisionData? {
-        val collision = entity.get<CollisionV2>() ?: return null
+        val collision = entity.get<Collider>() ?: return null
         val bounds = collision.bounds
         val box = Box(
             Vector3(
@@ -30,7 +30,7 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
         )
     }
 
-    fun findProjectedCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): PredictedCollisions? {
+    fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): PredictedCollisions? {
         val data = findCollisionData(entity) ?: return null
         val box = data.box
         val projectedBox = Box(
@@ -40,52 +40,24 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
             box.height + dz
         )
 
-        val collisions = findEntityCollisions(projectedBox)
-            .filter { collision -> collision.entity != entity }
-            .toSet()
+        val entities = findEntitiesInArea(projectedBox)
+            .filter { otherEntity -> otherEntity != entity }
+
+        val collisions = mutableSetOf<EntityBoxCollision>()
+        for (other in entities) {
+            val otherData = findCollisionData(other) ?: continue
+            val collisionSide = checkCollision(projectedBox, otherData.box) ?: continue
+            collisions.add(EntityBoxCollision(other, otherData, collisionSide))
+        }
 
         return PredictedCollisions(projectedBox, collisions)
     }
 
-    fun findEntityCollisions(box: Box): Set<EntityBoxCollision> =
-        findEntitiesInArea(box)
-            .mapNotNull { entity -> checkEntityCollision(entity, box) }
-            .toSet()
-
-    private fun findEntitiesInArea(box: Box): Set<Entity> {
-        val min = box.getMin()
-        val max = box.getMax()
-
-        val startX = floor(min.x).toInt()
-        val endX = ceil(max.x).toInt()
-
-        val startY = floor(min.y).toInt()
-        val endY = ceil(max.y).toInt()
-
-        // TODO: optimize this to avoid searching all entities from the ground up
-        val startZ = 0
-        val endZ = ceil(max.z).toInt()
-
-        val entities = mutableSetOf<Entity>()
-        for (x in startX..endX) {
-            for (y in startY..endY) {
-                for (z in startZ..endZ) {
-                    worldService.getObjectsAt(x, y, z)
-                        .filterIsInstance<Entity>()
-                        .forEach(entities::add)
-                }
-            }
+    private fun checkCollision(box: Box, box2: Box): BoxCollisionSide? {
+        if (!boxesIntersect(box, box2)) {
+            return null
         }
-        return entities
-    }
-
-    private fun checkEntityCollision(entity: Entity, box: Box): EntityBoxCollision? {
-        val data = findCollisionData(entity) ?: return null
-        return if (boxesIntersect(data.box, box)) {
-            EntityBoxCollision(entity, data, BoxCollisionSide.TOP)
-        } else {
-            null
-        }
+        return BoxCollisionSide.TOP
     }
 
     // TODO: move this to Box.kt?
@@ -100,5 +72,32 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
                 aMax.y >= bMin.y &&
                 aMin.z <= bMax.z &&
                 aMax.z >= bMin.z
+    }
+
+    private fun findEntitiesInArea(box: Box): Set<Entity> {
+        val min = box.getMin()
+        val max = box.getMax()
+
+        val minX = floor(min.x).toInt()
+        val maxX = ceil(max.x).toInt()
+
+        val minY = floor(min.y).toInt()
+        val maxY = ceil(max.y).toInt()
+
+        // TODO: optimize this to avoid searching all entities from the ground up
+        val minZ = 0
+        val maxZ = ceil(max.z).toInt()
+
+        val entities = mutableSetOf<Entity>()
+        for (x in minX..maxX) {
+            for (y in minY..maxY) {
+                for (z in minZ..maxZ) {
+                    worldService.getObjectsAt(x, y, z)
+                        .filterIsInstance<Entity>()
+                        .forEach(entities::add)
+                }
+            }
+        }
+        return entities
     }
 }
