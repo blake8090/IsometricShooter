@@ -56,7 +56,7 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
             collisions.add(EntityBoxCollision(other, otherData, collisionSide))
         }
 
-        return PredictedCollisions(projectedBox, collisions)
+        return PredictedCollisions(data, projectedBox, collisions)
     }
 
     private fun checkCollision(box: Box, box2: Box): BoxCollisionSide? {

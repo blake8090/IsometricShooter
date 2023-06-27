@@ -4,24 +4,26 @@ import bke.iso.engine.log
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventService
+import bke.iso.engine.physics.collision.Bounds
+import bke.iso.engine.physics.collision.BoxCollisionSide
+import bke.iso.engine.physics.collision.CollisionServiceV2
+import bke.iso.engine.physics.collision.EntityBoxCollision
 import com.badlogic.gdx.math.Vector3
 
 class MovementHandler(
-    private val collisionService: CollisionService,
+    private val collisionService: CollisionServiceV2,
     private val eventService: EventService
 ) : EventHandler<MoveEvent> {
     override val type = MoveEvent::class
 
     override fun handle(event: MoveEvent) {
         val entity = event.entity
-        val delta = calculateDelta(event)
 
-        val result = collisionService.predictEntityCollisions(entity, delta.x, delta.y)
-        if (result != null) {
-            val bounds = result.bounds
-            for (boxCollision in result.collisions) {
-                resolveCollision(entity, bounds, boxCollision, delta)
-                eventService.fire(CollisionEvent(entity, boxCollision.data))
+        val delta = calculateDelta(event)
+        val predictedCollisions = collisionService.predictEntityCollisions(entity, delta.x, delta.y, delta.z)
+        if (predictedCollisions != null) {
+            for (collision in predictedCollisions.collisions) {
+                resolveCollision(entity, predictedCollisions.data.bounds, collision, delta)
             }
         }
 
@@ -38,30 +40,32 @@ class MovementHandler(
         )
     }
 
-    private fun resolveCollision(entity: Entity, bounds: Bounds, collision: BoxCollision, delta: Vector3) {
+    private fun resolveCollision(entity: Entity, bounds: Bounds, collision: EntityBoxCollision, delta: Vector3) {
         if (!collision.data.solid) {
             return
         }
         val box = collision.data.box
         when (collision.side) {
-            CollisionSide.TOP -> {
-                entity.y = box.y - bounds.length - bounds.offsetY
+            BoxCollisionSide.FRONT -> {
+                entity.y = box.getMin().y - (bounds.dimensions.y / 2f)
                 delta.y = 0f
             }
 
-            CollisionSide.BOTTOM -> {
-                entity.y = (box.y + box.height) - bounds.offsetY
+            BoxCollisionSide.BACK -> {
+                entity.y = box.getMax().y + (bounds.dimensions.y / 2f)
                 delta.y = 0f
             }
 
-            CollisionSide.LEFT -> {
-                entity.x = (box.x + box.width) - bounds.offsetX
+            BoxCollisionSide.LEFT -> {
+                entity.x = box.getMin().x - (bounds.dimensions.x / 2f)
                 delta.x = 0f
+                log.trace("left collision")
             }
 
-            CollisionSide.RIGHT -> {
-                entity.x = box.x - bounds.length - bounds.offsetX
+            BoxCollisionSide.RIGHT -> {
+                entity.x = box.getMax().x + (bounds.dimensions.x / 2f)
                 delta.x = 0f
+                log.trace("right collision")
             }
 
             else -> {
