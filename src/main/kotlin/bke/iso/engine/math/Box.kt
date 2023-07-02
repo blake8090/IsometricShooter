@@ -73,7 +73,7 @@ data class Box(
         return Box(min, max)
     }
 
-    fun minowskiSum(box: Box): Box {
+    fun minkowskiSum(box: Box): Box {
         val w = box.width + width
         val l = box.length + length
         val h = box.height + height

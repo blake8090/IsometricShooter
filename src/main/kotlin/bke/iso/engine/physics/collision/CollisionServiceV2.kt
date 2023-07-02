@@ -2,11 +2,15 @@ package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.getEndPoint
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.world.WorldService
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.collision.BoundingBox
+import com.badlogic.gdx.math.collision.Ray
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -51,13 +55,27 @@ class CollisionServiceV2(
         val entities = findEntitiesInArea(projectedBox)
             .filter { otherEntity -> otherEntity != entity }
 
-
         // narrow-phase: check for collisions with each entity along movement path
+        val movementRay = Ray(box.pos, Vector3(dx, dy, dz))
+        val dist = 1f
+        debugRenderService.addLine(box.pos, movementRay.getEndPoint(dist), 1.5f, Color.ORANGE)
+
         val collisions = mutableSetOf<EntityBoxCollision>()
         for (other in entities) {
             val otherData = findCollisionData(other) ?: continue
-            val minowskiSum = box.minowskiSum(otherData.box)
-            debugRenderService.addBox(minowskiSum, Color.ORANGE)
+            val minkowskiSum = box.minkowskiSum(otherData.box)
+            debugRenderService.addBox(minkowskiSum, Color.ORANGE)
+
+            val intersection = Vector3()
+            val collided = Intersector.intersectRayBounds(
+                movementRay,
+                BoundingBox(minkowskiSum.min, minkowskiSum.max),
+                intersection
+            )
+
+            if (collided && !intersection.isZero) {
+                debugRenderService.addPoint(intersection, 3f, Color.YELLOW)
+            }
             //val collisionSide = checkCollision(projectedBox, otherData.box) ?: continue
             //collisions.add(EntityBoxCollision(other, otherData, collisionSide))
         }

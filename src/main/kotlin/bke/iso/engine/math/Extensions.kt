@@ -3,6 +3,7 @@ package bke.iso.engine.math
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
 
 fun Rectangle.getEdges() =
@@ -46,3 +47,9 @@ fun Rectangle.getTopRight() =
 
 fun Vector3.toVector2() =
     Vector2(x, y)
+
+fun Ray.getEndPoint(distance: Float): Vector3 {
+    val end = Vector3()
+    getEndPoint(end, distance)
+    return end
+}
