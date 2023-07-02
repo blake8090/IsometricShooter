@@ -2,14 +2,19 @@ package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.math.Box
+import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.world.WorldService
 import bke.iso.service.SingletonService
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
-class CollisionServiceV2(private val worldService: WorldService) : SingletonService {
+class CollisionServiceV2(
+    private val worldService: WorldService,
+    private val debugRenderService: DebugRenderService
+) : SingletonService {
 
     fun findCollisionData(entity: Entity): EntityCollisionData? {
         val collision = entity.get<Collider>() ?: return null
@@ -35,25 +40,26 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
     fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): PredictedCollisions? {
         val data = findCollisionData(entity) ?: return null
         val box = data.box
-        val projectedBox = Box(
-            Vector3(
-                box.center.x + dx,
-                box.center.y + dy,
-                box.center.z + dz
-            ),
-            box.width,
-            box.length,
-            box.height
-        )
+
+        // broad-phase: find other entities along movement path by projecting the entity's collision box
+        val px = if (dx < 0) floor(dx) else ceil(dx)
+        val py = if (dy < 0) floor(dy) else ceil(dy)
+        val pz = if (dz < 0) floor(dz) else ceil(dz)
+        val projectedBox = box.project(px, py, pz)
+        debugRenderService.addBox(projectedBox, Color.ORANGE)
 
         val entities = findEntitiesInArea(projectedBox)
             .filter { otherEntity -> otherEntity != entity }
 
+
+        // narrow-phase: check for collisions with each entity along movement path
         val collisions = mutableSetOf<EntityBoxCollision>()
         for (other in entities) {
             val otherData = findCollisionData(other) ?: continue
-            val collisionSide = checkCollision(projectedBox, otherData.box) ?: continue
-            collisions.add(EntityBoxCollision(other, otherData, collisionSide))
+            val minowskiSum = box.minowskiSum(otherData.box)
+            debugRenderService.addBox(minowskiSum, Color.ORANGE)
+            //val collisionSide = checkCollision(projectedBox, otherData.box) ?: continue
+            //collisions.add(EntityBoxCollision(other, otherData, collisionSide))
         }
 
         return PredictedCollisions(data, projectedBox, collisions)
@@ -64,12 +70,12 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
             return null
         }
 
-        val diffX = abs(box.center.x - box2.center.x)
-        val diffY = abs(box.center.y - box2.center.y)
-        val diffZ = abs(box.center.z - box2.center.z)
+        val diffX = abs(box.pos.x - box2.pos.x)
+        val diffY = abs(box.pos.y - box2.pos.y)
+        val diffZ = abs(box.pos.z - box2.pos.z)
         return when (maxOf(diffX, diffY, diffZ)) {
             diffX -> {
-                if (box.center.x - box2.center.x > 0) {
+                if (box.pos.x - box2.pos.x > 0) {
                     BoxCollisionSide.RIGHT
                 } else {
                     BoxCollisionSide.LEFT
@@ -77,7 +83,7 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
             }
 
             diffY -> {
-                if (box.center.y - box2.center.y > 0) {
+                if (box.pos.y - box2.pos.y > 0) {
                     BoxCollisionSide.BACK
                 } else {
                     BoxCollisionSide.FRONT
@@ -85,7 +91,7 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
             }
 
             diffZ -> {
-                if (box.center.z - box2.center.z > 0) {
+                if (box.pos.z - box2.pos.z > 0) {
                     BoxCollisionSide.TOP
                 } else {
                     BoxCollisionSide.BOTTOM
@@ -112,15 +118,14 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
     }
 
     private fun findEntitiesInArea(box: Box): Set<Entity> {
-        val minX = floor(box.min.x).toInt()
-        val maxX = ceil(box.max.x).toInt()
+        val minX = box.min.x.toInt()
+        val maxX = box.max.x.toInt()
 
-        val minY = floor(box.min.y).toInt()
-        val maxY = ceil(box.max.y).toInt()
+        val minY = box.min.y.toInt()
+        val maxY = box.max.y.toInt()
 
-        // TODO: optimize this to avoid searching all entities from the ground up
-        val minZ = 0
-        val maxZ = ceil(box.max.z).toInt()
+        val minZ = box.min.z.toInt()
+        val maxZ = box.max.z.toInt()
 
         val entities = mutableSetOf<Entity>()
         for (x in minX..maxX) {

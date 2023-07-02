@@ -86,8 +86,9 @@ class DebugRenderService : SingletonService {
         boxes.add(box)
     }
 
+    // TODO: use Box instead of adding segments
     fun addBox(box: Box, color: Color) {
-        for (segment in box.getSegments()) {
+        for (segment in box.segments) {
             addLine(segment.a, segment.b, 1f, color)
         }
     }
