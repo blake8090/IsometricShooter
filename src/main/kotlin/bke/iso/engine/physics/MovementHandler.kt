@@ -47,23 +47,23 @@ class MovementHandler(
         val box = collision.data.box
         when (collision.side) {
             BoxCollisionSide.FRONT -> {
-                entity.y = box.getMin().y - (bounds.dimensions.y / 2f)
+                entity.y = box.min.y - (bounds.dimensions.y / 2f)
                 delta.y = 0f
             }
 
             BoxCollisionSide.BACK -> {
-                entity.y = box.getMax().y + (bounds.dimensions.y / 2f)
+                entity.y = box.max.y + (bounds.dimensions.y / 2f)
                 delta.y = 0f
             }
 
             BoxCollisionSide.LEFT -> {
-                entity.x = box.getMin().x - (bounds.dimensions.x / 2f)
+                entity.x = box.min.x - (bounds.dimensions.x / 2f)
                 delta.x = 0f
                 log.trace("left collision")
             }
 
             BoxCollisionSide.RIGHT -> {
-                entity.x = box.getMax().x + (bounds.dimensions.x / 2f)
+                entity.x = box.max.x + (bounds.dimensions.x / 2f)
                 delta.x = 0f
                 log.trace("right collision")
             }

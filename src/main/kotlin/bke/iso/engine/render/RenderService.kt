@@ -103,8 +103,8 @@ class RenderService(
 
     private fun toDrawData(obj: WorldObject): DrawData {
         val data = findCollisionData(obj)
-        val min = data?.box?.getMin() ?: Vector3(obj.x, obj.y, obj.z)
-        val max = data?.box?.getMax() ?: Vector3(obj.x, obj.y, obj.z)
+        val min = data?.box?.min ?: Vector3(obj.x, obj.y, obj.z)
+        val max = data?.box?.max ?: Vector3(obj.x, obj.y, obj.z)
 
         if (obj is Tile) {
             max.add(1f, 1f, 0f)

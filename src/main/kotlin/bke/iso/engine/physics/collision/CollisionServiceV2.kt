@@ -98,10 +98,11 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
 
     // TODO: move this to Box.kt?
     private fun boxesIntersect(a: Box, b: Box): Boolean {
-        val aMin = a.getMin()
-        val aMax = a.getMax()
-        val bMin = b.getMin()
-        val bMax = b.getMax()
+        // TODO: dont need these vals anymore
+        val aMin = a.min
+        val aMax = a.max
+        val bMin = b.min
+        val bMax = b.max
         return aMin.x <= bMax.x &&
                 aMax.x >= bMin.x &&
                 aMin.y <= bMax.y &&
@@ -111,18 +112,15 @@ class CollisionServiceV2(private val worldService: WorldService) : SingletonServ
     }
 
     private fun findEntitiesInArea(box: Box): Set<Entity> {
-        val min = box.getMin()
-        val max = box.getMax()
+        val minX = floor(box.min.x).toInt()
+        val maxX = ceil(box.max.x).toInt()
 
-        val minX = floor(min.x).toInt()
-        val maxX = ceil(max.x).toInt()
-
-        val minY = floor(min.y).toInt()
-        val maxY = ceil(max.y).toInt()
+        val minY = floor(box.min.y).toInt()
+        val maxY = ceil(box.max.y).toInt()
 
         // TODO: optimize this to avoid searching all entities from the ground up
         val minZ = 0
-        val maxZ = ceil(max.z).toInt()
+        val maxZ = ceil(box.max.z).toInt()
 
         val entities = mutableSetOf<Entity>()
         for (x in minX..maxX) {

@@ -11,36 +11,28 @@ data class Box(
     val height: Float
 ) {
 
-    private val bottomCorner = Vector3(
+    /**
+     * Minimum point of the box; the bottom-left corner of the closest face.
+     */
+    val min = Vector3(
         center.x - (width / 2f),
         center.y - (length / 2f),
         center.z
     )
 
-    private val topCorner = Vector3(
+    /**
+     * Maximum point of the box; the top-right corner of the farthest face.
+     */
+    val max = Vector3(
         center.x + (width / 2f),
         center.y + (length / 2f),
         center.z + height
     )
 
-    /**
-     * Returns the minimum point of the box.
-     *
-     * This would be the bottom-left corner of the closest face.
-     */
-    fun getMin() = bottomCorner
-
-    /**
-     * Returns the minimum point of the box.
-     *
-     * This would be the top-right corner of the farthest face.
-     */
-    fun getMax() = topCorner
-
     fun getSegments(): List<Segment> {
         val rect = Rectangle(
-            bottomCorner.x,
-            bottomCorner.y,
+            min.x,
+            min.y,
             width,
             length
         )
