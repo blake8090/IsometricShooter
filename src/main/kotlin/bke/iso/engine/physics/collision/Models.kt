@@ -23,7 +23,9 @@ enum class BoxCollisionSide {
 data class EntityBoxCollision(
     val entity: Entity,
     val data: EntityCollisionData,
-    val side: BoxCollisionSide
+    val side: BoxCollisionSide,
+    val intersection: Vector3,
+    val distance: Float
 )
 
 data class PredictedCollisions(

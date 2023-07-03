@@ -1,6 +1,7 @@
 package bke.iso.engine.physics.collision
 
 import bke.iso.engine.entity.Entity
+import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.getEndPoint
 import bke.iso.engine.render.debug.DebugRenderService
@@ -11,7 +12,6 @@ import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Ray
-import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -57,8 +57,7 @@ class CollisionServiceV2(
 
         // narrow-phase: check for collisions with each entity along movement path
         val movementRay = Ray(box.pos, Vector3(dx, dy, dz))
-        val dist = 1f
-        debugRenderService.addLine(box.pos, movementRay.getEndPoint(dist), 1.5f, Color.ORANGE)
+        debugRenderService.addLine(box.pos, movementRay.getEndPoint(1f), 1.5f, Color.ORANGE)
 
         val collisions = mutableSetOf<EntityBoxCollision>()
         for (other in entities) {
@@ -75,49 +74,67 @@ class CollisionServiceV2(
 
             if (collided && !intersection.isZero) {
                 debugRenderService.addPoint(intersection, 3f, Color.YELLOW)
+
+                if (box.pos.dst2(intersection) <= 0) {
+                    val side = findSide(intersection, otherData.box)
+                    collisions.add(
+                        EntityBoxCollision(
+                            other,
+                            otherData,
+                            side,
+                            intersection,
+                            box.pos.dst2(otherData.box.pos)
+                        )
+                    )
+                }
             }
-            //val collisionSide = checkCollision(projectedBox, otherData.box) ?: continue
-            //collisions.add(EntityBoxCollision(other, otherData, collisionSide))
         }
 
         return PredictedCollisions(data, projectedBox, collisions)
     }
 
-    private fun checkCollision(box: Box, box2: Box): BoxCollisionSide? {
-        if (!boxesIntersect(box, box2)) {
-            return null
-        }
+    private fun findSide(point: Vector3, box: Box): BoxCollisionSide {
+        val top = Vector3(box.center).add(0f, 0f, box.height / 2f)
+        val bottom = Vector3(box.center).sub(0f, 0f, box.height / 2f)
+        val left = Vector3(box.center).sub(box.width / 2f, 0f, 0f)
+        val right = Vector3(box.center).add(box.width / 2f, 0f, 0f)
+        val front = Vector3(box.center).sub(0f, box.length / 2f, 0f)
+        val back = Vector3(box.center).add(0f, box.length / 2f, 0f)
 
-        val diffX = abs(box.pos.x - box2.pos.x)
-        val diffY = abs(box.pos.y - box2.pos.y)
-        val diffZ = abs(box.pos.z - box2.pos.z)
-        return when (maxOf(diffX, diffY, diffZ)) {
-            diffX -> {
-                if (box.pos.x - box2.pos.x > 0) {
-                    BoxCollisionSide.RIGHT
-                } else {
-                    BoxCollisionSide.LEFT
-                }
-            }
+        val dTop = top.dst2(point)
+        val dBottom = bottom.dst2(point)
+        val dLeft = left.dst2(point)
+        val dRight = right.dst2(point)
+        val dFront = front.dst2(point)
+        val dBack = back.dst2(point)
 
-            diffY -> {
-                if (box.pos.y - box2.pos.y > 0) {
-                    BoxCollisionSide.BACK
-                } else {
-                    BoxCollisionSide.FRONT
-                }
-            }
+        log.trace("dst top: $dTop bottom: $dBottom left: $dLeft right: $dRight front: $dFront back: $dBack")
+        val dx = dLeft + dRight
+        val dy = dFront + dBack
+        val dz = dTop + dBottom
+        log.trace("dst x: $dx, y: $dy, z: $dz")
 
-            diffZ -> {
-                if (box.pos.z - box2.pos.z > 0) {
-                    BoxCollisionSide.TOP
-                } else {
-                    BoxCollisionSide.BOTTOM
-                }
-            }
-
-            else -> BoxCollisionSide.CORNER
-        }
+        data class Entry(
+            val dist: Float,
+            val distAxis: Float,
+            val side: BoxCollisionSide
+        )
+        val entries = listOf(
+            Entry(dTop, dz, BoxCollisionSide.TOP),
+            Entry(dBottom, dz, BoxCollisionSide.BOTTOM),
+            Entry(dLeft, dx, BoxCollisionSide.LEFT),
+            Entry(dRight, dx, BoxCollisionSide.RIGHT),
+            Entry(dFront, dy, BoxCollisionSide.FRONT),
+            Entry(dBack, dy, BoxCollisionSide.BACK)
+        )
+        // sorting by multiple distances handles cases where two axes have the same distance.
+        // for example, if dx == dy, then take the minimum of dLeft, dRight, dFront, and dBack.
+        val min = entries.minWith(
+            Comparator.comparing(Entry::distAxis)
+                .thenBy(Entry::dist)
+        )
+        log.trace("min: $min")
+        return min.side
     }
 
     // TODO: move this to Box.kt?
