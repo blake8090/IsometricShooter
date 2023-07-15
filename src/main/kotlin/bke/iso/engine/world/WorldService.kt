@@ -2,7 +2,6 @@ package bke.iso.engine.world
 
 import bke.iso.engine.entity.Entities
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
 import bke.iso.service.SingletonService
@@ -80,7 +79,6 @@ class WorldService : SingletonService {
         val oldLocation = locationByObject[worldObject]
         if (oldLocation != null && oldLocation != newLocation) {
             remove(worldObject)
-            log.trace("moved entity to location {}", newLocation)
         }
         add(worldObject, x, y, z)
     }
