@@ -1,18 +1,11 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.log
-import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventHandler
-import bke.iso.engine.event.EventService
-import bke.iso.engine.physics.collision.BoxCollisionSide
 import bke.iso.engine.physics.collision.CollisionServiceV2
-import bke.iso.engine.physics.collision.EntityBoxCollision
+import bke.iso.engine.physics.collision.PredictedCollisions
 import com.badlogic.gdx.math.Vector3
 
-class MovementHandler(
-    private val collisionService: CollisionServiceV2,
-    private val eventService: EventService
-) : EventHandler<MoveEvent> {
+class MovementHandler(private val collisionService: CollisionServiceV2) : EventHandler<MoveEvent> {
     override val type = MoveEvent::class
 
     override fun handle(event: MoveEvent) {
@@ -20,32 +13,8 @@ class MovementHandler(
 
         val delta = calculateDelta(event)
         val predictedCollisions = collisionService.predictEntityCollisions(entity, delta.x, delta.y, delta.z)
-        if (predictedCollisions != null && predictedCollisions.collisions.isNotEmpty()) {
-            log.trace("begin")
-            val solidCollision = predictedCollisions.collisions
-                .sortedBy { it.distance }
-                .firstOrNull { it.data.solid }
-            if (solidCollision != null) {
-                entity.x = solidCollision.intersection.x
-                entity.y = solidCollision.intersection.y
-                entity.z = solidCollision.intersection.z
-                when(solidCollision.side) {
-                    BoxCollisionSide.TOP, BoxCollisionSide.BOTTOM -> {
-                        delta.z = 0f
-                    }
-
-                    BoxCollisionSide.FRONT, BoxCollisionSide.BACK -> {
-                        delta.y = 0f
-                    }
-
-                    BoxCollisionSide.LEFT, BoxCollisionSide.RIGHT -> {
-                        delta.x = 0f
-                    }
-
-                    BoxCollisionSide.CORNER -> {}
-                }
-            }
-            log.trace("end")
+        if (predictedCollisions != null) {
+            handleCollisions(delta, predictedCollisions)
         }
 
         entity.x += delta.x
@@ -61,30 +30,16 @@ class MovementHandler(
         )
     }
 
-    private fun resolveCollision(entity: Entity, collision: EntityBoxCollision, delta: Vector3) {
-        val intersection = collision.intersection
-        log.trace("collision: ${collision.side}, dist: ${collision.distance}")
-        when(collision.side) {
-            BoxCollisionSide.LEFT -> {
-                entity.x = intersection.x - 0.0001f
-                delta.x = 0f
-            }
-            BoxCollisionSide.RIGHT -> {
-                entity.x = intersection.x + 0.0001f
-                delta.x = 0f
-            }
+    private fun handleCollisions(delta: Vector3, predictedCollisions: PredictedCollisions) {
+        val collision = predictedCollisions.collisions
+            .filter { it.data.solid }
+            .sortedBy { it.collisionTime }
+            .firstOrNull()
 
-            BoxCollisionSide.FRONT -> {
-                entity.y = intersection.y - 0.0001f
-                delta.y = 0f
-            }
-
-            BoxCollisionSide.BACK -> {
-                entity.y = intersection.y + 0.0001f
-                delta.y = 0f
-            }
-
-            else -> {}
+        if (collision == null || collision.collisionTime == 1f) {
+            return
         }
+
+        delta.scl(collision.collisionTime)
     }
 }
