@@ -21,11 +21,7 @@ class CollisionServiceV2(
         val collision = entity.get<Collider>() ?: return null
         val bounds = collision.bounds
         val box = Box(
-            Vector3(
-                entity.x + bounds.offset.x,
-                entity.y + bounds.offset.y,
-                entity.z + bounds.offset.z
-            ),
+            entity.pos.add(bounds.offset),
             bounds.dimensions.x,
             bounds.dimensions.y,
             bounds.dimensions.z

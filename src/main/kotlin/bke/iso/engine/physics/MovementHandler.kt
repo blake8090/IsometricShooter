@@ -34,26 +34,18 @@ class MovementHandler(private val collisionService: CollisionServiceV2) : EventH
 
     private fun resolveCollisions(entity: Entity, delta: Vector3) {
         val collisions = getPredictedCollisions(entity, delta)
-        if (collisions.isEmpty()) {
-            entity.x += delta.x
-            entity.y += delta.y
-            entity.z += delta.z
-            return
-        }
 
         val collision = collisions.firstOrNull()
         if (collision == null) {
-            entity.x += delta.x
-            entity.y += delta.y
-            entity.z += delta.z
+            entity.move(delta)
             return
         }
 
         val collisionTime = collision.collisionTime
         val hitNormal = collision.hitNormal
 
-        entity.x += delta.x * collisionTime
-        entity.y += delta.y * collisionTime
+        val collisionDelta = Vector3(delta).scl(collisionTime)
+        entity.move(collisionDelta)
 
         // perform slide response
         // TODO: fix bug with sliding into corners

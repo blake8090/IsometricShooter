@@ -103,8 +103,8 @@ class RenderService(
 
     private fun toDrawData(obj: WorldObject): DrawData {
         val data = findCollisionData(obj)
-        val min = data?.box?.min ?: Vector3(obj.x, obj.y, obj.z)
-        val max = data?.box?.max ?: Vector3(obj.x, obj.y, obj.z)
+        val min = data?.box?.min ?: obj.pos
+        val max = data?.box?.max ?: obj.pos
 
         if (obj is Tile) {
             max.add(1f, 1f, 0f)
@@ -168,13 +168,13 @@ class RenderService(
         if (entity.z > 0f && entity.has<DrawShadow>()) {
             drawSprite(shadowSprite, Vector3(entity.x, entity.y, 0f))
         }
-        drawSprite(sprite, Vector3(entity.x, entity.y, entity.z))
+        drawSprite(sprite, entity.pos)
         eventService.fire(DrawEntityEvent(entity, batch))
         addEntityDebugData(entity)
     }
 
     private fun addEntityDebugData(entity: Entity) {
-        debugRenderService.addPoint(Vector3(entity.x, entity.y, entity.z), 2f, Color.RED)
+        debugRenderService.addPoint(entity.pos, 2f, Color.RED)
 
         collisionService.findCollisionData(entity)?.let { data ->
             debugRenderService.addBox(data.box, Color.GREEN)
@@ -182,14 +182,14 @@ class RenderService(
 
         if (entity.z != 0f) {
             val start = Vector3(entity.x, entity.y, 0f)
-            val end = Vector3(entity.x, entity.y, entity.z)
+            val end = entity.pos
             debugRenderService.addPoint(start, 2f, Color.RED)
             debugRenderService.addLine(start, end, 1f, Color.PURPLE)
         }
     }
 
     private fun drawTile(tile: Tile) {
-        drawSprite(tile.sprite, Vector3(tile.x, tile.y, tile.z))
+        drawSprite(tile.sprite, tile.pos)
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
