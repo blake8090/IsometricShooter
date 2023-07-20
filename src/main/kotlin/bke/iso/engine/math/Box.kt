@@ -69,7 +69,7 @@ data class Box(
         val max = Vector3(max)
         if (dx < 0) min.x += dx else max.x += dx
         if (dy < 0) min.y += dy else max.y += dy
-        if (dz < 0) min.z += dz else max.x += dz
+        if (dz < 0) min.z += dz else max.z += dz
         return Box(min, max)
     }
 
