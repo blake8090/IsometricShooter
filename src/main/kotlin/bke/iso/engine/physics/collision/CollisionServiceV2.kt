@@ -244,13 +244,12 @@ class CollisionServiceV2(
         val minY = box.min.y.toInt()
         val maxY = box.max.y.toInt()
 
-        val minZ = box.min.z.toInt()
         val maxZ = box.max.z.toInt()
 
         val entities = mutableSetOf<Entity>()
         for (x in minX..maxX) {
             for (y in minY..maxY) {
-                for (z in minZ..maxZ) {
+                for (z in 0..maxZ) {
                     worldService.getObjectsAt(x, y, z)
                         .filterIsInstance<Entity>()
                         .forEach(entities::add)

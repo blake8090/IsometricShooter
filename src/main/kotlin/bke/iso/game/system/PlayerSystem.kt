@@ -14,7 +14,6 @@ import bke.iso.game.Player
 import bke.iso.game.event.BulletType
 import bke.iso.game.event.ShootEvent
 import com.badlogic.gdx.math.Vector3
-import kotlin.math.max
 
 class PlayerSystem(
     private val worldService: WorldService,
@@ -68,14 +67,14 @@ class PlayerSystem(
                 } else {
                     walkSpeed
                 }
-            eventService.fire(MoveEvent(entity, dx, dy, speed, deltaTime))
+            eventService.fire(MoveEvent(entity, dx, dy, 0f, speed, deltaTime))
         }
-        renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
 
         val dz = inputService.poll("flyUp", "flyDown")
         if (dz != 0f) {
-            val newZ = entity.z + (dz * flySpeed * deltaTime)
-            entity.z = max(newZ, 0f)
+            eventService.fire(MoveEvent(entity, 0f, 0f, dz, flySpeed, deltaTime))
         }
+
+        renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
     }
 }
