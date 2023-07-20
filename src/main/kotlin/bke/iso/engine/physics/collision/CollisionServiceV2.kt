@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.max
-import kotlin.math.min
 
 class CollisionServiceV2(
     private val worldService: WorldService,
@@ -43,7 +42,7 @@ class CollisionServiceV2(
         val data = findCollisionData(entity) ?: return null
         val box = data.box
 
-        // broad-phase: find other entities along movement path by projecting the entity's collision box
+        // broad-phase: instead of iterating through every entity, only check entities within general area of movement
         val px = if (dx < 0) floor(dx) else ceil(dx)
         val py = if (dy < 0) floor(dy) else ceil(dy)
         val pz = if (dz < 0) floor(dz) else ceil(dz)
@@ -53,24 +52,18 @@ class CollisionServiceV2(
         val entities = findEntitiesInArea(projectedBox)
             .filter { otherEntity -> otherEntity != entity }
 
-        // narrow-phase: check for collisions with each entity along movement path
+        // narrow-phase: check precise collisions for each entity within area
         val collisions = mutableSetOf<EntityBoxCollision>()
         for (other in entities) {
             val otherData = findCollisionData(other) ?: continue
 
-            val collisionTime = checkSweptCollision(box, Vector3(dx, dy, dz), otherData.box)
-            if (collisionTime < 1f) {
-                val remainingTime = 1f - collisionTime
-                log.trace("remaining time: $remainingTime")
+            checkSweptCollision(box, Vector3(dx, dy, dz), otherData.box)?.let { collision ->
+                val distance = box.center.dst(otherData.box.center)
+                val side = getCollisionSide(collision.hitNormal)
+                log.trace("dist: $distance, collision time: ${collision.collisionTime}, hit normal: ${collision.hitNormal}, side: $side")
+
                 collisions.add(
-                    EntityBoxCollision(
-                        other,
-                        otherData,
-                        BoxCollisionSide.BOTTOM,
-                        Vector3(),
-                        0f,
-                        collisionTime
-                    )
+                    EntityBoxCollision(other, otherData, side, distance, collision.collisionTime, collision.hitNormal)
                 )
             }
         }
@@ -78,82 +71,132 @@ class CollisionServiceV2(
         return PredictedCollisions(data, projectedBox, collisions)
     }
 
-    private fun checkSweptCollision(box: Box, delta: Vector3, other: Box): Float {
-        val pBox = box.project(delta.x, delta.y, delta.z)
-        if (!boxesIntersect(pBox, other)) {
-            return 1f
+    private data class SweptCollision(
+        val collisionTime: Float,
+        val hitNormal: Vector3
+    )
+
+    private fun checkSweptCollision(a: Box, delta: Vector3, b: Box): SweptCollision? {
+        // if box B is not in the projection of box A, both boxes will never collide
+        val pBox = a.project(delta.x, delta.y, delta.z)
+        if (!boxesIntersect(pBox, b)) {
+            return null
         }
-        log.trace("begin swept collision check")
-        val dxEntry =
+
+        /**
+         * Represents the distance between the nearest sides of boxes A and B.
+         * Box A would need to travel this distance to begin overlapping box B.
+         */
+        val entryDistanceX =
             if (delta.x > 0f) {
-                other.min.x - box.max.x
+                b.min.x - a.max.x
             } else {
-                other.max.x - box.min.x
+                b.max.x - a.min.x
             }
-        val dxExit =
+
+        /**
+         * Represents the time it will take for box A to begin overlapping box B.
+         * Calculated using (distance / speed).
+         */
+        val entryTimeX =
+            if (delta.x != 0f) {
+                entryDistanceX / delta.x
+            } else {
+                Float.NEGATIVE_INFINITY
+            }
+
+        /**
+         * Represents the distance between the farthest sides of boxes A and B.
+         * Box A would need to travel this distance to stop overlapping box B.
+         */
+        val exitDistanceX =
             if (delta.x > 0f) {
-                other.max.x - box.min.x
+                b.max.x - a.min.x
             } else {
-                other.min.x - box.max.x
+                b.min.x - a.max.x
             }
 
-        val dyEntry =
-            if (delta.y > 0f) {
-                other.min.y - box.max.y
+        /**
+         * Represents the time it will take for box A to stop overlapping box B.
+         * Calculated using (distance / speed).
+         */
+        val exitTimeX =
+            if (delta.x != 0f) {
+                exitDistanceX / delta.x
             } else {
-                other.max.y - box.min.y
-            }
-        val dyExit =
-            if (delta.y > 0f) {
-                other.max.y - box.min.y
-            } else {
-                other.min.y - box.max.y
-            }
-
-//        log.trace("xEntry: $dxEntry, dxExit: $dxExit, dyEntry: $dyEntry, dyExit: $dyExit")
-
-        val txEntry =
-            if (delta.x == 0f) {
-                Float.NEGATIVE_INFINITY
-            } else {
-                dxEntry / delta.x
-            }
-        val txExit =
-            if (delta.x == 0f) {
                 Float.POSITIVE_INFINITY
-            } else {
-                dxExit / delta.x
             }
 
-        val tyEntry =
-            if (delta.y == 0f) {
+        val entryDistanceY =
+            if (delta.y > 0f) {
+                b.min.y - a.max.y
+            } else {
+                b.max.y - a.min.y
+            }
+
+        val entryTimeY =
+            if (delta.y != 0f) {
+                entryDistanceY / delta.y
+            } else {
                 Float.NEGATIVE_INFINITY
-            } else {
-                dyEntry / delta.y
             }
-        val tyExit =
-            if (delta.y == 0f) {
+
+        val exitDistanceY =
+            if (delta.y > 0f) {
+                b.max.y - a.min.y
+            } else {
+                b.min.y - a.max.y
+            }
+
+        val exitTimeY =
+            if (delta.y != 0f) {
+                exitDistanceY / delta.y
+            } else {
                 Float.POSITIVE_INFINITY
-            } else {
-                dyExit / delta.y
             }
 
-//        log.trace("txEntry: $txEntry, txExit: $txExit")
-//        log.trace("tyEntry: $tyEntry, tyExit: $tyExit")
+        // if the time ranges on both axes never overlap, there's no collision
+        if (entryTimeX > exitTimeY || entryTimeY > exitTimeX) {
+            return null
+        }
 
-        val entryTime = max(txEntry, tyEntry)
-        val exitTime = min(txExit, tyExit)
+        // find the longest entry time. the shortest entry time only demonstrates a collision on one axis.
+        val entryTime = max(entryTimeX, entryTimeY)
 
-        val e =
-            if (entryTime > exitTime || (txEntry < 0f && tyEntry < 0f) || txEntry > 1f || tyEntry > 1f) {
-                1f
-            } else {
-                entryTime
-            }
-        log.trace("entry time: $e")
-        log.trace("end swept collision check")
-        return e
+        // if the entryTime is not within the 0-1 range, that means no collision occurred
+        if (entryTime !in 0f..1f) {
+            return null
+        }
+
+        var hitNormalX = 0f
+        var hitNormalY = 0f
+        // TODO: handle z-axis
+        val hitNormalZ = 0f
+        if (entryTimeX > entryTimeY) {
+            hitNormalX = if (delta.x > 0) -1f else 1f
+        } else {
+            hitNormalY = if (delta.y > 0) -1f else 1f
+        }
+
+        /**
+         * The hit normal points either up, down, left, right, top, or bottom.
+         * Box B would need to push box A in this direction to stop box A from moving.
+         * Using this, the collision direction can be determined.
+         */
+        val hitNormal = Vector3(hitNormalX, hitNormalY, hitNormalZ)
+        return SweptCollision(entryTime, hitNormal)
     }
+
+    private fun getCollisionSide(hitNormal: Vector3): BoxCollisionSide =
+        when (hitNormal) {
+            Vector3(-1f, 0f, 0f) -> BoxCollisionSide.LEFT
+            Vector3(1f, 0f, 0f) -> BoxCollisionSide.RIGHT
+            Vector3(0f, -1f, 0f) -> BoxCollisionSide.FRONT
+            Vector3(0f, 1f, 0f) -> BoxCollisionSide.BACK
+            Vector3(0f, 0f, -1f) -> BoxCollisionSide.BOTTOM
+            Vector3(0f, 0f, 1f) -> BoxCollisionSide.TOP
+            else -> BoxCollisionSide.CORNER
+        }
 
     // TODO: move this to Box.kt?
     private fun boxesIntersect(a: Box, b: Box): Boolean {
@@ -164,71 +207,6 @@ class CollisionServiceV2(
                 a.min.z < b.max.z &&
                 a.max.z > b.min.z
     }
-
-//    private data class SideResult(
-//        val side: BoxCollisionSide,
-//        val dot: Float,
-//        val dist: Float
-//    )
-
-//    private fun checkMinkowski(box: Box, delta: Vector3, other: Entity, otherData: EntityCollisionData) {
-//        val movementRay = Ray(box.pos, delta)
-//        debugRenderService.addLine(box.pos, movementRay.getEndPoint(1f), 1.5f, Color.ORANGE)
-//
-//        val minkowskiSum = box.minkowskiSum(otherData.box)
-//        debugRenderService.addBox(minkowskiSum, Color.ORANGE)
-//        val intersection = Vector3()
-//        val collided = Intersector.intersectRayBounds(
-//            movementRay,
-//            BoundingBox(minkowskiSum.min, minkowskiSum.max),
-//            intersection
-//        )
-//
-//        val collisions = mutableSetOf<EntityBoxCollision>()
-//        if (collided && !intersection.isZero) {
-//            debugRenderService.addPoint(intersection, 3f, Color.YELLOW)
-//            if (box.pos.dst2(intersection) <= 0f) {
-//                val result = findSide(movementRay, intersection, otherData.box)
-//                log.trace("adding collision with side: ${result.side}, dist: ${result.dist}")
-//                collisions.add(
-//                    EntityBoxCollision(
-//                        other,
-//                        otherData,
-//                        result.side,
-//                        intersection,
-//                        result.dist,
-//                        0f
-//                    )
-//                )
-//            }
-//        }
-//    }
-
-//    private fun findSide(ray: Ray, intersection: Vector3, box: Box): SideResult {
-//        fun dot(x: Float, y: Float, z: Float) =
-//            ray.direction.dot(Vector3(x, y, z))
-//
-//        val topPoint = Vector3(box.center).add(0f, 0f, box.height / 2f)
-//        val bottomPoint = Vector3(box.center).sub(0f, 0f, box.height / 2f)
-//        val leftPoint = Vector3(box.center).sub(box.width / 2f, 0f, 0f)
-//        val rightPoint = Vector3(box.center).add(box.width / 2f, 0f, 0f)
-//        val frontPoint = Vector3(box.center).sub(0f, box.length / 2f, 0f)
-//        val backPoint = Vector3(box.center).add(0f, box.length / 2f, 0f)
-//
-//        val entries = listOf(
-//            SideResult(BoxCollisionSide.TOP, dot(0f, 0f, 1f), topPoint.dst(intersection)),
-//            SideResult(BoxCollisionSide.BOTTOM, dot(0f, 0f, -1f), bottomPoint.dst(intersection)),
-//            SideResult(BoxCollisionSide.LEFT, dot(-1f, 0f, 0f), leftPoint.dst(intersection)),
-//            SideResult(BoxCollisionSide.RIGHT, dot(1f, 0f, 0f), rightPoint.dst(intersection)),
-//            SideResult(BoxCollisionSide.FRONT, dot(0f, -1f, 0f), frontPoint.dst(intersection)),
-//            SideResult(BoxCollisionSide.BACK, dot(0f, 1f, 0f), backPoint.dst(intersection))
-//        )
-//
-//        log.trace("entries: ${entries.joinToString("\n")}")
-//
-//        return entries.filter { it.dot < 0 }
-//            .minBy { it.dist }
-//    }
 
     private fun findEntitiesInArea(box: Box): Set<Entity> {
         val minX = box.min.x.toInt()

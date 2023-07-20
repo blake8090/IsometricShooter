@@ -24,9 +24,9 @@ data class EntityBoxCollision(
     val entity: Entity,
     val data: EntityCollisionData,
     val side: BoxCollisionSide,
-    val intersection: Vector3,
     val distance: Float,
-    val collisionTime: Float
+    val collisionTime: Float,
+    val hitNormal: Vector3
 )
 
 data class PredictedCollisions(
