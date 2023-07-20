@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.max
 
 class CollisionServiceV2(
     private val worldService: WorldService,
@@ -123,6 +122,7 @@ class CollisionServiceV2(
                 Float.POSITIVE_INFINITY
             }
 
+        // y-axis
         val entryDistanceY =
             if (delta.y > 0f) {
                 b.min.y - a.max.y
@@ -151,13 +151,45 @@ class CollisionServiceV2(
                 Float.POSITIVE_INFINITY
             }
 
+        // z-axis
+        val entryDistanceZ =
+            if (delta.z > 0f) {
+                b.min.z - a.max.z
+            } else {
+                b.max.z - a.min.z
+            }
+
+        val entryTimeZ =
+            if (delta.z != 0f) {
+                entryDistanceZ / delta.z
+            } else {
+                Float.NEGATIVE_INFINITY
+            }
+
+        val exitDistanceZ =
+            if (delta.z > 0f) {
+                b.max.z - a.min.z
+            } else {
+                b.min.z - a.max.z
+            }
+
+        val exitTimeZ =
+            if (delta.z != 0f) {
+                exitDistanceZ / delta.z
+            } else {
+                Float.POSITIVE_INFINITY
+            }
+
         // if the time ranges on both axes never overlap, there's no collision
-        if (entryTimeX > exitTimeY || entryTimeY > exitTimeX) {
+        if ((entryTimeX > exitTimeY && entryTimeX > exitTimeZ) ||
+            (entryTimeY > exitTimeX && entryTimeY > exitTimeZ) ||
+            (entryTimeZ > exitTimeX && entryTimeZ > exitTimeY)
+        ) {
             return null
         }
 
         // find the longest entry time. the shortest entry time only demonstrates a collision on one axis.
-        val entryTime = max(entryTimeX, entryTimeY)
+        val entryTime = maxOf(entryTimeX, entryTimeY, entryTimeZ)
 
         // if the entryTime is not within the 0-1 range, that means no collision occurred
         if (entryTime !in 0f..1f) {
@@ -166,12 +198,13 @@ class CollisionServiceV2(
 
         var hitNormalX = 0f
         var hitNormalY = 0f
-        // TODO: handle z-axis
-        val hitNormalZ = 0f
-        if (entryTimeX > entryTimeY) {
+        var hitNormalZ = 0f
+        if (entryTimeX > entryTimeY && entryTimeX > entryTimeZ) {
             hitNormalX = if (delta.x > 0) -1f else 1f
-        } else {
+        } else if (entryTimeY > entryTimeX && entryTimeY > entryTimeZ) {
             hitNormalY = if (delta.y > 0) -1f else 1f
+        } else {
+            hitNormalZ = if (delta.z > 0) -1f else 1f
         }
 
         /**
