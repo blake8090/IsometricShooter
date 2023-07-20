@@ -5,7 +5,7 @@ import bke.iso.engine.event.EventHandler
 import bke.iso.engine.log
 import bke.iso.engine.physics.collision.BoxCollisionSide
 import bke.iso.engine.physics.collision.CollisionServiceV2
-import bke.iso.engine.physics.collision.EntityBoxCollision
+import bke.iso.engine.physics.collision.BoxCollision
 import com.badlogic.gdx.math.Vector3
 
 class MovementHandler(private val collisionService: CollisionServiceV2) : EventHandler<MoveEvent> {
@@ -20,15 +20,15 @@ class MovementHandler(private val collisionService: CollisionServiceV2) : EventH
         resolveCollisions(entity, delta)
     }
 
-    private fun getPredictedCollisions(entity: Entity, delta: Vector3): Set<EntityBoxCollision> {
+    private fun getPredictedCollisions(entity: Entity, delta: Vector3): Set<BoxCollision> {
         val predictedCollisions = collisionService.predictEntityCollisions(entity, delta.x, delta.y, delta.z)
             ?: return emptySet()
 
         return predictedCollisions.collisions
             .filter { it.data.solid }
             .sortedWith(
-                compareBy(EntityBoxCollision::distance)
-                    .thenBy(EntityBoxCollision::collisionTime)
+                compareBy(BoxCollision::distance)
+                    .thenBy(BoxCollision::collisionTime)
             )
             .toSet()
     }

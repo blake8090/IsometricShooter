@@ -4,6 +4,8 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.debug.DebugRenderService
+import bke.iso.engine.world.Tile
+import bke.iso.engine.world.WorldObject
 import bke.iso.engine.world.WorldService
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.graphics.Color
@@ -16,7 +18,24 @@ class CollisionServiceV2(
     private val debugRenderService: DebugRenderService
 ) : SingletonService {
 
-    fun findCollisionData(entity: Entity): EntityCollisionData? {
+    fun findCollisionData(obj: WorldObject): CollisionData? =
+        when (obj) {
+            is Entity -> findCollisionData(obj)
+            is Tile -> findCollisionData(obj)
+            else -> null
+        }
+
+    fun findCollisionData(tile: Tile): CollisionData {
+        val center = tile.pos
+        center.x += 0.5f
+        center.y += 0.5f
+        return CollisionData(
+            Box(center, 1f, 1f, 0f),
+            tile.solid
+        )
+    }
+
+    fun findCollisionData(entity: Entity): CollisionData? {
         val collision = entity.get<Collider>() ?: return null
         val bounds = collision.bounds
         val box = Box(
@@ -26,26 +45,26 @@ class CollisionServiceV2(
             bounds.dimensions.z
         )
 
-        return EntityCollisionData(box, collision.solid)
+        return CollisionData(box, collision.solid)
     }
 
     fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): PredictedCollisions? {
         val data = findCollisionData(entity) ?: return null
         val box = data.box
 
-        // broad-phase: instead of iterating through every entity, only check entities within general area of movement
+        // broad-phase: instead of iterating through every object, only check entities within general area of movement
         val px = if (dx < 0) floor(dx) else ceil(dx)
         val py = if (dy < 0) floor(dy) else ceil(dy)
         val pz = if (dz < 0) floor(dz) else ceil(dz)
         val projectedBox = box.project(px, py, pz)
         debugRenderService.addBox(projectedBox, Color.ORANGE)
 
-        val entities = findEntitiesInArea(projectedBox)
-            .filter { otherEntity -> otherEntity != entity }
+        val worldObjects = findObjectsInArea(projectedBox)
+            .filter { other -> other != entity }
 
-        // narrow-phase: check precise collisions for each entity within area
-        val collisions = mutableSetOf<EntityBoxCollision>()
-        for (other in entities) {
+        // narrow-phase: check precise collisions for each object within area
+        val collisions = mutableSetOf<BoxCollision>()
+        for (other in worldObjects) {
             val otherData = findCollisionData(other) ?: continue
 
             checkSweptCollision(box, Vector3(dx, dy, dz), otherData.box)?.let { collision ->
@@ -54,7 +73,7 @@ class CollisionServiceV2(
                 log.trace("dist: $distance, collision time: ${collision.collisionTime}, hit normal: ${collision.hitNormal}, side: $side")
 
                 collisions.add(
-                    EntityBoxCollision(other, otherData, side, distance, collision.collisionTime, collision.hitNormal)
+                    BoxCollision(other, otherData, side, distance, collision.collisionTime, collision.hitNormal)
                 )
             }
         }
@@ -223,7 +242,7 @@ class CollisionServiceV2(
             else -> BoxCollisionSide.CORNER
         }
 
-    private fun findEntitiesInArea(box: Box): Set<Entity> {
+    private fun findObjectsInArea(box: Box): Set<WorldObject> {
         val minX = box.min.x.toInt()
         val maxX = box.max.x.toInt()
 
@@ -232,16 +251,16 @@ class CollisionServiceV2(
 
         val maxZ = box.max.z.toInt()
 
-        val entities = mutableSetOf<Entity>()
+        val worldObjects = mutableSetOf<WorldObject>()
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in 0..maxZ) {
                     worldService.getObjectsAt(x, y, z)
-                        .filterIsInstance<Entity>()
-                        .forEach(entities::add)
+//                        .filterIsInstance<Entity>()
+                        .forEach(worldObjects::add)
                 }
             }
         }
-        return entities
+        return worldObjects
     }
 }

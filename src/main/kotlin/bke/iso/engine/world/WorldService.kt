@@ -16,8 +16,8 @@ class WorldService : SingletonService {
 
     val entities = Entities(grid)
 
-    fun setTile(location: Location, sprite: Sprite) {
-        val tile = Tile(sprite)
+    fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) {
+        val tile = Tile(sprite, solid)
         setup(tile, location.x.toFloat(), location.y.toFloat(), location.z.toFloat())
     }
 

@@ -36,8 +36,8 @@ class GameMapService(
 
     private fun readTile(char: Char, location: Location) {
         when (char) {
-            '1' -> worldService.setTile(location, floorSprite)
-            '2' -> worldService.setTile(location, floor2Sprite)
+            '1' -> worldService.setTile(location, floorSprite, true)
+            '2' -> worldService.setTile(location, floor2Sprite, true)
         }
     }
 
