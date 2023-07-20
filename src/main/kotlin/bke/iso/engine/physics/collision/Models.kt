@@ -5,7 +5,6 @@ import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 
 data class EntityCollisionData(
-    val bounds: Bounds,
     val box: Box,
     val solid: Boolean
 )

@@ -64,6 +64,15 @@ data class Box(
         Segment(Vector3(max.x, max.y, min.z), Vector3(max.x, max.y, max.z))
     )
 
+    fun intersects(other: Box): Boolean {
+        return min.x < other.max.x &&
+                max.x > other.min.x &&
+                min.y < other.max.y &&
+                max.y > other.min.y &&
+                min.z < other.max.z &&
+                max.z > other.min.z
+    }
+
     fun project(dx: Float, dy: Float, dz: Float): Box {
         val min = Vector3(min)
         val max = Vector3(max)

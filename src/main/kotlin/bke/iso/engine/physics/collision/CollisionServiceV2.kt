@@ -26,11 +26,7 @@ class CollisionServiceV2(
             bounds.dimensions.z
         )
 
-        return EntityCollisionData(
-            bounds,
-            box,
-            collision.solid
-        )
+        return EntityCollisionData(box, collision.solid)
     }
 
     fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): PredictedCollisions? {
@@ -74,7 +70,7 @@ class CollisionServiceV2(
     private fun checkSweptCollision(a: Box, delta: Vector3, b: Box): SweptCollision? {
         // if box B is not in the projection of box A, both boxes will never collide
         val pBox = a.project(delta.x, delta.y, delta.z)
-        if (!boxesIntersect(pBox, b)) {
+        if (!pBox.intersects(b)) {
             return null
         }
 
@@ -226,16 +222,6 @@ class CollisionServiceV2(
             Vector3(0f, 0f, 1f) -> BoxCollisionSide.TOP
             else -> BoxCollisionSide.CORNER
         }
-
-    // TODO: move this to Box.kt?
-    private fun boxesIntersect(a: Box, b: Box): Boolean {
-        return a.min.x < b.max.x &&
-                a.max.x > b.min.x &&
-                a.min.y < b.max.y &&
-                a.max.y > b.min.y &&
-                a.min.z < b.max.z &&
-                a.max.z > b.min.z
-    }
 
     private fun findEntitiesInArea(box: Box): Set<Entity> {
         val minX = box.min.x.toInt()

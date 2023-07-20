@@ -16,10 +16,6 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
         worldService.createEntity(location)
             .add(
                 Sprite("wall3", 0f, 16f),
-//                Collision(
-//                    Bounds(1f, 1f, 2f, 0f, 0f),
-//                    true
-//                ),
                 Collider(
                     Bounds(Vector3(1f, 1f, 2f), Vector3(0.5f, 0.5f, 0f)),
                     true
@@ -30,10 +26,6 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
         worldService.createEntity(location)
             .add(
                 Sprite("box", 16f, 8f),
-//                Collision(
-//                    Bounds(0.5f, 0.5f, 0.5f, -0.25f, -0.25f),
-//                    true
-//                ),
                 Collider(
                     Bounds(Vector3(0.5f, 0.5f, 0.5f)),
                     true
@@ -45,10 +37,6 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
             .add(
                 Sprite("turret", 16f, 0f),
                 Turret(),
-//                Collision(
-//                    Bounds(0.5f, 0.5f, 1f, -0.25f, -0.25f),
-//                    false
-//                ),
                 Collider(
                     Bounds(Vector3(0.5f, 0.5f, 1f)),
                     false
@@ -62,10 +50,6 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
             .add(
                 Sprite("player", 32f, 0f),
                 Player(),
-//                Collision(
-//                    Bounds(0.5f, 0.5f, 1.6f, -0.25f, -0.25f),
-//                    false
-//                ),
                 Collider(
                     Bounds(Vector3(0.5f, 0.5f, 1.6f)),
                     false
@@ -121,11 +105,7 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
                 Collider(
                     Bounds(Vector3(0.25f, 0.25f, 2.1f), Vector3(0f, 0f, 0f)),
                     true
-                ),
-//                Collision(
-//                    Bounds(0.25f, 0.25f, 2.1f, -0.125f, -0.125f),
-//                    true
-//                )
+                )
             )
 
     fun createPillar(location: Location) =
@@ -135,10 +115,6 @@ class EntityFactory(private val worldService: WorldService) : SingletonService {
                 Collider(
                     Bounds(Vector3(0.25f, 0.25f, 2f), Vector3(0f, 0f, 0f)),
                     true
-                ),
-//                Collision(
-//                    Bounds(0.25f, 0.25f, 2.1f, -0.125f, -0.125f),
-//                    true
-//                )
+                )
             )
 }
