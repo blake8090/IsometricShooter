@@ -12,7 +12,7 @@ class PhysicsSystem(
         worldService.entities.withComponent(Velocity::class) { entity, velocity ->
             // TODO: handle z-axis
             if (velocity.x != 0f || velocity.y != 0f) {
-                eventService.fire(MoveEvent(entity, velocity.x, velocity.y, 0f, velocity.speed, deltaTime))
+//                eventService.fire(MoveEvent(entity, velocity.x, velocity.y, 0f, velocity.speed, deltaTime))
             }
         }
     }

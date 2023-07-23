@@ -58,23 +58,33 @@ class PlayerSystem(
     }
 
     private fun updatePlayerEntity(entity: Entity, deltaTime: Float) {
-        val dx = inputService.poll("moveLeft", "moveRight")
-        val dy = inputService.poll("moveUp", "moveDown")
-        if (dx != 0f || dy != 0f) {
-            val speed =
-                if (inputService.poll("run") != 0f) {
-                    runSpeed
-                } else {
-                    walkSpeed
-                }
-            eventService.fire(MoveEvent(entity, dx, dy, 0f, speed, deltaTime))
-        }
+        val velocity = Vector3(
+            inputService.poll("moveLeft", "moveRight"),
+            inputService.poll("moveUp", "moveDown"),
+            inputService.poll("flyUp", "flyDown")
+        )
 
-        val dz = inputService.poll("flyUp", "flyDown")
-        if (dz != 0f) {
-            eventService.fire(MoveEvent(entity, 0f, 0f, dz, flySpeed, deltaTime))
+        if (!velocity.isZero) {
+            move(entity, velocity, deltaTime)
         }
 
         renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
+    }
+
+    private fun move(entity: Entity, velocity: Vector3, deltaTime: Float) {
+        val horizontalSpeed =
+            if (inputService.poll("run") != 0f) {
+                runSpeed
+            } else {
+                walkSpeed
+            }
+
+        val event = MoveEvent(
+            entity,
+            velocity,
+            Vector3(horizontalSpeed, horizontalSpeed, flySpeed),
+            deltaTime
+        )
+        eventService.fire(event)
     }
 }
