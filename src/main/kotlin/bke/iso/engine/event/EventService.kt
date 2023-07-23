@@ -1,6 +1,5 @@
 package bke.iso.engine.event
 
-import bke.iso.engine.physics.MovementHandler
 import bke.iso.engine.state.StateService
 import bke.iso.service.ServiceProvider
 import bke.iso.service.SingletonService
@@ -11,10 +10,6 @@ class EventService(
 ) : SingletonService {
 
     private val baseEventHandlers = EventHandlerMap()
-
-    override fun create() {
-        baseEventHandlers.add(provider.get(MovementHandler::class))
-    }
 
     fun <T : Event> fire(event: T) {
         baseEventHandlers.fire(event)

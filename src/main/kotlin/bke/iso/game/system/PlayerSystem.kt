@@ -4,7 +4,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
 import bke.iso.engine.log
-import bke.iso.engine.physics.MoveEvent
+import bke.iso.engine.physics.Velocity
 import bke.iso.engine.physics.collision.CollisionServiceV2
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.system.System
@@ -30,7 +30,7 @@ class PlayerSystem(
 
     override fun update(deltaTime: Float) {
         worldService.entities.withComponent(Player::class) { entity, _ ->
-            updatePlayerEntity(entity, deltaTime)
+            updatePlayer(entity)
 
             inputService.onAction("toggleDebug") {
                 renderService.toggleDebugMode()
@@ -57,21 +57,13 @@ class PlayerSystem(
         }
     }
 
-    private fun updatePlayerEntity(entity: Entity, deltaTime: Float) {
-        val velocity = Vector3(
+    private fun updatePlayer(entity: Entity) {
+        val movement = Vector3(
             inputService.poll("moveLeft", "moveRight"),
             inputService.poll("moveUp", "moveDown"),
             inputService.poll("flyUp", "flyDown")
         )
 
-        if (!velocity.isZero) {
-            move(entity, velocity, deltaTime)
-        }
-
-        renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
-    }
-
-    private fun move(entity: Entity, velocity: Vector3, deltaTime: Float) {
         val horizontalSpeed =
             if (inputService.poll("run") != 0f) {
                 runSpeed
@@ -79,12 +71,20 @@ class PlayerSystem(
                 walkSpeed
             }
 
-        val event = MoveEvent(
-            entity,
-            velocity,
-            Vector3(horizontalSpeed, horizontalSpeed, flySpeed),
-            deltaTime
-        )
-        eventService.fire(event)
+        val velocity = getOrAddVelocity(entity)
+        velocity.delta.set(movement)
+        velocity.speed.set(horizontalSpeed, horizontalSpeed, flySpeed)
+
+        renderService.setCameraPos(Vector3(entity.x, entity.y, entity.z))
+    }
+
+    private fun getOrAddVelocity(entity: Entity): Velocity {
+        val velocity = entity.get<Velocity>()
+        if (velocity != null) {
+            return velocity
+        }
+        val newVelocity = Velocity()
+        entity.add(newVelocity)
+        return newVelocity
     }
 }

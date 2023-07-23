@@ -14,9 +14,3 @@ data class Collision(
     val bounds: Bounds,
     val solid: Boolean
 ) : Component()
-
-data class Velocity(
-    val x: Float,
-    val y: Float,
-    val speed: Float
-) : Component()
