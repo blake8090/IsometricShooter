@@ -2,8 +2,8 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.physics.collision.BoxCollision
 import bke.iso.engine.physics.collision.CollisionServiceV2
+import bke.iso.engine.physics.collision.PredictedObjectCollision
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
 import com.badlogic.gdx.math.Vector3
@@ -28,8 +28,15 @@ class PhysicsSystem(
     }
 
     private fun move(entity: Entity, delta: Vector3) {
-        val collision = predictSolidCollisions(entity, delta)
+        val collision = collisionService
+            .predictEntityCollisions(entity, delta.x, delta.y, delta.z)
+            .filter { collision -> collision.data.solid }
+            .sortedWith(
+                compareBy(PredictedObjectCollision::collisionTime)
+                    .thenBy(PredictedObjectCollision::distance)
+            )
             .firstOrNull()
+
         if (collision == null) {
             entity.move(delta)
             return
@@ -50,17 +57,5 @@ class PhysicsSystem(
         // then, subtract the eliminated motion from the original motion, thus producing a slide effect
         val newDelta = Vector3(delta).sub(eliminatedMotion)
         move(entity, newDelta)
-    }
-
-    private fun predictSolidCollisions(entity: Entity, delta: Vector3): List<BoxCollision> {
-        val predictedCollisions = collisionService.predictEntityCollisions(entity, delta.x, delta.y, delta.z)
-            ?: return emptyList()
-        return predictedCollisions
-            .collisions
-            .filter { it.data.solid }
-            .sortedWith(
-                compareBy(BoxCollision::collisionTime)
-                    .thenBy(BoxCollision::distance)
-            )
     }
 }

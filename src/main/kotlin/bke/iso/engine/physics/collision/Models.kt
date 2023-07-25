@@ -1,6 +1,5 @@
 package bke.iso.engine.physics.collision
 
-import bke.iso.engine.entity.Entity
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.WorldObject
 import com.badlogic.gdx.math.Vector3
@@ -20,25 +19,42 @@ enum class BoxCollisionSide {
     CORNER
 }
 
-data class BoxCollision(
+/**
+ * Contains details on an object's collision on another object.
+ * @property obj The colliding object
+ * @property data The colliding object's [CollisionData]
+ * @property distance The distance between the center point of both object's bounding boxes
+ * @property side Which side the object collided with
+ */
+data class ObjectCollision(
     val obj: WorldObject,
     val data: CollisionData,
-    val side: BoxCollisionSide,
+    val distance: Float,
+    val side: BoxCollisionSide
+)
+
+/**
+ * Represents an object's collision with another object based on the other object's velocity.
+ * @property obj The colliding object
+ * @property data The colliding object's [CollisionData]
+ * @property distance The distance between the center point of both object's bounding boxes
+ * @property collisionTime A number between 0 and 1 representing the time the collision occurred within the entire frame
+ * @property hitNormal A [Vector3] representing the collision normal
+ * @property side Which side the object collided with
+ */
+data class PredictedObjectCollision(
+    val obj: WorldObject,
+    val data: CollisionData,
     val distance: Float,
     val collisionTime: Float,
-    val hitNormal: Vector3
+    val hitNormal: Vector3,
+    val side: BoxCollisionSide
 )
 
-data class PredictedCollisions(
+data class ObjectSegmentCollision(
+    val obj: WorldObject,
     val data: CollisionData,
-    val projectedBox: Box,
-    val collisions: Set<BoxCollision>
-)
-
-data class EntitySegmentCollision(
-    val entity: Entity,
-    val data: CollisionData,
-    val distanceFromStart: Float,
-    val distanceFromEnd: Float,
-    val intersectionPoints: Set<Vector3>
+    val distanceStart: Float,
+    val distanceEnd: Float,
+    val points: Set<Vector3>
 )

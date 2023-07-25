@@ -48,8 +48,8 @@ class CollisionServiceV2(
         return CollisionData(box, collision.solid)
     }
 
-    fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): PredictedCollisions? {
-        val data = findCollisionData(entity) ?: return null
+    fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): Set<PredictedObjectCollision> {
+        val data = findCollisionData(entity) ?: return emptySet()
         val box = data.box
 
         // broad-phase: instead of iterating through every object, only check entities within general area of movement
@@ -63,7 +63,7 @@ class CollisionServiceV2(
             .filter { other -> other != entity }
 
         // narrow-phase: check precise collisions for each object within area
-        val collisions = mutableSetOf<BoxCollision>()
+        val collisions = mutableSetOf<PredictedObjectCollision>()
         for (other in worldObjects) {
             val otherData = findCollisionData(other) ?: continue
 
@@ -73,12 +73,19 @@ class CollisionServiceV2(
                 log.trace("dist: $distance, collision time: ${collision.collisionTime}, hit normal: ${collision.hitNormal}, side: $side")
 
                 collisions.add(
-                    BoxCollision(other, otherData, side, distance, collision.collisionTime, collision.hitNormal)
+                    PredictedObjectCollision(
+                        other,
+                        otherData,
+                        distance,
+                        collision.collisionTime,
+                        collision.hitNormal,
+                        side
+                    )
                 )
             }
         }
 
-        return PredictedCollisions(data, projectedBox, collisions)
+        return collisions
     }
 
     private data class SweptCollision(
@@ -256,7 +263,6 @@ class CollisionServiceV2(
             for (y in minY..maxY) {
                 for (z in 0..maxZ) {
                     worldService.getObjectsAt(x, y, z)
-//                        .filterIsInstance<Entity>()
                         .forEach(worldObjects::add)
                 }
             }
