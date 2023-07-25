@@ -22,4 +22,9 @@ class SystemService(
         baseSystems.forEach { system -> system.update(deltaTime) }
         stateService.currentState.systems.forEach { system -> system.update(deltaTime) }
     }
+
+    fun onFrameEnd() {
+        baseSystems.forEach { system -> system.onFrameEnd() }
+        stateService.currentState.systems.forEach { system -> system.onFrameEnd() }
+    }
 }

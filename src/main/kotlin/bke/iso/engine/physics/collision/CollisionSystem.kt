@@ -16,4 +16,10 @@ class CollisionSystem(
             }
         }
     }
+
+    override fun onFrameEnd() {
+        worldService.entities.withComponent(FrameCollisions::class) { entity, _ ->
+            entity.remove<FrameCollisions>()
+        }
+    }
 }

@@ -3,9 +3,9 @@ package bke.iso.game.event
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
-import bke.iso.engine.physics.Bounds
-import bke.iso.engine.physics.Collision
 import bke.iso.engine.physics.Velocity
+import bke.iso.engine.physics.collision.Bounds
+import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
 import bke.iso.game.Bullet
@@ -39,7 +39,7 @@ class ShootHandler(private val worldService: WorldService) : EventHandler<ShootE
             BulletType.TURRET -> turretBulletSpeed
         }
 
-        val bullet = worldService.createEntity(pos.x, pos.y, pos.z)
+        val bullet = worldService.createEntity(pos.x, pos.y, pos.z + 0.5f)
         bullet.add(
             Bullet(shooter.id, pos),
             Sprite("bullet", 8f, 8f),
@@ -51,8 +51,8 @@ class ShootHandler(private val worldService: WorldService) : EventHandler<ShootE
                     0f
                 )
             ),
-            Collision(
-                Bounds(0.25f, 0.25f, 0f, 0f, -0.25f),
+            Collider(
+                Bounds(Vector3(0.125f, 0.125f, 0.125f)),
                 false
             )
         )

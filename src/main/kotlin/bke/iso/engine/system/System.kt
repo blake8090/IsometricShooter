@@ -4,4 +4,6 @@ import bke.iso.service.TransientService
 
 interface System : TransientService {
     fun update(deltaTime: Float)
+
+    fun onFrameEnd() {}
 }

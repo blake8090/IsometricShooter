@@ -26,7 +26,9 @@ class Engine(
         systemService.update(deltaTime)
         stateService.update(deltaTime)
         worldService.update()
+
         renderService.render()
+        systemService.onFrameEnd()
     }
 
     fun stop() {
