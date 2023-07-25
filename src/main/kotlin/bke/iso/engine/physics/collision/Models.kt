@@ -1,8 +1,14 @@
 package bke.iso.engine.physics.collision
 
+import bke.iso.engine.event.Event
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.WorldObject
 import com.badlogic.gdx.math.Vector3
+
+data class CollisionEvent(
+    val obj: WorldObject,
+    val collision: ObjectCollision
+) : Event()
 
 data class CollisionData(
     val box: Box,

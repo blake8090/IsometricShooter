@@ -12,3 +12,7 @@ data class Collider(
     val bounds: Bounds,
     val solid: Boolean
 ) : Component()
+
+data class FrameCollisions(
+    val collisions: MutableSet<ObjectCollision> = mutableSetOf()
+) : Component()

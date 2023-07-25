@@ -23,7 +23,7 @@ class Engine(
 
     fun update(deltaTime: Float) {
         inputService.update()
-        systemService.update(stateService.currentState, deltaTime)
+        systemService.update(deltaTime)
         stateService.update(deltaTime)
         worldService.update()
         renderService.render()

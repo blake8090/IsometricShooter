@@ -36,4 +36,17 @@ data class Entity(val id: UUID) : WorldObject() {
 
     inline fun <reified T : Component> has() =
         has(T::class)
+
+    fun <T : Component> getOrAdd(type: KClass<T>, defaultValue: T): T =
+        when (val component = get(type)) {
+            null -> {
+                add(defaultValue)
+                defaultValue
+            }
+
+            else -> component
+        }
+
+    inline fun <reified T : Component> getOrAdd(defaultValue: T) =
+        getOrAdd(T::class, defaultValue)
 }

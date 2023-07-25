@@ -85,7 +85,26 @@ class CollisionServiceV2(
             }
         }
 
+        recordCollisions(entity, collisions)
         return collisions
+    }
+
+    private fun recordCollisions(entity: Entity, predictedCollisions: Collection<PredictedObjectCollision>) {
+        val frameCollisions = entity.getOrAdd(FrameCollisions())
+        for (predictedCollision in predictedCollisions) {
+            if (frameCollisions.collisions.any { it.obj == predictedCollision.obj }) {
+                continue
+            }
+            // not every collision in a frame will be a predicted collision, so we'll use a more general format
+            frameCollisions.collisions.add(
+                ObjectCollision(
+                    predictedCollision.obj,
+                    predictedCollision.data,
+                    predictedCollision.distance,
+                    predictedCollision.side
+                )
+            )
+        }
     }
 
     private data class SweptCollision(
