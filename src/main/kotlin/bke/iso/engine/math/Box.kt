@@ -1,6 +1,7 @@
 package bke.iso.engine.math
 
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Segment
 
 data class Box(
@@ -62,6 +63,21 @@ data class Box(
         Segment(Vector3(max.x, min.y, min.z), Vector3(max.x, min.y, max.z)),
         Segment(Vector3(min.x, max.y, min.z), Vector3(min.x, max.y, max.z)),
         Segment(Vector3(max.x, max.y, min.z), Vector3(max.x, max.y, max.z))
+    )
+
+    val faces = listOf(
+        // top
+        BoundingBox(Vector3(min.x, min.y, max.z), Vector3(max.x, max.y, max.z)),
+        // bottom
+        BoundingBox(Vector3(min.x, min.y, min.z), Vector3(max.x, max.y, min.z)),
+        // left
+        BoundingBox(Vector3(min.x, min.y, min.z), Vector3(min.x, max.y, max.z)),
+        // right
+        BoundingBox(Vector3(max.x, min.y, min.z), Vector3(max.x, max.y, max.z)),
+        // front
+        BoundingBox(Vector3(min.x, min.y, min.z), Vector3(max.x, min.y, max.z)),
+        // back
+        BoundingBox(Vector3(min.x, max.y, min.z), Vector3(max.x, max.y, max.z))
     )
 
     fun intersects(other: Box): Boolean {

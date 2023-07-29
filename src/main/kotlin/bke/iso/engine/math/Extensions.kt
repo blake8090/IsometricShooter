@@ -53,3 +53,8 @@ fun Ray.getEndPoint(distance: Float): Vector3 {
     getEndPoint(end, distance)
     return end
 }
+
+fun Segment.getRay(): Ray {
+    val direction = Vector3(b).sub(a).nor()
+    return Ray(a, direction)
+}

@@ -58,13 +58,12 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
     }
 
     fun drawLine(line: DebugLine) {
-        shapeDrawer.setColor(line.color)
-        drawLine(line.start, line.end, line.color)
+        drawLine(line.start, line.end, line.color, line.width)
     }
 
-    private fun drawLine(start: Vector3, end: Vector3, color: Color) {
+    private fun drawLine(start: Vector3, end: Vector3, color: Color, width: Float = 1f) {
         shapeDrawer.setColor(color)
-        shapeDrawer.line(toScreen(start), toScreen(end))
+        shapeDrawer.line(toScreen(start), toScreen(end), width)
     }
 
     fun drawCircle(circle: DebugCircle) {

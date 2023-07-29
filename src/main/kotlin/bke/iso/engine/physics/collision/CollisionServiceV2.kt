@@ -3,15 +3,22 @@ package bke.iso.engine.physics.collision
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.getEndPoint
+import bke.iso.engine.math.getRay
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.WorldObject
 import bke.iso.engine.world.WorldService
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.collision.Ray
+import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 class CollisionServiceV2(
     private val worldService: WorldService,
@@ -46,6 +53,50 @@ class CollisionServiceV2(
         )
 
         return CollisionData(box, collision.solid)
+    }
+
+    fun checkCollisions(segment: Segment): Set<ObjectSegmentCollision> {
+        debugRenderService.addLine(segment.a, segment.b, 3f, Color.GOLD)
+        debugRenderService.addLine(Vector3(segment.a.x, segment.a.y, 0f), segment.b, 1f, Color.GOLD)
+
+        val area = Box(segment.a, segment.b)
+        debugRenderService.addBox(area, Color.ORANGE)
+
+        val dst = segment.len()
+        val ray = segment.getRay()
+        debugRenderService.addLine(ray.origin, ray.getEndPoint(dst), 2f, Color.GREEN)
+        debugRenderService.addPoint(segment.a, 5f, Color.GREEN)
+        debugRenderService.addPoint(segment.b, 5f, Color.GREEN)
+
+        val collisions = mutableSetOf<ObjectSegmentCollision>()
+        for (obj in findObjectsInArea(area)) {
+            val data = findCollisionData(obj) ?: continue
+            val points = intersects(ray, dst, data.box)
+            if (points.isNotEmpty()) {
+                collisions.add(
+                    ObjectSegmentCollision(
+                        obj,
+                        data,
+                        segment.a.dst(data.box.center),
+                        segment.b.dst(data.box.center),
+                        points
+                    )
+                )
+            }
+        }
+        return collisions
+    }
+
+    private fun intersects(ray: Ray, distance: Float, box: Box): Set<Vector3> {
+        val points = mutableSetOf<Vector3>()
+        for (face in box.faces) {
+            val point = Vector3()
+            val intersected = Intersector.intersectRayBounds(ray, face, point)
+            if (intersected && ray.origin.dst(point) <= distance) {
+                points.add(point)
+            }
+        }
+        return points
     }
 
     fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): Set<PredictedObjectCollision> {
@@ -269,18 +320,31 @@ class CollisionServiceV2(
         }
 
     private fun findObjectsInArea(box: Box): Set<WorldObject> {
-        val minX = box.min.x.toInt()
-        val maxX = box.max.x.toInt()
+        val min = Vector3(
+            min(box.min.x, box.max.x),
+            min(box.min.y, box.max.y),
+            min(box.min.z, box.max.z),
+        )
+        val max = Vector3(
+            max(box.min.x, box.max.x),
+            max(box.min.y, box.max.y),
+            max(box.min.z, box.max.z),
+        )
 
-        val minY = box.min.y.toInt()
-        val maxY = box.max.y.toInt()
 
-        val maxZ = box.max.z.toInt()
+        val minX = floor(min.x).toInt()
+        val maxX = ceil(max.x).toInt()
+
+        val minY = floor(min.y).toInt()
+        val maxY = ceil(max.y).toInt()
+
+        val minZ = floor(min.z).toInt()
+        val maxZ = ceil(max.z).toInt()
 
         val worldObjects = mutableSetOf<WorldObject>()
         for (x in minX..maxX) {
             for (y in minY..maxY) {
-                for (z in 0..maxZ) {
+                for (z in minZ..maxZ) {
                     worldService.getObjectsAt(x, y, z)
                         .forEach(worldObjects::add)
                 }
