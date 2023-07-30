@@ -45,7 +45,7 @@ class AssetModuleTest : StringSpec({
 
         class Image
 
-        class ImageLoader : AssetLoader<Image>() {
+        class ImageLoader : AssetLoader<Image> {
             override fun load(file: FilePointer): Pair<String, Image> =
                 file.getNameWithoutExtension() to Image()
         }
@@ -68,7 +68,7 @@ class AssetModuleTest : StringSpec({
 
         class Image
 
-        class ImageLoader : AssetLoader<Image>() {
+        class ImageLoader : AssetLoader<Image> {
             override fun load(file: FilePointer): Pair<String, Image> =
                 file.getNameWithoutExtension() to Image()
         }
