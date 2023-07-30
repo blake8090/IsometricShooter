@@ -19,6 +19,7 @@ class FileService : SingletonService {
      * Returns a list of all files in the given path, including subdirectories.
      * Given path is relative to the current working directory.
      */
+    // TODO: error handling
     fun getFiles(path: String): List<FilePointer> =
         File(path)
             .walkTopDown()
