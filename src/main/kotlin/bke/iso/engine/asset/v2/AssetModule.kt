@@ -17,7 +17,7 @@ private data class Key<T : Any>(
     val type: KClass<T>
 )
 
-private const val ASSETS_DIRECTORY = "assets"
+const val ASSETS_DIRECTORY = "assets"
 
 class AssetModule(private val name: String) {
 
@@ -31,10 +31,10 @@ class AssetModule(private val name: String) {
         return type.safeCast(value)
     }
 
-    inline fun <reified T :Any> get(name: String): T? =
+    inline fun <reified T : Any> get(name: String): T? =
         get(name, T::class)
 
-    fun load(fileService: FileService, loadersByExtension: Map<String, AssetLoader<Any>>) {
+    fun load(fileService: FileService, loadersByExtension: Map<String, AssetLoader<*>>) {
         val path = Path(ASSETS_DIRECTORY, name)
         val files = fileService.getFiles(path.pathString)
         check(files.isNotEmpty()) {
@@ -48,16 +48,16 @@ class AssetModule(private val name: String) {
         }
     }
 
-    private fun loadAsset(file: FilePointer, assetLoader: AssetLoader<Any>) {
+    private fun <T : Any> loadAsset(file: FilePointer, assetLoader: AssetLoader<T>) {
         val asset = assetLoader
             .load(file)
             .let { (name, asset) -> Asset(name, asset) }
 
-        val key = Key(asset.name, assetLoader.type())
-        check(!assets.containsKey(key)) {
-            "duplicate"
+        val type = asset.value::class
+        val key = Key(asset.name, type)
+        check(!assets.contains(key)) {
+            "duplicate asset"
         }
-
         assets[key] = asset
     }
 

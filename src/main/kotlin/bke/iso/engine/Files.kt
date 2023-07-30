@@ -9,6 +9,7 @@ import java.io.File
 class FilePointer(private val file: File) {
     fun getPath(): String = file.path
     fun getExtension() = file.extension
+    // TODO: getName & getFullName
     fun getNameWithoutExtension() = file.nameWithoutExtension
     fun getRawFile() = file
     fun readText() = file.readText()
