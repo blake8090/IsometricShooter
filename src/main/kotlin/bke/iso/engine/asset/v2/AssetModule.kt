@@ -9,7 +9,6 @@ import kotlin.reflect.safeCast
 
 data class Asset<T>(
     val name: String,
-    val path: String,
     val value: T
 )
 
@@ -20,7 +19,7 @@ private data class Key<T : Any>(
 
 private const val ASSETS_DIRECTORY = "assets"
 
-class AssetModule(val name: String) {
+class AssetModule(private val name: String) {
 
     private val assets = mutableMapOf<Key<*>, Asset<*>>()
 
@@ -32,30 +31,33 @@ class AssetModule(val name: String) {
         return type.safeCast(value)
     }
 
-    fun load(fileService: FileService, loaderByExtension: Map<String, AssetLoader<*>>) {
+    inline fun <reified T :Any> get(name: String): T? =
+        get(name, T::class)
+
+    fun load(fileService: FileService, loadersByExtension: Map<String, AssetLoader<Any>>) {
         val path = Path(ASSETS_DIRECTORY, name)
         val files = fileService.getFiles(path.pathString)
-        require(files.isNotEmpty()) {
+        check(files.isNotEmpty()) {
             "no files found"
         }
 
         for (file in files) {
-            val assetLoader = loaderByExtension[file.getExtension()]
+            val assetLoader = loadersByExtension[file.getExtension()]
                 ?: throw IllegalArgumentException()
             loadAsset(file, assetLoader)
         }
     }
 
-    private fun <T : Any> loadAsset(file: FilePointer, assetLoader: AssetLoader<T>) {
-        val (name, value) = assetLoader.load(file)
-        val asset = Asset(name, file.getPath(), value)
-        val key = Key(asset.name, assetLoader.type)
-        require(!assets.containsKey(key)) {
+    private fun loadAsset(file: FilePointer, assetLoader: AssetLoader<Any>) {
+        val asset = assetLoader
+            .load(file)
+            .let { (name, asset) -> Asset(name, asset) }
+
+        val key = Key(asset.name, assetLoader.type())
+        check(!assets.containsKey(key)) {
             "duplicate"
         }
-        assets.computeIfPresent(key) { _, _ ->
-            throw IllegalArgumentException()
-        }
+
         assets[key] = asset
     }
 

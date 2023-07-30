@@ -4,8 +4,8 @@ import bke.iso.engine.FilePointer
 import bke.iso.service.TransientService
 import kotlin.reflect.KClass
 
-abstract class AssetLoader<T : Any> : TransientService {
-    abstract val type: KClass<T>
-
-    abstract fun load(file: FilePointer): Pair<String, T>
+interface AssetLoader<T : Any> : TransientService {
+    fun load(file: FilePointer): Pair<String, T>
 }
+
+inline fun <reified T : Any> AssetLoader<T>.type(): KClass<T> = T::class
