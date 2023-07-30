@@ -3,7 +3,6 @@ package bke.iso.engine.physics.collision
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
-import bke.iso.engine.math.getEndPoint
 import bke.iso.engine.math.getRay
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.world.Tile
@@ -20,7 +19,7 @@ import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
-class CollisionServiceV2(
+class CollisionService(
     private val worldService: WorldService,
     private val debugRenderService: DebugRenderService
 ) : SingletonService {
@@ -56,18 +55,11 @@ class CollisionServiceV2(
     }
 
     fun checkCollisions(segment: Segment): Set<ObjectSegmentCollision> {
-        debugRenderService.addLine(segment.a, segment.b, 3f, Color.GOLD)
-        debugRenderService.addLine(Vector3(segment.a.x, segment.a.y, 0f), segment.b, 1f, Color.GOLD)
-
         val area = Box(segment.a, segment.b)
         debugRenderService.addBox(area, Color.ORANGE)
 
         val dst = segment.len()
         val ray = segment.getRay()
-        debugRenderService.addLine(ray.origin, ray.getEndPoint(dst), 2f, Color.GREEN)
-        debugRenderService.addPoint(segment.a, 5f, Color.GREEN)
-        debugRenderService.addPoint(segment.b, 5f, Color.GREEN)
-
         val collisions = mutableSetOf<ObjectSegmentCollision>()
         for (obj in findObjectsInArea(area)) {
             val data = findCollisionData(obj) ?: continue

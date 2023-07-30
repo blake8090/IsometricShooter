@@ -22,24 +22,25 @@ data class ShootEvent(
     val type: BulletType
 ) : Event()
 
+private const val PLAYER_BULLET_SPEED = 30f
+private const val TURRET_BULLET_SPEED = 30f
+private const val BULLET_Z_OFFSET = 0.5f
+
 class ShootHandler(private val worldService: WorldService) : EventHandler<ShootEvent> {
     override val type = ShootEvent::class
-
-    private val playerBulletSpeed = 30f
-    private val turretBulletSpeed = 20f
 
     override fun handle(event: ShootEvent) {
         val shooter = event.shooter
         val target = event.target
 
-        val pos = Vector3(shooter.x, shooter.y, shooter.z)
+        val pos = shooter.pos
         val direction = Vector3(target).sub(pos).nor()
         val speed = when (event.type) {
-            BulletType.PLAYER -> playerBulletSpeed
-            BulletType.TURRET -> turretBulletSpeed
+            BulletType.PLAYER -> PLAYER_BULLET_SPEED
+            BulletType.TURRET -> TURRET_BULLET_SPEED
         }
 
-        val bullet = worldService.createEntity(pos.x, pos.y, pos.z + 0.5f)
+        val bullet = worldService.createEntity(pos.x, pos.y, pos.z + BULLET_Z_OFFSET)
         bullet.add(
             Bullet(shooter.id, pos),
             Sprite("bullet", 8f, 8f),
@@ -48,7 +49,7 @@ class ShootHandler(private val worldService: WorldService) : EventHandler<ShootE
                 Vector3(
                     speed,
                     speed,
-                    0f
+                    speed
                 )
             ),
             Collider(

@@ -4,7 +4,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
 import bke.iso.engine.physics.Velocity
-import bke.iso.engine.physics.collision.CollisionServiceV2
+import bke.iso.engine.physics.collision.CollisionService
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
@@ -23,7 +23,7 @@ class PlayerSystem(
     private val eventService: EventService,
     private val renderService: RenderService,
     private val entityFactory: EntityFactory,
-    private val collisionService: CollisionServiceV2,
+    private val collisionService: CollisionService,
     private val debugRenderService: DebugRenderService
 ) : System {
 

@@ -6,7 +6,7 @@ import bke.iso.engine.event.EventService
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.physics.collision.CollisionServiceV2
+import bke.iso.engine.physics.collision.CollisionService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.engine.world.Tile
@@ -25,14 +25,14 @@ import com.badlogic.gdx.math.Vector3
 class RenderService(
     private val assetService: AssetService,
     private val worldService: WorldService,
-    private val collisionService: CollisionServiceV2,
+    private val collisionService: CollisionService,
     private val eventService: EventService,
     private val debugRenderService: DebugRenderService
 ) : SingletonService {
 
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
-    private val shapeDrawer = DebugShapeDrawer(batch)//ShapeDrawerUtil(batch)
+    private val shapeDrawer = DebugShapeDrawer(batch)
 
     private var debugMode = false
 

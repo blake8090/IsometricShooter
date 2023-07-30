@@ -21,4 +21,7 @@ class Entities(private val grid: Map<Location, MutableSet<WorldObject>>) {
         grid.flatMap { (_, objects) -> objects }
             .filterIsInstance<Entity>()
             .firstOrNull { entity -> entity.has(type) }
+
+    inline fun <reified T : Component> firstHaving(): Entity? =
+        firstHavingComponent(T::class)
 }

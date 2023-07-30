@@ -2,7 +2,7 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.physics.collision.CollisionServiceV2
+import bke.iso.engine.physics.collision.CollisionService
 import bke.iso.engine.physics.collision.PredictedObjectCollision
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
@@ -15,7 +15,7 @@ data class Velocity(
 
 class PhysicsSystem(
     private val worldService: WorldService,
-    private val collisionService: CollisionServiceV2
+    private val collisionService: CollisionService
 ) : System {
     override fun update(deltaTime: Float) {
         worldService.entities.withComponent(Velocity::class) { entity, velocity ->
