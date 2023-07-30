@@ -1,4 +1,4 @@
-package bke.iso.game.event
+package bke.iso.game.combat
 
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
@@ -6,7 +6,7 @@ import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventService
 import bke.iso.engine.physics.CollisionEvent
 import bke.iso.engine.world.WorldService
-import bke.iso.game.Bullet
+import bke.iso.game.entity.Bullet
 import kotlin.reflect.safeCast
 
 private const val BULLET_DAMAGE = 1f

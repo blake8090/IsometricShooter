@@ -1,4 +1,4 @@
-package bke.iso.game.system
+package bke.iso.game.entity
 
 import bke.iso.engine.entity.Component
 import bke.iso.engine.system.System
@@ -10,6 +10,7 @@ data class MovingPlatform(
     val minZ: Float = 0f,
     val pauseSeconds: Float = 1f
 ) : Component() {
+
     var state: State = State.UP
 
     enum class State {

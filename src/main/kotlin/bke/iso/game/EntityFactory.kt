@@ -6,7 +6,12 @@ import bke.iso.engine.physics.Collider
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
-import bke.iso.game.system.MovingPlatform
+import bke.iso.game.combat.Health
+import bke.iso.game.combat.HealthBar
+import bke.iso.game.entity.BouncyBall
+import bke.iso.game.entity.MovingPlatform
+import bke.iso.game.entity.Player
+import bke.iso.game.entity.Turret
 import bke.iso.service.SingletonService
 import com.badlogic.gdx.math.Vector3
 

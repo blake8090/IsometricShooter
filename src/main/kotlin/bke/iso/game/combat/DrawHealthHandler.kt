@@ -1,11 +1,9 @@
-package bke.iso.game.event
+package bke.iso.game.combat
 
 import bke.iso.engine.asset.AssetService
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.DrawEntityEvent
-import bke.iso.game.Health
-import bke.iso.game.HealthBar
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch

@@ -1,10 +1,12 @@
-package bke.iso.game.system
+package bke.iso.game.entity
 
+import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
-import bke.iso.game.BouncyBall
 import kotlin.math.max
+
+data class BouncyBall(var velocityZ: Float = 0f) : Component()
 
 class BouncyBallSystem(private val worldService: WorldService) : System {
 

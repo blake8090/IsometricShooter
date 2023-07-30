@@ -11,17 +11,17 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.state.State
 import bke.iso.engine.system.System
-import bke.iso.game.event.BulletCollisionHandler
-import bke.iso.game.event.DamageHandler
-import bke.iso.game.event.DrawHealthHandler
-import bke.iso.game.event.ShootHandler
+import bke.iso.game.entity.BouncyBallSystem
+import bke.iso.game.entity.BulletSystem
+import bke.iso.game.entity.MovingPlatformSystem
+import bke.iso.game.entity.PlayerSystem
+import bke.iso.game.entity.TurretSystem
+import bke.iso.game.combat.BulletCollisionHandler
+import bke.iso.game.combat.DamageHandler
+import bke.iso.game.combat.DrawHealthHandler
+import bke.iso.game.combat.ShootHandler
 import bke.iso.game.map.GameMap
 import bke.iso.game.map.GameMapService
-import bke.iso.game.system.BouncyBallSystem
-import bke.iso.game.system.BulletSystem
-import bke.iso.game.system.MovingPlatformSystem
-import bke.iso.game.system.PlayerSystem
-import bke.iso.game.system.TurretSystem
 import bke.iso.service.ServiceProvider
 import com.badlogic.gdx.Input
 

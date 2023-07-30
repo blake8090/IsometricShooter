@@ -1,12 +1,11 @@
-package bke.iso.game.event
+package bke.iso.game.combat
 
 import bke.iso.engine.log
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.world.WorldService
-import bke.iso.game.Health
-import bke.iso.game.Player
+import bke.iso.game.entity.Player
 import kotlin.math.max
 
 data class DamageEvent(

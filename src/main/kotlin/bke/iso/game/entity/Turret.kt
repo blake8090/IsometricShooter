@@ -1,5 +1,6 @@
-package bke.iso.game.system
+package bke.iso.game.entity
 
+import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.physics.CollisionService
@@ -7,13 +8,13 @@ import bke.iso.engine.physics.ObjectSegmentCollision
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
-import bke.iso.game.Player
-import bke.iso.game.Turret
-import bke.iso.game.event.BulletType
-import bke.iso.game.event.ShootEvent
+import bke.iso.game.combat.BulletType
+import bke.iso.game.combat.ShootEvent
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.max
+
+data class Turret(var coolDownTime: Float = 0f) : Component()
 
 private const val VISION_RADIUS = 12f
 private const val COOLDOWN_SECONDS = 0.5f

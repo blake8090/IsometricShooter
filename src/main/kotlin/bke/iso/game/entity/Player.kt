@@ -1,21 +1,23 @@
-package bke.iso.game.system
+package bke.iso.game.entity
 
+import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
-import bke.iso.engine.physics.Velocity
 import bke.iso.engine.physics.CollisionService
+import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
 import bke.iso.game.EntityFactory
-import bke.iso.game.Player
-import bke.iso.game.event.BulletType
-import bke.iso.game.event.ShootEvent
+import bke.iso.game.combat.BulletType
+import bke.iso.game.combat.ShootEvent
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
+
+class Player : Component()
 
 class PlayerSystem(
     private val worldService: WorldService,
@@ -56,6 +58,7 @@ class PlayerSystem(
             }
         }
     }
+
     private fun updatePlayer(entity: Entity) {
         val movement = Vector3(
             inputService.poll("moveLeft", "moveRight"),
