@@ -4,7 +4,6 @@ import bke.iso.engine.FilePointer
 import bke.iso.engine.asset.AssetLoader
 
 class GameMapLoader : AssetLoader<GameMap> {
-    override fun assetType() = GameMap::class
 
     override fun load(file: FilePointer): Pair<String, GameMap> {
         var mode = Mode.NONE

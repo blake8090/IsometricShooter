@@ -1,4 +1,4 @@
-package bke.iso.engine.asset.v2
+package bke.iso.engine.asset
 
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
@@ -17,19 +17,6 @@ class AssetModuleTest : StringSpec({
         every { fileService.getFiles(path.toString()) } returns emptyList()
 
         shouldThrow<IllegalStateException> {
-            val module = AssetModule("test")
-            module.load(fileService, mutableMapOf())
-        }
-    }
-
-    "should throw exception when asset loader is not found" {
-        val path = Path(ASSETS_DIRECTORY, "test")
-        every { fileService.getFiles(path.toString()) } returns listOf(
-            mockFilePointer("path\\sound.wav", "sound", "wav"),
-            mockFilePointer("docs\\files.zip", "files", "zip")
-        )
-
-        shouldThrow<IllegalArgumentException> {
             val module = AssetModule("test")
             module.load(fileService, mutableMapOf())
         }
@@ -79,10 +66,3 @@ class AssetModuleTest : StringSpec({
         module.get<Image>("img02") shouldNotBe null
     }
 })
-
-private fun mockFilePointer(path: String, name: String, extension: String): FilePointer =
-    mockk<FilePointer>().apply {
-        every { getPath() } returns path
-        every { getNameWithoutExtension() } returns name
-        every { getExtension() } returns extension
-    }

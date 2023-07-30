@@ -1,7 +1,8 @@
-package bke.iso.engine.asset.v2
+package bke.iso.engine.asset
 
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
+import bke.iso.service.ServiceProvider
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -13,20 +14,21 @@ import kotlin.io.path.Path
 
 class AssetServiceTest : StringSpec({
     val fileService = mockk<FileService>()
+    val provider = mockk<ServiceProvider<AssetLoader<*>>>()
 
     "should throw exception for duplicate loaders" {
         class StringLoader : AssetLoader<String> {
             override fun load(file: FilePointer): Pair<String, String> =
-                TODO()
+                "" to ""
         }
 
         class AnotherStringLoader : AssetLoader<String> {
             override fun load(file: FilePointer): Pair<String, String> =
-                TODO()
+                "" to ""
         }
 
         shouldThrow<IllegalArgumentException> {
-            val assetService = AssetService(fileService)
+            val assetService = AssetService(fileService, provider)
             assetService.addLoader("txt", StringLoader())
             assetService.addLoader("txt", AnotherStringLoader())
         }
@@ -34,7 +36,7 @@ class AssetServiceTest : StringSpec({
 
     "should throw exception if module not loaded" {
         shouldThrow<IllegalStateException> {
-            AssetService(fileService).get<String>("some-string")
+            AssetService(fileService, provider).get<String>("some-string")
         }
     }
 
@@ -51,7 +53,7 @@ class AssetServiceTest : StringSpec({
                 file.getNameWithoutExtension() to Image()
         }
 
-        val assetService = AssetService(fileService)
+        val assetService = AssetService(fileService, provider)
         assetService.addLoader("jpg", ImageLoader())
         assetService.addLoader("png", ImageLoader())
         assetService.loadModule("test")
@@ -76,7 +78,7 @@ class AssetServiceTest : StringSpec({
                 file.getNameWithoutExtension() to Image()
         }
 
-        val assetService = AssetService(fileService)
+        val assetService = AssetService(fileService, provider)
         assetService.addLoader("jpg", ImageLoader())
 
         assetService.loadModule("module1")
@@ -85,13 +87,6 @@ class AssetServiceTest : StringSpec({
 
         assetService.loadModule("module2")
         assetService.get<Image>("img01") shouldBe null
-        assetService.get<Image>("img02") shouldNotBe  null
+        assetService.get<Image>("img02") shouldNotBe null
     }
 })
-
-private fun mockFilePointer(path: String, name: String, extension: String): FilePointer =
-    mockk<FilePointer>().apply {
-        every { getPath() } returns path
-        every { getNameWithoutExtension() } returns name
-        every { getExtension() } returns extension
-    }

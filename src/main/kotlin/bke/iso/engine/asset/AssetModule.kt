@@ -1,7 +1,8 @@
-package bke.iso.engine.asset.v2
+package bke.iso.engine.asset
 
 import bke.iso.engine.FilePointer
 import bke.iso.engine.FileService
+import bke.iso.engine.log
 import kotlin.io.path.Path
 import kotlin.io.path.pathString
 import kotlin.reflect.KClass
@@ -19,7 +20,7 @@ private data class Key<T : Any>(
 
 const val ASSETS_DIRECTORY = "assets"
 
-class AssetModule(private val name: String) {
+class AssetModule(val name: String) {
 
     private val assets = mutableMapOf<Key<*>, Asset<*>>()
 
@@ -42,8 +43,12 @@ class AssetModule(private val name: String) {
         }
 
         for (file in files) {
-            val assetLoader = loadersByExtension[file.getExtension()]
-                ?: throw IllegalArgumentException()
+            val extension = file.getExtension()
+            val assetLoader = loadersByExtension[extension]
+            if (assetLoader == null) {
+                log.warn("No asset loader found for extension '$extension' - skipping file ${file.getPath()}")
+                continue
+            }
             loadAsset(file, assetLoader)
         }
     }
@@ -59,6 +64,7 @@ class AssetModule(private val name: String) {
             "duplicate asset"
         }
         assets[key] = asset
+        log.info("Loaded asset '${file.getPath()}' (${type.simpleName}) as '${asset.name}' ")
     }
 
     fun unload() {

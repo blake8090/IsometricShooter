@@ -95,9 +95,7 @@ class GameState(
     }
 
     private fun loadMap(mapName: String) {
-        val gameMap = assetService.get<GameMap>(mapName)
-            ?: throw IllegalArgumentException("expected map asset '$mapName'")
-
+        val gameMap = assetService.require<GameMap>(mapName)
         gameMapService.load(gameMap)
     }
 }

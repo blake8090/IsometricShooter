@@ -5,7 +5,6 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 
 class TextureLoader : AssetLoader<Texture> {
-    override fun assetType() = Texture::class
 
     override fun load(file: FilePointer): Pair<String, Texture> {
         val name = file.getNameWithoutExtension()

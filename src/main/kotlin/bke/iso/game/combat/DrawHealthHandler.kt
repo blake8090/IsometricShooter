@@ -21,7 +21,7 @@ class DrawHealthHandler(private val assetService: AssetService) : EventHandler<D
         val healthBar = entity.get<HealthBar>() ?: return
 
         val batch = event.batch
-        val pixel = assetService.get<Texture>("pixel") ?: return
+        val pixel = assetService.require<Texture>("pixel")
         val offset = Vector2(healthBar.offsetX, healthBar.offsetY)
         val pos = toScreen(entity.x, entity.y, entity.z).sub(offset)
 

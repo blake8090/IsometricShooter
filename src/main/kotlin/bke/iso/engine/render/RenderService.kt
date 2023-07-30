@@ -54,7 +54,7 @@ class RenderService(
     }
 
     fun setCursor(textureName: String) {
-        val texture = assetService.get<Texture>(textureName) ?: return
+        val texture = assetService.require<Texture>(textureName)
         val xHotspot = texture.width / 2
         val yHotspot = texture.height / 2
         texture.textureData.prepare()
@@ -193,7 +193,7 @@ class RenderService(
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
-        val texture = assetService.get<Texture>(sprite.texture) ?: return
+        val texture = assetService.require<Texture>(sprite.texture)
         val screenPos = toScreen(worldPos)
             .sub(sprite.offsetX, sprite.offsetY)
         batch.draw(texture, screenPos.x, screenPos.y)
