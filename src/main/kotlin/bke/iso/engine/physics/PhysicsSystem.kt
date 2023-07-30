@@ -1,17 +1,9 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.entity.Component
 import bke.iso.engine.entity.Entity
-import bke.iso.engine.physics.collision.CollisionService
-import bke.iso.engine.physics.collision.PredictedObjectCollision
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
 import com.badlogic.gdx.math.Vector3
-
-data class Velocity(
-    val delta: Vector3 = Vector3(),
-    val speed: Vector3 = Vector3()
-) : Component()
 
 class PhysicsSystem(
     private val worldService: WorldService,

@@ -4,8 +4,8 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.Event
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.physics.Velocity
-import bke.iso.engine.physics.collision.Bounds
-import bke.iso.engine.physics.collision.Collider
+import bke.iso.engine.physics.Bounds
+import bke.iso.engine.physics.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
 import bke.iso.game.Bullet

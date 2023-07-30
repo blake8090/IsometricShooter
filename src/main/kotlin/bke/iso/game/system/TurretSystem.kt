@@ -2,8 +2,8 @@ package bke.iso.game.system
 
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
-import bke.iso.engine.physics.collision.CollisionService
-import bke.iso.engine.physics.collision.ObjectSegmentCollision
+import bke.iso.engine.physics.CollisionService
+import bke.iso.engine.physics.ObjectSegmentCollision
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService

@@ -1,4 +1,4 @@
-package bke.iso.engine.physics.collision
+package bke.iso.engine.physics
 
 import bke.iso.engine.event.Event
 import bke.iso.engine.math.Box

@@ -1,4 +1,4 @@
-package bke.iso.engine.physics.collision
+package bke.iso.engine.physics
 
 import bke.iso.engine.entity.Entity
 import bke.iso.engine.log

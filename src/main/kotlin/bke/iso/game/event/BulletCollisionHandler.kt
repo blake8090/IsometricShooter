@@ -4,7 +4,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.event.EventHandler
 import bke.iso.engine.event.EventService
-import bke.iso.engine.physics.collision.CollisionEvent
+import bke.iso.engine.physics.CollisionEvent
 import bke.iso.engine.world.WorldService
 import bke.iso.game.Bullet
 import kotlin.reflect.safeCast
@@ -21,17 +21,18 @@ class BulletCollisionHandler(
     override fun handle(event: CollisionEvent) {
         val entity = Entity::class.safeCast(event.obj) ?: return
         val bullet = entity.get<Bullet>() ?: return
-        val otherEntity = Entity::class.safeCast(event.collision.obj) ?: return
-
-        log.trace("handling collision event")
-
-        // bullets should not collide with the shooter or other bullets
-        if (bullet.shooterId == otherEntity.id || otherEntity.has<Bullet>()) {
-            return
-        }
+        val other = event.collision.obj
 
         log.trace("bullet collided")
+
+        if (other is Entity) {
+            // bullets should not collide with the shooter or other bullets
+            if (entity.id == other.id || bullet.shooterId == other.id || other.has<Bullet>()) {
+                return
+            }
+            eventService.fire(DamageEvent(entity, other, BULLET_DAMAGE))
+        }
+
         worldService.delete(entity)
-        eventService.fire(DamageEvent(entity, otherEntity, BULLET_DAMAGE))
     }
 }

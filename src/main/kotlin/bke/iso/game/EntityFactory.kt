@@ -1,8 +1,8 @@
 package bke.iso.game
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.collision.Bounds
-import bke.iso.engine.physics.collision.Collider
+import bke.iso.engine.physics.Bounds
+import bke.iso.engine.physics.Collider
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService

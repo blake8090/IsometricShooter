@@ -1,4 +1,4 @@
-package bke.iso.engine.physics.collision
+package bke.iso.engine.physics
 
 import bke.iso.engine.entity.Component
 import com.badlogic.gdx.math.Vector3
@@ -15,4 +15,9 @@ data class Collider(
 
 data class FrameCollisions(
     val collisions: MutableSet<ObjectCollision> = mutableSetOf()
+) : Component()
+
+data class Velocity(
+    val delta: Vector3 = Vector3(),
+    val speed: Vector3 = Vector3()
 ) : Component()

@@ -4,7 +4,7 @@ import bke.iso.engine.entity.Entity
 import bke.iso.engine.event.EventService
 import bke.iso.engine.input.InputService
 import bke.iso.engine.physics.Velocity
-import bke.iso.engine.physics.collision.CollisionService
+import bke.iso.engine.physics.CollisionService
 import bke.iso.engine.render.RenderService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
