@@ -48,7 +48,7 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
     fun drawPoint(point: DebugPoint) =
         drawPoint(point.pos, point.size, point.color)
 
-    fun drawPoint(worldPos: Vector3, size: Float, color: Color) =
+    private fun drawPoint(worldPos: Vector3, size: Float, color: Color) =
         shapeDrawer.filledCircle(toScreen(worldPos), size, color)
 
     fun drawRectangle(rectangle: DebugRectangle) {
@@ -84,6 +84,7 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.ellipse(pos.x, pos.y, width, height)
     }
 
+    // TODO: use segments
     fun drawBox(box: DebugBox) {
         val pos = box.pos
         val dim = box.dimensions
