@@ -1,4 +1,4 @@
-package bke.iso.game.map
+package bke.iso.game.asset
 
 import bke.iso.engine.FilePointer
 import bke.iso.engine.asset.AssetLoader

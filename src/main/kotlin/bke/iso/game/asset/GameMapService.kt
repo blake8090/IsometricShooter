@@ -1,9 +1,9 @@
-package bke.iso.game.map
+package bke.iso.game.asset
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.WorldService
-import bke.iso.game.EntityFactory
+import bke.iso.game.entity.EntityFactory
 import bke.iso.service.SingletonService
 
 class GameMapService(

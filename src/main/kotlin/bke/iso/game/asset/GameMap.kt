@@ -1,4 +1,4 @@
-package bke.iso.game.map
+package bke.iso.game.asset
 
 class GameMap(val layers: List<Layer>) {
     class Layer(val z: Int) {

@@ -10,7 +10,6 @@ import bke.iso.engine.render.RenderService
 import bke.iso.engine.render.debug.DebugRenderService
 import bke.iso.engine.system.System
 import bke.iso.engine.world.WorldService
-import bke.iso.game.EntityFactory
 import bke.iso.game.combat.BulletType
 import bke.iso.game.combat.ShootEvent
 import com.badlogic.gdx.graphics.Color

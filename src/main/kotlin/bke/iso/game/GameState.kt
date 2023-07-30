@@ -20,8 +20,9 @@ import bke.iso.game.combat.BulletCollisionHandler
 import bke.iso.game.combat.DamageHandler
 import bke.iso.game.combat.DrawHealthHandler
 import bke.iso.game.combat.ShootHandler
-import bke.iso.game.map.GameMap
-import bke.iso.game.map.GameMapService
+import bke.iso.game.asset.GameMap
+import bke.iso.game.asset.GameMapService
+import bke.iso.game.entity.EntityFactory
 import bke.iso.service.ServiceProvider
 import com.badlogic.gdx.Input
 
