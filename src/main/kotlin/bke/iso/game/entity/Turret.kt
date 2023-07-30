@@ -39,7 +39,9 @@ class TurretSystem(
         val playerEntity = worldService.entities.firstHaving<Player>() ?: return
         val target = playerEntity.pos
 
-        val firstCollision = collisionService.checkCollisions(Segment(start, target))
+        val firstCollision = collisionService
+            .checkCollisions(Segment(start, target))
+            .asSequence()
             .sortedBy(ObjectSegmentCollision::distanceStart)
             .filter { collision -> collision.obj is Entity }
             .filter { collision -> start.dst(collision.data.box.center) <= VISION_RADIUS }
@@ -47,9 +49,9 @@ class TurretSystem(
             .firstOrNull()
             ?: return
 
-        val firstPoint = firstCollision.points
-            .sortedBy { point -> start.dst(point) }
-            .first()
+        val firstPoint = firstCollision
+            .points
+            .minByOrNull { point -> start.dst(point) }!!
         debugRenderService.addPoint(firstPoint, 3f, Color.RED)
 
         if (firstCollision.obj != playerEntity) {
