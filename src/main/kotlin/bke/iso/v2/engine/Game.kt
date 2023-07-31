@@ -1,5 +1,6 @@
 package bke.iso.v2.engine
 
+import bke.iso.v2.engine.world.World
 import bke.iso.v2.game.MainGameState
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -11,7 +12,6 @@ abstract class Module(game: Game) {
 }
 
 class Game {
-    // modules
     val assets = Assets(this)
     val renderer = Renderer(this)
     val world = World(this)
@@ -25,8 +25,6 @@ class Game {
     fun stop() {}
 
     fun update(deltaTime: Float) {
-        // update modules
-
         state.update(deltaTime)
         for (system in state.systems) {
             system.update(deltaTime)

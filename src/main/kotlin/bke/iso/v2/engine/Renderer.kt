@@ -17,7 +17,7 @@ class Renderer(private val game: Game) : Module(game) {
 
         batch.begin()
         for (actor in game.world.getActors()) {
-            val sprite = actor.get<Sprite>() ?: continue
+            val sprite = actor.components[Sprite::class] ?: continue
             val texture = game.assets.getTexture(sprite.texture)
                 ?: throw IllegalStateException("texture ${sprite.texture} not found")
 
