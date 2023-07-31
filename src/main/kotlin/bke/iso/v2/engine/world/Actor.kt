@@ -5,11 +5,11 @@ import java.util.UUID
 import kotlin.reflect.KClass
 
 data class Actor(
-    val uuid: UUID = UUID.randomUUID(),
+    override val id: UUID = UUID.randomUUID(),
     override val x: Float = 0f,
     override val y: Float = 0f,
     override val z: Float = 0f,
-    override val onMove: (GameObject) -> Unit = {}
+    override val onMove: (GameObject) -> Unit = {},
 ) : GameObject() {
 
     val components = Components()
