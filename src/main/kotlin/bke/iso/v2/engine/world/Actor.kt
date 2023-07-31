@@ -6,9 +6,9 @@ import kotlin.reflect.KClass
 
 data class Actor(
     override val id: UUID = UUID.randomUUID(),
-    override val x: Float = 0f,
-    override val y: Float = 0f,
-    override val z: Float = 0f,
+    override var x: Float = 0f,
+    override var y: Float = 0f,
+    override var z: Float = 0f,
     override val onMove: (GameObject) -> Unit = {},
 ) : GameObject() {
 

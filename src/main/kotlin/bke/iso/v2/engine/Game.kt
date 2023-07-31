@@ -1,5 +1,6 @@
 package bke.iso.v2.engine
 
+import bke.iso.v2.engine.render.Renderer
 import bke.iso.v2.engine.world.World
 import bke.iso.v2.game.MainGameState
 import kotlin.reflect.KClass

@@ -5,9 +5,9 @@ import java.util.UUID
 
 data class Tile(
     override val id: UUID = UUID.randomUUID(),
-    override val x: Float = 0f,
-    override val y: Float = 0f,
-    override val z: Float = 0f,
+    override var x: Float = 0f,
+    override var y: Float = 0f,
+    override var z: Float = 0f,
     val texture: String = "",
     val solid: Boolean = false,
     override val onMove: (GameObject) -> Unit = {}
