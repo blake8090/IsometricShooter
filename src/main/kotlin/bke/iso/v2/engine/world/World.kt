@@ -17,10 +17,11 @@ class World(game: Game) : Module(game) {
         x: Float, y: Float, z: Float,
         vararg components: Component,
         id: UUID = UUID.randomUUID()
-    ) {
+    ): Actor {
         val actor = Actor(id, x, y, z, this::onMove)
         components.forEach { component -> actor.components[component::class] = component }
         grid.add(actor)
+        return actor
     }
 
     fun setTile(location: Location, texture: String, solid: Boolean = false) {
