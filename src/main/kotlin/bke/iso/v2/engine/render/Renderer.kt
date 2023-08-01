@@ -4,6 +4,7 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.Sprite
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
+import bke.iso.v2.engine.physics.getCollisionData
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.GameObject
 import bke.iso.v2.engine.world.Tile
@@ -51,15 +52,13 @@ class Renderer(private val game: Game) : Module(game) {
     }
 
     private fun toDrawData(obj: GameObject): DrawData {
-//        val data = findCollisionData(obj)
-//        val min = data?.box?.min ?: obj.pos
-//        val max = data?.box?.max ?: obj.pos
-        val min = obj.pos
-        val max = obj.pos
+        val data = obj.getCollisionData()
+        val min = data?.box?.min ?: obj.pos
+        val max = data?.box?.max ?: obj.pos
 
-        if (obj is Tile) {
-            max.add(1f, 1f, 0f)
-        }
+//        if (obj is Tile) {
+//            max.add(1f, 1f, 0f)
+//        }
 
         val width = max.x - min.x
         val length = max.y - min.y
@@ -103,7 +102,7 @@ class Renderer(private val game: Game) : Module(game) {
         data.visited = true
         data.objectsBehind.forEach(::draw)
         when (val gameObject = data.obj) {
-            is Actor-> draw(gameObject)
+            is Actor -> draw(gameObject)
             is Tile -> draw(gameObject)
         }
     }

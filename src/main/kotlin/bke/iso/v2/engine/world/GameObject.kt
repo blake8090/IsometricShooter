@@ -32,4 +32,18 @@ abstract class GameObject {
             y = value.y
             z = value.z
         }
+
+    override fun equals(other: Any?) =
+        other is GameObject && other.id == id
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + x.hashCode()
+        result = 31 * result + y.hashCode()
+        result = 31 * result + z.hashCode()
+        return result
+    }
+
+    override fun toString() =
+        id.toString()
 }

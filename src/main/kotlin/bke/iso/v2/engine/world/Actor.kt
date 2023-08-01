@@ -1,17 +1,22 @@
 package bke.iso.v2.engine.world
 
 import bke.iso.engine.entity.Component
+import com.badlogic.gdx.math.Vector3
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
-data class Actor(
+class Actor(
     override val id: UUID = UUID.randomUUID(),
-    override var x: Float = 0f,
-    override var y: Float = 0f,
-    override var z: Float = 0f,
+    x: Float = 0f,
+    y: Float = 0f,
+    z: Float = 0f,
     override val onMove: (GameObject) -> Unit = {},
 ) : GameObject() {
+
+    init {
+        pos = Vector3(x, y, z)
+    }
 
     val components = Components()
 }

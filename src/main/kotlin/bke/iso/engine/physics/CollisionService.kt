@@ -323,7 +323,6 @@ class CollisionService(
             max(box.min.z, box.max.z),
         )
 
-
         val minX = floor(min.x).toInt()
         val maxX = ceil(max.x).toInt()
 

@@ -38,15 +38,19 @@ class Grid {
     }
 
     fun remove(gameObject: GameObject) {
-        val location = locationByObject.remove(gameObject)
-        checkNotNull(location) {
-            "GameObject $gameObject does not have a location"
+        val location = locationByObject.remove(gameObject) ?: return
+        val entry = grid[location] ?: return
+        when (gameObject) {
+            is Tile -> entry.tile = null
+            is Actor -> entry.actors.remove(gameObject)
         }
+    }
 
-        val entry = grid[location]
-        checkNotNull(entry) {
-            "GameObject $gameObject not found in grid location $location"
-        }
-        entry.actors.remove(gameObject)
+    fun getAll(location: Location): Set<GameObject> {
+        val objects = mutableSetOf<GameObject>()
+        val (tile, actors) = grid[location] ?: return emptySet()
+        tile?.let(objects::add)
+        objects.addAll(actors)
+        return objects
     }
 }
