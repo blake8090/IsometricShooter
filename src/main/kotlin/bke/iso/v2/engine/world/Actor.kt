@@ -3,6 +3,7 @@ package bke.iso.v2.engine.world
 import bke.iso.engine.entity.Component
 import java.util.UUID
 import kotlin.reflect.KClass
+import kotlin.reflect.safeCast
 
 data class Actor(
     override val id: UUID = UUID.randomUUID(),
@@ -28,8 +29,8 @@ class Components {
         map[type] = component
     }
 
-    inline operator fun <reified T : Component> get(type: KClass<T>): T? =
-        map[T::class] as T?
+    operator fun <T : Component> get(type: KClass<T>): T? =
+        type.safeCast(map[type])
 
     inline fun <reified T : Component> getOrPut(defaultValue: T): T =
         map.getOrPut(T::class) { defaultValue } as T

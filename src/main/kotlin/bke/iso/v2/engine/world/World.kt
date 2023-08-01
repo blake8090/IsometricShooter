@@ -5,6 +5,7 @@ import bke.iso.engine.math.Location
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import java.util.UUID
+import kotlin.reflect.KClass
 
 class World(game: Game) : Module(game) {
 
@@ -31,4 +32,14 @@ class World(game: Game) : Module(game) {
 
     private fun onMove(gameObject: GameObject) =
         grid.move(gameObject, Location(gameObject.pos))
+
+    fun <T : Component> actorsWith(type: KClass<out T>, action: (Actor, T) -> Unit) {
+        for (actor in grid.objects.filterIsInstance<Actor>()) {
+            val component = actor.components[type] ?: continue
+            action.invoke(actor, component)
+        }
+    }
+
+    inline fun <reified T : Component> actorsWith(noinline action: (Actor, T) -> Unit) =
+        actorsWith(T::class, action)
 }

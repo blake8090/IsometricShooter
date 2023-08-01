@@ -18,9 +18,18 @@ class Renderer(private val game: Game) : Module(game) {
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
 
+    fun setCameraPos(worldPos: Vector3) {
+        val pos = toScreen(worldPos)
+        camera.position.x = pos.x
+        camera.position.y = pos.y
+    }
+
     fun render() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+        camera.update()
+        batch.projectionMatrix = camera.combined
 
         batch.begin()
         val drawData = game.world.objects.map(::toDrawData)

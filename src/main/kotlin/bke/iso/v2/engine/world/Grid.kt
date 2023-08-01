@@ -13,14 +13,7 @@ class Grid {
     private val grid = mutableMapOf<Location, Entry>()
 
     val objects: Set<GameObject>
-        get() {
-            val gameObjects = mutableSetOf<GameObject>()
-            grid.values.forEach { (tile, actors) ->
-                tile?.let(gameObjects::add)
-                gameObjects.addAll(actors)
-            }
-            return gameObjects.toSet()
-        }
+        get() = locationByObject.keys.toSet()
 
     fun add(gameObject: GameObject) =
         put(gameObject, Location(gameObject.x, gameObject.y, gameObject.z))
@@ -35,6 +28,8 @@ class Grid {
         require(existingLocation == null) {
             "GameObject $gameObject is already in location $existingLocation"
         }
+
+        locationByObject[gameObject] = location
         val entry = grid.getOrPut(location) { Entry() }
         when (gameObject) {
             is Tile -> entry.tile = gameObject

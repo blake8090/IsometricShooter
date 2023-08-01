@@ -3,6 +3,7 @@ package bke.iso.v2.game
 import bke.iso.engine.math.Location
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
+import bke.iso.game.entity.Player
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.GameState
 import bke.iso.v2.engine.System
@@ -30,6 +31,12 @@ class MainGameState(private val game: Game) : GameState(game) {
                 x -= 0.5f
                 y += 0.5f
             }
+    }
+
+    override fun update(deltaTime: Float) {
+        game.world.actorsWith<Player> { actor, _ ->
+            game.renderer.setCameraPos(actor.pos)
+        }
     }
 
     private fun loadMap() {

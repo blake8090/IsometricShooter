@@ -67,8 +67,7 @@ class RenderService(
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        camera.update()
-        batch.projectionMatrix = camera.combined
+
         shapeDrawer.update()
 
         batch.begin()
