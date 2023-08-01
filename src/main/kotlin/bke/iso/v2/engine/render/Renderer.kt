@@ -10,6 +10,7 @@ import bke.iso.v2.engine.world.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector3
 
@@ -100,19 +101,14 @@ class Renderer(private val game: Game) : Module(game) {
 
     private fun draw(actor: Actor) {
         val sprite = actor.components[Sprite::class] ?: return
-
-        val texture = game.assets.getTexture(sprite.texture)
-            ?: throw IllegalStateException("texture ${sprite.texture} not found")
-
+        val texture = game.assets.get<Texture>(sprite.texture)
         val screenPos = toScreen(actor.x, actor.y, actor.z)
             .sub(sprite.offsetX, sprite.offsetY)
         batch.draw(texture, screenPos.x, screenPos.y)
     }
 
     private fun draw(tile: Tile) {
-        val texture = game.assets.getTexture(tile.texture)
-            ?: throw IllegalStateException("texture ${tile.texture} not found")
-
+        val texture = game.assets.get<Texture>(tile.texture)
         val screenPos = toScreen(tile.x, tile.y, tile.z)
         batch.draw(texture, screenPos.x, screenPos.y)
     }

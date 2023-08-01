@@ -1,5 +1,7 @@
 package bke.iso.v2.engine
 
+import bke.iso.engine.asset.TextureLoader
+import bke.iso.v2.engine.asset.Assets
 import bke.iso.v2.engine.render.Renderer
 import bke.iso.v2.engine.world.World
 import bke.iso.v2.game.MainGameState
@@ -20,6 +22,8 @@ class Game {
     private var state: GameState = EmptyState(this)
 
     fun start() {
+        assets.addLoader("jpg", TextureLoader())
+        assets.addLoader("png", TextureLoader())
         switchState(MainGameState::class)
     }
 
