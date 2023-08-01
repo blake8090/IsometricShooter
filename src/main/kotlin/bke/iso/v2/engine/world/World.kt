@@ -28,5 +28,6 @@ class World(game: Game) : Module(game) {
         grid.add(tile)
     }
 
-    private fun onMove(gameObject: GameObject) {}
+    private fun onMove(gameObject: GameObject) =
+        grid.move(gameObject, Location(gameObject.pos))
 }

@@ -11,6 +11,5 @@ data class Location(val x: Int = 0, val y: Int = 0, val z: Int = 0) {
                 floor(z).toInt()
             )
 
-    fun toVector3() =
-        Vector3(x.toFloat(), y.toFloat(), z.toFloat())
+    constructor(pos: Vector3) : this(pos.x, pos.y, pos.z)
 }
