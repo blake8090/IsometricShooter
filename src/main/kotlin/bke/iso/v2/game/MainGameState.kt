@@ -1,12 +1,15 @@
 package bke.iso.v2.game
 
 import bke.iso.engine.math.Location
+import bke.iso.engine.physics.Velocity
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.entity.Player
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.GameState
 import bke.iso.v2.engine.System
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 
 class MainGameState(private val game: Game) : GameState(game) {
     override val systems = emptySet<System>()
@@ -35,6 +38,28 @@ class MainGameState(private val game: Game) : GameState(game) {
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<Player> { actor, _ ->
+            val x =
+                if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                    -1f
+                } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                    1f
+                } else {
+                    0f
+                }
+
+            val y =
+                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                    1f
+                } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                    -1f
+                } else {
+                    0f
+                }
+
+            val velocity = actor.components.getOrPut(Velocity())
+            velocity.delta.set(x, y, 0f)
+            velocity.speed.set(5f, 5f, 5f)
+
             game.renderer.setCameraPos(actor.pos)
         }
     }

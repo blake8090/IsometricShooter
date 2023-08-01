@@ -2,6 +2,8 @@ package bke.iso.v2.engine
 
 import bke.iso.engine.asset.TextureLoader
 import bke.iso.v2.engine.asset.Assets
+import bke.iso.v2.engine.physics.Collisions
+import bke.iso.v2.engine.physics.Physics
 import bke.iso.v2.engine.render.Renderer
 import bke.iso.v2.engine.world.World
 import bke.iso.v2.game.MainGameState
@@ -16,6 +18,8 @@ abstract class Module(game: Game) {
 
 class Game {
     val assets = Assets(this)
+    val collisions = Collisions(this)
+    val physics = Physics(this)
     val renderer = Renderer(this)
     val world = World(this)
 
@@ -30,12 +34,15 @@ class Game {
     fun stop() {}
 
     fun update(deltaTime: Float) {
+        physics.update(deltaTime)
+
         state.update(deltaTime)
         for (system in state.systems) {
             system.update(deltaTime)
         }
 
         renderer.render()
+        collisions.update(deltaTime)
     }
 
     fun <T : GameState> switchState(stateClass: KClass<T>) {

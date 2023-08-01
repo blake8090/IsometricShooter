@@ -1,14 +1,12 @@
 package bke.iso.v2.engine.physics
 
-import bke.iso.engine.entity.Entity
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.physics.BoxCollisionSide
 import bke.iso.engine.physics.FrameCollisions
-import bke.iso.engine.physics.PredictedObjectCollision
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
-import com.badlogic.gdx.graphics.Color
+import bke.iso.v2.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -21,46 +19,48 @@ class Collisions(private val game: Game) : Module(game) {
         }
     }
 
-//    fun predictEntityCollisions(entity: Entity, dx: Float, dy: Float, dz: Float): Set<PredictedObjectCollision> {
-//        val data = findCollisionData(entity) ?: return emptySet()
-//        val box = data.box
-//
-//        // broad-phase: instead of iterating through every object, only check entities within general area of movement
-//        val px = if (dx < 0) floor(dx) else ceil(dx)
-//        val py = if (dy < 0) floor(dy) else ceil(dy)
-//        val pz = if (dz < 0) floor(dz) else ceil(dz)
-//        val projectedBox = box.project(px, py, pz)
+    fun predictCollisions(actor: Actor, dx: Float, dy: Float, dz: Float): Set<PredictedCollision> {
+        val data = actor.getCollisionData() ?: return emptySet()
+        val box = data.box
+
+        // broad-phase: instead of iterating through every object, only check entities within general area of movement
+        val px = if (dx < 0) floor(dx) else ceil(dx)
+        val py = if (dy < 0) floor(dy) else ceil(dy)
+        val pz = if (dz < 0) floor(dz) else ceil(dz)
+        val projectedBox = box.project(px, py, pz)
 //        debugRenderService.addBox(projectedBox, Color.ORANGE)
-//
-//        val worldObjects = findObjectsInArea(projectedBox)
-//            .filter { other -> other != entity }
-//
-//        // narrow-phase: check precise collisions for each object within area
-//        val collisions = mutableSetOf<PredictedObjectCollision>()
-//        for (other in worldObjects) {
-//            val otherData = findCollisionData(other) ?: continue
-//
-//            checkSweptCollision(box, Vector3(dx, dy, dz), otherData.box)?.let { collision ->
-//                val distance = box.center.dst(otherData.box.center)
-//                val side = getCollisionSide(collision.hitNormal)
-//                log.trace("dist: $distance, collision time: ${collision.collisionTime}, hit normal: ${collision.hitNormal}, side: $side")
-//
-//                collisions.add(
-//                    PredictedObjectCollision(
-//                        other,
-//                        otherData,
-//                        distance,
-//                        collision.collisionTime,
-//                        collision.hitNormal,
-//                        side
-//                    )
-//                )
-//            }
-//        }
-//
+
+        val objects = game.world.getObjectsInArea(projectedBox)
+
+        // narrow-phase: check precise collisions for each object within area
+        val collisions = mutableSetOf<PredictedCollision>()
+        for (other in objects) {
+            if (actor == other) {
+                continue
+            }
+
+            val otherData = other.getCollisionData() ?: continue
+            checkSweptCollision(box, Vector3(dx, dy, dz), otherData.box)?.let { collision ->
+                val distance = box.center.dst(otherData.box.center)
+                val side = getCollisionSide(collision.hitNormal)
+                log.trace("dist: $distance, collision time: ${collision.collisionTime}, hit normal: ${collision.hitNormal}, side: $side")
+
+                collisions.add(
+                    PredictedCollision(
+                        other,
+                        otherData,
+                        distance,
+                        collision.collisionTime,
+                        collision.hitNormal,
+                        side
+                    )
+                )
+            }
+        }
+
 //        recordCollisions(entity, collisions)
-//        return collisions
-//    }
+        return collisions
+    }
 
     private data class SweptCollision(
         val collisionTime: Float,

@@ -33,6 +33,15 @@ abstract class GameObject {
             z = value.z
         }
 
+    fun move(delta: Vector3) =
+        move(delta.x, delta.y, delta.z)
+
+    fun move(dx: Float, dy: Float, dz: Float) {
+        x += dx
+        y += dy
+        z += dz
+    }
+
     override fun equals(other: Any?) =
         other is GameObject && other.id == id
 
