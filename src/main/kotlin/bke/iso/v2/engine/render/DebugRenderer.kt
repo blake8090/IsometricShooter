@@ -11,130 +11,77 @@ import bke.iso.engine.math.Box
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Pool
 
 class DebugRenderer {
 
-    private val lines = mutableListOf<DebugLine>()
-    private val linePool = object : Pool<DebugLine>() {
-        override fun newObject() =
-            DebugLine()
-    }
+    private val lines = ObjectPool.new<DebugLine>()
+    private val rectangles = ObjectPool.new<DebugRectangle>()
+    private val circles = ObjectPool.new<DebugCircle>()
+    private val points = ObjectPool.new<DebugPoint>()
+    private val boxes = ObjectPool.new<DebugBox>()
+    private val spheres = ObjectPool.new<DebugSphere>()
 
-    private val rectangles = mutableListOf<DebugRectangle>()
-    private val rectanglePool = object : Pool<DebugRectangle>() {
-        override fun newObject() =
-            DebugRectangle()
-    }
-
-    private val circles = mutableListOf<DebugCircle>()
-    private val circlePool = object : Pool<DebugCircle>() {
-        override fun newObject() =
-            DebugCircle()
-    }
-
-    private val points = mutableListOf<DebugPoint>()
-    private val pointPool = object : Pool<DebugPoint>() {
-        override fun newObject() =
-            DebugPoint()
-    }
-
-    private val boxes = mutableListOf<DebugBox>()
-    private val boxPool = object : Pool<DebugBox>() {
-        override fun newObject() =
-            DebugBox()
-    }
-
-    private val spheres = mutableListOf<DebugSphere>()
-    private val spherePool = object : Pool<DebugSphere>() {
-        override fun newObject() =
-            DebugSphere()
-    }
-
-    fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
-        val line = linePool.obtain()
-        line.start.set(start)
-        line.end.set(end)
-        line.width = width
-        line.color = color
-        lines.add(line)
-    }
-
-    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
-        val rect = rectanglePool.obtain()
-        rect.rectangle.set(rectangle)
-        rect.lineWidth = lineWidth
-        rect.color = color
-        rectangles.add(rect)
-    }
-
-    fun addCircle(pos: Vector3, radius: Float, color: Color) {
-        val circle = circlePool.obtain()
-        circle.pos.set(pos.x, pos.y, pos.z)
-        circle.radius = radius
-        circle.color = color
-        circles.add(circle)
-    }
-
-    fun addPoint(pos: Vector3, size: Float, color: Color) {
-        val point = pointPool.obtain()
-        point.pos.set(pos)
-        point.size = size
-        point.color = color
-        points.add(point)
-    }
-
-    fun addBox(pos: Vector3, dimensions: Vector3, color: Color) {
-        val box = boxPool.obtain()
-        box.pos.set(pos)
-        box.dimensions.set(dimensions)
-        box.color = color
-        boxes.add(box)
-    }
-
-    // TODO: use Box instead of adding segments
-    fun addBox(box: Box, color: Color) {
-        for (segment in box.segments) {
-            addLine(segment.a, segment.b, 1f, color)
+    fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) =
+        lines.obtain().apply {
+            this.start.set(start)
+            this.end.set(end)
+            this.end.set(end)
+            this.width = width
+            this.color = color
         }
-    }
 
-    fun addSphere(pos: Vector3, radius: Float, color: Color) {
-        val sphere = spherePool.obtain()
-        sphere.pos.set(pos.x, pos.y, pos.z)
-        sphere.radius = radius
-        sphere.color = color
-        spheres.add(sphere)
-    }
+    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) =
+        rectangles.obtain().apply {
+            this.rectangle.set(rectangle)
+            this.lineWidth = lineWidth
+            this.color = color
+        }
+
+    fun addCircle(pos: Vector3, radius: Float, color: Color) =
+        circles.obtain().apply {
+            this.pos.set(pos.x, pos.y, pos.z)
+            this.radius = radius
+            this.color = color
+        }
+
+    fun addPoint(pos: Vector3, size: Float, color: Color) =
+        points.obtain().apply {
+            this.pos.set(pos)
+            this.size = size
+            this.color = color
+        }
+
+    fun addBox(box: Box, color: Color) =
+        boxes.obtain().apply {
+            pos.set(box.min)
+            dimensions.set(box.width, box.length, box.height)
+            this.color = color
+        }
+
+    fun addSphere(pos: Vector3, radius: Float, color: Color) =
+        spheres.obtain().apply {
+            this.pos.set(pos.x, pos.y, pos.z)
+            this.radius = radius
+            this.color = color
+        }
 
     fun render(shapeDrawer: DebugShapeDrawer) {
         shapeDrawer.begin()
-        lines.forEach(shapeDrawer::drawLine)
-        rectangles.forEach(shapeDrawer::drawRectangle)
-        circles.forEach(shapeDrawer::drawCircle)
-        points.forEach(shapeDrawer::drawPoint)
-        boxes.forEach(shapeDrawer::drawBox)
-        spheres.forEach(shapeDrawer::drawSphere)
+        lines.getAll().forEach(shapeDrawer::drawLine)
+        rectangles.getAll().forEach(shapeDrawer::drawRectangle)
+        circles.getAll().forEach(shapeDrawer::drawCircle)
+        points.getAll().forEach(shapeDrawer::drawPoint)
+        boxes.getAll().forEach(shapeDrawer::drawBox)
+        spheres.getAll().forEach(shapeDrawer::drawSphere)
         shapeDrawer.end()
     }
 
     fun clear() {
-        lines.forEach(linePool::free)
         lines.clear()
-
-        rectangles.forEach(rectanglePool::free)
         rectangles.clear()
-
-        circles.forEach(circlePool::free)
         circles.clear()
-
-        points.forEach(pointPool::free)
         points.clear()
-
-        boxes.forEach(boxPool::free)
         boxes.clear()
-
-        spheres.forEach(spherePool::free)
         spheres.clear()
     }
 }

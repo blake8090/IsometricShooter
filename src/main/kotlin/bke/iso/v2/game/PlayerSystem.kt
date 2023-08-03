@@ -23,9 +23,9 @@ class PlayerSystem(
         world.actorsWith<Player> { actor, _ ->
             updatePlayer(actor)
 
-//            inputService.onAction("toggleDebug") {
-//                renderService.toggleDebugMode()
-//            }
+            input.onAction("toggleDebug") {
+                renderer.toggleDebug()
+            }
 //
 //            inputService.onAction("shoot") {
 //                val mousePos = inputService.getMousePos()

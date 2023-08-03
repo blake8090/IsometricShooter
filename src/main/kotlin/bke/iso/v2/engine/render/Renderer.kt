@@ -22,13 +22,18 @@ class Renderer(private val game: Game) : Module(game) {
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
 
-    private val shapeDrawer = DebugShapeDrawer(batch)
     val debugRenderer = DebugRenderer()
+    private val shapeDrawer = DebugShapeDrawer(batch)
+    private var debugEnabled = false
 
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
         camera.position.x = pos.x
         camera.position.y = pos.y
+    }
+
+    fun toggleDebug() {
+        debugEnabled = debugEnabled.not()
     }
 
     fun render() {
@@ -56,7 +61,9 @@ class Renderer(private val game: Game) : Module(game) {
         drawData.forEach(::draw)
         batch.end()
 
-        debugRenderer.render(shapeDrawer)
+        if (debugEnabled) {
+            debugRenderer.render(shapeDrawer)
+        }
         // debug data still accumulates even when not in debug mode!
         debugRenderer.clear()
     }
@@ -121,22 +128,22 @@ class Renderer(private val game: Game) : Module(game) {
     private fun draw(actor: Actor) {
         val sprite = actor.components[Sprite::class] ?: return
         drawSprite(sprite, actor.pos)
-        //addActorDebugShapes(actor)
+        addDebugShapes(actor)
     }
 
-    private fun addActorDebugShapes(actor: Actor) {
+    private fun addDebugShapes(actor: Actor) {
         debugRenderer.addPoint(actor.pos, 2f, Color.RED)
 
         actor.getCollisionData()?.let { data ->
             debugRenderer.addBox(data.box, Color.GREEN)
         }
 
-//        if (entity.z != 0f) {
-//            val start = Vector3(entity.x, entity.y, 0f)
-//            val end = entity.pos
-//            debugRenderService.addPoint(start, 2f, Color.RED)
-//            debugRenderService.addLine(start, end, 1f, Color.PURPLE)
-//        }
+        if (actor.z != 0f) {
+            val start = Vector3(actor.x, actor.y, 0f)
+            val end = actor.pos
+            debugRenderer.addPoint(start, 2f, Color.RED)
+            debugRenderer.addLine(start, end, 1f, Color.PURPLE)
+        }
     }
 
     private fun draw(tile: Tile) {
