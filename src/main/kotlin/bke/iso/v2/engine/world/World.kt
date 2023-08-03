@@ -18,9 +18,15 @@ import kotlin.reflect.KClass
 class World(game: Game) : Module(game) {
 
     private val grid = Grid()
+    private val deletedObjects = mutableSetOf<GameObject>()
 
     val objects: Set<GameObject>
         get() = grid.objects
+
+    override fun update(deltaTime: Float) {
+        deletedObjects.forEach(grid::remove)
+        deletedObjects.clear()
+    }
 
     fun newActor(
         x: Float, y: Float, z: Float,
@@ -30,6 +36,10 @@ class World(game: Game) : Module(game) {
         val actor = Actor(id, x, y, z, this::onMove)
         components.forEach { component -> actor.components[component::class] = component }
         return actor
+    }
+
+    fun delete(gameObject: GameObject) {
+        deletedObjects.add(gameObject)
     }
 
     fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) =

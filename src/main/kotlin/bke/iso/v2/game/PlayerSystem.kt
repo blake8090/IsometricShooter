@@ -12,7 +12,8 @@ import com.badlogic.gdx.math.Vector3
 class PlayerSystem(
     private val input: Input,
     private val world: World,
-    private val renderer: Renderer
+    private val renderer: Renderer,
+    private val bullets: Bullets
 ) : System {
 
     private val walkSpeed = 5f
@@ -26,12 +27,10 @@ class PlayerSystem(
             input.onAction("toggleDebug") {
                 renderer.toggleDebug()
             }
-//
-//            inputService.onAction("shoot") {
-//                val mousePos = inputService.getMousePos()
-//                val target = renderService.unproject(mousePos)
-//                eventService.fire(ShootEvent(entity, target, BulletType.PLAYER))
-//            }
+
+            input.onAction("shoot") {
+                bullets.shoot(actor, renderer.getCursorPos(), BulletType.PLAYER)
+            }
 //
 //            inputService.onAction("placeBouncyBall") {
 //                val mousePos = inputService.getMousePos()

@@ -3,10 +3,10 @@ package bke.iso.v2.engine.physics
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.physics.BoxCollisionSide
-import bke.iso.engine.physics.FrameCollisions
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import bke.iso.v2.engine.world.Actor
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -28,7 +28,7 @@ class Collisions(private val game: Game) : Module(game) {
         val py = if (dy < 0) floor(dy) else ceil(dy)
         val pz = if (dz < 0) floor(dz) else ceil(dz)
         val projectedBox = box.project(px, py, pz)
-//        debugRenderService.addBox(projectedBox, Color.ORANGE)
+        game.renderer.debugRenderer.addBox(projectedBox, Color.ORANGE)
 
         val objects = game.world.getObjectsInArea(projectedBox)
 
@@ -58,8 +58,20 @@ class Collisions(private val game: Game) : Module(game) {
             }
         }
 
-//        recordCollisions(entity, collisions)
+        recordCollisions(actor, collisions)
         return collisions
+    }
+
+    private fun recordCollisions(actor: Actor, predictedCollisions: Collection<PredictedCollision>) {
+        val frameCollisions = actor.components.getOrPut(FrameCollisions())
+        predictedCollisions
+            .filter { collision ->
+                frameCollisions.collisions.none {
+                    it.obj.id == collision.obj.id
+                }
+            }
+            .map { Collision(it.obj, it.data, it.distance, it.side) }
+            .forEach(frameCollisions.collisions::add)
     }
 
     private data class SweptCollision(

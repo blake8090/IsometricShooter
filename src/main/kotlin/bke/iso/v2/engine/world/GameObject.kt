@@ -46,11 +46,7 @@ abstract class GameObject {
         other is GameObject && other.id == id
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + x.hashCode()
-        result = 31 * result + y.hashCode()
-        result = 31 * result + z.hashCode()
-        return result
+        return id.hashCode()
     }
 
     override fun toString() =

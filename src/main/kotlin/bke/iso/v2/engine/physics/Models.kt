@@ -1,9 +1,14 @@
 package bke.iso.v2.engine.physics
 
+import bke.iso.engine.entity.Component
 import bke.iso.engine.physics.BoxCollisionSide
 import bke.iso.engine.physics.CollisionData
 import bke.iso.v2.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
+
+data class FrameCollisions(
+    val collisions: MutableSet<Collision> = mutableSetOf()
+) : Component()
 
 /**
  * Contains details on an object's collision on another object.
@@ -35,4 +40,12 @@ data class PredictedCollision(
     val collisionTime: Float,
     val hitNormal: Vector3,
     val side: BoxCollisionSide
+)
+
+data class SegmentCollision(
+    val obj: GameObject,
+    val data: CollisionData,
+    val distanceStart: Float,
+    val distanceEnd: Float,
+    val points: Set<Vector3>
 )

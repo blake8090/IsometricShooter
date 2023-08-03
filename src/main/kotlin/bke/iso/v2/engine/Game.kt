@@ -46,6 +46,7 @@ class Game {
 
         renderer.render()
         collisions.update(deltaTime)
+        world.update(deltaTime)
     }
 
     fun <T : GameState> switchState(stateClass: KClass<T>) {

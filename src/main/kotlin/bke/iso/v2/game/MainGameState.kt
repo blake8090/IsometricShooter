@@ -14,11 +14,14 @@ import bke.iso.v2.engine.System
 import com.badlogic.gdx.Input
 
 class MainGameState(private val game: Game) : GameState(game) {
-    override val systems = setOf<System>(
-        PlayerSystem(game.input, game.world, game.renderer)
-    )
 
     private val factory = Factory(game.world)
+    private val bullets = Bullets(game.world)
+
+    override val systems = setOf<System>(
+        PlayerSystem(game.input, game.world, game.renderer, bullets),
+        BulletSystem(game.world)
+    )
 
     override fun start() {
         game.assets.addLoader("map2", GameMapLoader())
