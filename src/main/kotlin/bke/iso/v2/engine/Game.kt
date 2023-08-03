@@ -1,6 +1,7 @@
 package bke.iso.v2.engine
 
 import bke.iso.engine.asset.TextureLoader
+import bke.iso.engine.event.Event
 import bke.iso.v2.engine.asset.Assets
 import bke.iso.v2.engine.input.Input
 import bke.iso.v2.engine.physics.Collisions
@@ -54,5 +55,9 @@ class Game {
         state.stop()
         state = instance
         instance.start()
+    }
+
+    fun <T : Event> fireEvent(event: T) {
+        state.handleEvent(event)
     }
 }

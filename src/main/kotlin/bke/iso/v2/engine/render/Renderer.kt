@@ -1,5 +1,6 @@
 package bke.iso.v2.engine.render
 
+import bke.iso.engine.event.Event
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
@@ -16,8 +17,14 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector3
+
+data class DrawActorEvent(
+    val actor: Actor,
+    val batch: PolygonSpriteBatch
+) : Event()
 
 class Renderer(private val game: Game) : Module(game) {
 
@@ -146,6 +153,7 @@ class Renderer(private val game: Game) : Module(game) {
         val sprite = actor.components[Sprite::class] ?: return
         drawSprite(sprite, actor.pos)
         addDebugShapes(actor)
+        game.fireEvent(DrawActorEvent(actor, batch))
     }
 
     private fun addDebugShapes(actor: Actor) {
@@ -173,6 +181,13 @@ class Renderer(private val game: Game) : Module(game) {
             .sub(sprite.offsetX, sprite.offsetY)
         batch.draw(texture, screenPos.x, screenPos.y)
     }
+}
+
+fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
+    val originalColor = Color(this.color)
+    this.color = color
+    action.invoke(this)
+    this.color = originalColor
 }
 
 private data class DrawData(

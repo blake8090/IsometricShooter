@@ -1,24 +1,33 @@
 package bke.iso.v2.game
 
+import bke.iso.engine.event.Event
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.log
 import bke.iso.engine.math.Location
+import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.Sprite
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
+import bke.iso.game.combat.Health
+import bke.iso.game.combat.HealthBar
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.GameState
-import bke.iso.v2.engine.System
+import bke.iso.v2.engine.render.DrawActorEvent
+import bke.iso.v2.engine.render.withColor
+import bke.iso.v2.engine.world.Actor
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 
 class MainGameState(private val game: Game) : GameState(game) {
 
     private val factory = Factory(game.world)
     private val bullets = Bullets(game.world)
 
-    override val systems = setOf<System>(
+    override val systems = setOf(
         PlayerSystem(game.input, game.world, game.renderer, bullets),
         BulletSystem(game.world)
     )
@@ -43,6 +52,12 @@ class MainGameState(private val game: Game) : GameState(game) {
             }
 
         bindInput()
+    }
+
+    override fun handleEvent(event: Event) {
+        when (event) {
+            is DrawActorEvent -> drawHealthBar(event.actor, event.batch)
+        }
     }
 
     private fun bindInput() {
@@ -96,6 +111,28 @@ class MainGameState(private val game: Game) : GameState(game) {
             '/' -> factory.createSideFence(location)
             '=' -> factory.createFrontFence(location)
             '|' -> factory.createPillar(location)
+        }
+    }
+
+    private fun drawHealthBar(actor: Actor, batch: PolygonSpriteBatch) {
+        val healthBarWidth = 32f
+        val healthBarHeight = 8f
+
+        val health = actor.components[Health::class] ?: return
+        val healthBar = actor.components[HealthBar::class] ?: return
+
+        val pixel = game.assets.get<Texture>("pixel")
+        val pos = toScreen(actor.pos)
+            .sub(healthBar.offsetX, healthBar.offsetY)
+
+        batch.withColor(Color.RED) {
+            batch.draw(pixel, pos.x, pos.y, healthBarWidth, healthBarHeight)
+        }
+
+        batch.withColor(Color.GREEN) {
+            val ratio = health.value / health.maxValue
+            val width = healthBarWidth * ratio
+            batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
         }
     }
 }
