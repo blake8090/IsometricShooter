@@ -1,30 +1,32 @@
 package bke.iso.v2.game
 
+import bke.iso.engine.input.InputState
+import bke.iso.engine.input.KeyBinding
+import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.log
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Sprite
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
-import bke.iso.game.entity.Player
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.GameState
 import bke.iso.v2.engine.System
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 
 class MainGameState(private val game: Game) : GameState(game) {
-    override val systems = emptySet<System>()
+    override val systems = setOf<System>(
+        PlayerSystem(game.input, game.world, game.renderer)
+    )
 
     private val factory = Factory(game.world)
 
     override fun start() {
         game.assets.addLoader("map2", GameMapLoader())
         game.assets.load("game")
-        loadMap()
 
+        loadMap()
         factory.createLampPost(Location(4, 4, 0))
         factory.createLampPost(Location(8, 4, 0))
-
         factory.createPillar(Location(12, 12, 0))
             .apply {
                 x -= 0.5f
@@ -35,34 +37,25 @@ class MainGameState(private val game: Game) : GameState(game) {
                 x -= 0.5f
                 y += 0.5f
             }
+
+        bindInput()
     }
 
-    override fun update(deltaTime: Float) {
-        game.world.actorsWith<Player> { actor, _ ->
-            val x =
-                if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                    -1f
-                } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                    1f
-                } else {
-                    0f
-                }
+    private fun bindInput() {
+        log.debug("binding actions")
+        game.input.bind("toggleDebug", KeyBinding(Input.Keys.M, InputState.PRESSED))
+        game.input.bind("moveLeft", KeyBinding(Input.Keys.A, InputState.DOWN, true))
+        game.input.bind("moveRight", KeyBinding(Input.Keys.D, InputState.DOWN))
+        game.input.bind("moveUp", KeyBinding(Input.Keys.W, InputState.DOWN))
+        game.input.bind("moveDown", KeyBinding(Input.Keys.S, InputState.DOWN, true))
+        game.input.bind("run", KeyBinding(Input.Keys.SHIFT_LEFT, InputState.DOWN))
+        game.input.bind("shoot", MouseBinding(Input.Buttons.LEFT, InputState.PRESSED))
 
-            val y =
-                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                    1f
-                } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                    -1f
-                } else {
-                    0f
-                }
+        game.input.bind("flyUp", KeyBinding(Input.Keys.E, InputState.DOWN))
+        game.input.bind("flyDown", KeyBinding(Input.Keys.Q, InputState.DOWN, true))
 
-            val velocity = actor.components.getOrPut(Velocity())
-            velocity.delta.set(x, y, 0f)
-            velocity.speed.set(5f, 5f, 5f)
-
-            game.renderer.setCameraPos(actor.pos)
-        }
+        game.input.bind("placeBouncyBall", KeyBinding(Input.Keys.Z, InputState.PRESSED))
+        game.input.bind("checkCollisions", KeyBinding(Input.Keys.C, InputState.DOWN))
     }
 
     private fun loadMap() {

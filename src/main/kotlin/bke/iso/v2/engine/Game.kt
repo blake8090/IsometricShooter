@@ -2,6 +2,7 @@ package bke.iso.v2.engine
 
 import bke.iso.engine.asset.TextureLoader
 import bke.iso.v2.engine.asset.Assets
+import bke.iso.v2.engine.input.Input
 import bke.iso.v2.engine.physics.Collisions
 import bke.iso.v2.engine.physics.Physics
 import bke.iso.v2.engine.render.Renderer
@@ -18,6 +19,7 @@ abstract class Module(game: Game) {
 
 class Game {
     val assets = Assets(this)
+    val input = Input(this)
     val collisions = Collisions(this)
     val physics = Physics(this)
     val renderer = Renderer(this)
@@ -34,6 +36,7 @@ class Game {
     fun stop() {}
 
     fun update(deltaTime: Float) {
+        input.update(deltaTime)
         physics.update(deltaTime)
 
         state.update(deltaTime)
