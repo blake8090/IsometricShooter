@@ -2,6 +2,7 @@ package bke.iso.v2.game
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Velocity
+import bke.iso.engine.render.Sprite
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.entity.Player
@@ -83,8 +84,8 @@ class MainGameState(private val game: Game) : GameState(game) {
 
     private fun readTile(char: Char, location: Location) {
         when (char) {
-            '1' -> game.world.setTile(location, "floor", true)
-            '2' -> game.world.setTile(location, "floor2", true)
+            '1' -> game.world.setTile(location, Sprite("floor", 0f, 16f), true)
+            '2' -> game.world.setTile(location, Sprite("floor2", 0f, 16f), true)
         }
     }
 

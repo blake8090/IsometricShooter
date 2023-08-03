@@ -66,6 +66,7 @@ class Renderer(private val game: Game) : Module(game) {
         val min = data?.box?.min ?: obj.pos
         val max = data?.box?.max ?: obj.pos
 
+        // TODO: is this still needed?
 //        if (obj is Tile) {
 //            max.add(1f, 1f, 0f)
 //        }
@@ -119,10 +120,7 @@ class Renderer(private val game: Game) : Module(game) {
 
     private fun draw(actor: Actor) {
         val sprite = actor.components[Sprite::class] ?: return
-        val texture = game.assets.get<Texture>(sprite.texture)
-        val screenPos = toScreen(actor.x, actor.y, actor.z)
-            .sub(sprite.offsetX, sprite.offsetY)
-        batch.draw(texture, screenPos.x, screenPos.y)
+        drawSprite(sprite, actor.pos)
         //addActorDebugShapes(actor)
     }
 
@@ -142,8 +140,13 @@ class Renderer(private val game: Game) : Module(game) {
     }
 
     private fun draw(tile: Tile) {
-        val texture = game.assets.get<Texture>(tile.texture)
-        val screenPos = toScreen(tile.x, tile.y, tile.z)
+        drawSprite(tile.sprite, tile.pos)
+    }
+
+    private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
+        val texture = game.assets.get<Texture>(sprite.texture)
+        val screenPos = toScreen(worldPos)
+            .sub(sprite.offsetX, sprite.offsetY)
         batch.draw(texture, screenPos.x, screenPos.y)
     }
 }

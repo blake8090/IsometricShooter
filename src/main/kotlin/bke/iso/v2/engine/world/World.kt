@@ -4,6 +4,7 @@ import bke.iso.engine.entity.Component
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
+import bke.iso.engine.render.Sprite
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import com.badlogic.gdx.math.Vector3
@@ -31,8 +32,8 @@ class World(game: Game) : Module(game) {
         return actor
     }
 
-    fun setTile(location: Location, texture: String, solid: Boolean = false) =
-        Tile(UUID.randomUUID(), location, texture, solid, ::onMove)
+    fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) =
+        Tile(UUID.randomUUID(), location, sprite, solid, ::onMove)
 
     private fun onMove(gameObject: GameObject) {
         log.trace("moving")
