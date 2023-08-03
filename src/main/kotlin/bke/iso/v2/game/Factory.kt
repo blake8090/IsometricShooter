@@ -3,6 +3,7 @@ package bke.iso.v2.game
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collider
+import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.DrawShadow
 import bke.iso.engine.render.Sprite
 import bke.iso.game.combat.Health
@@ -10,6 +11,7 @@ import bke.iso.game.combat.HealthBar
 import bke.iso.game.entity.MovingPlatform
 import bke.iso.game.entity.Player
 import bke.iso.game.entity.Turret
+import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.World
 import com.badlogic.gdx.math.Vector3
 
@@ -112,4 +114,21 @@ class Factory(private val world: World) {
                 true
             )
         )
+}
+
+fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType) {
+    val pos = shooter.pos
+    val speed = Vector3(bulletType.speed, bulletType.speed, bulletType.speed)
+    newActor(
+        pos.x,
+        pos.y,
+        pos.z + bulletType.zOffset,
+        Bullet(shooter.id, pos, bulletType),
+        Sprite("bullet", 8f, 8f),
+        Velocity(direction, speed),
+        Collider(
+            Bounds(Vector3(0.125f, 0.125f, 0.125f)),
+            false
+        )
+    )
 }

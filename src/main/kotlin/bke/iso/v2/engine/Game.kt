@@ -25,6 +25,7 @@ class Game {
     val physics = Physics(this)
     val renderer = Renderer(this)
     val world = World(this)
+    val events = Events()
 
     private var state: GameState = EmptyState(this)
 
@@ -57,7 +58,9 @@ class Game {
         instance.start()
     }
 
-    fun <T : Event> fireEvent(event: T) {
-        state.handleEvent(event)
+    inner class Events {
+        fun fire(event: Event) {
+            state.handleEvent(event)
+        }
     }
 }

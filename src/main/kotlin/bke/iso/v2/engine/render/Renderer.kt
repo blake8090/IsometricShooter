@@ -153,7 +153,7 @@ class Renderer(private val game: Game) : Module(game) {
         val sprite = actor.components[Sprite::class] ?: return
         drawSprite(sprite, actor.pos)
         addDebugShapes(actor)
-        game.fireEvent(DrawActorEvent(actor, batch))
+        game.events.fire(DrawActorEvent(actor, batch))
     }
 
     private fun addDebugShapes(actor: Actor) {

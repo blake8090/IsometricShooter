@@ -25,11 +25,11 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 class MainGameState(private val game: Game) : GameState(game) {
 
     private val factory = Factory(game.world)
-    private val bullets = Bullets(game.world)
+    private val combat = Combat(game.world)
 
     override val systems = setOf(
-        PlayerSystem(game.input, game.world, game.renderer, bullets),
-        BulletSystem(game.world)
+        PlayerSystem(game.input, game.world, game.renderer, combat),
+        BulletSystem(game.world, combat)
     )
 
     override fun start() {

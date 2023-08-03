@@ -19,6 +19,9 @@ class Actor(
     }
 
     val components = Components()
+
+    inline fun <reified T : Component> has() =
+        T::class in components
 }
 
 class Components {

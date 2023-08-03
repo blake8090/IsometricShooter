@@ -13,7 +13,7 @@ class PlayerSystem(
     private val input: Input,
     private val world: World,
     private val renderer: Renderer,
-    private val bullets: Bullets
+    private val combat: Combat
 ) : System {
 
     private val walkSpeed = 5f
@@ -29,7 +29,7 @@ class PlayerSystem(
             }
 
             input.onAction("shoot") {
-                bullets.shoot(actor, renderer.getCursorPos(), BulletType.PLAYER)
+                combat.shoot(actor, renderer.getCursorPos(), BulletType.PLAYER)
             }
 //
 //            inputService.onAction("placeBouncyBall") {
