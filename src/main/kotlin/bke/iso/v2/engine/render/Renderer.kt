@@ -2,6 +2,7 @@ package bke.iso.v2.engine.render
 
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import bke.iso.v2.engine.physics.getCollisionData
@@ -9,15 +10,20 @@ import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.GameObject
 import bke.iso.v2.engine.world.Tile
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector3
 
 class Renderer(private val game: Game) : Module(game) {
-    private val batch = SpriteBatch()
+
+    private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)
+
+    private val shapeDrawer = DebugShapeDrawer(batch)
+    val debugRenderer = DebugRenderer()
 
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
@@ -49,6 +55,10 @@ class Renderer(private val game: Game) : Module(game) {
         drawData.filter { it.objectsBehind.isEmpty() }.forEach(::draw)
         drawData.forEach(::draw)
         batch.end()
+
+        debugRenderer.render(shapeDrawer)
+        // debug data still accumulates even when not in debug mode!
+        debugRenderer.clear()
     }
 
     private fun toDrawData(obj: GameObject): DrawData {
@@ -113,6 +123,22 @@ class Renderer(private val game: Game) : Module(game) {
         val screenPos = toScreen(actor.x, actor.y, actor.z)
             .sub(sprite.offsetX, sprite.offsetY)
         batch.draw(texture, screenPos.x, screenPos.y)
+        //addActorDebugShapes(actor)
+    }
+
+    private fun addActorDebugShapes(actor: Actor) {
+        debugRenderer.addPoint(actor.pos, 2f, Color.RED)
+
+        actor.getCollisionData()?.let { data ->
+            debugRenderer.addBox(data.box, Color.GREEN)
+        }
+
+//        if (entity.z != 0f) {
+//            val start = Vector3(entity.x, entity.y, 0f)
+//            val end = entity.pos
+//            debugRenderService.addPoint(start, 2f, Color.RED)
+//            debugRenderService.addLine(start, end, 1f, Color.PURPLE)
+//        }
     }
 
     private fun draw(tile: Tile) {

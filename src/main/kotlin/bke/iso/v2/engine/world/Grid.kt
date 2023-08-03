@@ -24,11 +24,6 @@ class Grid {
     }
 
     private fun put(gameObject: GameObject, location: Location) {
-        val existingLocation = locationByObject[gameObject]
-        require(existingLocation == null) {
-            "GameObject $gameObject is already in location $existingLocation"
-        }
-
         locationByObject[gameObject] = location
         val entry = grid.getOrPut(location) { Entry() }
         when (gameObject) {
