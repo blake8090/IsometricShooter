@@ -23,6 +23,7 @@ class MainGameState(private val game: Game) : GameState(game) {
     override fun start() {
         game.assets.addLoader("map2", GameMapLoader())
         game.assets.load("game")
+        game.renderer.setCursor("cursor")
 
         loadMap()
         factory.createLampPost(Location(4, 4, 0))

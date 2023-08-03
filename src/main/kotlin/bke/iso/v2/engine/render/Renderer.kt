@@ -1,6 +1,8 @@
 package bke.iso.v2.engine.render
 
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.math.toVector2
+import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.v2.engine.Game
@@ -34,6 +36,21 @@ class Renderer(private val game: Game) : Module(game) {
 
     fun toggleDebug() {
         debugEnabled = debugEnabled.not()
+    }
+
+    fun getCursorPos(): Vector3 {
+        val screenPos = camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
+        return toWorld(screenPos.toVector2())
+    }
+
+    fun setCursor(textureName: String) {
+        val texture = game.assets.get<Texture>(textureName)
+        val xHotspot = texture.width / 2
+        val yHotspot = texture.height / 2
+        texture.textureData.prepare()
+        val pixmap = texture.textureData.consumePixmap()
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot))
+        pixmap.dispose()
     }
 
     fun render() {
