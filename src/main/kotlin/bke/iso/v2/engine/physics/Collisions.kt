@@ -2,12 +2,17 @@ package bke.iso.v2.engine.physics
 
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.getRay
 import bke.iso.engine.physics.BoxCollisionSide
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import bke.iso.v2.engine.world.Actor
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.collision.BoundingBox
+import com.badlogic.gdx.math.collision.Ray
+import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -16,6 +21,46 @@ class Collisions(private val game: Game) : Module(game) {
     override fun update(deltaTime: Float) {
         game.world.actorsWith<FrameCollisions> { actor, _ ->
             actor.components.remove<FrameCollisions>()
+        }
+    }
+
+    fun checkCollisions(segment: Segment): Set<SegmentCollision> {
+        val area = Box(segment.a, segment.b)
+        game.renderer.debugRenderer.addBox(area, Color.ORANGE)
+
+        val ray = segment.getRay()
+        val collisions = mutableSetOf<SegmentCollision>()
+        for (gameObject in game.world.getObjectsInArea(area)) {
+            val data = gameObject.getCollisionData() ?: continue
+            val points = mutableSetOf<Vector3>()
+            for (face in data.box.faces) {
+                findIntersection(ray, face)
+                    ?.let(points::add)
+            }
+
+            if (points.isNotEmpty()) {
+                val center = data.box.center
+                collisions.add(
+                    SegmentCollision(
+                        gameObject,
+                        data,
+                        segment.a.dst(center),
+                        segment.b.dst(center),
+                        points
+                    )
+                )
+            }
+        }
+
+        return collisions
+    }
+
+    private fun findIntersection(ray: Ray, box: BoundingBox): Vector3? {
+        val point = Vector3()
+        return if (Intersector.intersectRayBounds(ray, box, point)) {
+            point
+        } else {
+            null
         }
     }
 

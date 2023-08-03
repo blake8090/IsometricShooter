@@ -29,7 +29,8 @@ class MainGameState(private val game: Game) : GameState(game) {
 
     override val systems = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
-        BulletSystem(game.world, combat)
+        BulletSystem(game.world, combat),
+        TurretSystem(game.world, game.collisions, game.renderer.debugRenderer, combat)
     )
 
     override fun start() {

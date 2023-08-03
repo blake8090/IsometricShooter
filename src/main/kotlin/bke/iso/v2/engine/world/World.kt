@@ -60,6 +60,18 @@ class World(game: Game) : Module(game) {
     inline fun <reified T : Component> actorsWith(noinline action: (Actor, T) -> Unit) =
         actorsWith(T::class, action)
 
+    fun <T : Component> findActorWith(type: KClass<out T>): Pair<Actor, T>? =
+       grid.objects
+           .filterIsInstance<Actor>()
+           .mapNotNull { actor ->
+               val component = actor.components[type] ?: return@mapNotNull null
+               actor to component
+           }
+           .firstOrNull()
+
+    inline fun <reified T : Component> findActorWith() =
+        findActorWith(T::class)
+
     fun getObjectsInArea(box: Box): Set<GameObject> {
         val min = Vector3(
             min(box.min.x, box.max.x),
