@@ -1,4 +1,4 @@
-package bke.iso.v2.engine.asset
+package bke.iso.engine.asset
 
 import bke.iso.engine.Game
 import io.kotest.assertions.throwables.shouldThrow
@@ -12,18 +12,18 @@ class AssetsTest : StringSpec({
     val game = mockk<Game>()
 
     "should throw exception when add duplicate loader" {
-        class LoaderA : bke.iso.engine.asset.AssetLoader<String> {
+        class LoaderA : AssetLoader<String> {
             override fun load(file: File): Pair<String, String> =
                 "test" to "test"
         }
 
-        class LoaderB : bke.iso.engine.asset.AssetLoader<String> {
+        class LoaderB : AssetLoader<String> {
             override fun load(file: File): Pair<String, String> =
                 "test" to "test"
         }
 
         val exception = shouldThrow<IllegalArgumentException> {
-            val assets = bke.iso.engine.asset.Assets(game)
+            val assets = Assets(game)
             assets.addLoader("txt", LoaderA())
             assets.addLoader("txt", LoaderB())
         }
