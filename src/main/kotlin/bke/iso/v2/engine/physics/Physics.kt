@@ -6,7 +6,7 @@ import bke.iso.v2.engine.Module
 import bke.iso.v2.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
 
-class Physics(private val game: Game) : Module(game) {
+class Physics(override val game: Game) : Module() {
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<Velocity> { actor, velocity ->

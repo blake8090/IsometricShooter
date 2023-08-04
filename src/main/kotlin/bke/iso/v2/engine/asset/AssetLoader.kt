@@ -1,7 +1,7 @@
 package bke.iso.v2.engine.asset
 
-import bke.iso.engine.FilePointer
+import java.io.File
 
 interface AssetLoader<T : Any> {
-    fun load(file: FilePointer): Pair<String, T>
+    fun load(file: File): Pair<String, T>
 }

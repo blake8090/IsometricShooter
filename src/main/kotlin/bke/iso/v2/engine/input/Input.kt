@@ -13,7 +13,7 @@ enum class InputState {
 
 open class Binding
 
-class Input(game: Game) : Module(game) {
+class Input(override val game: Game) : Module() {
 
     private val keyInput = KeyInput()
     private val mouseInput = MouseInput()

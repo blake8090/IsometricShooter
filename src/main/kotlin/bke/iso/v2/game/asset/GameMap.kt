@@ -1,7 +1,7 @@
 package bke.iso.v2.game.asset
 
-import bke.iso.engine.FilePointer
 import bke.iso.v2.engine.asset.AssetLoader
+import java.io.File
 
 class GameMap(val layers: List<Layer>) {
     class Layer(val z: Int) {
@@ -13,7 +13,7 @@ class GameMap(val layers: List<Layer>) {
 // TODO: refactor this!
 class GameMapLoader : AssetLoader<GameMap> {
 
-    override fun load(file: FilePointer): Pair<String, GameMap> {
+    override fun load(file: File): Pair<String, GameMap> {
         var mode = Mode.NONE
         val layers = mutableListOf<GameMap.Layer>()
 
@@ -40,7 +40,7 @@ class GameMapLoader : AssetLoader<GameMap> {
             }
         }
 
-        return file.getNameWithoutExtension() to GameMap(layers)
+        return file.nameWithoutExtension to GameMap(layers)
     }
 
     private enum class Mode {

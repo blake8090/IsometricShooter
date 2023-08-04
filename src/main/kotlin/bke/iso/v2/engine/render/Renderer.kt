@@ -26,7 +26,7 @@ data class DrawActorEvent(
     val batch: PolygonSpriteBatch
 ) : Event()
 
-class Renderer(private val game: Game) : Module(game) {
+class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)

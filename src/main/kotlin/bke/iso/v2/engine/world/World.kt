@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 
 abstract class GameObject
 
-class World(game: Game) : Module(game) {
+class World(override val game: Game) : Module() {
 
     private val grid = Grid()
     private val deletedObjects = mutableSetOf<Actor>()

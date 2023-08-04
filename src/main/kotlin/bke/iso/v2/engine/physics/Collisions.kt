@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.ceil
 import kotlin.math.floor
 
-class Collisions(private val game: Game) : Module(game) {
+class Collisions(override val game: Game) : Module() {
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<FrameCollisions> { actor, _ ->

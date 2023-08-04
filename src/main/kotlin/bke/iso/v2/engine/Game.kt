@@ -3,6 +3,7 @@ package bke.iso.v2.engine
 import bke.iso.engine.event.Event
 import bke.iso.v2.engine.asset.Assets
 import bke.iso.v2.engine.asset.TextureLoader
+import bke.iso.v2.engine.file.FileSystem
 import bke.iso.v2.engine.input.Input
 import bke.iso.v2.engine.physics.Collisions
 import bke.iso.v2.engine.physics.Physics
@@ -12,14 +13,19 @@ import bke.iso.v2.game.GameplayState
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-abstract class Module(game: Game) {
+abstract class Module {
+    protected abstract val game: Game
+
     open fun start() {}
+
     open fun update(deltaTime: Float) {}
+
     open fun stop() {}
 }
 
 class Game {
     val assets = Assets(this)
+    val fileSystem = FileSystem()
     val input = Input(this)
     val collisions = Collisions(this)
     val physics = Physics(this)
