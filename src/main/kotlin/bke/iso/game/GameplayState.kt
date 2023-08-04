@@ -5,6 +5,7 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.GameState
+import bke.iso.engine.System
 import bke.iso.engine.input.InputState
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
@@ -24,14 +25,14 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import mu.KotlinLogging
 
-class GameplayState(private val game: bke.iso.engine.Game) : bke.iso.engine.GameState(game) {
+class GameplayState(private val game: Game) : GameState(game) {
 
     private val log = KotlinLogging.logger {}
 
     private val factory = Factory(game.world)
     private val combat = Combat(game.world)
 
-    override val systems = setOf(
+    override val systems: Set<System> = setOf<System>(
         PlayerSystem(game.input, game.world, game.renderer, combat),
         TurretSystem(game.world, game.collisions, game.renderer.debugRenderer, combat),
         BulletSystem(game.world, combat)
@@ -59,7 +60,7 @@ class GameplayState(private val game: bke.iso.engine.Game) : bke.iso.engine.Game
         bindInput()
     }
 
-    override fun handleEvent(event: bke.iso.engine.Event) {
+    override fun handleEvent(event: Event) {
         when (event) {
             is DrawActorEvent -> drawHealthBar(event.actor, event.batch)
         }

@@ -15,7 +15,7 @@ import mu.KotlinLogging
 import kotlin.math.ceil
 import kotlin.math.floor
 
-class Collisions(override val game: bke.iso.engine.Game) : bke.iso.engine.Module() {
+class Collisions(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 

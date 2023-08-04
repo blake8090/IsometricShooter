@@ -9,7 +9,7 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 class AssetsTest : StringSpec({
-    val game = mockk<bke.iso.engine.Game>()
+    val game = mockk<Game>()
 
     "should throw exception when add duplicate loader" {
         class LoaderA : bke.iso.engine.asset.AssetLoader<String> {

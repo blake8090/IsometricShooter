@@ -13,7 +13,7 @@ enum class InputState {
 
 open class Binding
 
-class Input(override val game: bke.iso.engine.Game) : bke.iso.engine.Module() {
+class Input(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 

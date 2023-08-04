@@ -4,8 +4,8 @@ interface System {
     fun update(deltaTime: Float)
 }
 
-abstract class GameState(game: bke.iso.engine.Game) {
-    abstract val systems: Set<bke.iso.engine.System>
+abstract class GameState(game: Game) {
+    abstract val systems: Set<System>
 
     open fun start() {}
 
@@ -13,9 +13,9 @@ abstract class GameState(game: bke.iso.engine.Game) {
 
     open fun stop() {}
 
-    open fun handleEvent(event: bke.iso.engine.Event) {}
+    open fun handleEvent(event: Event) {}
 }
 
-class EmptyState(game: bke.iso.engine.Game) : bke.iso.engine.GameState(game) {
-    override val systems = emptySet<bke.iso.engine.System>()
+class EmptyState(game: Game) : GameState(game) {
+    override val systems = emptySet<System>()
 }

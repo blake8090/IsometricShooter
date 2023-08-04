@@ -11,7 +11,7 @@ class GameMap(val layers: List<Layer>) {
 }
 
 // TODO: refactor this!
-class GameMapLoader : bke.iso.engine.asset.AssetLoader<GameMap> {
+class GameMapLoader : AssetLoader<GameMap> {
 
     override fun load(file: File): Pair<String, GameMap> {
         var mode = Mode.NONE

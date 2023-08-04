@@ -1,11 +1,11 @@
 package bke.iso.engine.render
 
-import bke.iso.engine.math.toScreen
-import bke.iso.engine.math.toVector2
-import bke.iso.engine.math.toWorld
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import bke.iso.engine.math.toScreen
+import bke.iso.engine.math.toVector2
+import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.getCollisionData
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
@@ -22,9 +22,9 @@ import com.badlogic.gdx.math.Vector3
 data class DrawActorEvent(
     val actor: Actor,
     val batch: PolygonSpriteBatch
-) : bke.iso.engine.Event()
+) : Event()
 
-class Renderer(override val game: bke.iso.engine.Game) : bke.iso.engine.Module() {
+class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera(1920f, 1080f)

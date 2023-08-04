@@ -1,7 +1,5 @@
 package bke.iso.engine.asset
 
-import bke.iso.engine.Game
-import bke.iso.engine.Module
 import mu.KotlinLogging
 import java.io.File
 import kotlin.io.path.Path
@@ -19,10 +17,10 @@ class Assets(override val game: bke.iso.engine.Game) : bke.iso.engine.Module() {
 
     private val log = KotlinLogging.logger {}
 
-    private val loadersByExtension = mutableMapOf<String, bke.iso.engine.asset.AssetLoader<*>>()
-    private val assets = mutableMapOf<Pair<String, KClass<*>>, bke.iso.engine.asset.Asset<*>>()
+    private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
+    private val assets = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
 
-    fun addLoader(fileExtension: String, loader: bke.iso.engine.asset.AssetLoader<*>) {
+    fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
         val existingLoader = loadersByExtension[fileExtension]
         require(existingLoader == null) {
             "Extension '$fileExtension' has already been set to loader ${existingLoader!!::class.simpleName}"
@@ -44,26 +42,26 @@ class Assets(override val game: bke.iso.engine.Game) : bke.iso.engine.Module() {
 
     fun load(module: String) {
         log.info("Loading assets from module '$module'")
-        val path = Path(bke.iso.engine.asset.ASSETS_DIRECTORY, module).toString()
+        val path = Path(ASSETS_DIRECTORY, module).toString()
         val files = game.fileSystem.getFiles(path)
 
         for (file in files) {
             val assetLoader = loadersByExtension[file.extension]
             if (assetLoader == null) {
-                log.warn("No loader found for extension '${file.extension}' - skipping file ${file.getPath()}")
+                log.warn("No loader found for extension '${file.extension}' - skipping file ${file.path}")
                 continue
             }
             load(file, assetLoader)
         }
     }
 
-    private fun <T : Any> load(file: File, assetLoader: bke.iso.engine.asset.AssetLoader<T>) {
+    private fun <T : Any> load(file: File, assetLoader: AssetLoader<T>) {
         val (name, asset) = assetLoader.load(file)
-        set(name, bke.iso.engine.asset.Asset(name, asset))
+        set(name, Asset(name, asset))
         log.info("Loaded asset '${name}' (${asset::class.simpleName}) - '${file.path}'")
     }
 
-    private fun <T : Any> set(name: String, asset: bke.iso.engine.asset.Asset<T>) {
+    private fun <T : Any> set(name: String, asset: Asset<T>) {
         assets[name to asset.value::class] = asset
     }
 }

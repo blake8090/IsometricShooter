@@ -14,7 +14,7 @@ import kotlin.reflect.full.primaryConstructor
 open class Event
 
 abstract class Module {
-    protected abstract val game: bke.iso.engine.Game
+    protected abstract val game: Game
 
     open fun start() {}
 

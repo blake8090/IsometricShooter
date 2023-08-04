@@ -23,7 +23,7 @@ class TurretSystem(
     private val collisions: Collisions,
     private val debugRenderer: DebugRenderer,
     private val combat: Combat
-) : bke.iso.engine.System {
+) : System {
 
     override fun update(deltaTime: Float) {
         world.actorsWith<Turret> { actor, turret ->
