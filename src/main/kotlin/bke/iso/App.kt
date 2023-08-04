@@ -1,13 +1,13 @@
 package bke.iso
 
-import bke.iso.v2.engine.Game
+import bke.iso.engine.Game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import ktx.async.KtxAsync
 
 class App(title: String) : ApplicationAdapter() {
-    private lateinit var game: Game
+    private lateinit var game: bke.iso.engine.Game
 
     val config: Lwjgl3ApplicationConfiguration by lazy {
         // TODO: load this from application config
@@ -20,7 +20,7 @@ class App(title: String) : ApplicationAdapter() {
 
     override fun create() {
         KtxAsync.initiate()
-        game = Game()
+        game = bke.iso.engine.Game()
         game.start()
     }
 

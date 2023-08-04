@@ -1,0 +1,72 @@
+package bke.iso.engine
+
+import bke.iso.engine.asset.TextureLoader
+import bke.iso.engine.file.FileSystem
+import bke.iso.engine.input.Input
+import bke.iso.engine.physics.Collisions
+import bke.iso.engine.physics.Physics
+import bke.iso.engine.render.Renderer
+import bke.iso.engine.world.World
+import bke.iso.game.GameplayState
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
+
+open class Event
+
+abstract class Module {
+    protected abstract val game: bke.iso.engine.Game
+
+    open fun start() {}
+
+    open fun update(deltaTime: Float) {}
+
+    open fun stop() {}
+}
+
+class Game {
+    val assets = bke.iso.engine.asset.Assets(this)
+    val fileSystem = FileSystem()
+    val input = Input(this)
+    val collisions = Collisions(this)
+    val physics = Physics(this)
+    val renderer = Renderer(this)
+    val world = World(this)
+    val events = Events()
+
+    private var state: GameState = EmptyState(this)
+
+    fun start() {
+        assets.addLoader("jpg", TextureLoader())
+        assets.addLoader("png", TextureLoader())
+        switchState(GameplayState::class)
+    }
+
+    fun stop() {}
+
+    fun update(deltaTime: Float) {
+        input.update(deltaTime)
+        physics.update(deltaTime)
+
+        state.update(deltaTime)
+        for (system in state.systems) {
+            system.update(deltaTime)
+        }
+
+        renderer.render()
+        collisions.update(deltaTime)
+        world.update(deltaTime)
+    }
+
+    fun <T : GameState> switchState(stateClass: KClass<T>) {
+        val instance = stateClass.primaryConstructor!!.call(this)
+        state.stop()
+        state = instance
+        instance.start()
+    }
+
+    inner class Events {
+        fun fire(event: Event) {
+            state.handleEvent(event)
+        }
+    }
+}
