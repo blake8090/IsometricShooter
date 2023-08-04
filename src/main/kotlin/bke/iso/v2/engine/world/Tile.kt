@@ -1,6 +1,6 @@
 package bke.iso.v2.engine.world
 
-import bke.iso.engine.math.Location
+import bke.iso.v2.engine.math.Location
 import bke.iso.v2.engine.render.Sprite
 
 data class Tile(

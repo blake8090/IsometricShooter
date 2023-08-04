@@ -1,6 +1,6 @@
 package bke.iso.v2.engine.render
 
-import bke.iso.engine.math.Box
+import bke.iso.v2.engine.math.Box
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3

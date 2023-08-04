@@ -1,8 +1,8 @@
 package bke.iso.v2.game
 
 import bke.iso.engine.log
-import bke.iso.engine.math.Location
-import bke.iso.engine.math.toScreen
+import bke.iso.v2.engine.math.Location
+import bke.iso.v2.engine.math.toScreen
 import bke.iso.v2.engine.Event
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.GameState

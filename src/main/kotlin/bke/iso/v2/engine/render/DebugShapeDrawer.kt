@@ -1,10 +1,10 @@
 package bke.iso.v2.engine.render
 
-import bke.iso.engine.math.TILE_SIZE_X
-import bke.iso.engine.math.TILE_SIZE_Y
-import bke.iso.engine.math.TILE_SIZE_Z
-import bke.iso.engine.math.getIsometricRatio
-import bke.iso.engine.math.toScreen
+import bke.iso.v2.engine.math.TILE_SIZE_X
+import bke.iso.v2.engine.math.TILE_SIZE_Y
+import bke.iso.v2.engine.math.TILE_SIZE_Z
+import bke.iso.v2.engine.math.getIsometricRatio
+import bke.iso.v2.engine.math.toScreen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture

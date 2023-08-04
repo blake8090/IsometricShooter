@@ -1,6 +1,6 @@
 package bke.iso.v2.game.actor
 
-import bke.iso.engine.math.Location
+import bke.iso.v2.engine.math.Location
 import bke.iso.v2.engine.physics.Bounds
 import bke.iso.v2.engine.physics.Collider
 import bke.iso.v2.engine.physics.Velocity

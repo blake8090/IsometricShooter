@@ -1,7 +1,7 @@
 package bke.iso.v2.engine.world
 
-import bke.iso.engine.math.Box
-import bke.iso.engine.math.Location
+import bke.iso.v2.engine.math.Box
+import bke.iso.v2.engine.math.Location
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import bke.iso.v2.engine.render.Sprite
