@@ -1,7 +1,6 @@
 package bke.iso.v2.engine.physics
 
 import bke.iso.engine.math.Box
-import bke.iso.engine.physics.CollisionData
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.GameObject
 import bke.iso.v2.engine.world.Tile

@@ -1,9 +1,23 @@
 package bke.iso.v2.engine.physics
 
-import bke.iso.engine.physics.BoxCollisionSide
-import bke.iso.engine.physics.CollisionData
+import bke.iso.engine.math.Box
 import bke.iso.v2.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
+
+data class CollisionData(
+    val box: Box,
+    val solid: Boolean
+)
+
+enum class BoxCollisionSide {
+    FRONT,
+    BACK,
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM,
+    CORNER
+}
 
 /**
  * Contains details on an object's collision on another object.

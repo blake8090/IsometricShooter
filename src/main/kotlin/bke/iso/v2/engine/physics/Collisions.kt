@@ -3,7 +3,6 @@ package bke.iso.v2.engine.physics
 import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.getRay
-import bke.iso.engine.physics.BoxCollisionSide
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
 import bke.iso.v2.engine.world.Actor
