@@ -1,9 +1,8 @@
 package bke.iso.old
 
-import bke.iso.engine.Engine
-import bke.iso.engine.Game
-import bke.iso.service.Service
-import bke.iso.service.ServiceContainer
+import bke.iso.old.engine.Game
+import bke.iso.old.service.Service
+import bke.iso.old.service.ServiceContainer
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
@@ -18,12 +17,12 @@ class App(
 ) : ApplicationAdapter() {
 
     private val container = ServiceContainer()
-    private lateinit var engine: Engine
+    private lateinit var engine: bke.iso.old.engine.Engine
 
     override fun create() {
         KtxAsync.initiate()
 
-        container.register(findServices("bke.iso.engine") + findServices("bke.iso.game"))
+        container.register(findServices("bke.iso.old.engine") + findServices("bke.iso.old.game"))
 
         engine = container.get()
         val game = container.get(gameClass)

@@ -1,6 +1,6 @@
 package bke.iso.old
 
-import bke.iso.game.IsometricShooter
+import bke.iso.old.game.IsometricShooter
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
