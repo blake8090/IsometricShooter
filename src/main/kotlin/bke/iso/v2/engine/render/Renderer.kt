@@ -94,14 +94,19 @@ class Renderer(private val game: Game) : Module(game) {
 
     private fun toDrawData(obj: GameObject): DrawData {
         val data = obj.getCollisionData()
-        val min = data?.box?.min ?: obj.pos
-        val max = data?.box?.max ?: obj.pos
+        val pos = when (obj) {
+            is Tile -> obj.location.toVector3()
+            is Actor -> obj.pos
+            else -> error("Unrecognized type for game object $obj")
+        }
 
         // TODO: is this still needed?
 //        if (obj is Tile) {
 //            max.add(1f, 1f, 0f)
 //        }
 
+        val min = data?.box?.min ?: pos
+        val max = data?.box?.max ?: pos
         val width = max.x - min.x
         val length = max.y - min.y
         val height = max.z - min.z
@@ -172,7 +177,7 @@ class Renderer(private val game: Game) : Module(game) {
     }
 
     private fun draw(tile: Tile) {
-        drawSprite(tile.sprite, tile.pos)
+        drawSprite(tile.sprite, tile.location.toVector3())
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {

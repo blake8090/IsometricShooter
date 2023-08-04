@@ -1,4 +1,4 @@
-package bke.iso.v2.game
+package bke.iso.v2.game.actor
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
@@ -9,7 +9,6 @@ import bke.iso.engine.render.Sprite
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.entity.MovingPlatform
-import bke.iso.game.entity.Player
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.World
 import com.badlogic.gdx.math.Vector3

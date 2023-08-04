@@ -1,12 +1,12 @@
-package bke.iso.v2.game
+package bke.iso.v2.game.actor
 
 import bke.iso.engine.entity.Component
-import bke.iso.game.entity.Player
 import bke.iso.v2.engine.System
 import bke.iso.v2.engine.physics.Collisions
 import bke.iso.v2.engine.render.DebugRenderer
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.World
+import bke.iso.v2.game.Combat
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.collision.Segment
 

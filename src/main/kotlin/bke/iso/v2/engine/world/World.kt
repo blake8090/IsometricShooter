@@ -1,7 +1,6 @@
 package bke.iso.v2.engine.world
 
 import bke.iso.engine.entity.Component
-import bke.iso.engine.log
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
@@ -15,13 +14,15 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KClass
 
+abstract class GameObject
+
 class World(game: Game) : Module(game) {
 
     private val grid = Grid()
-    private val deletedObjects = mutableSetOf<GameObject>()
+    private val deletedObjects = mutableSetOf<Actor>()
 
     val objects: Set<GameObject>
-        get() = grid.objects
+        get() = grid.getAll()
 
     override fun update(deltaTime: Float) {
         deletedObjects.forEach(grid::remove)
@@ -38,21 +39,18 @@ class World(game: Game) : Module(game) {
         return actor
     }
 
-    fun delete(gameObject: GameObject) {
-        deletedObjects.add(gameObject)
+    private fun onMove(actor: Actor) =
+        grid.move(actor)
+
+    fun deleteActor(actor: Actor) {
+        deletedObjects.add(actor)
     }
 
     fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) =
-        Tile(UUID.randomUUID(), location, sprite, solid, ::onMove)
-
-    private fun onMove(gameObject: GameObject) {
-        log.trace("moving")
-        grid.move(gameObject, Location(gameObject.pos))
-    }
+        grid.setTile(location, sprite, solid)
 
     fun <T : Component> actorsWith(type: KClass<out T>, action: (Actor, T) -> Unit) {
-        for (actor in grid.objects.filterIsInstance<Actor>()) {
-            val component = actor.components[type] ?: continue
+        for ((actor, component) in findActorsWith(type)) {
             action.invoke(actor, component)
         }
     }
@@ -60,14 +58,17 @@ class World(game: Game) : Module(game) {
     inline fun <reified T : Component> actorsWith(noinline action: (Actor, T) -> Unit) =
         actorsWith(T::class, action)
 
+    private fun <T : Component> findActorsWith(type: KClass<out T>): Set<Pair<Actor, T>> =
+        grid.getAllActors()
+            .associateWith { actor -> actor.components[type] }
+            .mapNotNull { (actor, component) ->
+                component ?: return@mapNotNull null
+                actor to component
+            }
+            .toSet()
+
     fun <T : Component> findActorWith(type: KClass<out T>): Pair<Actor, T>? =
-       grid.objects
-           .filterIsInstance<Actor>()
-           .mapNotNull { actor ->
-               val component = actor.components[type] ?: return@mapNotNull null
-               actor to component
-           }
-           .firstOrNull()
+        findActorsWith(type).firstOrNull()
 
     inline fun <reified T : Component> findActorWith() =
         findActorWith(T::class)

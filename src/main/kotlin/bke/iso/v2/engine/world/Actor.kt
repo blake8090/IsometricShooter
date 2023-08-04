@@ -3,25 +3,64 @@ package bke.iso.v2.engine.world
 import bke.iso.engine.entity.Component
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
+import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
 class Actor(
-    override val id: UUID = UUID.randomUUID(),
-    x: Float = 0f,
-    y: Float = 0f,
-    z: Float = 0f,
-    override val onMove: (GameObject) -> Unit = {},
+    val id: UUID,
+    x: Float,
+    y: Float,
+    z: Float,
+    private val onMove: (Actor) -> Unit = {}
 ) : GameObject() {
 
-    init {
-        pos = Vector3(x, y, z)
+    var x: Float by Delegates.observable(0f) { _, _, _ ->
+        onMove(this)
     }
+
+    var y: Float by Delegates.observable(0f) { _, _, _ ->
+        onMove(this)
+    }
+
+    var z: Float by Delegates.observable(0f) { _, _, _ ->
+        onMove(this)
+    }
+
+    var pos: Vector3
+        get() = Vector3(x, y, z)
+        set(value) {
+            x = value.x
+            y = value.y
+            z = value.z
+        }
 
     val components = Components()
 
+    init {
+        this.x = x
+        this.y = y
+        this.z = z
+    }
+
     inline fun <reified T : Component> has() =
         T::class in components
+
+    fun move(delta: Vector3) {
+        x += delta.x
+        y += delta.y
+        z += delta.z
+    }
+
+    override fun equals(other: Any?) =
+        other is Actor && other.id == id
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString() =
+        id.toString()
 }
 
 class Components {

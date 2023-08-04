@@ -1,4 +1,4 @@
-package bke.iso.v2.game
+package bke.iso.v2.game.actor
 
 import bke.iso.engine.entity.Component
 import bke.iso.v2.engine.System
@@ -7,6 +7,7 @@ import bke.iso.v2.engine.physics.FrameCollisions
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.GameObject
 import bke.iso.v2.engine.world.World
+import bke.iso.v2.game.Combat
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
 
@@ -41,7 +42,7 @@ class BulletSystem(
     private fun update(actor: Actor, bullet: Bullet) {
         val distance = bullet.startPos.dst(actor.pos)
         if (distance > MAX_BULLET_DISTANCE) {
-            world.delete(actor)
+            world.deleteActor(actor)
             return
         }
 
@@ -53,13 +54,13 @@ class BulletSystem(
             combat.onDamage(other, bullet.type.damage)
         }
 
-        world.delete(actor)
+        world.deleteActor(actor)
     }
 
-    private fun getFirstCollidingObject(actor: Actor): GameObject? =
-        actor.components[FrameCollisions::class]
+    private fun getFirstCollidingObject(actor: Actor): GameObject? {
+        val collisions = actor.components[FrameCollisions::class]
             ?.collisions
-            ?.map(Collision::obj)
-            ?.firstOrNull()
-            ?.takeIf { other -> other != actor }
+            ?: return null
+        return collisions.minByOrNull(Collision::distance)?.obj
+    }
 }

@@ -111,9 +111,7 @@ class Collisions(private val game: Game) : Module(game) {
         val frameCollisions = actor.components.getOrPut(FrameCollisions())
         predictedCollisions
             .filter { collision ->
-                frameCollisions.collisions.none {
-                    it.obj.id == collision.obj.id
-                }
+                frameCollisions.collisions.none { collision.obj is Actor && collision.obj == actor }
             }
             .map { Collision(it.obj, it.data, it.distance, it.side) }
             .forEach(frameCollisions.collisions::add)

@@ -8,7 +8,7 @@ import bke.iso.v2.engine.physics.Collisions
 import bke.iso.v2.engine.physics.Physics
 import bke.iso.v2.engine.render.Renderer
 import bke.iso.v2.engine.world.World
-import bke.iso.v2.game.MainGameState
+import bke.iso.v2.game.GameplayState
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -32,7 +32,7 @@ class Game {
     fun start() {
         assets.addLoader("jpg", TextureLoader())
         assets.addLoader("png", TextureLoader())
-        switchState(MainGameState::class)
+        switchState(GameplayState::class)
     }
 
     fun stop() {}

@@ -17,20 +17,24 @@ import bke.iso.v2.engine.GameState
 import bke.iso.v2.engine.render.DrawActorEvent
 import bke.iso.v2.engine.render.withColor
 import bke.iso.v2.engine.world.Actor
+import bke.iso.v2.game.actor.BulletSystem
+import bke.iso.v2.game.actor.Factory
+import bke.iso.v2.game.actor.PlayerSystem
+import bke.iso.v2.game.actor.TurretSystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 
-class MainGameState(private val game: Game) : GameState(game) {
+class GameplayState(private val game: Game) : GameState(game) {
 
     private val factory = Factory(game.world)
     private val combat = Combat(game.world)
 
     override val systems = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
-        BulletSystem(game.world, combat),
-        TurretSystem(game.world, game.collisions, game.renderer.debugRenderer, combat)
+        TurretSystem(game.world, game.collisions, game.renderer.debugRenderer, combat),
+        BulletSystem(game.world, combat)
     )
 
     override fun start() {

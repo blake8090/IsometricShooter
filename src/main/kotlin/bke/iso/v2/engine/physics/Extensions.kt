@@ -16,7 +16,7 @@ fun GameObject.getCollisionData(): CollisionData? =
 
 fun Tile.getCollisionData() =
     CollisionData(
-        Box(pos.add(0.5f, 0.5f, 0f), 1f, 1f, 0f),
+        Box(location.toVector3().add(0.5f, 0.5f, 0f), 1f, 1f, 0f),
         solid
     )
 

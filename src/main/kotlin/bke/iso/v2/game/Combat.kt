@@ -5,6 +5,8 @@ import bke.iso.game.combat.Health
 import bke.iso.game.entity.Player
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.World
+import bke.iso.v2.game.actor.BulletType
+import bke.iso.v2.game.actor.createBullet
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
 
@@ -29,7 +31,7 @@ class Combat(private val world: World) {
         if (actor.has<Player>()) {
             return
         }
-        world.delete(actor)
+        world.deleteActor(actor)
         log.trace("Actor ${actor.id} has been destroyed")
     }
 }
