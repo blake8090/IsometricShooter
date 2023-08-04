@@ -1,15 +1,17 @@
 package bke.iso.v2.engine.input
 
-import bke.iso.engine.input.Binding
-import bke.iso.engine.input.KeyBinding
-import bke.iso.engine.input.KeyInput
-import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.input.MouseInput
 import bke.iso.engine.log
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.math.Vector2
+
+enum class InputState {
+    UP,
+    DOWN,
+    PRESSED,
+    RELEASED
+}
+
+open class Binding
 
 class Input(game: Game) : Module(game) {
 
@@ -45,10 +47,4 @@ class Input(game: Game) : Module(game) {
             func.invoke(axis)
         }
     }
-
-    fun getMousePos() =
-        Vector2(
-            Gdx.input.x.toFloat(),
-            Gdx.input.y.toFloat()
-        )
 }

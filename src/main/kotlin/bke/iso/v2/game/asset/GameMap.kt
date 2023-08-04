@@ -10,6 +10,7 @@ class GameMap(val layers: List<Layer>) {
     }
 }
 
+// TODO: refactor this!
 class GameMapLoader : AssetLoader<GameMap> {
 
     override fun load(file: FilePointer): Pair<String, GameMap> {
