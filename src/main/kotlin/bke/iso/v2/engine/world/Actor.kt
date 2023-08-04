@@ -1,11 +1,12 @@
 package bke.iso.v2.engine.world
 
-import bke.iso.engine.entity.Component
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
+
+open class Component
 
 class Actor(
     val id: UUID,

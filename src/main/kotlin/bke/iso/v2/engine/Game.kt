@@ -1,6 +1,5 @@
 package bke.iso.v2.engine
 
-import bke.iso.engine.event.Event
 import bke.iso.v2.engine.asset.Assets
 import bke.iso.v2.engine.asset.TextureLoader
 import bke.iso.v2.engine.file.FileSystem
@@ -12,6 +11,8 @@ import bke.iso.v2.engine.world.World
 import bke.iso.v2.game.GameplayState
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
+
+open class Event
 
 abstract class Module {
     protected abstract val game: Game

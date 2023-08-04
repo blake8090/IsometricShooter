@@ -1,16 +1,14 @@
 package bke.iso.v2.game.actor
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.Bounds
-import bke.iso.engine.physics.Collider
-import bke.iso.engine.physics.Velocity
-import bke.iso.engine.render.DrawShadow
-import bke.iso.engine.render.Sprite
-import bke.iso.game.combat.Health
-import bke.iso.game.combat.HealthBar
-import bke.iso.game.entity.MovingPlatform
+import bke.iso.v2.engine.physics.Bounds
+import bke.iso.v2.engine.physics.Collider
+import bke.iso.v2.engine.physics.Velocity
+import bke.iso.v2.engine.render.Sprite
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.World
+import bke.iso.v2.game.Health
+import bke.iso.v2.game.HealthBar
 import com.badlogic.gdx.math.Vector3
 
 class Factory(private val world: World) {
@@ -25,8 +23,7 @@ class Factory(private val world: World) {
                 false
             ),
             Health(5f),
-            HealthBar(18f, -64f),
-            DrawShadow()
+            HealthBar(18f, -64f)
         )
 
     fun createWall(location: Location) =
@@ -49,7 +46,7 @@ class Factory(private val world: World) {
             )
         )
 
-    fun createTurret(location: Location)  =
+    fun createTurret(location: Location) =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("turret", 16f, 0f),

@@ -1,11 +1,10 @@
 package bke.iso.v2.engine.world
 
-import bke.iso.engine.entity.Component
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
-import bke.iso.engine.render.Sprite
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
+import bke.iso.v2.engine.render.Sprite
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
 import kotlin.math.ceil

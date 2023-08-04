@@ -1,14 +1,24 @@
 package bke.iso.v2.game
 
 import bke.iso.engine.log
-import bke.iso.game.combat.Health
-import bke.iso.game.entity.Player
 import bke.iso.v2.engine.world.Actor
+import bke.iso.v2.engine.world.Component
 import bke.iso.v2.engine.world.World
 import bke.iso.v2.game.actor.BulletType
+import bke.iso.v2.game.actor.Player
 import bke.iso.v2.game.actor.createBullet
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
+
+data class Health(
+    val maxValue: Float,
+    var value: Float = maxValue
+) : Component()
+
+data class HealthBar(
+    val offsetX: Float,
+    val offsetY: Float
+) : Component()
 
 class Combat(private val world: World) {
 

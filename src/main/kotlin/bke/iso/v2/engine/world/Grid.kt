@@ -1,7 +1,7 @@
 package bke.iso.v2.engine.world
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.render.Sprite
+import bke.iso.v2.engine.render.Sprite
 
 class Grid {
 

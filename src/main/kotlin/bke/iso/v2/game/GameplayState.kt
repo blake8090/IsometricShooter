@@ -1,18 +1,16 @@
 package bke.iso.v2.game
 
-import bke.iso.engine.event.Event
 import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.render.Sprite
-import bke.iso.game.combat.Health
-import bke.iso.game.combat.HealthBar
+import bke.iso.v2.engine.Event
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.GameState
 import bke.iso.v2.engine.input.InputState
 import bke.iso.v2.engine.input.KeyBinding
 import bke.iso.v2.engine.input.MouseBinding
 import bke.iso.v2.engine.render.DrawActorEvent
+import bke.iso.v2.engine.render.Sprite
 import bke.iso.v2.engine.render.withColor
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.game.actor.BulletSystem

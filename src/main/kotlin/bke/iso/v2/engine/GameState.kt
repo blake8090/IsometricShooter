@@ -1,7 +1,5 @@
 package bke.iso.v2.engine
 
-import bke.iso.engine.event.Event
-
 interface System {
     fun update(deltaTime: Float)
 }

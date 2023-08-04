@@ -1,14 +1,9 @@
 package bke.iso.v2.engine.physics
 
-import bke.iso.engine.entity.Component
 import bke.iso.engine.physics.BoxCollisionSide
 import bke.iso.engine.physics.CollisionData
 import bke.iso.v2.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
-
-data class FrameCollisions(
-    val collisions: MutableSet<Collision> = mutableSetOf()
-) : Component()
 
 /**
  * Contains details on an object's collision on another object.

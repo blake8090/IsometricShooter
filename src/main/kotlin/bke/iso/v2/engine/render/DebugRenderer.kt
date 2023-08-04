@@ -1,12 +1,5 @@
 package bke.iso.v2.engine.render
 
-import bke.iso.engine.render.debug.DebugBox
-import bke.iso.engine.render.debug.DebugCircle
-import bke.iso.engine.render.debug.DebugLine
-import bke.iso.engine.render.debug.DebugPoint
-import bke.iso.engine.render.debug.DebugRectangle
-import bke.iso.engine.render.debug.DebugShapeDrawer
-import bke.iso.engine.render.debug.DebugSphere
 import bke.iso.engine.math.Box
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
