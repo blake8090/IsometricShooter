@@ -1,6 +1,5 @@
 package bke.iso.v2.game
 
-import bke.iso.engine.log
 import bke.iso.v2.engine.world.Actor
 import bke.iso.v2.engine.world.Component
 import bke.iso.v2.engine.world.World
@@ -8,6 +7,7 @@ import bke.iso.v2.game.actor.BulletType
 import bke.iso.v2.game.actor.Player
 import bke.iso.v2.game.actor.createBullet
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 import kotlin.math.max
 
 data class Health(
@@ -21,6 +21,8 @@ data class HealthBar(
 ) : Component()
 
 class Combat(private val world: World) {
+
+    private val log = KotlinLogging.logger {}
 
     fun shoot(shooter: Actor, target: Vector3, bulletType: BulletType) {
         val pos = shooter.pos

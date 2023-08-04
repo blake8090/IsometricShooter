@@ -1,8 +1,8 @@
 package bke.iso.v2.engine.asset
 
-import bke.iso.engine.log
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
+import mu.KotlinLogging
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.reflect.KClass
@@ -17,8 +17,9 @@ private const val ASSETS_DIRECTORY = "assets"
 
 class Assets(override val game: Game) : Module() {
 
-    private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
+    private val log = KotlinLogging.logger {}
 
+    private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assets = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
 
     fun addLoader(fileExtension: String, loader: AssetLoader<*>) {

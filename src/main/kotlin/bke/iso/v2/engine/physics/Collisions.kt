@@ -1,6 +1,5 @@
 package bke.iso.v2.engine.physics
 
-import bke.iso.engine.log
 import bke.iso.v2.engine.math.Box
 import bke.iso.v2.engine.math.getRay
 import bke.iso.v2.engine.Game
@@ -12,10 +11,13 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
+import mu.KotlinLogging
 import kotlin.math.ceil
 import kotlin.math.floor
 
 class Collisions(override val game: Game) : Module() {
+
+    private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<FrameCollisions> { actor, _ ->

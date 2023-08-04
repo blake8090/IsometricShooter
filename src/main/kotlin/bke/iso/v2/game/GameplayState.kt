@@ -1,6 +1,5 @@
 package bke.iso.v2.game
 
-import bke.iso.engine.log
 import bke.iso.v2.engine.math.Location
 import bke.iso.v2.engine.math.toScreen
 import bke.iso.v2.engine.Event
@@ -23,8 +22,11 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import mu.KotlinLogging
 
 class GameplayState(private val game: Game) : GameState(game) {
+
+    private val log = KotlinLogging.logger {}
 
     private val factory = Factory(game.world)
     private val combat = Combat(game.world)

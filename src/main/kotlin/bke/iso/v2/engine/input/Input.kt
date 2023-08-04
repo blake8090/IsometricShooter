@@ -1,8 +1,8 @@
 package bke.iso.v2.engine.input
 
-import bke.iso.engine.log
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
+import mu.KotlinLogging
 
 enum class InputState {
     UP,
@@ -14,6 +14,8 @@ enum class InputState {
 open class Binding
 
 class Input(override val game: Game) : Module() {
+
+    private val log = KotlinLogging.logger {}
 
     private val keyInput = KeyInput()
     private val mouseInput = MouseInput()
