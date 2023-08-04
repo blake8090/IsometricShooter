@@ -1,9 +1,6 @@
 package bke.iso.v2.engine.asset
 
 import bke.iso.engine.FilePointer
-import bke.iso.engine.asset.ASSETS_DIRECTORY
-import bke.iso.engine.asset.Asset
-import bke.iso.engine.asset.AssetLoader
 import bke.iso.engine.log
 import bke.iso.v2.engine.Game
 import bke.iso.v2.engine.Module
@@ -11,6 +8,13 @@ import java.io.File
 import kotlin.io.path.Path
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
+
+data class Asset<T>(
+    val name: String,
+    val value: T
+)
+
+private const val ASSETS_DIRECTORY = "assets"
 
 class Assets(game: Game) : Module(game) {
 

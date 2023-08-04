@@ -8,8 +8,6 @@ import bke.iso.engine.log
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.Sprite
-import bke.iso.game.asset.GameMap
-import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.v2.engine.Game
@@ -21,6 +19,8 @@ import bke.iso.v2.game.actor.BulletSystem
 import bke.iso.v2.game.actor.Factory
 import bke.iso.v2.game.actor.PlayerSystem
 import bke.iso.v2.game.actor.TurretSystem
+import bke.iso.v2.game.asset.GameMap
+import bke.iso.v2.game.asset.GameMapLoader
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
