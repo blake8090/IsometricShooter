@@ -17,8 +17,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.reflections:reflections:0.10.2")
 
-    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:1.11.0")
-    implementation("com.badlogicgames.gdx:gdx-platform:1.11.0:natives-desktop")
+    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.0")
+    implementation("com.badlogicgames.gdx:gdx-platform:1.12.0:natives-desktop")
+    implementation("com.badlogicgames.gdx:gdx-freetype:1.12.0")
+    implementation("com.badlogicgames.gdx:gdx-freetype-platform:1.12.0:natives-desktop")
     implementation("io.github.libktx:ktx-async:1.12.0-rc1")
     implementation("space.earlygrey:shapedrawer:2.6.0")
 

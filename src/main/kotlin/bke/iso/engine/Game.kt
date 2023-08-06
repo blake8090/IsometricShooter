@@ -1,5 +1,7 @@
 package bke.iso.engine
 
+import bke.iso.engine.asset.Assets
+import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
 import bke.iso.engine.asset.TextureLoader
 import bke.iso.engine.file.FileSystem
 import bke.iso.engine.input.Input
@@ -24,7 +26,7 @@ abstract class Module {
 }
 
 class Game {
-    val assets = bke.iso.engine.asset.Assets(this)
+    val assets = Assets(this)
     val fileSystem = FileSystem()
     val input = Input(this)
     val collisions = Collisions(this)
@@ -38,6 +40,7 @@ class Game {
     fun start() {
         assets.addLoader("jpg", TextureLoader())
         assets.addLoader("png", TextureLoader())
+        assets.addLoader("ttf", FreeTypeFontGeneratorLoader())
         switchState(GameplayState::class)
     }
 

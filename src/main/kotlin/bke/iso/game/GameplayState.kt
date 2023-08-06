@@ -140,5 +140,8 @@ class GameplayState(private val game: Game) : GameState(game) {
             val width = healthBarWidth * ratio
             batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
         }
+
+        val font = game.assets.getFont("roboto", 16f)
+        font.draw(batch, "health: ${health.value}/${health.maxValue}", pos.x, pos.y)
     }
 }
