@@ -31,4 +31,8 @@ class App(title: String) : ApplicationAdapter() {
     override fun dispose() {
         game.stop()
     }
+
+    override fun resize(width: Int, height: Int) {
+        game.resize(width, height)
+    }
 }

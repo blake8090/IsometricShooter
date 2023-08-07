@@ -33,6 +33,8 @@ class Renderer(override val game: Game) : Module() {
     private val shapeDrawer = DebugShapeDrawer(batch)
     private var debugEnabled = false
 
+    private val fonts = Fonts(game.assets)
+
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
         camera.position.x = pos.x
@@ -56,6 +58,22 @@ class Renderer(override val game: Game) : Module() {
         val pixmap = texture.textureData.consumePixmap()
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot))
         pixmap.dispose()
+    }
+
+    fun drawFont(
+        name: String,
+        text: String,
+        size: Float,
+        x: Float,
+        y: Float,
+        color: Color = Color.WHITE
+    ) {
+        val font = fonts[FontOptions(name, size, color)]
+        font.draw(batch, text, x, y)
+    }
+
+    fun resize(width: Int, height: Int) {
+        fonts.reload()
     }
 
     fun render() {

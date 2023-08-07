@@ -141,7 +141,13 @@ class GameplayState(private val game: Game) : GameState(game) {
             batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
         }
 
-        val font = game.assets.getFont("roboto", 16f)
-        font.draw(batch, "health: ${health.value}/${health.maxValue}", pos.x, pos.y)
+        val textPos = toScreen(actor.pos)
+        game.renderer.drawFont(
+            "roboto",
+            "health: ${health.value}/${health.maxValue}",
+            16f,
+            textPos.x,
+            textPos.y
+        )
     }
 }
