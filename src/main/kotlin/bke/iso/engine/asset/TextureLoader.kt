@@ -8,7 +8,8 @@ class TextureLoader : AssetLoader<Texture> {
 
     override fun load(file: File): Pair<String, Texture> {
         val name = file.nameWithoutExtension
-        val value = Texture(FileHandle(file))
-        return name to value
+        val texture = Texture(FileHandle(file), true)
+        texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Nearest)
+        return name to texture
     }
 }

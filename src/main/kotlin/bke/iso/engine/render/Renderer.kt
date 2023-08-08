@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 
 data class DrawActorEvent(
     val actor: Actor,
@@ -27,13 +28,18 @@ data class DrawActorEvent(
 class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
-    private val camera = OrthographicCamera(1920f, 1080f)
+    private val camera = OrthographicCamera()
+    private val viewport = ExtendViewport(800f, 800f, camera)
 
     val debugRenderer = DebugRenderer()
     private val shapeDrawer = DebugShapeDrawer(batch)
     private var debugEnabled = false
 
     private val fonts = Fonts(game.assets)
+
+    init {
+        viewport.apply()
+    }
 
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
@@ -73,6 +79,7 @@ class Renderer(override val game: Game) : Module() {
     }
 
     fun resize(width: Int, height: Int) {
+        viewport.update(width, height)
         fonts.reload()
     }
 
@@ -80,7 +87,7 @@ class Renderer(override val game: Game) : Module() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        camera.update()
+        viewport.apply()
         batch.projectionMatrix = camera.combined
 
         batch.begin()
