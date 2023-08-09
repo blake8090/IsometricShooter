@@ -15,6 +15,7 @@ import bke.iso.engine.render.withColor
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.Factory
+import bke.iso.game.actor.Player
 import bke.iso.game.actor.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.asset.GameMap
@@ -32,7 +33,7 @@ class GameplayState(private val game: Game) : GameState(game) {
     private val factory = Factory(game.world)
     private val combat = Combat(game.world)
 
-    override val systems: Set<System> = setOf<System>(
+    override val systems: Set<System> = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
         TurretSystem(game.world, game.collisions, game.renderer.debugRenderer, combat),
         BulletSystem(game.world, combat)
@@ -59,7 +60,7 @@ class GameplayState(private val game: Game) : GameState(game) {
 
         bindInput()
 
-        game.ui.pushScreen(GameHUD(game.assets.fonts))
+        game.ui.pushScreen(GameHUD(game.assets))
     }
 
     override fun handleEvent(event: Event) {
@@ -123,6 +124,11 @@ class GameplayState(private val game: Game) : GameState(game) {
     }
 
     private fun drawHealthBar(actor: Actor, batch: PolygonSpriteBatch) {
+        // we already display the player's health in the HUD!
+        if (actor.has<Player>()) {
+            return
+        }
+
         val healthBarWidth = 32f
         val healthBarHeight = 8f
 
@@ -142,14 +148,5 @@ class GameplayState(private val game: Game) : GameState(game) {
             val width = healthBarWidth * ratio
             batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
         }
-
-        val textPos = toScreen(actor.pos)
-        game.renderer.drawFont(
-            "roboto",
-            "health: ${health.value}/${health.maxValue}",
-            16f,
-            textPos.x,
-            textPos.y
-        )
     }
 }
