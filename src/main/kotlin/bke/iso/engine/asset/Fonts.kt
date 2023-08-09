@@ -4,9 +4,11 @@ import bke.iso.old.engine.log
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import java.io.File
+import kotlin.math.ceil
 
 class Fonts(private val assets: Assets) {
 
@@ -17,9 +19,14 @@ class Fonts(private val assets: Assets) {
 
     private fun generateFont(options: FontOptions): BitmapFont {
         val generator = assets.get<FreeTypeFontGenerator>(options.name)
-        val pixels = (options.dp * Gdx.graphics.density).toInt()
         val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
-        parameter.size = pixels
+//        val pixels = (options.dp * Gdx.graphics.density).toInt()
+//        parameter.size = pixels
+        val pixels = (options.dp * Gdx.graphics.density)
+        parameter.size = ceil(pixels).toInt()
+        generator.scaleForPixelHeight(ceil(pixels).toInt())
+        parameter.minFilter = Texture.TextureFilter.Nearest
+        parameter.magFilter = Texture.TextureFilter.MipMapLinearNearest
         parameter.color = options.color
         log.debug("Generated font ${options.name}, $options, pixels $pixels")
         return generator.generateFont(parameter)

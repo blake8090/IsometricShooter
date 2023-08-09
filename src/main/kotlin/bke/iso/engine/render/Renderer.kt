@@ -30,7 +30,7 @@ class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
     private val camera = OrthographicCamera()
-    private val viewport = ExtendViewport(800f, 800f, camera)
+    private val viewport = ExtendViewport(1280f, 720f, camera)
 
     val debugRenderer = DebugRenderer()
     private val shapeDrawer = DebugShapeDrawer(batch)

@@ -66,6 +66,7 @@ class Game {
 
     fun resize(width: Int, height: Int) {
         log.info("Resizing to ${width}x$height")
+        assets.resize()
         renderer.resize(width, height)
         ui.resize(width, height)
     }
