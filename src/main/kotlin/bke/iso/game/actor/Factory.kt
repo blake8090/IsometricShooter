@@ -13,19 +13,6 @@ import com.badlogic.gdx.math.Vector3
 
 class Factory(private val world: World) {
 
-    fun createPlayer(location: Location) =
-        world.newActor(
-            location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
-            Sprite("player", 32f, 0f),
-            Player(),
-            Collider(
-                Bounds(Vector3(0.5f, 0.5f, 1.6f)),
-                false
-            ),
-            Health(5f),
-            HealthBar(18f, -64f)
-        )
-
     fun createWall(location: Location) =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),

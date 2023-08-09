@@ -15,9 +15,11 @@ import bke.iso.engine.render.withColor
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.Factory
+import bke.iso.game.actor.PLAYER_MAX_HEALTH
 import bke.iso.game.actor.Player
 import bke.iso.game.actor.PlayerSystem
 import bke.iso.game.actor.TurretSystem
+import bke.iso.game.actor.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import com.badlogic.gdx.Input
@@ -31,7 +33,7 @@ class GameplayState(private val game: Game) : GameState(game) {
     private val log = KotlinLogging.logger {}
 
     private val factory = Factory(game.world)
-    private val combat = Combat(game.world)
+    private val combat = Combat(game.world, game.events)
 
     override val systems: Set<System> = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
@@ -61,11 +63,19 @@ class GameplayState(private val game: Game) : GameState(game) {
         bindInput()
 
         game.ui.pushScreen(GameHUD(game.assets))
+        game.events.fire(GameHudUpdateEvent(PLAYER_MAX_HEALTH))
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
             is DrawActorEvent -> drawHealthBar(event.actor, event.batch)
+
+            is OnDamagePlayerEvent -> game.events.fire(
+                GameHudUpdateEvent(
+                    PLAYER_MAX_HEALTH,
+                    event.health
+                )
+            )
         }
     }
 
@@ -112,7 +122,7 @@ class GameplayState(private val game: Game) : GameState(game) {
 
     private fun readEntity(char: Char, location: Location) {
         when (char) {
-            'p' -> factory.createPlayer(location)
+            'p' -> game.world.createPlayer(location)
             '#' -> factory.createWall(location)
             'x' -> factory.createBox(location)
             't' -> factory.createTurret(location)

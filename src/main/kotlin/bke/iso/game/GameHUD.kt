@@ -1,5 +1,6 @@
 package bke.iso.game
 
+import bke.iso.engine.Event
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.ui.UIScreen
@@ -13,11 +14,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import mu.KotlinLogging
+import kotlin.reflect.cast
 
 private const val HUD_HEALTH_BAR_NAME = "healthBar"
 
+data class GameHudUpdateEvent(
+    val maxHealth: Float,
+    val currentHealth: Float = maxHealth
+) : Event()
+
 class GameHUD(private val assets: Assets) : UIScreen() {
 
+    private val log = KotlinLogging.logger {}
     private val skin = Skin()
 
     override fun create() {
@@ -65,6 +74,15 @@ class GameHUD(private val assets: Assets) : UIScreen() {
                 skin.newDrawable("white", Color.GREEN)
             )
         )
+    }
+
+    override fun handleEvent(event: Event) {
+        if (event is GameHudUpdateEvent) {
+            log.debug { "updating hud: $event" }
+            val actor = HudHealthBar::class.cast(stage.root.findActor(HUD_HEALTH_BAR_NAME))
+            actor.maxValue = event.maxHealth
+            actor.value = event.currentHealth
+        }
     }
 
     override fun dispose() {

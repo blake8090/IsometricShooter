@@ -1,5 +1,7 @@
 package bke.iso.game
 
+import bke.iso.engine.Event
+import bke.iso.engine.Game
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
@@ -20,7 +22,14 @@ data class HealthBar(
     val offsetY: Float
 ) : Component()
 
-class Combat(private val world: World) {
+data class OnDamagePlayerEvent(
+    val health: Float
+) : Event()
+
+class Combat(
+    private val world: World,
+    private val events: Game.Events
+) {
 
     private val log = KotlinLogging.logger {}
 
@@ -34,6 +43,11 @@ class Combat(private val world: World) {
         val health = actor.components[Health::class] ?: return
         health.value = max(health.value - damage, 0f)
         log.trace("Actor received damage: $damage Remaining health: ${health.value}")
+
+        if (actor.has<Player>()) {
+            events.fire(OnDamagePlayerEvent(health.value))
+        }
+
         if (health.value == 0f) {
             onDeath(actor)
         }
