@@ -58,6 +58,8 @@ class GameplayState(private val game: Game) : GameState(game) {
             }
 
         bindInput()
+
+        game.ui.pushScreen(GameHUD(game.assets.fonts))
     }
 
     override fun handleEvent(event: Event) {

@@ -1,7 +1,5 @@
-package bke.iso.engine.render
+package bke.iso.engine.asset
 
-import bke.iso.engine.asset.AssetLoader
-import bke.iso.engine.asset.Assets
 import bke.iso.old.engine.log
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle

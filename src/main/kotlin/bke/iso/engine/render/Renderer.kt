@@ -3,6 +3,7 @@ package bke.iso.engine.render
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
@@ -12,7 +13,7 @@ import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -34,8 +35,6 @@ class Renderer(override val game: Game) : Module() {
     val debugRenderer = DebugRenderer()
     private val shapeDrawer = DebugShapeDrawer(batch)
     private var debugEnabled = false
-
-    private val fonts = Fonts(game.assets)
 
     init {
         viewport.apply()
@@ -74,18 +73,17 @@ class Renderer(override val game: Game) : Module() {
         y: Float,
         color: Color = Color.WHITE
     ) {
-        val font = fonts[FontOptions(name, size, color)]
+        val font = game.assets.fonts[FontOptions(name, size, color)]
         font.draw(batch, text, x, y)
     }
 
     fun resize(width: Int, height: Int) {
         viewport.update(width, height)
-        fonts.reload()
     }
 
     fun render() {
         Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT)
 
         viewport.apply()
         batch.projectionMatrix = camera.combined

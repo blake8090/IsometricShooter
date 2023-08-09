@@ -6,8 +6,9 @@ import bke.iso.engine.file.FileSystem
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.Collisions
 import bke.iso.engine.physics.Physics
-import bke.iso.engine.render.FreeTypeFontGeneratorLoader
+import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.game.GameplayState
 import bke.iso.old.engine.log
@@ -35,6 +36,7 @@ class Game {
     val renderer = Renderer(this)
     val world = World(this)
     val events = Events()
+    val ui = UI(this)
 
     private var state: GameState = EmptyState(this)
 
@@ -59,11 +61,13 @@ class Game {
         renderer.render()
         collisions.update(deltaTime)
         world.update(deltaTime)
+        ui.update(deltaTime)
     }
 
     fun resize(width: Int, height: Int) {
         log.info("Resizing to ${width}x$height")
         renderer.resize(width, height)
+        ui.resize(width, height)
     }
 
     fun <T : GameState> switchState(stateClass: KClass<T>) {
