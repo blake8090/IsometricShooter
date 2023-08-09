@@ -1,5 +1,6 @@
 package bke.iso.engine.ui
 
+import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 
@@ -22,5 +23,9 @@ class UI(override val game: Game) : Module() {
     fun pushScreen(screen: UIScreen) {
         screen.create()
         screens.addFirst(screen)
+    }
+
+    fun handleEvent(event: Event) {
+        screens.forEach { screen -> screen.handleEvent(event) }
     }
 }

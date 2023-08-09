@@ -80,6 +80,7 @@ class Game {
     inner class Events {
         fun fire(event: Event) {
             state.handleEvent(event)
+            ui.handleEvent(event)
         }
     }
 }
