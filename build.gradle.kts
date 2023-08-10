@@ -21,6 +21,8 @@ dependencies {
     implementation("com.badlogicgames.gdx:gdx-platform:1.12.0:natives-desktop")
     implementation("com.badlogicgames.gdx:gdx-freetype:1.12.0")
     implementation("com.badlogicgames.gdx:gdx-freetype-platform:1.12.0:natives-desktop")
+    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-core:2.2.3")
+    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-desktop:2.2.3")
     implementation("io.github.libktx:ktx-async:1.12.0-rc1")
     implementation("space.earlygrey:shapedrawer:2.6.0")
 
@@ -41,7 +43,7 @@ application {
     mainClass.set("bke.iso.MainKt")
 }
 
-tasks.withType<Test>() {
+tasks.withType<Test> {
     useJUnitPlatform()
 }
 
