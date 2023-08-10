@@ -1,12 +1,10 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.TextureLoader
 import bke.iso.engine.file.FileSystem
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.Collisions
 import bke.iso.engine.physics.Physics
-import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
@@ -15,17 +13,7 @@ import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-open class Event
-
-abstract class Module {
-    protected abstract val game: Game
-
-    open fun start() {}
-
-    open fun update(deltaTime: Float) {}
-
-    open fun stop() {}
-}
+abstract class Event
 
 class Game {
 
@@ -45,9 +33,7 @@ class Game {
     private var loader: Loader = Loader()
 
     fun start() {
-        assets.addLoader("jpg", TextureLoader())
-        assets.addLoader("png", TextureLoader())
-        assets.addLoader("ttf", FreeTypeFontGeneratorLoader())
+        assets.setup()
         switchState(MainMenuState::class)
     }
 
@@ -87,7 +73,6 @@ class Game {
     fun <T : GameState> switchState(stateClass: KClass<T>) {
         log.debug { "switching to state ${stateClass.simpleName}" }
         val instance = stateClass.primaryConstructor!!.call(this)
-        state.stop()
         state = instance
         instance.start()
     }
@@ -104,4 +89,12 @@ class Game {
             ui.handleEvent(event)
         }
     }
+}
+
+abstract class Module {
+    protected abstract val game: Game
+
+    open fun update(deltaTime: Float) {}
+
+    open fun stop() {}
 }

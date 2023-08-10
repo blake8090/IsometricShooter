@@ -31,7 +31,7 @@ private const val MAX_BULLET_DISTANCE = 50f
 class BulletSystem(
     private val world: World,
     private val combat: Combat
-) : System {
+) : System() {
 
     override fun update(deltaTime: Float) {
         world.actorsWith<Bullet> { actor, bullet ->

@@ -30,7 +30,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import mu.KotlinLogging
 
-class GameplayState(private val game: Game) : GameState(game) {
+class GameplayState(override val game: Game) : GameState() {
 
     private val log = KotlinLogging.logger {}
 

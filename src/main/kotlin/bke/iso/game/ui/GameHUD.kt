@@ -22,7 +22,6 @@ private const val HUD_HEALTH_BAR_NAME = "healthBar"
 class GameHUD(private val assets: Assets) : UIScreen() {
 
     private val log = KotlinLogging.logger {}
-    private val skin = Skin()
 
     override fun create() {
         super.create()
@@ -78,11 +77,6 @@ class GameHUD(private val assets: Assets) : UIScreen() {
             actor.maxValue = event.maxHealth
             actor.value = event.currentHealth
         }
-    }
-
-    override fun dispose() {
-        super.dispose()
-        skin.dispose()
     }
 
     class UpdateEvent(

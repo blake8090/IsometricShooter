@@ -7,12 +7,9 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 
 class LoadingScreen(private val assets: Assets) : UIScreen() {
-
-    private val skin = Skin()
 
     override fun create() {
         super.create()
@@ -27,11 +24,6 @@ class LoadingScreen(private val assets: Assets) : UIScreen() {
         table.add(Label("Loading...", skin))
             .padRight(50f)
             .padBottom(50f)
-    }
-
-    override fun dispose() {
-        super.dispose()
-        skin.dispose()
     }
 
     private fun setup() {

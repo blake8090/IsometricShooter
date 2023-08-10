@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
@@ -24,7 +23,6 @@ class MainMenuScreen(
 ) : UIScreen() {
 
     private val log = KotlinLogging.logger {}
-    private val skin = Skin()
 
     override fun create() {
         super.create()
@@ -91,10 +89,5 @@ class MainMenuScreen(
             over = skin.newDrawable("white", Color.BLUE)
             font = skin.getFont("button")
         })
-    }
-
-    override fun dispose() {
-        super.dispose()
-        skin.dispose()
     }
 }

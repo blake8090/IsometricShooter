@@ -6,7 +6,7 @@ import bke.iso.engine.GameState
 import bke.iso.engine.System
 import bke.iso.game.ui.MainMenuScreen
 
-class MainMenuState(private val game: Game) : GameState(game) {
+class MainMenuState(override val game: Game) : GameState() {
 
     override val systems: Set<System> = emptySet()
 

@@ -72,4 +72,10 @@ class Assets(override val game: Game) : Module() {
     fun resize() {
         fonts.reload()
     }
+
+    fun setup() {
+        addLoader("jpg", TextureLoader())
+        addLoader("png", TextureLoader())
+        addLoader("ttf", FreeTypeFontGeneratorLoader())
+    }
 }
