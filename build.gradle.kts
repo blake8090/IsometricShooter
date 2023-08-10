@@ -32,8 +32,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("org.mockito:mockito-core:5.3.0")
     testImplementation("io.kotest:kotest-runner-junit5:5.6.2")
     testImplementation("io.kotest:kotest-assertions-core:5.6.2")
     testImplementation("io.mockk:mockk:1.13.5")
