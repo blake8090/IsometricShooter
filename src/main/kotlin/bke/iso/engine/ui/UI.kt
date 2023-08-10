@@ -20,14 +20,10 @@ class UI(override val game: Game) : Module() {
         screens.forEach { screen -> screen.resize(width, height) }
     }
 
-    fun pushScreen(screen: UIScreen) {
-        screen.create()
-        screens.addFirst(screen)
-    }
-
-    fun clearScreens() {
+    fun setScreen(screen: UIScreen) {
         screens.forEach(UIScreen::dispose)
         screens.clear()
+        screens.addFirst(screen)
     }
 
     fun handleEvent(event: Event) {

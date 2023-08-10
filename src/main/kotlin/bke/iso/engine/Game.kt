@@ -28,6 +28,7 @@ abstract class Module {
 }
 
 class Game {
+
     val assets = Assets(this)
     val fileSystem = FileSystem()
     val input = Input(this)
@@ -39,6 +40,7 @@ class Game {
     val ui = UI(this)
 
     private var state: GameState = EmptyState(this)
+    private var loader: Loader = Loader()
 
     fun start() {
         assets.addLoader("jpg", TextureLoader())
@@ -52,6 +54,14 @@ class Game {
     }
 
     fun update(deltaTime: Float) {
+        if (!loader.isLoading) {
+            runFrame(deltaTime)
+        }
+
+        ui.update(deltaTime)
+    }
+
+    private fun runFrame(deltaTime: Float) {
         input.update(deltaTime)
         physics.update(deltaTime)
 
@@ -63,7 +73,6 @@ class Game {
         renderer.render()
         collisions.update(deltaTime)
         world.update(deltaTime)
-        ui.update(deltaTime)
     }
 
     fun resize(width: Int, height: Int) {
@@ -78,6 +87,12 @@ class Game {
         state.stop()
         state = instance
         instance.start()
+    }
+
+    fun load(init: Loader.() -> Unit) {
+        loader.init()
+        loader.screen?.let(ui::setScreen)
+        loader.start()
     }
 
     inner class Events {

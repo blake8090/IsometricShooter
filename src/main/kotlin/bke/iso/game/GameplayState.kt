@@ -23,6 +23,7 @@ import bke.iso.game.actor.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.ui.GameHUD
+import bke.iso.game.ui.LoadingScreen
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -43,29 +44,36 @@ class GameplayState(private val game: Game) : GameState(game) {
     )
 
     override fun start() {
-        game.assets.addLoader("map2", GameMapLoader())
-        game.assets.load("game")
-        game.renderer.setCursor("cursor")
+        game.load {
+            screen = LoadingScreen(game.assets)
 
-        loadMap()
-        factory.createLampPost(Location(4, 4, 0))
-        factory.createLampPost(Location(8, 4, 0))
-        factory.createPillar(Location(12, 12, 0))
-            .apply {
-                x -= 0.5f
-                y += 0.5f
+            onLoad = {
+                game.assets.addLoader("map2", GameMapLoader())
+                game.assets.load("game")
+
+                loadMap()
+                factory.createLampPost(Location(4, 4, 0))
+                factory.createLampPost(Location(8, 4, 0))
+                factory.createPillar(Location(12, 12, 0))
+                    .apply {
+                        x -= 0.5f
+                        y += 0.5f
+                    }
+                factory.createPillar(Location(10, 12, 0))
+                    .apply {
+                        x -= 0.5f
+                        y += 0.5f
+                    }
+
+                bindInput()
             }
-        factory.createPillar(Location(10, 12, 0))
-            .apply {
-                x -= 0.5f
-                y += 0.5f
+
+            onFinish = {
+                game.renderer.setCursor("cursor")
+                game.ui.setScreen(GameHUD(game.assets))
+                game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
             }
-
-        bindInput()
-
-        game.ui.clearScreens()
-        game.ui.pushScreen(GameHUD(game.assets))
-        game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
+        }
     }
 
     override fun handleEvent(event: Event) {
