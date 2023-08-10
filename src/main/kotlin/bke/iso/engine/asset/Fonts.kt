@@ -1,16 +1,18 @@
 package bke.iso.engine.asset
 
-import bke.iso.old.engine.log
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import mu.KotlinLogging
 import java.io.File
 import kotlin.math.ceil
 
 class Fonts(private val assets: Assets) {
+
+    private val log = KotlinLogging.logger {}
 
     private val cache = mutableMapOf<FontOptions, BitmapFont>()
 
@@ -28,12 +30,12 @@ class Fonts(private val assets: Assets) {
         parameter.minFilter = Texture.TextureFilter.Nearest
         parameter.magFilter = Texture.TextureFilter.MipMapLinearNearest
         parameter.color = options.color
-        log.debug("Generated font ${options.name}, $options, pixels $pixels")
+        log.debug { "Generated font ${options.name}, $options, pixels $pixels" }
         return generator.generateFont(parameter)
     }
 
     fun reload() {
-        log.debug("Reloading fonts")
+        log.debug { "Reloading fonts" }
         for (options in cache.keys) {
             cache[options] = generateFont(options)
         }

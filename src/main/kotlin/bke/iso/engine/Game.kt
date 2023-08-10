@@ -11,7 +11,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
-import bke.iso.old.engine.log
+import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -28,6 +28,8 @@ abstract class Module {
 }
 
 class Game {
+
+    private val log = KotlinLogging.logger {}
 
     val assets = Assets(this)
     val fileSystem = FileSystem()
@@ -50,7 +52,7 @@ class Game {
     }
 
     fun stop() {
-        log.info("Stopping game")
+        log.info { "Stopping game" }
     }
 
     fun update(deltaTime: Float) {
@@ -83,6 +85,7 @@ class Game {
     }
 
     fun <T : GameState> switchState(stateClass: KClass<T>) {
+        log.debug { "switching to state ${stateClass.simpleName}" }
         val instance = stateClass.primaryConstructor!!.call(this)
         state.stop()
         state = instance
