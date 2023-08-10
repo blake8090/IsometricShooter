@@ -25,6 +25,11 @@ class UI(override val game: Game) : Module() {
         screens.addFirst(screen)
     }
 
+    fun clearScreens() {
+        screens.forEach(UIScreen::dispose)
+        screens.clear()
+    }
+
     fun handleEvent(event: Event) {
         screens.forEach { screen -> screen.handleEvent(event) }
     }

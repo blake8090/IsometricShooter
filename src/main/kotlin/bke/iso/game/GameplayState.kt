@@ -22,6 +22,7 @@ import bke.iso.game.actor.TurretSystem
 import bke.iso.game.actor.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
+import bke.iso.game.ui.GameHUD
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -62,8 +63,9 @@ class GameplayState(private val game: Game) : GameState(game) {
 
         bindInput()
 
+        game.ui.clearScreens()
         game.ui.pushScreen(GameHUD(game.assets))
-        game.events.fire(GameHudUpdateEvent(PLAYER_MAX_HEALTH))
+        game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
     }
 
     override fun handleEvent(event: Event) {
@@ -71,7 +73,7 @@ class GameplayState(private val game: Game) : GameState(game) {
             is DrawActorEvent -> drawHealthBar(event.actor, event.batch)
 
             is OnDamagePlayerEvent -> game.events.fire(
-                GameHudUpdateEvent(
+                GameHUD.UpdateEvent(
                     PLAYER_MAX_HEALTH,
                     event.health
                 )

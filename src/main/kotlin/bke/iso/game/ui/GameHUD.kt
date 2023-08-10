@@ -1,4 +1,4 @@
-package bke.iso.game
+package bke.iso.game.ui
 
 import bke.iso.engine.Event
 import bke.iso.engine.asset.Assets
@@ -18,11 +18,6 @@ import mu.KotlinLogging
 import kotlin.reflect.cast
 
 private const val HUD_HEALTH_BAR_NAME = "healthBar"
-
-data class GameHudUpdateEvent(
-    val maxHealth: Float,
-    val currentHealth: Float = maxHealth
-) : Event()
 
 class GameHUD(private val assets: Assets) : UIScreen() {
 
@@ -77,7 +72,7 @@ class GameHUD(private val assets: Assets) : UIScreen() {
     }
 
     override fun handleEvent(event: Event) {
-        if (event is GameHudUpdateEvent) {
+        if (event is UpdateEvent) {
             log.debug { "updating hud: $event" }
             val actor = HudHealthBar::class.cast(stage.root.findActor(HUD_HEALTH_BAR_NAME))
             actor.maxValue = event.maxHealth
@@ -89,6 +84,11 @@ class GameHUD(private val assets: Assets) : UIScreen() {
         super.dispose()
         skin.dispose()
     }
+
+    class UpdateEvent(
+        val maxHealth: Float,
+        val currentHealth: Float = maxHealth
+    ) : Event()
 }
 
 private class HudHealthBar(

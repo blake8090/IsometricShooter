@@ -10,7 +10,7 @@ import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
-import bke.iso.game.GameplayState
+import bke.iso.game.MainMenuState
 import bke.iso.old.engine.log
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -44,10 +44,12 @@ class Game {
         assets.addLoader("jpg", TextureLoader())
         assets.addLoader("png", TextureLoader())
         assets.addLoader("ttf", FreeTypeFontGeneratorLoader())
-        switchState(GameplayState::class)
+        switchState(MainMenuState::class)
     }
 
-    fun stop() {}
+    fun stop() {
+        log.info("Stopping game")
+    }
 
     fun update(deltaTime: Float) {
         input.update(deltaTime)
