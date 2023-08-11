@@ -30,10 +30,11 @@ class Input(override val game: Game) : Module() {
         }
     }
 
-    // TODO: improve binding api
-    fun bind(action: String, binding: Binding) {
-        keyboardMouseSource.bind(action, binding)
-        controllerSource.bind(action, binding)
+    fun bind(vararg bindings: Pair<String, Binding>) {
+        bindings.forEach { (action, binding) ->
+            keyboardMouseSource.bind(action, binding)
+            controllerSource.bind(action, binding)
+        }
     }
 
     fun poll(action: String): Float {

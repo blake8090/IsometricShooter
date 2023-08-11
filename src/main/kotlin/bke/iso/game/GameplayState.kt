@@ -24,11 +24,11 @@ import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.ui.GameHUD
 import bke.iso.game.ui.LoadingScreen
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import mu.KotlinLogging
-import com.badlogic.gdx.Input as GdxInput
 
 class GameplayState(override val game: Game) : GameState() {
 
@@ -90,20 +90,21 @@ class GameplayState(override val game: Game) : GameState() {
     }
 
     private fun bindInput() {
-        log.debug("binding actions")
-        game.input.bind("toggleDebug", KeyBinding(GdxInput.Keys.M, ButtonState.PRESSED))
-        game.input.bind("moveLeft", KeyBinding(GdxInput.Keys.A, ButtonState.DOWN))
-        game.input.bind("moveRight", KeyBinding(GdxInput.Keys.D, ButtonState.DOWN))
-        game.input.bind("moveUp", KeyBinding(GdxInput.Keys.W, ButtonState.DOWN))
-        game.input.bind("moveDown", KeyBinding(GdxInput.Keys.S, ButtonState.DOWN))
-        game.input.bind("run", KeyBinding(GdxInput.Keys.SHIFT_LEFT, ButtonState.DOWN))
-        game.input.bind("shoot", MouseBinding(GdxInput.Buttons.LEFT, ButtonState.PRESSED))
+        log.debug { "binding actions" }
 
-        game.input.bind("flyUp", KeyBinding(GdxInput.Keys.E, ButtonState.DOWN))
-        game.input.bind("flyDown", KeyBinding(GdxInput.Keys.Q, ButtonState.DOWN))
+        game.input.bind(
+            "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
+            "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
 
-        game.input.bind("placeBouncyBall", KeyBinding(GdxInput.Keys.Z, ButtonState.PRESSED))
-        game.input.bind("checkCollisions", KeyBinding(GdxInput.Keys.C, ButtonState.DOWN))
+            "moveLeft" to KeyBinding(Input.Keys.A, ButtonState.DOWN),
+            "moveRight" to KeyBinding(Input.Keys.D, ButtonState.DOWN),
+            "moveUp" to KeyBinding(Input.Keys.W, ButtonState.DOWN),
+            "moveDown" to KeyBinding(Input.Keys.S, ButtonState.DOWN),
+            "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
+            "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
+            "flyUp" to KeyBinding(Input.Keys.E, ButtonState.DOWN),
+            "flyDown" to KeyBinding(Input.Keys.Q, ButtonState.DOWN)
+        )
     }
 
     private fun loadMap() {
