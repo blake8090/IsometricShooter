@@ -33,6 +33,7 @@ class Game {
     private var loader: Loader = Loader()
 
     fun start() {
+        input.start()
         assets.setup()
         switchState(MainMenuState::class)
     }
