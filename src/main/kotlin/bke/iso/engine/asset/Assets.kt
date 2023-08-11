@@ -24,6 +24,12 @@ class Assets(override val game: Game) : Module() {
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assets = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
 
+    fun setup() {
+        addLoader("jpg", TextureLoader())
+        addLoader("png", TextureLoader())
+        addLoader("ttf", FreeTypeFontGeneratorLoader())
+    }
+
     fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
         val existingLoader = loadersByExtension[fileExtension]
         require(existingLoader == null) {
@@ -71,11 +77,5 @@ class Assets(override val game: Game) : Module() {
 
     fun resize() {
         fonts.reload()
-    }
-
-    fun setup() {
-        addLoader("jpg", TextureLoader())
-        addLoader("png", TextureLoader())
-        addLoader("ttf", FreeTypeFontGeneratorLoader())
     }
 }

@@ -6,6 +6,7 @@ import kotlinx.coroutines.delay
 import ktx.async.KtxAsync
 import mu.KotlinLogging
 
+// TODO: move into GameState
 class Loader {
 
     private val log = KotlinLogging.logger {}

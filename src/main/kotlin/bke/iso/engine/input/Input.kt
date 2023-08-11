@@ -30,6 +30,7 @@ class Input(override val game: Game) : Module() {
         }
     }
 
+    // TODO: improve binding api
     fun bind(action: String, binding: Binding) {
         keyboardMouseSource.bind(action, binding)
         controllerSource.bind(action, binding)
@@ -43,6 +44,7 @@ class Input(override val game: Game) : Module() {
         }
     }
 
+    // TODO: improve this! maybe add a new binding for double binds between -1 and 1?
     fun poll(actionPositive: String, actionNegative: String): Float {
         val positive = poll(actionPositive)
         val negative = poll(actionNegative)

@@ -3,12 +3,12 @@ package bke.iso.engine.render
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.getCollisionData
 import bke.iso.engine.world.Actor
+import bke.iso.engine.world.Component
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.Gdx
@@ -21,6 +21,13 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 
+data class Sprite(
+    val texture: String = "",
+    val offsetX: Float = 0f,
+    val offsetY: Float = 0f
+) : Component()
+
+// TODO: inner class?
 data class DrawActorEvent(
     val actor: Actor,
     val batch: PolygonSpriteBatch
@@ -63,18 +70,6 @@ class Renderer(override val game: Game) : Module() {
         val pixmap = texture.textureData.consumePixmap()
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot))
         pixmap.dispose()
-    }
-
-    fun drawFont(
-        name: String,
-        text: String,
-        size: Float,
-        x: Float,
-        y: Float,
-        color: Color = Color.WHITE
-    ) {
-        val font = game.assets.fonts[FontOptions(name, size, color)]
-        font.draw(batch, text, x, y)
     }
 
     fun resize(width: Int, height: Int) {
