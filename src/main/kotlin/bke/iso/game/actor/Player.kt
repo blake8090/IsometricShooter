@@ -1,7 +1,7 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.System
-import bke.iso.engine.input.Input
+import bke.iso.engine.input.v2.Input
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collider
@@ -57,7 +57,7 @@ class PlayerSystem(
 
     private fun updatePlayer(actor: Actor) {
         val movement = Vector3(
-            input.poll("moveLeft", "moveRight"),
+            input.poll("moveRight", "moveLeft"),
             input.poll("moveUp", "moveDown"),
             input.poll("flyUp", "flyDown")
         )

@@ -6,9 +6,9 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.GameState
 import bke.iso.engine.System
-import bke.iso.engine.input.InputState
-import bke.iso.engine.input.KeyBinding
-import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.input.v2.ButtonState
+import bke.iso.engine.input.v2.KeyBinding
+import bke.iso.engine.input.v2.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.withColor
@@ -24,11 +24,11 @@ import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.ui.GameHUD
 import bke.iso.game.ui.LoadingScreen
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import mu.KotlinLogging
+import com.badlogic.gdx.Input as GdxInput
 
 class GameplayState(override val game: Game) : GameState() {
 
@@ -91,19 +91,19 @@ class GameplayState(override val game: Game) : GameState() {
 
     private fun bindInput() {
         log.debug("binding actions")
-        game.input.bind("toggleDebug", KeyBinding(Input.Keys.M, InputState.PRESSED))
-        game.input.bind("moveLeft", KeyBinding(Input.Keys.A, InputState.DOWN, true))
-        game.input.bind("moveRight", KeyBinding(Input.Keys.D, InputState.DOWN))
-        game.input.bind("moveUp", KeyBinding(Input.Keys.W, InputState.DOWN))
-        game.input.bind("moveDown", KeyBinding(Input.Keys.S, InputState.DOWN, true))
-        game.input.bind("run", KeyBinding(Input.Keys.SHIFT_LEFT, InputState.DOWN))
-        game.input.bind("shoot", MouseBinding(Input.Buttons.LEFT, InputState.PRESSED))
+        game.input.bind("toggleDebug", KeyBinding(GdxInput.Keys.M, ButtonState.PRESSED))
+        game.input.bind("moveLeft", KeyBinding(GdxInput.Keys.A, ButtonState.DOWN))
+        game.input.bind("moveRight", KeyBinding(GdxInput.Keys.D, ButtonState.DOWN))
+        game.input.bind("moveUp", KeyBinding(GdxInput.Keys.W, ButtonState.DOWN))
+        game.input.bind("moveDown", KeyBinding(GdxInput.Keys.S, ButtonState.DOWN))
+        game.input.bind("run", KeyBinding(GdxInput.Keys.SHIFT_LEFT, ButtonState.DOWN))
+        game.input.bind("shoot", MouseBinding(GdxInput.Buttons.LEFT, ButtonState.PRESSED))
 
-        game.input.bind("flyUp", KeyBinding(Input.Keys.E, InputState.DOWN))
-        game.input.bind("flyDown", KeyBinding(Input.Keys.Q, InputState.DOWN, true))
+        game.input.bind("flyUp", KeyBinding(GdxInput.Keys.E, ButtonState.DOWN))
+        game.input.bind("flyDown", KeyBinding(GdxInput.Keys.Q, ButtonState.DOWN))
 
-        game.input.bind("placeBouncyBall", KeyBinding(Input.Keys.Z, InputState.PRESSED))
-        game.input.bind("checkCollisions", KeyBinding(Input.Keys.C, InputState.DOWN))
+        game.input.bind("placeBouncyBall", KeyBinding(GdxInput.Keys.Z, ButtonState.PRESSED))
+        game.input.bind("checkCollisions", KeyBinding(GdxInput.Keys.C, ButtonState.DOWN))
     }
 
     private fun loadMap() {
