@@ -12,6 +12,7 @@ import bke.iso.engine.input.source.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.withColor
+import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.Factory
@@ -43,37 +44,33 @@ class GameplayState(override val game: Game) : GameState() {
         BulletSystem(game.world, combat)
     )
 
+    override var loadingScreen: UIScreen? = LoadingScreen(game.assets)
+
+    override fun load() {
+        game.assets.addLoader("map2", GameMapLoader())
+        game.assets.load("game")
+
+        loadMap()
+        factory.createLampPost(Location(4, 4, 0))
+        factory.createLampPost(Location(8, 4, 0))
+        factory.createPillar(Location(12, 12, 0))
+            .apply {
+                x -= 0.5f
+                y += 0.5f
+            }
+        factory.createPillar(Location(10, 12, 0))
+            .apply {
+                x -= 0.5f
+                y += 0.5f
+            }
+
+        bindInput()
+    }
+
     override fun start() {
-        game.load {
-            screen = LoadingScreen(game.assets)
-
-            onLoad = {
-                game.assets.addLoader("map2", GameMapLoader())
-                game.assets.load("game")
-
-                loadMap()
-                factory.createLampPost(Location(4, 4, 0))
-                factory.createLampPost(Location(8, 4, 0))
-                factory.createPillar(Location(12, 12, 0))
-                    .apply {
-                        x -= 0.5f
-                        y += 0.5f
-                    }
-                factory.createPillar(Location(10, 12, 0))
-                    .apply {
-                        x -= 0.5f
-                        y += 0.5f
-                    }
-
-                bindInput()
-            }
-
-            onFinish = {
-                game.renderer.setCursor("cursor")
-                game.ui.setScreen(GameHUD(game.assets))
-                game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
-            }
-        }
+        game.renderer.setCursor("cursor")
+        game.ui.setScreen(GameHUD(game.assets))
+        game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
     }
 
     override fun handleEvent(event: Event) {

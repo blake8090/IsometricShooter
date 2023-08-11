@@ -1,5 +1,7 @@
 package bke.iso.engine
 
+import bke.iso.engine.ui.UIScreen
+
 abstract class System {
     abstract fun update(deltaTime: Float)
 }
@@ -8,6 +10,11 @@ abstract class GameState {
 
     protected abstract val game: Game
     abstract val systems: Set<System>
+
+    open var loadingScreen: UIScreen? = null
+        protected set
+
+    open fun load() {}
 
     open fun start() {}
 

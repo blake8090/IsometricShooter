@@ -9,9 +9,13 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import ktx.async.KtxAsync
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
+import kotlin.time.measureTime
 
 abstract class Event
 
@@ -30,7 +34,7 @@ class Game {
     val ui = UI(this)
 
     private var state: GameState = EmptyState(this)
-    private var loader: Loader = Loader()
+    private var loading = false
 
     fun start() {
         input.start()
@@ -43,10 +47,9 @@ class Game {
     }
 
     fun update(deltaTime: Float) {
-        if (!loader.isLoading) {
+        if (!loading) {
             runFrame(deltaTime)
         }
-
         ui.update(deltaTime)
     }
 
@@ -73,15 +76,26 @@ class Game {
 
     fun <T : GameState> switchState(stateClass: KClass<T>) {
         log.debug { "switching to state ${stateClass.simpleName}" }
-        val instance = stateClass.primaryConstructor!!.call(this)
-        state = instance
-        instance.start()
+        state = stateClass.primaryConstructor!!.call(this)
+        load(state)
     }
 
-    fun load(init: Loader.() -> Unit) {
-        loader.init()
-        loader.screen?.let(ui::setScreen)
-        loader.start()
+    private fun load(state: GameState) {
+        loading = true
+        state.loadingScreen?.let(ui::setScreen)
+        KtxAsync.async {
+            if (state.loadingScreen != null) {
+                // delay a bit to give time for the loading screen to show up
+                delay(300)
+            }
+            val duration = measureTime {
+                log.debug { "Loading started" }
+                state.load()
+                state.start()
+                loading = false
+            }
+            log.debug { "Loading finished in ${duration.inWholeMilliseconds} ms" }
+        }
     }
 
     inner class Events {
