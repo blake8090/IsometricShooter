@@ -6,9 +6,8 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.GameState
 import bke.iso.engine.System
-import bke.iso.engine.input.ButtonState
-import bke.iso.engine.input.source.KeyBinding
-import bke.iso.engine.input.source.MouseBinding
+import bke.iso.engine.input.KeyBinding
+import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.withColor
@@ -88,20 +87,30 @@ class GameplayState(override val game: Game) : GameState() {
 
     private fun bindInput() {
         log.debug { "binding actions" }
-
-        game.input.bind(
-            "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
-            "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
-
-            "moveLeft" to KeyBinding(Input.Keys.A, ButtonState.DOWN),
-            "moveRight" to KeyBinding(Input.Keys.D, ButtonState.DOWN),
-            "moveUp" to KeyBinding(Input.Keys.W, ButtonState.DOWN),
-            "moveDown" to KeyBinding(Input.Keys.S, ButtonState.DOWN),
-            "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
-            "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
-            "flyUp" to KeyBinding(Input.Keys.E, ButtonState.DOWN),
-            "flyDown" to KeyBinding(Input.Keys.Q, ButtonState.DOWN)
-        )
+        with(game.input) {
+            // keyboard & mouse
+            bind(
+                "toggleDebug" to KeyBinding(Input.Keys.M, bke.iso.engine.input.ButtonState.PRESSED),
+                "placeBouncyBall" to KeyBinding(Input.Keys.Z, bke.iso.engine.input.ButtonState.PRESSED),
+                "run" to KeyBinding(Input.Keys.SHIFT_LEFT, bke.iso.engine.input.ButtonState.DOWN),
+                "shoot" to MouseBinding(Input.Buttons.LEFT, bke.iso.engine.input.ButtonState.PRESSED),
+            )
+            bind(
+                "moveY",
+                KeyBinding(Input.Keys.S, bke.iso.engine.input.ButtonState.DOWN),
+                KeyBinding(Input.Keys.W, bke.iso.engine.input.ButtonState.DOWN)
+            )
+            bind(
+                "moveX",
+                KeyBinding(Input.Keys.A, bke.iso.engine.input.ButtonState.DOWN),
+                KeyBinding(Input.Keys.D, bke.iso.engine.input.ButtonState.DOWN)
+            )
+            bind(
+                "fly",
+                KeyBinding(Input.Keys.Q, bke.iso.engine.input.ButtonState.DOWN),
+                KeyBinding(Input.Keys.E, bke.iso.engine.input.ButtonState.DOWN)
+            )
+        }
     }
 
     private fun loadMap() {

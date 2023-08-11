@@ -57,9 +57,9 @@ class PlayerSystem(
 
     private fun updatePlayer(actor: Actor) {
         val movement = Vector3(
-            input.poll("moveRight", "moveLeft"),
-            input.poll("moveUp", "moveDown"),
-            input.poll("flyUp", "flyDown")
+            input.poll("moveX"),
+            input.poll("moveY"),
+            input.poll("fly")
         )
 
         val horizontalSpeed =

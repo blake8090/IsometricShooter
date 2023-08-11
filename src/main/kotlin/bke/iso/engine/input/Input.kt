@@ -2,8 +2,7 @@ package bke.iso.engine.input
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.input.source.ControllerSource
-import bke.iso.engine.input.source.KeyboardMouseSource
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
@@ -15,46 +14,67 @@ class Input(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
-    private val keyboardMouseSource = KeyboardMouseSource()
-    private val controllerSource = ControllerSource()
-    private var controllerConnected = false
+    private val keyboardMouseBindings = Bindings()
+    private val controllerBindings = Bindings()
+    private var controller: Controller? = null
+
+    init {
+        keyboardMouseBindings.isButtonDown = { binding ->
+            checkButtonDown(binding)
+        }
+        controllerBindings.isButtonDown = { binding ->
+            checkButtonDown(binding)
+        }
+        controllerBindings.getAxis = { binding ->
+            Controllers.getCurrent()
+                ?.getAxis(binding.code)
+                ?: 0f
+        }
+    }
 
     fun start() {
         Controllers.addListener(ControllerHandler())
     }
 
     override fun update(deltaTime: Float) {
-        keyboardMouseSource.update()
-        if (controllerConnected) {
-            controllerSource.update()
-        }
+        keyboardMouseBindings.update()
+        controllerBindings.update()
     }
 
     fun bind(vararg bindings: Pair<String, Binding>) {
         bindings.forEach { (action, binding) ->
-            keyboardMouseSource.bind(action, binding)
-            controllerSource.bind(action, binding)
+            when (binding) {
+                is KeyBinding, is MouseBinding -> {
+                    keyboardMouseBindings[action] = binding
+                }
+
+                is ControllerBinding, is ControllerAxisBinding -> {
+                    controllerBindings[action] = binding
+                }
+
+                else -> {}
+            }
         }
     }
+
+    fun bind(action: String, negative: KeyBinding, positive: KeyBinding) {
+        keyboardMouseBindings[action] = CompositeBinding(negative, positive)
+    }
+
+    private fun checkButtonDown(binding: ButtonBinding) =
+        when (binding) {
+            is KeyBinding -> Gdx.input.isKeyPressed(binding.code)
+            is MouseBinding -> Gdx.input.isButtonPressed(binding.code)
+            is ControllerBinding -> controller
+                ?.getButton(binding.code)
+                ?: false
+        }
 
     fun poll(action: String): Float {
-        return if (controllerConnected) {
-            controllerSource.poll(action)
+        return if (Controllers.getCurrent() != null) {
+            controllerBindings.poll(action)
         } else {
-            keyboardMouseSource.poll(action)
-        }
-    }
-
-    // TODO: improve this! maybe add a new binding for double binds between -1 and 1?
-    fun poll(actionPositive: String, actionNegative: String): Float {
-        val positive = poll(actionPositive)
-        val negative = poll(actionNegative)
-        return if (positive != 0f) {
-            positive
-        } else if (negative != 0f) {
-            negative * -1f
-        } else {
-            0f
+            keyboardMouseBindings.poll(action)
         }
     }
 
