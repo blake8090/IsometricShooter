@@ -1,4 +1,6 @@
-package bke.iso.engine.input.v2
+package bke.iso.engine.input.source
+
+import bke.iso.engine.input.Binding
 
 abstract class InputSource {
 

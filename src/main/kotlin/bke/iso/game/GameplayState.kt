@@ -6,9 +6,9 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.GameState
 import bke.iso.engine.System
-import bke.iso.engine.input.v2.ButtonState
-import bke.iso.engine.input.v2.KeyBinding
-import bke.iso.engine.input.v2.MouseBinding
+import bke.iso.engine.input.ButtonState
+import bke.iso.engine.input.source.KeyBinding
+import bke.iso.engine.input.source.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.withColor

@@ -1,4 +1,4 @@
-package bke.iso.engine.input.v2
+package bke.iso.engine.input
 
 sealed class Binding
 
