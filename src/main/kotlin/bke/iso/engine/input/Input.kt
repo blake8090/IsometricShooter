@@ -9,6 +9,9 @@ import com.badlogic.gdx.controllers.Controllers
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
+import kotlin.math.abs
+
+private const val CONTROLLER_DEAD_ZONE = 0.2f
 
 class Input(override val game: Game) : Module() {
 
@@ -16,19 +19,18 @@ class Input(override val game: Game) : Module() {
 
     private val keyboardMouseBindings = Bindings()
     private val controllerBindings = Bindings()
-    private var controller: Controller? = null
 
     init {
         keyboardMouseBindings.isButtonDown = { binding ->
             checkButtonDown(binding)
         }
+
         controllerBindings.isButtonDown = { binding ->
             checkButtonDown(binding)
         }
+
         controllerBindings.getAxis = { binding ->
-            Controllers.getCurrent()
-                ?.getAxis(binding.code)
-                ?: 0f
+            getAxis(binding)
         }
     }
 
@@ -61,14 +63,9 @@ class Input(override val game: Game) : Module() {
         keyboardMouseBindings[action] = CompositeBinding(negative, positive)
     }
 
-    private fun checkButtonDown(binding: ButtonBinding) =
-        when (binding) {
-            is KeyBinding -> Gdx.input.isKeyPressed(binding.code)
-            is MouseBinding -> Gdx.input.isButtonPressed(binding.code)
-            is ControllerBinding -> controller
-                ?.getButton(binding.code)
-                ?: false
-        }
+    fun bind(action: String, negative: ControllerBinding, positive: ControllerBinding) {
+        controllerBindings[action] = CompositeBinding(negative, positive)
+    }
 
     fun poll(action: String): Float {
         return if (Controllers.getCurrent() != null) {
@@ -82,6 +79,32 @@ class Input(override val game: Game) : Module() {
         val axis = poll(actionName)
         if (axis != 0f) {
             func.invoke(axis)
+        }
+    }
+
+    private fun checkButtonDown(binding: ButtonBinding) =
+        when (binding) {
+            is KeyBinding -> Gdx.input.isKeyPressed(binding.code)
+            is MouseBinding -> Gdx.input.isButtonPressed(binding.code)
+            is ControllerBinding ->
+                Controllers.getCurrent()
+                    ?.getButton(binding.code)
+                    ?: false
+        }
+
+    private fun getAxis(binding: AxisBinding): Float {
+        val axis = Controllers.getCurrent()
+            ?.getAxis(binding.code)
+            ?: return 0f
+
+        if (abs(axis) <= CONTROLLER_DEAD_ZONE) {
+            return 0f
+        }
+
+        return if (binding.invert) {
+            axis * -1f
+        } else {
+            axis
         }
     }
 

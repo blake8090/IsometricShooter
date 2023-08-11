@@ -21,6 +21,7 @@ data class CompositeBinding<T : ButtonBinding>(
 
 sealed class AxisBinding : Binding() {
     abstract val code: Int
+    abstract val invert: Boolean
 }
 
 data class MouseBinding(
@@ -39,7 +40,10 @@ data class ControllerBinding(
     override val state: ButtonState
 ) : ButtonBinding()
 
-data class ControllerAxisBinding(override val code: Int) : AxisBinding()
+data class ControllerAxisBinding(
+    override val code: Int,
+    override val invert: Boolean = false
+) : AxisBinding()
 
 class Bindings {
     private val bindings = mutableMapOf<String, Binding>()

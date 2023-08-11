@@ -6,6 +6,9 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.GameState
 import bke.iso.engine.System
+import bke.iso.engine.input.ButtonState
+import bke.iso.engine.input.ControllerAxisBinding
+import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
@@ -28,6 +31,8 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.studiohartman.jamepad.ControllerAxis
+import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
 
 class GameplayState(override val game: Game) : GameState() {
@@ -90,25 +95,37 @@ class GameplayState(override val game: Game) : GameState() {
         with(game.input) {
             // keyboard & mouse
             bind(
-                "toggleDebug" to KeyBinding(Input.Keys.M, bke.iso.engine.input.ButtonState.PRESSED),
-                "placeBouncyBall" to KeyBinding(Input.Keys.Z, bke.iso.engine.input.ButtonState.PRESSED),
-                "run" to KeyBinding(Input.Keys.SHIFT_LEFT, bke.iso.engine.input.ButtonState.DOWN),
-                "shoot" to MouseBinding(Input.Buttons.LEFT, bke.iso.engine.input.ButtonState.PRESSED),
+                "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
+                "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
+                "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
+                "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
             )
             bind(
                 "moveY",
-                KeyBinding(Input.Keys.S, bke.iso.engine.input.ButtonState.DOWN),
-                KeyBinding(Input.Keys.W, bke.iso.engine.input.ButtonState.DOWN)
+                KeyBinding(Input.Keys.S, ButtonState.DOWN),
+                KeyBinding(Input.Keys.W, ButtonState.DOWN)
             )
             bind(
                 "moveX",
-                KeyBinding(Input.Keys.A, bke.iso.engine.input.ButtonState.DOWN),
-                KeyBinding(Input.Keys.D, bke.iso.engine.input.ButtonState.DOWN)
+                KeyBinding(Input.Keys.A, ButtonState.DOWN),
+                KeyBinding(Input.Keys.D, ButtonState.DOWN)
             )
             bind(
                 "fly",
-                KeyBinding(Input.Keys.Q, bke.iso.engine.input.ButtonState.DOWN),
-                KeyBinding(Input.Keys.E, bke.iso.engine.input.ButtonState.DOWN)
+                KeyBinding(Input.Keys.Q, ButtonState.DOWN),
+                KeyBinding(Input.Keys.E, ButtonState.DOWN)
+            )
+
+            // controller
+            bind(
+                "run" to ControllerBinding(ControllerButton.LEFTBUMPER.ordinal, ButtonState.DOWN),
+                "moveX" to ControllerAxisBinding(ControllerAxis.LEFTX.ordinal),
+                "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
+            )
+            bind(
+                "fly",
+                ControllerBinding(ControllerButton.X.ordinal, ButtonState.DOWN),
+                ControllerBinding(ControllerButton.A.ordinal, ButtonState.DOWN)
             )
         }
     }
