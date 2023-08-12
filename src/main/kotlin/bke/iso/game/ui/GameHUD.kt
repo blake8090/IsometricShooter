@@ -53,7 +53,6 @@ class GameHUD(private val assets: Assets) : UIScreen() {
         pixmap.fill()
         skin.add("white", Texture(pixmap))
 
-        // TODO: reload fonts in skin when resizing?
         skin.add("default", assets.fonts[FontOptions("roboto", 25f, Color.WHITE)])
 
         skin.add("default", LabelStyle().apply {
