@@ -4,11 +4,11 @@ import bke.iso.engine.Event
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 
 abstract class UIScreen {
 
-    protected val stage = Stage(ScreenViewport())
+    protected val stage = Stage(ExtendViewport(2560f, 1440f))
     protected val skin = Skin()
 
     open fun create() {

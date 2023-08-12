@@ -74,8 +74,4 @@ class Assets(override val game: Game) : Module() {
     private fun <T : Any> set(name: String, asset: Asset<T>) {
         assets[name to asset.value::class] = asset
     }
-
-    fun resize() {
-        fonts.reload()
-    }
 }

@@ -33,13 +33,6 @@ class Fonts(private val assets: Assets) {
         log.debug { "Generated font ${options.name}, $options, pixels $pixels" }
         return generator.generateFont(parameter)
     }
-
-    fun reload() {
-        log.debug { "Reloading fonts" }
-        for (options in cache.keys) {
-            cache[options] = generateFont(options)
-        }
-    }
 }
 
 class FreeTypeFontGeneratorLoader : AssetLoader<FreeTypeFontGenerator> {
