@@ -14,9 +14,7 @@ import bke.iso.engine.world.World
 import bke.iso.game.Combat
 import bke.iso.game.Health
 import bke.iso.game.HealthBar
-import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector3
-import kotlin.math.sign
 
 const val PLAYER_MAX_HEALTH = 5f
 
@@ -59,9 +57,9 @@ class PlayerSystem(
 
     private fun updatePlayer(actor: Actor) {
         val movement = Vector3(
-            input.poll("moveX").lerp(),
-            input.poll("moveY").lerp(),
-            input.poll("fly").lerp()
+            input.poll("moveX"),
+            input.poll("moveY"),
+            input.poll("fly")
         )
 
         val horizontalSpeed =
@@ -91,12 +89,3 @@ fun World.createPlayer(location: Location) =
         Health(PLAYER_MAX_HEALTH),
         HealthBar(18f, -64f)
     )
-
-fun  Float.lerp(
-    a: Float = 0f,
-    b: Float = 1f,
-    interpolation: Interpolation = Interpolation.circleIn
-): Float {
-    val ax = interpolation.apply(this)
-    return ax * this.sign
-}

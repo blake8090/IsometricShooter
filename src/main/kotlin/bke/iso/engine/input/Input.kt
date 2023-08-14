@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
-import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
 import kotlin.math.abs
@@ -68,7 +67,7 @@ class Input(override val game: Game) : Module() {
     }
 
     fun poll(action: String): Float {
-        return if (Controllers.getCurrent() != null) {
+        return if (findController() != null) {
             controllerBindings.poll(action)
         } else {
             keyboardMouseBindings.poll(action)
@@ -93,7 +92,7 @@ class Input(override val game: Game) : Module() {
         }
 
     private fun getAxis(binding: AxisBinding): Float {
-        val axis = Controllers.getCurrent()
+        val axis = findController()
             ?.getAxis(binding.code)
             ?: return 0f
 
@@ -107,6 +106,10 @@ class Input(override val game: Game) : Module() {
             axis
         }
     }
+
+    private fun findController(): Controller? =
+        Controllers.getCurrent()
+            .takeIf(Controller::isConnected)
 
     inner class ControllerHandler : ControllerAdapter() {
 
@@ -130,12 +133,6 @@ class Input(override val game: Game) : Module() {
             return false
         }
 
-        override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
-            val controllerAxis = matchAxis(axisIndex)
-            log.trace { "Axis '${controllerAxis.name}': $value - ${controller.log()}" }
-            return false
-        }
-
         private fun Controller.log() =
             "'$name' id: $uniqueId"
 
@@ -143,10 +140,5 @@ class Input(override val game: Game) : Module() {
             ControllerButton.entries
                 .find { entry -> entry.ordinal == index }
                 ?: error("Unknown ControllerButton index: $index")
-
-        private fun matchAxis(index: Int) =
-            ControllerAxis.entries
-                .find { entry -> entry.ordinal == index }
-                ?: error("Unknown ControllerAxis index: $index")
     }
 }
