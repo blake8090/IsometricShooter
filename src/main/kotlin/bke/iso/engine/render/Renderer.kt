@@ -36,16 +36,14 @@ data class DrawActorEvent(
 class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
-    private val camera = OrthographicCamera()
-    private val viewport = ExtendViewport(1280f, 720f, camera)
+    private val camera = OrthographicCamera(1280f, 720f)
+    private val viewport = ExtendViewport(camera.viewportWidth, camera.viewportHeight, camera)
+//    private val camera = OrthographicCamera(30f * TILE_SIZE_X, 10f * TILE_SIZE_Y)
+//    private val viewport = ExtendViewport(camera.viewportWidth, camera.viewportHeight, camera)
 
     val debugRenderer = DebugRenderer()
     private val shapeDrawer = DebugShapeDrawer(batch)
     private var debugEnabled = false
-
-    init {
-        viewport.apply()
-    }
 
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
