@@ -63,10 +63,8 @@ class Renderer(override val game: Game) : Module() {
      */
     private val viewport = ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
 
-    val debugRenderer = DebugRenderer()
-
-    // TODO: pass this to DebugRenderer
     private val shapeDrawer = DebugShapeDrawer(batch)
+    val debugRenderer = DebugRenderer(shapeDrawer)
     private var debugEnabled = false
 
     init {
@@ -111,7 +109,6 @@ class Renderer(override val game: Game) : Module() {
 
         frameBuffer.begin()
         ScreenUtils.clear(0f, 0f, 255f, 1f)
-        // TODO: is this needed? no effect after commenting out
         batch.projectionMatrix = camera.combined
         batch.begin()
         val drawData = game.world.objects.map(::toDrawData)
@@ -142,7 +139,7 @@ class Renderer(override val game: Game) : Module() {
         if (debugEnabled) {
             // match debug shapes to world positions
             batch.projectionMatrix = camera.combined
-            debugRenderer.render(shapeDrawer)
+            debugRenderer.render()
         }
         // debug data still accumulates even when not in debug mode!
         debugRenderer.clear()

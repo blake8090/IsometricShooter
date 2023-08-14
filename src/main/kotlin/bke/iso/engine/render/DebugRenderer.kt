@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 
-class DebugRenderer {
+class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
 
     private val lines = ObjectPool.new<DebugLine>()
     private val rectangles = ObjectPool.new<DebugRectangle>()
@@ -58,7 +58,7 @@ class DebugRenderer {
             this.color = color
         }
 
-    fun render(shapeDrawer: DebugShapeDrawer) {
+    fun render() {
         shapeDrawer.begin()
         lines.getAll().forEach(shapeDrawer::drawLine)
         rectangles.getAll().forEach(shapeDrawer::drawRectangle)
