@@ -6,26 +6,18 @@ import bke.iso.engine.math.TILE_SIZE_Z
 import bke.iso.engine.math.getIsometricRatio
 import bke.iso.engine.math.toScreen
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import space.earlygrey.shapedrawer.ShapeDrawer
 
 class DebugShapeDrawer(batch: PolygonSpriteBatch) {
 
     private val shapeDrawer: ShapeDrawer
-    private val texture: Texture
+    private val pixel = makePixel()
 
     init {
-        val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
-        pixmap.setColor(Color.WHITE)
-        pixmap.drawPixel(0, 0)
-        texture = Texture(pixmap)
-        pixmap.dispose()
-        val region = TextureRegion(texture, 0, 0, 1, 1)
+        val region = TextureRegion(pixel, 0, 0, 1, 1)
         shapeDrawer = ShapeDrawer(batch, region)
     }
 
@@ -42,7 +34,7 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
     }
 
     fun dispose() {
-        texture.dispose()
+        pixel.dispose()
     }
 
     fun drawPoint(point: DebugPoint) =
@@ -54,7 +46,7 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
     fun drawRectangle(rectangle: DebugRectangle) {
         val polygon = toScreen(rectangle.rectangle)
         shapeDrawer.setColor(rectangle.color)
-        shapeDrawer.polygon(polygon)
+        shapeDrawer.polygon(polygon, rectangle.lineWidth)
     }
 
     fun drawLine(line: DebugLine) {
@@ -82,46 +74,6 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         val pos = toScreen(worldPos)
         shapeDrawer.setColor(color)
         shapeDrawer.ellipse(pos.x, pos.y, width, height)
-    }
-
-    // TODO: use segments
-    fun drawBox(box: DebugBox) {
-        val pos = box.pos
-        val dim = box.dimensions
-        val rect = Rectangle(pos.x, pos.y, dim.x, dim.y)
-
-        val bottomPolygon = toScreen(rect, pos.z)
-        shapeDrawer.setColor(box.color)
-        shapeDrawer.polygon(bottomPolygon)
-
-        if (dim.z > 0) {
-            val topPolygon = toScreen(rect, pos.z + dim.z)
-            shapeDrawer.polygon(topPolygon)
-
-            // bottom left
-            shapeDrawer.line(
-                toScreen(pos.x, pos.y, pos.z),
-                toScreen(pos.x, pos.y, pos.z + dim.z)
-            )
-
-            // bottom right
-            shapeDrawer.line(
-                toScreen(pos.x + dim.x, pos.y, pos.z),
-                toScreen(pos.x + dim.x, pos.y, pos.z + dim.z)
-            )
-
-            // top left
-            shapeDrawer.line(
-                toScreen(pos.x, pos.y + dim.y, pos.z),
-                toScreen(pos.x, pos.y + dim.y, pos.z + dim.z)
-            )
-
-            // top right
-            shapeDrawer.line(
-                toScreen(pos.x + dim.x, pos.y + dim.y, pos.z),
-                toScreen(pos.x + dim.x, pos.y + dim.y, pos.z + dim.z)
-            )
-        }
     }
 
     /**

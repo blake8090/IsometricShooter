@@ -27,7 +27,7 @@ class Collisions(override val game: Game) : Module() {
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
         val area = Box(segment.a, segment.b)
-        game.renderer.debugRenderer.addBox(area, Color.ORANGE)
+        game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
 
         val ray = segment.getRay()
         val collisions = mutableSetOf<SegmentCollision>()
@@ -74,7 +74,7 @@ class Collisions(override val game: Game) : Module() {
         val py = if (dy < 0) floor(dy) else ceil(dy)
         val pz = if (dz < 0) floor(dz) else ceil(dz)
         val projectedBox = box.project(px, py, pz)
-        game.renderer.debugRenderer.addBox(projectedBox, Color.ORANGE)
+        game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
 
         val objects = game.world.getObjectsInArea(projectedBox)
 

@@ -13,7 +13,6 @@ class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
     private val rectangles = Array<DebugRectangle>()
     private val circles = Array<DebugCircle>()
     private val points = Array<DebugPoint>()
-    private val boxes = Array<DebugBox>()
     private val spheres = Array<DebugSphere>()
 
     fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
@@ -54,12 +53,9 @@ class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
         }
     }
 
-    fun addBox(box: Box, color: Color) {
-        Pools.obtain(DebugBox::class.java).apply {
-            pos.set(box.min)
-            dimensions.set(box.width, box.length, box.height)
-            this.color = color
-            boxes.add(this)
+    fun addBox(box: Box, width: Float, color: Color) {
+        box.segments.forEach { segment ->
+            addLine(segment.a, segment.b, width, color)
         }
     }
 
@@ -78,7 +74,6 @@ class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
         rectangles.forEach(shapeDrawer::drawRectangle)
         circles.forEach(shapeDrawer::drawCircle)
         points.forEach(shapeDrawer::drawPoint)
-        boxes.forEach(shapeDrawer::drawBox)
         spheres.forEach(shapeDrawer::drawSphere)
         shapeDrawer.end()
     }
@@ -88,7 +83,6 @@ class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
         clear(rectangles)
         clear(circles)
         clear(points)
-        clear(boxes)
         clear(spheres)
     }
 

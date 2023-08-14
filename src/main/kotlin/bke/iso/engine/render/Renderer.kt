@@ -218,7 +218,7 @@ class Renderer(override val game: Game) : Module() {
         debugRenderer.addPoint(actor.pos, 2f, Color.RED)
 
         actor.getCollisionData()?.let { data ->
-            debugRenderer.addBox(data.box, Color.GREEN)
+            debugRenderer.addBox(data.box, 1f, Color.GREEN)
         }
 
         if (actor.z != 0f) {
@@ -246,6 +246,15 @@ fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
     this.color = color
     action.invoke(this)
     this.color = originalColor
+}
+
+fun makePixel(): Texture {
+    val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
+    pixmap.setColor(Color.WHITE)
+    pixmap.fill()
+    val texture = Texture(pixmap)
+    pixmap.dispose()
+    return texture
 }
 
 private data class DrawData(

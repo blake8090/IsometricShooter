@@ -17,7 +17,6 @@ data class DebugLine(
 
 data class DebugRectangle(
     var rectangle: Rectangle = Rectangle(),
-    // TODO: implement line width
     var lineWidth: Float = 0f,
     var color: Color = Color.WHITE
 ) : Poolable {
@@ -37,15 +36,6 @@ data class DebugCircle(
 data class DebugPoint(
     var pos: Vector3 = Vector3(),
     var size: Float = 0f,
-    var color: Color = Color.WHITE
-) : Poolable {
-
-    override fun reset() {}
-}
-
-data class DebugBox(
-    var pos: Vector3 = Vector3(),
-    var dimensions: Vector3 = Vector3(),
     var color: Color = Color.WHITE
 ) : Poolable {
 
