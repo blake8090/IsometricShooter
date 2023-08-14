@@ -61,7 +61,7 @@ class Renderer(override val game: Game) : Module() {
     /**
      * Used to scale the rendered frame buffer to the screen
      */
-    private val viewport = ScalingViewport(Scaling.fillY, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
+    private val viewport = ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
 
     val debugRenderer = DebugRenderer()
 
