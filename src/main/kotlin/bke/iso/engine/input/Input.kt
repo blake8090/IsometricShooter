@@ -109,7 +109,7 @@ class Input(override val game: Game) : Module() {
 
     private fun findController(): Controller? =
         Controllers.getCurrent()
-            .takeIf(Controller::isConnected)
+            ?.takeIf(Controller::isConnected)
 
     inner class ControllerHandler : ControllerAdapter() {
 
