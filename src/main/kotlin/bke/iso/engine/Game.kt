@@ -23,6 +23,7 @@ class Game {
 
     private val log = KotlinLogging.logger {}
 
+    val events = Events()
     val assets = Assets(this)
     val fileSystem = FileSystem()
     val input = Input(this)
@@ -30,7 +31,6 @@ class Game {
     val physics = Physics(this)
     val renderer = Renderer(this)
     val world = World(this)
-    val events = Events()
     val ui = UI(this)
 
     private var state: GameState = EmptyState(this)

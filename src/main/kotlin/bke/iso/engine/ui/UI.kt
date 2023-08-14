@@ -29,7 +29,7 @@ class UI(override val game: Game) : Module() {
         game.input.addInputProcessor(screen.stage)
         game.input.addControllerListener(screen.controllerNavigation)
         screen.create()
-        if (game.input.usingController) {
+        if (game.input.isUsingController()) {
             screen.controllerNavigation.start()
         }
     }
