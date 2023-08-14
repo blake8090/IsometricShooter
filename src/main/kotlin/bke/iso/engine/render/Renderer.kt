@@ -13,13 +13,19 @@ import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.Scaling
+import com.badlogic.gdx.utils.ScreenUtils
+import com.badlogic.gdx.utils.viewport.ScalingViewport
+
+const val VIRTUAL_WIDTH = 960f
+const val VIRTUAL_HEIGHT = 540f
 
 data class Sprite(
     val texture: String = "",
@@ -36,14 +42,39 @@ data class DrawActorEvent(
 class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
-    private val camera = OrthographicCamera(1280f, 720f)
-    private val viewport = ExtendViewport(camera.viewportWidth, camera.viewportHeight, camera)
-//    private val camera = OrthographicCamera(30f * TILE_SIZE_X, 10f * TILE_SIZE_Y)
-//    private val viewport = ExtendViewport(camera.viewportWidth, camera.viewportHeight, camera)
+
+    /**
+     * All game objects are rendered to this buffer
+     */
+    private val frameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH.toInt(), VIRTUAL_HEIGHT.toInt(), false)
+
+    /**
+     * Used only for rendering the frame buffer
+     */
+    private val fboCamera = OrthographicCamera()
+
+    /**
+     * Only used for game-logic, i.e. following the player
+     */
+    private val camera = OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+
+    /**
+     * Used to scale the rendered frame buffer to the screen
+     */
+    private val viewport = ScalingViewport(Scaling.fillX, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
 
     val debugRenderer = DebugRenderer()
+
+    // TODO: pass this to DebugRenderer
     private val shapeDrawer = DebugShapeDrawer(batch)
     private var debugEnabled = false
+
+    init {
+        // enables somewhat pixel-perfect rendering!
+        frameBuffer.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
+        // ensures that everything rendered on the frame buffer is in the correct position
+        fboCamera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+    }
 
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
@@ -72,15 +103,16 @@ class Renderer(override val game: Game) : Module() {
 
     fun resize(width: Int, height: Int) {
         viewport.update(width, height)
+        fboCamera.update()
     }
 
     fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 255f, 1f)
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT)
+        camera.update()
 
-        viewport.apply()
+        frameBuffer.begin()
+        ScreenUtils.clear(0f, 0f, 0f, 0f)
+        // TODO: is this needed? no effect after commenting out
         batch.projectionMatrix = camera.combined
-
         batch.begin()
         val drawData = game.world.objects.map(::toDrawData)
         for ((i, a) in drawData.withIndex()) {
@@ -98,8 +130,18 @@ class Renderer(override val game: Game) : Module() {
         drawData.filter { it.objectsBehind.isEmpty() }.forEach(::draw)
         drawData.forEach(::draw)
         batch.end()
+        frameBuffer.end()
+
+        ScreenUtils.clear(0f, 0f, 255f, 1f)
+        viewport.apply()
+        batch.projectionMatrix = fboCamera.combined
+        batch.begin()
+        batch.draw(frameBuffer.colorBufferTexture, 0f, 0f, viewport.worldWidth, viewport.worldHeight, 0f, 0f, 1f, 1f)
+        batch.end()
 
         if (debugEnabled) {
+            // match debug shapes to world positions
+            batch.projectionMatrix = camera.combined
             debugRenderer.render(shapeDrawer)
         }
         // debug data still accumulates even when not in debug mode!
