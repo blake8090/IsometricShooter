@@ -20,7 +20,9 @@ class InputState(private val events: Game.Events) {
 
     fun start() {
         // when starting the game, a controller should always be used if already connected
-        if (findPrimaryController() != null) {
+        val controller = findPrimaryController()
+        if (controller != null) {
+            log.debug { "Controller detected: ${controller.asString()}" }
             switchInput(InputSource.CONTROLLER)
         }
     }
@@ -39,6 +41,9 @@ class InputState(private val events: Game.Events) {
             usingController = false
         }
     }
+
+    private fun Controller.asString() =
+        "'$name' id: $uniqueId player index: $playerIndex"
 
     private inner class KeyMouseHandler : InputAdapter() {
 
@@ -71,37 +76,37 @@ class InputState(private val events: Game.Events) {
 
         override fun disconnected(controller: Controller) {
             log.info { "Controller disconnected: ${controller.asString()}" }
-            // TODO: Fix
             // when the primary controller is disconnected, switch to keyboard/mouse.
             // we don't need to worry about any other controllers
-            if (controller.playerIndex == 0) {
+            if (findPrimaryController() == null) {
                 switchInput(InputSource.KEYBOARD_MOUSE)
             }
         }
 
         override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
-            val controllerButton = matchButton(buttonIndex)
-            log.trace { "Button down: ${controllerButton.name} - ${controller.asString()}" }
-            switchInput(InputSource.CONTROLLER)
-            return false
-        }
-
-        override fun buttonUp(controller: Controller, buttonIndex: Int): Boolean {
-            val controllerButton = matchButton(buttonIndex)
-            log.trace { "Button up: ${controllerButton.name} - ${controller.asString()}" }
-            switchInput(InputSource.CONTROLLER)
-            return false
-        }
-
-        override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
-            if (abs(value) >= CONTROLLER_DEAD_ZONE) {
+            if (controller.playerIndex != -1) {
+                val controllerButton = matchButton(buttonIndex)
+                log.trace { "Button down: ${controllerButton.name} - ${controller.asString()}" }
                 switchInput(InputSource.CONTROLLER)
             }
             return false
         }
 
-        private fun Controller.asString() =
-            "'$name' id: $uniqueId player index: $playerIndex"
+        override fun buttonUp(controller: Controller, buttonIndex: Int): Boolean {
+            if (controller.playerIndex != -1) {
+                val controllerButton = matchButton(buttonIndex)
+                log.trace { "Button up: ${controllerButton.name} - ${controller.asString()}" }
+                switchInput(InputSource.CONTROLLER)
+            }
+            return false
+        }
+
+        override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
+            if (controller.playerIndex != -1 && abs(value) >= CONTROLLER_DEAD_ZONE) {
+                switchInput(InputSource.CONTROLLER)
+            }
+            return false
+        }
 
         private fun matchButton(index: Int) =
             ControllerButton.entries

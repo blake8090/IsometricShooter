@@ -98,10 +98,9 @@ class Input(override val game: Game) : Module() {
         when (binding) {
             is KeyBinding -> Gdx.input.isKeyPressed(binding.code)
             is MouseBinding -> Gdx.input.isButtonPressed(binding.code)
-            is ControllerBinding ->
-                Controllers.getCurrent()
-                    ?.getButton(binding.code)
-                    ?: false
+            is ControllerBinding -> inputState.findPrimaryController()
+                ?.getButton(binding.code)
+                ?: false
         }
 
     private fun getAxis(binding: AxisBinding): Float {
