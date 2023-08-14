@@ -66,7 +66,7 @@ class PlayerSystem(
         // by normalizing the movement vector, we ensure that the player doesn't move faster diagonally
         movement.nor()
         // when using a controller, reapply the magnitude to support precise movement
-        if (input.isControllerConnected()) {
+        if (input.usingController) {
             movement.scl(magnitude)
         }
 

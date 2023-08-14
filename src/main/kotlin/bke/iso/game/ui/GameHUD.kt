@@ -24,7 +24,6 @@ class GameHUD(private val assets: Assets) : UIScreen() {
     private val log = KotlinLogging.logger {}
 
     override fun create() {
-        super.create()
         setup()
 
         val table = Table()

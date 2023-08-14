@@ -3,6 +3,9 @@ package bke.iso.engine.input
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
@@ -18,6 +21,10 @@ class Input(override val game: Game) : Module() {
 
     private val keyboardMouseBindings = Bindings()
     private val controllerBindings = Bindings()
+    private val inputMultiplexer = InputMultiplexer()
+
+    var usingController = false
+        private set
 
     init {
         keyboardMouseBindings.isButtonDown = { binding ->
@@ -34,6 +41,8 @@ class Input(override val game: Game) : Module() {
     }
 
     fun start() {
+        Gdx.input.inputProcessor = inputMultiplexer
+        addInputProcessor(KeyMouseHandler())
         Controllers.addListener(ControllerHandler())
     }
 
@@ -67,7 +76,7 @@ class Input(override val game: Game) : Module() {
     }
 
     fun poll(action: String): Float {
-        return if (findController() != null) {
+        return if (usingController && findController() != null) {
             controllerBindings.poll(action)
         } else {
             keyboardMouseBindings.poll(action)
@@ -81,8 +90,12 @@ class Input(override val game: Game) : Module() {
         }
     }
 
-    fun isControllerConnected() =
-        findController() != null
+    fun addInputProcessor(processor: InputProcessor) {
+        inputMultiplexer.addProcessor(0, processor)
+    }
+
+    fun removeInputProcessor(processor: InputProcessor) =
+        inputMultiplexer.removeProcessor(processor)
 
     private fun checkButtonDown(binding: ButtonBinding) =
         when (binding) {
@@ -110,9 +123,36 @@ class Input(override val game: Game) : Module() {
         }
     }
 
+    private fun switchInput(useController: Boolean) {
+        if (useController && !usingController) {
+            log.debug { "Switching input to controller" }
+            usingController = true
+        } else if (!useController && usingController) {
+            log.debug { "Switching input to keyboard/mouse" }
+            usingController = false
+        }
+    }
+
     private fun findController(): Controller? =
         Controllers.getCurrent()
             ?.takeIf(Controller::isConnected)
+
+    inner class KeyMouseHandler : InputAdapter() {
+        override fun keyDown(keycode: Int): Boolean {
+            switchInput(false)
+            return true
+        }
+
+        override fun keyUp(keycode: Int): Boolean {
+            switchInput(false)
+            return true
+        }
+
+        override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+            switchInput(false)
+            return true
+        }
+    }
 
     inner class ControllerHandler : ControllerAdapter() {
 
@@ -127,12 +167,21 @@ class Input(override val game: Game) : Module() {
         override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
             val controllerButton = matchButton(buttonIndex)
             log.trace { "Button down: ${controllerButton.name} - ${controller.log()}" }
+            switchInput(true)
             return false
         }
 
         override fun buttonUp(controller: Controller, buttonIndex: Int): Boolean {
             val controllerButton = matchButton(buttonIndex)
             log.trace { "Button up: ${controllerButton.name} - ${controller.log()}" }
+            switchInput(true)
+            return false
+        }
+
+        override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
+            if (abs(value) >= CONTROLLER_DEAD_ZONE) {
+                switchInput(true)
+            }
             return false
         }
 

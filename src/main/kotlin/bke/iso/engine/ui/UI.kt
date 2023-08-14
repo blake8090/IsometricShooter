@@ -24,10 +24,18 @@ class UI(override val game: Game) : Module() {
 
     fun setScreen(screen: UIScreen) {
         log.debug { "setting screen to ${screen::class.simpleName}" }
-        screens.forEach(UIScreen::dispose)
-        screens.clear()
+        clear()
         screens.addFirst(screen)
+        game.input.addInputProcessor(screen.stage)
         screen.create()
+    }
+
+    private fun clear() {
+        screens.forEach { screen ->
+            game.input.removeInputProcessor(screen.stage)
+            screen.dispose()
+        }
+        screens.clear()
     }
 
     fun handleEvent(event: Event) {

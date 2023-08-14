@@ -25,7 +25,6 @@ class MainMenuScreen(
     private val log = KotlinLogging.logger {}
 
     override fun create() {
-        super.create()
         setup()
 
         val root = Table()

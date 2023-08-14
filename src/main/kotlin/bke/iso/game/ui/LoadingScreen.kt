@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 class LoadingScreen(private val assets: Assets) : UIScreen() {
 
     override fun create() {
-        super.create()
         setup()
 
         val table = Table()
