@@ -81,6 +81,9 @@ class Input(override val game: Game) : Module() {
         }
     }
 
+    fun isControllerConnected() =
+        findController() != null
+
     private fun checkButtonDown(binding: ButtonBinding) =
         when (binding) {
             is KeyBinding -> Gdx.input.isKeyPressed(binding.code)
@@ -114,11 +117,11 @@ class Input(override val game: Game) : Module() {
     inner class ControllerHandler : ControllerAdapter() {
 
         override fun connected(controller: Controller) {
-            log.info { "Controller connected: '${controller.name}' id: ${controller.uniqueId}" }
+            log.info { "Controller connected: ${controller.log()}" }
         }
 
         override fun disconnected(controller: Controller) {
-            log.info { "Controller disconnected: '${controller.name}' id: ${controller.uniqueId}" }
+            log.info { "Controller disconnected: ${controller.log()}" }
         }
 
         override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
@@ -134,7 +137,7 @@ class Input(override val game: Game) : Module() {
         }
 
         private fun Controller.log() =
-            "'$name' id: $uniqueId"
+            "'$name' id: $uniqueId player index: $playerIndex"
 
         private fun matchButton(index: Int) =
             ControllerButton.entries

@@ -62,6 +62,14 @@ class PlayerSystem(
             input.poll("fly")
         )
 
+        val magnitude = movement.len()
+        // by normalizing the movement vector, we ensure that the player doesn't move faster diagonally
+        movement.nor()
+        // when using a controller, reapply the magnitude to support precise movement
+        if (input.isControllerConnected()) {
+            movement.scl(magnitude)
+        }
+
         val horizontalSpeed =
             if (input.poll("run") != 0f) {
                 runSpeed
