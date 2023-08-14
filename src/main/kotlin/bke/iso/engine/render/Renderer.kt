@@ -61,7 +61,7 @@ class Renderer(override val game: Game) : Module() {
     /**
      * Used to scale the rendered frame buffer to the screen
      */
-    private val viewport = ScalingViewport(Scaling.fillX, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
+    private val viewport = ScalingViewport(Scaling.fillY, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
 
     val debugRenderer = DebugRenderer()
 
@@ -110,7 +110,7 @@ class Renderer(override val game: Game) : Module() {
         camera.update()
 
         frameBuffer.begin()
-        ScreenUtils.clear(0f, 0f, 0f, 0f)
+        ScreenUtils.clear(0f, 0f, 255f, 1f)
         // TODO: is this needed? no effect after commenting out
         batch.projectionMatrix = camera.combined
         batch.begin()
@@ -132,7 +132,7 @@ class Renderer(override val game: Game) : Module() {
         batch.end()
         frameBuffer.end()
 
-        ScreenUtils.clear(0f, 0f, 255f, 1f)
+        ScreenUtils.clear(0f, 0f, 0f, 1f)
         viewport.apply()
         batch.projectionMatrix = fboCamera.combined
         batch.begin()
