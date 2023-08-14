@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 abstract class UIScreen {
 
     val stage = Stage(ScreenViewport())
+    val controllerNavigation = ControllerNavigation()
+
     protected val skin = Skin()
 
     abstract fun create()

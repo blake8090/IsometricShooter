@@ -27,12 +27,14 @@ class UI(override val game: Game) : Module() {
         clear()
         screens.addFirst(screen)
         game.input.addInputProcessor(screen.stage)
+        game.input.addControllerListener(screen.controllerNavigation)
         screen.create()
     }
 
     private fun clear() {
         screens.forEach { screen ->
             game.input.removeInputProcessor(screen.stage)
+            game.input.removeControllerListener(screen.controllerNavigation)
             screen.dispose()
         }
         screens.clear()

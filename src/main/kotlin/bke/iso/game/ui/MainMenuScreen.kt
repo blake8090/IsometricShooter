@@ -40,30 +40,31 @@ class MainMenuScreen(
             .padRight(50f)
 
         stackTable.row()
-        stackTable.add(TextButton("Start", skin).apply {
-            addListener(object : ChangeListener() {
-                override fun changed(event: ChangeEvent, actor: Actor) {
-                    log.debug { "Start clicked" }
-                    events.fire(MainMenuState.StartEvent())
-                }
-            })
+        val startButton = TextButton("Start", skin)
+        startButton.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent, actor: Actor) {
+                log.debug { "Start clicked" }
+                events.fire(MainMenuState.StartEvent())
+            }
         })
-            .width(700f)
+        controllerNavigation.add(startButton)
+        stackTable.add(startButton)
             .padTop(50f)
             .padBottom(50f)
 
         stackTable.row()
-        stackTable.add(TextButton("Quit", skin).apply {
-            addListener(object : ChangeListener() {
-                override fun changed(event: ChangeEvent, actor: Actor) {
-                    log.debug { "Quit clicked" }
-                    Gdx.app.exit()
-                }
-            })
+        val quitButton = TextButton("Quit", skin)
+        quitButton.addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent, actor: Actor) {
+                log.debug { "Quit clicked" }
+                Gdx.app.exit()
+            }
         })
-            .width(700f)
+        controllerNavigation.add(quitButton)
+        stackTable.add(quitButton)
             .padTop(50f)
             .padBottom(50f)
+
         root.add(stackTable).center()
     }
 
@@ -82,6 +83,7 @@ class MainMenuScreen(
         })
 
         skin.add("default", TextButtonStyle().apply {
+            focused = skin.newDrawable("white", Color.BLUE)
             up = skin.newDrawable("white", Color.LIGHT_GRAY)
             down = skin.newDrawable("white", Color.GRAY)
             checked = skin.newDrawable("white", Color.LIGHT_GRAY)

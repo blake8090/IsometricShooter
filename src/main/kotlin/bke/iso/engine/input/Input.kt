@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
+import com.badlogic.gdx.controllers.ControllerListener
 import com.badlogic.gdx.controllers.Controllers
 import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
@@ -96,6 +97,12 @@ class Input(override val game: Game) : Module() {
 
     fun removeInputProcessor(processor: InputProcessor) =
         inputMultiplexer.removeProcessor(processor)
+
+    fun addControllerListener(listener: ControllerListener) =
+        Controllers.addListener(listener)
+
+    fun removeControllerListener(listener: ControllerListener) =
+        Controllers.removeListener(listener)
 
     private fun checkButtonDown(binding: ButtonBinding) =
         when (binding) {
