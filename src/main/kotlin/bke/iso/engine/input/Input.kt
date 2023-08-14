@@ -45,6 +45,11 @@ class Input(override val game: Game) : Module() {
         Gdx.input.inputProcessor = inputMultiplexer
         addInputProcessor(KeyMouseHandler())
         Controllers.addListener(ControllerHandler())
+
+        // when starting the game, a controller should always be used if already connected
+        if (findController() != null) {
+            usingController = true
+        }
     }
 
     override fun update(deltaTime: Float) {

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import mu.KotlinLogging
 
 class MainMenuScreen(
@@ -35,31 +36,27 @@ class MainMenuScreen(
 
         val stackTable = Table()
         stackTable.background = skin.newDrawable("white", Color.DARK_GRAY)
-        stackTable.add(Label("Isometric Shooter", skin))
+        stackTable.add(Label("ISOMETRIC SHOOTER", skin))
             .padLeft(50f)
             .padRight(50f)
 
         stackTable.row()
-        val startButton = TextButton("Start", skin)
-        startButton.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent, actor: Actor) {
-                log.debug { "Start clicked" }
-                events.fire(MainMenuState.StartEvent())
-            }
-        })
+        val startButton = TextButton("START", skin)
+        startButton.onChanged { _, _ ->
+            log.debug { "Start clicked" }
+            events.fire(MainMenuState.StartEvent())
+        }
         controllerNavigation.add(startButton)
         stackTable.add(startButton)
             .padTop(50f)
             .padBottom(50f)
 
         stackTable.row()
-        val quitButton = TextButton("Quit", skin)
-        quitButton.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent, actor: Actor) {
-                log.debug { "Quit clicked" }
-                Gdx.app.exit()
-            }
-        })
+        val quitButton = TextButton("QUIT", skin)
+        quitButton.onChanged { _, _ ->
+            log.debug { "Quit clicked" }
+            Gdx.app.exit()
+        }
         controllerNavigation.add(quitButton)
         stackTable.add(quitButton)
             .padTop(50f)
@@ -74,7 +71,7 @@ class MainMenuScreen(
         pixmap.fill()
         skin.add("white", Texture(pixmap))
 
-        skin.add("title", assets.fonts[FontOptions("roboto", 75f, Color.WHITE)])
+        skin.add("title", assets.fonts[FontOptions("TitilliumWeb-SemiBold", 75f, Color.WHITE)])
         skin.add("button", assets.fonts[FontOptions("roboto", 65f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
@@ -83,12 +80,18 @@ class MainMenuScreen(
         })
 
         skin.add("default", TextButtonStyle().apply {
-            focused = skin.newDrawable("white", Color.BLUE)
+            font = skin.getFont("button")
             up = skin.newDrawable("white", Color.LIGHT_GRAY)
             down = skin.newDrawable("white", Color.GRAY)
-            checked = skin.newDrawable("white", Color.LIGHT_GRAY)
             over = skin.newDrawable("white", Color.BLUE)
-            font = skin.getFont("button")
         })
     }
+}
+
+fun TextButton.onChanged(action: (ChangeEvent, Actor) -> Unit) {
+    addListener(object : ChangeListener() {
+        override fun changed(event: ChangeEvent, actor: Actor) {
+            action.invoke(event, actor)
+        }
+    })
 }

@@ -19,6 +19,10 @@ class ControllerNavigation : ControllerAdapter() {
     fun add(actor: Actor) =
         actors.add(actor)
 
+    fun start() {
+        selectButton()
+    }
+
     override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean =
         when (ControllerButton.entries[buttonIndex]) {
             ControllerButton.A -> clickButton()
@@ -36,6 +40,8 @@ class ControllerNavigation : ControllerAdapter() {
     private fun fireEvent(actor: Actor, type: InputEvent.Type, code: Int? = null): Boolean {
         val event = Pools.obtain(InputEvent::class.java)
         event.type = type
+        // -1 is always used on desktop
+        event.pointer = -1
         if (code != null) {
             event.button = code
         }
