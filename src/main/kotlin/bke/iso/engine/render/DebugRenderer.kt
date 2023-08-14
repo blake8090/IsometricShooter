@@ -4,77 +4,96 @@ import bke.iso.engine.math.Box
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.Pools
 
 class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
 
-    private val lines = ObjectPool.new<DebugLine>()
-    private val rectangles = ObjectPool.new<DebugRectangle>()
-    private val circles = ObjectPool.new<DebugCircle>()
-    private val points = ObjectPool.new<DebugPoint>()
-    private val boxes = ObjectPool.new<DebugBox>()
-    private val spheres = ObjectPool.new<DebugSphere>()
+    private val lines = Array<DebugLine>()
+    private val rectangles = Array<DebugRectangle>()
+    private val circles = Array<DebugCircle>()
+    private val points = Array<DebugPoint>()
+    private val boxes = Array<DebugBox>()
+    private val spheres = Array<DebugSphere>()
 
-    fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) =
-        lines.obtain().apply {
+    fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
+        Pools.obtain(DebugLine::class.java).apply {
             this.start.set(start)
             this.end.set(end)
             this.end.set(end)
             this.width = width
             this.color = color
+            lines.add(this)
         }
+    }
 
-    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) =
-        rectangles.obtain().apply {
+    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
+        Pools.obtain(DebugRectangle::class.java).apply {
             this.rectangle.set(rectangle)
             this.lineWidth = lineWidth
             this.color = color
+            rectangles.add(this)
         }
+    }
 
-    fun addCircle(pos: Vector3, radius: Float, color: Color) =
-        circles.obtain().apply {
+    fun addCircle(pos: Vector3, radius: Float, color: Color) {
+        Pools.obtain(DebugCircle::class.java).apply {
             this.pos.set(pos.x, pos.y, pos.z)
             this.radius = radius
             this.color = color
+            circles.add(this)
         }
+    }
 
-    fun addPoint(pos: Vector3, size: Float, color: Color) =
-        points.obtain().apply {
+    fun addPoint(pos: Vector3, size: Float, color: Color) {
+        Pools.obtain(DebugPoint::class.java).apply {
             this.pos.set(pos)
             this.size = size
             this.color = color
+            points.add(this)
         }
+    }
 
-    fun addBox(box: Box, color: Color) =
-        boxes.obtain().apply {
+    fun addBox(box: Box, color: Color) {
+        Pools.obtain(DebugBox::class.java).apply {
             pos.set(box.min)
             dimensions.set(box.width, box.length, box.height)
             this.color = color
+            boxes.add(this)
         }
+    }
 
-    fun addSphere(pos: Vector3, radius: Float, color: Color) =
-        spheres.obtain().apply {
+    fun addSphere(pos: Vector3, radius: Float, color: Color) {
+        Pools.obtain(DebugSphere::class.java).apply {
             this.pos.set(pos.x, pos.y, pos.z)
             this.radius = radius
             this.color = color
+            spheres.add(this)
         }
+    }
 
     fun render() {
         shapeDrawer.begin()
-        lines.getAll().forEach(shapeDrawer::drawLine)
-        rectangles.getAll().forEach(shapeDrawer::drawRectangle)
-        circles.getAll().forEach(shapeDrawer::drawCircle)
-        points.getAll().forEach(shapeDrawer::drawPoint)
-        boxes.getAll().forEach(shapeDrawer::drawBox)
-        spheres.getAll().forEach(shapeDrawer::drawSphere)
+        lines.forEach(shapeDrawer::drawLine)
+        rectangles.forEach(shapeDrawer::drawRectangle)
+        circles.forEach(shapeDrawer::drawCircle)
+        points.forEach(shapeDrawer::drawPoint)
+        boxes.forEach(shapeDrawer::drawBox)
+        spheres.forEach(shapeDrawer::drawSphere)
         shapeDrawer.end()
     }
 
     fun clear() {
-        lines.clear()
-        rectangles.clear()
-        circles.clear()
-        points.clear()
-        boxes.clear()
-        spheres.clear()
+        clear(lines)
+        clear(rectangles)
+        clear(circles)
+        clear(points)
+        clear(boxes)
+        clear(spheres)
+    }
+
+    private fun <T : Any> clear(array: Array<T>) {
+        Pools.freeAll(array)
+        array.clear()
     }
 }
