@@ -4,14 +4,11 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.math.toVector2
-import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.getCollisionData
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Pixmap
@@ -63,9 +60,10 @@ class Renderer(override val game: Game) : Module() {
      */
     private val viewport = ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
 
-    private val shapeDrawer = DebugShapeDrawer(batch)
-    val debugRenderer = DebugRenderer(shapeDrawer)
+    val debugRenderer = DebugRenderer(DebugShapeDrawer(batch))
     private var debugEnabled = false
+
+    val cursor = Cursor(game.assets, camera)
 
     init {
         // enables somewhat pixel-perfect rendering!
@@ -82,21 +80,6 @@ class Renderer(override val game: Game) : Module() {
 
     fun toggleDebug() {
         debugEnabled = debugEnabled.not()
-    }
-
-    fun getCursorPos(): Vector3 {
-        val screenPos = camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
-        return toWorld(screenPos.toVector2())
-    }
-
-    fun setCursor(textureName: String) {
-        val texture = game.assets.get<Texture>(textureName)
-        val xHotspot = texture.width / 2
-        val yHotspot = texture.height / 2
-        texture.textureData.prepare()
-        val pixmap = texture.textureData.consumePixmap()
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot))
-        pixmap.dispose()
     }
 
     fun resize(width: Int, height: Int) {
@@ -248,9 +231,9 @@ fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
     this.color = originalColor
 }
 
-fun makePixel(): Texture {
+fun makePixel(color: Color = Color.WHITE): Texture {
     val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
-    pixmap.setColor(Color.WHITE)
+    pixmap.setColor(color)
     pixmap.fill()
     val texture = Texture(pixmap)
     pixmap.dispose()
