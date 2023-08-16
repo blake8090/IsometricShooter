@@ -25,6 +25,7 @@ import bke.iso.game.actor.TurretSystem
 import bke.iso.game.actor.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
+import bke.iso.game.ui.CrosshairCursor
 import bke.iso.game.ui.GameHUD
 import bke.iso.game.ui.LoadingScreen
 import com.badlogic.gdx.Input
@@ -72,7 +73,7 @@ class GameplayState(override val game: Game) : GameState() {
     }
 
     override fun start() {
-        game.renderer.cursor.set("cursor")
+        game.renderer.cursor = CrosshairCursor()
         game.ui.setScreen(GameHUD(game.assets))
         game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
     }

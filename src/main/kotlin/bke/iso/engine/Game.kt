@@ -38,12 +38,17 @@ class Game {
 
     fun start() {
         input.start()
-        assets.setup()
+        assets.start()
         switchState(MainMenuState::class)
     }
 
     fun stop() {
         log.info { "Stopping game" }
+        // TODO: CRITICAL: fix "already disposed" error!
+        ui.dispose()
+        assets.dispose()
+        input.dispose()
+        renderer.dispose()
     }
 
     fun update(deltaTime: Float) {
@@ -51,6 +56,7 @@ class Game {
             runFrame(deltaTime)
         }
         ui.update(deltaTime)
+        renderer.drawCursor()
     }
 
     private fun runFrame(deltaTime: Float) {
@@ -108,7 +114,9 @@ class Game {
 abstract class Module {
     protected abstract val game: Game
 
+    open fun start() {}
+
     open fun update(deltaTime: Float) {}
 
-    open fun stop() {}
+    open fun dispose() {}
 }

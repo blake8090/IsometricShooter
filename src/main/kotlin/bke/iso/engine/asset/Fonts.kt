@@ -33,6 +33,10 @@ class Fonts(private val assets: Assets) {
         log.debug { "Generated font ${options.name}, $options, pixels $pixels" }
         return generator.generateFont(parameter)
     }
+
+    fun dispose() {
+        cache.values.forEach(BitmapFont::dispose)
+    }
 }
 
 class FreeTypeFontGeneratorLoader : AssetLoader<FreeTypeFontGenerator> {

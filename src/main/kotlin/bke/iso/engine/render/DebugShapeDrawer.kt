@@ -14,11 +14,12 @@ import space.earlygrey.shapedrawer.ShapeDrawer
 class DebugShapeDrawer(batch: PolygonSpriteBatch) {
 
     private val shapeDrawer: ShapeDrawer
-    private val pixel = makePixel()
 
     init {
+        val pixel = makePixelTexture()
         val region = TextureRegion(pixel, 0, 0, 1, 1)
         shapeDrawer = ShapeDrawer(batch, region)
+        pixel.dispose()
     }
 
     fun update() {
@@ -31,10 +32,6 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
 
     fun end() {
         shapeDrawer.batch.end()
-    }
-
-    fun dispose() {
-        pixel.dispose()
     }
 
     fun drawPoint(point: DebugPoint) =

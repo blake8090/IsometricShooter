@@ -2,6 +2,7 @@ package bke.iso.engine.asset
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 import java.io.File
 import kotlin.io.path.Path
@@ -24,10 +25,17 @@ class Assets(override val game: Game) : Module() {
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assets = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
 
-    fun setup() {
+    override fun start() {
         addLoader("jpg", TextureLoader())
         addLoader("png", TextureLoader())
         addLoader("ttf", FreeTypeFontGeneratorLoader())
+    }
+
+    override fun dispose() {
+        assets.values
+            .filterIsInstance<Disposable>()
+            .forEach(Disposable::dispose)
+        fonts.dispose()
     }
 
     fun addLoader(fileExtension: String, loader: AssetLoader<*>) {

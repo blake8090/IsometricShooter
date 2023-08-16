@@ -28,7 +28,7 @@ class Input(override val game: Game) : Module() {
         controllerBindings.getAxis = (::getAxis)
     }
 
-    fun start() {
+    override fun start() {
         Gdx.input.inputProcessor = inputMultiplexer
         addInputProcessor(inputState.keyMouseHandler)
         Controllers.addListener(inputState.controllerHandler)

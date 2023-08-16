@@ -4,11 +4,13 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.getCollisionData
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Pixmap
@@ -40,6 +42,11 @@ class Renderer(override val game: Game) : Module() {
 
     private val batch = PolygonSpriteBatch()
 
+    val debugRenderer = DebugRenderer(DebugShapeDrawer(batch))
+    private var debugEnabled = false
+
+    var cursor: CustomCursor? = null
+
     /**
      * All game objects are rendered to this buffer
      */
@@ -60,16 +67,17 @@ class Renderer(override val game: Game) : Module() {
      */
     private val viewport = ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
 
-    val debugRenderer = DebugRenderer(DebugShapeDrawer(batch))
-    private var debugEnabled = false
-
-    val cursor = Cursor(game.assets, camera)
-
     init {
         // enables somewhat pixel-perfect rendering!
         frameBuffer.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
         // ensures that everything rendered on the frame buffer is in the correct position
         fboCamera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+    }
+
+    override fun dispose() {
+        batch.dispose()
+        debugRenderer.clear()
+        frameBuffer.dispose()
     }
 
     fun setCameraPos(worldPos: Vector3) {
@@ -85,6 +93,21 @@ class Renderer(override val game: Game) : Module() {
     fun resize(width: Int, height: Int) {
         viewport.update(width, height)
         fboCamera.update()
+    }
+
+    fun drawCursor() {
+        val customCursor = cursor
+            ?.takeIf(CustomCursor::enabled)
+            ?: return
+        val cursorPos = camera.unproject(
+            Vector3(
+                Gdx.input.x.toFloat(),
+                Gdx.input.y.toFloat(),
+                0f
+            )
+        )
+        batch.projectionMatrix = camera.combined
+        customCursor.draw(batch, cursorPos.toVector2())
     }
 
     fun render() {
@@ -231,13 +254,18 @@ fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
     this.color = originalColor
 }
 
-fun makePixel(color: Color = Color.WHITE): Texture {
-    val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
-    pixmap.setColor(color)
-    pixmap.fill()
+fun makePixelTexture(color: Color = Color.WHITE): Texture {
+    val pixmap = makePixel(color)
     val texture = Texture(pixmap)
     pixmap.dispose()
     return texture
+}
+
+fun makePixel(color: Color = Color.WHITE): Pixmap {
+    val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
+    pixmap.setColor(color)
+    pixmap.fill()
+    return pixmap
 }
 
 private data class DrawData(

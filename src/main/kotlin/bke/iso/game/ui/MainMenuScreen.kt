@@ -3,7 +3,7 @@ package bke.iso.game.ui
 import bke.iso.engine.Game
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
-import bke.iso.engine.render.makePixel
+import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.Gdx
@@ -65,7 +65,7 @@ class MainMenuScreen(
     }
 
     private fun setup() {
-        skin.add("white", makePixel())
+        skin.add("white", makePixelTexture())
 
         skin.add("title", assets.fonts[FontOptions("TitilliumWeb-SemiBold", 75f, Color.WHITE)])
         skin.add("button", assets.fonts[FontOptions("roboto", 65f, Color.WHITE)])

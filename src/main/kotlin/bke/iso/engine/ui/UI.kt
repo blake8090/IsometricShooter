@@ -14,7 +14,7 @@ class UI(override val game: Game) : Module() {
         screens.forEach { screen -> screen.render(deltaTime) }
     }
 
-    override fun stop() {
+    override fun dispose() {
         screens.forEach(UIScreen::dispose)
     }
 

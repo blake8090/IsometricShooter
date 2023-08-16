@@ -2,7 +2,7 @@ package bke.iso.game.ui
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
-import bke.iso.engine.render.makePixel
+import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -25,7 +25,7 @@ class LoadingScreen(private val assets: Assets) : UIScreen() {
     }
 
     private fun setup() {
-        skin.add("pixel", makePixel())
+        skin.add("pixel", makePixelTexture())
 
         skin.add("default", assets.fonts[FontOptions("roboto", 45f, Color.WHITE)])
 
