@@ -44,11 +44,10 @@ class Game {
 
     fun stop() {
         log.info { "Stopping game" }
-        // TODO: CRITICAL: fix "already disposed" error!
-        ui.dispose()
         assets.dispose()
         input.dispose()
         renderer.dispose()
+        ui.dispose()
     }
 
     fun update(deltaTime: Float) {

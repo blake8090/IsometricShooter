@@ -1,5 +1,6 @@
 package bke.iso.engine.asset
 
+import bke.iso.engine.Disposer
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
@@ -35,7 +36,10 @@ class Fonts(private val assets: Assets) {
     }
 
     fun dispose() {
-        cache.values.forEach(BitmapFont::dispose)
+        log.info { "Disposing fonts" }
+        for ((options, font) in cache) {
+            Disposer.dispose(font, options.name)
+        }
     }
 }
 

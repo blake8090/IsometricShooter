@@ -36,6 +36,7 @@ class UI(override val game: Game) : Module() {
 
     private fun clear() {
         screens.forEach { screen ->
+            log.debug { "Disposing screen ${screen::class.simpleName}" }
             game.input.removeInputProcessor(screen.stage)
             game.input.removeControllerListener(screen.controllerNavigation)
             screen.dispose()

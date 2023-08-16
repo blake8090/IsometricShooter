@@ -1,5 +1,6 @@
 package bke.iso.engine.asset
 
+import bke.iso.engine.Disposer
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import com.badlogic.gdx.utils.Disposable
@@ -32,9 +33,12 @@ class Assets(override val game: Game) : Module() {
     }
 
     override fun dispose() {
-        assets.values
-            .filterIsInstance<Disposable>()
-            .forEach(Disposable::dispose)
+        log.info { "Disposing assets" }
+        for (asset in assets.values) {
+            if (asset.value is Disposable) {
+                Disposer.dispose(asset.value, asset.name)
+            }
+        }
         fonts.dispose()
     }
 
