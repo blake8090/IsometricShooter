@@ -37,15 +37,14 @@ class Game {
     private var loading = false
 
     fun start() {
-        input.start()
         assets.start()
+        input.start()
         switchState(MainMenuState::class)
     }
 
     fun stop() {
         log.info { "Stopping game" }
         assets.dispose()
-        input.dispose()
         renderer.dispose()
         ui.dispose()
     }
@@ -62,6 +61,8 @@ class Game {
         input.update(deltaTime)
         physics.update(deltaTime)
 
+        // make sure that game states receive accurate positions when custom cursors are enabled
+        renderer.updateCursor(deltaTime)
         state.update(deltaTime)
         for (system in state.systems) {
             system.update(deltaTime)

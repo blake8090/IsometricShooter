@@ -3,6 +3,7 @@ package bke.iso.game.actor
 import bke.iso.engine.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.Location
+import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collider
 import bke.iso.engine.physics.Velocity
@@ -40,7 +41,7 @@ class PlayerSystem(
             }
 
             input.onAction("shoot") {
-//                combat.shoot(actor, renderer.cursor.worldPos, BulletType.PLAYER)
+                combat.shoot(actor, toWorld(renderer.getCursorPos()), BulletType.PLAYER)
             }
 //
 //            inputService.onAction("placeBouncyBall") {

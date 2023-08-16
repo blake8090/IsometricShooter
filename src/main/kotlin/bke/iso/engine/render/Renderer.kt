@@ -12,16 +12,19 @@ import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Cursor
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.viewport.ScalingViewport
+import mu.KotlinLogging
 
 const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f
@@ -40,12 +43,14 @@ data class DrawActorEvent(
 
 class Renderer(override val game: Game) : Module() {
 
+    private val log = KotlinLogging.logger {}
+
     private val batch = PolygonSpriteBatch()
 
     val debugRenderer = DebugRenderer(DebugShapeDrawer(batch))
     private var debugEnabled = false
 
-    var cursor: CustomCursor? = null
+    private var customCursor: CustomCursor? = null
 
     /**
      * All game objects are rendered to this buffer
@@ -80,6 +85,11 @@ class Renderer(override val game: Game) : Module() {
         frameBuffer.dispose()
     }
 
+    fun resize(width: Int, height: Int) {
+        viewport.update(width, height)
+        fboCamera.update()
+    }
+
     fun setCameraPos(worldPos: Vector3) {
         val pos = toScreen(worldPos)
         camera.position.x = pos.x
@@ -90,24 +100,32 @@ class Renderer(override val game: Game) : Module() {
         debugEnabled = debugEnabled.not()
     }
 
-    fun resize(width: Int, height: Int) {
-        viewport.update(width, height)
-        fboCamera.update()
+    fun getCursorPos(): Vector2 {
+        val pos = customCursor
+            ?.getPos()
+            ?: Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
+        return camera.unproject(Vector3(pos.x, pos.y, 0f)).toVector2()
     }
 
+    fun setCursor(customCursor: CustomCursor) {
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None)
+        this.customCursor = customCursor
+        log.debug { "Set custom cursor: ${customCursor::class.simpleName}" }
+    }
+
+    fun resetCursor() {
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow)
+        customCursor = null
+        log.debug { "Reset cursor" }
+    }
+
+    fun updateCursor(deltaTime: Float) =
+        customCursor?.update(deltaTime)
+
     fun drawCursor() {
-        val customCursor = cursor
-            ?.takeIf(CustomCursor::enabled)
-            ?: return
-        val cursorPos = camera.unproject(
-            Vector3(
-                Gdx.input.x.toFloat(),
-                Gdx.input.y.toFloat(),
-                0f
-            )
-        )
+        val cursor = customCursor ?: return
         batch.projectionMatrix = camera.combined
-        customCursor.draw(batch, cursorPos.toVector2())
+        cursor.draw(batch, getCursorPos())
     }
 
     fun render() {

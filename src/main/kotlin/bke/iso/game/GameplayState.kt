@@ -73,7 +73,7 @@ class GameplayState(override val game: Game) : GameState() {
     }
 
     override fun start() {
-        game.renderer.cursor = CrosshairCursor()
+        game.renderer.setCursor(CrosshairCursor(game.assets))
         game.ui.setScreen(GameHUD(game.assets))
         game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
     }
