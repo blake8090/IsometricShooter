@@ -74,6 +74,9 @@ class Collisions(override val game: Game) : Module() {
         val py = if (dy < 0) floor(dy) else ceil(dy)
         val pz = if (dz < 0) floor(dz) else ceil(dz)
         val projectedBox = box.project(px, py, pz)
+            // project downward one more unit to make sure objects just below are checked
+            // TODO: rewrite this to handle arbitrary heights
+            .project(0f, 0f, -1f)
         game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
 
         val objects = game.world.getObjectsInArea(projectedBox)
