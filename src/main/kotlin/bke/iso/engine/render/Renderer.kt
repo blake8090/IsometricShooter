@@ -178,11 +178,6 @@ class Renderer(override val game: Game) : Module() {
             else -> error("Unrecognized type for game object $obj")
         }
 
-        // TODO: is this still needed?
-//        if (obj is Tile) {
-//            max.add(1f, 1f, 0f)
-//        }
-
         val min = data?.box?.min ?: pos
         val max = data?.box?.max ?: pos
         val width = max.x - min.x
