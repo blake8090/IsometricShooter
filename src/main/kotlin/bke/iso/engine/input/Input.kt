@@ -20,6 +20,7 @@ class Input(override val game: Game) : Module() {
         Gdx.input.inputProcessor = inputMultiplexer
         addInputProcessor(inputState.keyMouseHandler)
         Controllers.addListener(inputState.controllerHandler)
+        inputState.start()
     }
 
     override fun update(deltaTime: Float) {

@@ -8,13 +8,9 @@ import bke.iso.engine.ui.UIScreen
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import mu.KotlinLogging
 
 class MainMenuScreen(
@@ -34,33 +30,46 @@ class MainMenuScreen(
         stage.addActor(root)
 
         val stackTable = Table()
+        stackTable.debug = true
         stackTable.background = skin.newDrawable("white", Color.DARK_GRAY)
         stackTable.add(Label("ISOMETRIC SHOOTER", skin))
             .padLeft(50f)
             .padRight(50f)
 
         stackTable.row()
-        // TODO: fix input enter/exit events
-        val startButton = TextButton("START", skin)
-        startButton.onChanged { _, _ ->
-            log.debug { "Start clicked" }
-            events.fire(MainMenuState.StartEvent())
-        }
-        controllerNavigation.add(startButton)
+        val startButton = TextButtonBuilder("START", skin)
+            .onChanged { _, _ ->
+                log.debug { "Start clicked" }
+                events.fire(MainMenuState.StartEvent())
+            }
+            .onEnter { _, actor ->
+                actor.color = Color.BLUE
+            }
+            .onExit { _, actor ->
+                actor.color = Color.LIGHT_GRAY
+            }
+            .build()
         stackTable.add(startButton)
-            .padTop(50f)
-            .padBottom(50f)
+            .padTop(20f)
+        controllerNavigation.add(startButton)
 
         stackTable.row()
-        val quitButton = TextButton("QUIT", skin)
-        quitButton.onChanged { _, _ ->
-            log.debug { "Quit clicked" }
-            Gdx.app.exit()
-        }
-        controllerNavigation.add(quitButton)
+        val quitButton = TextButtonBuilder("QUIT", skin)
+            .onChanged { _, _ ->
+                log.debug { "Quit clicked" }
+                Gdx.app.exit()
+            }
+            .onEnter { _, actor ->
+                actor.color = Color.BLUE
+            }
+            .onExit { _, actor ->
+                actor.color = Color.LIGHT_GRAY
+            }
+            .build()
         stackTable.add(quitButton)
-            .padTop(50f)
-            .padBottom(50f)
+            .padTop(20f)
+            .padBottom(20f)
+        controllerNavigation.add(quitButton)
 
         root.add(stackTable).center()
     }
@@ -83,12 +92,4 @@ class MainMenuScreen(
             over = skin.newDrawable("white", Color.BLUE)
         })
     }
-}
-
-fun TextButton.onChanged(action: (ChangeEvent, Actor) -> Unit) {
-    addListener(object : ChangeListener() {
-        override fun changed(event: ChangeEvent, actor: Actor) {
-            action.invoke(event, actor)
-        }
-    })
 }
