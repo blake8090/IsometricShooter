@@ -198,26 +198,19 @@ class Renderer(override val game: Game) : Module() {
     }
 
     private fun inFront(a: DrawData, b: DrawData): Boolean {
-        // TODO: this fixes an odd rendering bug - can we somehow combine this into another condition for simplicity?
-        if (a.max.x <= b.min.x) {
-            return false
-        }
-
-        if (getDepth(a) < getDepth(b)) {
-            return false
-        }
-
-        // TODO: finish adding cases to fix rendering issues on y-axis
         if (a.max.z <= b.min.z) {
             return false
         }
 
-        return true
-    }
+        if (a.min.y - b.max.y >= 0) {
+            return false
+        }
 
-    private fun getDepth(data: DrawData): Float {
-        val dCenter = data.center.x - data.center.y
-        return dCenter + data.min.x - data.min.y
+        if (a.max.x - b.min.x <= 0) {
+            return false
+        }
+
+        return true
     }
 
     private fun draw(data: DrawData) {
