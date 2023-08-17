@@ -40,7 +40,7 @@ class Combat(
     }
 
     fun onDamage(actor: Actor, damage: Float) {
-        val health = actor.components[Health::class] ?: return
+        val health = actor.get<Health>() ?: return
         health.value = max(health.value - damage, 0f)
         log.trace("Actor received damage: $damage Remaining health: ${health.value}")
 

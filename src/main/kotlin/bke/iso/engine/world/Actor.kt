@@ -36,7 +36,7 @@ class Actor(
             z = value.z
         }
 
-    val components = Components()
+    val components = mutableMapOf<KClass<out Component>, Component>()
 
     init {
         this.x = x
@@ -44,14 +44,36 @@ class Actor(
         this.z = z
     }
 
-    inline fun <reified T : Component> has() =
-        T::class in components
-
     fun move(delta: Vector3) {
         x += delta.x
         y += delta.y
         z += delta.z
     }
+
+    inline fun <reified T : Component> add(component: T) {
+        components[T::class] = component
+    }
+
+    fun add(vararg components: Component) {
+        for (component in components) {
+            add(component)
+        }
+    }
+
+    fun <T : Component> get(type: KClass<T>): T? =
+        type.safeCast(components[type])
+
+    inline fun <reified T : Component> get(): T? =
+        components[T::class] as T?
+
+    inline fun <reified T : Component> getOrPut(defaultValue: T): T =
+        components.getOrPut(T::class) { defaultValue } as T
+
+    inline fun <reified T : Component> has() =
+        components.contains(T::class)
+
+    inline fun <reified T : Component> remove() =
+        components.remove(T::class)
 
     override fun equals(other: Any?) =
         other is Actor && other.id == id
@@ -62,31 +84,4 @@ class Actor(
 
     override fun toString() =
         id.toString()
-}
-
-// TODO: remove this and use inline functions on a map
-class Components {
-    val map = mutableMapOf<KClass<out Component>, Component>()
-
-    fun add(components: Array<out Component>) =
-        components.forEach(::add)
-
-    private inline fun <reified T : Component> add(component: T) =
-        set(T::class, component)
-
-    operator fun <T : Component> set(type: KClass<out T>, component: T) {
-        map[type] = component
-    }
-
-    operator fun <T : Component> get(type: KClass<T>): T? =
-        type.safeCast(map[type])
-
-    inline fun <reified T : Component> getOrPut(defaultValue: T): T =
-        map.getOrPut(T::class) { defaultValue } as T
-
-    operator fun <T : Component> contains(type: KClass<T>) =
-        map.contains(type)
-
-    inline fun <reified T : Component> remove() =
-        map.remove(T::class)
 }

@@ -58,7 +58,7 @@ class BulletSystem(
     }
 
     private fun getFirstCollidingObject(actor: Actor): GameObject? {
-        val collisions = actor.components[FrameCollisions::class]
+        val collisions = actor.get<FrameCollisions>()
             ?.collisions
             ?: return null
         return collisions.minByOrNull(Collision::distance)?.obj

@@ -59,9 +59,8 @@ class World(override val game: Game) : Module() {
 
     private fun <T : Component> findActorsWith(type: KClass<out T>): Set<Pair<Actor, T>> =
         grid.getAllActors()
-            .associateWith { actor -> actor.components[type] }
-            .mapNotNull { (actor, component) ->
-                component ?: return@mapNotNull null
+            .mapNotNull { actor ->
+                val component = actor.get(type) ?: return@mapNotNull null
                 actor to component
             }
             .toSet()

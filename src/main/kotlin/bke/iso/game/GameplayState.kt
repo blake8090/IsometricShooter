@@ -183,8 +183,8 @@ class GameplayState(override val game: Game) : GameState() {
         val healthBarWidth = 32f
         val healthBarHeight = 8f
 
-        val health = actor.components[Health::class] ?: return
-        val healthBar = actor.components[HealthBar::class] ?: return
+        val health = actor.get<Health>() ?: return
+        val healthBar = actor.get<HealthBar>() ?: return
 
         val pixel = game.assets.get<Texture>("pixel")
         val pos = toScreen(actor.pos)

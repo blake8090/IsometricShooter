@@ -19,7 +19,7 @@ fun Tile.getCollisionData() =
     )
 
 fun Actor.getCollisionData(): CollisionData? {
-    val collision = components[Collider::class] ?: return null
+    val collision = get<Collider>() ?: return null
     val bounds = collision.bounds
     return CollisionData(
         Box(

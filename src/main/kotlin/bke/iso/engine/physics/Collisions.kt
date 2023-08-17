@@ -21,7 +21,7 @@ class Collisions(override val game: Game) : Module() {
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<FrameCollisions> { actor, _ ->
-            actor.components.remove<FrameCollisions>()
+            actor.remove<FrameCollisions>()
         }
     }
 
@@ -109,7 +109,7 @@ class Collisions(override val game: Game) : Module() {
     }
 
     private fun recordCollisions(actor: Actor, predictedCollisions: Collection<PredictedCollision>) {
-        val frameCollisions = actor.components.getOrPut(FrameCollisions())
+        val frameCollisions = actor.getOrPut(FrameCollisions())
         predictedCollisions
             .filter { collision ->
                 frameCollisions.collisions.none { collision.obj is Actor && collision.obj == actor }

@@ -78,7 +78,7 @@ class PlayerSystem(
                 walkSpeed
             }
 
-        val velocity = actor.components.getOrPut(Velocity())
+        val velocity = actor.getOrPut(Velocity())
         velocity.delta.set(movement)
         velocity.speed.set(horizontalSpeed, horizontalSpeed, flySpeed)
 
