@@ -42,6 +42,7 @@ class GameplayState(override val game: Game) : GameState() {
 
     private val factory = Factory(game.world)
     private val combat = Combat(game.world, game.events)
+    private val crosshair = CrosshairCursor(game.assets, game.input)
 
     override val systems: Set<System> = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
@@ -73,7 +74,7 @@ class GameplayState(override val game: Game) : GameState() {
     }
 
     override fun start() {
-        game.renderer.setCursor(CrosshairCursor(game.assets))
+        game.renderer.setCursor(crosshair)
         game.ui.setScreen(GameHUD(game.assets))
         game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
     }
@@ -93,7 +94,7 @@ class GameplayState(override val game: Game) : GameState() {
 
     private fun bindInput() {
         log.debug { "binding actions" }
-        with(game.input) {
+        with(game.input.keyMouse) {
             // keyboard & mouse
             bind(
                 "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
@@ -116,12 +117,17 @@ class GameplayState(override val game: Game) : GameState() {
                 KeyBinding(Input.Keys.Q, ButtonState.DOWN),
                 KeyBinding(Input.Keys.E, ButtonState.DOWN)
             )
+        }
 
+        with(game.input.controller) {
             // controller
             bind(
                 "run" to ControllerBinding(ControllerButton.LEFTBUMPER.ordinal, ButtonState.DOWN),
                 "moveX" to ControllerAxisBinding(ControllerAxis.LEFTX.ordinal),
                 "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
+                "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
+                "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
+                "shoot" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.PRESSED)
             )
             bind(
                 "fly",

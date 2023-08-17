@@ -13,6 +13,8 @@ abstract class CustomCursor {
         Gdx.input.y.toFloat()
     )
 
+    abstract fun create()
+
     abstract fun update(deltaTime: Float)
 
     abstract fun draw(batch: PolygonSpriteBatch, unProjectedPos: Vector2)

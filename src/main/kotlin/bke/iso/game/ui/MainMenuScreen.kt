@@ -40,6 +40,7 @@ class MainMenuScreen(
             .padRight(50f)
 
         stackTable.row()
+        // TODO: fix input enter/exit events
         val startButton = TextButton("START", skin)
         startButton.onChanged { _, _ ->
             log.debug { "Start clicked" }

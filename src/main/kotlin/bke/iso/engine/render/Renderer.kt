@@ -109,6 +109,7 @@ class Renderer(override val game: Game) : Module() {
 
     fun setCursor(customCursor: CustomCursor) {
         Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None)
+        customCursor.create()
         this.customCursor = customCursor
         log.debug { "Set custom cursor: ${customCursor::class.simpleName}" }
     }

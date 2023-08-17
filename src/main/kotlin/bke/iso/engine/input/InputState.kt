@@ -1,5 +1,6 @@
 package bke.iso.engine.input
 
+import bke.iso.engine.Event
 import bke.iso.engine.Game
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.controllers.Controller
@@ -70,7 +71,7 @@ class InputState(private val events: Game.Events) {
             // only switch to controller input when the primary controller has been connected
             if (controller.playerIndex == 0) {
                 switchInput(InputSource.CONTROLLER)
-                events.fire(Input.OnControllerConnect())
+                events.fire(OnControllerConnect())
             }
         }
 
@@ -102,7 +103,7 @@ class InputState(private val events: Game.Events) {
         }
 
         override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
-            if (controller.playerIndex != -1 && abs(value) >= CONTROLLER_DEAD_ZONE) {
+            if (controller.playerIndex != -1 && abs(value) >= DEFAULT_CONTROLLER_DEADZONE) {
                 switchInput(InputSource.CONTROLLER)
             }
             return false
@@ -113,6 +114,8 @@ class InputState(private val events: Game.Events) {
                 .find { entry -> entry.ordinal == index }
                 ?: error("Unknown ControllerButton index: $index")
     }
+
+    class OnControllerConnect : Event()
 }
 
 enum class InputSource {
