@@ -57,8 +57,8 @@ class GameplayState(override val game: Game) : GameState() {
         game.assets.load("game")
 
         loadMap()
-        factory.createLampPost(Location(4, 4, 0))
-        factory.createLampPost(Location(8, 4, 0))
+        factory.createLampPost(Location(4, 4, 0)).y -= 0.125f
+        factory.createLampPost(Location(8, 4, 0)).y -= 0.125f
         factory.createPillar(Location(12, 12, 0))
             .apply {
                 x -= 0.5f
