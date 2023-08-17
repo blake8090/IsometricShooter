@@ -283,7 +283,7 @@ fun makePixelTexture(color: Color = Color.WHITE): Texture {
 fun makePixel(color: Color = Color.WHITE): Pixmap {
     val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
     pixmap.setColor(color)
-    pixmap.fill()
+    pixmap.drawPixel(0, 0)
     return pixmap
 }
 

@@ -19,7 +19,6 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         val pixel = makePixelTexture()
         val region = TextureRegion(pixel, 0, 0, 1, 1)
         shapeDrawer = ShapeDrawer(batch, region)
-        pixel.dispose()
     }
 
     fun update() {

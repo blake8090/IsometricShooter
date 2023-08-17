@@ -27,10 +27,10 @@ const val TILE_SIZE_Z = 32
 fun getIsometricRatio() =
     sqrt(TILE_SIZE_X.toFloat() / TILE_SIZE_Y.toFloat())
 
-fun toScreen(x: Float, y: Float, z: Float): Vector2  {
+fun toScreen(x: Float, y: Float, z: Float): Vector2 {
     val scaleX = TILE_SIZE_X / 2
     val scaleY = TILE_SIZE_Y / 2
-    val height =  z * TILE_SIZE_Z
+    val height = z * TILE_SIZE_Z
     return Vector2(
         (x + y) * scaleX,
         (y - x) * scaleY + height
