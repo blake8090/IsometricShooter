@@ -139,6 +139,7 @@ class Renderer(override val game: Game) : Module() {
                 }
             }
         }
+        // TODO: is this really true?
         // for proper rendering, objects with nothing behind them must be drawn first
         drawData.filter { it.objectsBehind.isEmpty() }.forEach(::draw)
         drawData.forEach(::draw)
