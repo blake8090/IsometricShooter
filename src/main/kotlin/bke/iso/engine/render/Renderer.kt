@@ -53,41 +53,33 @@ class Renderer(override val game: Game) : Module() {
     private var customCursor: CustomCursor? = null
 
     /**
-     * All game objects are rendered to this buffer
+     * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
      */
-    private val frameBuffer = FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH.toInt(), VIRTUAL_HEIGHT.toInt(), false)
+    private val fbo = FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH.toInt(), VIRTUAL_HEIGHT.toInt(), false)
 
     /**
-     * Used only for rendering the frame buffer
+     * Used for scaling the FBO to the main screen
      */
-    private val fboCamera = OrthographicCamera()
+    private val fboViewport = ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 
     /**
      * Only used for game-logic, i.e. following the player
      */
     private val camera = OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 
-    /**
-     * Used to scale the rendered frame buffer to the screen
-     */
-    private val viewport = ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, fboCamera)
-
     init {
         // enables somewhat pixel-perfect rendering!
-        frameBuffer.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
-        // ensures that everything rendered on the frame buffer is in the correct position
-        fboCamera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+        fbo.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
     }
 
     override fun dispose() {
         batch.dispose()
         debugRenderer.clear()
-        frameBuffer.dispose()
+        fbo.dispose()
     }
 
     fun resize(width: Int, height: Int) {
-        viewport.update(width, height)
-        fboCamera.update()
+        fboViewport.update(width, height, true)
     }
 
     fun setCameraPos(worldPos: Vector3) {
@@ -131,8 +123,7 @@ class Renderer(override val game: Game) : Module() {
 
     fun render() {
         camera.update()
-
-        frameBuffer.begin()
+        fbo.begin()
         ScreenUtils.clear(0f, 0f, 255f, 1f)
         batch.projectionMatrix = camera.combined
         batch.begin()
@@ -152,13 +143,13 @@ class Renderer(override val game: Game) : Module() {
         drawData.filter { it.objectsBehind.isEmpty() }.forEach(::draw)
         drawData.forEach(::draw)
         batch.end()
-        frameBuffer.end()
+        fbo.end()
 
         ScreenUtils.clear(0f, 0f, 0f, 1f)
-        viewport.apply()
-        batch.projectionMatrix = fboCamera.combined
+        fboViewport.apply()
+        batch.projectionMatrix = fboViewport.camera.combined
         batch.begin()
-        batch.draw(frameBuffer.colorBufferTexture, 0f, 0f, viewport.worldWidth, viewport.worldHeight, 0f, 0f, 1f, 1f)
+        batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
 
         if (debugEnabled) {
