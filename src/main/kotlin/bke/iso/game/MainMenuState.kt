@@ -2,11 +2,11 @@ package bke.iso.game
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
-import bke.iso.engine.GameState
+import bke.iso.engine.State
 import bke.iso.engine.System
 import bke.iso.game.ui.MainMenuScreen
 
-class MainMenuState(override val game: Game) : GameState() {
+class MainMenuState(override val game: Game) : State() {
 
     override val systems: Set<System> = emptySet()
 
@@ -17,7 +17,7 @@ class MainMenuState(override val game: Game) : GameState() {
 
     override fun handleEvent(event: Event) {
         if (event is StartEvent) {
-            game.switchState(GameplayState::class)
+            game.switchState(GameState::class)
         }
     }
 

@@ -33,7 +33,7 @@ class Game {
     val world = World(this)
     val ui = UI(this)
 
-    private var state: GameState = EmptyState(this)
+    private var state: State = EmptyState(this)
     private var loading = false
 
     fun start() {
@@ -79,13 +79,13 @@ class Game {
         ui.resize(width, height)
     }
 
-    fun <T : GameState> switchState(stateClass: KClass<T>) {
+    fun <T : State> switchState(stateClass: KClass<T>) {
         log.debug { "switching to state ${stateClass.simpleName}" }
         state = stateClass.primaryConstructor!!.call(this)
         load(state)
     }
 
-    private fun load(state: GameState) {
+    private fun load(state: State) {
         loading = true
         state.loadingScreen?.let(ui::setScreen)
         KtxAsync.async {

@@ -4,7 +4,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Game
-import bke.iso.engine.GameState
+import bke.iso.engine.State
 import bke.iso.engine.System
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.ControllerAxisBinding
@@ -36,7 +36,7 @@ import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
 
-class GameplayState(override val game: Game) : GameState() {
+class GameState(override val game: Game) : State() {
 
     private val log = KotlinLogging.logger {}
 

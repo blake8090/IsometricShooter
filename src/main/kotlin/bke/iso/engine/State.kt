@@ -6,7 +6,7 @@ abstract class System {
     abstract fun update(deltaTime: Float)
 }
 
-abstract class GameState {
+abstract class State {
 
     protected abstract val game: Game
     abstract val systems: Set<System>
@@ -23,6 +23,6 @@ abstract class GameState {
     open fun handleEvent(event: Event) {}
 }
 
-class EmptyState(override val game: Game) : GameState() {
+class EmptyState(override val game: Game) : State() {
     override val systems = emptySet<System>()
 }
