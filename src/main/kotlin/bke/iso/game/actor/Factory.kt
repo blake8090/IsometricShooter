@@ -100,14 +100,13 @@ class Factory(private val world: World) {
 
 fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType) {
     val pos = shooter.pos
-    val speed = Vector3(bulletType.speed, bulletType.speed, bulletType.speed)
     newActor(
         pos.x,
         pos.y,
         pos.z + bulletType.zOffset,
         Bullet(shooter.id, pos, bulletType),
         Sprite("bullet", 8f, 8f),
-        Velocity(direction, speed),
+        Velocity(direction.scl(bulletType.speed)),
         Collider(
             Bounds(Vector3(0.125f, 0.125f, 0.125f)),
             false

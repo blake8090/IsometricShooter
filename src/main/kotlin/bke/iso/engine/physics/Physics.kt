@@ -10,7 +10,6 @@ class Physics(override val game: Game) : Module() {
     override fun update(deltaTime: Float) {
         game.world.actorsWith<Velocity> { actor, velocity ->
             val delta = Vector3(velocity.delta)
-                .scl(velocity.speed)
                 .scl(deltaTime)
             move(actor, delta)
         }

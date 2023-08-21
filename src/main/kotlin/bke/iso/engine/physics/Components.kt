@@ -18,6 +18,5 @@ data class FrameCollisions(
 ) : Component()
 
 data class Velocity(
-    val delta: Vector3 = Vector3(),
-    val speed: Vector3 = Vector3()
+    val delta: Vector3 = Vector3()
 ) : Component()

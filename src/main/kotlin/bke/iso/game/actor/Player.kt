@@ -78,9 +78,11 @@ class PlayerSystem(
                 walkSpeed
             }
 
-        val velocity = actor.getOrPut(Velocity())
-        velocity.delta.set(movement)
-        velocity.speed.set(horizontalSpeed, horizontalSpeed, flySpeed)
+        movement.scl(horizontalSpeed, horizontalSpeed, flySpeed)
+
+        actor.getOrPut(Velocity())
+            .delta
+            .set(movement)
 
         renderer.setCameraPos(actor.pos)
     }
