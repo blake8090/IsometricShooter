@@ -106,7 +106,11 @@ fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletTyp
         pos.z + bulletType.zOffset,
         Bullet(shooter.id, pos, bulletType),
         Sprite("bullet", 8f, 8f),
-        Velocity(direction.scl(bulletType.speed)),
+        Velocity(
+            direction.x * bulletType.speed,
+            direction.y * bulletType.speed,
+            direction.z * bulletType.speed
+        ),
         Collider(
             Bounds(Vector3(0.125f, 0.125f, 0.125f)),
             false

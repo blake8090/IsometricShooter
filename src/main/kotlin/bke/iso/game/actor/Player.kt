@@ -80,9 +80,10 @@ class PlayerSystem(
 
         movement.scl(horizontalSpeed, horizontalSpeed, flySpeed)
 
-        actor.getOrPut(Velocity())
-            .delta
-            .set(movement)
+        val velocity = actor.getOrPut(Velocity())
+        velocity.x = movement.x
+        velocity.y = movement.y
+        velocity.z = movement.z
 
         renderer.setCameraPos(actor.pos)
     }
