@@ -290,14 +290,14 @@ class Collisions(override val game: Game) : Module() {
         return SweptCollision(entryTime, hitNormal)
     }
 
-    private fun getCollisionSide(hitNormal: Vector3): BoxCollisionSide =
+    private fun getCollisionSide(hitNormal: Vector3): CollisionSide =
         when (hitNormal) {
-            Vector3(-1f, 0f, 0f) -> BoxCollisionSide.LEFT
-            Vector3(1f, 0f, 0f) -> BoxCollisionSide.RIGHT
-            Vector3(0f, -1f, 0f) -> BoxCollisionSide.FRONT
-            Vector3(0f, 1f, 0f) -> BoxCollisionSide.BACK
-            Vector3(0f, 0f, -1f) -> BoxCollisionSide.BOTTOM
-            Vector3(0f, 0f, 1f) -> BoxCollisionSide.TOP
-            else -> BoxCollisionSide.CORNER
+            Vector3(-1f, 0f, 0f) -> CollisionSide.LEFT
+            Vector3(1f, 0f, 0f) -> CollisionSide.RIGHT
+            Vector3(0f, -1f, 0f) -> CollisionSide.FRONT
+            Vector3(0f, 1f, 0f) -> CollisionSide.BACK
+            Vector3(0f, 0f, -1f) -> CollisionSide.BOTTOM
+            Vector3(0f, 0f, 1f) -> CollisionSide.TOP
+            else -> CollisionSide.CORNER
         }
 }

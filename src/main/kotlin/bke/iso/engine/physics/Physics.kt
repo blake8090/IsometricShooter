@@ -40,7 +40,7 @@ class Physics(override val game: Game) : Module() {
 
         val c = actor.get<FrameCollisions>()
             ?.collisions
-            ?.filter { collision -> collision.data.solid && collision.side == BoxCollisionSide.TOP }
+            ?.filter { collision -> collision.data.solid && collision.side == CollisionSide.TOP }
             ?.sortedBy(Collision::distance)
             ?.firstOrNull()
         if (c == null) {
@@ -76,22 +76,22 @@ class Physics(override val game: Game) : Module() {
         slide(actor, delta, collision.hitNormal)
     }
 
-    private fun killVelocity(actor: Actor, side: BoxCollisionSide) {
+    private fun killVelocity(actor: Actor, side: CollisionSide) {
         val velocity = actor.get<Velocity>()!!
         when (side) {
-            BoxCollisionSide.RIGHT, BoxCollisionSide.LEFT -> {
+            CollisionSide.RIGHT, CollisionSide.LEFT -> {
                 velocity.x = 0f
             }
 
-            BoxCollisionSide.BACK, BoxCollisionSide.FRONT -> {
+            CollisionSide.BACK, CollisionSide.FRONT -> {
                 velocity.y = 0f
             }
 
-            BoxCollisionSide.BOTTOM, BoxCollisionSide.TOP -> {
+            CollisionSide.BOTTOM, CollisionSide.TOP -> {
                 velocity.z = 0f
             }
 
-            BoxCollisionSide.CORNER -> {
+            CollisionSide.CORNER -> {
                 velocity.x = 0f
                 velocity.y = 0f
                 velocity.z = 0f

@@ -5,6 +5,11 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 
+data class CollisionData(
+    val box: Box,
+    val solid: Boolean
+)
+
 fun GameObject.getCollisionData(): CollisionData? =
     when (this) {
         is Tile -> getCollisionData()
