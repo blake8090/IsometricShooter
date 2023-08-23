@@ -19,8 +19,9 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun move(actor: Actor, delta: Vector3) {
+        // TODO: clean this up
         val collision = game.collisions
-            .predictCollisions(actor, delta.x, delta.y, delta.z)
+            .predictCollisions(actor, delta)
             .filter { collision -> collision.data.solid }
             .sortedWith(
                 compareBy(PredictedCollision::collisionTime)

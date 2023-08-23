@@ -98,15 +98,6 @@ data class Box(
         return Box(min, max)
     }
 
-    fun minkowskiSum(box: Box): Box {
-        val w = box.width + width
-        val l = box.length + length
-        val h = box.height + height
-        val newPos = Vector3(
-            box.pos.x,
-            box.pos.y,
-            box.pos.z - ((h - box.height) / 2f)
-        )
-        return Box(newPos, w, l, h)
-    }
+    fun dst(other: Box) =
+        center.dst(other.center)
 }
