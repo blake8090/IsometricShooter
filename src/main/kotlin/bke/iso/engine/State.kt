@@ -18,7 +18,11 @@ abstract class State {
 
     open fun start() {}
 
-    open fun update(deltaTime: Float) {}
+    open fun update(deltaTime: Float) {
+        for (system in systems) {
+            system.update(deltaTime)
+        }
+    }
 
     open fun handleEvent(event: Event) {}
 }

@@ -59,18 +59,12 @@ class Game {
 
     private fun runFrame(deltaTime: Float) {
         input.update(deltaTime)
-        physics.update(deltaTime)
-
-        // make sure that game states receive accurate positions when custom cursors are enabled
         renderer.updateCursor(deltaTime)
         state.update(deltaTime)
-        for (system in state.systems) {
-            system.update(deltaTime)
-        }
-
-        renderer.render()
-        collisions.update(deltaTime)
         world.update(deltaTime)
+        collisions.update(deltaTime)
+        physics.update(deltaTime)
+        renderer.render()
     }
 
     fun resize(width: Int, height: Int) {
@@ -79,28 +73,27 @@ class Game {
         ui.resize(width, height)
     }
 
-    fun <T : State> switchState(stateClass: KClass<T>) {
-        log.debug { "switching to state ${stateClass.simpleName}" }
-        state = stateClass.primaryConstructor!!.call(this)
-        load(state)
+    fun <T : State> switchState(type: KClass<T>) {
+        log.debug { "switching to state ${type.simpleName}" }
+
+        loading = true
+        state = type.primaryConstructor!!.call(this)
+        state.loadingScreen?.let(ui::setScreen)
+        KtxAsync.async { load(state) }
     }
 
-    private fun load(state: State) {
-        loading = true
-        state.loadingScreen?.let(ui::setScreen)
-        KtxAsync.async {
-            if (state.loadingScreen != null) {
-                // delay a bit to give time for the loading screen to show up
-                delay(300)
-            }
-            val duration = measureTime {
-                log.debug { "Loading started" }
-                state.load()
-                state.start()
-                loading = false
-            }
-            log.debug { "Loading finished in ${duration.inWholeMilliseconds} ms" }
+    private suspend fun load(state: State) {
+        if (state.loadingScreen != null) {
+            // delay a bit to give time for the loading screen to show up
+            delay(300)
         }
+        val duration = measureTime {
+            log.debug { "Loading started" }
+            state.load()
+            state.start()
+            loading = false
+        }
+        log.debug { "Loading finished in ${duration.inWholeMilliseconds} ms" }
     }
 
     inner class Events {
