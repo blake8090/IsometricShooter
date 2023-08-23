@@ -4,17 +4,50 @@ import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
+import kotlin.math.max
+
+const val GRAVITY_ACCELERATION = -9.8f
+const val TERMINAL_VELOCITY = -10f
 
 class Physics(override val game: Game) : Module() {
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<Velocity> { actor, velocity ->
-            val delta = Vector3(
-                velocity.x * deltaTime,
-                velocity.y * deltaTime,
-                velocity.z * deltaTime
-            )
-            move(actor, delta)
+            update(actor, velocity, deltaTime)
+        }
+    }
+
+    private fun update(actor: Actor, velocity: Velocity, deltaTime: Float) {
+        val acceleration = actor.get<Acceleration>()
+        if (acceleration != null) {
+            velocity.x += acceleration.x * deltaTime
+            velocity.y += acceleration.y * deltaTime
+            velocity.z += acceleration.z * deltaTime
+        }
+
+        applyGravity(actor, velocity, deltaTime)
+
+        val delta = Vector3(
+            velocity.x * deltaTime,
+            velocity.y * deltaTime,
+            velocity.z * deltaTime
+        )
+        move(actor, delta)
+    }
+
+    private fun applyGravity(actor: Actor, velocity: Velocity, deltaTime: Float) {
+        val gravity = actor.get<Gravity>() ?: return
+
+        val c = actor.get<FrameCollisions>()
+            ?.collisions
+            ?.filter { collision -> collision.data.solid && collision.side == BoxCollisionSide.TOP }
+            ?.sortedBy(Collision::distance)
+            ?.firstOrNull()
+        if (c == null) {
+            velocity.z += gravity.acceleration * deltaTime
+            velocity.z = max(velocity.z, gravity.terminalVelocity)
+        } else {
+            velocity.z = 0f
         }
     }
 
@@ -39,8 +72,31 @@ class Physics(override val game: Game) : Module() {
         //  (might need to make tile's collision box taller?)
         actor.move(collisionDelta)
 
-        // TODO: kill velocity along hit normal
+        killVelocity(actor, collision.side)
         slide(actor, delta, collision.hitNormal)
+    }
+
+    private fun killVelocity(actor: Actor, side: BoxCollisionSide) {
+        val velocity = actor.get<Velocity>()!!
+        when (side) {
+            BoxCollisionSide.RIGHT, BoxCollisionSide.LEFT -> {
+                velocity.x = 0f
+            }
+
+            BoxCollisionSide.BACK, BoxCollisionSide.FRONT -> {
+                velocity.y = 0f
+            }
+
+            BoxCollisionSide.BOTTOM, BoxCollisionSide.TOP -> {
+                velocity.z = 0f
+            }
+
+            BoxCollisionSide.CORNER -> {
+                velocity.x = 0f
+                velocity.y = 0f
+                velocity.z = 0f
+            }
+        }
     }
 
     private fun slide(actor: Actor, delta: Vector3, hitNormal: Vector3) {

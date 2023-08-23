@@ -6,6 +6,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collider
+import bke.iso.engine.physics.Gravity
 import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
@@ -18,6 +19,7 @@ import bke.iso.game.HealthBar
 import com.badlogic.gdx.math.Vector3
 
 const val PLAYER_MAX_HEALTH = 5f
+private const val PLAYER_JUMP_FORCE = 6f
 
 class Player : Component()
 
@@ -83,7 +85,9 @@ class PlayerSystem(
         val velocity = actor.getOrPut(Velocity())
         velocity.x = movement.x
         velocity.y = movement.y
-        velocity.z = movement.z
+        input.onAction("jump") {
+            velocity.z = PLAYER_JUMP_FORCE
+        }
 
         renderer.setCameraPos(actor.pos)
     }
@@ -99,5 +103,6 @@ fun World.createPlayer(location: Location) =
             false
         ),
         Health(PLAYER_MAX_HEALTH),
-        HealthBar(18f, -64f)
+        HealthBar(18f, -64f),
+        Gravity()
     )

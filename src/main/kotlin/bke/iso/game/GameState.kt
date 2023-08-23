@@ -101,6 +101,7 @@ class GameState(override val game: Game) : State() {
                 "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
                 "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
                 "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
+                "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED)
             )
             bind(
                 "moveY",
