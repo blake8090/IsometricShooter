@@ -69,15 +69,12 @@ class Physics(override val game: Game) : Module() {
                     .thenBy(PredictedCollision::distance)
             )
         val collision = collisions.firstOrNull()
-
-        if (collision == null) {
+        if (collision == null || !collision.solid) {
             actor.move(delta)
             return
         }
 
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
-        // TODO: fix bug where vertical movement when moving horizontally clips through tiles
-        //  (might need to make tile's collision box taller?)
         actor.move(collisionDelta)
 
         val box = actor.getCollisionData()!!.box
@@ -88,42 +85,6 @@ class Physics(override val game: Game) : Module() {
 
         killVelocity(actor, collision.side)
         slide(actor, delta, collision.hitNormal)
-    }
-
-    private fun resolveOverlap(actor: Actor, box: Box, collision: PredictedCollision) {
-        var x = actor.x
-        var y = actor.y
-        var z = actor.z
-        when (collision.side) {
-            CollisionSide.LEFT -> {
-                x = collision.box.min.x - (box.size.x / 2f)
-            }
-
-            CollisionSide.RIGHT -> {
-                x = collision.box.max.x + (box.size.x / 2f)
-            }
-
-            CollisionSide.FRONT -> {
-                y = collision.box.min.y - (box.size.y / 2f)
-            }
-
-            CollisionSide.BACK -> {
-                y = collision.box.max.y + (box.size.y / 2f)
-            }
-
-            CollisionSide.TOP -> {
-                z = collision.box.max.z + (box.size.z / 2f)
-            }
-
-            CollisionSide.BOTTOM -> {
-                z = collision.box.min.z - (box.size.z / 2f)
-            }
-
-            CollisionSide.CORNER -> {
-                log.warn { "Could not resolve corner collision" }
-            }
-        }
-        actor.moveTo(x, y, z)
     }
 
     private fun killVelocity(actor: Actor, side: CollisionSide) {
@@ -155,5 +116,42 @@ class Physics(override val game: Game) : Module() {
         // then, subtract the eliminated motion from the original motion, thus producing a slide effect
         val newDelta = Vector3(delta).sub(eliminatedMotion)
         move(actor, newDelta)
+    }
+
+    private fun resolveOverlap(actor: Actor, box: Box, collision: PredictedCollision) {
+        var x = actor.x
+        var y = actor.y
+        var z = actor.z
+        when (collision.side) {
+            CollisionSide.LEFT -> {
+                x = collision.box.min.x - (box.size.x / 2f)
+            }
+
+            CollisionSide.RIGHT -> {
+                x = collision.box.max.x + (box.size.x / 2f)
+            }
+
+            CollisionSide.FRONT -> {
+                y = collision.box.min.y - (box.size.y / 2f)
+            }
+
+            CollisionSide.BACK -> {
+                y = collision.box.max.y + (box.size.y / 2f)
+            }
+
+            CollisionSide.TOP -> {
+                // an actor's origin is the bottom of the collision box, not the center
+                z = collision.box.max.z
+            }
+
+            CollisionSide.BOTTOM -> {
+                z = collision.box.min.z - (box.size.z / 2f)
+            }
+
+            CollisionSide.CORNER -> {
+                log.warn { "Could not resolve corner collision" }
+            }
+        }
+        actor.moveTo(x, y, z)
     }
 }

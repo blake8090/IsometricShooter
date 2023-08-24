@@ -3,6 +3,7 @@ package bke.iso.engine.physics
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.getRay
 import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
@@ -18,7 +19,6 @@ import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sign
 
-// TODO: finish rewriting
 class Collisions(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
@@ -30,15 +30,14 @@ class Collisions(override val game: Game) : Module() {
     }
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
-        return emptySet()
-//        val area = Box2.from(segment)
-//        game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
-//
-//        val ray = segment.getRay()
-//        return game.world
-//            .getObjectsInArea(area)
-//            .mapNotNull { obj -> checkCollision(segment, ray, obj) }
-//            .toSet()
+        val area = Box.from(segment)
+        game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
+
+        val ray = segment.getRay()
+        return game.world
+            .getObjectsInArea(area)
+            .mapNotNull { obj -> checkCollision(segment, ray, obj) }
+            .toSet()
     }
 
     private fun checkCollision(segment: Segment, ray: Ray, gameObject: GameObject): SegmentCollision? {

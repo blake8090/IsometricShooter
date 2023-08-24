@@ -48,7 +48,7 @@ class BulletSystem(
 
         val other = getFirstCollidingObject(actor) ?: return
         if (other is Actor) {
-            if (other.has<Bullet>()) {
+            if (other.has<Bullet>() || other.id == bullet.shooterId) {
                 return
             }
             combat.onDamage(other, bullet.type.damage)

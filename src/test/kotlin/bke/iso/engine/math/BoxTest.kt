@@ -61,4 +61,15 @@ class BoxTest : StringSpec({
         box.min.shouldBe(start)
         box.max.shouldBe(end)
     }
+
+    "when segment start > end should return box with correct size" {
+        val start = Vector3(2f, 2f, 2f)
+        val end = Vector3(0f, 0f, 0f)
+
+        val box = Box.from(Segment(start, end))
+        box.pos.shouldBe(Vector3(1f, 1f, 1f))
+        box.size.shouldBe(Vector3(2f, 2f, 2f))
+        box.min.shouldBe(end)
+        box.max.shouldBe(start)
+    }
 })

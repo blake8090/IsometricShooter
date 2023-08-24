@@ -9,6 +9,8 @@ import kotlin.reflect.safeCast
 
 open class Component
 
+data class Description(val text: String) : Component()
+
 class Actor(
     val id: UUID = UUID.randomUUID(),
     private val onMove: (Actor) -> Unit = {}
@@ -104,6 +106,12 @@ class Actor(
         return id.hashCode()
     }
 
-    override fun toString() =
-        id.toString()
+    override fun toString(): String {
+        val description = get<Description>()
+        return if (description != null) {
+            "(${description.text} $id $pos)"
+        } else {
+            "($id $pos)"
+        }
+    }
 }

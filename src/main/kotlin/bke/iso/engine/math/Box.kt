@@ -105,7 +105,18 @@ data class Box(
             return Box(center, size)
         }
 
-        fun from(segment: Segment) =
-            from(segment.a, segment.b)
+        fun from(segment: Segment): Box {
+            val min = Vector3(
+                min(segment.a.x, segment.b.x),
+                min(segment.a.y, segment.b.y),
+                min(segment.a.z, segment.b.z)
+            )
+            val max = Vector3(
+                max(segment.a.x, segment.b.x),
+                max(segment.a.y, segment.b.y),
+                max(segment.a.z, segment.b.z)
+            )
+            return from(min, max)
+        }
     }
 }

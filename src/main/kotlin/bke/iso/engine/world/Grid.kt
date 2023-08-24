@@ -35,6 +35,7 @@ class Grid {
         for (location in locations) {
             actorGrid[location]?.remove(actor)
         }
+        locationsByActor.remove(actor)
     }
 
     fun getAll(): Set<GameObject> {

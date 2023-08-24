@@ -12,6 +12,7 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
+import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import bke.iso.game.Combat
 import bke.iso.game.Health
@@ -106,5 +107,6 @@ fun World.createPlayer(location: Location) =
         Health(PLAYER_MAX_HEALTH),
         HealthBar(18f, -64f),
         Gravity(),
-        DebugSettings()
+        DebugSettings(),
+        Description("player")
     )
