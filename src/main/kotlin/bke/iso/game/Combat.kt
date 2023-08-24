@@ -57,7 +57,7 @@ class Combat(
         if (actor.has<Player>()) {
             return
         }
-        world.deleteActor(actor)
+        world.delete(actor)
         log.trace("Actor ${actor.id} has been destroyed")
     }
 }

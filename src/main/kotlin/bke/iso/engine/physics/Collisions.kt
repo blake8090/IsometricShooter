@@ -1,12 +1,12 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.math.getRay
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.math.Box
 import bke.iso.engine.math.Box2
+import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
+import bke.iso.engine.world.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
@@ -16,7 +16,6 @@ import com.badlogic.gdx.math.collision.Segment
 import mu.KotlinLogging
 import kotlin.math.abs
 import kotlin.math.ceil
-import kotlin.math.floor
 import kotlin.math.sign
 
 // TODO: finish rewriting
@@ -90,57 +89,52 @@ class Collisions(override val game: Game) : Module() {
         )
         game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
 
+        // narrow-phase: check precise collisions for each object within area
+        val collisions = mutableSetOf<PredictedCollision>()
+        for (obj in game.world.getObjectsInArea(projectedBox)) {
+            if (actor == obj) {
+                continue
+            }
 
-//        val px = if (delta.x < 0) floor(delta.x) else ceil(delta.x)
-//        val py = if (delta.y < 0) floor(delta.y) else ceil(delta.y)
-//        val pz = if (delta.z < 0) floor(delta.z) else ceil(delta.z)
-//        val projectedBox = box.project(px, py, pz)
-//            // project downward one more unit to make sure objects just below are checked
-//            // TODO: rewrite this to handle arbitrary heights
-//            .project(0f, 0f, -1f)
-//        game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
-//
-//        // narrow-phase: check precise collisions for each object within area
-//        val collisions = mutableSetOf<PredictedCollision>()
-//        for (gameObject in game.world.getObjectsInArea(projectedBox)) {
-//            if (actor == gameObject) {
-//                continue
-//            }
-//
-//            val collision = predictCollision(box, delta, gameObject)
-//            if (collision != null) {
-//                recordCollision(actor, collision)
-//                collisions.add(collision)
-//            }
-//        }
-//        return collisions
+            if (obj is Tile) {
+                obj.selected = true
+            } else if (obj is Actor) {
+                obj.get<DebugSettings>()?.collisionBoxSelected = true
+            }
 
-        return emptySet()
+            val collision = predictCollision(box, delta, obj)
+            if (collision != null) {
+                recordCollision(actor, collision)
+                collisions.add(collision)
+            }
+        }
+
+        return collisions
     }
 
-    private fun predictCollision(box: Box, delta: Vector3, gameObject: GameObject): PredictedCollision? {
-        return null
-//        val data = gameObject.getCollisionData()
-//            ?: return null
-//
-//        val sweptCollision = checkSweptCollision(box, delta, data.box)
-//            ?: return null
-//
-//        val distance = box.dst(data.box)
-//        val side = getCollisionSide(sweptCollision.hitNormal)
-//        log.trace {
-//            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
-//                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
-//        }
-//
-//        return PredictedCollision(
-//            gameObject,
-//            data,
-//            distance,
-//            sweptCollision.collisionTime,
-//            sweptCollision.hitNormal,
-//            side
-//        )
+    private fun predictCollision(box: Box2, delta: Vector3, gameObject: GameObject): PredictedCollision? {
+        val data = gameObject.getCollisionData()
+            ?: return null
+
+        val sweptCollision = checkSweptCollision(box, delta, data.box)
+            ?: return null
+
+        val distance = box.dst(data.box)
+        val side = getCollisionSide(sweptCollision.hitNormal)
+        log.trace {
+            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
+                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
+        }
+
+        return PredictedCollision(
+            gameObject,
+            data.box,
+            data.solid,
+            distance,
+            sweptCollision.collisionTime,
+            sweptCollision.hitNormal,
+            side
+        )
     }
 
     private fun recordCollision(actor: Actor, predictedCollision: PredictedCollision) {
@@ -151,7 +145,8 @@ class Collisions(override val game: Game) : Module() {
         // so the normal Collision object should be stored instead.
         val collision = Collision(
             predictedCollision.obj,
-            predictedCollision.data,
+            predictedCollision.box,
+            predictedCollision.solid,
             predictedCollision.distance,
             predictedCollision.side
         )
@@ -165,9 +160,10 @@ class Collisions(override val game: Game) : Module() {
         val hitNormal: Vector3
     )
 
-    private fun checkSweptCollision(a: Box, delta: Vector3, b: Box): SweptCollision? {
+    private fun checkSweptCollision(a: Box2, delta: Vector3, b: Box2): SweptCollision? {
         // if box B is not in the projection of box A, both boxes will never collide
-        val pBox = a.project(delta.x, delta.y, delta.z)
+        val pBox = a.expand(delta.x, delta.y, delta.z)
+
         if (!pBox.intersects(b)) {
             return null
         }

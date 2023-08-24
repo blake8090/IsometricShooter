@@ -6,6 +6,9 @@ import bke.iso.engine.Module
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
 import bke.iso.engine.physics.getCollisionData
+import bke.iso.engine.render.debug.DebugRenderer
+import bke.iso.engine.render.debug.DebugSettings
+import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.GameObject
@@ -127,6 +130,7 @@ class Renderer(override val game: Game) : Module() {
         ScreenUtils.clear(0f, 0f, 255f, 1f)
         batch.projectionMatrix = camera.combined
         batch.begin()
+        // TODO: break out sorting code
         val drawData = game.world.objects.map(::toDrawData)
         for ((i, a) in drawData.withIndex()) {
             for ((j, b) in drawData.withIndex()) {
@@ -220,23 +224,43 @@ class Renderer(override val game: Game) : Module() {
     }
 
     private fun addDebugShapes(actor: Actor) {
-        debugRenderer.addPoint(actor.pos, 2f, Color.RED)
+        val settings = actor.get<DebugSettings>() ?: return
 
-        actor.getCollisionData()?.let { data ->
-            debugRenderer.addBox(data.box, 1f, Color.GREEN)
+        if (settings.collisionBox) {
+            val color =
+                if (settings.collisionBoxSelected) {
+                    Color.PURPLE
+                } else {
+                    settings.collisionBoxColor
+                }
+            actor.getCollisionData()?.let { data ->
+                debugRenderer.addBox(data.box, 1f, color)
+            }
+            settings.collisionBoxSelected = false
         }
 
-        if (actor.z != 0f) {
+        if (settings.position) {
+            debugRenderer.addPoint(actor.pos, 2f, settings.positionColor)
+        }
+
+        if (settings.zAxis && actor.z > 0f) {
             val start = Vector3(actor.x, actor.y, 0f)
             val end = actor.pos
-            debugRenderer.addPoint(start, 2f, Color.RED)
-            debugRenderer.addLine(start, end, 1f, Color.PURPLE)
+            debugRenderer.addPoint(start, 2f, settings.zAxisColor)
+            debugRenderer.addLine(start, end, 1f, settings.zAxisColor)
         }
     }
 
     private fun draw(tile: Tile) {
         drawSprite(tile.sprite, tile.location.toVector3())
-        debugRenderer.addBox(tile.getCollisionData().box, 1f, Color.WHITE)
+        val color =
+            if (tile.selected) {
+                Color.PURPLE
+            } else {
+                Color.WHITE
+            }
+        debugRenderer.addBox(tile.getCollisionData().box, 1f, color)
+        tile.selected = false
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {

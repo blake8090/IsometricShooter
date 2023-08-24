@@ -1,16 +1,11 @@
 package bke.iso.engine.world
 
-import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import bke.iso.engine.math.Box2
 import bke.iso.engine.render.Sprite
-import com.badlogic.gdx.math.Vector3
 import java.util.UUID
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.reflect.KClass
 
 abstract class GameObject
@@ -34,15 +29,15 @@ class World(override val game: Game) : Module() {
         id: UUID = UUID.randomUUID()
     ): Actor {
         val actor = Actor(id, this::onMove)
+        components.forEach(actor::add)
         actor.moveTo(x, y, z)
-        components.forEach { component -> actor.components[component::class] = component }
         return actor
     }
 
     private fun onMove(actor: Actor) =
         grid.update(actor)
 
-    fun deleteActor(actor: Actor) {
+    fun delete(actor: Actor) {
         deletedObjects.add(actor)
     }
 
@@ -71,26 +66,14 @@ class World(override val game: Game) : Module() {
     inline fun <reified T : Component> findActorWith() =
         findActorWith(T::class)
 
-    fun getObjectsInArea(box: Box): Set<GameObject> {
-        val min = Vector3(
-            min(box.min.x, box.max.x),
-            min(box.min.y, box.max.y),
-            min(box.min.z, box.max.z),
-        )
-        val max = Vector3(
-            max(box.min.x, box.max.x),
-            max(box.min.y, box.max.y),
-            max(box.min.z, box.max.z),
-        )
+    fun getObjectsInArea(box: Box2): Set<GameObject> {
+        val minX = box.min.x.toInt()
+        val minY = box.min.y.toInt()
+        val minZ = box.min.z.toInt()
 
-        val minX = floor(min.x).toInt()
-        val maxX = ceil(max.x).toInt()
-
-        val minY = floor(min.y).toInt()
-        val maxY = ceil(max.y).toInt()
-
-        val minZ = floor(min.z).toInt()
-        val maxZ = ceil(max.z).toInt()
+        val maxX = box.max.x.toInt()
+        val maxY = box.max.y.toInt()
+        val maxZ = box.max.z.toInt()
 
         val objects = mutableSetOf<GameObject>()
         for (x in minX..maxX) {

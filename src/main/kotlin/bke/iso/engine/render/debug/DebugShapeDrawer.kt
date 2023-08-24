@@ -1,10 +1,11 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.debug
 
 import bke.iso.engine.math.TILE_SIZE_X
 import bke.iso.engine.math.TILE_SIZE_Y
 import bke.iso.engine.math.TILE_SIZE_Z
 import bke.iso.engine.math.getIsometricRatio
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.render.makePixelTexture
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion

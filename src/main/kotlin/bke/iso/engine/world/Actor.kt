@@ -41,14 +41,8 @@ class Actor(
     fun move(dx: Float, dy: Float, dz: Float) =
         moveTo(x + dx, y + dy, z + dz)
 
-    inline fun <reified T : Component> add(component: T) {
-        components[T::class] = component
-    }
-
-    fun add(vararg components: Component) {
-        for (component in components) {
-            add(component)
-        }
+    fun <T : Component> add(component: T) {
+        components[component::class] = component
     }
 
     fun <T : Component> get(type: KClass<T>): T? =

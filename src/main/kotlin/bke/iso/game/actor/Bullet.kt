@@ -42,7 +42,7 @@ class BulletSystem(
     private fun update(actor: Actor, bullet: Bullet) {
         val distance = bullet.startPos.dst(actor.pos)
         if (distance > MAX_BULLET_DISTANCE) {
-            world.deleteActor(actor)
+            world.delete(actor)
             return
         }
 
@@ -54,7 +54,7 @@ class BulletSystem(
             combat.onDamage(other, bullet.type.damage)
         }
 
-        world.deleteActor(actor)
+        world.delete(actor)
     }
 
     private fun getFirstCollidingObject(actor: Actor): GameObject? {

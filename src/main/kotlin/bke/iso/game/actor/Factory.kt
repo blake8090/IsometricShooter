@@ -4,6 +4,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.physics.Collider
 import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.Health
@@ -19,7 +20,10 @@ class Factory(private val world: World) {
             Collider(
                 true,
                 Vector3(1f, 1f, 2f)
-            )
+            ),
+            DebugSettings().apply {
+                zAxis = false
+            }
         )
 
     fun createBox(location: Location) =
@@ -29,7 +33,8 @@ class Factory(private val world: World) {
             Collider(
                 true,
                 Vector3(0.5f, 0.5f, 0.5f)
-            )
+            ),
+            DebugSettings()
         )
 
     fun createTurret(location: Location) =
@@ -43,7 +48,8 @@ class Factory(private val world: World) {
                 Vector3(-0.25f, 0f, 0f)
             ),
             Health(3f),
-            HealthBar(16f, -36f)
+            HealthBar(16f, -36f),
+            DebugSettings()
         )
 
     fun createPlatform(location: Location) =
@@ -54,7 +60,8 @@ class Factory(private val world: World) {
             Collider(
                 true,
                 Vector3(2f, 1f, 0.125f)
-            )
+            ),
+            DebugSettings()
         )
 
     fun createSideFence(location: Location) =
@@ -64,7 +71,10 @@ class Factory(private val world: World) {
             Collider(
                 true,
                 Vector3(0.1f, 1f, 1f)
-            )
+            ),
+            DebugSettings().apply {
+                zAxis = false
+            }
         )
 
     fun createFrontFence(location: Location) =
@@ -74,7 +84,10 @@ class Factory(private val world: World) {
             Collider(
                 true,
                 Vector3(1f, 0.1f, 1f)
-            )
+            ),
+            DebugSettings().apply {
+                zAxis = false
+            }
         )
 
     fun createLampPost(location: Location) =
@@ -85,7 +98,10 @@ class Factory(private val world: World) {
                 true,
                 Vector3(0.25f, 0.25f, 2.1f),
                 Vector3(-0.125f, -0.125f, 0f)
-            )
+            ),
+            DebugSettings().apply {
+                zAxis = false
+            }
         )
 
     fun createPillar(location: Location) =
@@ -95,7 +111,10 @@ class Factory(private val world: World) {
             Collider(
                 true,
                 Vector3(0.25f, 0.25f, 2f)
-            )
+            ),
+            DebugSettings().apply {
+                zAxis = false
+            }
         )
 }
 
@@ -115,6 +134,9 @@ fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletTyp
         Collider(
             false,
             Vector3(0.125f, 0.125f, 0.125f)
-        )
+        ),
+        DebugSettings().apply {
+            zAxis = false
+        }
     )
 }

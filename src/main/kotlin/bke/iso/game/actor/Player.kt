@@ -9,6 +9,7 @@ import bke.iso.engine.physics.Gravity
 import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
@@ -84,10 +85,9 @@ class PlayerSystem(
         val velocity = actor.getOrPut(Velocity())
         velocity.x = movement.x
         velocity.y = movement.y
-        velocity.z = movement.z
-//        input.onAction("jump") {
-//            velocity.z = PLAYER_JUMP_FORCE
-//        }
+        input.onAction("jump") {
+            velocity.z = PLAYER_JUMP_FORCE
+        }
 
         renderer.setCameraPos(actor.pos)
     }
@@ -105,5 +105,6 @@ fun World.createPlayer(location: Location) =
         ),
         Health(PLAYER_MAX_HEALTH),
         HealthBar(18f, -64f),
-        //Gravity()
+        Gravity(),
+        DebugSettings()
     )

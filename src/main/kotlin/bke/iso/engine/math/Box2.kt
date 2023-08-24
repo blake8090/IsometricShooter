@@ -3,6 +3,8 @@ package bke.iso.engine.math
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Segment
+import kotlin.math.max
+import kotlin.math.min
 
 data class Box2(
     /**
@@ -69,6 +71,17 @@ data class Box2(
                 max.y > box.min.y &&
                 min.z < box.max.z &&
                 max.z > box.min.z
+    }
+
+    fun getOverlapArea(box: Box2): Float {
+        val dx = min(max.x, box.max.x) - max(min.x, box.min.x)
+        val dy = min(max.y, box.max.y) - max(min.y, box.min.y)
+        val dz = min(max.z, box.max.z) - max(min.z, box.min.z)
+        return if (dx >= 0f && dy >= 0f && dz >= 0f) {
+            dx * dy * dz
+        } else {
+            0f
+        }
     }
 
     fun expand(dx: Float, dy: Float, dz: Float): Box2 {

@@ -2,14 +2,18 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import bke.iso.engine.math.Box2
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 import kotlin.math.max
 
 const val GRAVITY_ACCELERATION = -9.8f
 const val TERMINAL_VELOCITY = -10f
 
 class Physics(override val game: Game) : Module() {
+
+    private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
         game.world.actorsWith<Velocity> { actor, velocity ->
@@ -32,7 +36,9 @@ class Physics(override val game: Game) : Module() {
             velocity.y * deltaTime,
             velocity.z * deltaTime
         )
-        move(actor, delta)
+        if (!delta.isZero) {
+            move(actor, delta)
+        }
     }
 
     private fun applyGravity(actor: Actor, velocity: Velocity, deltaTime: Float) {
@@ -40,7 +46,7 @@ class Physics(override val game: Game) : Module() {
 
         val c = actor.get<FrameCollisions>()
             ?.collisions
-            ?.filter { collision -> collision.data.solid && collision.side == CollisionSide.TOP }
+            ?.filter { collision -> collision.solid && collision.side == CollisionSide.TOP }
             ?.sortedBy(Collision::distance)
             ?.firstOrNull()
         if (c == null) {
@@ -52,15 +58,17 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun move(actor: Actor, delta: Vector3) {
+        if (delta.isZero) {
+            return
+        }
+
         // TODO: clean this up
-        val collision = game.collisions
-            .predictCollisions(actor, delta)
-            .filter { collision -> collision.data.solid }
+        val collisions = game.collisions.predictCollisions(actor, delta)
             .sortedWith(
                 compareBy(PredictedCollision::collisionTime)
                     .thenBy(PredictedCollision::distance)
             )
-            .firstOrNull()
+        val collision = collisions.firstOrNull()
 
         if (collision == null) {
             actor.move(delta)
@@ -72,8 +80,50 @@ class Physics(override val game: Game) : Module() {
         //  (might need to make tile's collision box taller?)
         actor.move(collisionDelta)
 
+        val box = actor.getCollisionData()!!.box
+        if (box.getOverlapArea(collision.box) != 0f) {
+            log.debug { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }
+            resolveOverlap(actor, box, collision)
+        }
+
         killVelocity(actor, collision.side)
         slide(actor, delta, collision.hitNormal)
+    }
+
+    private fun resolveOverlap(actor: Actor, box: Box2, collision: PredictedCollision) {
+        var x = actor.x
+        var y = actor.y
+        var z = actor.z
+        when (collision.side) {
+            CollisionSide.LEFT -> {
+                x = collision.box.min.x - (box.size.x / 2f)
+            }
+
+            CollisionSide.RIGHT -> {
+                x = collision.box.max.x + (box.size.x / 2f)
+            }
+
+            CollisionSide.FRONT -> {
+                y = collision.box.min.y - (box.size.y / 2f)
+            }
+
+            CollisionSide.BACK -> {
+                y = collision.box.max.y + (box.size.y / 2f)
+            }
+
+            CollisionSide.TOP -> {
+                z = collision.box.max.z + (box.size.z / 2f)
+            }
+
+            CollisionSide.BOTTOM -> {
+                z = collision.box.min.z - (box.size.z / 2f)
+            }
+
+            CollisionSide.CORNER -> {
+                log.warn { "Could not resolve corner collision" }
+            }
+        }
+        actor.moveTo(x, y, z)
     }
 
     private fun killVelocity(actor: Actor, side: CollisionSide) {
