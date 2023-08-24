@@ -1,6 +1,6 @@
 package bke.iso.engine.render.debug
 
-import bke.iso.engine.math.Box2
+import bke.iso.engine.math.Box
 import bke.iso.engine.world.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
@@ -60,7 +60,7 @@ class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
         }
     }
 
-    fun addBox(box: Box2, width: Float, color: Color) {
+    fun addBox(box: Box, width: Float, color: Color) {
         box.segments.forEach { segment ->
             addLine(segment.a, segment.b, width, color)
         }

@@ -2,7 +2,7 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.math.Box2
+import bke.iso.engine.math.Box
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
@@ -90,7 +90,7 @@ class Physics(override val game: Game) : Module() {
         slide(actor, delta, collision.hitNormal)
     }
 
-    private fun resolveOverlap(actor: Actor, box: Box2, collision: PredictedCollision) {
+    private fun resolveOverlap(actor: Actor, box: Box, collision: PredictedCollision) {
         var x = actor.x
         var y = actor.y
         var z = actor.z

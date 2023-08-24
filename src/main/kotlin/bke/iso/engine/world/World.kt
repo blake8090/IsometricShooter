@@ -3,7 +3,7 @@ package bke.iso.engine.world
 import bke.iso.engine.math.Location
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.math.Box2
+import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
 import java.util.UUID
 import kotlin.reflect.KClass
@@ -66,7 +66,7 @@ class World(override val game: Game) : Module() {
     inline fun <reified T : Component> findActorWith() =
         findActorWith(T::class)
 
-    fun getObjectsInArea(box: Box2): Set<GameObject> {
+    fun getObjectsInArea(box: Box): Set<GameObject> {
         val minX = box.min.x.toInt()
         val minY = box.min.y.toInt()
         val minZ = box.min.z.toInt()

@@ -3,46 +3,30 @@ package bke.iso.engine.math
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Segment
+import kotlin.math.max
+import kotlin.math.min
 
 data class Box(
+    /**
+     * Center point of the box
+     */
     val pos: Vector3,
-    val width: Float,
-    val length: Float,
-    val height: Float
+    /**
+     * Box dimensions
+     */
+    val size: Vector3
 ) {
-    constructor(min: Vector3, max: Vector3) : this(
-        Vector3(
-            min.x + ((max.x - min.x) / 2f),
-            min.y + ((max.y - min.y) / 2f),
-            min.z
-        ),
-        max.x - min.x,
-        max.y - min.y,
-        max.z - min.z
-    )
 
-    /**
-     * Minimum point of the box; the bottom-left corner of the closest face.
-     */
     val min = Vector3(
-        pos.x - (width / 2f),
-        pos.y - (length / 2f),
-        pos.z
+        pos.x - (size.x / 2f),
+        pos.y - (size.y / 2f),
+        pos.z - (size.z / 2f)
     )
 
-    /**
-     * Maximum point of the box; the top-right corner of the farthest face.
-     */
     val max = Vector3(
-        pos.x + (width / 2f),
-        pos.y + (length / 2f),
-        pos.z + height
-    )
-
-    val center = Vector3(
-        pos.x,
-        pos.y,
-        pos.z + (height / 2f)
+        pos.x + (size.x / 2f),
+        pos.y + (size.y / 2f),
+        pos.z + (size.z / 2f)
     )
 
     val segments = listOf(
@@ -80,24 +64,48 @@ data class Box(
         BoundingBox(Vector3(min.x, max.y, min.z), Vector3(max.x, max.y, max.z))
     )
 
-    fun intersects(other: Box): Boolean {
-        return min.x < other.max.x &&
-                max.x > other.min.x &&
-                min.y < other.max.y &&
-                max.y > other.min.y &&
-                min.z < other.max.z &&
-                max.z > other.min.z
+    fun intersects(box: Box): Boolean {
+        return min.x < box.max.x &&
+                max.x > box.min.x &&
+                min.y < box.max.y &&
+                max.y > box.min.y &&
+                min.z < box.max.z &&
+                max.z > box.min.z
     }
 
-    fun project(dx: Float, dy: Float, dz: Float): Box {
+    fun getOverlapArea(box: Box): Float {
+        val dx = min(max.x, box.max.x) - max(min.x, box.min.x)
+        val dy = min(max.y, box.max.y) - max(min.y, box.min.y)
+        val dz = min(max.z, box.max.z) - max(min.z, box.min.z)
+        return if (dx >= 0f && dy >= 0f && dz >= 0f) {
+            dx * dy * dz
+        } else {
+            0f
+        }
+    }
+
+    fun expand(dx: Float, dy: Float, dz: Float): Box {
         val min = Vector3(min)
         val max = Vector3(max)
         if (dx < 0) min.x += dx else max.x += dx
         if (dy < 0) min.y += dy else max.y += dy
         if (dz < 0) min.z += dz else max.z += dz
-        return Box(min, max)
+        return from(min, max)
     }
 
-    fun dst(other: Box) =
-        center.dst(other.center)
+    fun dst(box: Box) =
+        pos.dst(box.pos)
+
+    companion object {
+        fun from(min: Vector3, max: Vector3): Box {
+            val size = Vector3(max).sub(min)
+            val center = Vector3(size)
+                .scl(0.5f)
+                .add(min)
+            return Box(center, size)
+        }
+
+        fun from(segment: Segment) =
+            from(segment.a, segment.b)
+    }
 }

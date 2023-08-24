@@ -1,6 +1,6 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.math.Box2
+import bke.iso.engine.math.Box
 import bke.iso.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
 
@@ -24,7 +24,7 @@ enum class CollisionSide {
  */
 data class Collision(
     val obj: GameObject,
-    val box: Box2,
+    val box: Box,
     val solid: Boolean,
     val distance: Float,
     val side: CollisionSide
@@ -42,7 +42,7 @@ data class Collision(
  */
 data class PredictedCollision(
     val obj: GameObject,
-    val box: Box2,
+    val box: Box,
     val solid: Boolean,
     val distance: Float,
     val collisionTime: Float,

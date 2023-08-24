@@ -2,7 +2,7 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.math.Box2
+import bke.iso.engine.math.Box
 import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
@@ -112,7 +112,7 @@ class Collisions(override val game: Game) : Module() {
         return collisions
     }
 
-    private fun predictCollision(box: Box2, delta: Vector3, gameObject: GameObject): PredictedCollision? {
+    private fun predictCollision(box: Box, delta: Vector3, gameObject: GameObject): PredictedCollision? {
         val data = gameObject.getCollisionData()
             ?: return null
 
@@ -160,7 +160,7 @@ class Collisions(override val game: Game) : Module() {
         val hitNormal: Vector3
     )
 
-    private fun checkSweptCollision(a: Box2, delta: Vector3, b: Box2): SweptCollision? {
+    private fun checkSweptCollision(a: Box, delta: Vector3, b: Box): SweptCollision? {
         // if box B is not in the projection of box A, both boxes will never collide
         val pBox = a.expand(delta.x, delta.y, delta.z)
 
