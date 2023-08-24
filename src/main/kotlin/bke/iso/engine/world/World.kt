@@ -33,13 +33,14 @@ class World(override val game: Game) : Module() {
         vararg components: Component,
         id: UUID = UUID.randomUUID()
     ): Actor {
-        val actor = Actor(id, x, y, z, this::onMove)
+        val actor = Actor(id, this::onMove)
+        actor.moveTo(x, y, z)
         components.forEach { component -> actor.components[component::class] = component }
         return actor
     }
 
     private fun onMove(actor: Actor) =
-        grid.move(actor)
+        grid.update(actor)
 
     fun deleteActor(actor: Actor) {
         deletedObjects.add(actor)
@@ -59,11 +60,10 @@ class World(override val game: Game) : Module() {
 
     private fun <T : Component> findActorsWith(type: KClass<out T>): Set<Pair<Actor, T>> =
         grid.getAllActors()
-            .mapNotNull { actor ->
-                val component = actor.get(type) ?: return@mapNotNull null
-                actor to component
+            .mapNotNullTo(mutableSetOf()) { actor ->
+                actor.get(type)
+                    ?.let { component -> actor to component }
             }
-            .toSet()
 
     fun <T : Component> findActorWith(type: KClass<out T>): Pair<Actor, T>? =
         findActorsWith(type).firstOrNull()

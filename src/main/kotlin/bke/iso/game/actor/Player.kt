@@ -4,7 +4,6 @@ import bke.iso.engine.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collider
 import bke.iso.engine.physics.Gravity
 import bke.iso.engine.physics.Velocity
@@ -85,9 +84,10 @@ class PlayerSystem(
         val velocity = actor.getOrPut(Velocity())
         velocity.x = movement.x
         velocity.y = movement.y
-        input.onAction("jump") {
-            velocity.z = PLAYER_JUMP_FORCE
-        }
+        velocity.z = movement.z
+//        input.onAction("jump") {
+//            velocity.z = PLAYER_JUMP_FORCE
+//        }
 
         renderer.setCameraPos(actor.pos)
     }
@@ -99,10 +99,11 @@ fun World.createPlayer(location: Location) =
         Sprite("player", 32f, 0f),
         Player(),
         Collider(
-            Bounds(Vector3(0.5f, 0.5f, 1.6f)),
-            false
+            false,
+            Vector3(0.4f, 0.4f, 1.6f),
+            Vector3(-0.2f, -0.2f, 0f)
         ),
         Health(PLAYER_MAX_HEALTH),
         HealthBar(18f, -64f),
-        Gravity()
+        //Gravity()
     )

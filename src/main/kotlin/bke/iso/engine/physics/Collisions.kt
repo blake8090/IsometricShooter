@@ -1,9 +1,10 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.math.Box
 import bke.iso.engine.math.getRay
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import bke.iso.engine.math.Box
+import bke.iso.engine.math.Box2
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import com.badlogic.gdx.graphics.Color
@@ -13,9 +14,12 @@ import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
 import mu.KotlinLogging
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.sign
 
+// TODO: finish rewriting
 class Collisions(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
@@ -27,14 +31,15 @@ class Collisions(override val game: Game) : Module() {
     }
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
-        val area = Box(segment.a, segment.b)
-        game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
-
-        val ray = segment.getRay()
-        return game.world
-            .getObjectsInArea(area)
-            .mapNotNull { obj -> checkCollision(segment, ray, obj) }
-            .toSet()
+        return emptySet()
+//        val area = Box2.from(segment)
+//        game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
+//
+//        val ray = segment.getRay()
+//        return game.world
+//            .getObjectsInArea(area)
+//            .mapNotNull { obj -> checkCollision(segment, ray, obj) }
+//            .toSet()
     }
 
     private fun checkCollision(segment: Segment, ray: Ray, gameObject: GameObject): SegmentCollision? {
@@ -54,8 +59,8 @@ class Collisions(override val game: Game) : Module() {
         return SegmentCollision(
             gameObject,
             data,
-            segment.a.dst(data.box.center),
-            segment.b.dst(data.box.center),
+            segment.a.dst(data.box.pos),
+            segment.b.dst(data.box.pos),
             points
         )
     }
@@ -74,53 +79,68 @@ class Collisions(override val game: Game) : Module() {
         val box = data.box
 
         // broad-phase: instead of iterating through every object, only check entities within general area of movement
-        val px = if (delta.x < 0) floor(delta.x) else ceil(delta.x)
-        val py = if (delta.y < 0) floor(delta.y) else ceil(delta.y)
-        val pz = if (delta.z < 0) floor(delta.z) else ceil(delta.z)
-        val projectedBox = box.project(px, py, pz)
-            // project downward one more unit to make sure objects just below are checked
-            // TODO: rewrite this to handle arbitrary heights
-            .project(0f, 0f, -1f)
+        val px = ceil(abs(delta.x))
+        val py = ceil(abs(delta.y))
+        val pz = ceil(abs(delta.z))
+
+        val projectedBox = box.expand(
+            px * delta.x.sign,
+            py * delta.y.sign,
+            pz * delta.z.sign,
+        )
         game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
 
-        // narrow-phase: check precise collisions for each object within area
-        val collisions = mutableSetOf<PredictedCollision>()
-        for (gameObject in game.world.getObjectsInArea(projectedBox)) {
-            if (actor == gameObject) {
-                continue
-            }
 
-            val collision = predictCollision(box, delta, gameObject)
-            if (collision != null) {
-                recordCollision(actor, collision)
-                collisions.add(collision)
-            }
-        }
-        return collisions
+//        val px = if (delta.x < 0) floor(delta.x) else ceil(delta.x)
+//        val py = if (delta.y < 0) floor(delta.y) else ceil(delta.y)
+//        val pz = if (delta.z < 0) floor(delta.z) else ceil(delta.z)
+//        val projectedBox = box.project(px, py, pz)
+//            // project downward one more unit to make sure objects just below are checked
+//            // TODO: rewrite this to handle arbitrary heights
+//            .project(0f, 0f, -1f)
+//        game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
+//
+//        // narrow-phase: check precise collisions for each object within area
+//        val collisions = mutableSetOf<PredictedCollision>()
+//        for (gameObject in game.world.getObjectsInArea(projectedBox)) {
+//            if (actor == gameObject) {
+//                continue
+//            }
+//
+//            val collision = predictCollision(box, delta, gameObject)
+//            if (collision != null) {
+//                recordCollision(actor, collision)
+//                collisions.add(collision)
+//            }
+//        }
+//        return collisions
+
+        return emptySet()
     }
 
     private fun predictCollision(box: Box, delta: Vector3, gameObject: GameObject): PredictedCollision? {
-        val data = gameObject.getCollisionData()
-            ?: return null
-
-        val sweptCollision = checkSweptCollision(box, delta, data.box)
-            ?: return null
-
-        val distance = box.dst(data.box)
-        val side = getCollisionSide(sweptCollision.hitNormal)
-        log.trace {
-            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
-                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
-        }
-
-        return PredictedCollision(
-            gameObject,
-            data,
-            distance,
-            sweptCollision.collisionTime,
-            sweptCollision.hitNormal,
-            side
-        )
+        return null
+//        val data = gameObject.getCollisionData()
+//            ?: return null
+//
+//        val sweptCollision = checkSweptCollision(box, delta, data.box)
+//            ?: return null
+//
+//        val distance = box.dst(data.box)
+//        val side = getCollisionSide(sweptCollision.hitNormal)
+//        log.trace {
+//            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
+//                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
+//        }
+//
+//        return PredictedCollision(
+//            gameObject,
+//            data,
+//            distance,
+//            sweptCollision.collisionTime,
+//            sweptCollision.hitNormal,
+//            side
+//        )
     }
 
     private fun recordCollision(actor: Actor, predictedCollision: PredictedCollision) {

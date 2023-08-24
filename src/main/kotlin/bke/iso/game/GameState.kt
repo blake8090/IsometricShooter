@@ -57,18 +57,14 @@ class GameState(override val game: Game) : State() {
         game.assets.load("game")
 
         loadMap()
-        factory.createLampPost(Location(4, 4, 0)).y -= 0.125f
-        factory.createLampPost(Location(8, 4, 0)).y -= 0.125f
+        factory.createLampPost(Location(4, 4, 0))
+            .move(0f, -0.125f, 0f)
+        factory.createLampPost(Location(8, 4, 0))
+            .move(0f, -0.125f, 0f)
         factory.createPillar(Location(12, 12, 0))
-            .apply {
-                x -= 0.5f
-                y += 0.5f
-            }
+            .move(-0.5f, 0.5f, 0f)
         factory.createPillar(Location(10, 12, 0))
-            .apply {
-                x -= 0.5f
-                y += 0.5f
-            }
+            .move(-0.5f, 0.5f, 0f)
 
         bindInput()
     }

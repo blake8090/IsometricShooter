@@ -1,54 +1,45 @@
 package bke.iso.engine.world
 
+import bke.iso.engine.math.Location
+import bke.iso.engine.physics.getCollisionData
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
-import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
 open class Component
 
 class Actor(
-    val id: UUID,
-    x: Float,
-    y: Float,
-    z: Float,
+    val id: UUID = UUID.randomUUID(),
     private val onMove: (Actor) -> Unit = {}
 ) : GameObject() {
 
-    var x: Float by Delegates.observable(0f) { _, _, _ ->
-        onMove(this)
-    }
+    var x: Float = 0f
+        private set
 
-    var y: Float by Delegates.observable(0f) { _, _, _ ->
-        onMove(this)
-    }
+    var y: Float = 0f
+        private set
 
-    var z: Float by Delegates.observable(0f) { _, _, _ ->
-        onMove(this)
-    }
+    var z: Float = 0f
+        private set
 
-    var pos: Vector3
+    val pos: Vector3
         get() = Vector3(x, y, z)
-        set(value) {
-            x = value.x
-            y = value.y
-            z = value.z
-        }
 
     val components = mutableMapOf<KClass<out Component>, Component>()
 
-    init {
+    fun moveTo(x: Float, y: Float, z: Float) {
         this.x = x
         this.y = y
         this.z = z
+        onMove(this)
     }
 
-    fun move(delta: Vector3) {
-        x += delta.x
-        y += delta.y
-        z += delta.z
-    }
+    fun move(delta: Vector3) =
+        move(delta.x, delta.y, delta.z)
+
+    fun move(dx: Float, dy: Float, dz: Float) =
+        moveTo(x + dx, y + dy, z + dz)
 
     inline fun <reified T : Component> add(component: T) {
         components[T::class] = component
@@ -74,6 +65,43 @@ class Actor(
 
     inline fun <reified T : Component> remove() =
         components.remove(T::class)
+
+    /**
+     * Returns a list of locations that the actor spans, including its bounding box (if present).
+     *
+     * For example: An actor is positioned at (0, 0, 0) with a bounding box of size 1.
+     * The box's minimum is therefore (0, 0, 0) and the maximum is (1, 1, 1).
+     *
+     * The returned locations would be the following:
+     *
+     * (0, 0, 0) (0, 1, 0) (1, 0, 0) (1, 1, 0)
+     * (0, 0, 1) (0, 1, 1) (1, 0, 1) (1, 1, 1)
+     */
+    fun getLocations(): Set<Location> {
+        val locations = mutableSetOf<Location>()
+        locations.add(Location(pos))
+
+        val collisionData = getCollisionData()
+        if (collisionData != null) {
+            val minX = collisionData.box.min.x.toInt()
+            val minY = collisionData.box.min.y.toInt()
+            val minZ = collisionData.box.min.z.toInt()
+
+            val maxX = collisionData.box.max.x.toInt()
+            val maxY = collisionData.box.max.y.toInt()
+            val maxZ = collisionData.box.max.z.toInt()
+
+            for (x in minX..maxX) {
+                for (y in minY..maxY) {
+                    for (z in minZ..maxZ) {
+                        locations.add(Location(x, y, z))
+                    }
+                }
+            }
+        }
+
+        return locations
+    }
 
     override fun equals(other: Any?) =
         other is Actor && other.id == id

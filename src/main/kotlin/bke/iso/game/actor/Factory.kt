@@ -1,7 +1,6 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.Bounds
 import bke.iso.engine.physics.Collider
 import bke.iso.engine.physics.Velocity
 import bke.iso.engine.render.Sprite
@@ -18,8 +17,8 @@ class Factory(private val world: World) {
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("wall3", 0f, 16f),
             Collider(
-                Bounds(Vector3(1f, 1f, 2f), Vector3(0.5f, 0.5f, 0f)),
-                true
+                true,
+                Vector3(1f, 1f, 2f)
             )
         )
 
@@ -28,8 +27,8 @@ class Factory(private val world: World) {
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("box", 16f, 8f),
             Collider(
-                Bounds(Vector3(0.5f, 0.5f, 0.5f)),
-                true
+                true,
+                Vector3(0.5f, 0.5f, 0.5f)
             )
         )
 
@@ -39,8 +38,9 @@ class Factory(private val world: World) {
             Sprite("turret", 16f, 0f),
             Turret(),
             Collider(
-                Bounds(Vector3(0.5f, 0.5f, 1f)),
-                false
+                false,
+                Vector3(0.25f, 0.25f, 0.5f),
+                Vector3(-0.25f, 0f, 0f)
             ),
             Health(3f),
             HealthBar(16f, -36f)
@@ -52,8 +52,8 @@ class Factory(private val world: World) {
             Sprite("platform", 0f, 32f),
             MovingPlatform(),
             Collider(
-                Bounds(Vector3(2f, 1f, 0f), Vector3(1f, 0.5f, 0f)),
-                true
+                true,
+                Vector3(2f, 1f, 0.125f)
             )
         )
 
@@ -62,8 +62,8 @@ class Factory(private val world: World) {
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("fence-side", 0f, 16f),
             Collider(
-                Bounds(Vector3(0.1f, 1f, 1f), Vector3(0f, 0.5f, 0f)),
-                true
+                true,
+                Vector3(0.1f, 1f, 1f)
             )
         )
 
@@ -72,8 +72,8 @@ class Factory(private val world: World) {
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("fence-front", 32f, 32f),
             Collider(
-                Bounds(Vector3(1f, 0.1f, 1f), Vector3(0.5f, -0.05f, 0f)),
-                true
+                true,
+                Vector3(1f, 0.1f, 1f)
             )
         )
 
@@ -82,18 +82,19 @@ class Factory(private val world: World) {
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("lamppost", 32f, 16f),
             Collider(
-                Bounds(Vector3(0.25f, 0.25f, 2.1f), Vector3(0f, 0f, 0f)),
-                true
+                true,
+                Vector3(0.25f, 0.25f, 2.1f),
+                Vector3(-0.125f, -0.125f, 0f)
             )
         )
 
     fun createPillar(location: Location) =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
-            Sprite("pillar", 32f, 4f),
+            Sprite("pillar", 24f, 3f),
             Collider(
-                Bounds(Vector3(0.25f, 0.25f, 2f), Vector3(0f, 0f, 0f)),
-                true
+                true,
+                Vector3(0.25f, 0.25f, 2f)
             )
         )
 }
@@ -112,8 +113,8 @@ fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletTyp
             direction.z * bulletType.speed
         ),
         Collider(
-            Bounds(Vector3(0.125f, 0.125f, 0.125f)),
-            false
+            false,
+            Vector3(0.125f, 0.125f, 0.125f)
         )
     )
 }

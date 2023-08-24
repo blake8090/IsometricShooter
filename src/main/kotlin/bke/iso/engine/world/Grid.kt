@@ -3,10 +3,12 @@ package bke.iso.engine.world
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
 
+// TODO: negative coordinates NOT ALLOWED!
+
 class Grid {
 
     private val actorGrid = mutableMapOf<Location, MutableSet<Actor>>()
-    private val locationByActor = mutableMapOf<Actor, Location>()
+    private val locationsByActor = mutableMapOf<Actor, MutableSet<Location>>()
 
     private val tileGrid = mutableMapOf<Location, Tile>()
 
@@ -16,34 +18,29 @@ class Grid {
         tile.location = location
     }
 
-    fun add(actor: Actor) =
-        put(actor, Location(actor.x, actor.y, actor.z))
-
-    private fun put(actor: Actor, location: Location) {
-        locationByActor[actor] = location
-        actorGrid
-            .getOrPut(location) { mutableSetOf() }
-            .add(actor)
-    }
-
-    fun move(actor: Actor) {
+    fun update(actor: Actor) {
         remove(actor)
-        add(actor)
+        for (location in actor.getLocations()) {
+            actorGrid
+                .getOrPut(location) { mutableSetOf() }
+                .add(actor)
+            locationsByActor
+                .getOrPut(actor) { mutableSetOf() }
+                .add(location)
+        }
     }
 
     fun remove(actor: Actor) {
-        val location = locationByActor
-            .remove(actor)
-            ?: return
-        actorGrid[location]?.remove(actor)
+        val locations = locationsByActor[actor] ?: return
+        for (location in locations) {
+            actorGrid[location]?.remove(actor)
+        }
     }
 
     fun getAll(): Set<GameObject> {
         val objects = mutableSetOf<GameObject>()
-        for ((_, tile) in tileGrid) {
-            objects.add(tile)
-        }
-        actorGrid.values.flatten().forEach(objects::add)
+        objects.addAll(tileGrid.values)
+        actorGrid.values.forEach(objects::addAll)
         return objects
     }
 
@@ -54,6 +51,6 @@ class Grid {
         return objects
     }
 
-    fun getAllActors(): Set<Actor> =
-        locationByActor.keys.toSet()
+    fun getAllActors()  =
+        locationsByActor.keys
 }

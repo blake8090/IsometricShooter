@@ -236,6 +236,7 @@ class Renderer(override val game: Game) : Module() {
 
     private fun draw(tile: Tile) {
         drawSprite(tile.sprite, tile.location.toVector3())
+        debugRenderer.addBox(tile.getCollisionData().box, 1f, Color.WHITE)
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
