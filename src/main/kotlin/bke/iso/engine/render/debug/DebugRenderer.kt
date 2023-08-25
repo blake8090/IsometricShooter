@@ -75,7 +75,7 @@ class DebugRenderer(private val shapeDrawer: DebugShapeDrawer) {
         }
     }
 
-    fun render() {
+    fun draw() {
         shapeDrawer.begin()
         for (shape in shapes) {
             when (shape) {

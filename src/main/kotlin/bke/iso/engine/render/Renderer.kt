@@ -11,7 +11,6 @@ import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
-import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -49,11 +48,11 @@ class Renderer(override val game: Game) : Module() {
     private val log = KotlinLogging.logger {}
 
     private val batch = PolygonSpriteBatch()
+    private val objectSorter = ObjectSorter()
+    private var customCursor: CustomCursor? = null
 
     val debugRenderer = DebugRenderer(DebugShapeDrawer(batch))
     private var debugEnabled = false
-
-    private var customCursor: CustomCursor? = null
 
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
@@ -124,29 +123,18 @@ class Renderer(override val game: Game) : Module() {
         cursor.draw(batch, getCursorPos())
     }
 
-    fun render() {
+    fun draw() {
         camera.update()
         fbo.begin()
         ScreenUtils.clear(0f, 0f, 255f, 1f)
         batch.projectionMatrix = camera.combined
         batch.begin()
-        // TODO: break out sorting code
-        val drawData = game.world.objects.map(::toDrawData)
-        for ((i, a) in drawData.withIndex()) {
-            for ((j, b) in drawData.withIndex()) {
-                if (i == j) {
-                    continue
-                } else if (inFront(a, b)) {
-                    a.objectsBehind.add(b)
-                } else if (inFront(b, a)) {
-                    b.objectsBehind.add(a)
-                }
+        objectSorter.forEach(game.world.objects) {
+            when (it) {
+                is Actor -> draw(it)
+                is Tile -> draw(it)
             }
         }
-        // TODO: is this really true?
-        // for proper rendering, objects with nothing behind them must be drawn first
-        drawData.filter { it.objectsBehind.isEmpty() }.forEach(::draw)
-        drawData.forEach(::draw)
         batch.end()
         fbo.end()
 
@@ -160,60 +148,10 @@ class Renderer(override val game: Game) : Module() {
         if (debugEnabled) {
             // match debug shapes to world positions
             batch.projectionMatrix = camera.combined
-            debugRenderer.render()
+            debugRenderer.draw()
         }
         // debug data still accumulates even when not in debug mode!
         debugRenderer.clear()
-    }
-
-    private fun toDrawData(obj: GameObject): DrawData {
-        val data = obj.getCollisionData()
-        val pos = when (obj) {
-            is Tile -> obj.location.toVector3()
-            is Actor -> obj.pos
-            else -> error("Unrecognized type for game object $obj")
-        }
-
-        val min = data?.box?.min ?: pos
-        val max = data?.box?.max ?: pos
-        val width = max.x - min.x
-        val length = max.y - min.y
-        val height = max.z - min.z
-        val center = Vector3(
-            min.x + (width / 2f),
-            min.y + (length / 2f),
-            min.z + (height / 2f)
-        )
-
-        return DrawData(obj, min, max, center)
-    }
-
-    private fun inFront(a: DrawData, b: DrawData): Boolean {
-        if (a.max.z <= b.min.z) {
-            return false
-        }
-
-        if (a.min.y - b.max.y >= 0) {
-            return false
-        }
-
-        if (a.max.x - b.min.x <= 0) {
-            return false
-        }
-
-        return true
-    }
-
-    private fun draw(data: DrawData) {
-        if (data.visited) {
-            return
-        }
-        data.visited = true
-        data.objectsBehind.forEach(::draw)
-        when (val gameObject = data.obj) {
-            is Actor -> draw(gameObject)
-            is Tile -> draw(gameObject)
-        }
     }
 
     private fun draw(actor: Actor) {
@@ -290,14 +228,4 @@ fun makePixel(color: Color = Color.WHITE): Pixmap {
     pixmap.setColor(color)
     pixmap.drawPixel(0, 0)
     return pixmap
-}
-
-private data class DrawData(
-    val obj: GameObject,
-    val min: Vector3,
-    val max: Vector3,
-    val center: Vector3
-) {
-    val objectsBehind = mutableSetOf<DrawData>()
-    var visited = false
 }

@@ -64,7 +64,7 @@ class Game {
         world.update(deltaTime)
         collisions.update(deltaTime)
         physics.update(deltaTime)
-        renderer.render()
+        renderer.draw()
     }
 
     fun resize(width: Int, height: Int) {
