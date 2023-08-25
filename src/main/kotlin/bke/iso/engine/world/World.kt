@@ -13,14 +13,18 @@ abstract class GameObject
 class World(override val game: Game) : Module() {
 
     private val grid = Grid()
-    private val deletedObjects = mutableSetOf<Actor>()
+    private val actorsById = mutableMapOf<UUID, Actor>()
+    private val deletedActors = mutableSetOf<Actor>()
 
     val objects: Set<GameObject>
         get() = grid.getAll()
 
     override fun update(deltaTime: Float) {
-        deletedObjects.forEach(grid::remove)
-        deletedObjects.clear()
+        for (actor in deletedActors) {
+            actorsById.remove(actor.id)
+            grid.remove(actor)
+        }
+        deletedActors.clear()
     }
 
     fun newActor(
@@ -31,14 +35,18 @@ class World(override val game: Game) : Module() {
         val actor = Actor(id, this::onMove)
         components.forEach(actor::add)
         actor.moveTo(x, y, z)
+        actorsById[actor.id] = actor
         return actor
     }
+
+    fun getActor(id: UUID): Actor =
+        actorsById[id] ?: throw IllegalArgumentException("No actor found with id $id")
 
     private fun onMove(actor: Actor) =
         grid.update(actor)
 
     fun delete(actor: Actor) {
-        deletedObjects.add(actor)
+        deletedActors.add(actor)
     }
 
     fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) =

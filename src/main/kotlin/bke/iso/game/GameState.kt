@@ -13,6 +13,7 @@ import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.createShadow
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.world.Actor
@@ -160,7 +161,11 @@ class GameState(override val game: Game) : State() {
 
     private fun readEntity(char: Char, location: Location) {
         when (char) {
-            'p' -> game.world.createPlayer(location)
+            'p' -> {
+                val player = game.world.createPlayer(location)
+                game.world.createShadow(player)
+            }
+
             '#' -> factory.createWall(location)
             'x' -> factory.createBox(location)
             't' -> factory.createTurret(location)

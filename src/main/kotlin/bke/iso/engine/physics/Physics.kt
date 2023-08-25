@@ -64,12 +64,13 @@ class Physics(override val game: Game) : Module() {
 
         // TODO: clean this up
         val collisions = game.collisions.predictCollisions(actor, delta)
+            .filter(PredictedCollision::solid)
             .sortedWith(
                 compareBy(PredictedCollision::collisionTime)
                     .thenBy(PredictedCollision::distance)
             )
         val collision = collisions.firstOrNull()
-        if (collision == null || !collision.solid) {
+        if (collision == null) {
             actor.move(delta)
             return
         }

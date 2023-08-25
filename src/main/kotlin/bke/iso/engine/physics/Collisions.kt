@@ -29,6 +29,32 @@ class Collisions(override val game: Game) : Module() {
         }
     }
 
+    fun checkCollisions(box: Box): Set<Collision> {
+        game.renderer.debugRenderer.addBox(box, 1f, Color.SKY)
+        val collisions = mutableSetOf<Collision>()
+        val objects = game.world.getObjectsInArea(box)
+        for (obj in objects) {
+            val data = obj.getCollisionData()
+                ?: continue
+
+            if (!data.box.intersects(box)) {
+                continue
+            }
+
+            collisions.add(
+                Collision(
+                    obj,
+                    data.box,
+                    data.solid,
+                    box.dst(data.box),
+                    // TODO: find collision side
+                    CollisionSide.CORNER
+                )
+            )
+        }
+        return collisions
+    }
+
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
         val area = Box.from(segment)
         game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
