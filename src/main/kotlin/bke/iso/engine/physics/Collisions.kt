@@ -30,7 +30,7 @@ class Collisions(override val game: Game) : Module() {
     }
 
     fun checkCollisions(box: Box): Set<Collision> {
-        game.renderer.debugRenderer.addBox(box, 1f, Color.SKY)
+        game.renderer.debug.addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
         val objects = game.world.getObjectsInArea(box)
         for (obj in objects) {
@@ -57,7 +57,7 @@ class Collisions(override val game: Game) : Module() {
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
         val area = Box.from(segment)
-        game.renderer.debugRenderer.addBox(area, 1f, Color.ORANGE)
+        game.renderer.debug.addBox(area, 1f, Color.ORANGE)
 
         val ray = segment.getRay()
         return game.world
@@ -112,7 +112,7 @@ class Collisions(override val game: Game) : Module() {
             py * delta.y.sign,
             pz * delta.z.sign,
         )
-        game.renderer.debugRenderer.addBox(projectedBox, 1f, Color.ORANGE)
+        game.renderer.debug.addBox(projectedBox, 1f, Color.ORANGE)
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()

@@ -5,10 +5,7 @@ import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.math.toVector2
-import bke.iso.engine.physics.getCollisionData
 import bke.iso.engine.render.debug.DebugRenderer
-import bke.iso.engine.render.debug.DebugSettings
-import bke.iso.engine.render.debug.DebugShapeDrawer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
@@ -51,8 +48,7 @@ class Renderer(override val game: Game) : Module() {
     private val objectSorter = ObjectSorter()
     private var customCursor: CustomCursor? = null
 
-    val debugRenderer = DebugRenderer(DebugShapeDrawer(batch))
-    private var debugEnabled = false
+    val debug = DebugRenderer(batch)
 
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
@@ -76,7 +72,6 @@ class Renderer(override val game: Game) : Module() {
 
     override fun dispose() {
         batch.dispose()
-        debugRenderer.clear()
         fbo.dispose()
     }
 
@@ -88,10 +83,6 @@ class Renderer(override val game: Game) : Module() {
         val pos = toScreen(worldPos)
         camera.position.x = pos.x
         camera.position.y = pos.y
-    }
-
-    fun toggleDebug() {
-        debugEnabled = debugEnabled.not()
     }
 
     fun getCursorPos(): Vector2 {
@@ -145,60 +136,21 @@ class Renderer(override val game: Game) : Module() {
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
 
-        if (debugEnabled) {
-            // match debug shapes to world positions
-            batch.projectionMatrix = camera.combined
-            debugRenderer.draw()
-        }
-        // debug data still accumulates even when not in debug mode!
-        debugRenderer.clear()
+        // make sure that shapes are drawn respective to world positions
+        batch.projectionMatrix = camera.combined
+        debug.draw()
     }
 
     private fun draw(actor: Actor) {
         val sprite = actor.get<Sprite>() ?: return
         drawSprite(sprite, actor.pos)
-        addDebugShapes(actor)
+        debug.add(actor)
         game.events.fire(DrawActorEvent(actor, batch))
-    }
-
-    private fun addDebugShapes(actor: Actor) {
-        val settings = actor.get<DebugSettings>() ?: return
-
-        if (settings.collisionBox) {
-            val color =
-                if (settings.collisionBoxSelected) {
-                    Color.PURPLE
-                } else {
-                    settings.collisionBoxColor
-                }
-            actor.getCollisionData()?.let { data ->
-                debugRenderer.addBox(data.box, 1f, color)
-            }
-            settings.collisionBoxSelected = false
-        }
-
-        if (settings.position) {
-            debugRenderer.addPoint(actor.pos, 2f, settings.positionColor)
-        }
-
-        if (settings.zAxis && actor.z > 0f) {
-            val start = Vector3(actor.x, actor.y, 0f)
-            val end = actor.pos
-            debugRenderer.addPoint(start, 2f, settings.zAxisColor)
-            debugRenderer.addLine(start, end, 1f, settings.zAxisColor)
-        }
     }
 
     private fun draw(tile: Tile) {
         drawSprite(tile.sprite, tile.location.toVector3())
-        val color =
-            if (tile.selected) {
-                Color.PURPLE
-            } else {
-                Color.WHITE
-            }
-        debugRenderer.addBox(tile.getCollisionData().box, 1f, color)
-        tile.selected = false
+        debug.add(tile)
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {

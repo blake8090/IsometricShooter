@@ -40,7 +40,7 @@ class PlayerSystem(
             updatePlayer(actor)
 
             input.onAction("toggleDebug") {
-                renderer.toggleDebug()
+                renderer.debug.toggle()
             }
 
             input.onAction("shoot") {
