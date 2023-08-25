@@ -18,7 +18,6 @@ data class Turret(
 private const val VISION_RADIUS = 12f
 private const val MINIMUM_COOLDOWN_SECONDS = 0.8f
 
-// TODO: fix issue where turret sometimes won't shoot when player is on ground
 class TurretSystem(
     private val world: World,
     private val collisions: Collisions,
