@@ -3,8 +3,6 @@ package bke.iso.engine.world
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
 
-// TODO: negative coordinates NOT ALLOWED!
-
 class Grid {
 
     private val actorGrid = mutableMapOf<Location, MutableSet<Actor>>()

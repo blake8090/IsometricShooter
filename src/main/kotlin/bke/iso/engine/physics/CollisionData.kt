@@ -29,6 +29,7 @@ fun Tile.getCollisionData(): CollisionData {
 
 fun Actor.getCollisionData(): CollisionData? {
     val collider = get<Collider>() ?: return null
+    // TODO: add centering options in addition to offsets
     val min = pos.add(collider.offset)
     val max = Vector3(min).add(collider.size)
     return CollisionData(

@@ -4,10 +4,14 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.physics.getCollisionData
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
+import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
 open class Component
+
+private const val Z_CLAMP_THRESHOLD = 0.00001f
 
 data class Description(val text: String) : Component()
 
@@ -33,7 +37,11 @@ class Actor(
     fun moveTo(x: Float, y: Float, z: Float) {
         this.x = x
         this.y = y
-        this.z = z
+        this.z = if (abs(z) <= Z_CLAMP_THRESHOLD) {
+            0f
+        } else {
+            z
+        }
         onMove(this)
     }
 
@@ -77,15 +85,15 @@ class Actor(
         val locations = mutableSetOf<Location>()
         locations.add(Location(pos))
 
-        val collisionData = getCollisionData()
-        if (collisionData != null) {
-            val minX = collisionData.box.min.x.toInt()
-            val minY = collisionData.box.min.y.toInt()
-            val minZ = collisionData.box.min.z.toInt()
+        val box = getCollisionData()?.box
+        if (box != null) {
+            val minX = floor(box.min.x).toInt()
+            val minY = floor(box.min.y).toInt()
+            val minZ = floor(box.min.z).toInt()
 
-            val maxX = collisionData.box.max.x.toInt()
-            val maxY = collisionData.box.max.y.toInt()
-            val maxZ = collisionData.box.max.z.toInt()
+            val maxX = floor(box.max.x).toInt()
+            val maxY = floor(box.max.y).toInt()
+            val maxZ = floor(box.max.z).toInt()
 
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
