@@ -1,11 +1,11 @@
-package bke.iso.engine.render
+package bke.iso.game
 
 import bke.iso.engine.System
-import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.Box
 import bke.iso.engine.physics.Collider
 import bke.iso.engine.physics.Collisions
 import bke.iso.engine.physics.getCollisionData
+import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
@@ -18,7 +18,6 @@ data class Shadow(val parent: UUID) : Component()
 private const val Z_OFFSET = 0.0001f
 
 class ShadowSystem(
-    private val assets: Assets,
     private val world: World,
     private val collisions: Collisions
 ) : System() {

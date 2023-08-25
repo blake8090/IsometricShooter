@@ -13,7 +13,6 @@ import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.render.createShadow
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.world.Actor
@@ -48,7 +47,8 @@ class GameState(override val game: Game) : State() {
     override val systems: Set<System> = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
         TurretSystem(game.world, game.collisions, game.renderer.debugRenderer, combat),
-        BulletSystem(game.world, combat)
+        BulletSystem(game.world, combat),
+        ShadowSystem(game.world, game.collisions)
     )
 
     override var loadingScreen: UIScreen? = LoadingScreen(game.assets)

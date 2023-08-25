@@ -6,7 +6,6 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.physics.Collisions
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.render.ShadowSystem
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
@@ -33,8 +32,6 @@ class Game {
     val renderer = Renderer(this)
     val world = World(this)
     val ui = UI(this)
-
-    private val shadowSystem = ShadowSystem(assets, world, collisions)
 
     private var state: State = EmptyState(this)
     private var loading = false
@@ -63,10 +60,7 @@ class Game {
     private fun runFrame(deltaTime: Float) {
         input.update(deltaTime)
         renderer.updateCursor(deltaTime)
-
         state.update(deltaTime)
-        shadowSystem.update(deltaTime)
-
         world.update(deltaTime)
         collisions.update(deltaTime)
         physics.update(deltaTime)
