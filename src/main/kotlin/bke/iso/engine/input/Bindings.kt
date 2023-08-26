@@ -46,7 +46,7 @@ data class ControllerAxisBinding(
 ) : AxisBinding()
 
 class Bindings {
-    private val bindings = mutableMapOf<String, Binding>()
+    private val bindingByAction = mutableMapOf<String, Binding>()
     private val previousFrame = mutableMapOf<Int, Boolean>()
     private val currentFrame = mutableMapOf<Int, Boolean>()
 
@@ -54,17 +54,17 @@ class Bindings {
     var getAxis: (AxisBinding) -> Float = { 0f }
 
     operator fun get(action: String): Binding? =
-        bindings[action]
+        bindingByAction[action]
 
     operator fun set(action: String, binding: Binding) {
-        bindings[action] = binding
+        bindingByAction[action] = binding
     }
 
     fun update() {
         previousFrame.clear()
         previousFrame.putAll(currentFrame)
         currentFrame.clear()
-        for ((_, binding) in bindings) {
+        for ((_, binding) in bindingByAction) {
             if (binding is CompositeBinding<*>) {
                 currentFrame[binding.negativeBinding.code] = isButtonDown(binding.negativeBinding)
                 currentFrame[binding.positiveBinding.code] = isButtonDown(binding.positiveBinding)
@@ -75,7 +75,7 @@ class Bindings {
     }
 
     fun poll(action: String): Float =
-        when (val binding = bindings[action]) {
+        when (val binding = bindingByAction[action]) {
             is ButtonBinding -> pollButtonBinding(binding)
 
             is CompositeBinding<*> -> pollCompositeBinding(binding)

@@ -60,5 +60,4 @@ tasks.register<JavaExec>("start") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("bke.iso.MainKt")
     dependsOn("test")
-    dependsOn("detektMain")
 }

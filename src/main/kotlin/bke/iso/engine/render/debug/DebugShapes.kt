@@ -14,7 +14,12 @@ data class DebugLine(
     var color: Color = Color.WHITE
 ) : Poolable, DebugShape() {
 
-    override fun reset() {}
+    override fun reset() {
+        start = Vector3()
+        end = Vector3()
+        width = 0f
+        color = Color.WHITE
+    }
 }
 
 data class DebugRectangle(
@@ -23,7 +28,11 @@ data class DebugRectangle(
     var color: Color = Color.WHITE
 ) : Poolable, DebugShape() {
 
-    override fun reset() {}
+    override fun reset() {
+        rectangle = Rectangle()
+        lineWidth = 0f
+        color = Color.WHITE
+    }
 }
 
 data class DebugCircle(
@@ -32,7 +41,11 @@ data class DebugCircle(
     var color: Color = Color.WHITE
 ) : Poolable, DebugShape() {
 
-    override fun reset() {}
+    override fun reset() {
+        pos = Vector3()
+        radius = 0f
+        color = Color.WHITE
+    }
 }
 
 data class DebugPoint(
@@ -41,7 +54,11 @@ data class DebugPoint(
     var color: Color = Color.WHITE
 ) : Poolable, DebugShape() {
 
-    override fun reset() {}
+    override fun reset() {
+        pos = Vector3()
+        size = 0f
+        color = Color.WHITE
+    }
 }
 
 data class DebugSphere(
@@ -50,5 +67,9 @@ data class DebugSphere(
     var color: Color = Color.WHITE
 ) : Poolable, DebugShape() {
 
-    override fun reset() {}
+    override fun reset() {
+        pos = Vector3()
+        radius = 0f
+        color = Color.WHITE
+    }
 }

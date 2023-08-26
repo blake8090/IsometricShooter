@@ -24,7 +24,7 @@ class Assets(override val game: Game) : Module() {
     val fonts: Fonts = Fonts(this)
 
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
-    private val assets = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
+    private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
 
     override fun start() {
         addLoader("jpg", TextureLoader())
@@ -34,7 +34,7 @@ class Assets(override val game: Game) : Module() {
 
     override fun dispose() {
         log.info { "Disposing assets" }
-        for (asset in assets.values) {
+        for (asset in assetCache.values) {
             if (asset.value is Disposable) {
                 Disposer.dispose(asset.value, asset.name)
             }
@@ -51,7 +51,7 @@ class Assets(override val game: Game) : Module() {
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T {
-        val asset = assets[name to type]?.value
+        val asset = assetCache[name to type]?.value
         val value = type.safeCast(asset)
         requireNotNull(value) {
             "No asset found for name '$name' and type '${type.simpleName}'"
@@ -84,6 +84,6 @@ class Assets(override val game: Game) : Module() {
     }
 
     private fun <T : Any> set(name: String, asset: Asset<T>) {
-        assets[name to asset.value::class] = asset
+        assetCache[name to asset.value::class] = asset
     }
 }
