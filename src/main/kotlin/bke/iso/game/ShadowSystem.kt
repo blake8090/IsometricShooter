@@ -16,6 +16,7 @@ import java.util.UUID
 data class Shadow(val parent: UUID) : Component()
 
 private const val Z_OFFSET = 0.0001f
+private const val SHADOW_ALPHA = 0.5f
 
 class ShadowSystem(
     private val world: World,
@@ -74,7 +75,7 @@ fun World.createShadow(actor: Actor) =
         actor.y,
         actor.z,
         // TODO: sprite offsets should be negative for consistency!
-        Sprite("shadow", 16f, 16f),
+        Sprite("shadow", 16f, 16f, SHADOW_ALPHA),
         Shadow(actor.id),
         Collider(
             false,

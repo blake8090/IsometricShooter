@@ -31,7 +31,8 @@ const val VIRTUAL_HEIGHT = 540f
 data class Sprite(
     val texture: String = "",
     val offsetX: Float = 0f,
-    val offsetY: Float = 0f
+    val offsetY: Float = 0f,
+    val alpha: Float = 1f
 ) : Component()
 
 // TODO: inner class?
@@ -157,7 +158,12 @@ class Renderer(override val game: Game) : Module() {
         val texture = game.assets.get<Texture>(sprite.texture)
         val screenPos = toScreen(worldPos)
             .sub(sprite.offsetX, sprite.offsetY)
-        batch.draw(texture, screenPos.x, screenPos.y)
+
+        val color = Color(batch.color)
+        color.a = sprite.alpha
+        batch.withColor(color) {
+            batch.draw(texture, screenPos.x, screenPos.y)
+        }
     }
 }
 
