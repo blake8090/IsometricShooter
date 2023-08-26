@@ -2,11 +2,12 @@ import org.gradle.kotlin.dsl.application
 
 plugins {
     kotlin("jvm") version "1.9.10"
+    id("io.gitlab.arturbosch.detekt").version("1.23.1")
     application
 }
 
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(19)
 }
 
 repositories {
@@ -17,6 +18,8 @@ repositories {
 }
 
 dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.1")
+
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.reflections:reflections:0.10.2")
@@ -57,4 +60,5 @@ tasks.register<JavaExec>("start") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("bke.iso.MainKt")
     dependsOn("test")
+    dependsOn("detektMain")
 }
