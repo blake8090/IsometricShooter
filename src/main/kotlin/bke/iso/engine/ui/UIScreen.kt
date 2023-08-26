@@ -10,8 +10,8 @@ import kotlin.reflect.KClass
 
 abstract class UIScreen {
 
-    val stage = Stage(ScreenViewport())
-    val controllerNavigation = ControllerNavigation()
+    val stage: Stage = Stage(ScreenViewport())
+    val controllerNavigation: ControllerNavigation = ControllerNavigation()
 
     protected val skin: Skin = DisposerSkin()
 

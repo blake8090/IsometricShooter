@@ -21,7 +21,7 @@ class CrosshairCursor(
     private val pos = Vector2()
     private var hide = false
 
-    override fun getPos() = pos
+    override fun getPos(): Vector2 = pos
 
     override fun create() {
         texture = assets.get<Texture>("cursor")

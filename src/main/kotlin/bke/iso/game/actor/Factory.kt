@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector3
 
 class Factory(private val world: World) {
 
-    fun createWall(location: Location) =
+    fun createWall(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("wall3", 0f, 16f),
@@ -28,7 +28,7 @@ class Factory(private val world: World) {
             Description("wall")
         )
 
-    fun createBox(location: Location) =
+    fun createBox(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("box", 16f, 8f),
@@ -40,7 +40,7 @@ class Factory(private val world: World) {
             Description("box")
         )
 
-    fun createTurret(location: Location) =
+    fun createTurret(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("turret", 16f, 0f),
@@ -56,7 +56,7 @@ class Factory(private val world: World) {
             Description("turret")
         )
 
-    fun createPlatform(location: Location) =
+    fun createPlatform(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("platform", 0f, 32f),
@@ -69,7 +69,7 @@ class Factory(private val world: World) {
             Description("moving platform")
         )
 
-    fun createSideFence(location: Location) =
+    fun createSideFence(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("fence-side", 0f, 16f),
@@ -83,7 +83,7 @@ class Factory(private val world: World) {
             Description("side fence")
         )
 
-    fun createFrontFence(location: Location) =
+    fun createFrontFence(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("fence-front", 32f, 32f),
@@ -97,7 +97,7 @@ class Factory(private val world: World) {
             Description("front fence")
         )
 
-    fun createLampPost(location: Location) =
+    fun createLampPost(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("lamppost", 32f, 16f),
@@ -112,7 +112,7 @@ class Factory(private val world: World) {
             Description("lamppost")
         )
 
-    fun createPillar(location: Location) =
+    fun createPillar(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("pillar", 24f, 3f),
@@ -127,9 +127,9 @@ class Factory(private val world: World) {
         )
 }
 
-fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType) {
+fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType): Actor {
     val pos = shooter.pos
-    newActor(
+    return newActor(
         pos.x,
         pos.y,
         pos.z + bulletType.zOffset,

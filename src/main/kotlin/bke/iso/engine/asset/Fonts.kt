@@ -17,7 +17,7 @@ class Fonts(private val assets: Assets) {
 
     private val cache = mutableMapOf<FontOptions, BitmapFont>()
 
-    operator fun get(options: FontOptions) =
+    operator fun get(options: FontOptions): BitmapFont =
         cache.getOrPut(options) { generateFont(options) }
 
     private fun generateFont(options: FontOptions): BitmapFont {

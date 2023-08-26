@@ -5,8 +5,8 @@ import java.io.File
 
 class GameMap(val layers: List<Layer>) {
     class Layer(val z: Int) {
-        val tiles = mutableListOf<String>()
-        val entities = mutableListOf<String>()
+        val tiles: MutableList<String> = mutableListOf()
+        val entities: MutableList<String> = mutableListOf()
     }
 }
 

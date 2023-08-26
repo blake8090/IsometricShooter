@@ -69,7 +69,7 @@ class ShadowSystem(
     }
 }
 
-fun World.createShadow(actor: Actor) =
+fun World.createShadow(actor: Actor): Actor =
     newActor(
         actor.x,
         actor.y,

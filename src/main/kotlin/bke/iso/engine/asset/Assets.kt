@@ -21,7 +21,7 @@ class Assets(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
-    val fonts = Fonts(this)
+    val fonts: Fonts = Fonts(this)
 
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assets = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()

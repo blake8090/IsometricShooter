@@ -25,8 +25,8 @@ import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import mu.KotlinLogging
 
-const val VIRTUAL_WIDTH = 960f
-const val VIRTUAL_HEIGHT = 540f
+private const val VIRTUAL_WIDTH = 960f
+private const val VIRTUAL_HEIGHT = 540f
 
 data class Sprite(
     val texture: String = "",
@@ -49,7 +49,7 @@ class Renderer(override val game: Game) : Module() {
     private val objectSorter = ObjectSorter()
     private var customCursor: CustomCursor? = null
 
-    val debug = DebugRenderer(batch)
+    val debug: DebugRenderer = DebugRenderer(batch)
 
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
@@ -106,8 +106,9 @@ class Renderer(override val game: Game) : Module() {
         log.debug { "Reset cursor" }
     }
 
-    fun updateCursor(deltaTime: Float) =
+    fun updateCursor(deltaTime: Float) {
         customCursor?.update(deltaTime)
+    }
 
     fun drawCursor() {
         val cursor = customCursor ?: return

@@ -34,11 +34,13 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.batch.end()
     }
 
-    fun drawPoint(point: DebugPoint) =
+    fun drawPoint(point: DebugPoint) {
         drawPoint(point.pos, point.size, point.color)
+    }
 
-    private fun drawPoint(worldPos: Vector3, size: Float, color: Color) =
+    private fun drawPoint(worldPos: Vector3, size: Float, color: Color) {
         shapeDrawer.filledCircle(toScreen(worldPos), size, color)
+    }
 
     fun drawRectangle(rectangle: DebugRectangle) {
         val polygon = toScreen(rectangle.rectangle)

@@ -13,8 +13,8 @@ class Input(override val game: Game) : Module() {
     private val inputMultiplexer = InputMultiplexer()
     private val inputState = InputState(game.events)
 
-    val keyMouse = KeyMouseInput()
-    val controller = ControllerInput(inputState)
+    val keyMouse: KeyMouseInput = KeyMouseInput()
+    val controller: ControllerInput = ControllerInput(inputState)
 
     override fun start() {
         Gdx.input.inputProcessor = inputMultiplexer
@@ -28,7 +28,7 @@ class Input(override val game: Game) : Module() {
         controller.update()
     }
 
-    fun isUsingController() =
+    fun isUsingController(): Boolean =
         inputState.usingController
 
     fun poll(action: String): Float {
@@ -50,12 +50,15 @@ class Input(override val game: Game) : Module() {
         inputMultiplexer.addProcessor(0, processor)
     }
 
-    fun removeInputProcessor(processor: InputProcessor) =
+    fun removeInputProcessor(processor: InputProcessor) {
         inputMultiplexer.removeProcessor(processor)
+    }
 
-    fun addControllerListener(listener: ControllerListener) =
+    fun addControllerListener(listener: ControllerListener) {
         Controllers.addListener(listener)
+    }
 
-    fun removeControllerListener(listener: ControllerListener) =
+    fun removeControllerListener(listener: ControllerListener) {
         Controllers.removeListener(listener)
+    }
 }

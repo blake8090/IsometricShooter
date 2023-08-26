@@ -50,6 +50,7 @@ class Grid {
         return objects
     }
 
-    fun getAllActors()  =
+    // TODO: should be a property
+    fun getAllActors(): Set<Actor> =
         locationsByActor.keys
 }

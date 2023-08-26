@@ -16,8 +16,9 @@ class ControllerNavigation : ControllerAdapter() {
     private val actors = mutableListOf<Actor>()
     private var pointer = 0
 
-    fun add(actor: Actor) =
+    fun add(actor: Actor) {
         actors.add(actor)
+    }
 
     fun start() {
         selectButton()

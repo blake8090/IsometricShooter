@@ -2,7 +2,7 @@ package bke.iso.engine.input
 
 import kotlin.math.abs
 
-const val DEFAULT_CONTROLLER_DEADZONE = 0.2f
+const val DEFAULT_CONTROLLER_DEADZONE: Float = 0.2f
 
 class ControllerInput(private val inputState: InputState) {
 

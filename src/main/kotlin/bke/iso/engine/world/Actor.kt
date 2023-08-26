@@ -32,7 +32,7 @@ class Actor(
     val pos: Vector3
         get() = Vector3(x, y, z)
 
-    val components = mutableMapOf<KClass<out Component>, Component>()
+    val components: MutableMap<KClass<out Component>, Component> = mutableMapOf()
 
     fun moveTo(x: Float, y: Float, z: Float) {
         this.x = x
@@ -45,11 +45,13 @@ class Actor(
         onMove(this)
     }
 
-    fun move(delta: Vector3) =
+    fun move(delta: Vector3) {
         move(delta.x, delta.y, delta.z)
+    }
 
-    fun move(dx: Float, dy: Float, dz: Float) =
+    fun move(dx: Float, dy: Float, dz: Float) {
         moveTo(x + dx, y + dy, z + dz)
+    }
 
     fun <T : Component> add(component: T) {
         components[component::class] = component
@@ -64,11 +66,12 @@ class Actor(
     inline fun <reified T : Component> getOrPut(defaultValue: T): T =
         components.getOrPut(T::class) { defaultValue } as T
 
-    inline fun <reified T : Component> has() =
+    inline fun <reified T : Component> has(): Boolean =
         components.contains(T::class)
 
-    inline fun <reified T : Component> remove() =
+    inline fun <reified T : Component> remove() {
         components.remove(T::class)
+    }
 
     /**
      * Returns a list of locations that the actor spans, including its bounding box (if present).
@@ -107,7 +110,7 @@ class Actor(
         return locations
     }
 
-    override fun equals(other: Any?) =
+    override fun equals(other: Any?): Boolean =
         other is Actor && other.id == id
 
     override fun hashCode(): Int {

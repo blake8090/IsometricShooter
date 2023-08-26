@@ -8,7 +8,7 @@ abstract class CustomCursor {
     /**
      * Returns the **raw** position of the cursor; not the un-projected position.
      */
-    open fun getPos() = Vector2(
+    open fun getPos(): Vector2 = Vector2(
         Gdx.input.x.toFloat(),
         Gdx.input.y.toFloat()
     )

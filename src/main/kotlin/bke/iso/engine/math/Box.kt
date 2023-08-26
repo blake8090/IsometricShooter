@@ -17,19 +17,19 @@ data class Box(
     val size: Vector3
 ) {
 
-    val min = Vector3(
+    val min: Vector3 = Vector3(
         pos.x - (size.x / 2f),
         pos.y - (size.y / 2f),
         pos.z - (size.z / 2f)
     )
 
-    val max = Vector3(
+    val max: Vector3 = Vector3(
         pos.x + (size.x / 2f),
         pos.y + (size.y / 2f),
         pos.z + (size.z / 2f)
     )
 
-    val segments = listOf(
+    val segments: List<Segment> = listOf(
         // top
         Segment(Vector3(min.x, min.y, max.z), Vector3(min.x, max.y, max.z)),
         Segment(Vector3(min.x, max.y, max.z), Vector3(max.x, max.y, max.z)),
@@ -49,7 +49,7 @@ data class Box(
         Segment(Vector3(max.x, max.y, min.z), Vector3(max.x, max.y, max.z))
     )
 
-    val faces = listOf(
+    val faces: List<BoundingBox> = listOf(
         // top
         BoundingBox(Vector3(min.x, min.y, max.z), Vector3(max.x, max.y, max.z)),
         // bottom
@@ -93,7 +93,7 @@ data class Box(
         return from(min, max)
     }
 
-    fun dst(box: Box) =
+    fun dst(box: Box): Float =
         pos.dst(box.pos)
 
     companion object {

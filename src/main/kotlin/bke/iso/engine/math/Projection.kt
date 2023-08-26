@@ -9,22 +9,22 @@ import kotlin.math.sqrt
 /**
  * Width of one tile in pixels
  */
-const val TILE_SIZE_X = 64
+const val TILE_SIZE_X: Int = 64
 
 /**
  * Length of one tile in pixels
  */
-const val TILE_SIZE_Y = 32
+const val TILE_SIZE_Y: Int = 32
 
 /**
  * Height of one tile in pixels
  */
-const val TILE_SIZE_Z = 32
+const val TILE_SIZE_Z: Int = 32
 
 /**
  * Two to one ratio (64/32 = 2)
  */
-fun getIsometricRatio() =
+fun getIsometricRatio(): Float =
     sqrt(TILE_SIZE_X.toFloat() / TILE_SIZE_Y.toFloat())
 
 fun toScreen(x: Float, y: Float, z: Float): Vector2 {
@@ -37,7 +37,7 @@ fun toScreen(x: Float, y: Float, z: Float): Vector2 {
     )
 }
 
-fun toScreen(worldPos: Vector3) =
+fun toScreen(worldPos: Vector3): Vector2 =
     toScreen(worldPos.x, worldPos.y, worldPos.z)
 
 /**

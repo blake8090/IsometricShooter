@@ -49,8 +49,9 @@ class World(override val game: Game) : Module() {
         deletedActors.add(actor)
     }
 
-    fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) =
+    fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) {
         grid.setTile(location, sprite, solid)
+    }
 
     fun <T : Component> actorsWith(type: KClass<out T>, action: (Actor, T) -> Unit) {
         for ((actor, component) in findActorsWith(type)) {
@@ -58,8 +59,9 @@ class World(override val game: Game) : Module() {
         }
     }
 
-    inline fun <reified T : Component> actorsWith(noinline action: (Actor, T) -> Unit) =
+    inline fun <reified T : Component> actorsWith(noinline action: (Actor, T) -> Unit) {
         actorsWith(T::class, action)
+    }
 
     private fun <T : Component> findActorsWith(type: KClass<out T>): Set<Pair<Actor, T>> =
         grid.getAllActors()
@@ -71,7 +73,7 @@ class World(override val game: Game) : Module() {
     fun <T : Component> findActorWith(type: KClass<out T>): Pair<Actor, T>? =
         findActorsWith(type).firstOrNull()
 
-    inline fun <reified T : Component> findActorWith() =
+    inline fun <reified T : Component> findActorWith(): Pair<Actor, T>? =
         findActorWith(T::class)
 
     fun getObjectsInArea(box: Box): Set<GameObject> {

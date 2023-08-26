@@ -17,6 +17,6 @@ data class Location(
 
     constructor(pos: Vector3) : this(pos.x, pos.y, pos.z)
 
-    fun toVector3() =
+    fun toVector3(): Vector3 =
         Vector3(x.toFloat(), y.toFloat(), z.toFloat())
 }

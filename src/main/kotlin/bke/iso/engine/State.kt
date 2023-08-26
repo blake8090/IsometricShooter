@@ -28,5 +28,5 @@ abstract class State {
 }
 
 class EmptyState(override val game: Game) : State() {
-    override val systems = emptySet<System>()
+    override val systems: Set<System> = emptySet()
 }

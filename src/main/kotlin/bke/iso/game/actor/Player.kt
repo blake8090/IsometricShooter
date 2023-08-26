@@ -19,7 +19,7 @@ import bke.iso.game.Health
 import bke.iso.game.HealthBar
 import com.badlogic.gdx.math.Vector3
 
-const val PLAYER_MAX_HEALTH = 5f
+const val PLAYER_MAX_HEALTH: Float = 5f
 private const val PLAYER_JUMP_FORCE = 6f
 
 class Player : Component()
@@ -94,7 +94,7 @@ class PlayerSystem(
     }
 }
 
-fun World.createPlayer(location: Location) =
+fun World.createPlayer(location: Location): Actor =
     newActor(
         location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
         Sprite("player", 32f, 0f),

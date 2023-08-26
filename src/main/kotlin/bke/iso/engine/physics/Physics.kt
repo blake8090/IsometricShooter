@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 import kotlin.math.max
 
-const val GRAVITY_ACCELERATION = -9.8f
-const val TERMINAL_VELOCITY = -10f
+const val GRAVITY_ACCELERATION: Float = -9.8f
+const val TERMINAL_VELOCITY: Float = -10f
 
 class Physics(override val game: Game) : Module() {
 

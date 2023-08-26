@@ -16,7 +16,7 @@ class InputState(private val events: Game.Events) {
 
     val keyMouseHandler: InputAdapter = KeyMouseHandler()
     val controllerHandler: ControllerAdapter = ControllerHandler()
-    var usingController = false
+    var usingController: Boolean = false
         private set
 
     fun start() {
@@ -28,7 +28,7 @@ class InputState(private val events: Game.Events) {
         }
     }
 
-    fun findPrimaryController() =
+    fun findPrimaryController(): Controller? =
         Controllers.getControllers().find { controller ->
             controller.isConnected && controller.playerIndex == 0
         }
