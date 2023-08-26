@@ -1,6 +1,6 @@
 package bke.iso.engine.render
 
-import bke.iso.engine.physics.getCollisionData
+import bke.iso.engine.physics.collision.getCollisionData
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile

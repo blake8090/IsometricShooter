@@ -2,9 +2,9 @@ package bke.iso.game
 
 import bke.iso.engine.System
 import bke.iso.engine.math.Box
-import bke.iso.engine.physics.Collider
-import bke.iso.engine.physics.Collisions
-import bke.iso.engine.physics.getCollisionData
+import bke.iso.engine.physics.collision.Collider
+import bke.iso.engine.physics.collision.Collisions
+import bke.iso.engine.physics.collision.getCollisionData
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component

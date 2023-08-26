@@ -1,7 +1,7 @@
 package bke.iso.engine.render.debug
 
 import bke.iso.engine.math.Box
-import bke.iso.engine.physics.getCollisionData
+import bke.iso.engine.physics.collision.getCollisionData
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile

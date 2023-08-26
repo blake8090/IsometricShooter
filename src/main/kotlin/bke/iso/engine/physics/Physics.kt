@@ -3,6 +3,11 @@ package bke.iso.engine.physics
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
+import bke.iso.engine.physics.collision.Collision
+import bke.iso.engine.physics.collision.CollisionSide
+import bke.iso.engine.physics.collision.FrameCollisions
+import bke.iso.engine.physics.collision.PredictedCollision
+import bke.iso.engine.physics.collision.getCollisionData
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging

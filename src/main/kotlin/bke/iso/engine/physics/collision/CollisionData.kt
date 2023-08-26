@@ -1,4 +1,4 @@
-package bke.iso.engine.physics
+package bke.iso.engine.physics.collision
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.Actor

@@ -1,4 +1,4 @@
-package bke.iso.engine.physics
+package bke.iso.engine.physics.collision
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
@@ -135,7 +135,7 @@ class Collisions(override val game: Game) : Module() {
         val data = gameObject.getCollisionData()
             ?: return null
 
-        val sweptCollision = checkSweptCollision(box, delta, data.box)
+        val sweptCollision = sweepTest(box, data.box, delta)
             ?: return null
 
         val distance = box.dst(data.box)
@@ -174,156 +174,156 @@ class Collisions(override val game: Game) : Module() {
             .add(collision)
     }
 
-    private data class SweptCollision(
-        val collisionTime: Float,
-        val hitNormal: Vector3
-    )
-
-    private fun checkSweptCollision(a: Box, delta: Vector3, b: Box): SweptCollision? {
-        // if box B is not in the projection of box A, both boxes will never collide
-        val pBox = a.expand(delta.x, delta.y, delta.z)
-
-        if (!pBox.intersects(b)) {
-            return null
-        }
-
-        /**
-         * Represents the distance between the nearest sides of boxes A and B.
-         * Box A would need to travel this distance to begin overlapping box B.
-         */
-        val entryDistanceX =
-            if (delta.x > 0f) {
-                b.min.x - a.max.x
-            } else {
-                b.max.x - a.min.x
-            }
-
-        /**
-         * Represents the time it will take for box A to begin overlapping box B.
-         * Calculated using (distance / speed).
-         */
-        val entryTimeX =
-            if (delta.x != 0f) {
-                entryDistanceX / delta.x
-            } else {
-                Float.NEGATIVE_INFINITY
-            }
-
-        /**
-         * Represents the distance between the farthest sides of boxes A and B.
-         * Box A would need to travel this distance to stop overlapping box B.
-         */
-        val exitDistanceX =
-            if (delta.x > 0f) {
-                b.max.x - a.min.x
-            } else {
-                b.min.x - a.max.x
-            }
-
-        /**
-         * Represents the time it will take for box A to stop overlapping box B.
-         * Calculated using (distance / speed).
-         */
-        val exitTimeX =
-            if (delta.x != 0f) {
-                exitDistanceX / delta.x
-            } else {
-                Float.POSITIVE_INFINITY
-            }
-
-        // y-axis
-        val entryDistanceY =
-            if (delta.y > 0f) {
-                b.min.y - a.max.y
-            } else {
-                b.max.y - a.min.y
-            }
-
-        val entryTimeY =
-            if (delta.y != 0f) {
-                entryDistanceY / delta.y
-            } else {
-                Float.NEGATIVE_INFINITY
-            }
-
-        val exitDistanceY =
-            if (delta.y > 0f) {
-                b.max.y - a.min.y
-            } else {
-                b.min.y - a.max.y
-            }
-
-        val exitTimeY =
-            if (delta.y != 0f) {
-                exitDistanceY / delta.y
-            } else {
-                Float.POSITIVE_INFINITY
-            }
-
-        // z-axis
-        val entryDistanceZ =
-            if (delta.z > 0f) {
-                b.min.z - a.max.z
-            } else {
-                b.max.z - a.min.z
-            }
-
-        val entryTimeZ =
-            if (delta.z != 0f) {
-                entryDistanceZ / delta.z
-            } else {
-                Float.NEGATIVE_INFINITY
-            }
-
-        val exitDistanceZ =
-            if (delta.z > 0f) {
-                b.max.z - a.min.z
-            } else {
-                b.min.z - a.max.z
-            }
-
-        val exitTimeZ =
-            if (delta.z != 0f) {
-                exitDistanceZ / delta.z
-            } else {
-                Float.POSITIVE_INFINITY
-            }
-
-        // if the time ranges on both axes never overlap, there's no collision
-        if ((entryTimeX > exitTimeY && entryTimeX > exitTimeZ) ||
-            (entryTimeY > exitTimeX && entryTimeY > exitTimeZ) ||
-            (entryTimeZ > exitTimeX && entryTimeZ > exitTimeY)
-        ) {
-            return null
-        }
-
-        // find the longest entry time. the shortest entry time only demonstrates a collision on one axis.
-        val entryTime = maxOf(entryTimeX, entryTimeY, entryTimeZ)
-
-        // if the entryTime is not within the 0-1 range, that means no collision occurred
-        if (entryTime !in 0f..1f) {
-            return null
-        }
-
-        var hitNormalX = 0f
-        var hitNormalY = 0f
-        var hitNormalZ = 0f
-        if (entryTimeX > entryTimeY && entryTimeX > entryTimeZ) {
-            hitNormalX = if (delta.x > 0) -1f else 1f
-        } else if (entryTimeY > entryTimeX && entryTimeY > entryTimeZ) {
-            hitNormalY = if (delta.y > 0) -1f else 1f
-        } else {
-            hitNormalZ = if (delta.z > 0) -1f else 1f
-        }
-
-        /**
-         * The hit normal points either up, down, left, right, top, or bottom.
-         * Box B would need to push box A in this direction to stop box A from moving.
-         * Using this, the collision direction can be determined.
-         */
-        val hitNormal = Vector3(hitNormalX, hitNormalY, hitNormalZ)
-        return SweptCollision(entryTime, hitNormal)
-    }
+//    private data class SweptCollision(
+//        val collisionTime: Float,
+//        val hitNormal: Vector3
+//    )
+//
+//    private fun checkSweptCollision(a: Box, delta: Vector3, b: Box): SweptCollision? {
+//        // if box B is not in the projection of box A, both boxes will never collide
+//        val pBox = a.expand(delta.x, delta.y, delta.z)
+//
+//        if (!pBox.intersects(b)) {
+//            return null
+//        }
+//
+//        /**
+//         * Represents the distance between the nearest sides of boxes A and B.
+//         * Box A would need to travel this distance to begin overlapping box B.
+//         */
+//        val entryDistanceX =
+//            if (delta.x > 0f) {
+//                b.min.x - a.max.x
+//            } else {
+//                b.max.x - a.min.x
+//            }
+//
+//        /**
+//         * Represents the time it will take for box A to begin overlapping box B.
+//         * Calculated using (distance / speed).
+//         */
+//        val entryTimeX =
+//            if (delta.x != 0f) {
+//                entryDistanceX / delta.x
+//            } else {
+//                Float.NEGATIVE_INFINITY
+//            }
+//
+//        /**
+//         * Represents the distance between the farthest sides of boxes A and B.
+//         * Box A would need to travel this distance to stop overlapping box B.
+//         */
+//        val exitDistanceX =
+//            if (delta.x > 0f) {
+//                b.max.x - a.min.x
+//            } else {
+//                b.min.x - a.max.x
+//            }
+//
+//        /**
+//         * Represents the time it will take for box A to stop overlapping box B.
+//         * Calculated using (distance / speed).
+//         */
+//        val exitTimeX =
+//            if (delta.x != 0f) {
+//                exitDistanceX / delta.x
+//            } else {
+//                Float.POSITIVE_INFINITY
+//            }
+//
+//        // y-axis
+//        val entryDistanceY =
+//            if (delta.y > 0f) {
+//                b.min.y - a.max.y
+//            } else {
+//                b.max.y - a.min.y
+//            }
+//
+//        val entryTimeY =
+//            if (delta.y != 0f) {
+//                entryDistanceY / delta.y
+//            } else {
+//                Float.NEGATIVE_INFINITY
+//            }
+//
+//        val exitDistanceY =
+//            if (delta.y > 0f) {
+//                b.max.y - a.min.y
+//            } else {
+//                b.min.y - a.max.y
+//            }
+//
+//        val exitTimeY =
+//            if (delta.y != 0f) {
+//                exitDistanceY / delta.y
+//            } else {
+//                Float.POSITIVE_INFINITY
+//            }
+//
+//        // z-axis
+//        val entryDistanceZ =
+//            if (delta.z > 0f) {
+//                b.min.z - a.max.z
+//            } else {
+//                b.max.z - a.min.z
+//            }
+//
+//        val entryTimeZ =
+//            if (delta.z != 0f) {
+//                entryDistanceZ / delta.z
+//            } else {
+//                Float.NEGATIVE_INFINITY
+//            }
+//
+//        val exitDistanceZ =
+//            if (delta.z > 0f) {
+//                b.max.z - a.min.z
+//            } else {
+//                b.min.z - a.max.z
+//            }
+//
+//        val exitTimeZ =
+//            if (delta.z != 0f) {
+//                exitDistanceZ / delta.z
+//            } else {
+//                Float.POSITIVE_INFINITY
+//            }
+//
+//        // if the time ranges on both axes never overlap, there's no collision
+//        if ((entryTimeX > exitTimeY && entryTimeX > exitTimeZ) ||
+//            (entryTimeY > exitTimeX && entryTimeY > exitTimeZ) ||
+//            (entryTimeZ > exitTimeX && entryTimeZ > exitTimeY)
+//        ) {
+//            return null
+//        }
+//
+//        // find the longest entry time. the shortest entry time only demonstrates a collision on one axis.
+//        val entryTime = maxOf(entryTimeX, entryTimeY, entryTimeZ)
+//
+//        // if the entryTime is not within the 0-1 range, that means no collision occurred
+//        if (entryTime !in 0f..1f) {
+//            return null
+//        }
+//
+//        var hitNormalX = 0f
+//        var hitNormalY = 0f
+//        var hitNormalZ = 0f
+//        if (entryTimeX > entryTimeY && entryTimeX > entryTimeZ) {
+//            hitNormalX = if (delta.x > 0) -1f else 1f
+//        } else if (entryTimeY > entryTimeX && entryTimeY > entryTimeZ) {
+//            hitNormalY = if (delta.y > 0) -1f else 1f
+//        } else {
+//            hitNormalZ = if (delta.z > 0) -1f else 1f
+//        }
+//
+//        /**
+//         * The hit normal points either up, down, left, right, top, or bottom.
+//         * Box B would need to push box A in this direction to stop box A from moving.
+//         * Using this, the collision direction can be determined.
+//         */
+//        val hitNormal = Vector3(hitNormalX, hitNormalY, hitNormalZ)
+//        return SweptCollision(entryTime, hitNormal)
+//    }
 
     private fun getCollisionSide(hitNormal: Vector3): CollisionSide =
         when (hitNormal) {

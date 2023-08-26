@@ -1,7 +1,7 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.System
-import bke.iso.engine.physics.Collisions
+import bke.iso.engine.physics.collision.Collisions
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
