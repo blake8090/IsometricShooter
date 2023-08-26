@@ -24,7 +24,7 @@ data class HealthBar(
 
 data class OnDamagePlayerEvent(
     val health: Float
-) : Event()
+) : Event
 
 class Combat(
     private val world: World,

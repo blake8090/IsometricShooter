@@ -8,7 +8,7 @@ import bke.iso.engine.render.Sprite
 import java.util.UUID
 import kotlin.reflect.KClass
 
-abstract class GameObject
+interface GameObject
 
 class World(override val game: Game) : Module() {
 

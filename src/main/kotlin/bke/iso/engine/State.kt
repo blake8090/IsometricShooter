@@ -2,8 +2,8 @@ package bke.iso.engine
 
 import bke.iso.engine.ui.UIScreen
 
-abstract class System {
-    abstract fun update(deltaTime: Float)
+interface System {
+    fun update(deltaTime: Float)
 }
 
 abstract class State {

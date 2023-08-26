@@ -21,5 +21,5 @@ class MainMenuState(override val game: Game) : State() {
         }
     }
 
-    class StartEvent : Event()
+    class StartEvent : Event
 }

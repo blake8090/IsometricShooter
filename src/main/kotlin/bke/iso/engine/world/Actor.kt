@@ -18,7 +18,7 @@ data class Description(val text: String) : Component()
 class Actor(
     val id: UUID = UUID.randomUUID(),
     private val onMove: (Actor) -> Unit = {}
-) : GameObject() {
+) : GameObject {
 
     var x: Float = 0f
         private set

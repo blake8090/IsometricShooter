@@ -21,7 +21,7 @@ private const val SHADOW_ALPHA = 0.5f
 class ShadowSystem(
     private val world: World,
     private val collisions: Collisions
-) : System() {
+) : System {
 
     override fun update(deltaTime: Float) {
         world.actorsWith { actor: Actor, shadow: Shadow ->

@@ -29,7 +29,7 @@ class PlayerSystem(
     private val world: World,
     private val renderer: Renderer,
     private val combat: Combat
-) : System() {
+) : System {
 
     private val walkSpeed = 5f
     private val runSpeed = 10f

@@ -76,7 +76,7 @@ class GameHUD(private val assets: Assets) : UIScreen() {
     class UpdateEvent(
         val maxHealth: Float,
         val currentHealth: Float = maxHealth
-    ) : Event()
+    ) : Event
 }
 
 private class HudHealthBar(

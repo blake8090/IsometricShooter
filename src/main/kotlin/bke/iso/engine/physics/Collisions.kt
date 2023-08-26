@@ -28,25 +28,25 @@ class Collisions(override val game: Game) : Module() {
         val collisions = mutableSetOf<Collision>()
         val objects = game.world.getObjectsInArea(box)
         for (obj in objects) {
-            val data = obj.getCollisionData()
-                ?: continue
-
-            if (!data.box.intersects(box)) {
-                continue
-            }
-
-            collisions.add(
-                Collision(
-                    obj,
-                    data.box,
-                    data.solid,
-                    box.dst(data.box),
-                    // TODO: find collision side
-                    CollisionSide.CORNER
-                )
-            )
+            checkCollision(box, obj)?.let(collisions::add)
         }
         return collisions
+    }
+
+    private fun checkCollision(box: Box, obj: GameObject): Collision? {
+        val data = obj.getCollisionData()
+        return if (data == null || !data.box.intersects(box)) {
+            null
+        } else {
+            Collision(
+                obj,
+                data.box,
+                data.solid,
+                box.dst(data.box),
+                // TODO: find collision side
+                CollisionSide.CORNER
+            )
+        }
     }
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {

@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 import kotlin.time.measureTime
 
-abstract class Event
+interface Event
 
 @Suppress("DeferredResultUnused")
 class Game {

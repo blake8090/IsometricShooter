@@ -41,7 +41,7 @@ class ObjectSorter {
         if (!visited.add(context)) {
             return
         }
-        for (a in objectsBehind[context]?: emptySet()) {
+        for (a in objectsBehind[context].orEmpty()) {
             callAction(a, action)
         }
         action.invoke(context.obj)
@@ -67,19 +67,9 @@ class ObjectSorter {
         val data = obj.getCollisionData()
         val pos = obj.getPos()
 
-        val min = data
-            ?.box
-            ?.min
-            ?: pos
-        val max = data
-            ?.box
-            ?.max
-            ?: pos
-        val center = data
-            ?.box
-            ?.pos
-            ?: pos
-
+        val min = data?.box?.min ?: pos
+        val max = data?.box?.max ?: pos
+        val center = data?.box?.pos ?: pos
         return SortContext(obj, min, max, center)
     }
 }

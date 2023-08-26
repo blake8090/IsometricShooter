@@ -8,4 +8,4 @@ data class Tile(
     val solid: Boolean = false,
     var location: Location = Location(),
     var selected: Boolean = false
-) : GameObject()
+) : GameObject

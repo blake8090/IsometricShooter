@@ -115,7 +115,7 @@ class InputState(private val events: Game.Events) {
                 ?: error("Unknown ControllerButton index: $index")
     }
 
-    class OnControllerConnect : Event()
+    class OnControllerConnect : Event
 }
 
 enum class InputSource {

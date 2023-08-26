@@ -39,7 +39,7 @@ data class Sprite(
 data class DrawActorEvent(
     val actor: Actor,
     val batch: PolygonSpriteBatch
-) : Event()
+) : Event
 
 class Renderer(override val game: Game) : Module() {
 
