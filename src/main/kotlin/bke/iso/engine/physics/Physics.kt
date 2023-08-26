@@ -16,6 +16,10 @@ class Physics(override val game: Game) : Module() {
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
+        game.world.actorsWith<FrameCollisions> { actor, _ ->
+            actor.remove<FrameCollisions>()
+        }
+
         game.world.actorsWith<Velocity> { actor, velocity ->
             update(actor, velocity, deltaTime)
         }
@@ -78,6 +82,8 @@ class Physics(override val game: Game) : Module() {
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
         actor.move(collisionDelta)
 
+        // sometimes an actor may clip into another game object like a wall or a ground tile.
+        // in case of an overlap, the actor's position should be reset to the outer edge of the object's collision box.
         val box = actor.getCollisionData()!!.box
         if (box.getOverlapArea(collision.box) != 0f) {
             log.debug { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }

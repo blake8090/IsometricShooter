@@ -23,12 +23,6 @@ class Collisions(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
-    override fun update(deltaTime: Float) {
-        game.world.actorsWith<FrameCollisions> { actor, _ ->
-            actor.remove<FrameCollisions>()
-        }
-    }
-
     fun checkCollisions(box: Box): Set<Collision> {
         game.renderer.debug.addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()

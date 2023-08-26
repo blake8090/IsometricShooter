@@ -13,7 +13,6 @@ class App(title: String) : ApplicationAdapter() {
         // TODO: load this from application config
         Lwjgl3ApplicationConfiguration().apply {
             setTitle(title)
-            // TODO: fix vsync jitter, investigate using fixed time step
             useVsync(false)
             setWindowedMode(1920, 1080)
         }

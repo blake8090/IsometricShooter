@@ -19,6 +19,7 @@ import kotlin.time.measureTime
 
 abstract class Event
 
+@Suppress("DeferredResultUnused")
 class Game {
 
     private val log = KotlinLogging.logger {}
@@ -58,12 +59,14 @@ class Game {
     }
 
     private fun runFrame(deltaTime: Float) {
+        // TODO: investigate using fixed time step
+        physics.update(deltaTime)
+
         input.update(deltaTime)
         renderer.updateCursor(deltaTime)
         state.update(deltaTime)
         world.update(deltaTime)
-        collisions.update(deltaTime)
-        physics.update(deltaTime)
+
         renderer.draw()
     }
 
