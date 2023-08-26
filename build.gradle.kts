@@ -1,8 +1,12 @@
 import org.gradle.kotlin.dsl.application
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.10"
     application
+}
+
+kotlin {
+    jvmToolchain(20)
 }
 
 repositories {
