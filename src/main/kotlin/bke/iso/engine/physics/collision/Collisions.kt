@@ -23,6 +23,21 @@ class Collisions(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
+    private val previousCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
+    private val currentCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
+
+    override fun update(deltaTime: Float) {
+        previousCollisions.clear()
+        previousCollisions.putAll(currentCollisions)
+        currentCollisions.clear()
+    }
+
+    fun getCollisions(actor: Actor): Set<Collision> =
+        currentCollisions[actor].orEmpty()
+
+    fun getPreviousCollisions(actor: Actor): Set<Collision> =
+        previousCollisions[actor].orEmpty()
+
     fun checkCollisions(box: Box): Set<Collision> {
         game.renderer.debug.addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
@@ -169,6 +184,9 @@ class Collisions(override val game: Game) : Module() {
             distance = predictedCollision.distance,
             side = predictedCollision.side
         )
+        currentCollisions
+            .getOrPut(actor) { mutableSetOf() }
+            .add(collision)
         actor.getOrPut(FrameCollisions())
             .collisions
             .add(collision)

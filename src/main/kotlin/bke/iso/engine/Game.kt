@@ -59,6 +59,7 @@ class Game {
     }
 
     private fun runFrame(deltaTime: Float) {
+        collisions.update(deltaTime)
         // TODO: investigate using fixed time step
         physics.update(deltaTime)
 

@@ -52,19 +52,24 @@ class Physics(override val game: Game) : Module() {
 
     private fun applyGravity(actor: Actor, velocity: Velocity, deltaTime: Float) {
         val gravity = actor.get<Gravity>() ?: return
-
-        val c = actor.get<FrameCollisions>()
-            ?.collisions
-            ?.filter { collision -> collision.solid && collision.side == CollisionSide.TOP }
-            ?.sortedBy(Collision::distance)
-            ?.firstOrNull()
-        if (c == null) {
+        if (!isOnGround(actor)) {
             velocity.z += gravity.acceleration * deltaTime
             velocity.z = max(velocity.z, gravity.terminalVelocity)
         } else {
-            velocity.z = 0f
+            log.trace { "on ground: $actor" }
+            // only kill negative velocity - actor might still want to jump this frame
+            velocity.z = max(0f, velocity.z)
         }
     }
+
+    private fun isOnGround(actor: Actor): Boolean {
+        val collision = game.collisions
+            .getPreviousCollisions(actor)
+            .sortedBy(Collision::distance)
+            .firstOrNull { collision -> collision.solid && collision.side == CollisionSide.TOP }
+        return collision != null
+    }
+
 
     private fun move(actor: Actor, delta: Vector3) {
         if (delta.isZero) {
