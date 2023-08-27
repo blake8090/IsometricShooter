@@ -52,10 +52,10 @@ class BulletSystem(
 
     private fun handleCollision(actor: Actor, bullet: Bullet, obj: GameObject) {
         if (obj is Actor) {
-            combat.onDamage(obj, bullet.type.damage)
             if (obj.has<Bullet>() || obj.id == bullet.shooterId) {
                 return
             }
+            combat.onDamage(obj, bullet.type.damage)
         }
         world.delete(actor)
     }

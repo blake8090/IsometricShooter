@@ -32,7 +32,7 @@ data class Sprite(
     val texture: String = "",
     val offsetX: Float = 0f,
     val offsetY: Float = 0f,
-    val alpha: Float = 1f
+    var alpha: Float = 1f
 ) : Component()
 
 // TODO: inner class?
