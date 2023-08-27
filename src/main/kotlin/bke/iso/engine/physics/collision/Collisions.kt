@@ -39,12 +39,12 @@ class Collisions(override val game: Game) : Module() {
             null
         } else {
             Collision(
-                obj,
-                data.box,
-                data.solid,
-                box.dst(data.box),
+                obj = obj,
+                box = data.box,
+                solid = data.solid,
+                distance = box.dst(data.box),
                 // TODO: find collision side
-                CollisionSide.CORNER
+                side = CollisionSide.CORNER
             )
         }
     }
@@ -75,11 +75,11 @@ class Collisions(override val game: Game) : Module() {
         }
 
         return SegmentCollision(
-            gameObject,
-            data,
-            segment.a.dst(data.box.pos),
-            segment.b.dst(data.box.pos),
-            points
+            obj = gameObject,
+            data = data,
+            distanceStart = segment.a.dst(data.box.pos),
+            distanceEnd = segment.b.dst(data.box.pos),
+            points = points
         )
     }
 
@@ -146,13 +146,13 @@ class Collisions(override val game: Game) : Module() {
         }
 
         return PredictedCollision(
-            gameObject,
-            data.box,
-            data.solid,
-            distance,
-            sweptCollision.collisionTime,
-            sweptCollision.hitNormal,
-            side
+            obj = gameObject,
+            box = data.box,
+            solid = data.solid,
+            distance = distance,
+            collisionTime = sweptCollision.collisionTime,
+            hitNormal = sweptCollision.hitNormal,
+            side = side
         )
     }
 
@@ -163,11 +163,11 @@ class Collisions(override val game: Game) : Module() {
         // PredictedCollision is intended only for use with Physics,
         // so the normal Collision object should be stored instead.
         val collision = Collision(
-            predictedCollision.obj,
-            predictedCollision.box,
-            predictedCollision.solid,
-            predictedCollision.distance,
-            predictedCollision.side
+            obj = predictedCollision.obj,
+            box = predictedCollision.box,
+            solid = predictedCollision.solid,
+            distance = predictedCollision.distance,
+            side = predictedCollision.side
         )
         actor.getOrPut(FrameCollisions())
             .collisions
