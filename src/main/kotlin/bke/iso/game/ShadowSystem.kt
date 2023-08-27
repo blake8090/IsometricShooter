@@ -12,12 +12,14 @@ import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
+import kotlin.math.max
 
 data class Shadow(val parent: UUID) : Component()
 
 private const val Z_OFFSET = 0.0001f
 private const val MAX_RANGE = 5f
 private const val SPRITE_ALPHA = 0.5f
+private const val SPRITE_MIN_SCALE = 0.8f
 
 class ShadowSystem(
     private val world: World,
@@ -32,10 +34,11 @@ class ShadowSystem(
             val box = findTallestBoxBeneath(parent)
             val z = box?.max?.z ?: 0f
             val distance = parent.z - z
-            // ratio between the distance from the parent to the shadow and the max z range
-            val ratio = 1 - (distance / MAX_RANGE)
-            sprite.alpha = ratio * SPRITE_ALPHA
 
+            // ratio between the distance from the parent to the shadow and the max z range
+            val ratio = (1 - (distance / MAX_RANGE)).coerceIn(0f..1f)
+            sprite.alpha = ratio * SPRITE_ALPHA
+            sprite.scale = max(ratio, SPRITE_MIN_SCALE)
             actor.moveTo(parent.x, parent.y, z + Z_OFFSET)
         }
     }

@@ -32,7 +32,8 @@ data class Sprite(
     val texture: String = "",
     val offsetX: Float = 0f,
     val offsetY: Float = 0f,
-    var alpha: Float = 1f
+    var alpha: Float = 1f,
+    var scale: Float = 1f
 ) : Component()
 
 // TODO: inner class?
@@ -160,10 +161,17 @@ class Renderer(override val game: Game) : Module() {
         val screenPos = toScreen(worldPos)
             .sub(sprite.offsetX, sprite.offsetY)
 
-        val color = Color(batch.color)
-        color.a = sprite.alpha
+        val width = texture.width * sprite.scale
+        val height = texture.height * sprite.scale
+        // when scaling textures, make sure texture is still centered on origin point
+        if (sprite.scale != 1f) {
+            val diffX = texture.width - width
+            val diffY = texture.height - height
+            screenPos.add(diffX / 2f, diffY / 2f)
+        }
+        val color = Color(batch.color.r, batch.color.g, batch.color.b, sprite.alpha)
         batch.withColor(color) {
-            batch.draw(texture, screenPos.x, screenPos.y)
+            batch.draw(texture, screenPos.x, screenPos.y, width, height)
         }
     }
 }
