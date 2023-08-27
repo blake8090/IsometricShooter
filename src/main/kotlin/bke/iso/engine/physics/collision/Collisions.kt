@@ -187,9 +187,6 @@ class Collisions(override val game: Game) : Module() {
         currentCollisions
             .getOrPut(actor) { mutableSetOf() }
             .add(collision)
-        actor.getOrPut(FrameCollisions())
-            .collisions
-            .add(collision)
     }
 
     private fun getCollisionSide(hitNormal: Vector3): CollisionSide =

@@ -2,7 +2,7 @@ package bke.iso.game.actor
 
 import bke.iso.engine.System
 import bke.iso.engine.physics.collision.Collision
-import bke.iso.engine.physics.collision.FrameCollisions
+import bke.iso.engine.physics.collision.Collisions
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.GameObject
@@ -30,7 +30,8 @@ private const val MAX_BULLET_DISTANCE = 50f
 
 class BulletSystem(
     private val world: World,
-    private val combat: Combat
+    private val combat: Combat,
+    private val collisions: Collisions
 ) : System {
 
     override fun update(deltaTime: Float) {
@@ -60,10 +61,9 @@ class BulletSystem(
         world.delete(actor)
     }
 
-    private fun getFirstCollidingObject(actor: Actor): GameObject? {
-        val collisions = actor.get<FrameCollisions>()
-            ?.collisions
-            ?: return null
-        return collisions.minByOrNull(Collision::distance)?.obj
-    }
+    private fun getFirstCollidingObject(actor: Actor) =
+        collisions.getCollisions(actor)
+            .minByOrNull(Collision::distance)
+            ?.obj
+
 }

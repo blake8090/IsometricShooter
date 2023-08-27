@@ -5,7 +5,6 @@ import bke.iso.engine.Module
 import bke.iso.engine.math.Box
 import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.CollisionSide
-import bke.iso.engine.physics.collision.FrameCollisions
 import bke.iso.engine.physics.collision.PredictedCollision
 import bke.iso.engine.physics.collision.getCollisionData
 import bke.iso.engine.world.Actor
@@ -21,10 +20,6 @@ class Physics(override val game: Game) : Module() {
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
-        game.world.actorsWith<FrameCollisions> { actor, _ ->
-            actor.remove<FrameCollisions>()
-        }
-
         game.world.actorsWith<Velocity> { actor, velocity ->
             update(actor, velocity, deltaTime)
         }

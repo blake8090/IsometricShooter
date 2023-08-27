@@ -47,7 +47,7 @@ class GameState(override val game: Game) : State() {
     override val systems: Set<System> = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
         TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
-        BulletSystem(game.world, combat),
+        BulletSystem(game.world, combat, game.collisions),
         ShadowSystem(game.world, game.collisions)
     )
 
