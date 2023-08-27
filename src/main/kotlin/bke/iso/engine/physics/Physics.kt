@@ -65,7 +65,6 @@ class Physics(override val game: Game) : Module() {
         return collision != null
     }
 
-
     private fun move(actor: Actor, delta: Vector3) {
         if (delta.isZero) {
             return

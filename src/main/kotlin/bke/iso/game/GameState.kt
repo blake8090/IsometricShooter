@@ -18,10 +18,12 @@ import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.Factory
+import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.PLAYER_MAX_HEALTH
 import bke.iso.game.actor.Player
 import bke.iso.game.actor.PlayerSystem
 import bke.iso.game.actor.TurretSystem
+import bke.iso.game.actor.createMovingPlatform
 import bke.iso.game.actor.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
@@ -48,6 +50,7 @@ class GameState(override val game: Game) : State() {
         PlayerSystem(game.input, game.world, game.renderer, combat),
         TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
         BulletSystem(game.world, combat, game.collisions),
+        MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions)
     )
 
@@ -169,7 +172,7 @@ class GameState(override val game: Game) : State() {
             '#' -> factory.createWall(location)
             'x' -> factory.createBox(location)
             't' -> factory.createTurret(location)
-            '_' -> factory.createPlatform(location)
+            '_' -> game.world.createMovingPlatform(location)
             '/' -> factory.createSideFence(location)
             '=' -> factory.createFrontFence(location)
             '|' -> factory.createPillar(location)

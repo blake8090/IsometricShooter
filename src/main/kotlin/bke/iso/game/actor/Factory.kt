@@ -56,19 +56,6 @@ class Factory(private val world: World) {
             Description("turret")
         )
 
-    fun createPlatform(location: Location): Actor =
-        world.newActor(
-            location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
-            Sprite("platform", 0f, 32f),
-            MovingPlatform(),
-            Collider(
-                true,
-                Vector3(2f, 1f, 0.125f)
-            ),
-            DebugSettings(),
-            Description("moving platform")
-        )
-
     fun createSideFence(location: Location): Actor =
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),

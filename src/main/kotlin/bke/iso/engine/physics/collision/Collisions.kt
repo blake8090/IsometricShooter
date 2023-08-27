@@ -155,10 +155,10 @@ class Collisions(override val game: Game) : Module() {
 
         val distance = box.dst(data.box)
         val side = getCollisionSide(sweptCollision.hitNormal)
-        log.trace {
-            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
-                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
-        }
+//        log.trace {
+//            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
+//                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
+//        }
 
         return PredictedCollision(
             obj = gameObject,
