@@ -57,6 +57,10 @@ fun sweepTest(a: Box, b: Box, delta: Vector3): SweptCollision? {
      */
     val exitTime = getExitTime(exitDistance, delta)
 
+    return findSweptCollision(entryTime, exitTime, delta)
+}
+
+private fun findSweptCollision(entryTime: Vector3, exitTime: Vector3, delta: Vector3): SweptCollision? {
     // if the time ranges on all axes never overlap, there's no collision
     val noOverlapX = entryTime.x > exitTime.y && entryTime.x > exitTime.z
     val noOverlapY = entryTime.y > exitTime.x && entryTime.y > exitTime.z
@@ -64,17 +68,15 @@ fun sweepTest(a: Box, b: Box, delta: Vector3): SweptCollision? {
     if (noOverlapX || noOverlapY || noOverlapZ) {
         return null
     }
+
     // find the longest entry time. the shortest entry time only demonstrates a collision on one axis.
     val longestEntryTime = maxOf(entryTime.x, entryTime.y, entryTime.z)
-
     // if the longest entry time is not within the 0-1 range, that means no collision occurred
-    if (longestEntryTime !in 0f..1f) {
-        return null
+    return if (longestEntryTime !in 0f..1f) {
+        null
+    } else {
+        SweptCollision(longestEntryTime, getHitNormal(entryTime, delta))
     }
-
-    val hitNormal = getHitNormal(entryTime, delta)
-
-    return SweptCollision(longestEntryTime, hitNormal)
 }
 
 private fun getHitNormal(entryTime: Vector3, delta: Vector3): Vector3 {

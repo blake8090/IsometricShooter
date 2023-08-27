@@ -15,7 +15,7 @@ data class Turret(
     var canShoot: Boolean = true
 ) : Component()
 
-private const val VISION_RADIUS = 12f
+private const val RANGE_RADIUS = 12f
 private const val MINIMUM_COOLDOWN_SECONDS = 0.8f
 
 class TurretSystem(
@@ -33,26 +33,33 @@ class TurretSystem(
                 turret.canShoot = true
             }
 
-            debugRenderer.addSphere(actor.pos, VISION_RADIUS, Color.GOLD)
+            debugRenderer.addSphere(actor.pos, RANGE_RADIUS, Color.GOLD)
             engagePlayer(actor, turret)
         }
     }
 
-    private fun engagePlayer(turretObject: Actor, turret: Turret) {
-        val (playerObject, _) = world.findActorWith<Player>() ?: return
-        if (canSee(turretObject, playerObject) && turret.canShoot) {
-            combat.shoot(turretObject, playerObject.pos, BulletType.TURRET)
-            turret.elapsedCooldownTime = 0f
-            turret.canShoot = false
+    private fun engagePlayer(turretActor: Actor, turret: Turret) {
+        val (player, _) = world.findActorWith<Player>() ?: return
+        if (withinRange(turretActor, player) && canSee(turretActor, player)) {
+            shoot(turretActor, turret, player)
         }
     }
 
-    private fun canSee(actor: Actor, other: Actor): Boolean {
-        val start = actor.pos
-        val end = other.pos
-        if (start.dst(end) > VISION_RADIUS) {
-            return false
+    private fun shoot(turretActor: Actor, turret: Turret, target: Actor) {
+        if (!turret.canShoot) {
+            return
         }
+        combat.shoot(turretActor, target.pos, BulletType.TURRET)
+        turret.elapsedCooldownTime = 0f
+        turret.canShoot = false
+    }
+
+    private fun withinRange(actor: Actor, target: Actor) =
+        actor.pos.dst(target.pos) <= RANGE_RADIUS
+
+    private fun canSee(actor: Actor, target: Actor): Boolean {
+        val start = actor.pos
+        val end = target.pos
 
         val firstCollision = collisions
             .checkCollisions(Segment(start, end))
@@ -65,7 +72,7 @@ class TurretSystem(
             .minBy { point -> start.dst(point) }
         debugRenderer.addPoint(firstPoint, 3f, Color.RED)
 
-        return if (firstCollision.obj == other) {
+        return if (firstCollision.obj == target) {
             debugRenderer.addLine(start, end, 1f, Color.RED)
             true
         } else {

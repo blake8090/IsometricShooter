@@ -89,7 +89,10 @@ class Physics(override val game: Game) : Module() {
 
         // sometimes an actor may clip into another game object like a wall or a ground tile.
         // in case of an overlap, the actor's position should be reset to the outer edge of the object's collision box.
-        val box = actor.getCollisionData()!!.box
+        val box = actor.getCollisionData()?.box
+        checkNotNull(box) {
+            "Expected CollisionData for $actor"
+        }
         if (box.getOverlapArea(collision.box) != 0f) {
             log.debug { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }
             resolveOverlap(actor, box, collision)
@@ -100,7 +103,11 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun killVelocity(actor: Actor, side: CollisionSide) {
-        val velocity = actor.get<Velocity>()!!
+        val velocity = actor.get<Velocity>()
+        requireNotNull(velocity) {
+            "Expected Velocity component for $actor"
+        }
+
         when (side) {
             CollisionSide.RIGHT, CollisionSide.LEFT -> {
                 velocity.x = 0f

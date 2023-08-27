@@ -80,7 +80,13 @@ class Game {
         log.debug { "switching to state ${type.simpleName}" }
 
         loading = true
-        state = type.primaryConstructor!!.call(this)
+
+        val constructor = type.primaryConstructor
+        requireNotNull(constructor) {
+            "Type ${type.simpleName} must have a primary constructor"
+        }
+
+        state = constructor.call(this)
         state.loadingScreen?.let(ui::setScreen)
         KtxAsync.async { load(state) }
     }

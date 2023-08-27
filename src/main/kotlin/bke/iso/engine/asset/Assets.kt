@@ -6,6 +6,8 @@ import bke.iso.engine.Module
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 import java.io.File
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.io.path.Path
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
@@ -44,8 +46,8 @@ class Assets(override val game: Game) : Module() {
 
     fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
         val existingLoader = loadersByExtension[fileExtension]
-        require(existingLoader == null) {
-            "Extension '$fileExtension' has already been set to loader ${existingLoader!!::class.simpleName}"
+        requireNull(existingLoader) { value ->
+            "Extension '$fileExtension' has already been set to loader ${value::class.simpleName}"
         }
         loadersByExtension[fileExtension] = loader
     }
@@ -85,5 +87,16 @@ class Assets(override val game: Game) : Module() {
 
     private fun <T : Any> set(name: String, asset: Asset<T>) {
         assetCache[name to asset.value::class] = asset
+    }
+}
+
+@OptIn(ExperimentalContracts::class)
+private inline fun <T : Any> requireNull(value: T?, lazyMessage: (T) -> Any)  {
+    contract {
+        returns() implies (value == null)
+    }
+    if (value != null) {
+        val message = lazyMessage(value)
+        throw IllegalArgumentException(message.toString())
     }
 }

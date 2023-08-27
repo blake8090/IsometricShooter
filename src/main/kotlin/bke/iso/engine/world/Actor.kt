@@ -87,22 +87,26 @@ class Actor(
     fun getLocations(): Set<Location> {
         val locations = mutableSetOf<Location>()
         locations.add(Location(pos))
+        locations.addAll(getCollisionBoxLocations())
+        return locations
+    }
 
-        val box = getCollisionData()?.box
-        if (box != null) {
-            val minX = floor(box.min.x).toInt()
-            val minY = floor(box.min.y).toInt()
-            val minZ = floor(box.min.z).toInt()
+    private fun getCollisionBoxLocations(): Set<Location> {
+        val box = getCollisionData()?.box ?: return emptySet()
 
-            val maxX = floor(box.max.x).toInt()
-            val maxY = floor(box.max.y).toInt()
-            val maxZ = floor(box.max.z).toInt()
+        val minX = floor(box.min.x).toInt()
+        val minY = floor(box.min.y).toInt()
+        val minZ = floor(box.min.z).toInt()
 
-            for (x in minX..maxX) {
-                for (y in minY..maxY) {
-                    for (z in minZ..maxZ) {
-                        locations.add(Location(x, y, z))
-                    }
+        val maxX = floor(box.max.x).toInt()
+        val maxY = floor(box.max.y).toInt()
+        val maxZ = floor(box.max.z).toInt()
+
+        val locations = mutableSetOf<Location>()
+        for (x in minX..maxX) {
+            for (y in minY..maxY) {
+                for (z in minZ..maxZ) {
+                    locations.add(Location(x, y, z))
                 }
             }
         }

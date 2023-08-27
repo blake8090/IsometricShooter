@@ -45,15 +45,18 @@ class BulletSystem(
             world.delete(actor)
             return
         }
+        getFirstCollidingObject(actor)?.let { obj ->
+            handleCollision(actor, bullet, obj)
+        }
+    }
 
-        val other = getFirstCollidingObject(actor) ?: return
-        if (other is Actor) {
-            if (other.has<Bullet>() || other.id == bullet.shooterId) {
+    private fun handleCollision(actor: Actor, bullet: Bullet, obj: GameObject) {
+        if (obj is Actor) {
+            combat.onDamage(obj, bullet.type.damage)
+            if (obj.has<Bullet>() || obj.id == bullet.shooterId) {
                 return
             }
-            combat.onDamage(other, bullet.type.damage)
         }
-
         world.delete(actor)
     }
 
