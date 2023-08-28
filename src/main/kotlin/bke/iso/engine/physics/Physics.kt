@@ -3,7 +3,6 @@ package bke.iso.engine.physics
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
-import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.CollisionSide
 import bke.iso.engine.physics.collision.PredictedCollision
 import bke.iso.engine.physics.collision.getCollisionData
@@ -26,43 +25,23 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun update(actor: Actor, velocity: Velocity, deltaTime: Float) {
-        val acceleration = actor.get<Acceleration>()
-        if (acceleration != null) {
+        ifNotNull(actor.get<Acceleration>()) { acceleration ->
             velocity.x += acceleration.x * deltaTime
             velocity.y += acceleration.y * deltaTime
             velocity.z += acceleration.z * deltaTime
         }
 
-        applyGravity(actor, velocity, deltaTime)
+        ifNotNull(actor.get<Gravity>()) { gravity ->
+            velocity.z += gravity.acceleration * deltaTime
+            velocity.z = max(velocity.z, gravity.terminalVelocity)
+        }
 
         val delta = Vector3(
             velocity.x * deltaTime,
             velocity.y * deltaTime,
             velocity.z * deltaTime
         )
-        if (!delta.isZero) {
-            move(actor, delta)
-        }
-    }
-
-    private fun applyGravity(actor: Actor, velocity: Velocity, deltaTime: Float) {
-        val gravity = actor.get<Gravity>() ?: return
-        if (!isOnGround(actor)) {
-            velocity.z += gravity.acceleration * deltaTime
-            velocity.z = max(velocity.z, gravity.terminalVelocity)
-        } else {
-            log.trace { "on ground: $actor" }
-            // only kill negative velocity - actor might still want to jump this frame
-            velocity.z = max(0f, velocity.z)
-        }
-    }
-
-    private fun isOnGround(actor: Actor): Boolean {
-        val collision = game.collisions
-            .getPreviousCollisions(actor)
-            .sortedBy(Collision::distance)
-            .firstOrNull { collision -> collision.solid && collision.side == CollisionSide.TOP }
-        return collision != null
+        move(actor, delta)
     }
 
     private fun move(actor: Actor, delta: Vector3) {
@@ -96,7 +75,6 @@ class Physics(override val game: Game) : Module() {
             log.debug { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }
             resolveOverlap(actor, box, collision)
         }
-
         killVelocity(actor, collision.side)
         slide(actor, delta, collision.hitNormal)
     }
@@ -171,5 +149,11 @@ class Physics(override val game: Game) : Module() {
             }
         }
         actor.moveTo(x, y, z)
+    }
+}
+
+private inline fun <T : Any> ifNotNull(value: T?, action: (T) -> Unit) {
+    if (value != null) {
+        action.invoke(value)
     }
 }
