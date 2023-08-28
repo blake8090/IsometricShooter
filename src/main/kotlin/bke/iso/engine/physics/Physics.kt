@@ -3,6 +3,7 @@ package bke.iso.engine.physics
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
+import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.CollisionSide
 import bke.iso.engine.physics.collision.PredictedCollision
 import bke.iso.engine.physics.collision.getCollisionData
@@ -42,6 +43,7 @@ class Physics(override val game: Game) : Module() {
             velocity.z * deltaTime
         )
         move(actor, delta)
+        handleGroundCollision(actor, velocity)
     }
 
     private fun move(actor: Actor, delta: Vector3) {
@@ -67,8 +69,7 @@ class Physics(override val game: Game) : Module() {
 
         // sometimes an actor may clip into another game object like a wall or a ground tile.
         // in case of an overlap, the actor's position should be reset to the outer edge of the object's collision box.
-        val box = actor.getCollisionData()?.box
-        checkNotNull(box) {
+        val box = checkNotNull(actor.getCollisionData()?.box) {
             "Expected CollisionData for $actor"
         }
         if (box.getOverlapArea(collision.box) != 0f) {
@@ -80,8 +81,7 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun killVelocity(actor: Actor, side: CollisionSide) {
-        val velocity = actor.get<Velocity>()
-        requireNotNull(velocity) {
+        val velocity = requireNotNull(actor.get<Velocity>()) {
             "Expected Velocity component for $actor"
         }
 
@@ -149,6 +149,21 @@ class Physics(override val game: Game) : Module() {
             }
         }
         actor.moveTo(x, y, z)
+    }
+
+    private fun handleGroundCollision(actor: Actor, velocity: Velocity) {
+        val collision = game.collisions
+            .getCollisions(actor)
+            .filter { collision -> collision.solid && collision.side == CollisionSide.TOP }
+            .minByOrNull(Collision::distance)
+            ?: return
+
+        val obj = collision.obj as? Actor ?: return
+        ifNotNull(obj.get<Velocity>()) { objVelocity ->
+            velocity.x += objVelocity.x
+            velocity.y += objVelocity.y
+            velocity.z += objVelocity.z
+        }
     }
 }
 
