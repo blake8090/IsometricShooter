@@ -10,6 +10,7 @@ import bke.iso.engine.physics.collision.getCollisionData
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
+import kotlin.math.abs
 import kotlin.math.max
 
 const val GRAVITY_ACCELERATION: Float = -9.8f
@@ -23,6 +24,7 @@ class Physics(override val game: Game) : Module() {
         game.world.actorsWith<Velocity> { actor, velocity ->
             update(actor, velocity, deltaTime)
         }
+    // todo: will need impulse to distinguish between constant velocity and a one-frame sudden jump
     }
 
     private fun update(actor: Actor, velocity: Velocity, deltaTime: Float) {
@@ -44,6 +46,23 @@ class Physics(override val game: Game) : Module() {
         )
         move(actor, delta)
         handleGroundCollision(actor, velocity)
+
+        // TODO: implement after refactor
+//        val upwardsCollision = game.collisions
+//            .getCollisions(actor)
+//            .filter { !it.solid && it.side == CollisionSide.BOTTOM && !(it.obj is Actor && it.obj.has<Shadow>()) }
+//            .minByOrNull { it.distance }
+//        if (upwardsCollision != null) {
+//            //log.trace { "pushing up" }
+//            val obj = upwardsCollision.obj
+//            if (obj is Actor && velocity.z > 0f) {
+//                val v = obj.get<Velocity>()!!
+//                v.z = velocity.z
+//                val data = actor.getCollisionData()!!
+//                //move(obj, Vector3(0f, 0f, velocity.z * deltaTime))
+//                obj.moveTo(obj.x, obj.y, data.box.max.z + (velocity.z * deltaTime))
+//            }
+//        }
     }
 
     private fun move(actor: Actor, delta: Vector3) {
@@ -73,37 +92,20 @@ class Physics(override val game: Game) : Module() {
             "Expected CollisionData for $actor"
         }
         if (box.getOverlapArea(collision.box) != 0f) {
-            log.debug { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }
+            log.trace { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }
             resolveOverlap(actor, box, collision)
         }
-        killVelocity(actor, collision.side)
+        killVelocity(actor, collision.hitNormal)
         slide(actor, delta, collision.hitNormal)
     }
 
-    private fun killVelocity(actor: Actor, side: CollisionSide) {
+    private fun killVelocity(actor: Actor, hitNormal: Vector3) {
         val velocity = requireNotNull(actor.get<Velocity>()) {
             "Expected Velocity component for $actor"
         }
-
-        when (side) {
-            CollisionSide.RIGHT, CollisionSide.LEFT -> {
-                velocity.x = 0f
-            }
-
-            CollisionSide.BACK, CollisionSide.FRONT -> {
-                velocity.y = 0f
-            }
-
-            CollisionSide.BOTTOM, CollisionSide.TOP -> {
-                velocity.z = 0f
-            }
-
-            CollisionSide.CORNER -> {
-                velocity.x = 0f
-                velocity.y = 0f
-                velocity.z = 0f
-            }
-        }
+        velocity.x -= velocity.x * abs(hitNormal.x)
+        velocity.y -= velocity.y * abs(hitNormal.y)
+        velocity.z -= velocity.z * abs(hitNormal.z)
     }
 
     private fun slide(actor: Actor, delta: Vector3, hitNormal: Vector3) {
