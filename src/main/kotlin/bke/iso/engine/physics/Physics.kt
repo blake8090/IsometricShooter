@@ -2,11 +2,12 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.math.Box
+import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.CollisionSide
 import bke.iso.engine.physics.collision.PredictedCollision
 import bke.iso.engine.physics.collision.getCollisionBox
 import bke.iso.engine.world.Actor
+import bke.iso.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 import kotlin.math.abs
@@ -17,6 +18,8 @@ class Physics(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
+    private val onGround = mutableMapOf<Actor, Boolean>()
+
     override fun update(deltaTime: Float) {
         game.world.actorsWith { actor, physicsBody: PhysicsBody ->
             val motion = actor.get<Motion>() ?: return@actorsWith
@@ -24,28 +27,44 @@ class Physics(override val game: Game) : Module() {
             motion.velocity.y += motion.acceleration.y * deltaTime
             motion.velocity.z += motion.acceleration.z * deltaTime
 
-            // TODO: check if on ground?
             if (physicsBody.bodyType == BodyType.DYNAMIC) {
                 motion.velocity.z += DEFAULT_GRAVITY * deltaTime
             }
 
-            actor.get<Impulse>()?.let { impulse ->
-                if (impulse.x != 0f) {
-                    motion.velocity.x = impulse.x * deltaTime
-                }
-                if (impulse.y != 0f) {
-                    motion.velocity.y = impulse.y * deltaTime
-                }
-                if (impulse.z != 0f) {
-                    motion.velocity.z = impulse.z
-                }
-                actor.remove<Impulse>()
-                log.trace { "applied impulse" }
-            }
+            applyImpulse(actor, physicsBody.bodyType, motion, deltaTime)
 
             val delta = Vector3(motion.velocity).scl(deltaTime)
             move(actor, physicsBody, motion, delta)
+
+            if (physicsBody.bodyType == BodyType.DYNAMIC) {
+                val collided = collidedWithGround(actor)
+                val wasOnGround = onGround[actor] ?: false
+                if (collided && !wasOnGround) {
+                    log.trace { "just landed on ground" }
+                } else if (!collided && wasOnGround) {
+                    log.trace { "just left ground" }
+                }
+                onGround[actor] = collided
+            }
         }
+    }
+
+    private fun applyImpulse(actor: Actor, bodyType: BodyType, motion: Motion, deltaTime: Float) {
+        if (bodyType == BodyType.BULLET || bodyType == BodyType.KINEMATIC || bodyType == BodyType.SOLID) {
+            return
+        }
+        val impulse = actor.get<Impulse>() ?: return
+        if (impulse.x != 0f) {
+            motion.velocity.x = impulse.x * deltaTime
+        }
+        if (impulse.y != 0f) {
+            motion.velocity.y = impulse.y * deltaTime
+        }
+        if (impulse.z != 0f) {
+            motion.velocity.z = impulse.z
+        }
+        actor.remove<Impulse>()
+        log.trace { "applied impulse $impulse $actor" }
     }
 
     private fun move(actor: Actor, physicsBody: PhysicsBody, motion: Motion, delta: Vector3) {
@@ -73,14 +92,8 @@ class Physics(override val game: Game) : Module() {
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
         actor.move(collisionDelta)
 
-        val box = checkNotNull(actor.getCollisionBox()) {
-            "Expected collision box for $actor"
-        }
-        val otherBox = checkNotNull(collision.obj.getCollisionBox()) {
-            "Expected collision box for $collision.obj"
-        }
         // an overlap doesn't happen all the time, but it doesn't hurt to double-check each frame
-        resolveOverlap(actor, box, otherBox, collision.side)
+        resolveOverlap(actor, collision)
 
         // cancel out velocity along collision direction
         motion.velocity.x -= (motion.velocity.x * abs(collision.hitNormal.x))
@@ -96,11 +109,18 @@ class Physics(override val game: Game) : Module() {
         move(actor, physicsBody, motion, newDelta)
     }
 
-    private fun resolveOverlap(actor: Actor, box: Box, otherBox: Box, side: CollisionSide) {
+    private fun resolveOverlap(actor: Actor, collision: PredictedCollision) {
+        val box = checkNotNull(actor.getCollisionBox()) {
+            "Expected collision box for $actor"
+        }
+        val otherBox = checkNotNull(collision.obj.getCollisionBox()) {
+            "Expected collision box for $collision.obj"
+        }
+
         var x = actor.x
         var y = actor.y
         var z = actor.z
-        when (side) {
+        when (collision.side) {
             CollisionSide.LEFT -> {
                 x = otherBox.min.x - (box.size.x / 2f)
             }
@@ -120,7 +140,6 @@ class Physics(override val game: Game) : Module() {
             CollisionSide.TOP -> {
                 // an actor's origin is the bottom of the collision box, not the center
                 z = otherBox.max.z
-                log.trace { "$actor on ground" }
             }
 
             CollisionSide.BOTTOM -> {
@@ -133,6 +152,23 @@ class Physics(override val game: Game) : Module() {
         }
         actor.moveTo(x, y, z)
     }
+
+    private fun collidedWithGround(actor: Actor): Boolean {
+        val groundCollision = game.collisions
+            .getCollisions(actor)
+            .sortedBy(Collision::distance)
+            .filter { collision -> collision.side == CollisionSide.TOP }
+            .firstOrNull { collision ->
+                val type = getBodyType(collision.obj)
+                type == BodyType.SOLID || type == BodyType.KINEMATIC
+            }
+        return groundCollision != null
+    }
+
+    private fun getBodyType(obj: GameObject) = (obj as? Actor)
+        ?.get<PhysicsBody>()
+        ?.bodyType
+        ?: BodyType.SOLID
 
 //    private fun update(actor: Actor, velocity: Velocity, deltaTime: Float) {
 //        ifNotNull(actor.get<Acceleration>()) { acceleration ->
