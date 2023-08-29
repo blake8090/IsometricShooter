@@ -5,7 +5,6 @@ import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
-import java.util.UUID
 import kotlin.reflect.KClass
 
 interface GameObject
@@ -13,7 +12,7 @@ interface GameObject
 class World(override val game: Game) : Module() {
 
     private val grid = Grid()
-    private val actorsById = mutableMapOf<UUID, Actor>()
+    private val actorsById = mutableMapOf<String, Actor>()
     private val deletedActors = mutableSetOf<Actor>()
 
     val objects: Set<GameObject>
@@ -30,7 +29,7 @@ class World(override val game: Game) : Module() {
     fun newActor(
         x: Float, y: Float, z: Float,
         vararg components: Component,
-        id: UUID = UUID.randomUUID()
+        id: String = generateActorId()
     ): Actor {
         val actor = Actor(id, this::onMove)
         components.forEach(actor::add)
@@ -39,7 +38,7 @@ class World(override val game: Game) : Module() {
         return actor
     }
 
-    fun getActor(id: UUID): Actor =
+    fun getActor(id: String): Actor =
         actorsById[id] ?: throw IllegalArgumentException("No actor found with id $id")
 
     private fun onMove(actor: Actor) =

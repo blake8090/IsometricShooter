@@ -16,7 +16,6 @@ import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.game.Combat
 import com.badlogic.gdx.math.Vector3
-import java.util.UUID
 
 enum class BulletType(
     val speed: Float,
@@ -28,7 +27,7 @@ enum class BulletType(
 }
 
 data class Bullet(
-    val shooterId: UUID,
+    val shooterId: String,
     val startPos: Vector3,
     val type: BulletType
 ) : Component()

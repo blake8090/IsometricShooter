@@ -134,7 +134,7 @@ class Physics(override val game: Game) : Module() {
             CollisionSide.TOP -> {
                 // an actor's origin is the bottom of the collision box, not the center
                 z = otherBox.max.z
-                log.trace { "on ground" }
+                log.trace { "$actor on ground" }
             }
 
             CollisionSide.BOTTOM -> {

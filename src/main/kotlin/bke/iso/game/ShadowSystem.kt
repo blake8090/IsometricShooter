@@ -11,10 +11,9 @@ import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
-import java.util.UUID
 import kotlin.math.max
 
-data class Shadow(val parent: UUID) : Component()
+data class Shadow(val parentId: String) : Component()
 
 private const val Z_OFFSET = 0.0001f
 private const val MAX_RANGE = 5f
@@ -29,7 +28,7 @@ class ShadowSystem(
     override fun update(deltaTime: Float) {
         world.actorsWith { actor: Actor, shadow: Shadow ->
             val sprite = actor.get<Sprite>() ?: return@actorsWith
-            val parent = world.getActor(shadow.parent)
+            val parent = world.getActor(shadow.parentId)
 
             val box = findTallestBoxBeneath(parent)
             val z = box?.max?.z ?: 0f
