@@ -49,7 +49,7 @@ class World(override val game: Game) : Module() {
         deletedActors.add(actor)
     }
 
-    fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) {
+    fun setTile(location: Location, sprite: Sprite) {
         grid.setTile(location, sprite)
     }
 
