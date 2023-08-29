@@ -10,8 +10,8 @@ class Grid {
 
     private val tileGrid = mutableMapOf<Location, Tile>()
 
-    fun setTile(location: Location, sprite: Sprite, solid: Boolean) {
-        val tile = Tile(sprite, solid, location)
+    fun setTile(location: Location, sprite: Sprite) {
+        val tile = Tile(sprite, location)
         tileGrid[location] = tile
         tile.location = location
     }

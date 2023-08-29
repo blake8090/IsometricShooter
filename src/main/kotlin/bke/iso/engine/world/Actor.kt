@@ -1,7 +1,7 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.collision.getCollisionData
+import bke.iso.engine.physics.collision.getCollisionBox
 import com.badlogic.gdx.math.Vector3
 import java.util.UUID
 import kotlin.math.abs
@@ -93,7 +93,7 @@ class Actor(
     }
 
     private fun getCollisionBoxLocations(): Set<Location> {
-        val box = getCollisionData()?.box ?: return emptySet()
+        val box = getCollisionBox() ?: return emptySet()
 
         val minX = floor(box.min.x).toInt()
         val minY = floor(box.min.y).toInt()

@@ -1,6 +1,6 @@
 package bke.iso.engine.render
 
-import bke.iso.engine.physics.collision.getCollisionData
+import bke.iso.engine.physics.collision.getCollisionBox
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
@@ -65,12 +65,12 @@ class ObjectSorter {
 
     private fun getSortContext(obj: GameObject): SortContext {
         // TODO: should this use a different class to separate rendering and collision?
-        val data = obj.getCollisionData()
+        val box = obj.getCollisionBox()
         val pos = obj.getPos()
 
-        val min = data?.box?.min ?: pos
-        val max = data?.box?.max ?: pos
-        val center = data?.box?.pos ?: pos
+        val min = box?.min ?: pos
+        val max = box?.max ?: pos
+        val center = box?.pos ?: pos
         return SortContext(obj, min, max, center)
     }
 }

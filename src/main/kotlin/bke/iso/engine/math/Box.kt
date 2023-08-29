@@ -90,14 +90,14 @@ data class Box(
         if (dx < 0) min.x += dx else max.x += dx
         if (dy < 0) min.y += dy else max.y += dy
         if (dz < 0) min.z += dz else max.z += dz
-        return from(min, max)
+        return fromMinMax(min, max)
     }
 
     fun dst(box: Box): Float =
         pos.dst(box.pos)
 
     companion object {
-        fun from(min: Vector3, max: Vector3): Box {
+        fun fromMinMax(min: Vector3, max: Vector3): Box {
             val size = Vector3(max).sub(min)
             val center = Vector3(size)
                 .scl(0.5f)
@@ -105,7 +105,7 @@ data class Box(
             return Box(center, size)
         }
 
-        fun from(segment: Segment): Box {
+        fun fromMinMax(segment: Segment): Box {
             val min = Vector3(
                 min(segment.a.x, segment.b.x),
                 min(segment.a.y, segment.b.y),
@@ -116,7 +116,7 @@ data class Box(
                 max(segment.a.y, segment.b.y),
                 max(segment.a.z, segment.b.z)
             )
-            return from(min, max)
+            return fromMinMax(min, max)
         }
     }
 }

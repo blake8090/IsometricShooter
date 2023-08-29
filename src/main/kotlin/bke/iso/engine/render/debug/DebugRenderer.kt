@@ -1,7 +1,7 @@
 package bke.iso.engine.render.debug
 
 import bke.iso.engine.math.Box
-import bke.iso.engine.physics.collision.getCollisionData
+import bke.iso.engine.physics.collision.getCollisionBox
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
@@ -104,8 +104,8 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
         val settings = actor.get<DebugSettings>() ?: return
         if (settings.collisionBox) {
             val color = if (settings.collisionBoxSelected) Color.PURPLE else settings.collisionBoxColor
-            actor.getCollisionData()?.let { data ->
-                addBox(data.box, 1f, color)
+            actor.getCollisionBox()?.let { box ->
+                addBox(box, 1f, color)
             }
             settings.collisionBoxSelected = false
         }
@@ -127,7 +127,7 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
             return
         }
         val color = if (tile.selected) Color.PURPLE else Color.WHITE
-        addBox(tile.getCollisionData().box, 1f, color)
+        addBox(tile.getCollisionBox(), 1f, color)
         tile.selected = false
     }
 

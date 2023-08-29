@@ -50,7 +50,7 @@ class World(override val game: Game) : Module() {
     }
 
     fun setTile(location: Location, sprite: Sprite, solid: Boolean = false) {
-        grid.setTile(location, sprite, solid)
+        grid.setTile(location, sprite)
     }
 
     fun <T : Component> actorsWith(type: KClass<out T>, action: (Actor, T) -> Unit) {

@@ -102,7 +102,6 @@ fun World.createPlayer(location: Location): Actor =
         Sprite("player", 32f, 0f),
         Player(),
         Collider(
-            false,
             Vector3(0.4f, 0.4f, 1.6f),
             Vector3(-0.2f, -0.2f, 0f)
         ),

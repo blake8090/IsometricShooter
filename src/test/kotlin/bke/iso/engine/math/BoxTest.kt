@@ -20,7 +20,7 @@ class BoxTest : StringSpec({
         val min = Vector3()
         val max = Vector3(2f, 2f, 2f)
 
-        val box = Box.from(min, max)
+        val box = Box.fromMinMax(min, max)
         box.pos.shouldBe(Vector3(1f, 1f, 1f))
         box.size.shouldBe(Vector3(2f, 2f, 2f))
         box.min.shouldBe(min)
@@ -55,7 +55,7 @@ class BoxTest : StringSpec({
         val start = Vector3(0f, 0f, 0f)
         val end = Vector3(2f, 2f, 2f)
 
-        val box = Box.from(Segment(start, end))
+        val box = Box.fromMinMax(Segment(start, end))
         box.pos.shouldBe(Vector3(1f, 1f, 1f))
         box.size.shouldBe(Vector3(2f, 2f, 2f))
         box.min.shouldBe(start)
@@ -66,7 +66,7 @@ class BoxTest : StringSpec({
         val start = Vector3(2f, 2f, 2f)
         val end = Vector3(0f, 0f, 0f)
 
-        val box = Box.from(Segment(start, end))
+        val box = Box.fromMinMax(Segment(start, end))
         box.pos.shouldBe(Vector3(1f, 1f, 1f))
         box.size.shouldBe(Vector3(2f, 2f, 2f))
         box.min.shouldBe(end)

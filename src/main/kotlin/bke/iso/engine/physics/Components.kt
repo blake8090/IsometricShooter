@@ -24,11 +24,13 @@ data class Impulse(
  * @property KINEMATIC Does not respond to gravity or impulses.
  * When colliding with a dynamic object, the object will always be pushed away using an impulse.
  * @property SOLID Does not move. Default body type for tiles and actors without a [PhysicsBody].
+ * @property BULLET Does not respond to gravity or impulses, and collisions are ignored.
  */
 enum class BodyType {
     DYNAMIC,
     KINEMATIC,
-    SOLID
+    SOLID,
+    BULLET
 }
 
 data class PhysicsBody(val bodyType: BodyType) : Component()

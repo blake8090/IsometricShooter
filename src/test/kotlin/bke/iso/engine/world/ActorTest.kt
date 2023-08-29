@@ -11,7 +11,7 @@ class ActorTest : StringSpec({
 
     "should return locations" {
         val actor = Actor()
-        actor.add(Collider(false, Vector3(1f, 1f, 1f)))
+        actor.add(Collider(Vector3(1f, 1f, 1f)))
 
         val locations = actor.getLocations()
         locations.shouldContainExactlyInAnyOrder(
@@ -41,7 +41,6 @@ class ActorTest : StringSpec({
         actor.moveTo(1f,  0f, 0f)
         actor.add(
             Collider(
-                false,
                 Vector3(1f, 1f, 1f),
                 // center box on actor's position
                 Vector3(-0.5f, -0.5f, -0.5f)

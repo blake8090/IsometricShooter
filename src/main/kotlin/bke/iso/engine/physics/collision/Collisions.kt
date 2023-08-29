@@ -49,15 +49,14 @@ class Collisions(override val game: Game) : Module() {
     }
 
     private fun checkCollision(box: Box, obj: GameObject): Collision? {
-        val data = obj.getCollisionData()
-        return if (data == null || !data.box.intersects(box)) {
+        val objBox = obj.getCollisionBox()
+        return if (objBox == null || !objBox.intersects(box)) {
             null
         } else {
             Collision(
                 obj = obj,
-                box = data.box,
-                solid = data.solid,
-                distance = box.dst(data.box),
+                box = objBox,
+                distance = box.dst(objBox),
                 // TODO: find collision side
                 side = CollisionSide.CORNER
             )
@@ -65,7 +64,7 @@ class Collisions(override val game: Game) : Module() {
     }
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
-        val area = Box.from(segment)
+        val area = Box.fromMinMax(segment)
         game.renderer.debug.addBox(area, 1f, Color.ORANGE)
 
         val ray = segment.getRay()
@@ -76,11 +75,9 @@ class Collisions(override val game: Game) : Module() {
     }
 
     private fun checkCollision(segment: Segment, ray: Ray, gameObject: GameObject): SegmentCollision? {
-        val data = gameObject.getCollisionData()
-            ?: return null
+        val box = gameObject.getCollisionBox() ?: return null
 
-        val points = data
-            .box
+        val points = box
             .faces
             .mapNotNull { face -> findIntersection(ray, face) }
             .toSet()
@@ -91,9 +88,8 @@ class Collisions(override val game: Game) : Module() {
 
         return SegmentCollision(
             obj = gameObject,
-            data = data,
-            distanceStart = segment.a.dst(data.box.pos),
-            distanceEnd = segment.b.dst(data.box.pos),
+            distanceStart = segment.a.dst(box.pos),
+            distanceEnd = segment.b.dst(box.pos),
             points = points
         )
     }
@@ -108,8 +104,7 @@ class Collisions(override val game: Game) : Module() {
     }
 
     fun predictCollisions(actor: Actor, delta: Vector3): Set<PredictedCollision> {
-        val data = actor.getCollisionData() ?: return emptySet()
-        val box = data.box
+        val box = actor.getCollisionBox() ?: return emptySet()
 
         // broad-phase: instead of iterating through every object, only check entities within general area of movement
         val px = ceil(abs(delta.x))
@@ -146,28 +141,22 @@ class Collisions(override val game: Game) : Module() {
         return collisions
     }
 
-    private fun predictCollision(box: Box, delta: Vector3, gameObject: GameObject): PredictedCollision? {
-        val data = gameObject.getCollisionData()
-            ?: return null
+    private fun predictCollision(box: Box, delta: Vector3, obj: GameObject): PredictedCollision? {
+        val objBox = obj.getCollisionBox() ?: return null
+        val sweptCollision = sweepTest(box, objBox, delta) ?: return null
 
-        val sweptCollision = sweepTest(box, data.box, delta)
-            ?: return null
-
-        val distance = box.dst(data.box)
-        val side = getCollisionSide(sweptCollision.hitNormal)
 //        log.trace {
 //            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
 //                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
 //        }
 
         return PredictedCollision(
-            obj = gameObject,
-            box = data.box,
-            solid = data.solid,
-            distance = distance,
+            obj = obj,
+            box = objBox,
+            distance = box.dst(objBox),
             collisionTime = sweptCollision.collisionTime,
             hitNormal = sweptCollision.hitNormal,
-            side = side
+            side = getCollisionSide(sweptCollision.hitNormal)
         )
     }
 
@@ -180,7 +169,6 @@ class Collisions(override val game: Game) : Module() {
         val collision = Collision(
             obj = predictedCollision.obj,
             box = predictedCollision.box,
-            solid = predictedCollision.solid,
             distance = predictedCollision.distance,
             side = predictedCollision.side
         )
@@ -200,3 +188,23 @@ class Collisions(override val game: Game) : Module() {
             else -> CollisionSide.CORNER
         }
 }
+
+fun GameObject.getCollisionBox(): Box? =
+    when (this) {
+        is Tile -> getCollisionBox()
+        is Actor -> getCollisionBox()
+        else -> null
+    }
+
+fun Actor.getCollisionBox(): Box? {
+    val collider = get<Collider>() ?: return null
+    val min = pos.add(collider.offset)
+    val max = Vector3(min).add(collider.size)
+    return Box.fromMinMax(min, max)
+}
+
+fun Tile.getCollisionBox(): Box =
+    Box.fromMinMax(
+        location.toVector3(),
+        location.toVector3().add(1f, 1f, 0f)
+    )

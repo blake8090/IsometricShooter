@@ -17,10 +17,7 @@ class Factory(private val world: World) {
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("wall3", 0f, 16f),
-            Collider(
-                true,
-                Vector3(1f, 1f, 2f)
-            ),
+            Collider(Vector3(1f, 1f, 2f)),
             DebugSettings().apply {
                 zAxis = false
             },
@@ -31,10 +28,7 @@ class Factory(private val world: World) {
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("box", 16f, 8f),
-            Collider(
-                true,
-                Vector3(0.5f, 0.5f, 0.5f)
-            ),
+            Collider(Vector3(0.5f, 0.5f, 0.5f)),
             DebugSettings(),
             Description("box")
         )
@@ -45,7 +39,6 @@ class Factory(private val world: World) {
             Sprite("turret", 16f, 0f),
             Turret(),
             Collider(
-                false,
                 Vector3(0.25f, 0.25f, 0.75f),
                 Vector3(-0.25f, 0f, 0f)
             ),
@@ -59,10 +52,7 @@ class Factory(private val world: World) {
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("fence-side", 0f, 16f),
-            Collider(
-                true,
-                Vector3(0.1f, 1f, 1f)
-            ),
+            Collider(Vector3(0.1f, 1f, 1f)),
             DebugSettings().apply {
                 zAxis = false
             },
@@ -73,10 +63,7 @@ class Factory(private val world: World) {
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("fence-front", 32f, 32f),
-            Collider(
-                true,
-                Vector3(1f, 0.1f, 1f)
-            ),
+            Collider(Vector3(1f, 0.1f, 1f)),
             DebugSettings().apply {
                 zAxis = false
             },
@@ -88,7 +75,6 @@ class Factory(private val world: World) {
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("lamppost", 32f, 16f),
             Collider(
-                true,
                 Vector3(0.25f, 0.25f, 2.1f),
                 Vector3(-0.125f, -0.125f, 0f)
             ),
@@ -102,14 +88,10 @@ class Factory(private val world: World) {
         world.newActor(
             location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
             Sprite("pillar", 24f, 3f),
-            Collider(
-                true,
-                Vector3(0.25f, 0.25f, 2f)
-            ),
+            Collider(Vector3(0.25f, 0.25f, 2f)),
             DebugSettings().apply {
                 zAxis = false
             },
             Description("pillar")
         )
 }
-

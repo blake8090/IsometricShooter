@@ -57,7 +57,7 @@ class ShadowSystem(
             parent.y + (sizeY / 2f),
             parent.z + Z_OFFSET
         )
-        val area = Box.from(min, max)
+        val area = Box.fromMinMax(min, max)
         return collisions
             .checkCollisions(area)
             .filter { collision -> filterCollision(parent, collision) }
@@ -86,7 +86,6 @@ fun World.createShadow(actor: Actor): Actor =
         Sprite("shadow", 16f, 16f, SPRITE_ALPHA),
         Shadow(actor.id),
         Collider(
-            false,
             Vector3(0.25f, 0.25f, Z_OFFSET),
             Vector3(-0.125f, -0.125f, 0f)
         ),

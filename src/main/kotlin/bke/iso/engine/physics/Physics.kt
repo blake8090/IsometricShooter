@@ -5,7 +5,7 @@ import bke.iso.engine.Module
 import bke.iso.engine.math.Box
 import bke.iso.engine.physics.collision.CollisionSide
 import bke.iso.engine.physics.collision.PredictedCollision
-import bke.iso.engine.physics.collision.getCollisionData
+import bke.iso.engine.physics.collision.getCollisionBox
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
@@ -54,7 +54,6 @@ class Physics(override val game: Game) : Module() {
         }
 
         val collision = game.collisions.predictCollisions(actor, delta)
-            .filter(PredictedCollision::solid)
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
             .firstOrNull()
         if (collision == null || physicsBody.bodyType == BodyType.KINEMATIC) {
@@ -92,12 +91,12 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun resolveDynamicSolidCollision(actor: Actor, collision: PredictedCollision) {
-        val box = checkNotNull(actor.getCollisionData()?.box) {
-            "Expected CollisionData for $actor"
+        val box = checkNotNull(actor.getCollisionBox()) {
+            "Expected collision box for $actor"
         }
         val obj = collision.obj
-        val otherBox = checkNotNull(obj.getCollisionData()?.box) {
-            "Expected CollisionData for $obj"
+        val otherBox = checkNotNull(obj.getCollisionBox()) {
+            "Expected collision box for $obj"
         }
         // an overlap doesn't happen all the time, but it doesn't hurt to double-check each frame
         resolveOverlap(actor, box, otherBox, collision.side)

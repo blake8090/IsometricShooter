@@ -45,10 +45,7 @@ fun World.createMovingPlatform(location: Location): Actor =
         location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
         Sprite("platform", 0f, 32f),
         MovingPlatform(),
-        Collider(
-            true,
-            Vector3(2f, 1f, 0.125f)
-        ),
+        Collider(Vector3(2f, 1f, 0.125f)),
         PhysicsBody(BodyType.KINEMATIC),
         DebugSettings(),
         Description("moving platform")
