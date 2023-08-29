@@ -67,6 +67,6 @@ class GridTest : StringSpec({
 
         grid.remove(actor)
         grid.getAll(Location(1, 1, 0)).shouldContainExactly(actor2)
-        grid.getAllActors().shouldContainExactly(actor2)
+        grid.actors.shouldContainExactly(actor2)
     }
 })

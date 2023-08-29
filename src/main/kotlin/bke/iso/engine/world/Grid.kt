@@ -10,6 +10,8 @@ class Grid {
 
     private val tileGrid = mutableMapOf<Location, Tile>()
 
+    val actors: Set<Actor> = locationsByActor.keys
+
     fun setTile(location: Location, sprite: Sprite) {
         val tile = Tile(sprite, location)
         tileGrid[location] = tile
@@ -49,8 +51,4 @@ class Grid {
         actorGrid[location]?.let(objects::addAll)
         return objects
     }
-
-    // TODO: should be a property
-    fun getAllActors(): Set<Actor> =
-        locationsByActor.keys
 }

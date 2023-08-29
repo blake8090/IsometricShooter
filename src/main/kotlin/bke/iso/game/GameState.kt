@@ -157,8 +157,8 @@ class GameState(override val game: Game) : State() {
 
     private fun readTile(char: Char, location: Location) {
         when (char) {
-            '1' -> game.world.setTile(location, Sprite("floor", 0f, 16f), true)
-            '2' -> game.world.setTile(location, Sprite("floor2", 0f, 16f), true)
+            '1' -> game.world.setTile(location, Sprite("floor", 0f, 16f))
+            '2' -> game.world.setTile(location, Sprite("floor2", 0f, 16f))
         }
     }
 
