@@ -1,10 +1,17 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.System
+import bke.iso.engine.physics.BodyType
+import bke.iso.engine.physics.Motion
+import bke.iso.engine.physics.PhysicsBody
+import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.Collisions
+import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
+import bke.iso.engine.world.Description
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.game.Combat
@@ -66,4 +73,26 @@ class BulletSystem(
             .minByOrNull(Collision::distance)
             ?.obj
 
+}
+
+fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType): Actor {
+    val pos = shooter.pos
+    return newActor(
+        pos.x,
+        pos.y,
+        pos.z + bulletType.zOffset,
+        Bullet(shooter.id, pos, bulletType),
+        Sprite("bullet", 8f, 8f),
+        PhysicsBody(BodyType.KINEMATIC),
+        Motion(Vector3(direction).scl(bulletType.speed)),
+        Collider(
+            false,
+            Vector3(0.125f, 0.125f, 0.125f),
+            Vector3(0f, -0.125f, 0f)
+        ),
+        DebugSettings().apply {
+            zAxis = false
+        },
+        Description("bullet")
+    )
 }
