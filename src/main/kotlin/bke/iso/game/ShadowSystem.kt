@@ -44,6 +44,7 @@ class ShadowSystem(
     }
 
     private fun findTallestBoxBeneath(parent: Actor): Box? {
+        // TODO: make this a constant
         val sizeX = 0.25f
         val sizeY = 0.25f
         val min = Vector3(

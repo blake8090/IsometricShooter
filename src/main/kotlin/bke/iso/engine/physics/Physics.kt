@@ -169,6 +169,7 @@ class Physics(override val game: Game) : Module() {
     }
 }
 
+// TODO: utilize this elsewhere!
 private inline fun <T : Any> ifNotNull(value: T?, action: (T) -> Unit) {
     if (value != null) {
         action.invoke(value)

@@ -64,6 +64,7 @@ class ObjectSorter {
     }
 
     private fun getSortContext(obj: GameObject): SortContext {
+        // TODO: should this use a different class to separate rendering and collision?
         val data = obj.getCollisionData()
         val pos = obj.getPos()
 
