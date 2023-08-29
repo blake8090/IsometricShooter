@@ -2,7 +2,9 @@ package bke.iso.game.actor
 
 import bke.iso.engine.System
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.Velocity
+import bke.iso.engine.physics.BodyType
+import bke.iso.engine.physics.Motion
+import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.debug.DebugSettings
@@ -24,22 +26,17 @@ class MovingPlatformSystem(private val world: World) : System {
 
     override fun update(deltaTime: Float) {
         world.actorsWith{ actor: Actor, movingPlatform: MovingPlatform ->
-            update(actor, movingPlatform, deltaTime)
-        }
-    }
+            if (actor.z >= movingPlatform.maxZ) {
+                actor.moveTo(actor.x, actor.y, movingPlatform.maxZ)
+                movingPlatform.movingUp = movingPlatform.movingUp.not()
+            } else if (actor.z <= movingPlatform.minZ) {
+                actor.moveTo(actor.x, actor.y, movingPlatform.minZ)
+                movingPlatform.movingUp = movingPlatform.movingUp.not()
+            }
 
-    private fun update(actor: Actor, movingPlatform: MovingPlatform, deltaTime: Float) {
-        if (actor.z >= movingPlatform.maxZ) {
-            actor.moveTo(actor.x, actor.y, movingPlatform.maxZ)
-            movingPlatform.movingUp = movingPlatform.movingUp.not()
-        } else if (actor.z <= movingPlatform.minZ) {
-            actor.moveTo(actor.x, actor.y, movingPlatform.minZ)
-            movingPlatform.movingUp = movingPlatform.movingUp.not()
+            val dir = if (movingPlatform.movingUp) 1f else -1f
+            actor.getOrPut(Motion()).velocity.z = dir * movingPlatform.speed
         }
-
-        val dir = if (movingPlatform.movingUp) 1f else -1f
-        val velocity = actor.getOrPut(Velocity())
-        velocity.z = dir * movingPlatform.speed
     }
 }
 
@@ -52,6 +49,7 @@ fun World.createMovingPlatform(location: Location): Actor =
             true,
             Vector3(2f, 1f, 0.125f)
         ),
+        PhysicsBody(BodyType.KINEMATIC),
         DebugSettings(),
         Description("moving platform")
     )

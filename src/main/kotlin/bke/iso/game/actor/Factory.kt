@@ -1,7 +1,9 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.Velocity
+import bke.iso.engine.physics.BodyType
+import bke.iso.engine.physics.Motion
+import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.debug.DebugSettings
@@ -122,11 +124,8 @@ fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletTyp
         pos.z + bulletType.zOffset,
         Bullet(shooter.id, pos, bulletType),
         Sprite("bullet", 8f, 8f),
-        Velocity(
-            direction.x * bulletType.speed,
-            direction.y * bulletType.speed,
-            direction.z * bulletType.speed
-        ),
+        PhysicsBody(BodyType.KINEMATIC),
+        Motion(Vector3(direction).scl(bulletType.speed)),
         Collider(
             false,
             Vector3(0.125f, 0.125f, 0.125f),
