@@ -44,11 +44,11 @@ class Physics(override val game: Game) : Module() {
             }
 
             val delta = Vector3(motion.velocity).scl(deltaTime)
-            move(actor, physicsBody, delta)
+            move(actor, physicsBody, motion, delta)
         }
     }
 
-    private fun move(actor: Actor, physicsBody: PhysicsBody, delta: Vector3) {
+    private fun move(actor: Actor, physicsBody: PhysicsBody, motion: Motion, delta: Vector3) {
         if (delta.isZero) {
             return
         }
@@ -56,16 +56,11 @@ class Physics(override val game: Game) : Module() {
         val collision = game.collisions.predictCollisions(actor, delta)
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
             .firstOrNull()
-        if (collision == null || physicsBody.bodyType == BodyType.KINEMATIC) {
+        // TODO: handle Kinematic collisions
+        if (collision == null || physicsBody.bodyType == BodyType.KINEMATIC || physicsBody.bodyType == BodyType.BULLET) {
             actor.move(delta)
             return
         }
-
-        val obj = collision.obj
-        val objBodyType = (obj as? Actor)
-            ?.get<PhysicsBody>()
-            ?.bodyType
-            ?: BodyType.SOLID
 
         /*
         collision responses:
@@ -75,39 +70,30 @@ class Physics(override val game: Game) : Module() {
         kinematic -> dynamic: apply impulse!
         kinematic -> solid: nothing
          */
-        if (physicsBody.bodyType == BodyType.DYNAMIC && objBodyType == BodyType.SOLID) {
-            val collisionDelta = Vector3(delta).scl(collision.collisionTime)
-            actor.move(collisionDelta)
+        val collisionDelta = Vector3(delta).scl(collision.collisionTime)
+        actor.move(collisionDelta)
 
-            resolveDynamicSolidCollision(actor, collision)
-            // cancel out movement and try moving in the other directions
-            val newDelta = Vector3(
-                delta.x - delta.x * abs(collision.hitNormal.x),
-                delta.y - delta.y * abs(collision.hitNormal.y),
-                delta.z - delta.z * abs(collision.hitNormal.z),
-            )
-            move(actor, physicsBody, newDelta)
-        }
-    }
-
-    private fun resolveDynamicSolidCollision(actor: Actor, collision: PredictedCollision) {
         val box = checkNotNull(actor.getCollisionBox()) {
             "Expected collision box for $actor"
         }
-        val obj = collision.obj
-        val otherBox = checkNotNull(obj.getCollisionBox()) {
-            "Expected collision box for $obj"
+        val otherBox = checkNotNull(collision.obj.getCollisionBox()) {
+            "Expected collision box for $collision.obj"
         }
         // an overlap doesn't happen all the time, but it doesn't hurt to double-check each frame
         resolveOverlap(actor, box, otherBox, collision.side)
 
-        val motion = checkNotNull(actor.get<Motion>()) {
-            "Expected Motion component for $actor"
-        }
-        // cancel out velocity - stops actor from moving in the collision direction
-        motion.velocity.x -= motion.velocity.x * abs(collision.hitNormal.x)
-        motion.velocity.y -= motion.velocity.y * abs(collision.hitNormal.y)
-        motion.velocity.z -= motion.velocity.z * abs(collision.hitNormal.z)
+        // cancel out velocity along collision direction
+        motion.velocity.x -= (motion.velocity.x * abs(collision.hitNormal.x))
+        motion.velocity.y -= (motion.velocity.y * abs(collision.hitNormal.y))
+        motion.velocity.z -= (motion.velocity.z * abs(collision.hitNormal.z))
+
+        // move actor with the remaining delta
+        val newDelta = Vector3(
+            delta.x - (delta.x * abs(collision.hitNormal.x)),
+            delta.y - (delta.y * abs(collision.hitNormal.y)),
+            delta.z - (delta.z * abs(collision.hitNormal.z))
+        )
+        move(actor, physicsBody, motion, newDelta)
     }
 
     private fun resolveOverlap(actor: Actor, box: Box, otherBox: Box, side: CollisionSide) {
