@@ -50,7 +50,7 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun applyImpulse(actor: Actor, bodyType: BodyType, motion: Motion, deltaTime: Float) {
-        if (bodyType == BodyType.BULLET || bodyType == BodyType.KINEMATIC || bodyType == BodyType.SOLID) {
+        if (bodyType == BodyType.GHOST || bodyType == BodyType.KINEMATIC || bodyType == BodyType.SOLID) {
             return
         }
         val impulse = actor.get<Impulse>() ?: return
@@ -74,9 +74,9 @@ class Physics(override val game: Game) : Module() {
 
         val collision = game.collisions.predictCollisions(actor, delta)
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
-            .firstOrNull()
+            .firstOrNull { collision -> getBodyType(collision.obj) != BodyType.GHOST }
         // TODO: handle Kinematic collisions
-        if (collision == null || physicsBody.bodyType == BodyType.KINEMATIC || physicsBody.bodyType == BodyType.BULLET) {
+        if (collision == null || !shouldCollide(physicsBody.bodyType, collision)) {
             actor.move(delta)
             return
         }
@@ -109,6 +109,11 @@ class Physics(override val game: Game) : Module() {
         move(actor, physicsBody, motion, newDelta)
     }
 
+    private fun shouldCollide(bodyType: BodyType, collision: PredictedCollision): Boolean {
+        val objType = getBodyType(collision.obj)
+        return bodyType == BodyType.DYNAMIC && objType != BodyType.GHOST
+    }
+
     private fun resolveOverlap(actor: Actor, collision: PredictedCollision) {
         val box = checkNotNull(actor.getCollisionBox()) {
             "Expected collision box for $actor"
@@ -138,12 +143,11 @@ class Physics(override val game: Game) : Module() {
             }
 
             CollisionSide.TOP -> {
-                // an actor's origin is the bottom of the collision box, not the center
-                z = otherBox.max.z
+                z = otherBox.max.z // an actor's origin is the bottom of the collision box, not the center
             }
 
             CollisionSide.BOTTOM -> {
-                z = otherBox.min.z - (box.size.z / 2f)
+                z = otherBox.min.z - box.size.z // an actor's origin is the bottom of the collision box, not the center
             }
 
             CollisionSide.CORNER -> {
