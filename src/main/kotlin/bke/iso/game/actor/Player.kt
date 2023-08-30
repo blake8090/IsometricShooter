@@ -4,9 +4,7 @@ import bke.iso.engine.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.physics.BodyType
-import bke.iso.engine.physics.Impulse
-import bke.iso.engine.physics.Motion
+import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.render.Renderer
@@ -85,11 +83,12 @@ class PlayerSystem(
 
         movement.scl(horizontalSpeed, horizontalSpeed, flySpeed)
 
-        val motion = actor.getOrPut(Motion())
-        motion.velocity.x = movement.x
-        motion.velocity.y = movement.y
+        val body = checkNotNull(actor.get<PhysicsBody>()) {
+            "Expected $actor to have a PhysicsBody"
+        }
+        body.forces.add(movement)
         input.onAction("jump") {
-            actor.add(Impulse(0f, 0f, PLAYER_JUMP_FORCE))
+            body.velocity.z = PLAYER_JUMP_FORCE
         }
 
         renderer.setCameraPos(actor.pos)
@@ -107,7 +106,7 @@ fun World.createPlayer(location: Location): Actor =
         ),
         Health(PLAYER_MAX_HEALTH),
         HealthBar(18f, -64f),
-        PhysicsBody(BodyType.DYNAMIC),
+        PhysicsBody(PhysicsMode.DYNAMIC),
         DebugSettings(),
         Description("player")
     )

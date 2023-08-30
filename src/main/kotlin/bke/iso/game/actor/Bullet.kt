@@ -1,8 +1,7 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.System
-import bke.iso.engine.physics.BodyType
-import bke.iso.engine.physics.Motion
+import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.physics.collision.Collision
@@ -82,8 +81,7 @@ fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletTyp
         pos.z + bulletType.zOffset,
         Bullet(shooter.id, pos, bulletType),
         Sprite("bullet", 8f, 8f),
-        PhysicsBody(BodyType.GHOST),
-        Motion(Vector3(direction).scl(bulletType.speed)),
+        PhysicsBody(mode = PhysicsMode.GHOST, velocity = Vector3(direction).scl(bulletType.speed)),
         Collider(
             Vector3(0.125f, 0.125f, 0.125f),
             Vector3(0f, -0.125f, 0f)

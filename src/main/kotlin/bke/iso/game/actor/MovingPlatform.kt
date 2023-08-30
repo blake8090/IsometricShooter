@@ -2,8 +2,7 @@ package bke.iso.game.actor
 
 import bke.iso.engine.System
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.BodyType
-import bke.iso.engine.physics.Motion
+import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.render.Sprite
@@ -35,7 +34,11 @@ class MovingPlatformSystem(private val world: World) : System {
             }
 
             val dir = if (movingPlatform.movingUp) 1f else -1f
-            actor.getOrPut(Motion()).velocity.z = dir * movingPlatform.speed
+
+            val body = checkNotNull(actor.get<PhysicsBody>()) {
+                "Expected $actor to have a PhysicsBody"
+            }
+            body.velocity.z = dir * movingPlatform.speed
         }
     }
 }
@@ -46,7 +49,7 @@ fun World.createMovingPlatform(location: Location): Actor =
         Sprite("platform", 0f, 32f),
         MovingPlatform(),
         Collider(Vector3(2f, 1f, 0.125f)),
-        PhysicsBody(BodyType.KINEMATIC),
+        PhysicsBody(PhysicsMode.KINEMATIC),
         DebugSettings(),
         Description("moving platform")
     )

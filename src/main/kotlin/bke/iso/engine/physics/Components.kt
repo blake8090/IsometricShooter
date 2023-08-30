@@ -3,20 +3,6 @@ package bke.iso.engine.physics
 import bke.iso.engine.world.Component
 import com.badlogic.gdx.math.Vector3
 
-data class Motion(
-    val velocity: Vector3 = Vector3(),
-    val acceleration: Vector3 = Vector3()
-) : Component()
-
-/**
- * Applied to an actor's velocity only once.
- */
-data class Impulse(
-    val x: Float,
-    val y: Float,
-    val z: Float
-) : Component()
-
 /**
  * Defines an actor's movement behavior as well as interactions with Colliders.
  *
@@ -26,11 +12,16 @@ data class Impulse(
  * @property SOLID Does not move. Default body type for tiles and actors without a [PhysicsBody].
  * @property GHOST Does not respond to gravity or impulses, and collisions are ignored.
  */
-enum class BodyType {
+enum class PhysicsMode {
     DYNAMIC,
     KINEMATIC,
     SOLID,
     GHOST
 }
 
-data class PhysicsBody(val bodyType: BodyType) : Component()
+data class PhysicsBody(
+    val mode: PhysicsMode,
+    val velocity: Vector3 = Vector3(),
+    val mass: Float = 1f,
+    val forces: MutableList<Vector3> = mutableListOf()
+) : Component()

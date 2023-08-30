@@ -39,7 +39,7 @@ class Input(override val game: Game) : Module() {
         }
     }
 
-    fun onAction(actionName: String, func: (Float) -> Unit) {
+    inline fun onAction(actionName: String, func: (Float) -> Unit) {
         val axis = poll(actionName)
         if (axis != 0f) {
             func.invoke(axis)

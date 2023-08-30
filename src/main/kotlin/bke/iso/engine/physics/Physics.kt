@@ -18,103 +18,76 @@ class Physics(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
-    private val onGround = mutableMapOf<Actor, Boolean>()
-
     override fun update(deltaTime: Float) {
-        game.world.actorsWith { actor, physicsBody: PhysicsBody ->
-            val motion = actor.get<Motion>() ?: return@actorsWith
-            motion.velocity.x += motion.acceleration.x * deltaTime
-            motion.velocity.y += motion.acceleration.y * deltaTime
-            motion.velocity.z += motion.acceleration.z * deltaTime
-
-            if (physicsBody.bodyType == BodyType.DYNAMIC) {
-                motion.velocity.z += DEFAULT_GRAVITY * deltaTime
-            }
-
-            applyImpulse(actor, physicsBody.bodyType, motion, deltaTime)
-
-            val delta = Vector3(motion.velocity).scl(deltaTime)
-            move(actor, physicsBody, motion, delta)
-
-            if (physicsBody.bodyType == BodyType.DYNAMIC) {
-                val collided = collidedWithGround(actor)
-                val wasOnGround = onGround[actor] ?: false
-                if (collided && !wasOnGround) {
-                    log.trace { "just landed on ground" }
-                } else if (!collided && wasOnGround) {
-                    log.trace { "just left ground" }
-                }
-                onGround[actor] = collided
-            }
+        game.world.actorsWith { actor, body: PhysicsBody ->
+            update(actor, body, deltaTime)
         }
     }
 
-    private fun applyImpulse(actor: Actor, bodyType: BodyType, motion: Motion, deltaTime: Float) {
-        if (bodyType == BodyType.GHOST || bodyType == BodyType.KINEMATIC || bodyType == BodyType.SOLID) {
-            return
+    private fun update(actor: Actor, body: PhysicsBody, deltaTime: Float) {
+        val delta = Vector3()
+
+        if (body.mode == PhysicsMode.DYNAMIC) {
+            body.velocity.z += DEFAULT_GRAVITY * deltaTime
+            for (force in body.forces) {
+                force.scl(deltaTime)
+                delta.add(force)
+            }
+            body.forces.clear()
         }
-        val impulse = actor.get<Impulse>() ?: return
-        if (impulse.x != 0f) {
-            motion.velocity.x = impulse.x * deltaTime
-        }
-        if (impulse.y != 0f) {
-            motion.velocity.y = impulse.y * deltaTime
-        }
-        if (impulse.z != 0f) {
-            motion.velocity.z = impulse.z
-        }
-        actor.remove<Impulse>()
-        log.trace { "applied impulse $impulse $actor" }
+
+        delta.add(
+            body.velocity.x * deltaTime,
+            body.velocity.y * deltaTime,
+            body.velocity.z * deltaTime
+        )
+        move(actor, body, delta)
     }
 
-    private fun move(actor: Actor, physicsBody: PhysicsBody, motion: Motion, delta: Vector3) {
-        if (delta.isZero) {
-            return
-        }
-
+    private fun move(actor: Actor, body: PhysicsBody, delta: Vector3) {
         val collision = game.collisions.predictCollisions(actor, delta)
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
-            .firstOrNull { collision -> getBodyType(collision.obj) != BodyType.GHOST }
-        // TODO: handle Kinematic collisions
-        if (collision == null || !shouldCollide(physicsBody.bodyType, collision)) {
+            .firstOrNull { collision -> getPhysicsMode(collision.obj) != PhysicsMode.GHOST }
+
+        if (collision == null) {
             actor.move(delta)
             return
         }
 
-        /*
-        collision responses:
-        dynamic -> dynamic: ???
-        dynamic -> solid: kill velocity along collision normal and try moving again
-        dynamic -> kinematic: kill velocity along collision normal and try moving again
-        kinematic -> dynamic: apply impulse!
-        kinematic -> solid: nothing
-         */
+        when (body.mode) {
+            PhysicsMode.DYNAMIC -> solveDynamicContact(actor, body, delta, collision)
+            PhysicsMode.KINEMATIC -> solveKinematicContact(actor, body, delta, collision)
+            else -> actor.move(delta)
+        }
+    }
+
+    private fun solveDynamicContact(actor: Actor, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
+        // move to the position where the collision occurred
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
         actor.move(collisionDelta)
 
-        // an overlap doesn't happen all the time, but it doesn't hurt to double-check each frame
-        resolveOverlap(actor, collision)
+        // make sure actor doesn't overlap the collision side
+        clampPosToCollisionSide(actor, collision)
 
-        // cancel out velocity along collision direction
-        motion.velocity.x -= (motion.velocity.x * abs(collision.hitNormal.x))
-        motion.velocity.y -= (motion.velocity.y * abs(collision.hitNormal.y))
-        motion.velocity.z -= (motion.velocity.z * abs(collision.hitNormal.z))
+        // erase velocity towards collision normal
+        body.velocity.x -= (body.velocity.x * abs(collision.hitNormal.x))
+        body.velocity.y -= (body.velocity.y * abs(collision.hitNormal.y))
+        body.velocity.z -= (body.velocity.z * abs(collision.hitNormal.z))
 
-        // move actor with the remaining delta
+        // erase delta towards collision normal to get remaining movement for this frame
         val newDelta = Vector3(
             delta.x - (delta.x * abs(collision.hitNormal.x)),
             delta.y - (delta.y * abs(collision.hitNormal.y)),
             delta.z - (delta.z * abs(collision.hitNormal.z))
         )
-        move(actor, physicsBody, motion, newDelta)
+        move(actor, body, newDelta)
     }
 
-    private fun shouldCollide(bodyType: BodyType, collision: PredictedCollision): Boolean {
-        val objType = getBodyType(collision.obj)
-        return bodyType == BodyType.DYNAMIC && objType != BodyType.GHOST
+    private fun solveKinematicContact(actor: Actor, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
+        actor.move(delta)
     }
 
-    private fun resolveOverlap(actor: Actor, collision: PredictedCollision) {
+    private fun clampPosToCollisionSide(actor: Actor, collision: PredictedCollision) {
         val box = checkNotNull(actor.getCollisionBox()) {
             "Expected collision box for $actor"
         }
@@ -143,11 +116,11 @@ class Physics(override val game: Game) : Module() {
             }
 
             CollisionSide.TOP -> {
-                z = otherBox.max.z // an actor's origin is the bottom of the collision box, not the center
+                z = otherBox.max.z // actor origins are at the bottom of the collision box, not the center
             }
 
             CollisionSide.BOTTOM -> {
-                z = otherBox.min.z - box.size.z // an actor's origin is the bottom of the collision box, not the center
+                z = otherBox.min.z - box.size.z // actor origins are at the bottom of the collision box, not the center
             }
 
             CollisionSide.CORNER -> {
@@ -163,16 +136,16 @@ class Physics(override val game: Game) : Module() {
             .sortedBy(Collision::distance)
             .filter { collision -> collision.side == CollisionSide.TOP }
             .firstOrNull { collision ->
-                val type = getBodyType(collision.obj)
-                type == BodyType.SOLID || type == BodyType.KINEMATIC
+                val type = getPhysicsMode(collision.obj)
+                type == PhysicsMode.SOLID || type == PhysicsMode.KINEMATIC
             }
         return groundCollision != null
     }
 
-    private fun getBodyType(obj: GameObject) = (obj as? Actor)
+    private fun getPhysicsMode(obj: GameObject) = (obj as? Actor)
         ?.get<PhysicsBody>()
-        ?.bodyType
-        ?: BodyType.SOLID
+        ?.mode
+        ?: PhysicsMode.SOLID
 
 //    private fun update(actor: Actor, velocity: Velocity, deltaTime: Float) {
 //        ifNotNull(actor.get<Acceleration>()) { acceleration ->
