@@ -72,13 +72,13 @@ class Game {
     }
 
     fun resize(width: Int, height: Int) {
-        log.info {"Resizing to ${width}x$height" }
+        log.info { "Resizing to ${width}x$height" }
         renderer.resize(width, height)
         ui.resize(width, height)
     }
 
     fun <T : State> switchState(type: KClass<T>) {
-        log.debug { "switching to state ${type.simpleName}" }
+        log.debug { "Switching to state ${type.simpleName}" }
 
         loading = true
 

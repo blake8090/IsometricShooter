@@ -23,8 +23,8 @@ class UI(override val game: Game) : Module() {
     }
 
     fun setScreen(screen: UIScreen) {
-        log.debug { "setting screen to ${screen::class.simpleName}" }
         clear()
+        log.debug { "Setting screen to ${screen::class.simpleName}" }
         screens.addFirst(screen)
         game.input.addInputProcessor(screen.stage)
         game.input.addControllerListener(screen.controllerNavigation)

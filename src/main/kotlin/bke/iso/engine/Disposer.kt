@@ -22,6 +22,6 @@ object Disposer {
         }
 
         disposable.dispose()
-        log.info { "Disposed $className: '$name'" }
+        log.debug { "Disposed $className: '$name'" }
     }
 }

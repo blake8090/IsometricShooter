@@ -36,11 +36,8 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
-import mu.KotlinLogging
 
 class GameState(override val game: Game) : State() {
-
-    private val log = KotlinLogging.logger {}
 
     private val factory = Factory(game.world)
     private val combat = Combat(game.world, game.events)
@@ -94,7 +91,6 @@ class GameState(override val game: Game) : State() {
     }
 
     private fun bindInput() {
-        log.debug { "binding actions" }
         with(game.input.keyMouse) {
             bind(
                 "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),

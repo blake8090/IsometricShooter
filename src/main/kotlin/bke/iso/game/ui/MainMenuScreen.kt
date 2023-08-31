@@ -11,14 +11,11 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
-import mu.KotlinLogging
 
 class MainMenuScreen(
     private val assets: Assets,
     private val events: Game.Events
 ) : UIScreen() {
-
-    private val log = KotlinLogging.logger {}
 
     override fun create() {
         setup()
@@ -39,7 +36,6 @@ class MainMenuScreen(
         stackTable.row()
         val startButton = TextButtonBuilder("START", skin)
             .onChanged { _, _ ->
-                log.debug { "Start clicked" }
                 events.fire(MainMenuState.StartEvent())
             }
             .onEnter { _, actor ->
@@ -56,7 +52,6 @@ class MainMenuScreen(
         stackTable.row()
         val quitButton = TextButtonBuilder("QUIT", skin)
             .onChanged { _, _ ->
-                log.debug { "Quit clicked" }
                 Gdx.app.exit()
             }
             .onEnter { _, actor ->

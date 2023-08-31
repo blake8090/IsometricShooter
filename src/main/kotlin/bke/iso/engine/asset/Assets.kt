@@ -65,14 +65,14 @@ class Assets(override val game: Game) : Module() {
         get(name, T::class)
 
     fun load(module: String) {
-        log.info {"Loading assets from module '$module'" }
+        log.info { "Loading module '$module'" }
         val path = Path(ASSETS_DIRECTORY, module).toString()
         val files = game.fileSystem.getFiles(path)
 
         for (file in files) {
             val assetLoader = loadersByExtension[file.extension]
             if (assetLoader == null) {
-                log.warn {"No loader found for extension '${file.extension}' - skipping file ${file.path}" }
+                log.warn { "No loader found for '.${file.extension}', skipping file '${file.path}'" }
                 continue
             }
             load(file, assetLoader)
@@ -82,7 +82,7 @@ class Assets(override val game: Game) : Module() {
     private fun <T : Any> load(file: File, assetLoader: AssetLoader<T>) {
         val (name, asset) = assetLoader.load(file)
         set(name, Asset(name, asset))
-        log.info {"Loaded asset '${name}' (${asset::class.simpleName}) - '${file.path}'" }
+        log.info { "Loaded asset '${name}' (${asset::class.simpleName}): '${file.path}'" }
     }
 
     private fun <T : Any> set(name: String, asset: Asset<T>) {
@@ -91,7 +91,7 @@ class Assets(override val game: Game) : Module() {
 }
 
 @OptIn(ExperimentalContracts::class)
-private inline fun <T : Any> requireNull(value: T?, lazyMessage: (T) -> Any)  {
+private inline fun <T : Any> requireNull(value: T?, lazyMessage: (T) -> Any) {
     contract {
         returns() implies (value == null)
     }
