@@ -2,6 +2,8 @@ package bke.iso.game
 
 import bke.iso.engine.System
 import bke.iso.engine.math.Box
+import bke.iso.engine.physics.PhysicsBody
+import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.physics.collision.Collider
 import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.Collisions
@@ -83,6 +85,7 @@ fun World.createShadow(actor: Actor): Actor =
         actor.z,
         // TODO: sprite offsets should be negative for consistency!
         Sprite("shadow", 16f, 16f, SPRITE_ALPHA),
+        PhysicsBody(PhysicsMode.GHOST),
         Shadow(actor.id),
         Collider(
             Vector3(0.25f, 0.25f, Z_OFFSET),
