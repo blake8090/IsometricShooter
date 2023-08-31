@@ -2,7 +2,6 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.physics.collision.Collision
 import bke.iso.engine.physics.collision.CollisionSide
 import bke.iso.engine.physics.collision.PredictedCollision
 import bke.iso.engine.physics.collision.getCollisionBox
@@ -12,7 +11,7 @@ import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 import kotlin.math.abs
 
-const val DEFAULT_GRAVITY: Float = -9.8f
+const val DEFAULT_GRAVITY: Float = -12f
 
 class Physics(override val game: Game) : Module() {
 
@@ -74,6 +73,13 @@ class Physics(override val game: Game) : Module() {
         body.velocity.y -= (body.velocity.y * abs(collision.hitNormal.y))
         body.velocity.z -= (body.velocity.z * abs(collision.hitNormal.z))
 
+        // set velocity when landing on top of a moving kinematic (i.e. a moving platform)
+        if (collision.side == CollisionSide.TOP && getPhysicsMode(collision.obj) == PhysicsMode.KINEMATIC) {
+            val obj = collision.obj as Actor
+            val objBody = obj.get<PhysicsBody>()!!
+            body.velocity.z = objBody.velocity.z
+        }
+
         // erase delta towards collision normal to get remaining movement for this frame
         val newDelta = Vector3(
             delta.x - (delta.x * abs(collision.hitNormal.x)),
@@ -85,6 +91,25 @@ class Physics(override val game: Game) : Module() {
 
     private fun solveKinematicContact(actor: Actor, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
         actor.move(delta)
+
+        // bit of a hack to make vertical moving platforms work.
+        // the dynamic actor handles pushing down on the kinematic,
+        // while the kinematic pushes the dynamic actor upwards.
+        // TODO: find a way to make this logic more generalized
+        val obj = collision.obj as? Actor ?: return
+        val objBody = obj.get<PhysicsBody>() ?: return
+        if (objBody.mode != PhysicsMode.DYNAMIC) {
+            return
+        }
+
+        objBody.velocity.z = body.velocity.z
+        objBody.forces.add(Vector3(0f, 0f, body.velocity.z))
+
+        val box = checkNotNull(actor.getCollisionBox()) {
+            "Expected collision box for $actor"
+        }
+        // make sure object doesn't clip through the platform next frame
+        obj.moveTo(obj.x, obj.y, box.max.z)
     }
 
     private fun clampPosToCollisionSide(actor: Actor, collision: PredictedCollision) {
@@ -130,157 +155,8 @@ class Physics(override val game: Game) : Module() {
         actor.moveTo(x, y, z)
     }
 
-    private fun collidedWithGround(actor: Actor): Boolean {
-        val groundCollision = game.collisions
-            .getCollisions(actor)
-            .sortedBy(Collision::distance)
-            .filter { collision -> collision.side == CollisionSide.TOP }
-            .firstOrNull { collision ->
-                val type = getPhysicsMode(collision.obj)
-                type == PhysicsMode.SOLID || type == PhysicsMode.KINEMATIC
-            }
-        return groundCollision != null
-    }
-
     private fun getPhysicsMode(obj: GameObject) = (obj as? Actor)
         ?.get<PhysicsBody>()
         ?.mode
         ?: PhysicsMode.SOLID
-
-//    private fun update(actor: Actor, velocity: Velocity, deltaTime: Float) {
-//        ifNotNull(actor.get<Acceleration>()) { acceleration ->
-//            velocity.x += acceleration.x * deltaTime
-//            velocity.y += acceleration.y * deltaTime
-//            velocity.z += acceleration.z * deltaTime
-//        }
-//
-//        ifNotNull(actor.get<Gravity>()) { gravity ->
-//            velocity.z += gravity.acceleration * deltaTime
-//            velocity.z = max(velocity.z, gravity.terminalVelocity)
-//        }
-//
-//        val delta = Vector3(
-//            velocity.x * deltaTime,
-//            velocity.y * deltaTime,
-//            velocity.z * deltaTime
-//        )
-//        move(actor, delta)
-//        handleGroundCollision(actor, velocity)
-//
-//        // TODO: implement after refactor
-////        val upwardsCollision = game.collisions
-////            .getCollisions(actor)
-////            .filter { !it.solid && it.side == CollisionSide.BOTTOM && !(it.obj is Actor && it.obj.has<Shadow>()) }
-////            .minByOrNull { it.distance }
-////        if (upwardsCollision != null) {
-////            //log.trace { "pushing up" }
-////            val obj = upwardsCollision.obj
-////            if (obj is Actor && velocity.z > 0f) {
-////                val v = obj.get<Velocity>()!!
-////                v.z = velocity.z
-////                val data = actor.getCollisionData()!!
-////                //move(obj, Vector3(0f, 0f, velocity.z * deltaTime))
-////                obj.moveTo(obj.x, obj.y, data.box.max.z + (velocity.z * deltaTime))
-////            }
-////        }
-//    }
-//
-//    private fun move(actor: Actor, delta: Vector3) {
-//        if (delta.isZero) {
-//            return
-//        }
-//
-//        val collisions = game.collisions.predictCollisions(actor, delta)
-//            .filter(PredictedCollision::solid)
-//            .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
-//        val collision = collisions.firstOrNull()
-//        if (collision == null) {
-//            actor.move(delta)
-//            return
-//        }
-//
-//        val collisionDelta = Vector3(delta).scl(collision.collisionTime)
-//        actor.move(collisionDelta)
-//
-//        // sometimes an actor may clip into another game object like a wall or a ground tile.
-//        // in case of an overlap, the actor's position should be reset to the outer edge of the object's collision box.
-//        val box = checkNotNull(actor.getCollisionData()?.box) {
-//            "Expected CollisionData for $actor"
-//        }
-//        if (box.getOverlapArea(collision.box) != 0f) {
-//            log.trace { "Resolving overlap between $actor and ${collision.obj} on side: ${collision.side}" }
-//            resolveOverlap(actor, box, collision)
-//        }
-//        killVelocity(actor, collision.hitNormal)
-//        slide(actor, delta, collision.hitNormal)
-//    }
-//
-//    private fun killVelocity(actor: Actor, hitNormal: Vector3) {
-//        val velocity = requireNotNull(actor.get<Velocity>()) {
-//            "Expected Velocity component for $actor"
-//        }
-//        velocity.x -= velocity.x * abs(hitNormal.x)
-//        velocity.y -= velocity.y * abs(hitNormal.y)
-//        velocity.z -= velocity.z * abs(hitNormal.z)
-//    }
-//
-//    private fun slide(actor: Actor, delta: Vector3, hitNormal: Vector3) {
-//        // first, eliminate motion towards solid object by projecting the motion on to the collision normal
-//        val eliminatedMotion = Vector3(hitNormal).scl(delta.dot(hitNormal))
-//        // then, subtract the eliminated motion from the original motion, thus producing a slide effect
-//        val newDelta = Vector3(delta).sub(eliminatedMotion)
-//        move(actor, newDelta)
-//    }
-//
-//    private fun resolveOverlap(actor: Actor, box: Box, collision: PredictedCollision) {
-//        var x = actor.x
-//        var y = actor.y
-//        var z = actor.z
-//        when (collision.side) {
-//            CollisionSide.LEFT -> {
-//                x = collision.box.min.x - (box.size.x / 2f)
-//            }
-//
-//            CollisionSide.RIGHT -> {
-//                x = collision.box.max.x + (box.size.x / 2f)
-//            }
-//
-//            CollisionSide.FRONT -> {
-//                y = collision.box.min.y - (box.size.y / 2f)
-//            }
-//
-//            CollisionSide.BACK -> {
-//                y = collision.box.max.y + (box.size.y / 2f)
-//            }
-//
-//            CollisionSide.TOP -> {
-//                // an actor's origin is the bottom of the collision box, not the center
-//                z = collision.box.max.z
-//            }
-//
-//            CollisionSide.BOTTOM -> {
-//                z = collision.box.min.z - (box.size.z / 2f)
-//            }
-//
-//            CollisionSide.CORNER -> {
-//                log.warn { "Could not resolve corner collision" }
-//            }
-//        }
-//        actor.moveTo(x, y, z)
-//    }
-//
-//    private fun handleGroundCollision(actor: Actor, velocity: Velocity) {
-//        val collision = game.collisions
-//            .getCollisions(actor)
-//            .filter { collision -> collision.solid && collision.side == CollisionSide.TOP }
-//            .minByOrNull(Collision::distance)
-//            ?: return
-//
-//        val obj = collision.obj as? Actor ?: return
-//        ifNotNull(obj.get<Velocity>()) { objVelocity ->
-//            velocity.x += objVelocity.x
-//            velocity.y += objVelocity.y
-//            velocity.z += objVelocity.z
-//        }
-//    }
 }
