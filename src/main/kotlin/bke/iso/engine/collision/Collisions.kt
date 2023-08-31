@@ -148,11 +148,6 @@ class Collisions(override val game: Game) : Module() {
         val objBox = obj.getCollisionBox() ?: return null
         val sweptCollision = sweepTest(box, objBox, delta) ?: return null
 
-//        log.trace {
-//            "dist: $distance, collision time: ${sweptCollision.collisionTime}," +
-//                    " hit normal: ${sweptCollision.hitNormal}, side: $side"
-//        }
-
         return PredictedCollision(
             obj = obj,
             box = objBox,
