@@ -4,7 +4,7 @@ import bke.iso.engine.System
 import bke.iso.engine.math.Location
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.physics.PhysicsBody
-import bke.iso.engine.physics.collision.Collider
+import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor

@@ -1,4 +1,4 @@
-package bke.iso.engine.physics.collision
+package bke.iso.engine.collision
 
 import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3

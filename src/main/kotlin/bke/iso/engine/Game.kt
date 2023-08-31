@@ -3,7 +3,7 @@ package bke.iso.engine
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.file.FileSystem
 import bke.iso.engine.input.Input
-import bke.iso.engine.physics.collision.Collisions
+import bke.iso.engine.collision.Collisions
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI

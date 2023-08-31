@@ -1,4 +1,4 @@
-package bke.iso.engine.physics.collision
+package bke.iso.engine.collision
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module

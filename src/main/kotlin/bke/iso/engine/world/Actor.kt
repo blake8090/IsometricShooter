@@ -1,7 +1,7 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.physics.collision.getCollisionBox
+import bke.iso.engine.collision.getCollisionBox
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.abs
 import kotlin.math.floor

@@ -2,9 +2,9 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.physics.collision.CollisionSide
-import bke.iso.engine.physics.collision.PredictedCollision
-import bke.iso.engine.physics.collision.getCollisionBox
+import bke.iso.engine.collision.CollisionSide
+import bke.iso.engine.collision.PredictedCollision
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
