@@ -6,7 +6,7 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
 import bke.iso.game.actor.BulletType
-import bke.iso.game.actor.Player
+import bke.iso.game.player.Player
 import bke.iso.game.actor.createBullet
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging

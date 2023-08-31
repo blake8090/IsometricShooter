@@ -19,12 +19,12 @@ import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.Factory
 import bke.iso.game.actor.MovingPlatformSystem
-import bke.iso.game.actor.PLAYER_MAX_HEALTH
-import bke.iso.game.actor.Player
-import bke.iso.game.actor.PlayerSystem
+import bke.iso.game.player.PLAYER_MAX_HEALTH
+import bke.iso.game.player.Player
+import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.actor.createMovingPlatform
-import bke.iso.game.actor.createPlayer
+import bke.iso.game.player.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
 import bke.iso.game.ui.CrosshairCursor
@@ -45,6 +45,8 @@ class GameState(override val game: Game) : State() {
     private val factory = Factory(game.world)
     private val combat = Combat(game.world, game.events)
     private val crosshair = CrosshairCursor(game.assets, game.input)
+
+    private val gameHud = GameHUD(game.assets)
 
     override val systems: Set<System> = setOf(
         PlayerSystem(game.input, game.world, game.renderer, combat),
@@ -75,27 +77,25 @@ class GameState(override val game: Game) : State() {
 
     override fun start() {
         game.renderer.setCursor(crosshair)
-        game.ui.setScreen(GameHUD(game.assets))
-        game.events.fire(GameHUD.UpdateEvent(PLAYER_MAX_HEALTH))
+        game.ui.setScreen(gameHud)
+        gameHud.updateHealth(PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is DrawActorEvent -> drawHealthBar(event.actor, event.batch)
+            is DrawActorEvent -> {
+                drawHealthBar(event.actor, event.batch)
+            }
 
-            is OnDamagePlayerEvent -> game.events.fire(
-                GameHUD.UpdateEvent(
-                    PLAYER_MAX_HEALTH,
-                    event.health
-                )
-            )
+            is OnDamagePlayerEvent -> {
+                gameHud.updateHealth(event.health, PLAYER_MAX_HEALTH)
+            }
         }
     }
 
     private fun bindInput() {
         log.debug { "binding actions" }
         with(game.input.keyMouse) {
-            // keyboard & mouse
             bind(
                 "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
                 "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
@@ -121,7 +121,6 @@ class GameState(override val game: Game) : State() {
         }
 
         with(game.input.controller) {
-            // controller
             bind(
                 "run" to ControllerBinding(ControllerButton.LEFTBUMPER.ordinal, ButtonState.DOWN),
                 "moveX" to ControllerAxisBinding(ControllerAxis.LEFTX.ordinal),
