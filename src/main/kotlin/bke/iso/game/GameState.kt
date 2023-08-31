@@ -27,6 +27,10 @@ import bke.iso.game.actor.createMovingPlatform
 import bke.iso.game.player.createPlayer
 import bke.iso.game.asset.GameMap
 import bke.iso.game.asset.GameMapLoader
+import bke.iso.game.combat.Combat
+import bke.iso.game.combat.Health
+import bke.iso.game.combat.HealthBar
+import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.ui.CrosshairCursor
 import bke.iso.game.ui.GameHUD
 import bke.iso.game.ui.LoadingScreen
@@ -84,7 +88,7 @@ class GameState(override val game: Game) : State() {
                 drawHealthBar(event.actor, event.batch)
             }
 
-            is OnDamagePlayerEvent -> {
+            is PlayerDamageEvent -> {
                 gameHud.updateHealth(event.health, PLAYER_MAX_HEALTH)
             }
         }

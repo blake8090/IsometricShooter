@@ -7,8 +7,8 @@ import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
-import bke.iso.game.Health
-import bke.iso.game.HealthBar
+import bke.iso.game.combat.Health
+import bke.iso.game.combat.HealthBar
 import com.badlogic.gdx.math.Vector3
 
 class Factory(private val world: World) {

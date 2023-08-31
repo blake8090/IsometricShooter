@@ -13,7 +13,7 @@ import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
-import bke.iso.game.Combat
+import bke.iso.game.combat.Combat
 import com.badlogic.gdx.math.Vector3
 
 enum class BulletType(
@@ -61,7 +61,7 @@ class BulletSystem(
             if (obj.has<Bullet>() || obj.id == bullet.shooterId) {
                 return
             }
-            combat.onDamage(obj, bullet.type.damage)
+            combat.applyDamage(obj, bullet.type.damage)
         }
         world.delete(actor)
     }

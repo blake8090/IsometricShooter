@@ -7,7 +7,7 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
-import bke.iso.game.Combat
+import bke.iso.game.combat.Combat
 import bke.iso.game.actor.BulletType
 import com.badlogic.gdx.math.Vector3
 

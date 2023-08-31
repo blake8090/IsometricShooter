@@ -6,7 +6,7 @@ import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
-import bke.iso.game.Combat
+import bke.iso.game.combat.Combat
 import bke.iso.game.player.Player
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.collision.Segment

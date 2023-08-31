@@ -10,8 +10,8 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
-import bke.iso.game.Health
-import bke.iso.game.HealthBar
+import bke.iso.game.combat.Health
+import bke.iso.game.combat.HealthBar
 import com.badlogic.gdx.math.Vector3
 
 const val PLAYER_MAX_HEALTH: Float = 5f
