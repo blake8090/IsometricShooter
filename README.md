@@ -4,16 +4,24 @@ A 2D isometric shooter written in Kotlin and using LibGDX.
 
 ## Description
 
-This is an MVP demonstrating the core features required to develop a 2D isometric game, such as physics, collision detection, and input handling.
+This is an MVP demonstrating the core features required to develop a 2D isometric game such as physics, collision detection, input handling, etc.
 
-Currently supported features are the following:
+## Features
 
-- 2D isometric rendering
-- 3D collision detection and response using AABBs
-- ECS
-- Input binding (keyboard and mouse)
-- State machine
+- 2.5D isometric view
+- 3D physics
+- Input binding
+- Controller support
+- UI
 - Synchronous event handling
-- Lightweight DI framework
 - Asset management
-- Debug mode - rendering 3D shapes
+- 3D shape rendering
+
+## Roadmap
+
+- [ ] Fully playable vertical slice
+- [ ] Settings
+- [ ] 3D Audio
+- [ ] Animation
+- [ ] Serialization
+- [ ] Saving & loading
