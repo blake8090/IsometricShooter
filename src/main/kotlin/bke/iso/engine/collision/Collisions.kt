@@ -3,7 +3,6 @@ package bke.iso.engine.collision
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
-import bke.iso.engine.math.getRay
 import bke.iso.engine.render.debug.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
@@ -67,7 +66,11 @@ class Collisions(override val game: Game) : Module() {
         val area = Box.fromMinMax(segment)
         game.renderer.debug.addBox(area, 1f, Color.ORANGE)
 
-        val ray = segment.getRay()
+        val direction = Vector3(segment.b)
+            .sub(segment.a)
+            .nor()
+        val ray = Ray(segment.a, direction)
+
         return game.world
             .getObjectsInArea(area)
             .mapNotNull { obj -> checkCollision(segment, ray, obj) }

@@ -4,7 +4,6 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.math.toVector2
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
@@ -82,16 +81,16 @@ class Renderer(override val game: Game) : Module() {
     }
 
     fun setCameraPos(worldPos: Vector3) {
-        val pos = toScreen(worldPos)
-        camera.position.x = pos.x
-        camera.position.y = pos.y
+        camera.position.set(toScreen(worldPos), 0f)
     }
 
     fun getCursorPos(): Vector2 {
         val pos = customCursor
             ?.getPos()
             ?: Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
-        return camera.unproject(Vector3(pos.x, pos.y, 0f)).toVector2()
+
+        val screenPos = camera.unproject(Vector3(pos, 0f))
+        return Vector2(screenPos.x, screenPos.y)
     }
 
     fun setCursor(customCursor: CustomCursor) {
