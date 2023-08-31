@@ -41,7 +41,9 @@ class Grid {
     fun getAll(): Set<GameObject> {
         val objects = mutableSetOf<GameObject>()
         objects.addAll(tileGrid.values)
-        actorGrid.values.forEach(objects::addAll)
+        for (actorSet in actorGrid.values) {
+            objects.addAll(actorSet)
+        }
         return objects
     }
 

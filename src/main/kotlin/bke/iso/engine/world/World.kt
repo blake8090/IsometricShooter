@@ -32,9 +32,13 @@ class World(override val game: Game) : Module() {
         id: String = generateActorId()
     ): Actor {
         val actor = Actor(id, this::onMove)
-        components.forEach(actor::add)
-        actor.moveTo(x, y, z)
         actorsById[actor.id] = actor
+
+        for (component in components) {
+            actor.add(component)
+        }
+
+        actor.moveTo(x, y, z)
         return actor
     }
 

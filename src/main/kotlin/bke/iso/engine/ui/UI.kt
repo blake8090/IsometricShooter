@@ -11,15 +11,21 @@ class UI(override val game: Game) : Module() {
     private val screens = ArrayDeque<UIScreen>()
 
     override fun update(deltaTime: Float) {
-        screens.forEach { screen -> screen.render(deltaTime) }
+        for (screen in screens) {
+            screen.render(deltaTime)
+        }
     }
 
     override fun dispose() {
-        screens.forEach(UIScreen::dispose)
+        for (screen in screens) {
+            screen.dispose()
+        }
     }
 
     fun resize(width: Int, height: Int) {
-        screens.forEach { screen -> screen.resize(width, height) }
+        for (screen in screens) {
+            screen.resize(width, height)
+        }
     }
 
     fun setScreen(screen: UIScreen) {
@@ -35,7 +41,7 @@ class UI(override val game: Game) : Module() {
     }
 
     private fun clear() {
-        screens.forEach { screen ->
+        for (screen in screens) {
             log.debug { "Disposing screen ${screen::class.simpleName}" }
             game.input.removeInputProcessor(screen.stage)
             game.input.removeControllerListener(screen.controllerNavigation)
@@ -45,6 +51,8 @@ class UI(override val game: Game) : Module() {
     }
 
     fun handleEvent(event: Event) {
-        screens.forEach { screen -> screen.handleEvent(event) }
+        for (screen in screens) {
+            screen.handleEvent(event)
+        }
     }
 }

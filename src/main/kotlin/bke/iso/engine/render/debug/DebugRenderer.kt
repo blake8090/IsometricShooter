@@ -80,7 +80,7 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
 
     fun addBox(box: Box, width: Float, color: Color) {
         if (enabled) {
-            box.segments.forEach { segment ->
+            for (segment in box.segments) {
                 addLine(segment.a, segment.b, width, color)
             }
         }
@@ -134,7 +134,9 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
     fun draw() {
         if (enabled) {
             shapeDrawer.begin()
-            shapes.forEach(::drawShape)
+            for (shape in shapes) {
+                drawShape(shape)
+            }
             shapeDrawer.end()
         }
         Pools.freeAll(shapes)
