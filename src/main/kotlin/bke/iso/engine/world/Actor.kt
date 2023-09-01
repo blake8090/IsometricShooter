@@ -16,7 +16,7 @@ private const val Z_CLAMP_THRESHOLD = 0.00001f
 data class Description(val text: String) : Component()
 
 class Actor(
-    val id: String = generateActorId(),
+    val id: String,
     private val onMove: (Actor) -> Unit = {}
 ) : GameObject {
 
@@ -129,11 +129,4 @@ class Actor(
             "(actor id:$id)"
         }
     }
-}
-
-private const val ID_LENGTH = 6
-
-fun generateActorId(): String {
-    val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-    return List(ID_LENGTH) { charPool.random() }.joinToString("")
 }

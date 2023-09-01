@@ -25,7 +25,7 @@ class PlayerSystem(
     private val flySpeed = 4f
 
     override fun update(deltaTime: Float) {
-        world.actorsWith<Player> { actor, _ ->
+        world.actors.each<Player> { actor, _ ->
             updatePlayer(actor)
 
             input.onAction("toggleDebug") {

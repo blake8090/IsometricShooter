@@ -19,8 +19,8 @@ const val PLAYER_MAX_HEALTH: Float = 5f
 class Player : Component()
 
 fun World.createPlayer(location: Location): Actor =
-    newActor(
-        location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
+    actors.create(
+        location,
         Sprite("game/gfx/objects/player", 32f, 0f),
         Player(),
         Collider(

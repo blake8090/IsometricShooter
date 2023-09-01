@@ -40,7 +40,7 @@ class BulletSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.actorsWith<Bullet> { actor, bullet ->
+        world.actors.each<Bullet> { actor, bullet ->
             update(actor, bullet)
         }
     }
@@ -48,7 +48,7 @@ class BulletSystem(
     private fun update(actor: Actor, bullet: Bullet) {
         val distance = bullet.startPos.dst(actor.pos)
         if (distance > MAX_BULLET_DISTANCE) {
-            world.delete(actor)
+            world.actors.delete(actor)
             return
         }
         getFirstCollidingObject(actor)?.let { obj ->
@@ -63,7 +63,7 @@ class BulletSystem(
             }
             combat.applyDamage(obj, bullet.type.damage)
         }
-        world.delete(actor)
+        world.actors.delete(actor)
     }
 
     private fun getFirstCollidingObject(actor: Actor) =
@@ -75,7 +75,7 @@ class BulletSystem(
 
 fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType): Actor {
     val pos = shooter.pos
-    return newActor(
+    return actors.create(
         pos.x,
         pos.y,
         pos.z + bulletType.zOffset,

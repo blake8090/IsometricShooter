@@ -18,7 +18,7 @@ class Physics(override val game: Game) : Module() {
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
-        game.world.actorsWith { actor, body: PhysicsBody ->
+        game.world.actors.each { actor, body: PhysicsBody ->
             update(actor, body, deltaTime)
         }
     }

@@ -28,9 +28,9 @@ class ShadowSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.actorsWith { actor: Actor, shadow: Shadow ->
-            val sprite = actor.get<Sprite>() ?: return@actorsWith
-            val parent = world.getActor(shadow.parentId)
+        world.actors.each { actor: Actor, shadow: Shadow ->
+            val sprite = actor.get<Sprite>() ?: return@each
+            val parent = world.actors.get(shadow.parentId)
 
             val box = findTallestBoxBeneath(parent)
             val z = box?.max?.z ?: 0f
@@ -79,7 +79,7 @@ class ShadowSystem(
 }
 
 fun World.createShadow(actor: Actor): Actor =
-    newActor(
+    actors.create(
         actor.x,
         actor.y,
         actor.z,

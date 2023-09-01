@@ -24,7 +24,7 @@ data class MovingPlatform(
 class MovingPlatformSystem(private val world: World) : System {
 
     override fun update(deltaTime: Float) {
-        world.actorsWith{ actor: Actor, movingPlatform: MovingPlatform ->
+        world.actors.each { actor: Actor, movingPlatform: MovingPlatform ->
             if (actor.z >= movingPlatform.maxZ) {
                 actor.moveTo(actor.x, actor.y, movingPlatform.maxZ)
                 movingPlatform.movingUp = movingPlatform.movingUp.not()
@@ -44,7 +44,7 @@ class MovingPlatformSystem(private val world: World) : System {
 }
 
 fun World.createMovingPlatform(location: Location): Actor =
-    newActor(
+    actors.create(
         location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
         Sprite("game/gfx/objects/platform", 0f, 32f),
         MovingPlatform(),

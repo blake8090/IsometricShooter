@@ -27,7 +27,7 @@ class TurretSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.actorsWith<Turret> { actor, turret ->
+        world.actors.each<Turret> { actor, turret ->
             turret.elapsedCooldownTime += deltaTime
             if (turret.elapsedCooldownTime >= MINIMUM_COOLDOWN_SECONDS) {
                 turret.elapsedCooldownTime = 0f
@@ -40,7 +40,7 @@ class TurretSystem(
     }
 
     private fun engagePlayer(turretActor: Actor, turret: Turret) {
-        val (player, _) = world.findActorWith<Player>() ?: return
+        val player = world.actors.find<Player>() ?: return
         if (withinRange(turretActor, player) && canSee(turretActor, player)) {
             shoot(turretActor, turret, player)
         }

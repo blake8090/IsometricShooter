@@ -10,7 +10,7 @@ import io.kotest.matchers.shouldBe
 class ActorTest : StringSpec({
 
     "should return locations" {
-        val actor = Actor()
+        val actor = Actor("")
         actor.add(Collider(Vector3(1f, 1f, 1f)))
 
         val locations = actor.getLocations()
@@ -27,7 +27,7 @@ class ActorTest : StringSpec({
     }
 
     "should return location with negative coordinates" {
-        val actor = Actor()
+        val actor = Actor("")
         actor.moveTo(-1.5f, -2.01f, -0.5f)
 
         val locations = actor.getLocations()
@@ -37,7 +37,7 @@ class ActorTest : StringSpec({
     }
 
     "should return locations with both positive and negative coordinates" {
-        val actor = Actor()
+        val actor = Actor("")
         actor.moveTo(1f,  0f, 0f)
         actor.add(
             Collider(
@@ -63,7 +63,7 @@ class ActorTest : StringSpec({
     "should clamp z for small negative values" {
         val z = 0.00484398f
         val dz = -0.00484401f
-        val actor = Actor()
+        val actor = Actor("")
         actor.moveTo(0f, 0f, z)
 
         actor.move(0f, 0f, dz)
@@ -73,7 +73,7 @@ class ActorTest : StringSpec({
     "should clamp z for small positive values" {
         val z = 0f
         val dz = 0.000000125f
-        val actor = Actor()
+        val actor = Actor("")
         actor.moveTo(0f, 0f, z)
 
         actor.move(0f, 0f, dz)

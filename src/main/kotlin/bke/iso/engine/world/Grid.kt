@@ -1,56 +1,81 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.render.Sprite
+import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.ObjectSet
+import com.badlogic.gdx.utils.OrderedMap
 
 class Grid {
 
-    private val actorGrid = mutableMapOf<Location, MutableSet<Actor>>()
-    private val locationsByActor = mutableMapOf<Actor, MutableSet<Location>>()
+    private val objectMap = OrderedMap<Location, GridData>()
+    private val objects = ObjectSet<GameObject>()
+    private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
 
-    private val tileGrid = mutableMapOf<Location, Tile>()
-
-    val actors: Set<Actor> = locationsByActor.keys
-
-    fun setTile(location: Location, sprite: Sprite) {
-        val tile = Tile(sprite, location)
-        tileGrid[location] = tile
-        tile.location = location
-    }
+    fun getObjects(): ObjectSet.ObjectSetIterator<GameObject> =
+        objects.iterator()
 
     fun update(actor: Actor) {
-        remove(actor)
+        if (!objects.contains(actor)) {
+            objects.add(actor)
+        }
+
+        removeLocations(actor)
         for (location in actor.getLocations()) {
-            actorGrid
-                .getOrPut(location) { mutableSetOf() }
-                .add(actor)
-            locationsByActor
-                .getOrPut(actor) { mutableSetOf() }
-                .add(location)
+            val data = getOrPutData(location)
+            data.actors.add(actor)
+            getOrPutLocations(actor).add(location)
         }
     }
 
+    private fun getOrPutLocations(actor: Actor): ObjectSet<Location> {
+        if (!locationsByActor.containsKey(actor)) {
+            locationsByActor.put(actor, ObjectSet())
+        }
+        val locations = locationsByActor.get(actor)
+        return locations
+    }
+
     fun remove(actor: Actor) {
+        removeLocations(actor)
+        objects.remove(actor)
+    }
+
+    private fun removeLocations(actor: Actor) {
         val locations = locationsByActor[actor] ?: return
         for (location in locations) {
-            actorGrid[location]?.remove(actor)
+            val data = checkNotNull(objectMap.get(location)) {
+                "Expected GridData for $location from $actor"
+            }
+            data.actors.remove(actor)
         }
         locationsByActor.remove(actor)
     }
 
-    fun getAll(): Set<GameObject> {
+    fun objectsAt(location: Location): Set<GameObject> {
         val objects = mutableSetOf<GameObject>()
-        objects.addAll(tileGrid.values)
-        for (actorSet in actorGrid.values) {
-            objects.addAll(actorSet)
+        objectMap[location]?.let { data ->
+            objects.addAll(data.actors)
+            data.tile?.let(objects::add)
         }
         return objects
     }
 
-    fun getAll(location: Location): Set<GameObject> {
-        val objects = mutableSetOf<GameObject>()
-        tileGrid[location]?.let(objects::add)
-        actorGrid[location]?.let(objects::addAll)
-        return objects
+    fun setTile(tile: Tile) {
+        val data = getOrPutData(tile.location)
+        data.tile = tile
+        objects.add(tile)
+    }
+
+    private fun getOrPutData(location: Location): GridData {
+        if (!objectMap.containsKey(location)) {
+            objectMap.put(location, GridData())
+        }
+        val data = objectMap.get(location)
+        return data
     }
 }
+
+private data class GridData(
+    val actors: ObjectSet<Actor> = ObjectSet(),
+    var tile: Tile? = null
+)

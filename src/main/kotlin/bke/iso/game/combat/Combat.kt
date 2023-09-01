@@ -41,7 +41,7 @@ class Combat(private val world: World, private val events: Game.Events) {
         if (actor.has<Player>()) {
             return
         }
-        world.delete(actor)
+        world.actors.delete(actor)
         log.debug { "Actor $actor has been destroyed" }
     }
 }

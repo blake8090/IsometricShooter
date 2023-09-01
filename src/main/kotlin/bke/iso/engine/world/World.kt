@@ -5,79 +5,25 @@ import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
-import kotlin.reflect.KClass
 
 interface GameObject
 
 class World(override val game: Game) : Module() {
 
     private val grid = Grid()
-    private val actorsById = mutableMapOf<String, Actor>()
-    private val deletedActors = mutableSetOf<Actor>()
+
+    val actors = Actors(grid)
 
     val objects: Set<GameObject>
-        get() = grid.getAll()
+        get() = grid.getObjects().toSet()
 
     override fun update(deltaTime: Float) {
-        for (actor in deletedActors) {
-            actorsById.remove(actor.id)
-            grid.remove(actor)
-        }
-        deletedActors.clear()
-    }
-
-    fun newActor(
-        x: Float, y: Float, z: Float,
-        vararg components: Component,
-        id: String = generateActorId()
-    ): Actor {
-        val actor = Actor(id, this::onMove)
-        actorsById[actor.id] = actor
-
-        for (component in components) {
-            actor.add(component)
-        }
-
-        actor.moveTo(x, y, z)
-        return actor
-    }
-
-    fun getActor(id: String): Actor =
-        actorsById[id] ?: throw IllegalArgumentException("No actor found with id $id")
-
-    private fun onMove(actor: Actor) =
-        grid.update(actor)
-
-    fun delete(actor: Actor) {
-        deletedActors.add(actor)
+        actors.update()
     }
 
     fun setTile(location: Location, sprite: Sprite) {
-        grid.setTile(location, sprite)
+        grid.setTile(Tile(sprite, location))
     }
-
-    fun <T : Component> actorsWith(type: KClass<out T>, action: (Actor, T) -> Unit) {
-        for ((actor, component) in findActorsWith(type)) {
-            action.invoke(actor, component)
-        }
-    }
-
-    inline fun <reified T : Component> actorsWith(noinline action: (Actor, T) -> Unit) {
-        actorsWith(T::class, action)
-    }
-
-    private fun <T : Component> findActorsWith(type: KClass<out T>): Set<Pair<Actor, T>> =
-        grid.actors
-            .mapNotNullTo(mutableSetOf()) { actor ->
-                actor.get(type)
-                    ?.let { component -> actor to component }
-            }
-
-    fun <T : Component> findActorWith(type: KClass<out T>): Pair<Actor, T>? =
-        findActorsWith(type).firstOrNull()
-
-    inline fun <reified T : Component> findActorWith(): Pair<Actor, T>? =
-        findActorWith(T::class)
 
     fun getObjectsInArea(box: Box): Set<GameObject> {
         val minX = box.min.x.toInt()
@@ -92,7 +38,7 @@ class World(override val game: Game) : Module() {
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ..maxZ) {
-                    objects.addAll(grid.getAll(Location(x, y, z)))
+                    objects.addAll(grid.objectsAt(Location(x, y, z)))
                 }
             }
         }
