@@ -9,8 +9,8 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import mu.KotlinLogging
 import kotlin.reflect.KClass
@@ -19,7 +19,6 @@ import kotlin.time.measureTime
 
 interface Event
 
-@Suppress("DeferredResultUnused")
 class Game {
 
     private val log = KotlinLogging.logger {}
@@ -89,7 +88,7 @@ class Game {
 
         state = constructor.call(this)
         state.loadingScreen?.let(ui::setScreen)
-        KtxAsync.async { load(state) }
+        KtxAsync.launch { load(state) }
     }
 
     private suspend fun load(state: State) {
