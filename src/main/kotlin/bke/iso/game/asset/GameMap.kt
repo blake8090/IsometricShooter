@@ -13,7 +13,7 @@ class GameMap(val layers: List<Layer>) {
 // TODO: refactor this!
 class GameMapLoader : AssetLoader<GameMap> {
 
-    override fun load(file: File): Pair<String, GameMap> {
+    override fun load(file: File): GameMap {
         var mode = Mode.NONE
         val layers = mutableListOf<GameMap.Layer>()
 
@@ -40,7 +40,7 @@ class GameMapLoader : AssetLoader<GameMap> {
             }
         }
 
-        return file.nameWithoutExtension to GameMap(layers)
+        return GameMap(layers)
     }
 
     private enum class Mode {

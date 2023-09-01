@@ -46,7 +46,7 @@ class MovingPlatformSystem(private val world: World) : System {
 fun World.createMovingPlatform(location: Location): Actor =
     newActor(
         location.x.toFloat(), location.y.toFloat(), location.z.toFloat(),
-        Sprite("platform", 0f, 32f),
+        Sprite("game/gfx/objects/platform", 0f, 32f),
         MovingPlatform(),
         Collider(Vector3(2f, 1f, 0.125f)),
         PhysicsBody(PhysicsMode.KINEMATIC),

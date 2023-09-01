@@ -24,7 +24,7 @@ class CrosshairCursor(
     override fun getPos(): Vector2 = pos
 
     override fun create() {
-        texture = assets.get<Texture>("cursor")
+        texture = assets.get<Texture>("game/gfx/cursor")
         offset = Vector2(texture.width / 2f, texture.height / 2f)
     }
 

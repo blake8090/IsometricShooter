@@ -44,10 +44,8 @@ class Fonts(private val assets: Assets) {
 }
 
 class FreeTypeFontGeneratorLoader : AssetLoader<FreeTypeFontGenerator> {
-    override fun load(file: File): Pair<String, FreeTypeFontGenerator> {
-        val generator = FreeTypeFontGenerator(FileHandle(file))
-        return file.nameWithoutExtension to generator
-    }
+    override fun load(file: File): FreeTypeFontGenerator =
+        FreeTypeFontGenerator(FileHandle(file))
 }
 
 data class FontOptions(

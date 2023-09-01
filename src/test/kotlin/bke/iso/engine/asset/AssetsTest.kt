@@ -13,13 +13,13 @@ class AssetsTest : StringSpec({
 
     "should throw exception when add duplicate loader" {
         class LoaderA : AssetLoader<String> {
-            override fun load(file: File): Pair<String, String> =
-                "test" to "test"
+            override fun load(file: File): String =
+                "test"
         }
 
         class LoaderB : AssetLoader<String> {
-            override fun load(file: File): Pair<String, String> =
-                "test" to "test"
+            override fun load(file: File): String =
+                "test"
         }
 
         val exception = shouldThrow<IllegalArgumentException> {

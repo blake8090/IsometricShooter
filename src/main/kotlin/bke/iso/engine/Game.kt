@@ -1,7 +1,7 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.file.FileSystem
+import bke.iso.engine.file.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.physics.Physics
@@ -25,7 +25,7 @@ class Game {
 
     val events: Events = Events()
     val assets: Assets = Assets(this)
-    val fileSystem: FileSystem = FileSystem()
+    val files: Files = Files()
     val input: Input = Input(this)
     val collisions: Collisions = Collisions(this)
     val physics: Physics = Physics(this)

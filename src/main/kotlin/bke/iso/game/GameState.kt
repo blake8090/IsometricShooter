@@ -13,6 +13,7 @@ import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.world.Actor
@@ -36,7 +37,6 @@ import bke.iso.game.ui.GameHUD
 import bke.iso.game.ui.LoadingScreen
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
@@ -138,7 +138,7 @@ class GameState(override val game: Game) : State() {
     }
 
     private fun loadMap() {
-        val gameMap = game.assets.get<GameMap>("collision-test")
+        val gameMap = game.assets.get<GameMap>("game/maps/collision-test")
         for (layer in gameMap.layers) {
             for ((y, row) in layer.tiles.reversed().withIndex()) {
                 for ((x, char) in row.withIndex()) {
@@ -156,8 +156,8 @@ class GameState(override val game: Game) : State() {
 
     private fun readTile(char: Char, location: Location) {
         when (char) {
-            '1' -> game.world.setTile(location, Sprite("floor", 0f, 16f))
-            '2' -> game.world.setTile(location, Sprite("floor2", 0f, 16f))
+            '1' -> game.world.setTile(location, Sprite("game/gfx/tiles/floor", 0f, 16f))
+            '2' -> game.world.setTile(location, Sprite("game/gfx/tiles/floor2", 0f, 16f))
         }
     }
 
@@ -190,7 +190,7 @@ class GameState(override val game: Game) : State() {
         val health = actor.get<Health>() ?: return
         val healthBar = actor.get<HealthBar>() ?: return
 
-        val pixel = game.assets.get<Texture>("pixel")
+        val pixel = makePixelTexture()
         val pos = toScreen(actor.pos)
             .sub(healthBar.offsetX, healthBar.offsetY)
 

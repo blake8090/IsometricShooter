@@ -6,18 +6,14 @@ import bke.iso.engine.Module
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 import java.io.File
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
-import kotlin.io.path.Path
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
-data class Asset<T>(
-    val name: String,
-    val value: T
-)
+interface AssetLoader<T : Any> {
+    fun load(file: File): T
+}
 
-private const val ASSETS_DIRECTORY = "assets"
+private const val BASE_PATH = "assets"
 
 class Assets(override val game: Game) : Module() {
 
@@ -26,7 +22,7 @@ class Assets(override val game: Game) : Module() {
     val fonts: Fonts = Fonts(this)
 
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
-    private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Asset<*>>()
+    private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Any>()
 
     override fun start() {
         addLoader("jpg", TextureLoader())
@@ -34,27 +30,17 @@ class Assets(override val game: Game) : Module() {
         addLoader("ttf", FreeTypeFontGeneratorLoader())
     }
 
-    override fun dispose() {
-        log.info { "Disposing assets" }
-        for (asset in assetCache.values) {
-            if (asset.value is Disposable) {
-                Disposer.dispose(asset.value, asset.name)
-            }
-        }
-        fonts.dispose()
-    }
-
     fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
-        val existingLoader = loadersByExtension[fileExtension]
-        requireNull(existingLoader) { value ->
-            "Extension '$fileExtension' has already been set to loader ${value::class.simpleName}"
+        loadersByExtension[fileExtension]?.let { existing ->
+            throw IllegalArgumentException(
+                "Extension '$fileExtension' has already been set to loader ${existing::class.simpleName}"
+            )
         }
         loadersByExtension[fileExtension] = loader
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T {
-        val asset = assetCache[name to type]?.value
-        val value = type.safeCast(asset)
+        val value = type.safeCast(assetCache[name to type])
         requireNotNull(value) {
             "No asset found for name '$name' and type '${type.simpleName}'"
         }
@@ -64,15 +50,14 @@ class Assets(override val game: Game) : Module() {
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
 
-    fun load(module: String) {
-        log.info { "Loading module '$module'" }
-        val path = Path(ASSETS_DIRECTORY, module).toString()
-        val files = game.fileSystem.getFiles(path)
+    fun load(path: String) {
+        val assetsPath = game.files.combinePaths(BASE_PATH, path)
+        log.info { "Loading assets in path '$assetsPath'" }
 
-        for (file in files) {
+        for (file in game.files.listFiles(assetsPath)) {
             val assetLoader = loadersByExtension[file.extension]
             if (assetLoader == null) {
-                log.warn { "No loader found for '.${file.extension}', skipping file '${file.path}'" }
+                log.warn { "No loader found for '.${file.extension}', skipping file '${file.canonicalPath}'" }
                 continue
             }
             load(file, assetLoader)
@@ -80,23 +65,23 @@ class Assets(override val game: Game) : Module() {
     }
 
     private fun <T : Any> load(file: File, assetLoader: AssetLoader<T>) {
-        val (name, asset) = assetLoader.load(file)
-        set(name, Asset(name, asset))
-        log.info { "Loaded asset '${name}' (${asset::class.simpleName}): '${file.path}'" }
+        val asset = assetLoader.load(file)
+        val type = asset::class
+
+        val parentPath = game.files.relativeParentPath(BASE_PATH, file)
+        val name = game.files.combinePaths(parentPath, file.nameWithoutExtension)
+
+        assetCache[name to type] = asset
+        log.info { "Loaded asset '${name}' (${type::class.simpleName}) from '${file.canonicalPath}'" }
     }
 
-    private fun <T : Any> set(name: String, asset: Asset<T>) {
-        assetCache[name to asset.value::class] = asset
-    }
-}
-
-@OptIn(ExperimentalContracts::class)
-private inline fun <T : Any> requireNull(value: T?, lazyMessage: (T) -> Any) {
-    contract {
-        returns() implies (value == null)
-    }
-    if (value != null) {
-        val message = lazyMessage(value)
-        throw IllegalArgumentException(message.toString())
+    override fun dispose() {
+        log.info { "Disposing assets" }
+        for ((nameType, asset) in assetCache) {
+            if (asset is Disposable) {
+                Disposer.dispose(asset, nameType.first)
+            }
+        }
+        fonts.dispose()
     }
 }
