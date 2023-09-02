@@ -4,15 +4,21 @@ import bke.iso.engine.math.Location
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 import com.badlogic.gdx.utils.OrderedMap
+import com.badlogic.gdx.utils.OrderedSet
 
 class Grid {
 
     private val objectMap = OrderedMap<Location, GridData>()
-    private val objects = ObjectSet<GameObject>()
+    private val objects = OrderedSet<GameObject>()
     private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
 
-    fun getObjects(): ObjectSet.ObjectSetIterator<GameObject> =
-        objects.iterator()
+    init {
+        // improves performance when removing objects
+        objects.orderedItems().ordered = false
+    }
+
+    // TODO: property
+    fun getObjects() = objects
 
     fun update(actor: Actor) {
         if (!objects.contains(actor)) {

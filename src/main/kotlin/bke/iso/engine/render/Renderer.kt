@@ -122,7 +122,7 @@ class Renderer(override val game: Game) : Module() {
         ScreenUtils.clear(0f, 0f, 255f, 1f)
         batch.projectionMatrix = camera.combined
         batch.begin()
-        objectSorter.forEach(game.world.objects) {
+        objectSorter.forEach(game.world.getObjects()) {
             when (it) {
                 is Actor -> draw(it)
                 is Tile -> draw(it)

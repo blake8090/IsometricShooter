@@ -9,6 +9,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
+import com.badlogic.gdx.utils.PerformanceCounter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
@@ -35,6 +36,8 @@ class Game {
 
     private var state: State = EmptyState(this)
     private var loading = false
+
+    private val performanceCounter = PerformanceCounter("renderer")
 
     fun start() {
         assets.start()
@@ -67,7 +70,13 @@ class Game {
         state.update(deltaTime)
         world.update(deltaTime)
 
+//        performanceCounter.start()
         renderer.draw()
+//        performanceCounter.stop()
+//        performanceCounter.tick()
+//        val mean = performanceCounter.time.value * 1000f
+//        val max = performanceCounter.time.max * 1000f
+//        log.info { "renderer.draw() - max: ${max}ms mean: ${mean}ms load: ${performanceCounter.load.value}" }
     }
 
     fun resize(width: Int, height: Int) {

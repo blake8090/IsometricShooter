@@ -14,8 +14,8 @@ class World(override val game: Game) : Module() {
 
     val actors = Actors(grid)
 
-    val objects: Set<GameObject>
-        get() = grid.getObjects().toSet()
+    // TODO: property?
+    fun getObjects() = grid.getObjects()
 
     override fun update(deltaTime: Float) {
         actors.update()
