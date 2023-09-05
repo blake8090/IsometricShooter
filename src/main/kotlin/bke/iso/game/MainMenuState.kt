@@ -1,5 +1,6 @@
 package bke.iso.game
 
+import bke.iso.editor.EditorState
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
@@ -16,10 +17,12 @@ class MainMenuState(override val game: Game) : State() {
     }
 
     override fun handleEvent(event: Event) {
-        if (event is StartEvent) {
-            game.switchState(GameState::class)
+        when (event) {
+            is StartEvent -> game.switchState(GameState::class)
+            is EditorEvent -> game.switchState(EditorState::class)
         }
     }
 
     class StartEvent : Event
+    class EditorEvent : Event
 }

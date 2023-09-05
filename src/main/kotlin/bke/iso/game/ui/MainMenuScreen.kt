@@ -50,6 +50,22 @@ class MainMenuScreen(
         controllerNavigation.add(startButton)
 
         stackTable.row()
+        val editorButton = TextButtonBuilder("EDITOR", skin)
+            .onChanged { _, _ ->
+                events.fire(MainMenuState.EditorEvent())
+            }
+            .onEnter { _, actor ->
+                actor.color = Color.BLUE
+            }
+            .onExit { _, actor ->
+                actor.color = Color.LIGHT_GRAY
+            }
+            .build()
+        stackTable.add(editorButton)
+            .padTop(20f)
+        controllerNavigation.add(editorButton)
+
+        stackTable.row()
         val quitButton = TextButtonBuilder("QUIT", skin)
             .onChanged { _, _ ->
                 Gdx.app.exit()
