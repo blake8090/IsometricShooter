@@ -3,6 +3,7 @@ package bke.iso.engine
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 
+// TODO: make this a dependency instead of an object to facilitate unit testing?
 /**
  * Keeps track of disposed objects to avoid `Class already disposed!` errors.
  */
