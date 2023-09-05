@@ -89,11 +89,9 @@ class DebugRenderer {
 
     fun draw(shapeDrawer: Shape3dDrawer) {
         if (enabled) {
-            shapeDrawer.begin()
             for (shape in shapes) {
                 shapeDrawer.drawShape(shape)
             }
-            shapeDrawer.end()
         }
         shapes.clear()
     }

@@ -144,11 +144,13 @@ class Renderer(override val game: Game) : Module() {
 
         // make sure that shapes are drawn respective to world positions
         batch.projectionMatrix = camera.combined
+        shapeDrawer.begin()
         for (shape in shapes) {
             shapeDrawer.drawShape(shape)
         }
-        shapes.clear()
         debug.draw(shapeDrawer)
+        shapeDrawer.end()
+        shapes.clear()
     }
 
     private fun draw(actor: Actor) {
