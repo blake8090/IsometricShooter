@@ -8,7 +8,6 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector3
 
 data class DebugSettings(
@@ -21,9 +20,8 @@ data class DebugSettings(
     var zAxisColor: Color = Color.PURPLE
 ) : Component()
 
-class DebugRenderer(batch: PolygonSpriteBatch) {
+class DebugRenderer {
 
-    private val shapeDrawer = Shape3dDrawer(batch)
     private val shapes = Shape3dArray()
     private var enabled = false
 
@@ -89,7 +87,7 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
         tile.selected = false
     }
 
-    fun draw() {
+    fun draw(shapeDrawer: Shape3dDrawer) {
         if (enabled) {
             shapeDrawer.begin()
             for (shape in shapes) {

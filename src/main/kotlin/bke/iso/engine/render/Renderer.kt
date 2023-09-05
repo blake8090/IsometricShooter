@@ -4,6 +4,8 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.render.shape.Shape3dArray
+import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
@@ -48,7 +50,10 @@ class Renderer(override val game: Game) : Module() {
     private val objectSorter = ObjectSorter()
     private var customCursor: CustomCursor? = null
 
-    val debug: DebugRenderer = DebugRenderer(batch)
+    val debug: DebugRenderer = DebugRenderer()
+
+    val shapes: Shape3dArray = Shape3dArray()
+    private val shapeDrawer = Shape3dDrawer(batch)
 
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
@@ -139,7 +144,11 @@ class Renderer(override val game: Game) : Module() {
 
         // make sure that shapes are drawn respective to world positions
         batch.projectionMatrix = camera.combined
-        debug.draw()
+        for (shape in shapes) {
+            shapeDrawer.drawShape(shape)
+        }
+        shapes.clear()
+        debug.draw(shapeDrawer)
     }
 
     private fun draw(actor: Actor) {
