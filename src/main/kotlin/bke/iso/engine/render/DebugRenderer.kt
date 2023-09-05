@@ -1,16 +1,15 @@
-package bke.iso.engine.render.debug
+package bke.iso.engine.render
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.render.shape.Shape3dArray
+import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Array
-import com.badlogic.gdx.utils.Pools
 
 data class DebugSettings(
     var collisionBox: Boolean = true,
@@ -24,8 +23,8 @@ data class DebugSettings(
 
 class DebugRenderer(batch: PolygonSpriteBatch) {
 
-    private val shapeDrawer = DebugShapeDrawer(batch)
-    private val shapes = Array<DebugShape>()
+    private val shapeDrawer = Shape3dDrawer(batch)
+    private val shapes = Shape3dArray()
     private var enabled = false
 
     fun toggle() {
@@ -34,66 +33,25 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
 
     fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
         if (enabled) {
-            Pools.obtain(DebugLine::class.java).apply {
-                this.start.set(start)
-                this.end.set(end)
-                this.end.set(end)
-                this.width = width
-                this.color = color
-                shapes.add(this)
-            }
-        }
-    }
-
-    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
-        if (enabled) {
-            Pools.obtain(DebugRectangle::class.java).apply {
-                this.rectangle.set(rectangle)
-                this.lineWidth = lineWidth
-                this.color = color
-                shapes.add(this)
-            }
-        }
-    }
-
-    fun addCircle(pos: Vector3, radius: Float, color: Color) {
-        if (enabled) {
-            Pools.obtain(DebugCircle::class.java).apply {
-                this.pos.set(pos.x, pos.y, pos.z)
-                this.radius = radius
-                this.color = color
-                shapes.add(this)
-            }
+            shapes.addLine(start, end, width, color)
         }
     }
 
     fun addPoint(pos: Vector3, size: Float, color: Color) {
         if (enabled) {
-            Pools.obtain(DebugPoint::class.java).apply {
-                this.pos.set(pos)
-                this.size = size
-                this.color = color
-                shapes.add(this)
-            }
+            shapes.addPoint(pos, size, color)
         }
     }
 
     fun addBox(box: Box, width: Float, color: Color) {
         if (enabled) {
-            for (segment in box.segments) {
-                addLine(segment.a, segment.b, width, color)
-            }
+            shapes.addBox(box, width, color)
         }
     }
 
     fun addSphere(pos: Vector3, radius: Float, color: Color) {
         if (enabled) {
-            Pools.obtain(DebugSphere::class.java).apply {
-                this.pos.set(pos.x, pos.y, pos.z)
-                this.radius = radius
-                this.color = color
-                shapes.add(this)
-            }
+            shapes.addSphere(pos, radius, color)
         }
     }
 
@@ -135,20 +93,10 @@ class DebugRenderer(batch: PolygonSpriteBatch) {
         if (enabled) {
             shapeDrawer.begin()
             for (shape in shapes) {
-                drawShape(shape)
+                shapeDrawer.drawShape(shape)
             }
             shapeDrawer.end()
         }
-        Pools.freeAll(shapes)
         shapes.clear()
     }
-
-    private fun drawShape(shape: DebugShape) =
-        when (shape) {
-            is DebugLine -> shapeDrawer.drawLine(shape)
-            is DebugRectangle -> shapeDrawer.drawRectangle(shape)
-            is DebugCircle -> shapeDrawer.drawCircle(shape)
-            is DebugPoint -> shapeDrawer.drawPoint(shape)
-            is DebugSphere -> shapeDrawer.drawSphere(shape)
-        }
 }

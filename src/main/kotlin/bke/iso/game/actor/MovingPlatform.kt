@@ -6,7 +6,7 @@ import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.render.debug.DebugSettings
+import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description

@@ -1,4 +1,4 @@
-package bke.iso.engine.render.debug
+package bke.iso.engine.render.shape
 
 import bke.iso.engine.math.TILE_SIZE_X
 import bke.iso.engine.math.TILE_SIZE_Y
@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
 import space.earlygrey.shapedrawer.ShapeDrawer
 
-class DebugShapeDrawer(batch: PolygonSpriteBatch) {
+class Shape3dDrawer(batch: PolygonSpriteBatch) {
 
     private val shapeDrawer: ShapeDrawer
 
@@ -34,7 +34,16 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.batch.end()
     }
 
-    fun drawPoint(point: DebugPoint) {
+    fun drawShape(shape: Shape3D) =
+        when (shape) {
+            is Line3D -> drawLine(shape)
+//            is DebugRectangle -> shapeDrawer.drawRectangle(shape)
+            is Circle3D -> drawCircle(shape)
+            is Point3D -> drawPoint(shape)
+            is Sphere3D -> drawSphere(shape)
+        }
+
+    fun drawPoint(point: Point3D) {
         drawPoint(point.pos, point.size, point.color)
     }
 
@@ -42,13 +51,13 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.filledCircle(toScreen(worldPos), size, color)
     }
 
-    fun drawRectangle(rectangle: DebugRectangle) {
-        val polygon = toScreen(rectangle.rectangle)
-        shapeDrawer.setColor(rectangle.color)
-        shapeDrawer.polygon(polygon, rectangle.lineWidth)
-    }
+//    fun drawRectangle(rectangle: DebugRectangle) {
+//        val polygon = toScreen(rectangle.rectangle)
+//        shapeDrawer.setColor(rectangle.color)
+//        shapeDrawer.polygon(polygon, rectangle.lineWidth)
+//    }
 
-    fun drawLine(line: DebugLine) {
+    fun drawLine(line: Line3D) {
         drawLine(line.start, line.end, line.color, line.width)
     }
 
@@ -57,7 +66,7 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.line(toScreen(start), toScreen(end), width)
     }
 
-    fun drawCircle(circle: DebugCircle) {
+    fun drawCircle(circle: Circle3D) {
         val ratio = getIsometricRatio()
         val width = circle.radius * (TILE_SIZE_X / 2) * ratio
         val height = circle.radius * (TILE_SIZE_Y / 2) * ratio
@@ -78,7 +87,7 @@ class DebugShapeDrawer(batch: PolygonSpriteBatch) {
     /**
      * Draws a 2D projection of a 3D isometric sphere.
      */
-    fun drawSphere(sphere: DebugSphere) {
+    fun drawSphere(sphere: Sphere3D) {
         val referencePointColor = Color(sphere.color.r, sphere.color.g, sphere.color.b, 0.6f)
         val pos = sphere.pos
         val radius = sphere.radius

@@ -1,74 +1,60 @@
-package bke.iso.engine.render.debug
+package bke.iso.engine.render.shape
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Pool.Poolable
 
-sealed class DebugShape
+sealed class Shape3D
 
-data class DebugLine(
+data class Line3D(
     var start: Vector3 = Vector3(),
     var end: Vector3 = Vector3(),
     var width: Float = 0f,
     var color: Color = Color.WHITE
-) : Poolable, DebugShape() {
+) : Poolable, Shape3D() {
 
     override fun reset() {
-        start = Vector3()
-        end = Vector3()
+        start.setZero()
+        end.setZero()
         width = 0f
         color = Color.WHITE
     }
 }
 
-data class DebugRectangle(
-    var rectangle: Rectangle = Rectangle(),
-    var lineWidth: Float = 0f,
-    var color: Color = Color.WHITE
-) : Poolable, DebugShape() {
-
-    override fun reset() {
-        rectangle = Rectangle()
-        lineWidth = 0f
-        color = Color.WHITE
-    }
-}
-
-data class DebugCircle(
+data class Circle3D(
     var pos: Vector3 = Vector3(),
     var radius: Float = 0f,
     var color: Color = Color.WHITE
-) : Poolable, DebugShape() {
+) : Poolable, Shape3D() {
 
     override fun reset() {
-        pos = Vector3()
+        pos.setZero()
         radius = 0f
         color = Color.WHITE
     }
 }
 
-data class DebugPoint(
+data class Point3D(
     var pos: Vector3 = Vector3(),
     var size: Float = 0f,
     var color: Color = Color.WHITE
-) : Poolable, DebugShape() {
+) : Poolable, Shape3D() {
 
     override fun reset() {
-        pos = Vector3()
+        pos.setZero()
         size = 0f
         color = Color.WHITE
     }
 }
 
-data class DebugSphere(
+data class Sphere3D(
     var pos: Vector3 = Vector3(),
     var radius: Float = 0f,
     var color: Color = Color.WHITE
-) : Poolable, DebugShape() {
+) : Poolable, Shape3D() {
 
     override fun reset() {
-        pos = Vector3()
+        pos.setZero()
         radius = 0f
         color = Color.WHITE
     }

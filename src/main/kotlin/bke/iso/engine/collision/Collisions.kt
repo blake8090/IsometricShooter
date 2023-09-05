@@ -3,7 +3,7 @@ package bke.iso.engine.collision
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.math.Box
-import bke.iso.engine.render.debug.DebugSettings
+import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
