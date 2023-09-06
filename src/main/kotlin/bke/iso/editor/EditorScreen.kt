@@ -59,6 +59,8 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
 
         skin.add("font", assets.fonts[FontOptions("ui/roboto", 25f, Color.WHITE)])
 
+        skin.add("toolbar-over", makePixelTexture(color(34, 84, 133)))
+        skin.add("toolbar-down", makePixelTexture(color(43, 103, 161)))
         skin.add("toolbar-checked", makePixelTexture(color(43, 103, 161)))
 
         skin.add("default", Label.LabelStyle().apply {
@@ -68,9 +70,24 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
 
         skin.add("default", TextButton.TextButtonStyle().apply {
             font = skin.getFont("font")
+            up = skin.newDrawable("pixel", color(20, 51, 82))
+            down = skin.newDrawable("pixel", color(43, 103, 161))
+            over = skin.newDrawable("pixel", color(34, 84, 133))
+        })
+
+        skin.add("menu", TextButton.TextButtonStyle().apply {
+            font = skin.getFont("font")
             up = skin.newDrawable("pixel", Color.DARK_GRAY)
             down = skin.newDrawable("pixel", Color.GRAY)
             over = skin.newDrawable("pixel", color(94, 94, 94))
+        })
+
+        skin.add("sidebarTab", TextButton.TextButtonStyle().apply {
+            font = skin.getFont("font")
+            up = skin.newDrawable("pixel", color(20, 51, 82))
+            down = skin.newDrawable("pixel", color(43, 103, 161))
+            over = skin.newDrawable("pixel", color(34, 84, 133))
+            checked = skin.newDrawable("pixel", color(43, 103, 161))
         })
     }
 
@@ -78,15 +95,15 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
         val menuBar = Table().left()
         menuBar.background = skin.newDrawable("pixel", Color.DARK_GRAY)
 
-        val newButton = TextButtonBuilder("New", skin).build()
+        val newButton = textButton("New", skin, "menu")
         newButton.pad(6f)
         menuBar.add(newButton)
 
-        val openButton = TextButtonBuilder("Open", skin).build()
+        val openButton = textButton("Open", skin, "menu")
         openButton.pad(6f)
         menuBar.add(openButton)
 
-        val saveButton = TextButtonBuilder("Save", skin).build()
+        val saveButton = textButton("Save", skin, "menu")
         saveButton.pad(6f)
         menuBar.add(saveButton)
 
@@ -95,14 +112,27 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
 
     private fun createSideBar(): Actor {
         val sideBar = BorderedTable(color(77, 100, 130))
+        sideBar.left()
         sideBar.borderSize = 2f
         sideBar.background = skin.getDrawable("bg")
+
+        val tileButton = textButton("Tiles", skin, "sidebarTab")
+        tileButton.padLeft(16f)
+        tileButton.padRight(16f)
+        sideBar.add(tileButton)
+
+        val actorButton = textButton("Actors", skin, "sidebarTab")
+        actorButton.padLeft(16f)
+        actorButton.padRight(16f)
+        sideBar.add(actorButton)
+
+        ButtonGroup<TextButton>().add(tileButton, actorButton)
 
         return sideBar
     }
 
     private fun createToolBar(): Actor {
-        val toolBar =  BorderedTable(color(77, 100, 130))
+        val toolBar = BorderedTable(color(77, 100, 130))
         toolBar.left()
         toolBar.borderSize = 2f
         toolBar.borderLeft = false
@@ -112,16 +142,22 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
         val toolModes = Table()
 
         val pointerButton = ImageButton(getTextureDrawable("ui/editor/pointer"))
+        pointerButton.style.over = skin.getDrawable("toolbar-over")
+        pointerButton.style.down = skin.getDrawable("toolbar-down")
         pointerButton.style.checked = skin.getDrawable("toolbar-checked")
         pointerButton.pad(12f)
         toolModes.add(pointerButton)
 
         val brushButton = ImageButton(getTextureDrawable("ui/editor/brush"))
+        brushButton.style.over = skin.getDrawable("toolbar-over")
+        brushButton.style.down = skin.getDrawable("toolbar-down")
         brushButton.style.checked = skin.getDrawable("toolbar-checked")
         brushButton.pad(12f)
         toolModes.add(brushButton)
 
         val eraserButton = ImageButton(getTextureDrawable("ui/editor/eraser"))
+        eraserButton.style.over = skin.getDrawable("toolbar-over")
+        eraserButton.style.down = skin.getDrawable("toolbar-down")
         eraserButton.style.checked = skin.getDrawable("toolbar-checked")
         eraserButton.pad(12f)
         toolModes.add(eraserButton)
