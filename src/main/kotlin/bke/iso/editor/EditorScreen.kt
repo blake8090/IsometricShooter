@@ -6,11 +6,17 @@ import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.util.TextButtonBuilder
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Value
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 class EditorScreen(private val assets: Assets) : UIScreen() {
 
@@ -30,7 +36,6 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
 
         root.row()
         val editTable = Table()
-//        editTable.debug = true
 
         editTable.add(createSideBar())
             .width(Value.percentWidth(.15f, root))
@@ -41,7 +46,6 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
             .top()
             .expandX()
             .fillX()
-            .height(75f)
 
         root.add(editTable)
             .left()
@@ -51,14 +55,17 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
 
     private fun setup() {
         skin.add("pixel", makePixelTexture())
+        skin.add("bg", makePixelTexture(color(10, 23, 36)))
 
         skin.add("font", assets.fonts[FontOptions("ui/roboto", 25f, Color.WHITE)])
 
-//        skin.add("default", Label.LabelStyle().apply {
-//            font = skin.getFont("title")
-//            background = skin.newDrawable("white", Color.DARK_GRAY)
-//        })
-//
+        skin.add("toolbar-checked", makePixelTexture(color(43, 103, 161)))
+
+        skin.add("default", Label.LabelStyle().apply {
+            font = skin.getFont("font")
+            background = skin.getDrawable("bg")
+        })
+
         skin.add("default", TextButton.TextButtonStyle().apply {
             font = skin.getFont("font")
             up = skin.newDrawable("pixel", Color.DARK_GRAY)
@@ -87,17 +94,80 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
     }
 
     private fun createSideBar(): Actor {
-        val sideBar = BorderedTable(2f, color(77, 100, 130)).left()
-        sideBar.background = skin.newDrawable("pixel", Color.DARK_GRAY)
+        val sideBar = BorderedTable(color(77, 100, 130))
+        sideBar.borderSize = 2f
+        sideBar.background = skin.getDrawable("bg")
 
         return sideBar
     }
 
     private fun createToolBar(): Actor {
-        val toolBar = BorderedTable(2f, color(77, 100, 130)).left()
-        toolBar.background = skin.newDrawable("pixel", Color.DARK_GRAY)
+        val toolBar =  BorderedTable(color(77, 100, 130))
+        toolBar.left()
+        toolBar.borderSize = 2f
+        toolBar.borderLeft = false
+        toolBar.borderRight = false
+        toolBar.background = skin.getDrawable("bg")
+
+        val toolModes = Table()
+
+        val pointerButton = ImageButton(getTextureDrawable("ui/editor/pointer"))
+        pointerButton.style.checked = skin.getDrawable("toolbar-checked")
+        pointerButton.pad(12f)
+        toolModes.add(pointerButton)
+
+        val brushButton = ImageButton(getTextureDrawable("ui/editor/brush"))
+        brushButton.style.checked = skin.getDrawable("toolbar-checked")
+        brushButton.pad(12f)
+        toolModes.add(brushButton)
+
+        val eraserButton = ImageButton(getTextureDrawable("ui/editor/eraser"))
+        eraserButton.style.checked = skin.getDrawable("toolbar-checked")
+        eraserButton.pad(12f)
+        toolModes.add(eraserButton)
+
+        ButtonGroup<ImageButton>()
+            .add(pointerButton, brushButton, eraserButton)
+
+        toolBar.add(toolModes)
+
+        val miscTools = BorderedTable(color(77, 100, 130))
+        miscTools.left()
+        miscTools.borderSize = 2f
+        miscTools.borderRight = false
+        miscTools.borderTop = false
+        miscTools.borderBottom = false
+
+        val gridButton = ImageButton(getTextureDrawable("ui/editor/grid"))
+        gridButton.style.checked = skin.getDrawable("toolbar-checked")
+        gridButton.pad(12f)
+        miscTools.add(gridButton)
+
+        val layerLabel = Label("Layer: 1", skin)
+        miscTools.add(layerLabel).padLeft(16f)
+
+        val layerDecButton = TextButtonBuilder("-", skin).build()
+        layerDecButton.width = 32f
+        layerDecButton.padLeft(16f)
+        layerDecButton.padRight(16f)
+        miscTools.add(layerDecButton).padLeft(16f)
+
+        val layerIncButton = TextButtonBuilder("+", skin).build()
+        layerIncButton.width = 32f
+        layerIncButton.padLeft(16f)
+        layerIncButton.padRight(16f)
+        miscTools.add(layerIncButton).padLeft(8f)
+
+        toolBar.add(miscTools)
+            .fill()
+            .expand()
 
         return toolBar
+    }
+
+    private fun getTextureDrawable(name: String): TextureRegionDrawable {
+        val texture = assets.get<Texture>(name)
+        return TextureRegionDrawable(TextureRegion(texture))
     }
 
     /**
@@ -112,17 +182,34 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
         )
 }
 
-private class BorderedTable(private val borderSize: Float, borderColor: Color) : Table() {
+private class BorderedTable(borderColor: Color) : Table() {
 
-    private val pixel = makePixelTexture(borderColor)
+    private var pixel = makePixelTexture(borderColor)
+
+    var borderSize: Float = 1f
+    var borderLeft: Boolean = true
+    var borderRight: Boolean = true
+    var borderTop: Boolean = true
+    var borderBottom: Boolean = true
 
     override fun draw(batch: Batch, parentAlpha: Float) {
         super.draw(batch, parentAlpha)
         // TODO: similar to figma, add inside, outside and center options for borders
-        //  also add options for which sides of the borders are drawn
-        batch.draw(pixel, x, y + height - borderSize, width, borderSize) // top
-        batch.draw(pixel, x, y, width, borderSize) // bottom
-        batch.draw(pixel, x, y, borderSize, height) // left
-        batch.draw(pixel, x + width - borderSize, y, borderSize, height) // right
+
+        if (borderTop) {
+            batch.draw(pixel, x, y + height - borderSize, width, borderSize)
+        }
+
+        if (borderBottom) {
+            batch.draw(pixel, x, y, width, borderSize)
+        }
+
+        if (borderLeft) {
+            batch.draw(pixel, x, y, borderSize, height)
+        }
+
+        if (borderRight) {
+            batch.draw(pixel, x + width - borderSize, y, borderSize, height)
+        }
     }
 }
