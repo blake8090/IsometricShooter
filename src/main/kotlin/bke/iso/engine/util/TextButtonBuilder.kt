@@ -1,4 +1,4 @@
-package bke.iso.game.ui
+package bke.iso.engine.util
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent

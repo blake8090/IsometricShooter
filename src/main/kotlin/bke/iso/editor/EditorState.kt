@@ -13,7 +13,7 @@ class EditorState(override val game: Game) : State() {
 
     override val systems = emptySet<System>()
 
-    private val editorScreen = EditorScreen()
+    private val editorScreen = EditorScreen(game.assets)
 
     private var gridWidth = 20
     private var gridLength = 20
