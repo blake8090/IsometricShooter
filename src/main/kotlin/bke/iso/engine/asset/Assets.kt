@@ -20,7 +20,7 @@ class Assets(override val game: Game) : Module() {
 
     private val log = KotlinLogging.logger {}
 
-    val fonts: Fonts = Fonts(this)
+    val fonts: Fonts = Fonts(this, game.renderer)
 
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Any>()

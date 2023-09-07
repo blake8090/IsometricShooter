@@ -25,12 +25,12 @@ class Game {
     private val log = KotlinLogging.logger {}
 
     val events: Events = Events()
+    val renderer: Renderer = Renderer(this)
     val assets: Assets = Assets(this)
     val files: Files = Files()
     val input: Input = Input(this)
     val collisions: Collisions = Collisions(this)
     val physics: Physics = Physics(this)
-    val renderer: Renderer = Renderer(this)
     val world: World = World(this)
     val ui: UI = UI(this)
 
