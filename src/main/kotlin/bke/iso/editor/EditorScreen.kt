@@ -11,12 +11,15 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 
 class EditorScreen(private val assets: Assets) : UIScreen() {
 
@@ -57,7 +60,7 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
 
-        skin.add("font", assets.fonts[FontOptions("ui/roboto", 25f, Color.WHITE)])
+        skin.add("font", assets.fonts[FontOptions("ui/roboto", 20f, Color.WHITE)])
 
         skin.add("toolbar-over", makePixelTexture(color(34, 84, 133)))
         skin.add("toolbar-down", makePixelTexture(color(43, 103, 161)))
@@ -116,17 +119,68 @@ class EditorScreen(private val assets: Assets) : UIScreen() {
         sideBar.borderSize = 2f
         sideBar.background = skin.getDrawable("bg")
 
+        val tabs = HorizontalGroup()
         val tileButton = textButton("Tiles", skin, "sidebarTab")
         tileButton.padLeft(16f)
         tileButton.padRight(16f)
-        sideBar.add(tileButton)
+        tabs.addActor(tileButton)
 
         val actorButton = textButton("Actors", skin, "sidebarTab")
         actorButton.padLeft(16f)
         actorButton.padRight(16f)
-        sideBar.add(actorButton)
+        tabs.addActor(actorButton)
 
         ButtonGroup<TextButton>().add(tileButton, actorButton)
+        sideBar.add(tabs).left()
+
+        sideBar.row()
+        val assetBrowserContainer = BorderedTable(color(77, 100, 130))
+        assetBrowserContainer.borderSize = 6f
+        sideBar.add(assetBrowserContainer)
+            .expand()
+            .fill()
+
+        val assetBrowser = BorderedTable(color(77, 100, 130))
+        assetBrowser.top().left()
+        assetBrowser.borderSize = 6f
+
+        val testAsset = ImageButton(getTextureDrawable("game/gfx/objects/fence-front"))
+        testAsset.style.over = skin.getDrawable("toolbar-over")
+        testAsset.style.down = skin.getDrawable("toolbar-down")
+        testAsset.style.checked = skin.getDrawable("toolbar-checked")
+        testAsset.layout()
+        testAsset.image.setOrigin(Align.center)
+        assetBrowser.add(testAsset)
+            .width(Value.percentWidth(.333f, assetBrowser))
+            .fill()
+
+        val testAsset2 = ImageButton(getTextureDrawable("game/gfx/objects/player"))
+        testAsset2.style.over = skin.getDrawable("toolbar-over")
+        testAsset2.style.down = skin.getDrawable("toolbar-down")
+        testAsset2.style.checked = skin.getDrawable("toolbar-checked")
+        testAsset2.layout()
+        testAsset2.image.setOrigin(Align.center)
+        assetBrowser.add(testAsset2)
+            .width(Value.percentWidth(.333f, assetBrowser))
+            .fill()
+
+        val testAsset3 = ImageButton(getTextureDrawable("game/gfx/objects/box"))
+        testAsset3.style.over = skin.getDrawable("toolbar-over")
+        testAsset3.style.down = skin.getDrawable("toolbar-down")
+        testAsset3.style.checked = skin.getDrawable("toolbar-checked")
+        testAsset3.layout()
+        testAsset3.image.setOrigin(Align.center)
+        assetBrowser.add(testAsset3)
+            .width(Value.percentWidth(.333f, assetBrowser))
+            .fill()
+
+        val scrollStyle = ScrollPane.ScrollPaneStyle()
+        scrollStyle.hScrollKnob = getTextureDrawable("ui/editor/pointer")
+        val scrollPane = ScrollPane(assetBrowser, scrollStyle)
+        assetBrowserContainer.add(scrollPane)
+            .fill()
+            .expand()
+        scrollPane.layout()
 
         return sideBar
     }
