@@ -11,7 +11,11 @@ import mu.KotlinLogging
 import java.io.File
 import kotlin.math.ceil
 
+/**
+ * see [asd](https://github.com/libgdx/libgdx/issues/6820)
+ */
 private const val MINIMUM_FONT_SIZE = 5
+private const val REFERENCE_WIDTH = 2560f
 
 class Fonts(
     private val assets: Assets,
@@ -31,7 +35,8 @@ class Fonts(
     private fun generateFont(options: FontOptions): BitmapFont {
         val displayMode = renderer.maxDisplayMode
         val aspectRatio = displayMode.width.toFloat() / displayMode.height.toFloat()
-        val scaledSize = options.size * aspectRatio
+        val ratio = displayMode.width / REFERENCE_WIDTH
+        val scaledSize = options.size * ratio
         val pixels = ceil(scaledSize)
             .toInt()
             .coerceAtLeast(MINIMUM_FONT_SIZE)
@@ -46,7 +51,9 @@ class Fonts(
         }
 
         val bitmapFont = generator.generateFont(parameter)
-        log.debug { "Generated font: '$bitmapFont' aspectRatio: $aspectRatio size: $scaledSize -> $pixels" }
+        log.debug {
+            "Generated font: '$bitmapFont' aspectRatio: $aspectRatio width ratio: $ratio size: $scaledSize -> $pixels"
+        }
         return generator.generateFont(parameter)
     }
 
