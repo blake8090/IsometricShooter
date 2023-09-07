@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
-class EditorScreen(private val assets: Assets) : UIScreen() {
+class EditorScreen(assets: Assets) : UIScreen(assets) {
 
     private val assetBrowser = EditorAssetBrowser(assets)
 

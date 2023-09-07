@@ -1,19 +1,19 @@
 package bke.iso.engine.ui
 
-import bke.iso.engine.Disposer
 import bke.iso.engine.Event
+import bke.iso.engine.asset.Assets
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import kotlin.reflect.KClass
+import mu.KotlinLogging
 
-abstract class UIScreen {
+abstract class UIScreen(protected val assets: Assets) {
 
     val stage: Stage = Stage(ScreenViewport())
     val controllerNavigation: ControllerNavigation = ControllerNavigation()
 
-    protected val skin: Skin = DisposerSkin()
+    protected val skin: Skin = AssetAwareSkin(assets)
 
     abstract fun create()
 
@@ -35,20 +35,38 @@ abstract class UIScreen {
     open fun handleEvent(event: Event) {}
 }
 
-private class DisposerSkin : Skin() {
+/**
+ * Multiple UI screens can reference a single resource loaded in [Assets].
+ * Different UI screens will continuously be created and disposed throughout the app's lifetime.
+ *
+ * The [AssetAwareSkin] manually keeps track of all added resources, as [Skin.resources] is private.
+ * When [Skin.dispose] is called, any resources loaded in [Assets] are skipped.
+ * Only resources local to this instance are disposed.
+ */
+private class AssetAwareSkin(private val assets: Assets) : Skin() {
 
-    private val types = mutableSetOf<KClass<out Disposable>>()
+    private val log = KotlinLogging.logger {}
+    private val resources = mutableSetOf<Any>()
 
     override fun add(name: String, resource: Any, type: Class<*>) {
         super.add(name, resource, type)
-        val disposable = resource as? Disposable ?: return
-        types.add(disposable::class)
+        resources.add(resource)
     }
 
     override fun dispose() {
-        val entries = types.flatMap { type -> getAll(type.java) ?: emptyList() }
-        for (entry in entries) {
-            Disposer.dispose(entry.value, entry.key)
+        if (atlas != null) {
+            dispose(atlas)
+        }
+        for (resource in resources) {
+            dispose(resource)
+        }
+    }
+
+    private fun dispose(resource: Any) {
+        if (resource in assets) {
+            log.debug { "Skipping '$resource' - resource is loaded in asset cache" }
+        } else if (resource is Disposable) {
+            resource.dispose()
         }
     }
 }

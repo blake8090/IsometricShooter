@@ -3,6 +3,7 @@ package bke.iso.engine.asset
 import bke.iso.engine.Disposer
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 import java.io.File
@@ -23,20 +24,12 @@ class Assets(override val game: Game) : Module() {
 
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Any>()
+    private val loadedAssets = mutableSetOf<Any>()
 
     override fun start() {
         addLoader("jpg", TextureLoader())
         addLoader("png", TextureLoader())
         addLoader("ttf", FreeTypeFontGeneratorLoader())
-    }
-
-    fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
-        loadersByExtension[fileExtension]?.let { existing ->
-            throw IllegalArgumentException(
-                "Extension '$fileExtension' has already been set to loader ${existing::class.simpleName}"
-            )
-        }
-        loadersByExtension[fileExtension] = loader
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T {
@@ -49,6 +42,22 @@ class Assets(override val game: Game) : Module() {
 
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
+
+    operator fun <T : Any> contains(asset: T) =
+        if (asset is BitmapFont) {
+            asset in fonts
+        } else {
+            loadedAssets.contains(asset)
+        }
+
+    fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
+        loadersByExtension[fileExtension]?.let { existing ->
+            throw IllegalArgumentException(
+                "Extension '$fileExtension' has already been set to loader ${existing::class.simpleName}"
+            )
+        }
+        loadersByExtension[fileExtension] = loader
+    }
 
     fun load(path: String) {
         val assetsPath = game.files.combinePaths(BASE_PATH, path)
@@ -72,6 +81,7 @@ class Assets(override val game: Game) : Module() {
         val name = game.files.combinePaths(parentPath, file.nameWithoutExtension)
 
         assetCache[name to type] = asset
+        loadedAssets.add(asset)
         log.info { "Loaded asset '${name}' (${type::class.simpleName}) from '${file.canonicalPath}'" }
     }
 
@@ -80,6 +90,7 @@ class Assets(override val game: Game) : Module() {
         for ((nameType, asset) in assetCache) {
             if (asset is Disposable) {
                 Disposer.dispose(asset, nameType.first)
+                loadedAssets.remove(asset)
             }
         }
         fonts.dispose()

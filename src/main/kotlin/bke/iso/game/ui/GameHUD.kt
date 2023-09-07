@@ -16,7 +16,7 @@ import kotlin.reflect.cast
 
 private const val HUD_HEALTH_BAR_NAME = "healthBar"
 
-class GameHUD(private val assets: Assets) : UIScreen() {
+class GameHUD(assets: Assets) : UIScreen(assets) {
 
     override fun create() {
         setup()

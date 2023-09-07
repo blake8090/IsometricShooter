@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import mu.KotlinLogging
 import java.io.File
-import kotlin.math.ceil
+
+private const val REFERENCE_WIDTH = 2560f
 
 class Fonts(private val assets: Assets) {
 
@@ -19,6 +20,9 @@ class Fonts(private val assets: Assets) {
 
     operator fun get(options: FontOptions): BitmapFont =
         cache.getOrPut(options) { generateFont(options) }
+
+    operator fun contains(font: BitmapFont) =
+        cache.containsValue(font)
 
     private fun generateFont(options: FontOptions): BitmapFont {
         val generator = assets.get<FreeTypeFontGenerator>(options.name)
