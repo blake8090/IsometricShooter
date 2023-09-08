@@ -41,7 +41,7 @@ class Fonts(
         val density = renderer.screenDensity
         val densityRatio = density / REFERENCE_DENSITY
         val widthRatio = renderer.maxDisplayMode.width / REFERENCE_WIDTH
-        val scale = (1 / REFERENCE_DENSITY) * (densityRatio / widthRatio)
+        val scale = (densityRatio / widthRatio)
         Gdx.graphics.primaryMonitor
         log.debug {
             "Calculating size - baseScale: $baseScale density: $density, densityRatio: $densityRatio," +

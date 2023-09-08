@@ -58,7 +58,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
 
-        skin.add("font", assets.fonts[FontOptions("ui/roboto", 20f, Color.WHITE)])
+        skin.add("font", assets.fonts[FontOptions("ui/roboto", 12f, Color.WHITE)])
 
         skin.add("toolbar-over", makePixelTexture(color(34, 84, 133)))
         skin.add("toolbar-down", makePixelTexture(color(43, 103, 161)))
@@ -96,16 +96,31 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
         val menuBar = Table().left()
         menuBar.background = skin.newDrawable("pixel", Color.DARK_GRAY)
 
-        val newButton = textButton("New", skin, "menu")
-        newButton.pad(6f)
+        val vPad = .25f
+        val hPad = .18f
+
+        val newButton = textButton("New", skin, "menu").apply {
+            padTop(Value.percentHeight(vPad, this))
+            padBottom(Value.percentHeight(vPad, this))
+            padLeft(Value.percentWidth(hPad, this))
+            padRight(Value.percentWidth(hPad, this))
+        }
         menuBar.add(newButton)
 
-        val openButton = textButton("Open", skin, "menu")
-        openButton.pad(6f)
+        val openButton = textButton("Open", skin, "menu").apply {
+            padTop(Value.percentHeight(vPad, this))
+            padBottom(Value.percentHeight(vPad, this))
+            padLeft(Value.percentWidth(hPad, this))
+            padRight(Value.percentWidth(hPad, this))
+        }
         menuBar.add(openButton)
 
-        val saveButton = textButton("Save", skin, "menu")
-        saveButton.pad(6f)
+        val saveButton = textButton("Save", skin, "menu").apply {
+            padTop(Value.percentHeight(vPad, this))
+            padBottom(Value.percentHeight(vPad, this))
+            padLeft(Value.percentWidth(hPad, this))
+            padRight(Value.percentWidth(hPad, this))
+        }
         menuBar.add(saveButton)
 
         return menuBar
