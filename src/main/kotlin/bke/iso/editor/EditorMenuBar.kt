@@ -15,7 +15,7 @@ class EditorMenuBar(private val skin: Skin) {
         menuBar.background = skin.getDrawable("bg")
 
         val vPad = .25f
-        val hPad = .18f
+        val hPad = .15f
 
         val newButton = textButton("New", skin, "menu").apply {
             padTop(Value.percentHeight(vPad, this))
