@@ -58,6 +58,7 @@ class Renderer(override val game: Game) : Module() {
 
     val displayModes: List<DisplayMode>
     val maxDisplayMode: DisplayMode
+    val screenDensity: Float
 
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
@@ -87,6 +88,10 @@ class Renderer(override val game: Game) : Module() {
         log.info { "System info - Max refresh rate: $maxRefreshRate" }
         log.info { "System info - Supported resolutions:\n${displayModes.joinToString("\n")}" }
         log.info { "System info - Maximum supported resolution: $maxDisplayMode" }
+
+        screenDensity = Gdx.graphics.density
+        log.info { "System info - Screen PPI: ${screenDensity * 160f}" }
+        log.info { "System info - Screen PPI ratio: $screenDensity" }
     }
 
     override fun dispose() {

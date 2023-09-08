@@ -15,7 +15,9 @@ import kotlin.math.ceil
  * see [asd](https://github.com/libgdx/libgdx/issues/6820)
  */
 private const val MINIMUM_FONT_SIZE = 5
+
 private const val REFERENCE_WIDTH = 2560f
+private const val REFERENCE_DENSITY = 0.582235f // 93 ppi 1440p reference monitor
 
 class Fonts(
     private val assets: Assets,
@@ -33,10 +35,16 @@ class Fonts(
         cache.containsValue(font)
 
     private fun generateFont(options: FontOptions): BitmapFont {
-        val displayMode = renderer.maxDisplayMode
-        val aspectRatio = displayMode.width.toFloat() / displayMode.height.toFloat()
-        val ratio = displayMode.width / REFERENCE_WIDTH
-        val scaledSize = options.size * ratio
+        // TODO: cache scale, simplify formula and add comments
+        val density = renderer.screenDensity
+        val densityRatio = density / REFERENCE_DENSITY
+        val widthRatio = renderer.maxDisplayMode.width / REFERENCE_WIDTH
+        val scale = widthRatio * (densityRatio / density)
+        log.debug {
+            "Calculating size - density: $density, densityRatio: $densityRatio, widthRatio: $widthRatio, scale: $scale"
+        }
+
+        val scaledSize = options.size * scale
         val pixels = ceil(scaledSize)
             .toInt()
             .coerceAtLeast(MINIMUM_FONT_SIZE)
@@ -51,9 +59,7 @@ class Fonts(
         }
 
         val bitmapFont = generator.generateFont(parameter)
-        log.debug {
-            "Generated font: '$bitmapFont' aspectRatio: $aspectRatio width ratio: $ratio size: $scaledSize -> $pixels"
-        }
+        log.debug { "Generated font: '$bitmapFont', dp: ${options.size}, scaledSize: $scaledSize -> $pixels" }
         return generator.generateFont(parameter)
     }
 
