@@ -13,9 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
-class EditorAssetBrowser(private val assets: Assets) {
+class EditorAssetBrowser(
+    private val skin: Skin,
+    private val assets: Assets
+) {
 
-    fun create(skin: Skin): Actor {
+    fun create(): Actor {
         val root = Table().top().left()
 
         val tabs = HorizontalGroup()
