@@ -2,7 +2,6 @@ package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
 import bke.iso.engine.render.Renderer
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -16,9 +15,7 @@ import kotlin.math.ceil
  * see [asd](https://github.com/libgdx/libgdx/issues/6820)
  */
 private const val MINIMUM_FONT_SIZE = 5
-
 private const val REFERENCE_WIDTH = 2560f
-private const val REFERENCE_DENSITY = 0.582235f // 93 ppi 1440p reference monitor
 
 class Fonts(
     private val assets: Assets,
@@ -37,15 +34,13 @@ class Fonts(
 
     private fun generateFont(options: FontOptions): BitmapFont {
         // TODO: cache scale, simplify formula and add comments
-        val baseScale = 1 / REFERENCE_DENSITY
+        val baseScale = 0.5f
         val density = renderer.screenDensity
-        val densityRatio = density / REFERENCE_DENSITY
         val widthRatio = renderer.maxDisplayMode.width / REFERENCE_WIDTH
-        val scale = (densityRatio / widthRatio)
-        Gdx.graphics.primaryMonitor
+
+        val scale = (baseScale + density) * widthRatio
         log.debug {
-            "Calculating size - baseScale: $baseScale density: $density, densityRatio: $densityRatio," +
-                    " widthRatio: $widthRatio, scale: $scale"
+            "Calculating size - baseScale: $baseScale density: $density, widthRatio: $widthRatio, scale: $scale"
         }
 
         val scaledSize = options.size * scale
@@ -54,6 +49,7 @@ class Fonts(
             .coerceAtLeast(MINIMUM_FONT_SIZE)
 
         val generator = assets.get<FreeTypeFontGenerator>(options.name)
+        generator.scaleForPixelHeight(pixels)
         val parameter = FreeTypeFontGenerator.FreeTypeFontParameter().apply {
             size = pixels
             color = options.color
