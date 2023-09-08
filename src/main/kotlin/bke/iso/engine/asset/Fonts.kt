@@ -2,6 +2,7 @@ package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
 import bke.iso.engine.render.Renderer
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -36,12 +37,15 @@ class Fonts(
 
     private fun generateFont(options: FontOptions): BitmapFont {
         // TODO: cache scale, simplify formula and add comments
+        val baseScale = 1 / REFERENCE_DENSITY
         val density = renderer.screenDensity
         val densityRatio = density / REFERENCE_DENSITY
         val widthRatio = renderer.maxDisplayMode.width / REFERENCE_WIDTH
-        val scale = widthRatio * (densityRatio / density)
+        val scale = (1 / REFERENCE_DENSITY) * (densityRatio / widthRatio)
+        Gdx.graphics.primaryMonitor
         log.debug {
-            "Calculating size - density: $density, densityRatio: $densityRatio, widthRatio: $widthRatio, scale: $scale"
+            "Calculating size - baseScale: $baseScale density: $density, densityRatio: $densityRatio," +
+                    " widthRatio: $widthRatio, scale: $scale"
         }
 
         val scaledSize = options.size * scale
