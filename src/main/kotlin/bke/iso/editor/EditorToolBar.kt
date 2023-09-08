@@ -1,7 +1,6 @@
 package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.util.TextButtonBuilder
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -27,23 +26,23 @@ class EditorToolBar(
         val toolModes = Table()
 
         val pointerButton = ImageButton(getTextureDrawable("ui/editor/pointer"))
-        pointerButton.style.over = skin.getDrawable("toolbar-over")
-        pointerButton.style.down = skin.getDrawable("toolbar-down")
-        pointerButton.style.checked = skin.getDrawable("toolbar-checked")
+        pointerButton.style.over = skin.getDrawable("button-over")
+        pointerButton.style.down = skin.getDrawable("button-down")
+        pointerButton.style.checked = skin.getDrawable("button-checked")
         pointerButton.pad(12f)
         toolModes.add(pointerButton)
 
         val brushButton = ImageButton(getTextureDrawable("ui/editor/brush"))
-        brushButton.style.over = skin.getDrawable("toolbar-over")
-        brushButton.style.down = skin.getDrawable("toolbar-down")
-        brushButton.style.checked = skin.getDrawable("toolbar-checked")
+        brushButton.style.over = skin.getDrawable("button-over")
+        brushButton.style.down = skin.getDrawable("button-down")
+        brushButton.style.checked = skin.getDrawable("button-checked")
         brushButton.pad(12f)
         toolModes.add(brushButton)
 
         val eraserButton = ImageButton(getTextureDrawable("ui/editor/eraser"))
-        eraserButton.style.over = skin.getDrawable("toolbar-over")
-        eraserButton.style.down = skin.getDrawable("toolbar-down")
-        eraserButton.style.checked = skin.getDrawable("toolbar-checked")
+        eraserButton.style.over = skin.getDrawable("button-over")
+        eraserButton.style.down = skin.getDrawable("button-down")
+        eraserButton.style.checked = skin.getDrawable("button-checked")
         eraserButton.pad(12f)
         toolModes.add(eraserButton)
 
@@ -60,20 +59,20 @@ class EditorToolBar(
         miscTools.borderBottom = false
 
         val gridButton = ImageButton(getTextureDrawable("ui/editor/grid"))
-        gridButton.style.checked = skin.getDrawable("toolbar-checked")
+        gridButton.style.checked = skin.getDrawable("button-checked")
         gridButton.pad(12f)
         miscTools.add(gridButton)
 
         val layerLabel = Label("Layer: 1", skin)
         miscTools.add(layerLabel).padLeft(16f)
 
-        val layerDecButton = TextButtonBuilder("-", skin).build()
+        val layerDecButton = textButton("-", skin)
         layerDecButton.width = 32f
         layerDecButton.padLeft(16f)
         layerDecButton.padRight(16f)
         miscTools.add(layerDecButton).padLeft(16f)
 
-        val layerIncButton = TextButtonBuilder("+", skin).build()
+        val layerIncButton = textButton("+", skin)
         layerIncButton.width = 32f
         layerIncButton.padLeft(16f)
         layerIncButton.padRight(16f)

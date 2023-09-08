@@ -12,7 +12,7 @@ class EditorMenuBar(private val skin: Skin) {
         setup()
 
         val menuBar = Table().left()
-        menuBar.background = skin.newDrawable("pixel", Color.DARK_GRAY)
+        menuBar.background = skin.getDrawable("bg")
 
         val vPad = .25f
         val hPad = .18f
@@ -46,8 +46,8 @@ class EditorMenuBar(private val skin: Skin) {
 
     private fun setup() {
         skin.add("menu", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("font")
-            up = skin.newDrawable("pixel", Color.DARK_GRAY)
+            font = skin.getFont("default")
+            up = skin.getDrawable("bg")
             down = skin.newDrawable("pixel", Color.GRAY)
             over = skin.newDrawable("pixel", color(94, 94, 94))
         })

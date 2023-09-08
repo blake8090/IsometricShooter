@@ -54,32 +54,32 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
 
-        skin.add("font", assets.fonts[FontOptions("ui/roboto", 12f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("ui/roboto", 12f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
-            font = skin.getFont("font")
+            font = skin.getFont("default")
             background = skin.getDrawable("bg")
         })
 
+        skin.add("button-up", makePixelTexture(color(20, 51, 82)))
+        skin.add("button-over", makePixelTexture(color(34, 84, 133)))
+        skin.add("button-down", makePixelTexture(color(43, 103, 161)))
+        skin.add("button-checked", makePixelTexture(color(43, 103, 161)))
+
         skin.add("default", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("font")
-            up = skin.newDrawable("pixel", color(20, 51, 82))
-            down = skin.newDrawable("pixel", color(43, 103, 161))
-            over = skin.newDrawable("pixel", color(34, 84, 133))
+            font = skin.getFont("default")
+            up = skin.getDrawable("button-up")
+            down = skin.getDrawable("button-down")
+            over = skin.getDrawable("button-over")
         })
 
         skin.add("sidebarTab", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("font")
-            up = skin.newDrawable("pixel", color(20, 51, 82))
-            down = skin.newDrawable("pixel", color(43, 103, 161))
-            over = skin.newDrawable("pixel", color(34, 84, 133))
-            checked = skin.newDrawable("pixel", color(43, 103, 161))
+            font = skin.getFont("default")
+            up = skin.getDrawable("button-up")
+            down = skin.getDrawable("button-down")
+            over = skin.getDrawable("button-over")
+            checked = skin.getDrawable("button-checked")
         })
-
-        // TODO: standardize button colors for all widgets
-        skin.add("toolbar-over", makePixelTexture(color(34, 84, 133)))
-        skin.add("toolbar-down", makePixelTexture(color(43, 103, 161)))
-        skin.add("toolbar-checked", makePixelTexture(color(43, 103, 161)))
     }
 
     private fun createSideBar(): Actor {

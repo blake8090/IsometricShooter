@@ -59,10 +59,10 @@ class EditorAssetBrowser(
     private fun createAssetButton(name: String, texture: String, skin: Skin): ImageTextButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
             imageUp = getTextureDrawable(texture)
-            over = skin.getDrawable("toolbar-over")
-            down = skin.getDrawable("toolbar-down")
-            checked = skin.getDrawable("toolbar-checked")
-            font = skin.getFont("font")
+            over = skin.getDrawable("button-over")
+            down = skin.getDrawable("button-down")
+            checked = skin.getDrawable("button-checked")
+            font = skin.getFont("default")
         }
 
         val button = ImageTextButton(name, style)
