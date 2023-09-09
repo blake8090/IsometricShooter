@@ -64,19 +64,18 @@ class EditorAssetBrowser(
     private fun setup() {
         skin.add("asset-browser-tab", TextButton.TextButtonStyle().apply {
             font = skin.getFont("default")
-            up = skin.getDrawable("button-up")
-            down = skin.getDrawable("button-down")
-            over = skin.getDrawable("button-over")
-            checked = skin.getDrawable("button-checked")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            over = skin.newTintedDrawable("pixel", "button-over")
+            checked = skin.newTintedDrawable("pixel", "button-checked")
         })
     }
 
     private fun createAssetButton(name: String, texture: String, skin: Skin): ImageTextButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
             imageUp = getTextureDrawable(texture)
-            over = skin.getDrawable("button-over")
-            down = skin.getDrawable("button-down")
-            checked = skin.getDrawable("button-checked")
+            over = skin.newTintedDrawable("pixel", "button-over")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            checked = skin.newTintedDrawable("pixel", "button-checked")
             font = skin.getFont("default")
         }
 

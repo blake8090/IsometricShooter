@@ -2,10 +2,12 @@ package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -27,29 +29,16 @@ class EditorToolBar(
 
         val toolModes = Table()
 
-        val pointerButton = ImageButton(getTextureDrawable("ui/editor/pointer"))
-        pointerButton.style.over = skin.getDrawable("button-over")
-        pointerButton.style.down = skin.getDrawable("button-down")
-        pointerButton.style.checked = skin.getDrawable("button-checked")
-        pointerButton.pad(12f)
+        val pointerButton = createButton("ui/editor/pointer")
         toolModes.add(pointerButton)
 
-        val brushButton = ImageButton(getTextureDrawable("ui/editor/brush"))
-        brushButton.style.over = skin.getDrawable("button-over")
-        brushButton.style.down = skin.getDrawable("button-down")
-        brushButton.style.checked = skin.getDrawable("button-checked")
-        brushButton.pad(12f)
+        val brushButton = createButton("ui/editor/brush")
         toolModes.add(brushButton)
 
-        val eraserButton = ImageButton(getTextureDrawable("ui/editor/eraser"))
-        eraserButton.style.over = skin.getDrawable("button-over")
-        eraserButton.style.down = skin.getDrawable("button-down")
-        eraserButton.style.checked = skin.getDrawable("button-checked")
-        eraserButton.pad(12f)
+        val eraserButton = createButton("ui/editor/eraser")
         toolModes.add(eraserButton)
 
-        ButtonGroup<ImageButton>()
-            .add(pointerButton, brushButton, eraserButton)
+        ButtonGroup<Button>().add(pointerButton, brushButton, eraserButton)
 
         toolBar.add(toolModes)
 
@@ -60,9 +49,8 @@ class EditorToolBar(
         miscTools.borderTop = false
         miscTools.borderBottom = false
 
-        val gridButton = ImageButton(getTextureDrawable("ui/editor/grid"))
-        gridButton.style.checked = skin.getDrawable("button-checked")
-        gridButton.pad(12f)
+        val gridButton = createButton("ui/editor/grid")
+        gridButton.style.checked = newTextureDrawable("ui/editor/grid", "button-checked")
         miscTools.add(gridButton)
 
         val layerLabel = Label("Layer: 1", skin)
@@ -89,8 +77,33 @@ class EditorToolBar(
         return toolBar
     }
 
-    private fun getTextureDrawable(name: String): TextureRegionDrawable {
-        val texture = assets.get<Texture>(name)
-        return TextureRegionDrawable(TextureRegion(texture))
+    private fun createButton(texture: String): Button {
+        val style = Button.ButtonStyle().apply {
+            up = newTextureDrawable(texture, "button-up")
+            over = newTextureDrawable(texture, "button-over")
+            down = newTextureDrawable(texture, "button-down")
+            checked = newTextureDrawable(texture, "button-checked")
+        }
+        return Button(style)
+    }
+
+    private fun newTextureDrawable(textureName: String, bgColor: String): TextureRegionDrawable {
+        val texture = assets.get<Texture>(textureName)
+
+        val canvas = Pixmap(texture.width, texture.height, Pixmap.Format.RGBA8888)
+        val color = skin.get<Color>(bgColor)
+        canvas.setColor(color)
+        canvas.fill()
+
+        texture.textureData.prepare()
+        val pixmap = texture.textureData.consumePixmap()
+        canvas.setColor(0)
+        canvas.drawPixmap(pixmap, 0, 0)
+
+        val canvasTexture = Texture(canvas)
+        canvas.dispose()
+        pixmap.dispose()
+
+        return TextureRegionDrawable(TextureRegion(canvasTexture))
     }
 }

@@ -62,16 +62,16 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
             background = skin.getDrawable("bg")
         })
 
-        skin.add("button-up", makePixelTexture(color(20, 51, 82)))
-        skin.add("button-over", makePixelTexture(color(34, 84, 133)))
-        skin.add("button-down", makePixelTexture(color(43, 103, 161)))
-        skin.add("button-checked", makePixelTexture(color(43, 103, 161)))
+        skin.add("button-up", color(20, 51, 82))
+        skin.add("button-over",color(34, 84, 133))
+        skin.add("button-down", color(43, 103, 161))
+        skin.add("button-checked", color(43, 103, 161))
 
         skin.add("default", TextButton.TextButtonStyle().apply {
             font = skin.getFont("default")
-            up = skin.getDrawable("button-up")
-            down = skin.getDrawable("button-down")
-            over = skin.getDrawable("button-over")
+            up = skin.newTintedDrawable("pixel", "button-up")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            over = skin.newTintedDrawable("pixel", "button-over")
         })
     }
 
