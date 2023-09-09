@@ -1,6 +1,7 @@
 package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.ui.util.BorderedTable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -19,17 +20,21 @@ class EditorAssetBrowser(
 ) {
 
     fun create(): Actor {
+        setup()
+
         val root = Table().top().left()
 
         val tabs = HorizontalGroup()
-        val tileButton = textButton("Tiles", skin, "sidebarTab")
-        tileButton.padLeft(16f)
-        tileButton.padRight(16f)
+        val tileButton = TextButton("Tiles", skin, "asset-browser-tab").apply {
+            padLeft(16f)
+            padRight(16f)
+        }
         tabs.addActor(tileButton)
 
-        val actorButton = textButton("Actors", skin, "sidebarTab")
-        actorButton.padLeft(16f)
-        actorButton.padRight(16f)
+        val actorButton = TextButton("Actors", skin, "asset-browser-tab").apply {
+            padLeft(16f)
+            padRight(16f)
+        }
         tabs.addActor(actorButton)
 
         ButtonGroup<TextButton>().add(tileButton, actorButton)
@@ -54,6 +59,16 @@ class EditorAssetBrowser(
             .expand()
 
         return root
+    }
+
+    private fun setup() {
+        skin.add("asset-browser-tab", TextButton.TextButtonStyle().apply {
+            font = skin.getFont("default")
+            up = skin.getDrawable("button-up")
+            down = skin.getDrawable("button-down")
+            over = skin.getDrawable("button-over")
+            checked = skin.getDrawable("button-checked")
+        })
     }
 
     private fun createAssetButton(name: String, texture: String, skin: Skin): ImageTextButton {

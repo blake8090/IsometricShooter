@@ -4,6 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
+import bke.iso.engine.ui.util.BorderedTable
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -71,14 +72,6 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
             up = skin.getDrawable("button-up")
             down = skin.getDrawable("button-down")
             over = skin.getDrawable("button-over")
-        })
-
-        skin.add("sidebarTab", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("default")
-            up = skin.getDrawable("button-up")
-            down = skin.getDrawable("button-down")
-            over = skin.getDrawable("button-over")
-            checked = skin.getDrawable("button-checked")
         })
     }
 

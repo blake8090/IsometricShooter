@@ -1,4 +1,4 @@
-package bke.iso.engine.ui
+package bke.iso.engine.ui.util
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.controllers.Controller

@@ -1,6 +1,7 @@
 package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.ui.util.BorderedTable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 class EditorToolBar(
@@ -66,16 +68,18 @@ class EditorToolBar(
         val layerLabel = Label("Layer: 1", skin)
         miscTools.add(layerLabel).padLeft(16f)
 
-        val layerDecButton = textButton("-", skin)
-        layerDecButton.width = 32f
-        layerDecButton.padLeft(16f)
-        layerDecButton.padRight(16f)
+        val layerDecButton = TextButton("-", skin).apply {
+            width = 32f
+            padLeft(16f)
+            padRight(16f)
+        }
         miscTools.add(layerDecButton).padLeft(16f)
 
-        val layerIncButton = textButton("+", skin)
-        layerIncButton.width = 32f
-        layerIncButton.padLeft(16f)
-        layerIncButton.padRight(16f)
+        val layerIncButton = TextButton("+", skin).apply {
+            width = 32f
+            padLeft(16f)
+            padRight(16f)
+        }
         miscTools.add(layerIncButton).padLeft(8f)
 
         toolBar.add(miscTools)

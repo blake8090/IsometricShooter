@@ -5,12 +5,15 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
-import bke.iso.engine.util.TextButtonBuilder
+import bke.iso.engine.ui.util.onChanged
+import bke.iso.engine.ui.util.onEnter
+import bke.iso.engine.ui.util.onExit
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 
 class MainMenuScreen(
@@ -35,49 +38,55 @@ class MainMenuScreen(
             .padRight(50f)
 
         stackTable.row()
-        val startButton = TextButtonBuilder("START", skin)
-            .onChanged { _, _ ->
+        val startButton = TextButton("START", skin).apply {
+            onChanged { _ ->
                 events.fire(MainMenuState.StartEvent())
             }
-            .onEnter { _, actor ->
-                actor.color = Color.BLUE
+
+            onEnter { button ->
+                button.color = Color.BLUE
             }
-            .onExit { _, actor ->
-                actor.color = Color.LIGHT_GRAY
+
+            onExit { button ->
+                button.color = Color.LIGHT_GRAY
             }
-            .build()
+        }
         stackTable.add(startButton)
             .padTop(20f)
         controllerNavigation.add(startButton)
 
         stackTable.row()
-        val editorButton = TextButtonBuilder("EDITOR", skin)
-            .onChanged { _, _ ->
+        val editorButton = TextButton("EDITOR", skin).apply {
+            onChanged { _ ->
                 events.fire(MainMenuState.EditorEvent())
             }
-            .onEnter { _, actor ->
-                actor.color = Color.BLUE
+
+            onEnter { button ->
+                button.color = Color.BLUE
             }
-            .onExit { _, actor ->
-                actor.color = Color.LIGHT_GRAY
+
+            onExit { button ->
+                button.color = Color.LIGHT_GRAY
             }
-            .build()
+        }
         stackTable.add(editorButton)
             .padTop(20f)
         controllerNavigation.add(editorButton)
 
         stackTable.row()
-        val quitButton = TextButtonBuilder("QUIT", skin)
-            .onChanged { _, _ ->
+        val quitButton = TextButton("QUIT", skin).apply {
+            onChanged { _ ->
                 Gdx.app.exit()
             }
-            .onEnter { _, actor ->
-                actor.color = Color.BLUE
+
+            onEnter { button ->
+                button.color = Color.BLUE
             }
-            .onExit { _, actor ->
-                actor.color = Color.LIGHT_GRAY
+
+            onExit { button ->
+                button.color = Color.LIGHT_GRAY
             }
-            .build()
+        }
         stackTable.add(quitButton)
             .padTop(20f)
             .padBottom(20f)

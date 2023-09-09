@@ -2,6 +2,7 @@ package bke.iso.engine.ui
 
 import bke.iso.engine.Event
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.ui.util.ControllerNavigation
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable

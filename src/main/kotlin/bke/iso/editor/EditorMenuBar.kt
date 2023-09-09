@@ -17,7 +17,7 @@ class EditorMenuBar(private val skin: Skin) {
         val vPad = .25f
         val hPad = .15f
 
-        val newButton = textButton("New", skin, "menu").apply {
+        val newButton = TextButton("New", skin, "menu").apply {
             padTop(Value.percentHeight(vPad, this))
             padBottom(Value.percentHeight(vPad, this))
             padLeft(Value.percentWidth(hPad, this))
@@ -25,7 +25,7 @@ class EditorMenuBar(private val skin: Skin) {
         }
         menuBar.add(newButton)
 
-        val openButton = textButton("Open", skin, "menu").apply {
+        val openButton = TextButton("Open", skin, "menu").apply {
             padTop(Value.percentHeight(vPad, this))
             padBottom(Value.percentHeight(vPad, this))
             padLeft(Value.percentWidth(hPad, this))
@@ -33,7 +33,7 @@ class EditorMenuBar(private val skin: Skin) {
         }
         menuBar.add(openButton)
 
-        val saveButton = textButton("Save", skin, "menu").apply {
+        val saveButton = TextButton("Save", skin, "menu").apply {
             padTop(Value.percentHeight(vPad, this))
             padBottom(Value.percentHeight(vPad, this))
             padLeft(Value.percentWidth(hPad, this))
