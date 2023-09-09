@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 class EditorToolBar(
@@ -56,19 +56,16 @@ class EditorToolBar(
         val layerLabel = Label("Layer: 1", skin)
         miscTools.add(layerLabel).padLeft(16f)
 
-        val layerDecButton = TextButton("-", skin).apply {
-            width = 32f
-            padLeft(16f)
-            padRight(16f)
+        val decreaseLayerButton = createButton("ui/editor/minus").apply {
+            style.up = newTextureDrawable("ui/editor/minus", "button-up")
         }
-        miscTools.add(layerDecButton).padLeft(16f)
+        miscTools.add(decreaseLayerButton)
+            .height(Value.percentHeight(.5f, layerLabel))
 
-        val layerIncButton = TextButton("+", skin).apply {
-            width = 32f
-            padLeft(16f)
-            padRight(16f)
+        val increaseLayerButton = createButton("ui/editor/plus").apply {
+            style.up = newTextureDrawable("ui/editor/plus", "button-up")
         }
-        miscTools.add(layerIncButton).padLeft(8f)
+        miscTools.add(increaseLayerButton)
 
         toolBar.add(miscTools)
             .fill()
@@ -79,7 +76,7 @@ class EditorToolBar(
 
     private fun createButton(texture: String): Button {
         val style = Button.ButtonStyle().apply {
-            up = newTextureDrawable(texture, "button-up")
+            up = newTextureDrawable(texture)
             over = newTextureDrawable(texture, "button-over")
             down = newTextureDrawable(texture, "button-down")
             checked = newTextureDrawable(texture, "button-checked")
@@ -105,5 +102,10 @@ class EditorToolBar(
         pixmap.dispose()
 
         return TextureRegionDrawable(TextureRegion(canvasTexture))
+    }
+
+    private fun newTextureDrawable(textureName: String): TextureRegionDrawable {
+        val texture = assets.get<Texture>(textureName)
+        return TextureRegionDrawable(TextureRegion(texture))
     }
 }
