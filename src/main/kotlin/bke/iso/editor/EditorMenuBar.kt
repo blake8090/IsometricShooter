@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.Value
 
 class EditorMenuBar(private val skin: Skin) {
 
@@ -14,33 +13,9 @@ class EditorMenuBar(private val skin: Skin) {
         val menuBar = Table().left()
         menuBar.background = skin.getDrawable("bg")
 
-        val vPad = .25f
-        val hPad = .15f
-
-        val newButton = TextButton("New", skin, "menu").apply {
-            padTop(Value.percentHeight(vPad, this))
-            padBottom(Value.percentHeight(vPad, this))
-            padLeft(Value.percentWidth(hPad, this))
-            padRight(Value.percentWidth(hPad, this))
-        }
-        menuBar.add(newButton)
-
-        val openButton = TextButton("Open", skin, "menu").apply {
-            padTop(Value.percentHeight(vPad, this))
-            padBottom(Value.percentHeight(vPad, this))
-            padLeft(Value.percentWidth(hPad, this))
-            padRight(Value.percentWidth(hPad, this))
-        }
-        menuBar.add(openButton)
-
-        val saveButton = TextButton("Save", skin, "menu").apply {
-            padTop(Value.percentHeight(vPad, this))
-            padBottom(Value.percentHeight(vPad, this))
-            padLeft(Value.percentWidth(hPad, this))
-            padRight(Value.percentWidth(hPad, this))
-        }
-        menuBar.add(saveButton)
-
+        menuBar.add(createMenuButton("New"))
+        menuBar.add(createMenuButton("Open"))
+        menuBar.add(createMenuButton("Save"))
         return menuBar
     }
 
@@ -51,5 +26,16 @@ class EditorMenuBar(private val skin: Skin) {
             down = skin.newDrawable("pixel", Color.GRAY)
             over = skin.newDrawable("pixel", color(94, 94, 94))
         })
+    }
+
+    private fun createMenuButton(text: String): TextButton {
+        val vPad = 10f
+        val hPad = 10f
+        return TextButton(text, skin, "menu").apply {
+            padTop(vPad)
+            padBottom(vPad)
+            padLeft(hPad)
+            padRight(hPad)
+        }
     }
 }

@@ -25,13 +25,11 @@ class MainMenuScreen(
         setup()
 
         val root = Table()
-        root.debug = true
         root.setFillParent(true)
         root.background = skin.newDrawable("white", Color.BLACK)
         stage.addActor(root)
 
         val stackTable = Table()
-        stackTable.debug = true
         stackTable.background = skin.newDrawable("white", Color.DARK_GRAY)
         stackTable.add(Label("ISOMETRIC SHOOTER", skin))
             .padLeft(50f)

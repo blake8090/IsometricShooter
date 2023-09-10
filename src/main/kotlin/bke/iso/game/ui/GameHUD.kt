@@ -22,7 +22,6 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
         setup()
 
         val table = Table()
-//        table.debug = true
         table.left().bottom()
         table.setFillParent(true)
         stage.addActor(table)

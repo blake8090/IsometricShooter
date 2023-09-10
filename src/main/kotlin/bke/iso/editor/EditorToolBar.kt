@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 class EditorToolBar(
@@ -20,56 +19,37 @@ class EditorToolBar(
 ) {
 
     fun create(): Table {
-        val toolBar = BorderedTable(color(77, 100, 130))
+        val toolBar = BorderedTable(skin.getColor("table-border"))
         toolBar.left()
         toolBar.borderSize = 2f
-        toolBar.borderLeft = false
-        toolBar.borderRight = false
         toolBar.background = skin.getDrawable("bg")
 
-        val toolModes = Table()
-
         val pointerButton = createButton("ui/editor/pointer")
-        toolModes.add(pointerButton)
+        toolBar.add(pointerButton)
 
         val brushButton = createButton("ui/editor/brush")
-        toolModes.add(brushButton)
+        toolBar.add(brushButton)
 
         val eraserButton = createButton("ui/editor/eraser")
-        toolModes.add(eraserButton)
+        toolBar.add(eraserButton)
 
-        ButtonGroup<Button>().add(pointerButton, brushButton, eraserButton)
-
-        toolBar.add(toolModes)
-
-        val miscTools = BorderedTable(color(77, 100, 130))
-        miscTools.left()
-        miscTools.borderSize = 2f
-        miscTools.borderRight = false
-        miscTools.borderTop = false
-        miscTools.borderBottom = false
+        ButtonGroup(pointerButton, brushButton, eraserButton)
 
         val gridButton = createButton("ui/editor/grid")
         gridButton.style.checked = newTextureDrawable("ui/editor/grid", "button-checked")
-        miscTools.add(gridButton)
+        toolBar.add(gridButton).spaceLeft(30f)
 
-        val layerLabel = Label("Layer: 1", skin)
-        miscTools.add(layerLabel).padLeft(16f)
+        toolBar.add(Label("Layer: 1", skin)).spaceLeft(30f)
 
         val decreaseLayerButton = createButton("ui/editor/minus").apply {
             style.up = newTextureDrawable("ui/editor/minus", "button-up")
         }
-        miscTools.add(decreaseLayerButton)
-            .height(Value.percentHeight(.5f, layerLabel))
+        toolBar.add(decreaseLayerButton).space(20f)
 
         val increaseLayerButton = createButton("ui/editor/plus").apply {
             style.up = newTextureDrawable("ui/editor/plus", "button-up")
         }
-        miscTools.add(increaseLayerButton)
-
-        toolBar.add(miscTools)
-            .fill()
-            .expand()
+        toolBar.add(increaseLayerButton)
 
         return toolBar
     }
