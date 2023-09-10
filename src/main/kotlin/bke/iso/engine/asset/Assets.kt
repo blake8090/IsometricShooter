@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 import java.io.File
 import kotlin.reflect.KClass
+import kotlin.reflect.cast
 import kotlin.reflect.safeCast
 
 interface AssetLoader<T : Any> {
@@ -42,6 +43,14 @@ class Assets(override val game: Game) : Module() {
 
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
+
+    fun <T : Any> getAll(type: KClass<T>): Set<Pair<String, T>> =
+        assetCache
+            .filterKeys { (_, assetType) -> assetType == type }
+            .map { (nameType, asset) ->
+                nameType.first to type.cast(asset)
+            }
+            .toSet()
 
     operator fun <T : Any> contains(asset: T) =
         if (asset is BitmapFont) {

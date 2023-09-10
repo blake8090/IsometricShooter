@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -19,6 +20,7 @@ class EditorAssetBrowser(
 ) {
 
     private lateinit var browser: Table
+    private lateinit var scrollPane: ScrollPane
 
     fun create(): Actor {
         setup()
@@ -37,11 +39,13 @@ class EditorAssetBrowser(
             .grow()
 
         browser = Table().top().left()
-        browserContainer.add(browser)
+        scrollPane = ScrollPane(browser)
+        scrollPane.layout()
+        browserContainer.add(scrollPane)
             .pad(browserContainer.borderSize) // don't let borders cover the content
             .grow()
 
-        addTestAssets()
+        populateBrowser()
         return root
     }
 
@@ -72,32 +76,26 @@ class EditorAssetBrowser(
         return table
     }
 
-    private fun addTestAssets() {
-        addAsset("box", "game/gfx/objects/box")
-        addAsset("fence-front", "game/gfx/objects/fence-front")
-
-        browser.row()
-        addAsset("player", "game/gfx/objects/player")
-        addAsset("pillar", "game/gfx/objects/pillar")
-
-        browser.row()
-        addAsset("platform", "game/gfx/objects/platform")
-        addAsset("turret", "game/gfx/objects/turret")
-
-        browser.row()
-        addAsset("lamppost", "game/gfx/objects/lamppost")
+    private fun populateBrowser() {
+        val rows = assets.getAll(Texture::class).chunked(2)
+        val buttonGroup = ButtonGroup<ImageTextButton>()
+        for (row in rows) {
+            for ((name, texture) in row) {
+                val label = name.substringAfterLast("/")
+                val button = createAssetButton(label, texture, skin)
+                browser.add(button)
+                    .uniform()
+                    .fill()
+                    .pad(10f)
+                buttonGroup.add(button)
+            }
+            browser.row()
+        }
     }
 
-    private fun addAsset(name: String, textureName: String) {
-        browser.add(createAssetButton(name, textureName, skin))
-            .uniform()
-            .fill()
-            .pad(10f)
-    }
-
-    private fun createAssetButton(name: String, texture: String, skin: Skin): ImageTextButton {
+    private fun createAssetButton(name: String, texture: Texture, skin: Skin): ImageTextButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
-            imageUp = getTextureDrawable(texture)
+            imageUp = TextureRegionDrawable(TextureRegion(texture))
             over = skin.newTintedDrawable("pixel", "button-over")
             down = skin.newTintedDrawable("pixel", "button-down")
             checked = skin.newTintedDrawable("pixel", "button-checked")
@@ -113,10 +111,5 @@ class EditorAssetBrowser(
         button.row()
         button.add(label)
         return button
-    }
-
-    private fun getTextureDrawable(name: String): TextureRegionDrawable {
-        val texture = assets.get<Texture>(name)
-        return TextureRegionDrawable(TextureRegion(texture))
     }
 }
