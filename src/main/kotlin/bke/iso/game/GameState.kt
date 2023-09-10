@@ -6,6 +6,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
@@ -72,6 +73,12 @@ class GameState(override val game: Game) : State() {
             .move(-0.5f, 0.5f, 0f)
         factory.createPillar(Location(10, 12, 0))
             .move(-0.5f, 0.5f, 0f)
+
+        // TODO: remove this when finished testing
+        game.world.actors.find<Player>()?.let { actor ->
+            val prefab = ActorPrefab("asd", actor.components.values.toList())
+            println("TEST PREFAB:\n${game.serializer.write(prefab)}")
+        }
 
         bindInput()
     }

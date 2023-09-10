@@ -37,8 +37,9 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.14.2")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testImplementation("io.kotest:kotest-runner-junit5:5.6.2")
