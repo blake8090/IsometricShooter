@@ -46,13 +46,11 @@ class Assets(override val game: Game) : Module() {
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
 
-    fun <T : Any> getAll(type: KClass<T>): Set<Pair<String, T>> =
+    fun <T : Any> getAll(type: KClass<T>): List<T> =
         assetCache
             .filterKeys { (_, assetType) -> assetType == type }
-            .map { (nameType, asset) ->
-                nameType.first to type.cast(asset)
-            }
-            .toSet()
+            .values
+            .map(type::cast)
 
     operator fun <T : Any> contains(asset: T) =
         if (asset is BitmapFont) {

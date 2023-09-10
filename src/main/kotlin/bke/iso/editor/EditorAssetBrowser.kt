@@ -1,6 +1,8 @@
 package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.BorderedTable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -77,17 +79,22 @@ class EditorAssetBrowser(
     }
 
     private fun populateBrowser() {
-        val rows = assets.getAll(Texture::class).chunked(2)
-        val buttonGroup = ButtonGroup<ImageTextButton>()
-        for (row in rows) {
-            for ((name, texture) in row) {
-                val label = name.substringAfterLast("/")
-                val button = createAssetButton(label, texture, skin)
+        val buttons = mutableListOf<ImageTextButton>()
+        for (prefab in assets.getAll(ActorPrefab::class)) {
+            val texture = prefab.components
+                .filterIsInstance<Sprite>()
+                .firstOrNull()
+                ?.let { sprite -> assets.get<Texture>(sprite.texture) }
+                ?: continue
+            buttons.add(createAssetButton(prefab.name, texture, skin))
+        }
+
+        for (row in buttons.chunked(2)) {
+            for (button in row) {
                 browser.add(button)
                     .uniform()
                     .fill()
                     .pad(10f)
-                buttonGroup.add(button)
             }
             browser.row()
         }
