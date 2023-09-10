@@ -10,11 +10,13 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
+import bke.iso.engine.world.ComponentSubType
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
 
+@ComponentSubType("shadow")
 data class Shadow(val parentId: String) : Component()
 
 private const val Z_OFFSET = 0.0001f

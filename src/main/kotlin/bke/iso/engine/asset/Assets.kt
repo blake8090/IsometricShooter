@@ -3,6 +3,7 @@ package bke.iso.engine.asset
 import bke.iso.engine.Disposer
 import bke.iso.engine.Game
 import bke.iso.engine.Module
+import bke.iso.engine.asset.prefab.ActorPrefabLoader
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
@@ -31,6 +32,7 @@ class Assets(override val game: Game) : Module() {
         addLoader("jpg", TextureLoader())
         addLoader("png", TextureLoader())
         addLoader("ttf", FreeTypeFontGeneratorLoader())
+        addLoader("actor", ActorPrefabLoader())
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T {

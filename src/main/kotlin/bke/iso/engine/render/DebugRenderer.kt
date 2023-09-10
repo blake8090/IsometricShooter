@@ -5,20 +5,9 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
-
-data class DebugSettings(
-    var collisionBox: Boolean = true,
-    var collisionBoxColor: Color = Color.GREEN,
-    var collisionBoxSelected: Boolean = false,
-    var position: Boolean = true,
-    var positionColor: Color = Color.RED,
-    var zAxis: Boolean = true,
-    var zAxisColor: Color = Color.PURPLE
-) : Component()
 
 class DebugRenderer {
 

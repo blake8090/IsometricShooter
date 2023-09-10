@@ -33,6 +33,7 @@ class Game {
     val physics: Physics = Physics(this)
     val world: World = World(this)
     val ui: UI = UI(this)
+    val serializer = Serializer()
 
     private var state: State = EmptyState(this)
     private var loading = false
@@ -40,6 +41,7 @@ class Game {
     private val performanceCounter = PerformanceCounter("renderer")
 
     fun start() {
+        serializer.start()
         assets.start()
         input.start()
         switchState(MainMenuState::class)

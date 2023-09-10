@@ -7,7 +7,6 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.Component
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics.DisplayMode
@@ -28,14 +27,6 @@ import mu.KotlinLogging
 
 private const val VIRTUAL_WIDTH = 960f
 private const val VIRTUAL_HEIGHT = 540f
-
-data class Sprite(
-    val texture: String = "",
-    val offsetX: Float = 0f,
-    val offsetY: Float = 0f,
-    var alpha: Float = 1f,
-    var scale: Float = 1f
-) : Component()
 
 // TODO: inner class?
 data class DrawActorEvent(

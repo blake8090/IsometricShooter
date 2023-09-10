@@ -1,6 +1,7 @@
 package bke.iso.engine.physics
 
 import bke.iso.engine.world.Component
+import bke.iso.engine.world.ComponentSubType
 import com.badlogic.gdx.math.Vector3
 
 /**
@@ -19,6 +20,7 @@ enum class PhysicsMode {
     GHOST
 }
 
+@ComponentSubType("physicsBody")
 data class PhysicsBody(
     val mode: PhysicsMode,
     val velocity: Vector3 = Vector3(),

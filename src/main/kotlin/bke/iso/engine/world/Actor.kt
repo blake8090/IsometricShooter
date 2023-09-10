@@ -8,11 +8,9 @@ import kotlin.math.floor
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
-// TODO: interface or nah?
-open class Component
-
 private const val Z_CLAMP_THRESHOLD = 0.00001f
 
+@ComponentSubType("description")
 data class Description(val text: String) : Component()
 
 class Actor(

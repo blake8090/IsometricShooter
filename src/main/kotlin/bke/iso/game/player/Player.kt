@@ -8,6 +8,7 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
+import bke.iso.engine.world.ComponentSubType
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import bke.iso.game.combat.Health
@@ -16,6 +17,7 @@ import com.badlogic.gdx.math.Vector3
 
 const val PLAYER_MAX_HEALTH: Float = 5f
 
+@ComponentSubType("player")
 class Player : Component()
 
 fun World.createPlayer(location: Location): Actor =
