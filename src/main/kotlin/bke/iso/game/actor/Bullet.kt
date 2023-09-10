@@ -10,12 +10,12 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
-import bke.iso.engine.world.ComponentSubType
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.game.combat.Combat
 import com.badlogic.gdx.math.Vector3
+import com.fasterxml.jackson.annotation.JsonTypeName
 
 enum class BulletType(
     val speed: Float,
@@ -26,7 +26,7 @@ enum class BulletType(
     TURRET(25f, 1f, 0.2f)
 }
 
-@ComponentSubType("bullet")
+@JsonTypeName("bullet")
 data class Bullet(
     val shooterId: String,
     val startPos: Vector3,

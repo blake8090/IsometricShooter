@@ -1,8 +1,8 @@
 package bke.iso.engine.physics
 
 import bke.iso.engine.world.Component
-import bke.iso.engine.world.ComponentSubType
 import com.badlogic.gdx.math.Vector3
+import com.fasterxml.jackson.annotation.JsonTypeName
 
 /**
  * Defines an actor's movement behavior as well as interactions with Colliders.
@@ -20,7 +20,7 @@ enum class PhysicsMode {
     GHOST
 }
 
-@ComponentSubType("physicsBody")
+@JsonTypeName("physicsBody")
 data class PhysicsBody(
     val mode: PhysicsMode,
     val velocity: Vector3 = Vector3(),

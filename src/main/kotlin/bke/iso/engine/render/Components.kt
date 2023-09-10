@@ -1,10 +1,10 @@
 package bke.iso.engine.render
 
 import bke.iso.engine.world.Component
-import bke.iso.engine.world.ComponentSubType
 import com.badlogic.gdx.graphics.Color
+import com.fasterxml.jackson.annotation.JsonTypeName
 
-@ComponentSubType("sprite")
+@JsonTypeName("sprite")
 data class Sprite(
     val texture: String = "",
     val offsetX: Float = 0f,
@@ -13,7 +13,7 @@ data class Sprite(
     var scale: Float = 1f
 ) : Component()
 
-@ComponentSubType("debugSettings")
+@JsonTypeName("debugSettings")
 data class DebugSettings(
     var collisionBox: Boolean = true,
     var collisionBoxColor: Color = Color.GREEN,

@@ -5,14 +5,14 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.DebugRenderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
-import bke.iso.engine.world.ComponentSubType
 import bke.iso.engine.world.World
 import bke.iso.game.combat.Combat
 import bke.iso.game.player.Player
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.collision.Segment
+import com.fasterxml.jackson.annotation.JsonTypeName
 
-@ComponentSubType("turret")
+@JsonTypeName("turret")
 data class Turret(
     var elapsedCooldownTime: Float = 0f,
     var canShoot: Boolean = true

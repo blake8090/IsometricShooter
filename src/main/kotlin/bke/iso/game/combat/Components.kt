@@ -1,15 +1,15 @@
 package bke.iso.game.combat
 
 import bke.iso.engine.world.Component
-import bke.iso.engine.world.ComponentSubType
+import com.fasterxml.jackson.annotation.JsonTypeName
 
-@ComponentSubType("health")
+@JsonTypeName("health")
 data class Health(
     val maxValue: Float,
     var value: Float = maxValue
 ) : Component()
 
-@ComponentSubType("healthBar")
+@JsonTypeName("healthBar")
 data class HealthBar(
     val offsetX: Float,
     val offsetY: Float

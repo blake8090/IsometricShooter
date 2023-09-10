@@ -10,6 +10,3 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
     visible = true
 )
 open class Component
-
-// TODO: cant we use JsonSubType instead?
-annotation class ComponentSubType(val name: String)
