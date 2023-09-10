@@ -32,7 +32,7 @@ class Assets(override val game: Game) : Module() {
         addLoader("jpg", TextureLoader())
         addLoader("png", TextureLoader())
         addLoader("ttf", FreeTypeFontGeneratorLoader())
-        addLoader("actor", ActorPrefabLoader())
+        addLoader("actor", ActorPrefabLoader(game.serializer))
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T {
@@ -93,7 +93,7 @@ class Assets(override val game: Game) : Module() {
 
         assetCache[name to type] = asset
         loadedAssets.add(asset)
-        log.info { "Loaded asset '${name}' (${type::class.simpleName}) from '${file.canonicalPath}'" }
+        log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
     }
 
     override fun dispose() {

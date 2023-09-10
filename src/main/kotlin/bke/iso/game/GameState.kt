@@ -6,7 +6,6 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
-import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
@@ -73,12 +72,6 @@ class GameState(override val game: Game) : State() {
             .move(-0.5f, 0.5f, 0f)
         factory.createPillar(Location(10, 12, 0))
             .move(-0.5f, 0.5f, 0f)
-
-        // TODO: remove this when finished testing
-        game.world.actors.find<Player>()?.let { actor ->
-            val prefab = ActorPrefab("asd", actor.components.values.toList())
-            println("TEST PREFAB:\n${game.serializer.write(prefab)}")
-        }
 
         bindInput()
     }
@@ -211,4 +204,25 @@ class GameState(override val game: Game) : State() {
             batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
         }
     }
+
+//    private fun generatePrefabs() {
+//        val location = Location()
+//        generatePrefab("player", game.world.createPlayer(location))
+//        //generatePrefab(game.world.createShadow(player))
+//        generatePrefab("wall", factory.createWall(location))
+//        generatePrefab("box", factory.createBox(location))
+//        generatePrefab("turret", factory.createTurret(location))
+//        generatePrefab("platform", game.world.createMovingPlatform(location))
+//        generatePrefab("side-fence", factory.createSideFence(location))
+//        generatePrefab("front-fence", factory.createFrontFence(location))
+//        generatePrefab("pillar", factory.createPillar(location))
+//        generatePrefab("bullet", game.world.createBullet(Actor(""), Vector3(), BulletType.PLAYER))
+//    }
+//
+//    private fun generatePrefab(name: String, actor: Actor) {
+//        val prefab = ActorPrefab(name, actor.components.values.toList())
+//        val json = game.serializer.write(prefab)
+//        println("PREFAB $name\n$json\n")
+//        game.world.actors.delete(actor)
+//    }
 }

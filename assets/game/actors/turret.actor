@@ -1,0 +1,48 @@
+{
+  name: "turret",
+  components: [
+    {
+      type: "sprite",
+      texture: "game/gfx/objects/turret",
+      offsetX: 16.0,
+      offsetY: 0.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "turret",
+      elapsedCooldownTime: 0.0,
+      canShoot: true
+    },
+    {
+      type: "collider",
+      size: {
+        x: 0.25,
+        y: 0.25,
+        z: 0.75
+      },
+      offset: {
+        x: -0.25,
+        y: 0.0,
+        z: 0.0
+      }
+    },
+    {
+      type: "health",
+      maxValue: 3.0,
+      value: 3.0
+    },
+    {
+      type: "healthBar",
+      offsetX: 16.0,
+      offsetY: -36.0
+    },
+    {
+      type: "debugSettings"
+    },
+    {
+      type: "description",
+      text: "turret"
+    }
+  ]
+}

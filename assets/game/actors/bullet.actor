@@ -1,0 +1,37 @@
+{
+  name: "bullet",
+  components: [
+    {
+      type: "sprite",
+      texture: "game/gfx/objects/bullet",
+      offsetX: 8.0,
+      offsetY: 8.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "physicsBody",
+      mode: "GHOST"
+    },
+    {
+      type: "collider",
+      size: {
+        x: 0.125,
+        y: 0.125,
+        z: 0.125
+      },
+      offset: {
+        x: 0.0,
+        y: -0.125,
+        z: 0.0
+      }
+    },
+    {
+      type: "debugSettings"
+    },
+    {
+      type: "description",
+      text: "bullet"
+    }
+  ]
+}

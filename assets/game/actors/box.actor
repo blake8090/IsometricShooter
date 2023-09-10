@@ -1,0 +1,28 @@
+{
+  name: "box",
+  components: [
+    {
+      type: "sprite",
+      texture: "game/gfx/objects/box",
+      offsetX: 16.0,
+      offsetY: 8.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "collider",
+      size: {
+        x: 0.5,
+        y: 0.5,
+        z: 0.5
+      }
+    },
+    {
+      type: "debugSettings"
+    },
+    {
+      type: "description",
+      text: "box"
+    }
+  ]
+}

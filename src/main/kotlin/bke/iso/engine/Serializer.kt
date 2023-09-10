@@ -7,11 +7,12 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.json.JsonWriteFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.reflections.Reflections
 
 class Serializer {
 
-    private val mapper = jacksonObjectMapper()
+    val mapper = jacksonObjectMapper()
 
     fun start() {
         mapper.apply {
@@ -30,6 +31,9 @@ class Serializer {
 
     fun <T : Any> write(value: T): String =
         mapper.writeValueAsString(value)
+
+    inline fun <reified T : Any> read(content: String): T =
+        mapper.readValue(content)
 }
 
 @Suppress("UNUSED")

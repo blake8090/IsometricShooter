@@ -1,9 +1,0 @@
-[floor]
-symbol = "."
-texture = "floor"
-collidable = false
-
-[wall]
-symbol = "#"
-texture = "wall3"
-collidable = true
