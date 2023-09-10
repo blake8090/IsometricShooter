@@ -2,7 +2,6 @@ package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -19,6 +18,8 @@ class EditorAssetBrowser(
     private val assets: Assets
 ) {
 
+    private lateinit var browser: Table
+
     fun create(): Actor {
         setup()
 
@@ -27,8 +28,6 @@ class EditorAssetBrowser(
 
         root.add(createTabs())
             .expandX()
-            .top()
-            .left()
 
         root.row()
 
@@ -36,32 +35,13 @@ class EditorAssetBrowser(
         browserContainer.borderSize = 4f
         root.add(browserContainer)
             .grow()
-            .top()
-            .left()
 
-//        root.add(createTabs())
-//            .expand()
-//        root.row()
-//        root.add(createAssetBrowser())
+        browser = Table().top().left()
+        browserContainer.add(browser)
+            .pad(browserContainer.borderSize) // don't let borders cover the content
+            .grow()
 
-//        root.row()
-//        val container = BorderedTable(color(77, 100, 130))
-//        container.borderSize = 4f
-//
-//        val browser = Table().top().left()
-//        browser.add(createAssetButton("floor", "game/gfx/tiles/floor", skin))
-//            .fill()
-//
-//        val scrollPane = ScrollPane(browser)
-//        scrollPane.layout()
-//        container.add(scrollPane)
-//            .fill()
-//            .expand()
-//
-//        root.add(container)
-//            .fill()
-//            .expand()
-
+        addTestAssets()
         return root
     }
 
@@ -92,10 +72,27 @@ class EditorAssetBrowser(
         return table
     }
 
-    private fun createBrowser(): Table {
-        val table = BorderedTable(skin.get<Color>("table-border"))
-        table.borderSize = 4f
-        return table
+    private fun addTestAssets() {
+        addAsset("box", "game/gfx/objects/box")
+        addAsset("fence-front", "game/gfx/objects/fence-front")
+
+        browser.row()
+        addAsset("player", "game/gfx/objects/player")
+        addAsset("pillar", "game/gfx/objects/pillar")
+
+        browser.row()
+        addAsset("platform", "game/gfx/objects/platform")
+        addAsset("turret", "game/gfx/objects/turret")
+
+        browser.row()
+        addAsset("lamppost", "game/gfx/objects/lamppost")
+    }
+
+    private fun addAsset(name: String, textureName: String) {
+        browser.add(createAssetButton(name, textureName, skin))
+            .uniform()
+            .fill()
+            .pad(10f)
     }
 
     private fun createAssetButton(name: String, texture: String, skin: Skin): ImageTextButton {

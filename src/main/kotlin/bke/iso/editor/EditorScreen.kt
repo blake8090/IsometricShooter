@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.Value
 
 class EditorScreen(assets: Assets) : UIScreen(assets) {
 
@@ -27,7 +26,6 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
                 .colspan(2)
             row()
             add(assetBrowser.create())
-                .width(Value.percentWidth(.15f, this))
                 .growY()
                 .top()
                 .left()
