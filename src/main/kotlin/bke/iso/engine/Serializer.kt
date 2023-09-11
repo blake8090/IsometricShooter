@@ -29,6 +29,7 @@ class Serializer {
         mapper.registerSubtypes(*componentSubTypes)
     }
 
+    // TODO: are generics really needed?
     fun <T : Any> write(value: T): String =
         mapper.writeValueAsString(value)
 
@@ -36,6 +37,7 @@ class Serializer {
         mapper.readValue(content)
 }
 
+// TODO: just use JsonIgnoreProperties?
 @Suppress("UNUSED")
 private abstract class Vector3Mixin {
     @JsonIgnore
