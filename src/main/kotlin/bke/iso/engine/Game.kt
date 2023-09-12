@@ -7,16 +7,13 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
+import bke.iso.engine.ui.loading.BasicLoadingScreen
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.utils.PerformanceCounter
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import ktx.async.KtxAsync
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
-import kotlin.time.measureTime
 
 interface Event
 
@@ -40,7 +37,6 @@ class Game {
     val ui: UI = UI(input)
 
     private var state: State = EmptyState(this)
-    private var loading = false
 
     private val performanceCounter = PerformanceCounter("renderer")
 
@@ -48,6 +44,10 @@ class Game {
         serializer.start()
         assets.start()
         input.start()
+
+        assets.load("ui")
+        ui.setLoadingScreen(BasicLoadingScreen(assets))
+
         setState(MainMenuState::class)
     }
 
@@ -59,14 +59,16 @@ class Game {
     }
 
     fun update(deltaTime: Float) {
-        if (!loading) {
-            runFrame(deltaTime)
-        }
-        ui.update(deltaTime)
+        runFrame(deltaTime)
+        ui.draw(deltaTime)
         renderer.drawCursor()
     }
 
     private fun runFrame(deltaTime: Float) {
+        if (ui.isLoadingScreenActive) {
+            return
+        }
+
         collisions.update()
         // TODO: investigate using fixed time step
         physics.update(deltaTime)
@@ -93,31 +95,11 @@ class Game {
 
     fun <T : State> setState(type: KClass<T>) {
         log.debug { "Switching to state ${type.simpleName}" }
-
-        loading = true
-
-        val constructor = type.primaryConstructor
-        requireNotNull(constructor) {
-            "Type ${type.simpleName} must have a primary constructor"
-        }
-
-        state = constructor.call(this)
-        state.loadingScreen?.let(ui::setScreen)
-        KtxAsync.launch { load(state) }
-    }
-
-    private suspend fun load(state: State) {
-        if (state.loadingScreen != null) {
-            // delay a bit to give time for the loading screen to show up
-            delay(300)
-        }
-        val duration = measureTime {
-            log.debug { "Loading started" }
+        state = requireNotNull(type.primaryConstructor).call(this)
+        ui.loadingScreen.start {
             state.load()
             state.start()
-            loading = false
         }
-        log.debug { "Loading finished in ${duration.inWholeMilliseconds} ms" }
     }
 
     // TODO: separate into different class!

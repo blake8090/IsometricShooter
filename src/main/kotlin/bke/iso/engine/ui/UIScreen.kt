@@ -18,7 +18,7 @@ abstract class UIScreen(protected val assets: Assets) {
 
     abstract fun create()
 
-    fun render(deltaTime: Float) {
+    open fun draw(deltaTime: Float) {
         stage.act(deltaTime)
         stage.viewport.apply()
         stage.draw()

@@ -20,7 +20,6 @@ class EditorState(override val game: Game) : State() {
 
     override fun load() {
         game.assets.load("game")
-        game.assets.load("ui")
     }
 
     override fun start() {

@@ -15,7 +15,6 @@ import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
-import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.Factory
@@ -34,7 +33,6 @@ import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.ui.CrosshairCursor
 import bke.iso.game.ui.GameHUD
-import bke.iso.game.ui.LoadingScreen
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -56,8 +54,6 @@ class GameState(override val game: Game) : State() {
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions)
     )
-
-    override var loadingScreen: UIScreen? = LoadingScreen(game.assets)
 
     override fun load() {
         game.assets.addLoader("map2", GameMapLoader())
