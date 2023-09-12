@@ -56,7 +56,7 @@ class GameState(override val game: Game) : State() {
     )
 
     override fun load() {
-        game.assets.addLoader("map2", GameMapLoader())
+        game.assets.register(GameMapLoader())
         game.assets.load("game")
 
         loadMap()

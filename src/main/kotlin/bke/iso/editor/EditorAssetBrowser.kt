@@ -80,7 +80,7 @@ class EditorAssetBrowser(
 
     private fun populateBrowser() {
         val buttons = mutableListOf<ImageTextButton>()
-        for (prefab in assets.getAll(ActorPrefab::class)) {
+        for (prefab in assets.getAll<ActorPrefab>()) {
             val texture = prefab.components
                 .filterIsInstance<Sprite>()
                 .firstOrNull()
