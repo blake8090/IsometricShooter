@@ -1,19 +1,17 @@
 package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
-import bke.iso.engine.Serializer
 import bke.iso.engine.SystemInfo
-import bke.iso.engine.asset.prefab.ActorPrefabLoader
 import bke.iso.engine.file.Files
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.OrderedMap.OrderedMapValues
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -29,15 +27,15 @@ interface AssetLoader<T : Any> {
     fun load(file: File): T
 }
 
-private const val BASE_PATH = "assets"
+const val BASE_PATH = "assets"
 
 private typealias AssetCache<T> = OrderedMap<String, T>
 
-class Assets(
-    private val files: Files,
-    private val serializer: Serializer,
-    systemInfo: SystemInfo
-) {
+// TODO: move this to Game or something
+fun getCoroutineScope(): CoroutineScope =
+    KtxAsync
+
+class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     private val log = KotlinLogging.logger {}
 
@@ -48,19 +46,10 @@ class Assets(
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
     private val cacheMutex = Mutex()
 
-    fun start() {
-        // TODO: move these to game to reduce dependencies
-        register(TextureLoader())
-        register(FreeTypeFontGeneratorLoader())
-        register(ActorPrefabLoader(serializer))
-    }
-
-    inline fun <reified T : Any> get(name: String): T {
-        val cache = getCache<T>()
-        return requireNotNull(cache[name]) {
-            "Asset '$name' (${T::class.simpleName}) was not found"
-        }
-    }
+    inline fun <reified T : Any> get(name: String): T =
+        getCache<T>()
+            .get(name)
+            ?: error("Asset '$name' (${T::class.simpleName}) was not found")
 
     inline fun <reified T : Any> getAll(): OrderedMapValues<T> =
         OrderedMapValues(getCache<T>())
@@ -68,7 +57,7 @@ class Assets(
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getCache(type: KClass<T>): AssetCache<T> =
         cacheByType[type] as? AssetCache<T>
-            ?: error("Expected asset cache for type '${type.simpleName}'")
+            ?: error("Expected asset cache for type ${type.simpleName}")
 
     inline fun <reified T : Any> getCache(): AssetCache<T> =
         getCache(T::class)
@@ -90,10 +79,9 @@ class Assets(
     private fun validateLoader(extension: String, assetLoader: AssetLoader<*>) {
         val existing = loaderByExtension[extension]
         if (existing != null) {
-            error(
-                "Error registering ${assetLoader::class.simpleName}:"
-                        + "Extension '.$extension' already registered to '${existing::class.simpleName}'"
-            )
+            val message = "Error registering ${assetLoader::class.simpleName}: " +
+                    "Extension '$extension' already registered to ${existing::class.simpleName}"
+            error(message)
         }
     }
 
@@ -108,20 +96,19 @@ class Assets(
             files.listFiles(assetsPath)
         }
 
-        KtxAsync.launch {
-            val tasks = files.mapTo(mutableListOf()) { file ->
-                KtxAsync.async {
+        val tasks = files
+            .mapTo(mutableListOf()) { file ->
+                getCoroutineScope().async {
                     load(file, loaderByExtension[file.extension])
                 }
             }
-            tasks.awaitAll()
-        }
+        tasks.awaitAll()
     }
 
     @Suppress("UNCHECKED_CAST")
     private suspend inline fun <T : Any> load(file: File, assetLoader: AssetLoader<T>?) {
         if (assetLoader == null) {
-            log.warn { "Skipping file skipping file '${file.canonicalPath}': No loader found for '.${file.extension}'" }
+            log.warn { "Skipping file skipping file '${file.canonicalPath}': No loader found for '${file.extension}'" }
             return
         }
 
@@ -130,6 +117,10 @@ class Assets(
 
         cacheMutex.withLock {
             val type = asset::class as KClass<T>
+            if (!cacheByType.containsKey(type)) {
+                cacheByType.put(type, AssetCache<T>())
+            }
+
             getCache(type).put(name, asset)
             log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
         }

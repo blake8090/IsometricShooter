@@ -1,6 +1,9 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
+import bke.iso.engine.asset.TextureLoader
+import bke.iso.engine.asset.prefab.ActorPrefabLoader
 import bke.iso.engine.file.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
@@ -26,7 +29,7 @@ class Game {
 
     val files: Files = Files()
     val serializer = Serializer()
-    val assets: Assets = Assets(files, serializer, systemInfo)
+    val assets: Assets = Assets(files, systemInfo)
 
     val world: World = World()
     val renderer: Renderer = Renderer(world, assets, events)
@@ -42,12 +45,16 @@ class Game {
 
     fun start() {
         serializer.start()
-        assets.start()
         input.start()
 
-        assets.load("ui")
-        ui.setLoadingScreen(BasicLoadingScreen(assets))
+        assets.run {
+            register(TextureLoader())
+            register(FreeTypeFontGeneratorLoader())
+            register(ActorPrefabLoader(serializer))
+            load("ui")
+        }
 
+        ui.setLoadingScreen(BasicLoadingScreen(assets))
         setState(MainMenuState::class)
     }
 
