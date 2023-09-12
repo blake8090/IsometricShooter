@@ -1,14 +1,12 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.Game
-import bke.iso.engine.Module
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
 
 interface GameObject
 
-class World(override val game: Game) : Module() {
+class World {
 
     private val grid = Grid()
 
@@ -17,7 +15,7 @@ class World(override val game: Game) : Module() {
     // TODO: property?
     fun getObjects() = grid.getObjects()
 
-    override fun update(deltaTime: Float) {
+    fun update() {
         actors.update()
     }
 

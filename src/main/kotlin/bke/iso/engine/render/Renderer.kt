@@ -2,12 +2,13 @@ package bke.iso.engine.render
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
-import bke.iso.engine.Module
+import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Tile
+import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics.DisplayMode
 import com.badlogic.gdx.graphics.Color
@@ -34,7 +35,11 @@ data class DrawActorEvent(
     val batch: PolygonSpriteBatch
 ) : Event
 
-class Renderer(override val game: Game) : Module() {
+class Renderer(
+    private val world: World,
+    private val assets: Assets,
+    private val events: Game.Events
+) {
 
     private val log = KotlinLogging.logger {}
 
@@ -85,7 +90,7 @@ class Renderer(override val game: Game) : Module() {
         log.info { "System info - Screen PPI ratio: $screenDensity" }
     }
 
-    override fun dispose() {
+    fun dispose() {
         batch.dispose()
         fbo.dispose()
     }
@@ -136,7 +141,7 @@ class Renderer(override val game: Game) : Module() {
         ScreenUtils.clear(0f, 0f, 255f, 1f)
         batch.projectionMatrix = camera.combined
         batch.begin()
-        objectSorter.forEach(game.world.getObjects()) {
+        objectSorter.forEach(world.getObjects()) {
             when (it) {
                 is Actor -> draw(it)
                 is Tile -> draw(it)
@@ -167,7 +172,7 @@ class Renderer(override val game: Game) : Module() {
         val sprite = actor.get<Sprite>() ?: return
         drawSprite(sprite, actor.pos)
         debug.add(actor)
-        game.events.fire(DrawActorEvent(actor, batch))
+        events.fire(DrawActorEvent(actor, batch))
     }
 
     private fun draw(tile: Tile) {
@@ -176,7 +181,7 @@ class Renderer(override val game: Game) : Module() {
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
-        val texture = game.assets.get<Texture>(sprite.texture)
+        val texture = assets.get<Texture>(sprite.texture)
         val screenPos = toScreen(worldPos)
             .sub(sprite.offsetX, sprite.offsetY)
 

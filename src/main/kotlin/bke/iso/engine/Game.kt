@@ -24,16 +24,20 @@ class Game {
 
     private val log = KotlinLogging.logger {}
 
+    val systemInfo = SystemInfo()
     val events: Events = Events()
-    val renderer: Renderer = Renderer(this)
-    val assets: Assets = Assets(this)
+
     val files: Files = Files()
-    val input: Input = Input(this)
-    val collisions: Collisions = Collisions(this)
-    val physics: Physics = Physics(this)
-    val world: World = World(this)
-    val ui: UI = UI(this)
     val serializer = Serializer()
+    val assets: Assets = Assets(files, serializer, systemInfo)
+
+    val world: World = World()
+    val renderer: Renderer = Renderer(world, assets, events)
+    val collisions: Collisions = Collisions(renderer, world)
+    val physics: Physics = Physics(world, collisions)
+
+    val input: Input = Input(events)
+    val ui: UI = UI(input)
 
     private var state: State = EmptyState(this)
     private var loading = false
@@ -63,14 +67,14 @@ class Game {
     }
 
     private fun runFrame(deltaTime: Float) {
-        collisions.update(deltaTime)
+        collisions.update()
         // TODO: investigate using fixed time step
         physics.update(deltaTime)
 
-        input.update(deltaTime)
+        input.update()
         renderer.updateCursor(deltaTime)
         state.update(deltaTime)
-        world.update(deltaTime)
+        world.update()
 
 //        performanceCounter.start()
         renderer.draw()
@@ -116,20 +120,11 @@ class Game {
         log.debug { "Loading finished in ${duration.inWholeMilliseconds} ms" }
     }
 
+    // TODO: separate into different class!
     inner class Events {
         fun fire(event: Event) {
             state.handleEvent(event)
             ui.handleEvent(event)
         }
     }
-}
-
-abstract class Module {
-    protected abstract val game: Game
-
-    open fun start() {}
-
-    open fun update(deltaTime: Float) {}
-
-    open fun dispose() {}
 }

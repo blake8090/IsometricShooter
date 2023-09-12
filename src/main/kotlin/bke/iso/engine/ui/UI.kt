@@ -1,22 +1,21 @@
 package bke.iso.engine.ui
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
-import bke.iso.engine.Module
+import bke.iso.engine.input.Input
 import mu.KotlinLogging
 
-class UI(override val game: Game) : Module() {
+class UI(private val input: Input) {
 
     private val log = KotlinLogging.logger {}
     private val screens = ArrayDeque<UIScreen>()
 
-    override fun update(deltaTime: Float) {
+    fun update(deltaTime: Float) {
         for (screen in screens) {
             screen.render(deltaTime)
         }
     }
 
-    override fun dispose() {
+    fun dispose() {
         for (screen in screens) {
             screen.dispose()
         }
@@ -32,10 +31,10 @@ class UI(override val game: Game) : Module() {
         clear()
         log.debug { "Setting screen to ${screen::class.simpleName}" }
         screens.addFirst(screen)
-        game.input.addInputProcessor(screen.stage)
-        game.input.addControllerListener(screen.controllerNavigation)
+        input.addInputProcessor(screen.stage)
+        input.addControllerListener(screen.controllerNavigation)
         screen.create()
-        if (game.input.isUsingController()) {
+        if (input.isUsingController()) {
             screen.controllerNavigation.start()
         }
     }
@@ -43,8 +42,8 @@ class UI(override val game: Game) : Module() {
     private fun clear() {
         for (screen in screens) {
             log.debug { "Disposing screen ${screen::class.simpleName}" }
-            game.input.removeInputProcessor(screen.stage)
-            game.input.removeControllerListener(screen.controllerNavigation)
+            input.removeInputProcessor(screen.stage)
+            input.removeControllerListener(screen.controllerNavigation)
             screen.dispose()
         }
         screens.clear()

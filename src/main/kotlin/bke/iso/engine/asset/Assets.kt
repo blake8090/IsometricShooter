@@ -1,10 +1,10 @@
 package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
-import bke.iso.engine.Game
-import bke.iso.engine.Module
+import bke.iso.engine.Serializer
+import bke.iso.engine.SystemInfo
 import bke.iso.engine.asset.prefab.ActorPrefabLoader
-import com.badlogic.gdx.graphics.g2d.BitmapFont
+import bke.iso.engine.file.Files
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 import java.io.File
@@ -18,21 +18,25 @@ interface AssetLoader<T : Any> {
 
 private const val BASE_PATH = "assets"
 
-class Assets(override val game: Game) : Module() {
+class Assets(
+    private val files: Files,
+    private val serializer: Serializer,
+    systemInfo: SystemInfo
+) {
 
     private val log = KotlinLogging.logger {}
 
-    val fonts: Fonts = Fonts(this, game.renderer)
+    val fonts: Fonts = Fonts(this, systemInfo)
 
     private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
     private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Any>()
     private val loadedAssets = mutableSetOf<Any>()
 
-    override fun start() {
+    fun start() {
         addLoader("jpg", TextureLoader())
         addLoader("png", TextureLoader())
         addLoader("ttf", FreeTypeFontGeneratorLoader())
-        addLoader("actor", ActorPrefabLoader(game.serializer))
+        addLoader("actor", ActorPrefabLoader(serializer))
     }
 
     fun <T : Any> get(name: String, type: KClass<T>): T {
@@ -53,11 +57,7 @@ class Assets(override val game: Game) : Module() {
             .map(type::cast)
 
     operator fun <T : Any> contains(asset: T) =
-        if (asset is BitmapFont) {
-            asset in fonts
-        } else {
-            loadedAssets.contains(asset)
-        }
+        loadedAssets.contains(asset)
 
     fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
         loadersByExtension[fileExtension]?.let { existing ->
@@ -69,10 +69,10 @@ class Assets(override val game: Game) : Module() {
     }
 
     fun load(path: String) {
-        val assetsPath = game.files.combinePaths(BASE_PATH, path)
+        val assetsPath = files.combinePaths(BASE_PATH, path)
         log.info { "Loading assets in path '$assetsPath'" }
 
-        for (file in game.files.listFiles(assetsPath)) {
+        for (file in files.listFiles(assetsPath)) {
             val assetLoader = loadersByExtension[file.extension]
             if (assetLoader == null) {
                 log.warn { "No loader found for '.${file.extension}', skipping file '${file.canonicalPath}'" }
@@ -86,15 +86,15 @@ class Assets(override val game: Game) : Module() {
         val asset = assetLoader.load(file)
         val type = asset::class
 
-        val parentPath = game.files.relativeParentPath(BASE_PATH, file)
-        val name = game.files.combinePaths(parentPath, file.nameWithoutExtension)
+        val parentPath = files.relativeParentPath(BASE_PATH, file)
+        val name = files.combinePaths(parentPath, file.nameWithoutExtension)
 
         assetCache[name to type] = asset
         loadedAssets.add(asset)
         log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
     }
 
-    override fun dispose() {
+    fun dispose() {
         log.info { "Disposing assets" }
         for ((nameType, asset) in assetCache) {
             if (asset is Disposable) {

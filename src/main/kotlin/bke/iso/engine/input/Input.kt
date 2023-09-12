@@ -1,29 +1,28 @@
 package bke.iso.engine.input
 
 import bke.iso.engine.Game
-import bke.iso.engine.Module
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.controllers.ControllerListener
 import com.badlogic.gdx.controllers.Controllers
 
-class Input(override val game: Game) : Module() {
+class Input(events: Game.Events) {
 
     private val inputMultiplexer = InputMultiplexer()
-    private val inputState = InputState(game.events)
+    private val inputState = InputState(events)
 
     val keyMouse: KeyMouseInput = KeyMouseInput()
     val controller: ControllerInput = ControllerInput(inputState)
 
-    override fun start() {
+    fun start() {
         Gdx.input.inputProcessor = inputMultiplexer
         addInputProcessor(inputState.keyMouseHandler)
         Controllers.addListener(inputState.controllerHandler)
         inputState.start()
     }
 
-    override fun update(deltaTime: Float) {
+    fun update() {
         keyMouse.update()
         controller.update()
     }

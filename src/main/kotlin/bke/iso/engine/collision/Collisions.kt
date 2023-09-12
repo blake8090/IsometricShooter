@@ -1,12 +1,12 @@
 package bke.iso.engine.collision
 
-import bke.iso.engine.Game
-import bke.iso.engine.Module
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
+import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
+import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
@@ -18,14 +18,17 @@ import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sign
 
-class Collisions(override val game: Game) : Module() {
+class Collisions(
+    private val renderer: Renderer,
+    private val world: World
+) {
 
     private val log = KotlinLogging.logger {}
 
     private val previousCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
     private val currentCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
 
-    override fun update(deltaTime: Float) {
+    fun update() {
         previousCollisions.clear()
         previousCollisions.putAll(currentCollisions)
         currentCollisions.clear()
@@ -38,9 +41,9 @@ class Collisions(override val game: Game) : Module() {
         previousCollisions[actor].orEmpty()
 
     fun checkCollisions(box: Box): Set<Collision> {
-        game.renderer.debug.addBox(box, 1f, Color.SKY)
+        renderer.debug.addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
-        val objects = game.world.getObjectsInArea(box)
+        val objects = world.getObjectsInArea(box)
         for (obj in objects) {
             checkCollision(box, obj)?.let(collisions::add)
         }
@@ -64,14 +67,14 @@ class Collisions(override val game: Game) : Module() {
 
     fun checkCollisions(segment: Segment): Set<SegmentCollision> {
         val area = Box.fromMinMax(segment)
-        game.renderer.debug.addBox(area, 1f, Color.ORANGE)
+        renderer.debug.addBox(area, 1f, Color.ORANGE)
 
         val direction = Vector3(segment.b)
             .sub(segment.a)
             .nor()
         val ray = Ray(segment.a, direction)
 
-        return game.world
+        return world
             .getObjectsInArea(area)
             .mapNotNull { obj -> checkCollision(segment, ray, obj) }
             .toSet()
@@ -119,11 +122,11 @@ class Collisions(override val game: Game) : Module() {
             py * delta.y.sign,
             pz * delta.z.sign,
         )
-        game.renderer.debug.addBox(projectedBox, 1f, Color.ORANGE)
+        renderer.debug.addBox(projectedBox, 1f, Color.ORANGE)
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()
-        for (obj in game.world.getObjectsInArea(projectedBox)) {
+        for (obj in world.getObjectsInArea(projectedBox)) {
             if (actor == obj) {
                 continue
             }

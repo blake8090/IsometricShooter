@@ -1,7 +1,7 @@
 package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
-import bke.iso.engine.render.Renderer
+import bke.iso.engine.SystemInfo
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -19,7 +19,7 @@ private const val REFERENCE_WIDTH = 2560f
 
 class Fonts(
     private val assets: Assets,
-    private val renderer: Renderer
+    private val systemInfo: SystemInfo
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -29,14 +29,14 @@ class Fonts(
     operator fun get(options: FontOptions): BitmapFont =
         cache.getOrPut(options) { generateFont(options) }
 
-    operator fun contains(font: BitmapFont) =
-        cache.containsValue(font)
+    operator fun contains(asset: Any) =
+        asset is BitmapFont && cache.containsValue(asset)
 
     private fun generateFont(options: FontOptions): BitmapFont {
         // TODO: cache scale, simplify formula and add comments
         val baseScale = 0.5f
-        val density = renderer.screenDensity
-        val widthRatio = renderer.maxDisplayMode.width / REFERENCE_WIDTH
+        val density = systemInfo.screenDensity
+        val widthRatio = systemInfo.maxDisplayMode.width / REFERENCE_WIDTH
 
         val scale = (baseScale + density) * widthRatio
         log.debug {
@@ -66,6 +66,7 @@ class Fonts(
     fun dispose() {
         log.info { "Disposing fonts" }
         for ((options, font) in cache) {
+            // TODO: use bitmap font name
             Disposer.dispose(font, options.name)
         }
     }

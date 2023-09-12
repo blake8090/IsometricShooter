@@ -1,24 +1,27 @@
 package bke.iso.engine.physics
 
-import bke.iso.engine.Game
-import bke.iso.engine.Module
 import bke.iso.engine.collision.CollisionSide
+import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.PredictedCollision
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
+import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 import kotlin.math.abs
 
 const val DEFAULT_GRAVITY: Float = -12f
 
-class Physics(override val game: Game) : Module() {
+class Physics(
+    private val world: World,
+    private val collisions: Collisions
+) {
 
     private val log = KotlinLogging.logger {}
 
-    override fun update(deltaTime: Float) {
-        game.world.actors.each { actor, body: PhysicsBody ->
+    fun update(deltaTime: Float) {
+        world.actors.each { actor, body: PhysicsBody ->
             update(actor, body, deltaTime)
         }
     }
@@ -44,7 +47,7 @@ class Physics(override val game: Game) : Module() {
     }
 
     private fun move(actor: Actor, body: PhysicsBody, delta: Vector3) {
-        val collision = game.collisions.predictCollisions(actor, delta)
+        val collision = collisions.predictCollisions(actor, delta)
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
             .firstOrNull { collision -> getPhysicsMode(collision.obj) != PhysicsMode.GHOST }
 
