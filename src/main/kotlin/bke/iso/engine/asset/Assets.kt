@@ -87,7 +87,6 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     fun load(string: String) {}
 
-    // TODO: figure out how to unit test this
     suspend fun loadAsync(path: String) {
         val assetsPath = files.combinePaths(BASE_PATH, path)
         log.info { "Loading assets in path '$assetsPath'" }
