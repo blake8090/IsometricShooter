@@ -18,8 +18,8 @@ class MainMenuState(override val game: Game) : State() {
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is StartEvent -> game.switchState(GameState::class)
-            is EditorEvent -> game.switchState(EditorState::class)
+            is StartEvent -> game.setState(GameState::class)
+            is EditorEvent -> game.setState(EditorState::class)
         }
     }
 

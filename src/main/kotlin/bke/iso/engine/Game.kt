@@ -48,7 +48,7 @@ class Game {
         serializer.start()
         assets.start()
         input.start()
-        switchState(MainMenuState::class)
+        setState(MainMenuState::class)
     }
 
     fun stop() {
@@ -91,7 +91,7 @@ class Game {
         ui.resize(width, height)
     }
 
-    fun <T : State> switchState(type: KClass<T>) {
+    fun <T : State> setState(type: KClass<T>) {
         log.debug { "Switching to state ${type.simpleName}" }
 
         loading = true
