@@ -8,23 +8,12 @@ import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import ktx.async.skipFrame
 import java.io.File
 
 class AssetsTest : StringSpec({
     val files = mockk<Files>()
     val systemInfo = mockk<SystemInfo>()
-
-    mockkStatic("bke.iso.engine.asset.AssetsKt")
-    every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
-
-    mockkStatic(::skipFrame)
-    coEvery { skipFrame() } returns Unit
 
     // TODO: test multiple extensions
 

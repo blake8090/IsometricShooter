@@ -9,11 +9,9 @@ import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.OrderedMap.OrderedMapValues
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import ktx.async.KtxAsync
 import mu.KotlinLogging
 import java.io.File
 import kotlin.reflect.KClass
@@ -21,10 +19,6 @@ import kotlin.reflect.KClass
 const val BASE_PATH = "assets"
 
 private typealias AssetCache<T> = OrderedMap<String, T>
-
-// TODO: move this to Game or something
-fun getCoroutineScope(): CoroutineScope =
-    KtxAsync
 
 // TODO: handle duplicate assets being loaded
 class Assets(private val files: Files, systemInfo: SystemInfo) {

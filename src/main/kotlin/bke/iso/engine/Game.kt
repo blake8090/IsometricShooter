@@ -9,6 +9,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
