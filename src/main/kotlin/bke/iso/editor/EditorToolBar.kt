@@ -18,39 +18,43 @@ class EditorToolBar(
 ) {
 
     fun create(): Table {
-        val toolBar = BorderedTable(skin.getColor("table-border"))
-        toolBar.left()
-        toolBar.borderSize = 2f
-        toolBar.background = skin.getDrawable("bg")
+        val root = BorderedTable(skin.getColor("table-border"))
+        root.left()
+        root.padTop(5f)
+        root.padBottom(5f)
+        root.borderSize = 1f
+        root.borderLeft = false
+        root.background = skin.getDrawable("bg")
 
         val pointerButton = createButton("pointer.png")
-        toolBar.add(pointerButton)
+        root.add(pointerButton)
+            .padLeft(5f)
 
         val brushButton = createButton("brush.png")
-        toolBar.add(brushButton)
+        root.add(brushButton)
 
         val eraserButton = createButton("eraser.png")
-        toolBar.add(eraserButton)
+        root.add(eraserButton)
 
         ButtonGroup(pointerButton, brushButton, eraserButton)
 
         val gridButton = createButton("grid.png")
         gridButton.style.checked = newTextureDrawable("grid.png", "button-checked")
-        toolBar.add(gridButton).spaceLeft(30f)
+        root.add(gridButton).spaceLeft(30f)
 
-        toolBar.add(Label("Layer: 1", skin)).spaceLeft(30f)
+        root.add(Label("Layer: 1", skin)).spaceLeft(30f)
 
         val decreaseLayerButton = createButton("minus.png").apply {
             style.up = newTextureDrawable("minus.png", "button-up")
         }
-        toolBar.add(decreaseLayerButton).space(20f)
+        root.add(decreaseLayerButton).space(20f)
 
         val increaseLayerButton = createButton("plus.png").apply {
             style.up = newTextureDrawable("plus.png", "button-up")
         }
-        toolBar.add(increaseLayerButton)
+        root.add(increaseLayerButton)
 
-        return toolBar
+        return root
     }
 
     private fun createButton(texture: String): Button {
