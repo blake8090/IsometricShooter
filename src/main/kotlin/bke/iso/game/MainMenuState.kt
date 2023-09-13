@@ -11,7 +11,7 @@ class MainMenuState(override val game: Game) : State() {
 
     override val systems: Set<System> = emptySet()
 
-    override fun start() {
+    override suspend fun load() {
         game.ui.setScreen(MainMenuScreen(game.assets, game.events))
     }
 

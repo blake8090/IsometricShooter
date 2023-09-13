@@ -64,11 +64,13 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         }
     }
 
-    inline operator fun <reified T : Any> contains(asset: T) =
+    operator fun <T : Any> contains(asset: T) =
         if (asset is BitmapFont) {
             asset in fonts
+        } else if (!cacheByType.containsKey(asset::class)) {
+            false
         } else {
-            getCache<T>().containsValue(asset, false)
+            getCache(asset::class).containsValue(asset, false)
         }
 
     private fun validateLoader(extension: String, assetLoader: AssetLoader<*>) {
@@ -115,6 +117,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
                 cacheByType.put(type, AssetCache<T>())
             }
 
+            // TODO: keep extension in name?
             getCache(type).put(name, asset)
             log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
         }

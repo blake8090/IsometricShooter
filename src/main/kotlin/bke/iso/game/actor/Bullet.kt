@@ -82,7 +82,7 @@ fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletTyp
         pos.y,
         pos.z + bulletType.zOffset,
         Bullet(shooter.id, pos, bulletType),
-        Sprite("game/gfx/objects/bullet", 8f, 8f),
+        Sprite("bullet", 8f, 8f),
         PhysicsBody(mode = PhysicsMode.GHOST, velocity = Vector3(direction).scl(bulletType.speed)),
         Collider(
             Vector3(0.125f, 0.125f, 0.125f),

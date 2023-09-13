@@ -86,7 +86,7 @@ fun World.createShadow(actor: Actor): Actor =
         actor.y,
         actor.z,
         // TODO: sprite offsets should be negative for consistency!
-        Sprite("game/gfx/shadow", 16f, 16f, SPRITE_ALPHA),
+        Sprite("shadow", 16f, 16f, SPRITE_ALPHA),
         PhysicsBody(PhysicsMode.GHOST),
         Shadow(actor.id),
         Collider(

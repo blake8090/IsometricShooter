@@ -18,11 +18,8 @@ class EditorState(override val game: Game) : State() {
     private var gridWidth = 20
     private var gridLength = 20
 
-    override fun load() {
-        game.assets.load("game")
-    }
-
-    override fun start() {
+    override suspend fun load() {
+        game.assets.loadAsync("game")
         log.info { "Starting editor" }
         game.ui.setScreen(editorScreen)
     }

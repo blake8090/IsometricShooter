@@ -85,4 +85,97 @@ class AssetsTest : StringSpec({
             assets.get<String>("file2") shouldBe "file2.txt: test"
         }
     }
+
+    "should return true when asset is present" {
+        val expectedValue = "value"
+
+        class LoaderA : AssetLoader<String> {
+            override val extensions: List<String> = listOf("txt")
+
+            override fun load(file: File): String =
+                expectedValue
+        }
+
+        mockkStatic("bke.iso.engine.asset.AssetsKt")
+        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
+
+        runBlocking {
+            val file = mockk<File>()
+            coEvery { file.name } returns "file.txt"
+            coEvery { file.canonicalPath } returns "some/path/file.txt"
+
+            val path = "path"
+            val fullPath = "$BASE_PATH/$path"
+            coEvery { files.listFiles(fullPath) } returns sequenceOf(file)
+            coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
+
+            val assets = Assets(files, systemInfo)
+            assets.register(LoaderA())
+
+            assets.loadAsync(path)
+            assets.contains(expectedValue) shouldBe true
+        }
+    }
+
+    "should return false when asset is not present" {
+        val value = "value"
+
+        class LoaderA : AssetLoader<String> {
+            override val extensions: List<String> = listOf("txt")
+
+            override fun load(file: File): String =
+                value
+        }
+
+        mockkStatic("bke.iso.engine.asset.AssetsKt")
+        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
+
+        runBlocking {
+            val file = mockk<File>()
+            coEvery { file.name } returns "file.txt"
+            coEvery { file.canonicalPath } returns "some/path/file.txt"
+
+            val path = "path"
+            val fullPath = "$BASE_PATH/$path"
+            coEvery { files.listFiles(fullPath) } returns sequenceOf(file)
+            coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
+
+            val assets = Assets(files, systemInfo)
+            assets.register(LoaderA())
+
+            assets.loadAsync(path)
+            assets.contains("some other value") shouldBe false
+        }
+    }
+
+    "should return false when no assets of that type were loaded" {
+        val value = "value"
+
+        class LoaderA : AssetLoader<String> {
+            override val extensions: List<String> = listOf("txt")
+
+            override fun load(file: File): String =
+                value
+        }
+
+        mockkStatic("bke.iso.engine.asset.AssetsKt")
+        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
+
+        runBlocking {
+            val file = mockk<File>()
+            coEvery { file.name } returns "file.txt"
+            coEvery { file.canonicalPath } returns "some/path/file.txt"
+
+            val path = "path"
+            val fullPath = "$BASE_PATH/$path"
+            coEvery { files.listFiles(fullPath) } returns sequenceOf(file)
+            coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
+
+            val assets = Assets(files, systemInfo)
+            assets.register(LoaderA())
+
+            assets.loadAsync(path)
+            assets.contains(555f) shouldBe false
+        }
+    }
 })

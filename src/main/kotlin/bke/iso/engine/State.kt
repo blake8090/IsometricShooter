@@ -9,10 +9,7 @@ abstract class State {
     protected abstract val game: Game
     abstract val systems: Set<System>
 
-    // TODO: make suspend and combine into start
-    open fun load() {}
-
-    open fun start() {}
+    open suspend fun load() {}
 
     open fun update(deltaTime: Float) {
         for (system in systems) {

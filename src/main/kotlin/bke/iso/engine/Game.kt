@@ -59,15 +59,6 @@ class Game {
                 setState(MainMenuState::class)
             }
         }
-
-
-    }
-
-    fun stop() {
-        log.info { "Stopping game" }
-        assets.dispose()
-        renderer.dispose()
-        ui.dispose()
     }
 
     fun update(deltaTime: Float) {
@@ -99,19 +90,23 @@ class Game {
 //        log.info { "renderer.draw() - max: ${max}ms mean: ${mean}ms load: ${performanceCounter.load.value}" }
     }
 
+    fun <T : State> setState(type: KClass<T>) {
+        log.debug { "Switching to state ${type.simpleName}" }
+        state = requireNotNull(type.primaryConstructor).call(this)
+        ui.loadingScreen.start(state::load)
+    }
+
     fun resize(width: Int, height: Int) {
         log.info { "Resizing to ${width}x$height" }
         renderer.resize(width, height)
         ui.resize(width, height)
     }
 
-    fun <T : State> setState(type: KClass<T>) {
-        log.debug { "Switching to state ${type.simpleName}" }
-        state = requireNotNull(type.primaryConstructor).call(this)
-        ui.loadingScreen.start {
-            state.load()
-            state.start()
-        }
+    fun stop() {
+        log.info { "Stopping game" }
+        assets.dispose()
+        renderer.dispose()
+        ui.dispose()
     }
 
     // TODO: separate into different class!

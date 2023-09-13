@@ -63,7 +63,7 @@ private class AssetAwareSkin(private val assets: Assets) : Skin() {
         }
     }
 
-    private fun dispose(resource: Any) {
+    private fun <T : Any> dispose(resource: T) {
         if (resource in assets || resource in assets.fonts) {
             log.debug { "Skipping '$resource' - resource is loaded in asset cache" }
         } else if (resource is Disposable) {

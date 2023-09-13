@@ -23,7 +23,7 @@ class Player : Component()
 fun World.createPlayer(location: Location): Actor =
     actors.create(
         location,
-        Sprite("game/gfx/objects/player", 32f, 0f),
+        Sprite("player", 32f, 0f),
         Player(),
         Collider(
             Vector3(0.4f, 0.4f, 1.6f),

@@ -55,9 +55,9 @@ class GameState(override val game: Game) : State() {
         ShadowSystem(game.world, game.collisions)
     )
 
-    override fun load() {
+    override suspend fun load() {
         game.assets.register(GameMapLoader())
-        game.assets.load("game")
+        game.assets.loadAsync("game")
 
         loadMap()
         factory.createLampPost(Location(4, 4, 0))
@@ -70,9 +70,7 @@ class GameState(override val game: Game) : State() {
             .move(-0.5f, 0.5f, 0f)
 
         bindInput()
-    }
 
-    override fun start() {
         game.renderer.setCursor(crosshair)
         game.ui.setScreen(gameHud)
         gameHud.updateHealth(PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
@@ -152,8 +150,8 @@ class GameState(override val game: Game) : State() {
 
     private fun readTile(char: Char, location: Location) {
         when (char) {
-            '1' -> game.world.setTile(location, Sprite("game/gfx/tiles/floor", 0f, 16f))
-            '2' -> game.world.setTile(location, Sprite("game/gfx/tiles/floor2", 0f, 16f))
+            '1' -> game.world.setTile(location, Sprite("floor", 0f, 16f))
+            '2' -> game.world.setTile(location, Sprite("floor2", 0f, 16f))
         }
     }
 
