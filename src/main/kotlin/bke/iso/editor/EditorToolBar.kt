@@ -2,7 +2,6 @@ package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -68,8 +67,7 @@ class EditorToolBar(
         val texture = assets.get<Texture>(textureName)
 
         val canvas = Pixmap(texture.width, texture.height, Pixmap.Format.RGBA8888)
-        val color = skin.get<Color>(bgColor)
-        canvas.setColor(color)
+        canvas.setColor(skin.getColor(bgColor))
         canvas.fill()
 
         texture.textureData.prepare()

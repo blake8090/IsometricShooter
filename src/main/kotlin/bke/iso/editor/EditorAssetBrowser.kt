@@ -4,6 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.loader.ActorPrefab
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.BorderedTable
+import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor

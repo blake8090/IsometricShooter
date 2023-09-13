@@ -4,6 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
+import bke.iso.engine.ui.util.get
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -81,7 +82,7 @@ private class HudHealthBar(
     var value = 1f
 
     init {
-        style = skin.get(styleName, HudHealthBarStyle::class.java)
+        style = skin.get<HudHealthBarStyle>(styleName)
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
