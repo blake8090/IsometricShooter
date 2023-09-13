@@ -3,7 +3,7 @@
   components: [
     {
       type: "sprite",
-      texture: "game/gfx/objects/fence-side",
+      texture: "fence-side.png",
       offsetX: 0.0,
       offsetY: 16.0,
       alpha: 1.0,

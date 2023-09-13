@@ -38,7 +38,7 @@ class BasicLoadingScreen(assets: Assets) : LoadingScreen(assets) {
 
     private fun setup() {
         skin.add("pixel", makePixelTexture())
-        skin.add("default", assets.fonts[FontOptions("roboto", 45f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 45f, Color.WHITE)])
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")
         })

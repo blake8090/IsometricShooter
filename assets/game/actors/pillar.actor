@@ -3,7 +3,7 @@
   components: [
     {
       type: "sprite",
-      texture: "game/gfx/objects/pillar",
+      texture: "pillar.png",
       offsetX: 24.0,
       offsetY: 3.0,
       alpha: 1.0,

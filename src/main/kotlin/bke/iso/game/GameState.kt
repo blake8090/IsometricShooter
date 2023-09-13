@@ -132,7 +132,7 @@ class GameState(override val game: Game) : State() {
     }
 
     private fun loadMap() {
-        val gameMap = game.assets.get<GameMap>("collision-test")
+        val gameMap = game.assets.get<GameMap>("collision-test.map2")
         for (layer in gameMap.layers) {
             for ((y, row) in layer.tiles.reversed().withIndex()) {
                 for ((x, char) in row.withIndex()) {
@@ -150,8 +150,8 @@ class GameState(override val game: Game) : State() {
 
     private fun readTile(char: Char, location: Location) {
         when (char) {
-            '1' -> game.world.setTile(location, Sprite("floor", 0f, 16f))
-            '2' -> game.world.setTile(location, Sprite("floor2", 0f, 16f))
+            '1' -> game.world.setTile(location, Sprite("floor.png", 0f, 16f))
+            '2' -> game.world.setTile(location, Sprite("floor2.png", 0f, 16f))
         }
     }
 

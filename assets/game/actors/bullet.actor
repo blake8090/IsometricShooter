@@ -3,7 +3,7 @@
   components: [
     {
       type: "sprite",
-      texture: "game/gfx/objects/bullet",
+      texture: "bullet.png",
       offsetX: 8.0,
       offsetY: 8.0,
       alpha: 1.0,

@@ -23,14 +23,14 @@ class AssetsTest : StringSpec({
 
     "should throw exception when duplicate loader registered" {
         class LoaderA : AssetLoader<String> {
-            override val extensions: List<String> = listOf(".txt")
+            override val extensions: List<String> = listOf("txt")
 
             override fun load(file: File): String =
                 "test"
         }
 
         class LoaderB : AssetLoader<String> {
-            override val extensions: List<String> = listOf(".txt")
+            override val extensions: List<String> = listOf("txt")
 
             override fun load(file: File): String =
                 "test"
@@ -41,7 +41,7 @@ class AssetsTest : StringSpec({
             assets.register(LoaderA())
             assets.register(LoaderB())
         }
-        exception.message shouldBe "Error registering LoaderB: Extension '.txt' already registered to LoaderA"
+        exception.message shouldBe "Error registering LoaderB: Extension 'txt' already registered to LoaderA"
     }
 
     "should throw exception when cache not found" {
@@ -81,8 +81,8 @@ class AssetsTest : StringSpec({
             assets.register(LoaderA())
 
             assets.loadAsync(path)
-            assets.get<String>("file") shouldBe "file.txt: test"
-            assets.get<String>("file2") shouldBe "file2.txt: test"
+            assets.get<String>("file.txt") shouldBe "file.txt: test"
+            assets.get<String>("file2.txt") shouldBe "file2.txt: test"
         }
     }
 

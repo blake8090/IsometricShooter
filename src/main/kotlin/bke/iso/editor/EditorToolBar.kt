@@ -24,30 +24,30 @@ class EditorToolBar(
         toolBar.borderSize = 2f
         toolBar.background = skin.getDrawable("bg")
 
-        val pointerButton = createButton("ui/editor/pointer")
+        val pointerButton = createButton("pointer.png")
         toolBar.add(pointerButton)
 
-        val brushButton = createButton("ui/editor/brush")
+        val brushButton = createButton("brush.png")
         toolBar.add(brushButton)
 
-        val eraserButton = createButton("ui/editor/eraser")
+        val eraserButton = createButton("eraser.png")
         toolBar.add(eraserButton)
 
         ButtonGroup(pointerButton, brushButton, eraserButton)
 
-        val gridButton = createButton("ui/editor/grid")
-        gridButton.style.checked = newTextureDrawable("ui/editor/grid", "button-checked")
+        val gridButton = createButton("grid.png")
+        gridButton.style.checked = newTextureDrawable("grid.png", "button-checked")
         toolBar.add(gridButton).spaceLeft(30f)
 
         toolBar.add(Label("Layer: 1", skin)).spaceLeft(30f)
 
-        val decreaseLayerButton = createButton("ui/editor/minus").apply {
-            style.up = newTextureDrawable("ui/editor/minus", "button-up")
+        val decreaseLayerButton = createButton("minus.png").apply {
+            style.up = newTextureDrawable("minus.png", "button-up")
         }
         toolBar.add(decreaseLayerButton).space(20f)
 
-        val increaseLayerButton = createButton("ui/editor/plus").apply {
-            style.up = newTextureDrawable("ui/editor/plus", "button-up")
+        val increaseLayerButton = createButton("plus.png").apply {
+            style.up = newTextureDrawable("plus.png", "button-up")
         }
         toolBar.add(increaseLayerButton)
 

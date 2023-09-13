@@ -49,7 +49,7 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
     private fun setup() {
         skin.add("white", makePixelTexture())
 
-        skin.add("default", assets.fonts[FontOptions("roboto", 25f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 25f, Color.WHITE)])
 
         skin.add("default", LabelStyle().apply {
             font = skin.getFont("default")

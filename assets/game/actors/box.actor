@@ -3,7 +3,7 @@
   components: [
     {
       type: "sprite",
-      texture: "game/gfx/objects/box",
+      texture: "box.png",
       offsetX: 16.0,
       offsetY: 8.0,
       alpha: 1.0,

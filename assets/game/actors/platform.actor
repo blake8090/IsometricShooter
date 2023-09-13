@@ -3,7 +3,7 @@
   components: [
     {
       type: "sprite",
-      texture: "game/gfx/objects/platform",
+      texture: "platform.png",
       offsetX: 0.0,
       offsetY: 32.0,
       alpha: 1.0,

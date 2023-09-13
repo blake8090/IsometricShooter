@@ -43,7 +43,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
 
-        skin.add("default", assets.fonts[FontOptions("roboto", 13f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")

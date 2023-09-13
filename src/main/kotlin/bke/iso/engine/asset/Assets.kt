@@ -37,25 +37,21 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     val fonts: Fonts = Fonts(this, systemInfo)
 
     private val loaderByExtension = OrderedMap<String, AssetLoader<*>>()
-
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
     private val cacheMutex = Mutex()
 
     inline fun <reified T : Any> get(name: String): T =
-        getCache<T>()
+        getCache(T::class)
             .get(name)
             ?: error("Asset '$name' (${T::class.simpleName}) was not found")
 
     inline fun <reified T : Any> getAll(): OrderedMapValues<T> =
-        OrderedMapValues(getCache<T>())
+        OrderedMapValues(getCache(T::class))
 
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getCache(type: KClass<T>): AssetCache<T> =
         cacheByType[type] as? AssetCache<T>
             ?: error("Expected asset cache for type ${type.simpleName}")
-
-    inline fun <reified T : Any> getCache(): AssetCache<T> =
-        getCache(T::class)
 
     fun register(assetLoader: AssetLoader<*>) {
         for (extension in assetLoader.extensions) {
@@ -82,8 +78,6 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         }
     }
 
-    fun load(string: String) {}
-
     suspend fun loadAsync(path: String) {
         val assetsPath = files.combinePaths(BASE_PATH, path)
         log.info { "Loading assets in path '$assetsPath'" }
@@ -108,7 +102,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
             return
         }
 
-        val name = file.nameWithoutExtension
+        val name = file.name
         val asset = assetLoader.load(file)
 
         cacheMutex.withLock {
