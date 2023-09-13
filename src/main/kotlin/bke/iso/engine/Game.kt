@@ -2,7 +2,7 @@ package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
-import bke.iso.engine.asset.TextureLoader
+import bke.iso.engine.asset.loader.TextureLoader
 import bke.iso.engine.asset.prefab.ActorPrefabLoader
 import bke.iso.engine.file.Files
 import bke.iso.engine.input.Input
@@ -14,6 +14,7 @@ import bke.iso.engine.ui.loading.BasicLoadingScreen
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.utils.PerformanceCounter
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -51,11 +52,15 @@ class Game {
             register(TextureLoader())
             register(FreeTypeFontGeneratorLoader())
             register(ActorPrefabLoader(serializer))
-            load("ui")
+
+            runBlocking {
+                loadAsync("ui")
+                ui.setLoadingScreen(BasicLoadingScreen(assets))
+                setState(MainMenuState::class)
+            }
         }
 
-        ui.setLoadingScreen(BasicLoadingScreen(assets))
-        setState(MainMenuState::class)
+
     }
 
     fun stop() {

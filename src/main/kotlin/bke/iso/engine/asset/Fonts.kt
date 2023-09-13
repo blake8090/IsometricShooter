@@ -2,6 +2,7 @@ package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
 import bke.iso.engine.SystemInfo
+import bke.iso.engine.asset.loader.AssetLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -73,6 +74,9 @@ class Fonts(
 }
 
 class FreeTypeFontGeneratorLoader : AssetLoader<FreeTypeFontGenerator> {
+
+    override val extensions: List<String> = listOf("ttf")
+
     override fun load(file: File): FreeTypeFontGenerator =
         FreeTypeFontGenerator(FileHandle(file))
 }

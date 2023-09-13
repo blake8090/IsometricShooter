@@ -134,7 +134,7 @@ class GameState(override val game: Game) : State() {
     }
 
     private fun loadMap() {
-        val gameMap = game.assets.get<GameMap>("game/maps/collision-test")
+        val gameMap = game.assets.get<GameMap>("collision-test")
         for (layer in gameMap.layers) {
             for ((y, row) in layer.tiles.reversed().withIndex()) {
                 for ((x, char) in row.withIndex()) {

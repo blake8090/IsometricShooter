@@ -1,6 +1,7 @@
 package bke.iso.engine.asset
 
 import bke.iso.engine.SystemInfo
+import bke.iso.engine.asset.loader.AssetLoader
 import bke.iso.engine.file.Files
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.common.runBlocking

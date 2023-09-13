@@ -2,6 +2,7 @@ package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
 import bke.iso.engine.SystemInfo
+import bke.iso.engine.asset.loader.AssetLoader
 import bke.iso.engine.file.Files
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.Disposable
@@ -20,13 +21,6 @@ import mu.KotlinLogging
 import java.io.File
 import kotlin.reflect.KClass
 
-interface AssetLoader<T : Any> {
-    val extensions: List<String>
-        get() = emptyList() //TODO sdf
-
-    fun load(file: File): T
-}
-
 const val BASE_PATH = "assets"
 
 private typealias AssetCache<T> = OrderedMap<String, T>
@@ -35,6 +29,7 @@ private typealias AssetCache<T> = OrderedMap<String, T>
 fun getCoroutineScope(): CoroutineScope =
     KtxAsync
 
+// TODO: handle duplicate assets being loaded
 class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     private val log = KotlinLogging.logger {}

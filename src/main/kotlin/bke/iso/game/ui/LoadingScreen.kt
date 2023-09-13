@@ -40,7 +40,7 @@ class LoadingScreen(assets: Assets) : UIScreen(assets) {
     private fun setup() {
         skin.add("pixel", makePixelTexture())
 
-        skin.add("default", assets.fonts[FontOptions("ui/roboto", 45f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("roboto", 45f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")

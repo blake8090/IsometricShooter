@@ -96,8 +96,8 @@ class MainMenuScreen(
     private fun setup() {
         skin.add("white", makePixelTexture())
 
-        skin.add("title", assets.fonts[FontOptions("ui/TitilliumWeb-SemiBold", 30f, Color.WHITE)])
-        skin.add("button", assets.fonts[FontOptions("ui/roboto", 20f, Color.WHITE)])
+        skin.add("title", assets.fonts[FontOptions("TitilliumWeb-SemiBold", 30f, Color.WHITE)])
+        skin.add("button", assets.fonts[FontOptions("roboto", 20f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("title")

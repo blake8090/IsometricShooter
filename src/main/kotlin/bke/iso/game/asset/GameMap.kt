@@ -1,6 +1,6 @@
 package bke.iso.game.asset
 
-import bke.iso.engine.asset.AssetLoader
+import bke.iso.engine.asset.loader.AssetLoader
 import java.io.File
 
 class GameMap(val layers: List<Layer>) {
@@ -12,6 +12,8 @@ class GameMap(val layers: List<Layer>) {
 
 // TODO: refactor this!
 class GameMapLoader : AssetLoader<GameMap> {
+
+    override val extensions: List<String> = listOf("map2")
 
     override fun load(file: File): GameMap {
         var mode = Mode.NONE
