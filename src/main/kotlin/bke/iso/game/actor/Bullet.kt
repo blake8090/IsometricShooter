@@ -15,7 +15,9 @@ import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.game.combat.Combat
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 enum class BulletType(
     val speed: Float,
@@ -26,12 +28,14 @@ enum class BulletType(
     TURRET(25f, 1f, 0.2f)
 }
 
-@JsonTypeName("bullet")
+@Serializable
+@SerialName("bullet")
 data class Bullet(
     val shooterId: String,
+    @Contextual
     val startPos: Vector3,
-    val type: BulletType
-) : Component()
+    val bulletType: BulletType
+) : Component
 
 private const val MAX_BULLET_DISTANCE = 50f
 
@@ -63,7 +67,7 @@ class BulletSystem(
             if (obj.has<Bullet>() || obj.id == bullet.shooterId) {
                 return
             }
-            combat.applyDamage(obj, bullet.type.damage)
+            combat.applyDamage(obj, bullet.bulletType.damage)
         }
         world.actors.delete(actor)
     }

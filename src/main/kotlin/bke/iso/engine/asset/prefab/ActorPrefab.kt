@@ -5,8 +5,10 @@ import bke.iso.engine.asset.loader.AssetLoader
 import bke.iso.engine.world.Component
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import java.io.File
 
+@Serializable
 data class ActorPrefab(
     val name: String,
     val components: List<Component>

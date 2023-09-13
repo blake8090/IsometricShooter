@@ -2,10 +2,15 @@ package bke.iso.engine.collision
 
 import bke.iso.engine.world.Component
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonTypeName("collider")
-data class Collider (
+@Serializable
+@SerialName("collider")
+data class Collider(
+    @Contextual
     val size: Vector3,
+    @Contextual
     val offset: Vector3 = Vector3()
-) : Component()
+) : Component

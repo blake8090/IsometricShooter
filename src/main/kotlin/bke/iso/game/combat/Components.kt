@@ -1,16 +1,19 @@
 package bke.iso.game.combat
 
 import bke.iso.engine.world.Component
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonTypeName("health")
+@Serializable
+@SerialName("health")
 data class Health(
     val maxValue: Float,
     var value: Float = maxValue
-) : Component()
+) : Component
 
-@JsonTypeName("healthBar")
+@Serializable
+@SerialName("healthBar")
 data class HealthBar(
     val offsetX: Float,
     val offsetY: Float
-) : Component()
+) : Component

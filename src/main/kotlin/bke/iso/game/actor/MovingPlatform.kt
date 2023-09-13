@@ -12,16 +12,18 @@ import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonTypeName("movingPlatform")
+@Serializable
+@SerialName("movingPlatform")
 data class MovingPlatform(
     val speed: Float = 1f,
     val maxZ: Float = 2f,
     val minZ: Float = 0f,
     val pauseSeconds: Float = 1f,
     var movingUp: Boolean = true
-) : Component()
+) : Component
 
 class MovingPlatformSystem(private val world: World) : System {
 

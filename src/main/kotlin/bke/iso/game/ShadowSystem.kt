@@ -13,11 +13,13 @@ import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlin.math.max
 
-@JsonTypeName("shadow")
-data class Shadow(val parentId: String) : Component()
+@Serializable
+@SerialName("shadow")
+data class Shadow(val parentId: String) : Component
 
 private const val Z_OFFSET = 0.0001f
 private const val MAX_RANGE = 5f

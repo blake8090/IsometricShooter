@@ -13,12 +13,14 @@ import bke.iso.engine.world.World
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 const val PLAYER_MAX_HEALTH: Float = 5f
 
-@JsonTypeName("player")
-class Player : Component()
+@Serializable
+@SerialName("player")
+class Player : Component
 
 fun World.createPlayer(location: Location): Actor =
     actors.create(

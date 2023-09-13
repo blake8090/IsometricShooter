@@ -3,7 +3,8 @@ package bke.iso.engine.world
 import bke.iso.engine.math.Location
 import bke.iso.engine.collision.getCollisionBox
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.reflect.KClass
@@ -11,8 +12,9 @@ import kotlin.reflect.safeCast
 
 private const val Z_CLAMP_THRESHOLD = 0.00001f
 
-@JsonTypeName("description")
-data class Description(val text: String) : Component()
+@Serializable
+@SerialName("description")
+data class Description(val text: String) : Component
 
 class Actor(
     val id: String,

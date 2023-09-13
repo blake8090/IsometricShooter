@@ -10,13 +10,15 @@ import bke.iso.game.combat.Combat
 import bke.iso.game.player.Player
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.collision.Segment
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonTypeName("turret")
+@Serializable
+@SerialName("turret")
 data class Turret(
     var elapsedCooldownTime: Float = 0f,
     var canShoot: Boolean = true
-) : Component()
+) : Component
 
 private const val RANGE_RADIUS = 12f
 private const val MINIMUM_COOLDOWN_SECONDS = 0.8f

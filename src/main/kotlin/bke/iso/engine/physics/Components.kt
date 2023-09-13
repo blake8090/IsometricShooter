@@ -2,7 +2,9 @@ package bke.iso.engine.physics
 
 import bke.iso.engine.world.Component
 import com.badlogic.gdx.math.Vector3
-import com.fasterxml.jackson.annotation.JsonTypeName
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Defines an actor's movement behavior as well as interactions with Colliders.
@@ -20,10 +22,12 @@ enum class PhysicsMode {
     GHOST
 }
 
-@JsonTypeName("physicsBody")
+@Serializable
+@SerialName("physicsBody")
 data class PhysicsBody(
     val mode: PhysicsMode,
+    @Contextual
     val velocity: Vector3 = Vector3(),
     val mass: Float = 1f,
-    val forces: MutableList<Vector3> = mutableListOf()
-) : Component()
+    val forces: MutableList<@Contextual Vector3> = mutableListOf()
+) : Component

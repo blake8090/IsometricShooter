@@ -2,6 +2,7 @@ import org.gradle.kotlin.dsl.application
 
 plugins {
     kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.0"
     id("io.gitlab.arturbosch.detekt").version("1.23.1")
     application
 }
@@ -37,9 +38,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.15.2")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testImplementation("io.kotest:kotest-runner-junit5:5.6.2")

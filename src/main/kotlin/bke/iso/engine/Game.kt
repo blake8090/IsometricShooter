@@ -47,7 +47,6 @@ class Game {
 
     fun start() {
         val time = measureTimeMillis {
-            serializer.start()
             input.start()
             assets.run {
                 register(TextureLoader())
