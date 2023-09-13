@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import java.io.File
 import kotlin.math.ceil
@@ -77,8 +79,10 @@ class FreeTypeFontGeneratorLoader : AssetLoader<FreeTypeFontGenerator> {
 
     override val extensions: List<String> = listOf("ttf")
 
-    override fun load(file: File): FreeTypeFontGenerator =
-        FreeTypeFontGenerator(FileHandle(file))
+    override suspend fun load(file: File): FreeTypeFontGenerator =
+        withContext(Dispatchers.IO) {
+            FreeTypeFontGenerator(FileHandle(file))
+        }
 }
 
 data class FontOptions(

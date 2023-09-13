@@ -15,7 +15,7 @@ class GameMapLoader : AssetLoader<GameMap> {
 
     override val extensions: List<String> = listOf("map2")
 
-    override fun load(file: File): GameMap {
+    override suspend fun load(file: File): GameMap {
         var mode = Mode.NONE
         val layers = mutableListOf<GameMap.Layer>()
 

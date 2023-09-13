@@ -8,7 +8,7 @@ class TextureLoader : AssetLoader<Texture> {
 
     override val extensions: List<String> = listOf("jpg", "png")
 
-    override fun load(file: File): Texture {
+    override suspend fun load(file: File): Texture {
         val texture = Texture(FileHandle(file), true)
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
         return texture

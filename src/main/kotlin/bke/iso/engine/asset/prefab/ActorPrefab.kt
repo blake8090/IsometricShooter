@@ -3,6 +3,8 @@ package bke.iso.engine.asset.prefab
 import bke.iso.engine.Serializer
 import bke.iso.engine.asset.loader.AssetLoader
 import bke.iso.engine.world.Component
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 data class ActorPrefab(
@@ -14,6 +16,8 @@ class ActorPrefabLoader(private val serializer: Serializer) : AssetLoader<ActorP
 
     override val extensions: List<String> = listOf("actor")
 
-    override fun load(file: File): ActorPrefab =
-        serializer.read(file.readText())
+    override suspend fun load(file: File): ActorPrefab =
+        withContext(Dispatchers.IO) {
+            serializer.read<ActorPrefab>(file.readText())
+        }
 }

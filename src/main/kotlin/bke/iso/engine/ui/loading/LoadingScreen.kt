@@ -35,9 +35,6 @@ abstract class LoadingScreen(assets: Assets) : UIScreen(assets) {
                 val time = measureTimeMillis { action.invoke() }
                 log.debug { "Load action completed in $time ms" }
 
-                // give a chance for some animation to play before moving on.
-                // makes the loading process look a bit smoother
-                skipFrame()
                 active = false
             }
             log.debug { "Launched load action" }

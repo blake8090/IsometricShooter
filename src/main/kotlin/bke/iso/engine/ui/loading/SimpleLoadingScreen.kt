@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 
-class BasicLoadingScreen(assets: Assets) : LoadingScreen(assets) {
+class SimpleLoadingScreen(assets: Assets) : LoadingScreen(assets) {
 
     override fun create() {
         setup()

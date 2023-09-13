@@ -8,5 +8,5 @@ interface AssetLoader<T : Any> {
      */
     val extensions: List<String>
 
-    fun load(file: File): T
+    suspend fun load(file: File): T
 }

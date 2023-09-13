@@ -10,7 +10,7 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.ui.UI
-import bke.iso.engine.ui.loading.BasicLoadingScreen
+import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.utils.PerformanceCounter
@@ -18,6 +18,7 @@ import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
+import kotlin.system.measureTimeMillis
 
 interface Event
 
@@ -45,19 +46,21 @@ class Game {
     private val performanceCounter = PerformanceCounter("renderer")
 
     fun start() {
-        serializer.start()
-        input.start()
-
-        assets.run {
-            register(TextureLoader())
-            register(FreeTypeFontGeneratorLoader())
-            register(ActorPrefabLoader(serializer))
-
-            runBlocking {
-                loadAsync("ui")
-                ui.setLoadingScreen(BasicLoadingScreen(assets))
-                setState(MainMenuState::class)
+        val time = measureTimeMillis {
+            serializer.start()
+            input.start()
+            assets.run {
+                register(TextureLoader())
+                register(FreeTypeFontGeneratorLoader())
+                register(ActorPrefabLoader(serializer))
             }
+            ui.setLoadingScreen(EmptyLoadingScreen(assets))
+        }
+        log.info { "Initialized modules in $time ms" }
+
+        runBlocking {
+            assets.loadAsync("ui")
+            setState(MainMenuState::class)
         }
     }
 

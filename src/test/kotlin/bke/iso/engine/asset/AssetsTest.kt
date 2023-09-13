@@ -13,11 +13,18 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import ktx.async.skipFrame
 import java.io.File
 
 class AssetsTest : StringSpec({
     val files = mockk<Files>()
     val systemInfo = mockk<SystemInfo>()
+
+    mockkStatic("bke.iso.engine.asset.AssetsKt")
+    every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
+
+    mockkStatic(::skipFrame)
+    coEvery { skipFrame() } returns Unit
 
     // TODO: test multiple extensions
 
@@ -25,14 +32,14 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetLoader<String> {
             override val extensions: List<String> = listOf("txt")
 
-            override fun load(file: File): String =
+            override suspend fun load(file: File): String =
                 "test"
         }
 
         class LoaderB : AssetLoader<String> {
             override val extensions: List<String> = listOf("txt")
 
-            override fun load(file: File): String =
+            override suspend fun load(file: File): String =
                 "test"
         }
 
@@ -56,12 +63,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetLoader<String> {
             override val extensions: List<String> = listOf("txt")
 
-            override fun load(file: File): String =
+            override suspend fun load(file: File): String =
                 "${file.name}: test"
         }
-
-        mockkStatic("bke.iso.engine.asset.AssetsKt")
-        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
 
         runBlocking {
             val file = mockk<File>()
@@ -92,12 +96,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetLoader<String> {
             override val extensions: List<String> = listOf("txt")
 
-            override fun load(file: File): String =
+            override suspend fun load(file: File): String =
                 expectedValue
         }
-
-        mockkStatic("bke.iso.engine.asset.AssetsKt")
-        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
 
         runBlocking {
             val file = mockk<File>()
@@ -123,12 +124,11 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetLoader<String> {
             override val extensions: List<String> = listOf("txt")
 
-            override fun load(file: File): String =
+            override suspend fun load(file: File): String =
                 value
         }
 
-        mockkStatic("bke.iso.engine.asset.AssetsKt")
-        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
+
 
         runBlocking {
             val file = mockk<File>()
@@ -154,12 +154,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetLoader<String> {
             override val extensions: List<String> = listOf("txt")
 
-            override fun load(file: File): String =
+            override suspend fun load(file: File): String =
                 value
         }
-
-        mockkStatic("bke.iso.engine.asset.AssetsKt")
-        every { getCoroutineScope() } returns CoroutineScope(Dispatchers.Default)
 
         runBlocking {
             val file = mockk<File>()

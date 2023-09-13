@@ -11,10 +11,7 @@ import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.OrderedMap.OrderedMapValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import ktx.async.KtxAsync
 import mu.KotlinLogging
@@ -38,7 +35,6 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     private val loaderByExtension = OrderedMap<String, AssetLoader<*>>()
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
-    private val cacheMutex = Mutex()
 
     inline fun <reified T : Any> get(name: String): T =
         getCache(T::class)
@@ -78,7 +74,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         }
     }
 
-    suspend fun loadAsync(path: String) {
+    suspend fun loadAsync(path: String) = coroutineScope {
         val assetsPath = files.combinePaths(BASE_PATH, path)
         log.info { "Loading assets in path '$assetsPath'" }
 
@@ -86,17 +82,13 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
             files.listFiles(assetsPath)
         }
 
-        val tasks = files
-            .mapTo(mutableListOf()) { file ->
-                getCoroutineScope().async {
-                    load(file, loaderByExtension[file.extension])
-                }
-            }
-        tasks.awaitAll()
+        for (file in files) {
+            load(file, loaderByExtension[file.extension])
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private suspend inline fun <T : Any> load(file: File, assetLoader: AssetLoader<T>?) {
+    private suspend fun <T : Any> load(file: File, assetLoader: AssetLoader<T>?) {
         if (assetLoader == null) {
             log.warn { "Skipping file skipping file '${file.canonicalPath}': No loader found for '${file.extension}'" }
             return
@@ -105,16 +97,13 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         val name = file.name
         val asset = assetLoader.load(file)
 
-        cacheMutex.withLock {
-            val type = asset::class as KClass<T>
-            if (!cacheByType.containsKey(type)) {
-                cacheByType.put(type, AssetCache<T>())
-            }
-
-            // TODO: keep extension in name?
-            getCache(type).put(name, asset)
-            log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
+        val type = asset::class as KClass<T>
+        if (!cacheByType.containsKey(type)) {
+            cacheByType.put(type, AssetCache<T>())
         }
+
+        getCache(type).put(name, asset)
+        log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
     }
 
     fun dispose() {
@@ -139,81 +128,3 @@ private operator fun <K, V> ObjectMap.Entry<K, V>.component1(): K =
 
 private operator fun <K, V> ObjectMap.Entry<K, V>.component2(): V =
     value
-
-//    private val loadersByExtension = mutableMapOf<String, AssetLoader<*>>()
-//    private val assetCache = mutableMapOf<Pair<String, KClass<*>>, Any>()
-//    private val loadedAssets = mutableSetOf<Any>()
-//
-//    fun start() {
-//        addLoader("jpg", TextureLoader())
-//        addLoader("png", TextureLoader())
-//        addLoader("ttf", FreeTypeFontGeneratorLoader())
-//        addLoader("actor", ActorPrefabLoader(serializer))
-//    }
-//
-//    fun <T : Any> get(name: String, type: KClass<T>): T {
-//        val value = type.safeCast(assetCache[name to type])
-//        requireNotNull(value) {
-//            "No asset found for name '$name' and type '${type.simpleName}'"
-//        }
-//        return value
-//    }
-//
-//    inline fun <reified T : Any> get(name: String): T =
-//        get(name, T::class)
-//
-
-//        assetCache
-//            .filterKeys { (_, assetType) -> assetType == type }
-//            .values
-//            .map(type::cast)
-//
-//    operator fun <T : Any> contains(asset: T) =
-//        loadedAssets.contains(asset)
-//
-//    fun addLoader(fileExtension: String, loader: AssetLoader<*>) {
-//        loadersByExtension[fileExtension]?.let { existing ->
-//            throw IllegalArgumentException(
-//                "Extension '$fileExtension' has already been set to loader ${existing::class.simpleName}"
-//            )
-//        }
-//        loadersByExtension[fileExtension] = loader
-//    }
-//
-//    fun load(path: String) {
-//        val assetsPath = files.combinePaths(BASE_PATH, path)
-//        log.info { "Loading assets in path '$assetsPath'" }
-//
-//        for (file in files.listFiles(assetsPath)) {
-//            val assetLoader = loadersByExtension[file.extension]
-//            if (assetLoader == null) {
-//                log.warn { "No loader found for '.${file.extension}', skipping file '${file.canonicalPath}'" }
-//                continue
-//            }
-//            load(file, assetLoader)
-//        }
-//    }
-//
-//    private fun <T : Any> load(file: File, assetLoader: AssetLoader<T>) {
-//        val asset = assetLoader.load(file)
-//        val type = asset::class
-//
-//        val parentPath = files.relativeParentPath(BASE_PATH, file)
-//        val name = files.combinePaths(parentPath, file.nameWithoutExtension)
-//
-//        assetCache[name to type] = asset
-//        loadedAssets.add(asset)
-//        log.info { "Loaded asset '${name}' (${type.simpleName}) from '${file.canonicalPath}'" }
-//    }
-//
-//    fun dispose() {
-//        log.info { "Disposing assets" }
-//        for ((nameType, asset) in assetCache) {
-//            if (asset is Disposable) {
-//                Disposer.dispose(asset, nameType.first)
-//                loadedAssets.remove(asset)
-//            }
-//        }
-//        fonts.dispose()
-//    }
-//}

@@ -5,6 +5,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.ui.loading.SimpleLoadingScreen
 import bke.iso.game.ui.MainMenuScreen
 
 class MainMenuState(override val game: Game) : State() {
@@ -17,8 +18,14 @@ class MainMenuState(override val game: Game) : State() {
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is StartEvent -> game.setState(GameState::class)
-            is EditorEvent -> game.setState(EditorState::class)
+            is StartEvent -> {
+                game.ui.setLoadingScreen(SimpleLoadingScreen(game.assets))
+                game.setState(GameState::class)
+            }
+
+            is EditorEvent -> {
+                game.setState(EditorState::class)
+            }
         }
     }
 

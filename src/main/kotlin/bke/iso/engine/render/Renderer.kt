@@ -10,7 +10,6 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics.DisplayMode
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Cursor
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -52,10 +51,6 @@ class Renderer(
     val shapes: Shape3dArray = Shape3dArray()
     private val shapeDrawer = Shape3dDrawer(batch)
 
-    val displayModes: List<DisplayMode>
-    val maxDisplayMode: DisplayMode
-    val screenDensity: Float
-
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
      */
@@ -74,20 +69,6 @@ class Renderer(
     init {
         // enables somewhat pixel-perfect rendering!
         fbo.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
-
-        val modes = Gdx.graphics.displayModes
-        val maxRefreshRate = modes.maxOf(DisplayMode::refreshRate)
-
-        displayModes = modes.filter { mode -> mode.refreshRate == maxRefreshRate }
-        maxDisplayMode = displayModes.maxBy { mode -> mode.width + mode.height }
-
-        log.info { "System info - Max refresh rate: $maxRefreshRate" }
-        log.info { "System info - Supported resolutions:\n${displayModes.joinToString("\n")}" }
-        log.info { "System info - Maximum supported resolution: $maxDisplayMode" }
-
-        screenDensity = Gdx.graphics.density
-        log.info { "System info - Screen PPI: ${screenDensity * 160f}" }
-        log.info { "System info - Screen PPI ratio: $screenDensity" }
     }
 
     fun dispose() {
