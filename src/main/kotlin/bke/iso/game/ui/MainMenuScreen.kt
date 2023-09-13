@@ -26,11 +26,11 @@ class MainMenuScreen(
 
         val root = Table()
         root.setFillParent(true)
-        root.background = skin.newDrawable("white", Color.BLACK)
+        root.background = skin.newDrawable("pixel", Color.BLACK)
         stage.addActor(root)
 
         val stackTable = Table()
-        stackTable.background = skin.newDrawable("white", Color.DARK_GRAY)
+        stackTable.background = skin.newDrawable("pixel", Color.DARK_GRAY)
         stackTable.add(Label("ISOMETRIC SHOOTER", skin))
             .padLeft(50f)
             .padRight(50f)
@@ -94,21 +94,21 @@ class MainMenuScreen(
     }
 
     private fun setup() {
-        skin.add("white", makePixelTexture())
+        skin.add("pixel", makePixelTexture())
 
         skin.add("title", assets.fonts[FontOptions("TitilliumWeb-SemiBold.ttf", 30f, Color.WHITE)])
         skin.add("button", assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("title")
-            background = skin.newDrawable("white", Color.DARK_GRAY)
+            background = skin.newDrawable("pixel", Color.DARK_GRAY)
         })
 
         skin.add("default", TextButtonStyle().apply {
             font = skin.getFont("button")
-            up = skin.newDrawable("white", Color.LIGHT_GRAY)
-            down = skin.newDrawable("white", Color.GRAY)
-            over = skin.newDrawable("white", Color.BLUE)
+            up = skin.newDrawable("pixel", Color.LIGHT_GRAY)
+            down = skin.newDrawable("pixel", Color.GRAY)
+            over = skin.newDrawable("pixel", Color.BLUE)
         })
     }
 }

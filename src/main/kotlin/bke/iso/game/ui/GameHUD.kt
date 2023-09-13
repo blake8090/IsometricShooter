@@ -47,20 +47,20 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
     }
 
     private fun setup() {
-        skin.add("white", makePixelTexture())
+        skin.add("pixel", makePixelTexture())
 
         skin.add("default", assets.fonts[FontOptions("roboto.ttf", 25f, Color.WHITE)])
 
         skin.add("default", LabelStyle().apply {
             font = skin.getFont("default")
-            background = skin.newDrawable("white", Color.DARK_GRAY)
+            background = skin.newDrawable("pixel", Color.DARK_GRAY)
         })
 
         skin.add(
             "default", HudHealthBar.HudHealthBarStyle(
-                skin.newDrawable("white", Color.DARK_GRAY),
-                skin.newDrawable("white", Color.RED),
-                skin.newDrawable("white", Color.GREEN)
+                skin.newDrawable("pixel", Color.DARK_GRAY),
+                skin.newDrawable("pixel", Color.RED),
+                skin.newDrawable("pixel", Color.GREEN)
             )
         )
     }
