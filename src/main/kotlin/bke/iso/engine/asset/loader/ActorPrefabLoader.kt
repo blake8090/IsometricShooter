@@ -1,7 +1,6 @@
-package bke.iso.engine.asset.prefab
+package bke.iso.engine.asset.loader
 
 import bke.iso.engine.serialization.Serializer
-import bke.iso.engine.asset.loader.AssetLoader
 import bke.iso.engine.world.Component
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

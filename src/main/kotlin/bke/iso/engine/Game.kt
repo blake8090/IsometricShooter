@@ -3,7 +3,7 @@ package bke.iso.engine
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
 import bke.iso.engine.asset.loader.TextureLoader
-import bke.iso.engine.asset.prefab.ActorPrefabLoader
+import bke.iso.engine.asset.loader.ActorPrefabLoader
 import bke.iso.engine.file.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions

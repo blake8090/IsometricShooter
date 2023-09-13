@@ -1,7 +1,7 @@
 package bke.iso.editor
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.loader.ActorPrefab
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.BorderedTable
 import com.badlogic.gdx.graphics.Texture
