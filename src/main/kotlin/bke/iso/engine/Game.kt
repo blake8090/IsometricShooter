@@ -107,9 +107,9 @@ class Game {
 
     fun stop() {
         log.info { "Stopping game" }
+        ui.dispose()
         assets.dispose()
         renderer.dispose()
-        ui.dispose()
     }
 
     // TODO: separate into different class!

@@ -67,7 +67,7 @@ class Fonts(
     }
 
     fun dispose() {
-        log.info { "Disposing fonts" }
+        log.debug { "Disposing fonts" }
         for ((options, font) in cache) {
             // TODO: use bitmap font name
             Disposer.dispose(font, options.name)

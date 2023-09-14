@@ -101,8 +101,8 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     }
 
     fun dispose() {
-        log.info { "Disposing assets" }
-        for ((_, cache) in cacheByType) {
+        log.debug { "Disposing assets" }
+        for (cache in cacheByType.values()) {
             disposeCache(cache)
         }
         fonts.dispose()
