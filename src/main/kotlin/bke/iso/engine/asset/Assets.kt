@@ -24,8 +24,8 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     fun <T : Any> register(assetType: KClass<T>, assetCache: AssetCache<T>) {
         for (extension in assetCache.extensions) {
-            cacheByExtension.put(extension, assetCache)?.run {
-                error("Extension '$extension' already registered to ${this::class::simpleName}")
+            cacheByExtension.put(extension, assetCache)?.let { existing ->
+                error("Extension '$extension' already registered to ${existing::class.simpleName}")
             }
         }
         cacheByType.put(assetType, assetCache)
@@ -85,7 +85,9 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         cacheByType[type] as? AssetCache<T>
 
     private fun <T : Any> getCache(type: KClass<T>): AssetCache<T> =
-        checkNotNull(tryGetCache(type))
+        checkNotNull(tryGetCache(type)) {
+            "Expected asset cache for type ${type.simpleName}"
+        }
 
     fun dispose() {
         fonts.dispose()
