@@ -5,7 +5,6 @@ import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
@@ -18,58 +17,68 @@ class EditorTileBrowser(
     private val skin: Skin
 ) {
 
-    private val root = Table().top().left()
-    private val scrollPane = ScrollPane(root)
-    private val buttonGroup = ButtonGroup<ImageTextButton>()
+    private val buttonGroup = ButtonGroup<TilePrefabButton>()
+    private val content = Table().top().left()
+    val root = ScrollPane(content)
 
-    fun create(): Actor {
-        return scrollPane
-    }
-
-    fun setVisible(visible: Boolean) {
-        scrollPane.isVisible = visible
-    }
-
-    fun populate(prefabs: List<TilePrefab>) {
-        root.clearChildren()
-        buttonGroup.clear()
-
-        val buttons = mutableListOf<ImageTextButton>()
-        for (prefab in prefabs) {
-            val texture = assets.get<Texture>(prefab.texture)
-            buttons.add(createAssetButton(prefab.name, texture, skin))
+    var visible: Boolean
+        get() = root.isVisible
+        set(value) {
+            root.isVisible = value
         }
 
-        for (row in buttons.chunked(2)) {
-            for (button in row) {
-                root.add(button)
-                    .uniform()
-                    .fill()
-                    .pad(10f)
-                buttonGroup.add(button)
+    fun getSelectedPrefab(): SelectedTilePrefab? =
+        buttonGroup.checked?.selectedPrefab
+
+    fun populate(prefabs: List<TilePrefab>) {
+        content.clearChildren()
+        buttonGroup.clear()
+
+        for (row in prefabs.chunked(2)) {
+            for (prefab in row) {
+                populate(prefab)
             }
-            root.row()
+            content.row()
         }
 
         buttonGroup.uncheckAll()
-        scrollPane.layout()
+        root.layout()
     }
 
-    private fun createAssetButton(name: String, texture: Texture, skin: Skin): ImageTextButton {
+    private fun populate(prefab: TilePrefab) {
+        val button = createButton(prefab, skin)
+        buttonGroup.add(button)
+        content.add(button)
+            .uniform()
+            .fill()
+            .pad(10f)
+    }
+
+    private fun createButton(prefab: TilePrefab, skin: Skin): TilePrefabButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
+            val texture = assets.get<Texture>(prefab.texture)
             imageUp = TextureRegionDrawable(TextureRegion(texture))
+
             over = skin.newTintedDrawable("pixel", "button-over")
             down = skin.newTintedDrawable("pixel", "button-down")
             checked = skin.newTintedDrawable("pixel", "button-checked")
             font = skin.getFont("default")
         }
 
-        return ImageTextButton(name, style).apply {
-            // align label to bottom instead of right by default
-            clearChildren()
-            add(image)
-            row()
-            add(label)
-        }
+        return TilePrefabButton(SelectedTilePrefab(prefab, prefab.texture), style)
+    }
+}
+
+private class TilePrefabButton(
+    val selectedPrefab: SelectedTilePrefab,
+    style: ImageTextButtonStyle
+) : ImageTextButton(selectedPrefab.prefab.name, style) {
+
+    init {
+        // align label to bottom instead of right by default
+        clearChildren()
+        add(image)
+        row()
+        add(label)
     }
 }

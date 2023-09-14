@@ -6,7 +6,6 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
@@ -14,55 +13,57 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
+private const val BUTTONS_PER_ROW = 2
+
 class EditorActorBrowser(
     private val assets: Assets,
     private val skin: Skin
 ) {
 
-    private val root = Table().top().left()
-    private val scrollPane = ScrollPane(root)
-    private val buttonGroup = ButtonGroup<ImageTextButton>()
+    private val buttonGroup = ButtonGroup<ActorPrefabButton>()
+    private val content = Table().top().left()
+    val root = ScrollPane(content)
 
-    fun create(): Actor {
-        return scrollPane
-    }
-
-    fun setVisible(visible: Boolean) {
-        scrollPane.isVisible = visible
-    }
-
-    fun populate(prefabs: List<ActorPrefab>) {
-        root.clearChildren()
-        buttonGroup.clear()
-
-        val buttons = mutableListOf<ImageTextButton>()
-        for (prefab in prefabs) {
-            val texture = getPrefabTexture(prefab) ?: continue
-            buttons.add(createAssetButton(prefab.name, texture, skin))
+    var visible: Boolean
+        get() = root.isVisible
+        set(value) {
+            root.isVisible = value
         }
 
-        for (row in buttons.chunked(2)) {
+    fun getSelectedPrefab(): SelectedActorPrefab? =
+        buttonGroup.checked?.selectedPrefab
+
+    fun populate(prefabs: List<ActorPrefab>) {
+        content.clearChildren()
+        buttonGroup.clear()
+
+        val buttons = mutableListOf<ActorPrefabButton>()
+        for (prefab in prefabs) {
+            val sprite = prefab
+                .components
+                .firstNotNullOfOrNull { component -> component as? Sprite }
+                ?: continue
+            buttons.add(createButton(prefab, sprite))
+        }
+
+        for (row in buttons.chunked(BUTTONS_PER_ROW)) {
             for (button in row) {
-                root.add(button)
+                content.add(button)
                     .uniform()
                     .fill()
                     .pad(10f)
                 buttonGroup.add(button)
             }
-            root.row()
+            content.row()
         }
 
         buttonGroup.uncheckAll()
-        scrollPane.layout()
+        root.layout()
     }
 
-    private fun getPrefabTexture(prefab: ActorPrefab) =
-        prefab.components
-            .filterIsInstance<Sprite>()
-            .firstOrNull()
-            ?.let { sprite -> assets.get<Texture>(sprite.texture) }
+    private fun createButton(prefab: ActorPrefab, sprite: Sprite): ActorPrefabButton {
+        val texture = assets.get<Texture>(sprite.texture)
 
-    private fun createAssetButton(name: String, texture: Texture, skin: Skin): ImageTextButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
             imageUp = TextureRegionDrawable(TextureRegion(texture))
             over = skin.newTintedDrawable("pixel", "button-over")
@@ -71,12 +72,20 @@ class EditorActorBrowser(
             font = skin.getFont("default")
         }
 
-        return ImageTextButton(name, style).apply {
-            // align label to bottom instead of right by default
-            clearChildren()
-            add(image)
-            row()
-            add(label)
-        }
+        return ActorPrefabButton(SelectedActorPrefab(prefab, sprite.texture), style)
+    }
+}
+
+private class ActorPrefabButton(
+    val selectedPrefab: SelectedActorPrefab,
+    style: ImageTextButtonStyle
+) : ImageTextButton(selectedPrefab.prefab.name, style) {
+
+    init {
+        // align label to bottom instead of right by default
+        clearChildren()
+        add(image)
+        row()
+        add(label)
     }
 }

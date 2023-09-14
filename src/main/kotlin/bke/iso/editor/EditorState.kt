@@ -3,6 +3,7 @@ package bke.iso.editor
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.render.Sprite
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -22,6 +23,8 @@ class EditorState(override val game: Game) : State() {
 
     private val lastCursorPos = Vector2()
 
+    private val brushActor = game.world.actors.create(0f, 0f, 0f)
+
     override suspend fun load() {
         game.assets.loadAsync("game")
         log.info { "Starting editor" }
@@ -29,6 +32,17 @@ class EditorState(override val game: Game) : State() {
     }
 
     override fun update(deltaTime: Float) {
+        // TODO: event instead of poll?
+        val selectedPrefab = editorScreen.assetBrowser.getSelectedPrefab()
+        if (selectedPrefab != null) {
+            brushActor.add(Sprite(
+                texture = selectedPrefab.texture,
+                offsetY = 16f // TODO: make this a constant
+            ))
+        } else {
+            brushActor.remove<Sprite>()
+        }
+
         // TODO: refactor all this
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             lastCursorPos.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())

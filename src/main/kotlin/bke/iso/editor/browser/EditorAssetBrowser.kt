@@ -35,8 +35,8 @@ class EditorAssetBrowser(
                 .padTop(5f)
 
             row()
-            stack.add(actorBrowser.create())
-            stack.add(tileBrowser.create())
+            stack.add(actorBrowser.root)
+            stack.add(tileBrowser.root)
             add(stack)
                 .grow()
                 .pad(2f)
@@ -45,6 +45,13 @@ class EditorAssetBrowser(
         populateBrowsers()
         return root
     }
+
+    fun getSelectedPrefab(): SelectedPrefab? =
+        when {
+            tileBrowser.visible -> tileBrowser.getSelectedPrefab()
+            actorBrowser.visible -> actorBrowser.getSelectedPrefab()
+            else -> null
+        }
 
     private fun setup() {
         skin.add("asset-browser", TextButton.TextButtonStyle().apply {
@@ -63,8 +70,8 @@ class EditorAssetBrowser(
             padLeft(Value.percentWidth(.25f, this))
             padRight(Value.percentWidth(.25f, this))
             onChanged {
-                tileBrowser.setVisible(true)
-                actorBrowser.setVisible(false)
+                tileBrowser.visible = true
+                actorBrowser.visible = false
             }
         }
         table.add(tileButton)
@@ -73,8 +80,8 @@ class EditorAssetBrowser(
             padLeft(Value.percentWidth(.25f, this))
             padRight(Value.percentWidth(.25f, this))
             onChanged {
-                actorBrowser.setVisible(true)
-                tileBrowser.setVisible(false)
+                tileBrowser.visible = false
+                actorBrowser.visible = true
             }
         }
         table.add(actorButton)

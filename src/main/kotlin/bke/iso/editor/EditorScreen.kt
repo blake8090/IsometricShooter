@@ -22,7 +22,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
 
     private val menuBar = EditorMenuBar(skin)
     private val toolBar = EditorToolBar(skin, assets)
-    private val assetBrowser = EditorAssetBrowser(skin, assets)
+    val assetBrowser = EditorAssetBrowser(skin, assets)
 
     override fun create() {
         setup()
@@ -65,6 +65,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
         return mainView
     }
 
+    // TODO: use apply() in all places skin is being setup
     private fun setup() {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
