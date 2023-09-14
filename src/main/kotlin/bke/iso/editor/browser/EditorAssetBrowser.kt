@@ -2,6 +2,7 @@ package bke.iso.editor.browser
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.ActorPrefab
+import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
@@ -83,6 +84,7 @@ class EditorAssetBrowser(
     }
 
     private fun populateBrowsers() {
+        tileBrowser.populate(assets.getAll<TilePrefab>())
         actorBrowser.populate(assets.getAll<ActorPrefab>())
     }
 }
