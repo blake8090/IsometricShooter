@@ -80,6 +80,10 @@ class Renderer(
         fboViewport.update(width, height, true)
     }
 
+    fun moveCamera(delta: Vector2) {
+        camera.position.add(delta.x, delta.y, 0f)
+    }
+
     fun setCameraPos(worldPos: Vector3) {
         camera.position.set(toScreen(worldPos), 0f)
     }

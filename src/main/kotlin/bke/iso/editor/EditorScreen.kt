@@ -6,12 +6,19 @@ import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.newTintedDrawable
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import mu.KotlinLogging
+
+private const val MAIN_VIEW_NAME = "mainView"
 
 class EditorScreen(assets: Assets) : UIScreen(assets) {
+
+    private val log = KotlinLogging.logger {}
 
     private val menuBar = EditorMenuBar(skin)
     private val toolBar = EditorToolBar(skin, assets)
@@ -31,14 +38,31 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
                 .growY()
                 .top()
                 .left()
-            add(toolBar.create())
-                .expand()
-                .fillX()
-                .top()
-                .left()
+            add(createMainView())
+                .grow()
         }
 
         stage.addActor(root)
+    }
+
+    fun hitMainView(): Boolean {
+        val screenPos = Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
+        val stagePos: Vector2 = stage.screenToStageCoordinates(screenPos)
+
+        val actor = stage.hit(stagePos.x, stagePos.y, false) ?: return false
+        log.trace { "hit actor ${actor::class.simpleName} ${actor.name}" }
+        return actor.name == MAIN_VIEW_NAME
+    }
+
+    private fun createMainView(): Table {
+        val mainView = Table()
+        mainView.name = MAIN_VIEW_NAME
+        mainView.add(toolBar.create())
+            .expand()
+            .fillX()
+            .top()
+            .left()
+        return mainView
     }
 
     private fun setup() {
@@ -53,7 +77,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
         })
 
         skin.add("button-up", color(20, 51, 82))
-        skin.add("button-over",color(34, 84, 133))
+        skin.add("button-over", color(34, 84, 133))
         skin.add("button-down", color(43, 103, 161))
         skin.add("button-checked", color(43, 103, 161))
         skin.add("table-border", color(77, 100, 130))
