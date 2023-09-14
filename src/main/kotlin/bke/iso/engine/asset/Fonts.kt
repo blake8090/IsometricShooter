@@ -2,17 +2,18 @@ package bke.iso.engine.asset
 
 import bke.iso.engine.Disposer
 import bke.iso.engine.SystemInfo
-import bke.iso.engine.asset.loader.AssetLoader
-import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import mu.KotlinLogging
-import java.io.File
 import kotlin.math.ceil
+
+data class FontOptions(
+    val name: String,
+    val size: Float,
+    val color: Color = Color.WHITE
+)
 
 /**
  * see [asd](https://github.com/libgdx/libgdx/issues/6820)
@@ -74,19 +75,3 @@ class Fonts(
         }
     }
 }
-
-class FreeTypeFontGeneratorLoader : AssetLoader<FreeTypeFontGenerator> {
-
-    override val extensions: List<String> = listOf("ttf")
-
-    override suspend fun load(file: File): FreeTypeFontGenerator =
-        withContext(Dispatchers.IO) {
-            FreeTypeFontGenerator(FileHandle(file))
-        }
-}
-
-data class FontOptions(
-    val name: String,
-    val size: Float,
-    val color: Color = Color.WHITE
-)

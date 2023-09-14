@@ -1,5 +1,6 @@
 package bke.iso.editor
 
+import bke.iso.editor.browser.EditorAssetBrowser
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture

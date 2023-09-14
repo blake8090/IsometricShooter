@@ -26,7 +26,7 @@ import bke.iso.game.actor.TurretSystem
 import bke.iso.game.actor.createMovingPlatform
 import bke.iso.game.player.createPlayer
 import bke.iso.game.asset.GameMap
-import bke.iso.game.asset.GameMapLoader
+import bke.iso.game.asset.GameMapCache
 import bke.iso.game.combat.Combat
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
@@ -56,7 +56,7 @@ class GameState(override val game: Game) : State() {
     )
 
     override suspend fun load() {
-        game.assets.register(GameMapLoader())
+        game.assets.register(GameMapCache())
         game.assets.loadAsync("game")
 
         loadMap()

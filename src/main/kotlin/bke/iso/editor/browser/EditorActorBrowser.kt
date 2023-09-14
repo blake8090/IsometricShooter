@@ -1,7 +1,7 @@
 package bke.iso.editor.browser
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.loader.ActorPrefab
+import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Texture

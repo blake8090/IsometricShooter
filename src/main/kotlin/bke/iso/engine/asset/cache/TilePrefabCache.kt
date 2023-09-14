@@ -1,4 +1,4 @@
-package bke.iso.engine.asset.loader
+package bke.iso.engine.asset.cache
 
 data class TilePrefab(
     val name: String,
@@ -6,4 +6,4 @@ data class TilePrefab(
     val solid: Boolean
 )
 
-class TilePrefabLoader
+class TilePrefabCache

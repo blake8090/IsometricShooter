@@ -2,7 +2,6 @@ package bke.iso.editor.browser
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.loader.ActorPrefab
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Texture

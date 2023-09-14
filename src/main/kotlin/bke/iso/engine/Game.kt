@@ -1,9 +1,9 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.FreeTypeFontGeneratorLoader
-import bke.iso.engine.asset.loader.TextureLoader
-import bke.iso.engine.asset.loader.ActorPrefabLoader
+import bke.iso.engine.asset.cache.ActorPrefabCache
+import bke.iso.engine.asset.cache.FontGeneratorCache
+import bke.iso.engine.asset.cache.TextureCache
 import bke.iso.engine.file.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
@@ -50,9 +50,9 @@ class Game {
         val time = measureTimeMillis {
             input.start()
             assets.run {
-                register(TextureLoader())
-                register(FreeTypeFontGeneratorLoader())
-                register(ActorPrefabLoader(serializer))
+                register(TextureCache())
+                register(FontGeneratorCache())
+                register(ActorPrefabCache(serializer))
             }
             ui.setLoadingScreen(EmptyLoadingScreen(assets))
         }
