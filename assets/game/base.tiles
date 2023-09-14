@@ -1,0 +1,12 @@
+[
+    {
+        "name": "floor",
+        "texture": "floor.png",
+        "solid": true
+    },
+    {
+        "name": "floor2",
+        "texture": "floor2.png",
+        "solid": true
+    }
+]
