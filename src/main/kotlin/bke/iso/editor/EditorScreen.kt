@@ -20,6 +20,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
 
     private val log = KotlinLogging.logger {}
 
+    private val root = Table()
     private val menuBar = EditorMenuBar(skin)
     private val toolBar = EditorToolBar(skin, assets)
     val assetBrowser = EditorAssetBrowser(skin, assets)
@@ -27,7 +28,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
     override fun create() {
         setup()
 
-        val root = Table().apply {
+        root.apply {
             setFillParent(true)
 
             add(menuBar.create())

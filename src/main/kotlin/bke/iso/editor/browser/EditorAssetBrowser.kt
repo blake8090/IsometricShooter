@@ -46,7 +46,7 @@ class EditorAssetBrowser(
         return root
     }
 
-    fun getSelectedPrefab(): SelectedPrefab? =
+    fun getSelectedPrefab(): PrefabData? =
         when {
             tileBrowser.visible -> tileBrowser.getSelectedPrefab()
             actorBrowser.visible -> actorBrowser.getSelectedPrefab()

@@ -30,7 +30,7 @@ class EditorActorBrowser(
             root.isVisible = value
         }
 
-    fun getSelectedPrefab(): SelectedActorPrefab? =
+    fun getSelectedPrefab(): ActorPrefabData? =
         buttonGroup.checked?.selectedPrefab
 
     fun populate(prefabs: List<ActorPrefab>) {
@@ -72,12 +72,12 @@ class EditorActorBrowser(
             font = skin.getFont("default")
         }
 
-        return ActorPrefabButton(SelectedActorPrefab(prefab, sprite.texture), style)
+        return ActorPrefabButton(ActorPrefabData(prefab, sprite.texture), style)
     }
 }
 
 private class ActorPrefabButton(
-    val selectedPrefab: SelectedActorPrefab,
+    val selectedPrefab: ActorPrefabData,
     style: ImageTextButtonStyle
 ) : ImageTextButton(selectedPrefab.prefab.name, style) {
 

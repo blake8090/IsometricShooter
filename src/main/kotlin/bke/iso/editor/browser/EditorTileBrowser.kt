@@ -27,7 +27,7 @@ class EditorTileBrowser(
             root.isVisible = value
         }
 
-    fun getSelectedPrefab(): SelectedTilePrefab? =
+    fun getSelectedPrefab(): TilePrefabData? =
         buttonGroup.checked?.selectedPrefab
 
     fun populate(prefabs: List<TilePrefab>) {
@@ -65,12 +65,12 @@ class EditorTileBrowser(
             font = skin.getFont("default")
         }
 
-        return TilePrefabButton(SelectedTilePrefab(prefab, prefab.texture), style)
+        return TilePrefabButton(TilePrefabData(prefab, prefab.texture), style)
     }
 }
 
 private class TilePrefabButton(
-    val selectedPrefab: SelectedTilePrefab,
+    val selectedPrefab: TilePrefabData,
     style: ImageTextButtonStyle
 ) : ImageTextButton(selectedPrefab.prefab.name, style) {
 

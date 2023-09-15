@@ -4,10 +4,8 @@ import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
 import bke.iso.engine.render.Sprite
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 
@@ -21,14 +19,14 @@ class EditorState(override val game: Game) : State() {
     private var gridWidth = 20
     private var gridLength = 20
 
-    private val lastCursorPos = Vector2()
-
+    private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.RIGHT)
     private val brushActor = game.world.actors.create(0f, 0f, 0f)
 
     override suspend fun load() {
-        game.assets.loadAsync("game")
         log.info { "Starting editor" }
+        game.assets.loadAsync("game")
         game.ui.setScreen(editorScreen)
+        game.input.addInputProcessor(mouseDragAdapter)
     }
 
     override fun update(deltaTime: Float) {
@@ -42,25 +40,13 @@ class EditorState(override val game: Game) : State() {
         } else {
             brushActor.remove<Sprite>()
         }
-
-        // TODO: refactor all this
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            lastCursorPos.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
-        } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-            val pos = Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
-
-            val difference = Vector2(
-                (pos.x - lastCursorPos.x) * -1, // movement seems to be inverted on the x-axis
-                pos.y - lastCursorPos.y,
-            )
-            if (!difference.isZero && editorScreen.hitMainView()) {
-                log.trace { "dragged: $difference" }
-                game.renderer.moveCamera(difference)
-            }
-
-            lastCursorPos.set(pos)
-        }
         drawGrid()
+
+        // TODO: comment and break out of this method
+        val delta = mouseDragAdapter.getDelta()
+        if (!delta.isZero && editorScreen.hitMainView()) {
+            game.renderer.moveCamera(delta.scl(-0.5f, 0.5f))
+        }
     }
 
     private fun drawGrid() {
