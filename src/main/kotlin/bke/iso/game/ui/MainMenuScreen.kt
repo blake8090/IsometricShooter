@@ -37,7 +37,7 @@ class MainMenuScreen(
 
         stackTable.row()
         val startButton = TextButton("START", skin).apply {
-            onChanged { _ ->
+            onChanged {
                 events.fire(MainMenuState.StartEvent())
             }
 
@@ -55,7 +55,7 @@ class MainMenuScreen(
 
         stackTable.row()
         val editorButton = TextButton("EDITOR", skin).apply {
-            onChanged { _ ->
+            onChanged {
                 events.fire(MainMenuState.EditorEvent())
             }
 
@@ -73,9 +73,7 @@ class MainMenuScreen(
 
         stackTable.row()
         val quitButton = TextButton("QUIT", skin).apply {
-            onChanged { _ ->
-                Gdx.app.exit()
-            }
+            onChanged { Gdx.app.exit() }
 
             onEnter { button ->
                 button.color = Color.BLUE

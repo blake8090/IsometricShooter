@@ -1,8 +1,10 @@
 package bke.iso.editor.ui.browser
 
+import bke.iso.editor.TilePrefabSelectedEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.ui.util.newTintedDrawable
+import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -62,7 +64,13 @@ class EditorTileBrowser(
             font = skin.getFont("default")
         }
 
-        return TilePrefabButton(prefab, prefab.texture, style)
+        return TilePrefabButton(prefab, prefab.texture, style).apply {
+            onChanged {
+                if (isChecked) {
+                    fire(TilePrefabSelectedEvent(prefab))
+                }
+            }
+        }
     }
 }
 

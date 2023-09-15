@@ -4,6 +4,8 @@ import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.math.toWorld
+import bke.iso.engine.render.Sprite
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -15,12 +17,12 @@ class EditorState(override val game: Game) : State() {
 
     override val systems = emptySet<System>()
 
-    private val editorScreen = EditorScreen(game.assets)
+    private val editorScreen = EditorScreen(this, game.assets)
     private var gridWidth = 20
     private var gridLength = 20
 
     private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.RIGHT)
-    private val brushActor = game.world.actors.create(0f, 0f, 0f)
+    private val referenceActor = game.world.actors.create(0f, 0f, 0f)
 
     override suspend fun load() {
         log.info { "Starting editor" }
@@ -29,6 +31,20 @@ class EditorState(override val game: Game) : State() {
         game.input.addInputProcessor(mouseDragAdapter)
     }
 
+    fun handleEvent(event: EditorEvent) =
+        when(event) {
+            is TilePrefabSelectedEvent -> {
+                log.debug { "tile prefab '${event.prefab.name}' selected" }
+                val sprite = Sprite(event.prefab.texture, 0f, 16f)
+                referenceActor.add(sprite)
+            }
+
+            is ActorPrefabSelectedEvent -> {
+                log.debug { "tile prefab '${event.prefab.name}' selected" }
+                referenceActor.add(event.sprite.copy())
+            }
+        }
+
     override fun update(deltaTime: Float) {
         drawGrid()
 
@@ -36,6 +52,12 @@ class EditorState(override val game: Game) : State() {
         val delta = mouseDragAdapter.getDelta()
         if (!delta.isZero && editorScreen.hitMainView()) {
             game.renderer.moveCamera(delta.scl(-0.5f, 0.5f))
+        }
+
+        if (editorScreen.hitMainView()) {
+            val pos = toWorld(game.renderer.getCursorPos())
+            // TODO: scale position when screen size changes
+            referenceActor.moveTo(pos.x, pos.y, pos.z)
         }
     }
 

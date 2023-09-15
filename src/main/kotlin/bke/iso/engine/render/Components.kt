@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("sprite")
 data class Sprite(
-    val texture: String = "",
+    var texture: String = "",
     val offsetX: Float = 0f,
     val offsetY: Float = 0f,
     var alpha: Float = 1f,

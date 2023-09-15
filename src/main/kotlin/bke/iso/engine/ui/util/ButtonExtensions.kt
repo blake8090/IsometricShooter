@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 
-fun <T : Button> T.onChanged(action: (T) -> Unit) {
+fun <T : Button> T.onChanged(action: T.() -> Unit) {
     addListener(object : ChangeListener() {
         override fun changed(event: ChangeEvent, actor: Actor) {
             action.invoke(this@onChanged)

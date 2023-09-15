@@ -1,9 +1,11 @@
 package bke.iso.editor.ui.browser
 
+import bke.iso.editor.ActorPrefabSelectedEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.newTintedDrawable
+import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -69,7 +71,13 @@ class EditorActorBrowser(
             font = skin.getFont("default")
         }
 
-        return ActorPrefabButton(prefab, sprite.texture, style)
+        return ActorPrefabButton(prefab, sprite.texture, style).apply {
+            onChanged {
+                if (isChecked) {
+                    fire(ActorPrefabSelectedEvent(prefab, sprite))
+                }
+            }
+        }
     }
 }
 

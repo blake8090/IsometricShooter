@@ -1,5 +1,8 @@
 package bke.iso.editor.ui
 
+import bke.iso.editor.EditorEvent
+import bke.iso.editor.EditorEventListener
+import bke.iso.editor.EditorState
 import bke.iso.editor.ui.browser.EditorAssetBrowser
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
@@ -16,7 +19,10 @@ import mu.KotlinLogging
 
 private const val MAIN_VIEW_NAME = "mainView"
 
-class EditorScreen(assets: Assets) : UIScreen(assets) {
+class EditorScreen(
+    private val editorState: EditorState,
+    assets: Assets
+) : UIScreen(assets) {
 
     private val log = KotlinLogging.logger {}
 
@@ -41,6 +47,11 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
                 .left()
             add(createMainView())
                 .grow()
+
+            addListener(object : EditorEventListener {
+                override fun handle(event: EditorEvent) =
+                    editorState.handleEvent(event)
+            })
         }
 
         stage.addActor(root)
