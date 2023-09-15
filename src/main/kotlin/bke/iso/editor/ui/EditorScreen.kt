@@ -1,6 +1,6 @@
-package bke.iso.editor
+package bke.iso.editor.ui
 
-import bke.iso.editor.browser.EditorAssetBrowser
+import bke.iso.editor.ui.browser.EditorAssetBrowser
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture

@@ -1,8 +1,7 @@
-package bke.iso.editor.browser
+package bke.iso.editor.ui.browser
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.cache.ActorPrefab
-import bke.iso.engine.render.Sprite
+import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -13,14 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
-private const val BUTTONS_PER_ROW = 2
-
-class EditorActorBrowser(
+class EditorTileBrowser(
     private val assets: Assets,
     private val skin: Skin
 ) {
 
-    private val buttonGroup = ButtonGroup<ActorPrefabButton>()
+    private val buttonGroup = ButtonGroup<TilePrefabButton>()
     private val content = Table().top().left()
     val root = ScrollPane(content)
 
@@ -30,26 +27,13 @@ class EditorActorBrowser(
             root.isVisible = value
         }
 
-    fun populate(prefabs: List<ActorPrefab>) {
+    fun populate(prefabs: List<TilePrefab>) {
         content.clearChildren()
         buttonGroup.clear()
 
-        val buttons = mutableListOf<ActorPrefabButton>()
-        for (prefab in prefabs) {
-            val sprite = prefab
-                .components
-                .firstNotNullOfOrNull { component -> component as? Sprite }
-                ?: continue
-            buttons.add(createButton(prefab, sprite))
-        }
-
-        for (row in buttons.chunked(BUTTONS_PER_ROW)) {
-            for (button in row) {
-                content.add(button)
-                    .uniform()
-                    .fill()
-                    .pad(10f)
-                buttonGroup.add(button)
+        for (row in prefabs.chunked(2)) {
+            for (prefab in row) {
+                populate(prefab)
             }
             content.row()
         }
@@ -58,23 +42,32 @@ class EditorActorBrowser(
         root.layout()
     }
 
-    private fun createButton(prefab: ActorPrefab, sprite: Sprite): ActorPrefabButton {
-        val texture = assets.get<Texture>(sprite.texture)
+    private fun populate(prefab: TilePrefab) {
+        val button = createButton(prefab, skin)
+        buttonGroup.add(button)
+        content.add(button)
+            .uniform()
+            .fill()
+            .pad(10f)
+    }
 
+    private fun createButton(prefab: TilePrefab, skin: Skin): TilePrefabButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
+            val texture = assets.get<Texture>(prefab.texture)
             imageUp = TextureRegionDrawable(TextureRegion(texture))
+
             over = skin.newTintedDrawable("pixel", "button-over")
             down = skin.newTintedDrawable("pixel", "button-down")
             checked = skin.newTintedDrawable("pixel", "button-checked")
             font = skin.getFont("default")
         }
 
-        return ActorPrefabButton(prefab, sprite.texture, style)
+        return TilePrefabButton(prefab, prefab.texture, style)
     }
 }
 
-private class ActorPrefabButton(
-    val prefab: ActorPrefab,
+private class TilePrefabButton(
+    val prefab: TilePrefab,
     val texture: String,
     style: ImageTextButtonStyle
 ) : ImageTextButton(prefab.name, style) {
