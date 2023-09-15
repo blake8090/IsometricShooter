@@ -19,7 +19,7 @@ class EditorTileBrowser(
     private val skin: Skin
 ) {
 
-    private val buttonGroup = ButtonGroup<TilePrefabButton>()
+    private val buttonGroup = ButtonGroup<ImageTextButton>()
     private val content = Table().top().left()
     val root = ScrollPane(content)
 
@@ -53,7 +53,7 @@ class EditorTileBrowser(
             .pad(10f)
     }
 
-    private fun createButton(prefab: TilePrefab, skin: Skin): TilePrefabButton {
+    private fun createButton(prefab: TilePrefab, skin: Skin): ImageTextButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
             val texture = assets.get<Texture>(prefab.texture)
             imageUp = TextureRegionDrawable(TextureRegion(texture))
@@ -64,27 +64,18 @@ class EditorTileBrowser(
             font = skin.getFont("default")
         }
 
-        return TilePrefabButton(prefab, prefab.texture, style).apply {
+        return ImageTextButton(prefab.name, style).apply {
+            // align label to bottom instead of right by default
+            clearChildren()
+            add(image)
+            row()
+            add(label)
+
             onChanged {
                 if (isChecked) {
                     fire(TilePrefabSelectedEvent(prefab))
                 }
             }
         }
-    }
-}
-
-private class TilePrefabButton(
-    val prefab: TilePrefab,
-    val texture: String,
-    style: ImageTextButtonStyle
-) : ImageTextButton(prefab.name, style) {
-
-    init {
-        // align label to bottom instead of right by default
-        clearChildren()
-        add(image)
-        row()
-        add(label)
     }
 }

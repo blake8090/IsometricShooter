@@ -22,7 +22,7 @@ class EditorActorBrowser(
     private val skin: Skin
 ) {
 
-    private val buttonGroup = ButtonGroup<ActorPrefabButton>()
+    private val buttonGroup = ButtonGroup<ImageTextButton>()
     private val content = Table().top().left()
     val root = ScrollPane(content)
 
@@ -36,7 +36,7 @@ class EditorActorBrowser(
         content.clearChildren()
         buttonGroup.clear()
 
-        val buttons = mutableListOf<ActorPrefabButton>()
+        val buttons = mutableListOf<ImageTextButton>()
         for (prefab in prefabs) {
             val sprite = prefab
                 .components
@@ -60,7 +60,7 @@ class EditorActorBrowser(
         root.layout()
     }
 
-    private fun createButton(prefab: ActorPrefab, sprite: Sprite): ActorPrefabButton {
+    private fun createButton(prefab: ActorPrefab, sprite: Sprite): ImageTextButton {
         val texture = assets.get<Texture>(sprite.texture)
 
         val style = ImageTextButton.ImageTextButtonStyle().apply {
@@ -71,27 +71,12 @@ class EditorActorBrowser(
             font = skin.getFont("default")
         }
 
-        return ActorPrefabButton(prefab, sprite.texture, style).apply {
+        return ImageTextButton(prefab.name, style).apply {
             onChanged {
                 if (isChecked) {
                     fire(ActorPrefabSelectedEvent(prefab, sprite))
                 }
             }
         }
-    }
-}
-
-private class ActorPrefabButton(
-    val prefab: ActorPrefab,
-    val texture: String,
-    style: ImageTextButtonStyle
-) : ImageTextButton(prefab.name, style) {
-
-    init {
-        // align label to bottom instead of right by default
-        clearChildren()
-        add(image)
-        row()
-        add(label)
     }
 }
