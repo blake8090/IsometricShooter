@@ -72,6 +72,12 @@ class EditorActorBrowser(
         }
 
         return ImageTextButton(prefab.name, style).apply {
+            // align label to bottom instead of right by default
+            clearChildren()
+            add(image)
+            row()
+            add(label)
+
             onChanged {
                 if (isChecked) {
                     fire(ActorPrefabSelectedEvent(prefab, sprite))

@@ -61,7 +61,6 @@ class EditorToolBar(
         val style = Button.ButtonStyle().apply {
             up = newTextureDrawable(texture)
             over = newTextureDrawable(texture, "button-over")
-            down = newTextureDrawable(texture, "button-down")
             checked = newTextureDrawable(texture, "button-checked")
         }
         return Button(style)
