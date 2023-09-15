@@ -128,7 +128,7 @@ class Renderer(
         fbo.begin()
         batch.begin()
 
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         // keep FBO's transparent pixels from mixing into other pixels
         batch.setBlendFunctionSeparate(
