@@ -2,6 +2,7 @@ package bke.iso.engine.serialization
 
 import bke.iso.engine.world.Component
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
@@ -11,6 +12,7 @@ import kotlinx.serialization.serializer
 import org.reflections.Reflections
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
+import kotlin.reflect.full.hasAnnotation
 
 class Serializer {
 
@@ -32,6 +34,7 @@ class Serializer {
         Reflections("bke.iso")
             .getSubTypesOf(Component::class.java)
             .map(Class<out Component>::kotlin)
+            .filter { kClass -> kClass.hasAnnotation<Serializable>() }
 
     @Suppress("UNCHECKED_CAST")
     private fun <T : Component> PolymorphicModuleBuilder<Component>.subclass(kClass: KClass<T>) {

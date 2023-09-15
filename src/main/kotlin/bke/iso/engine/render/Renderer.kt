@@ -51,6 +51,7 @@ class Renderer(
     val shapes: Shape3dArray = Shape3dArray()
     private val shapeDrawer = Shape3dDrawer(batch)
 
+    // TODO: cleanup this fbo code, see LowResGDX on github
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
      */
@@ -122,9 +123,18 @@ class Renderer(
 
     fun draw() {
         camera.update()
+        batch.projectionMatrix = camera.combined
+
         fbo.begin()
         ScreenUtils.clear(0f, 0f, 255f, 1f)
-        batch.projectionMatrix = camera.combined
+
+        // TODO: find a way to draw full size shapes underneath FBO
+        shapeDrawer.begin()
+        for (shape in shapes) {
+            shapeDrawer.drawShape(shape)
+        }
+        shapeDrawer.end()
+
         batch.begin()
         objectSorter.forEach(world.getObjects()) {
             when (it) {
@@ -145,11 +155,9 @@ class Renderer(
         // make sure that shapes are drawn respective to world positions
         batch.projectionMatrix = camera.combined
         shapeDrawer.begin()
-        for (shape in shapes) {
-            shapeDrawer.drawShape(shape)
-        }
         debug.draw(shapeDrawer)
         shapeDrawer.end()
+
         shapes.clear()
     }
 
