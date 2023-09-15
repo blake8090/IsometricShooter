@@ -30,9 +30,6 @@ class EditorActorBrowser(
             root.isVisible = value
         }
 
-    fun getSelectedPrefab(): ActorPrefabData? =
-        buttonGroup.checked?.selectedPrefab
-
     fun populate(prefabs: List<ActorPrefab>) {
         content.clearChildren()
         buttonGroup.clear()
@@ -72,14 +69,15 @@ class EditorActorBrowser(
             font = skin.getFont("default")
         }
 
-        return ActorPrefabButton(ActorPrefabData(prefab, sprite.texture), style)
+        return ActorPrefabButton(prefab, sprite.texture, style)
     }
 }
 
 private class ActorPrefabButton(
-    val selectedPrefab: ActorPrefabData,
+    val prefab: ActorPrefab,
+    val texture: String,
     style: ImageTextButtonStyle
-) : ImageTextButton(selectedPrefab.prefab.name, style) {
+) : ImageTextButton(prefab.name, style) {
 
     init {
         // align label to bottom instead of right by default

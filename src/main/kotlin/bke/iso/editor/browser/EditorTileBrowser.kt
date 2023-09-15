@@ -27,9 +27,6 @@ class EditorTileBrowser(
             root.isVisible = value
         }
 
-    fun getSelectedPrefab(): TilePrefabData? =
-        buttonGroup.checked?.selectedPrefab
-
     fun populate(prefabs: List<TilePrefab>) {
         content.clearChildren()
         buttonGroup.clear()
@@ -65,14 +62,15 @@ class EditorTileBrowser(
             font = skin.getFont("default")
         }
 
-        return TilePrefabButton(TilePrefabData(prefab, prefab.texture), style)
+        return TilePrefabButton(prefab, prefab.texture, style)
     }
 }
 
 private class TilePrefabButton(
-    val selectedPrefab: TilePrefabData,
+    val prefab: TilePrefab,
+    val texture: String,
     style: ImageTextButtonStyle
-) : ImageTextButton(selectedPrefab.prefab.name, style) {
+) : ImageTextButton(prefab.name, style) {
 
     init {
         // align label to bottom instead of right by default

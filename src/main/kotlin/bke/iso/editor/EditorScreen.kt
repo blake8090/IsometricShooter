@@ -23,7 +23,7 @@ class EditorScreen(assets: Assets) : UIScreen(assets) {
     private val root = Table()
     private val menuBar = EditorMenuBar(skin)
     private val toolBar = EditorToolBar(skin, assets)
-    val assetBrowser = EditorAssetBrowser(skin, assets)
+    private val assetBrowser = EditorAssetBrowser(skin, assets)
 
     override fun create() {
         setup()

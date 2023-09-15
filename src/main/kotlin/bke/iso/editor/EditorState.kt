@@ -3,7 +3,6 @@ package bke.iso.editor
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
-import bke.iso.engine.render.Sprite
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -30,16 +29,6 @@ class EditorState(override val game: Game) : State() {
     }
 
     override fun update(deltaTime: Float) {
-        // TODO: event instead of poll?
-        val selectedPrefab = editorScreen.assetBrowser.getSelectedPrefab()
-        if (selectedPrefab != null) {
-            brushActor.add(Sprite(
-                texture = selectedPrefab.texture,
-                offsetY = 16f // TODO: make this a constant
-            ))
-        } else {
-            brushActor.remove<Sprite>()
-        }
         drawGrid()
 
         // TODO: comment and break out of this method

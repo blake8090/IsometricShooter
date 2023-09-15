@@ -46,13 +46,6 @@ class EditorAssetBrowser(
         return root
     }
 
-    fun getSelectedPrefab(): PrefabData? =
-        when {
-            tileBrowser.visible -> tileBrowser.getSelectedPrefab()
-            actorBrowser.visible -> actorBrowser.getSelectedPrefab()
-            else -> null
-        }
-
     private fun setup() {
         skin.add("asset-browser", TextButton.TextButtonStyle().apply {
             font = skin.getFont("default")
