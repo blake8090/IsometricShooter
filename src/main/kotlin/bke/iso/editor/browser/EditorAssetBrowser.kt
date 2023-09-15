@@ -1,4 +1,4 @@
-package bke.iso.editor.ui.browser
+package bke.iso.editor.browser
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.ActorPrefab

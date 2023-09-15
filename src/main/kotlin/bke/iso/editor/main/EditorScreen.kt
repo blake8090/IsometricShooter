@@ -1,9 +1,9 @@
-package bke.iso.editor.ui
+package bke.iso.editor.main
 
 import bke.iso.editor.EditorEvent
 import bke.iso.editor.EditorEventListener
 import bke.iso.editor.EditorState
-import bke.iso.editor.ui.browser.EditorAssetBrowser
+import bke.iso.editor.browser.EditorAssetBrowser
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture

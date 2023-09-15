@@ -1,4 +1,4 @@
-package bke.iso.editor.ui
+package bke.iso.editor.main
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
