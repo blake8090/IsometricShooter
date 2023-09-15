@@ -119,7 +119,7 @@ class EditorState(override val game: Game) : State() {
             game.renderer.shapes.addLine(
                 Vector3(x.toFloat(), 0f, 0f),
                 Vector3(x.toFloat(), gridLength.toFloat(), 0f),
-                1f,
+                0.5f,
                 Color.GREEN
             )
         }
@@ -128,7 +128,7 @@ class EditorState(override val game: Game) : State() {
             game.renderer.shapes.addLine(
                 Vector3(0f, y.toFloat(), 0f),
                 Vector3(gridWidth.toFloat(), y.toFloat(), 0f),
-                1f,
+                0.5f,
                 Color.GREEN
             )
         }
