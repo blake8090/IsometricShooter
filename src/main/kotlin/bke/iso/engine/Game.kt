@@ -10,11 +10,12 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.render3d.Renderer3D
+import bke.iso.engine.render3d.Test3dState
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.ui.UI
-import bke.iso.engine.ui.loading.EmptyLoadingScreen
+import bke.iso.engine.ui.loading.SimpleLoadingScreen
 import bke.iso.engine.world.World
-import bke.iso.game.MainMenuState
 import com.badlogic.gdx.utils.PerformanceCounter
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
@@ -42,6 +43,7 @@ class Game {
 
     val input: Input = Input(events)
     val ui: UI = UI(input)
+    val renderer3D = Renderer3D(assets)
 
     private var state: State = EmptyState(this)
 
@@ -56,13 +58,15 @@ class Game {
                 register(ActorPrefabCache(serializer))
                 register(TilePrefabCache(serializer))
             }
-            ui.setLoadingScreen(EmptyLoadingScreen(assets))
         }
         log.info { "Initialized modules in $time ms" }
 
         runBlocking {
             assets.loadAsync("ui")
-            setState(MainMenuState::class)
+            assets.loadAsync("game")
+            renderer3D.init()
+            ui.setLoadingScreen(SimpleLoadingScreen(assets))
+            setState(Test3dState::class)
         }
     }
 
@@ -86,8 +90,9 @@ class Game {
         state.update(deltaTime)
         world.update()
 
+        renderer3D.render(deltaTime)
 //        performanceCounter.start()
-        renderer.draw()
+//        renderer.draw()
 //        performanceCounter.stop()
 //        performanceCounter.tick()
 //        val mean = performanceCounter.time.value * 1000f
