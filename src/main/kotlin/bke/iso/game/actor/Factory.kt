@@ -4,6 +4,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.DebugSettings
+import bke.iso.engine.render3d.BoxModel
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
@@ -21,6 +22,7 @@ class Factory(private val world: World) {
             DebugSettings().apply {
                 zAxis = false
             },
+            BoxModel(Vector3(1f, 1f, 2f)),
             Description("wall")
         )
 

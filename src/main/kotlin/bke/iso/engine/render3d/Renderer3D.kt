@@ -1,21 +1,27 @@
 package bke.iso.engine.render3d
 
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.VertexAttributes
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.g3d.Environment
+import com.badlogic.gdx.graphics.g3d.Material
 import com.badlogic.gdx.graphics.g3d.ModelBatch
+import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy
 import com.badlogic.gdx.graphics.g3d.decals.Decal
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
@@ -42,25 +48,26 @@ class Renderer3D(
     map (tile to decal)
      */
 
-    private val camera = OrthographicCamera(20f, 10f)
+    private val camera = OrthographicCamera(18f, 10f)
 
     private val decalBatch = DecalBatch(CameraGroupStrategy(camera))
     private val modelBatch = ModelBatch()
     private val environment = Environment()
 
     private val decalByTile = mutableMapOf<Tile, Decal>()
+    private val boxModelByActor = mutableMapOf<Actor, ModelInstance>()
 
     init {
         camera.apply {
             near = 1f
             far = 1000f
-            position.set(3f, 3f, 5f)
+            position.set(3f, 3f, 0f)
             direction.set(0f, 0f, -1f)
             rotate(Vector3.X, 90f - 35.264f)
             rotate(Vector3.Z, 45f)
 
             // zoom out
-            //translate(Vector3(direction).scl(-10f))
+            translate(Vector3(direction).scl(-20f))
         }
         environment.set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
         environment.add(DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f))
@@ -84,19 +91,28 @@ class Renderer3D(
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST)
 
+        val instances = mutableListOf<ModelInstance>()
         for (gameObject in world.getObjects()) {
             if (gameObject is Tile) {
                 val decal = decalByTile.getOrPut(gameObject) {
                     newDecal(gameObject.sprite.texture, gameObject.location.toVector3(), Vector2(1f, 1f))
                 }
                 decalBatch.add(decal)
+            } else if (gameObject is Actor) {
+                if (gameObject.has<BoxModel>()) {
+                    val instance = boxModelByActor.getOrPut(gameObject) {
+                        newBoxModel(gameObject.pos, Vector3(1f, 1f, 2f))
+                    }
+                    instances.add(instance)
+                }
             }
         }
-        decalBatch.flush()
 
-//        modelBatch.begin(camera)
-//        modelBatch.render(rect, environment)
-//        modelBatch.end()
+        modelBatch.begin(camera)
+        modelBatch.render(instances, environment)
+        modelBatch.end()
+
+        decalBatch.flush()
     }
 
     private fun newDecal(texture: String, pos: Vector3, dim: Vector2): Decal {
@@ -104,6 +120,16 @@ class Renderer3D(
         val decal = Decal.newDecal(dim.x, dim.y, textureRegion)
         decal.setPosition(pos)
         return decal
+    }
+
+    private fun newBoxModel(pos: Vector3, size: Vector3): ModelInstance {
+        val model = ModelBuilder().createBox(
+            size.x, size.y, size.z,
+            Material(ColorAttribute.createDiffuse(Color.DARK_GRAY)),
+            VertexAttributes.Usage.Position.toLong().or(VertexAttributes.Usage.Normal.toLong()))
+        val instance = ModelInstance(model)
+        instance.transform.setToTranslation(pos.cpy().add(0f, 0f, 1f))
+        return instance
     }
 
     fun dispose() {
