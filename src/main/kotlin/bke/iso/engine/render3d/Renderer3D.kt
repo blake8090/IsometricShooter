@@ -1,7 +1,10 @@
 package bke.iso.engine.render3d
 
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.world.Tile
+import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -15,9 +18,11 @@ import com.badlogic.gdx.graphics.g3d.decals.DecalBatch
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Array
 
-class Renderer3D(private val assets: Assets) {
+class Renderer3D(
+    private val assets: Assets,
+    private val world: World
+) {
     /*
     tiles -> decals (and later planes)
     actors -> decals rotated to camera
@@ -38,55 +43,54 @@ class Renderer3D(private val assets: Assets) {
      */
 
     private val camera = OrthographicCamera(20f, 10f)
-        .apply {
+
+    private val decalBatch = DecalBatch(CameraGroupStrategy(camera))
+    private val modelBatch = ModelBatch()
+    private val environment = Environment()
+
+    private val decalByTile = mutableMapOf<Tile, Decal>()
+
+    init {
+        camera.apply {
             near = 1f
             far = 1000f
             position.set(3f, 3f, 5f)
-            direction.set(-1f, -1f, -1f)
-            rotate(Vector3.X, 90f)
+            direction.set(0f, 0f, -1f)
+            rotate(Vector3.X, 90f - 35.264f)
+            rotate(Vector3.Z, 45f)
 
             // zoom out
             //translate(Vector3(direction).scl(-10f))
         }
-
-    private val decals = Array<Decal>()
-    private val decalBatch = DecalBatch(CameraGroupStrategy(camera))
-
-    private val modelBatch = ModelBatch()
-    private val environment = Environment().apply {
-        set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
-        add(DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f))
+        environment.set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
+        environment.add(DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f))
     }
 
-    fun init() {
-        for (x in 0..10) {
-            for (y in 0..10) {
-                newDecal(
-                    "test32.jpg",
-                    Vector3(x.toFloat(), y.toFloat(), 0f),
-                    Vector2(1f, 1f)
-                )
-            }
-        }
-    }
-
-    private fun newDecal(texture: String, pos: Vector3, dim: Vector2) {
-        val textureRegion = TextureRegion(assets.get<Texture>(texture))
-        Decal.newDecal(dim.x, dim.y, textureRegion).apply {
-            setPosition(pos)
-            decals.add(this)
-        }
+    fun moveCamera(delta: Vector3) {
+        camera.position.add(delta)
     }
 
     fun render(deltaTime: Float) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            camera.rotate(Vector3.X, -5f * deltaTime)
+            println("cam rot x: ${camera.direction}, ${camera.up}")
+        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+            camera.rotate(Vector3.X, 5f * deltaTime)
+            println("cam rot x: ${camera.direction}, ${camera.up}")
+        }
         camera.update()
 
         Gdx.gl.glClearColor(0f, 0f, 1f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST)
 
-        for (decal in decals) {
-            decalBatch.add(decal)
+        for (gameObject in world.getObjects()) {
+            if (gameObject is Tile) {
+                val decal = decalByTile.getOrPut(gameObject) {
+                    newDecal(gameObject.sprite.texture, gameObject.location.toVector3(), Vector2(1f, 1f))
+                }
+                decalBatch.add(decal)
+            }
         }
         decalBatch.flush()
 
@@ -95,8 +99,11 @@ class Renderer3D(private val assets: Assets) {
 //        modelBatch.end()
     }
 
-    fun moveCamera(delta: Vector3) {
-        camera.position.add(delta)
+    private fun newDecal(texture: String, pos: Vector3, dim: Vector2): Decal {
+        val textureRegion = TextureRegion(assets.get<Texture>(texture))
+        val decal = Decal.newDecal(dim.x, dim.y, textureRegion)
+        decal.setPosition(pos)
+        return decal
     }
 
     fun dispose() {

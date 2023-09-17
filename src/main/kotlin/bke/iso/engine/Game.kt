@@ -43,7 +43,7 @@ class Game {
 
     val input: Input = Input(events)
     val ui: UI = UI(input)
-    val renderer3D = Renderer3D(assets)
+    val renderer3D = Renderer3D(assets, world)
 
     private var state: State = EmptyState(this)
 
@@ -63,8 +63,6 @@ class Game {
 
         runBlocking {
             assets.loadAsync("ui")
-            assets.loadAsync("game")
-            renderer3D.init()
             ui.setLoadingScreen(SimpleLoadingScreen(assets))
             setState(Test3dState::class)
         }
