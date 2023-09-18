@@ -111,7 +111,7 @@ class Renderer3D(
                             newActorDecal(billboard.texture, gameObject.pos, Vector2(billboard.width, billboard.height))
                         }
                         decal.setPosition(gameObject.pos)
-                        decal.lookAt(camera.position, camera.up)
+                        decal.setRotation(camera.direction.cpy().scl(-1f), Vector3.Z)
                         decalBatch.add(decal)
                     }
                 }
