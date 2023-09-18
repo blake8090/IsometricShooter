@@ -6,6 +6,7 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.DebugSettings
+import bke.iso.engine.render3d.Billboard
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.Description
@@ -26,6 +27,7 @@ fun World.createPlayer(location: Location): Actor =
     actors.create(
         location,
         Sprite("player.png", 32f, 0f),
+        Billboard("player2.png", 1f, 2f),
         Player(),
         Collider(
             Vector3(0.4f, 0.4f, 1.6f),

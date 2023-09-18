@@ -55,6 +55,7 @@ class Renderer3D(
     private val environment = Environment()
 
     private val decalByTile = mutableMapOf<Tile, Decal>()
+    private val decalByActor = mutableMapOf<Actor, Decal>()
     private val boxModelByActor = mutableMapOf<Actor, ModelInstance>()
 
     init {
@@ -104,6 +105,15 @@ class Renderer3D(
                         newBoxModel(gameObject.pos, Vector3(1f, 1f, 2f))
                     }
                     instances.add(instance)
+                } else {
+                    gameObject.get<Billboard>()?.let { billboard ->
+                        val decal = decalByActor.getOrPut(gameObject) {
+                            newActorDecal(billboard.texture, gameObject.pos, Vector2(billboard.width, billboard.height))
+                        }
+                        decal.setPosition(gameObject.pos)
+                        decal.lookAt(camera.position, camera.up)
+                        decalBatch.add(decal)
+                    }
                 }
             }
         }
@@ -119,6 +129,18 @@ class Renderer3D(
         val textureRegion = TextureRegion(assets.get<Texture>(texture))
         val decal = Decal.newDecal(dim.x, dim.y, textureRegion)
         decal.setPosition(pos)
+        return decal
+    }
+
+    private fun newActorDecal(texture: String, pos: Vector3, dim: Vector2): Decal {
+        val textureRegion = TextureRegion(assets.get<Texture>(texture))
+        val decal = Decal.newDecal(dim.x, dim.y, textureRegion, true)
+        decal.setPosition(pos)
+        println("new decal $texture $pos")
+        decal.transformationOffset = Vector2(
+            dim.x / 2 * -1f,
+            dim.y / 2 * -1f
+        )
         return decal
     }
 
