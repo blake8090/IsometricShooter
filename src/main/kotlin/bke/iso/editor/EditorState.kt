@@ -56,6 +56,7 @@ class EditorState(override val game: Game) : State() {
                 val collider = event.prefab.components
                     .filterIsInstance<Collider>()
                     .firstOrNull()
+                collider?.let { referenceActor.add(it.copy()) }
                 selection = ActorSelection(event.prefab)
             }
         }
