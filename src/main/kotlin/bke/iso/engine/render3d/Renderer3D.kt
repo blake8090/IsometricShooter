@@ -17,10 +17,12 @@ import com.badlogic.gdx.graphics.g3d.Material
 import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy
 import com.badlogic.gdx.graphics.g3d.decals.Decal
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -54,9 +56,9 @@ class Renderer3D(
     private val modelBatch = ModelBatch()
     private val environment = Environment()
 
-    private val decalByTile = mutableMapOf<Tile, Decal>()
     private val decalByActor = mutableMapOf<Actor, Decal>()
     private val boxModelByActor = mutableMapOf<Actor, ModelInstance>()
+    private val modelByTile = mutableMapOf<Tile, ModelInstance>()
 
     init {
         camera.apply {
@@ -70,8 +72,8 @@ class Renderer3D(
             // zoom out
             translate(Vector3(direction).scl(-20f))
         }
-        environment.set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
-        environment.add(DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f))
+        environment.set(ColorAttribute(ColorAttribute.AmbientLight, 0.9f, 0.9f, 0.9f, 1f))
+        environment.add(DirectionalLight().set(Color.WHITE, Vector3(1f, 1f, -0.5f)))
     }
 
     fun moveCamera(delta: Vector3) {
@@ -95,10 +97,11 @@ class Renderer3D(
         val instances = mutableListOf<ModelInstance>()
         for (gameObject in world.getObjects()) {
             if (gameObject is Tile) {
-                val decal = decalByTile.getOrPut(gameObject) {
-                    newDecal(gameObject.sprite.texture, gameObject.location.toVector3(), Vector2(1f, 1f))
+                val instance = modelByTile.getOrPut(gameObject) {
+                    newRect(gameObject.sprite.texture)
                 }
-                decalBatch.add(decal)
+                instance.transform.setToTranslation(gameObject.location.toVector3().add(0f, 0f, 0.0001f))
+                instances.add(instance)
             } else if (gameObject is Actor) {
                 if (gameObject.has<BoxModel>()) {
                     val instance = boxModelByActor.getOrPut(gameObject) {
@@ -106,6 +109,7 @@ class Renderer3D(
                     }
                     instances.add(instance)
                 } else {
+                    // TODO: use planes so that billboards are affected by lighting
                     gameObject.get<Billboard>()?.let { billboard ->
                         val decal = decalByActor.getOrPut(gameObject) {
                             newActorDecal(billboard.texture, gameObject.pos, Vector2(billboard.width, billboard.height))
@@ -125,13 +129,6 @@ class Renderer3D(
         decalBatch.flush()
     }
 
-    private fun newDecal(texture: String, pos: Vector3, dim: Vector2): Decal {
-        val textureRegion = TextureRegion(assets.get<Texture>(texture))
-        val decal = Decal.newDecal(dim.x, dim.y, textureRegion)
-        decal.setPosition(pos)
-        return decal
-    }
-
     private fun newActorDecal(texture: String, pos: Vector3, dim: Vector2): Decal {
         val textureRegion = TextureRegion(assets.get<Texture>(texture))
         val decal = Decal.newDecal(dim.x, dim.y, textureRegion, true)
@@ -148,10 +145,31 @@ class Renderer3D(
         val model = ModelBuilder().createBox(
             size.x, size.y, size.z,
             Material(ColorAttribute.createDiffuse(Color.DARK_GRAY)),
-            VertexAttributes.Usage.Position.toLong().or(VertexAttributes.Usage.Normal.toLong()))
+            VertexAttributes.Usage.Position.toLong().or(VertexAttributes.Usage.Normal.toLong())
+        )
         val instance = ModelInstance(model)
         instance.transform.setToTranslation(pos.cpy().add(0f, 0f, 1f))
         return instance
+    }
+
+    private fun newRect(texture: String, width: Float = 1f, height: Float = 1f): ModelInstance {
+        val builder = ModelBuilder()
+        builder.begin()
+        builder.node()
+        val mpb: MeshPartBuilder = builder.part(
+            "rect",
+            GL20.GL_TRIANGLES,
+            VertexAttributes.Usage.Position.toLong().or(VertexAttributes.Usage.Normal.toLong().or(VertexAttributes.Usage.TextureCoordinates.toLong())),
+            Material(TextureAttribute(TextureAttribute.Diffuse, assets.get<Texture>(texture)))
+        )
+        mpb.rect(
+            -(width * 0.5f), -(height * 0.5f), 0f,
+            (width * 0.5f), -(height * 0.5f), 0f,
+            (width * 0.5f), (height * 0.5f), 0f,
+            -(width * 0.5f), (height * 0.5f), 0f,
+            0f, 0f, -1f
+        )
+        return ModelInstance(builder.end())
     }
 
     fun dispose() {

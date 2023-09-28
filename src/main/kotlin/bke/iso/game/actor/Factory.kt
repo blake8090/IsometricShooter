@@ -4,6 +4,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.DebugSettings
+import bke.iso.engine.render3d.Billboard
 import bke.iso.engine.render3d.BoxModel
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Description
@@ -39,6 +40,7 @@ class Factory(private val world: World) {
         world.actors.create(
             location,
             Sprite("turret.png", 16f, 0f),
+            Billboard("turret.png", 1f, 1f),
             Turret(),
             Collider(
                 Vector3(0.25f, 0.25f, 0.75f),
