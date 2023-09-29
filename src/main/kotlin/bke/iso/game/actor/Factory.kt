@@ -28,7 +28,10 @@ class Factory(private val world: World) {
         world.actors.create(
             location,
             Sprite("box.png", 16f, 8f),
-            Collider(Vector3(0.5f, 0.5f, 0.5f)),
+            Collider(
+                Vector3(0.5f, 0.5f, 0.5f),
+                Vector3(-0.25f, -0.25f, 0f)
+            ),
             DebugSettings(),
             Description("box")
         )
