@@ -11,13 +11,7 @@ import com.badlogic.gdx.utils.Pools
 
 class ObjectSorter {
 
-    private val objectsBehind = mutableMapOf<SortContext, MutableSet<SortContext>>()
-    private val visited = mutableSetOf<SortContext>()
-
     fun forEach(objects: OrderedSet<GameObject>, action: (GameObject) -> Unit) {
-        objectsBehind.clear()
-        visited.clear()
-
         val contexts = sort(objects)
         for (context in contexts) {
             callAction(context, action)
@@ -26,18 +20,15 @@ class ObjectSorter {
 
     private fun sort(objects: OrderedSet<GameObject>): List<SortContext> {
         val contexts = objects.map(::getSortContext)
-        for (i in 0..contexts.size) {
+        for (i in contexts.indices) {
+            val a = contexts[i]
             for (j in i + 1..<contexts.size) {
-                val a = contexts.get(i)
-                val b = contexts.get(j)
+
+                val b = contexts[j]
                 if (inFront(a, b)) {
-                    objectsBehind
-                        .getOrPut(a) { mutableSetOf() }
-                        .add(b)
+                    a.behind.add(b)
                 } else if (inFront(b, a)) {
-                    objectsBehind
-                        .getOrPut(b) { mutableSetOf() }
-                        .add(a)
+                    b.behind.add(a)
                 }
             }
         }
@@ -45,10 +36,11 @@ class ObjectSorter {
     }
 
     private fun callAction(context: SortContext, action: (GameObject) -> Unit) {
-        if (!visited.add(context)) {
+        if (context.visited) {
             return
         }
-        for (a in objectsBehind[context].orEmpty()) {
+        context.visited = true
+        for (a in context.behind) {
             callAction(a, action)
         }
         action.invoke(context.obj!!)
@@ -88,7 +80,7 @@ class ObjectSorter {
     }
 }
 
-private inline fun GameObject.getPos() =
+private fun GameObject.getPos() =
     when (this) {
         is Tile -> location.toVector3()
         is Actor -> pos
@@ -102,10 +94,17 @@ data class SortContext(
     val center: Vector3 = Vector3()
 ) : Poolable {
 
+    var visited: Boolean = false
+    val behind: MutableList<SortContext> = mutableListOf()
+    val inFront: MutableList<SortContext> = mutableListOf()
+
     override fun reset() {
         obj = null
         min.set(0f, 0f, 0f)
         max.set(0f, 0f, 0f)
         center.set(0f, 0f, 0f)
+        visited = false
+        behind.clear()
+        inFront.clear()
     }
 }

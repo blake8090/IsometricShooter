@@ -51,12 +51,12 @@ class EditorState(override val game: Game) : State() {
             }
 
             is ActorPrefabSelectedEvent -> {
-                log.debug { "tile prefab '${event.prefab.name}' selected" }
+                log.debug { "actor prefab '${event.prefab.name}' selected" }
                 referenceActor.add(event.sprite.copy())
-                val collider = event.prefab.components
+                event.prefab.components
                     .filterIsInstance<Collider>()
                     .firstOrNull()
-                collider?.let { referenceActor.add(it.copy()) }
+                    ?.let { referenceActor.add(it.copy()) }
                 selection = ActorSelection(event.prefab)
             }
         }
