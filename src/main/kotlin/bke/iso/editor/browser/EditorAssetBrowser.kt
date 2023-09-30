@@ -65,6 +65,7 @@ class EditorAssetBrowser(
             onChanged {
                 tileBrowser.visible = true
                 actorBrowser.visible = false
+                actorBrowser.unselect()
             }
         }
         table.add(tileButton)
@@ -74,6 +75,7 @@ class EditorAssetBrowser(
             padRight(Value.percentWidth(.25f, this))
             onChanged {
                 tileBrowser.visible = false
+                tileBrowser.unselect()
                 actorBrowser.visible = true
             }
         }

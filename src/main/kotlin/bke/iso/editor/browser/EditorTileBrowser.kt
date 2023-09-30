@@ -1,6 +1,6 @@
 package bke.iso.editor.browser
 
-import bke.iso.editor.TilePrefabSelectedEvent
+import bke.iso.editor.SelectTilePrefabEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.ui.util.newTintedDrawable
@@ -73,9 +73,13 @@ class EditorTileBrowser(
 
             onChanged {
                 if (isChecked) {
-                    fire(TilePrefabSelectedEvent(prefab))
+                    fire(SelectTilePrefabEvent(prefab))
                 }
             }
         }
+    }
+
+    fun unselect() {
+        buttonGroup.uncheckAll()
     }
 }

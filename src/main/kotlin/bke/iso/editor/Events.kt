@@ -20,9 +20,13 @@ interface EditorEventListener : EventListener {
 
 sealed class EditorEvent : Event()
 
-data class TilePrefabSelectedEvent(val prefab: TilePrefab) : EditorEvent()
+data class SelectTilePrefabEvent(val prefab: TilePrefab) : EditorEvent()
 
-data class ActorPrefabSelectedEvent(
+data class SelectActorPrefabEvent(
     val prefab: ActorPrefab,
     val sprite: Sprite
 ) : EditorEvent()
+
+class SelectPointerToolEvent : EditorEvent()
+
+class SelectBrushToolEvent : EditorEvent()

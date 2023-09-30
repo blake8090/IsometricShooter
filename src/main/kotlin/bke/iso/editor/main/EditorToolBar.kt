@@ -1,7 +1,10 @@
 package bke.iso.editor.main
 
+import bke.iso.editor.SelectBrushToolEvent
+import bke.iso.editor.SelectPointerToolEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
+import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -27,10 +30,20 @@ class EditorToolBar(
         root.background = skin.getDrawable("bg")
 
         val pointerButton = createButton("pointer.png")
+        pointerButton.onChanged {
+            if (isChecked) {
+                fire(SelectPointerToolEvent())
+            }
+        }
         root.add(pointerButton)
             .padLeft(5f)
 
         val brushButton = createButton("brush.png")
+        brushButton.onChanged {
+            if (isChecked) {
+                fire(SelectBrushToolEvent())
+            }
+        }
         root.add(brushButton)
 
         val eraserButton = createButton("eraser.png")

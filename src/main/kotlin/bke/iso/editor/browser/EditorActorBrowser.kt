@@ -1,6 +1,6 @@
 package bke.iso.editor.browser
 
-import bke.iso.editor.ActorPrefabSelectedEvent
+import bke.iso.editor.SelectActorPrefabEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.render.Sprite
@@ -80,9 +80,13 @@ class EditorActorBrowser(
 
             onChanged {
                 if (isChecked) {
-                    fire(ActorPrefabSelectedEvent(prefab, sprite))
+                    fire(SelectActorPrefabEvent(prefab, sprite))
                 }
             }
         }
+    }
+
+    fun unselect() {
+        buttonGroup.uncheckAll()
     }
 }

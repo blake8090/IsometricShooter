@@ -1,6 +1,9 @@
 package bke.iso.editor
 
 import bke.iso.editor.main.EditorScreen
+import bke.iso.editor.tool.BrushTool
+import bke.iso.editor.tool.EditorTool
+import bke.iso.editor.tool.PointerTool
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -24,7 +27,9 @@ class EditorState(override val game: Game) : State() {
     private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.RIGHT)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
+    private val pointerTool = PointerTool()
     private val brushTool = BrushTool(game.world, game.renderer)
+    private var selectedTool: EditorTool? = null
 
     override suspend fun load() {
         log.info { "Starting editor" }
@@ -35,20 +40,37 @@ class EditorState(override val game: Game) : State() {
 
     fun handleEvent(event: EditorEvent) =
         when (event) {
-            is TilePrefabSelectedEvent -> brushTool.selectPrefab(event.prefab)
-            is ActorPrefabSelectedEvent -> brushTool.selectPrefab(event.prefab, event.sprite)
+            is SelectTilePrefabEvent -> {
+                brushTool.selectPrefab(event.prefab)
+            }
+
+            is SelectActorPrefabEvent -> {
+                brushTool.selectPrefab(event.prefab, event.sprite)
+            }
+
+            is SelectPointerToolEvent -> {
+                selectTool(pointerTool)
+            }
+
+            is SelectBrushToolEvent -> {
+                selectTool(brushTool)
+            }
         }
+
+    private fun selectTool(tool: EditorTool) {
+        selectedTool?.disable()
+        tool.enable()
+        selectedTool = tool
+        log.debug { "Selected tool: ${tool::class.simpleName}" }
+    }
 
     override fun update(deltaTime: Float) {
         drawGrid()
         panCamera()
 
-        if (editorScreen.hitMainView()) {
-            brushTool.update()
-
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                brushTool.performAction()
-            }
+        brushTool.update()
+        if (editorScreen.hitMainView() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            selectedTool?.performAction()
         }
     }
 
