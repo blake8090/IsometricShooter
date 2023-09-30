@@ -9,7 +9,7 @@ import java.io.File
 @Serializable
 data class TilePrefab(
     val name: String,
-    val texture: String,
+    val texture: String,  // TODO: use Sprite instead
     val solid: Boolean
 )
 
