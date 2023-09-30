@@ -1,4 +1,4 @@
-package bke.iso.editor.browser
+package bke.iso.editor.ui
 
 import bke.iso.editor.SelectActorPrefabEvent
 import bke.iso.engine.asset.Assets

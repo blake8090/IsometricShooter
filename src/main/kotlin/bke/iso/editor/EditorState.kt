@@ -1,6 +1,6 @@
 package bke.iso.editor
 
-import bke.iso.editor.main.EditorScreen
+import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.brush.BrushTool
 import bke.iso.engine.Game
 import bke.iso.engine.State

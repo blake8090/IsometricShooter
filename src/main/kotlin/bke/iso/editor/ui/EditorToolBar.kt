@@ -1,4 +1,4 @@
-package bke.iso.editor.main
+package bke.iso.editor.ui
 
 import bke.iso.editor.SelectBrushToolEvent
 import bke.iso.editor.SelectPointerToolEvent
