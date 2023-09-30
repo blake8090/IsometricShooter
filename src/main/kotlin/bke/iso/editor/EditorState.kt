@@ -4,6 +4,7 @@ import bke.iso.editor.main.EditorScreen
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
@@ -44,6 +45,10 @@ class EditorState(override val game: Game) : State() {
 
         if (editorScreen.hitMainView()) {
             brushTool.update()
+
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                brushTool.performAction()
+            }
         }
     }
 

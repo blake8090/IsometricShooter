@@ -3,6 +3,7 @@ package bke.iso.editor
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.math.Location
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
@@ -11,7 +12,7 @@ import mu.KotlinLogging
 import kotlin.math.floor
 
 class BrushTool(
-    world: World,
+    private val world: World,
     private val renderer: Renderer
 ) {
 
@@ -50,21 +51,30 @@ class BrushTool(
         referenceActor.moveTo(pos.x, pos.y, pos.z)
     }
 
-//    private fun createTile(prefab: TilePrefab, location: Location) {
-//        log.debug { "set tile ${prefab.name} at $location" }
-//        game.world.setTile(location, Sprite(prefab.texture, 0f, 16f))
-//    }
-//
-//    private fun createActor(prefab: ActorPrefab, pos: Vector3) {
-//        val sprite = referenceActor.get<Sprite>()!!
-//        val a = game.world.actors.create(
-//            pos.x, pos.y, pos.z,
-//            sprite.copy(),
-//            ReferencePrefab(prefab)
-//        )
-//        prefab.components.filterIsInstance<Collider>()
-//            .firstOrNull()?.let { a.add(it.copy()) }
-//    }
+    fun performAction() {
+        if (selection is TileSelection) {
+            createTile((selection as TileSelection).prefab)
+        } else if (selection is ActorSelection) {
+            createActor((selection as ActorSelection).prefab)
+        }
+    }
+
+    private fun createTile(prefab: TilePrefab) {
+        val location = Location(referenceActor.pos)
+        world.setTile(location, Sprite(prefab.texture, 0f, 16f))
+        log.debug { "set tile ${prefab.name} at $location" }
+    }
+
+    private fun createActor(prefab: ActorPrefab) {
+        val pos = referenceActor.pos
+        val sprite = referenceActor.get<Sprite>()!!
+        val a = world.actors.create(
+            pos.x, pos.y, pos.z,
+            sprite.copy(),
+        )
+        prefab.components.filterIsInstance<Collider>()
+            .firstOrNull()?.let { a.add(it.copy()) }
+    }
 
     private sealed class Selection
 
