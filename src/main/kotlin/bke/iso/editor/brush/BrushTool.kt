@@ -1,5 +1,7 @@
-package bke.iso.editor.tool
+package bke.iso.editor.brush
 
+import bke.iso.editor.EditorCommand
+import bke.iso.editor.EditorTool
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.collision.Collider
@@ -36,13 +38,12 @@ class BrushTool(
         }
     }
 
-    override fun performAction() {
-        if (selection is TileSelection) {
-            createTile((selection as TileSelection).prefab)
-        } else if (selection is ActorSelection) {
-            createActor((selection as ActorSelection).prefab)
+    override fun performAction(): EditorCommand? =
+        when (val s = selection) {
+            is TileSelection -> CreateTileCommand(world, s.prefab, Location(referenceActor.pos))
+            is ActorSelection -> CreateActorCommand(world, s.prefab, referenceActor.pos)
+            else -> null
         }
-    }
 
     override fun enable() {
         enabled = true
@@ -70,23 +71,6 @@ class BrushTool(
             .filterIsInstance<Collider>()
             .firstOrNull()
             ?.let { referenceActor.add(it.copy()) }
-    }
-
-    private fun createTile(prefab: TilePrefab) {
-        val location = Location(referenceActor.pos)
-        world.setTile(location, Sprite(prefab.texture, 0f, 16f))
-        log.debug { "set tile ${prefab.name} at $location" }
-    }
-
-    private fun createActor(prefab: ActorPrefab) {
-        val pos = referenceActor.pos
-        val sprite = referenceActor.get<Sprite>()!!
-        val a = world.actors.create(
-            pos.x, pos.y, pos.z,
-            sprite.copy(),
-        )
-        prefab.components.filterIsInstance<Collider>()
-            .firstOrNull()?.let { a.add(it.copy()) }
     }
 
     private sealed class Selection

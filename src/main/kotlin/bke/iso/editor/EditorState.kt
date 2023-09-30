@@ -1,9 +1,7 @@
 package bke.iso.editor
 
 import bke.iso.editor.main.EditorScreen
-import bke.iso.editor.tool.BrushTool
-import bke.iso.editor.tool.EditorTool
-import bke.iso.editor.tool.PointerTool
+import bke.iso.editor.brush.BrushTool
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -30,6 +28,7 @@ class EditorState(override val game: Game) : State() {
     private val pointerTool = PointerTool()
     private val brushTool = BrushTool(game.world, game.renderer)
     private var selectedTool: EditorTool? = null
+    private val commands = ArrayDeque<EditorCommand>()
 
     override suspend fun load() {
         log.info { "Starting editor" }
@@ -70,7 +69,11 @@ class EditorState(override val game: Game) : State() {
 
         brushTool.update()
         if (editorScreen.hitMainView() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            selectedTool?.performAction()
+            selectedTool?.performAction()?.let { command ->
+                log.debug { "Executing ${command::class.simpleName}" }
+                command.execute()
+                commands.addFirst(command)
+            }
         }
     }
 

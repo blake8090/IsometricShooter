@@ -1,11 +1,12 @@
-package bke.iso.editor.tool
+package bke.iso.editor
 
 class PointerTool : EditorTool {
 
     override fun update() {
     }
 
-    override fun performAction() {
+    override fun performAction(): EditorCommand? {
+        return null
     }
 
     override fun enable() {

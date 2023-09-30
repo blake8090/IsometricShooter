@@ -1,8 +1,8 @@
-package bke.iso.editor.tool
+package bke.iso.editor
 
 interface EditorTool {
     fun update()
-    fun performAction()
+    fun performAction(): EditorCommand?
     fun enable()
     fun disable()
 }
