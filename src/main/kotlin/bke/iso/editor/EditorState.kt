@@ -59,7 +59,7 @@ class EditorState(override val game: Game) : State() {
             }
 
             is SelectActorPrefabEvent -> {
-                brushTool.selectPrefab(event.prefab, event.texture)
+                brushTool.selectPrefab(event.prefab)
             }
 
             is SelectPointerToolEvent -> {

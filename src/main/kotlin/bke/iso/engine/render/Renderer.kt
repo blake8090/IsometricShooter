@@ -175,6 +175,7 @@ class Renderer(
 
         batch.end()
         fbo.end()
+        fboViewport.apply()
     }
 
     private fun drawShapes(shapes: Shape3dArray) {
@@ -191,8 +192,6 @@ class Renderer(
         batch.begin()
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
-        // TODO: add comment explaining why this has to be called last
-        fboViewport.apply()
     }
 
     private fun draw(actor: Actor) {

@@ -21,10 +21,7 @@ sealed class EditorEvent : Event()
 
 data class SelectTilePrefabEvent(val prefab: TilePrefab) : EditorEvent()
 
-data class SelectActorPrefabEvent(
-    val prefab: ActorPrefab,
-    val texture: String
-) : EditorEvent()
+data class SelectActorPrefabEvent(val prefab: ActorPrefab) : EditorEvent()
 
 class SelectPointerToolEvent : EditorEvent()
 

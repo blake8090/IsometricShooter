@@ -79,7 +79,7 @@ class EditorActorBrowser(
 
             onChanged {
                 if (isChecked) {
-                    fire(SelectActorPrefabEvent(prefab, sprite.texture))
+                    fire(SelectActorPrefabEvent(prefab))
                 }
             }
         }
