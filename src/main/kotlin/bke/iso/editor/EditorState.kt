@@ -12,6 +12,18 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 
+interface EditorCommand {
+    fun execute()
+    fun undo()
+}
+
+interface EditorTool {
+    fun update()
+    fun performAction(): EditorCommand?
+    fun enable()
+    fun disable()
+}
+
 class EditorState(override val game: Game) : State() {
 
     override val systems = emptySet<System>()
