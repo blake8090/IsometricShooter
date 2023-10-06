@@ -48,7 +48,8 @@ class Renderer(
 
     val debug: DebugRenderer = DebugRenderer()
 
-    val shapes: Shape3dArray = Shape3dArray()
+    val bgShapes: Shape3dArray = Shape3dArray()
+    val fgShapes: Shape3dArray = Shape3dArray()
     private val shapeDrawer = Shape3dDrawer(batch)
 
     // TODO: cleanup this fbo code, see LowResGDX on github
@@ -123,6 +124,33 @@ class Renderer(
 
     fun draw() {
         camera.update()
+
+        drawToFbo()
+
+        Gdx.gl.glClearColor(0f, 0f, 1f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        // reset blend function to default
+        batch.setBlendFunctionSeparate(
+            GL20.GL_SRC_ALPHA,
+            GL20.GL_ONE_MINUS_SRC_ALPHA,
+            GL20.GL_SRC_ALPHA,
+            GL20.GL_ONE_MINUS_SRC_ALPHA
+        )
+
+        drawShapes(bgShapes)
+        drawFbo()
+        drawShapes(fgShapes)
+
+        batch.projectionMatrix = camera.combined
+        shapeDrawer.begin()
+        debug.draw(shapeDrawer)
+        shapeDrawer.end()
+
+        bgShapes.clear()
+        fgShapes.clear()
+    }
+
+    private fun drawToFbo() {
         batch.projectionMatrix = camera.combined
 
         fbo.begin()
@@ -144,38 +172,26 @@ class Renderer(
                 is Tile -> draw(it)
             }
         }
+
         batch.end()
         fbo.end()
-        fboViewport.apply()
+    }
 
-        Gdx.gl.glClearColor(0f, 0f, 1f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        // reset blend function to default
-        batch.setBlendFunctionSeparate(
-            GL20.GL_SRC_ALPHA,
-            GL20.GL_ONE_MINUS_SRC_ALPHA,
-            GL20.GL_SRC_ALPHA,
-            GL20.GL_ONE_MINUS_SRC_ALPHA
-        )
-
+    private fun drawShapes(shapes: Shape3dArray) {
         batch.projectionMatrix = camera.combined
         shapeDrawer.begin()
         for (shape in shapes) {
             shapeDrawer.drawShape(shape)
         }
         shapeDrawer.end()
-        shapes.clear()
+    }
 
+    private fun drawFbo() {
+        fboViewport.apply()
         batch.projectionMatrix = fboViewport.camera.combined
         batch.begin()
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
-
-        // make sure that shapes are drawn respective to world positions
-        batch.projectionMatrix = camera.combined
-        shapeDrawer.begin()
-        debug.draw(shapeDrawer)
-        shapeDrawer.end()
     }
 
     private fun draw(actor: Actor) {

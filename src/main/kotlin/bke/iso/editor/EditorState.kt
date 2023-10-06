@@ -91,7 +91,7 @@ class EditorState(override val game: Game) : State() {
 
     private fun drawGrid() {
         for (x in 0..gridWidth) {
-            game.renderer.shapes.addLine(
+            game.renderer.bgShapes.addLine(
                 Vector3(x.toFloat(), 0f, 0f),
                 Vector3(x.toFloat(), gridLength.toFloat(), 0f),
                 0.5f,
@@ -100,7 +100,7 @@ class EditorState(override val game: Game) : State() {
         }
 
         for (y in 0..gridLength) {
-            game.renderer.shapes.addLine(
+            game.renderer.bgShapes.addLine(
                 Vector3(0f, y.toFloat(), 0f),
                 Vector3(gridWidth.toFloat(), y.toFloat(), 0f),
                 0.5f,
