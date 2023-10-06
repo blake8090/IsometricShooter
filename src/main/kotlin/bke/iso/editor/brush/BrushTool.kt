@@ -20,9 +20,9 @@ class BrushTool(
 
     private val log = KotlinLogging.logger {}
 
-    private val referenceActor = world.actors.create(0f, 0f, 0f)
+    private val referenceSprite = Sprite()
+    private val referenceActor = world.actors.create(0f, 0f, 0f, referenceSprite)
     private var selection: Selection? = null
-    private var enabled = false
 
     override fun update() {
         // TODO: scale position when screen size changes
@@ -32,10 +32,6 @@ class BrushTool(
             pos.set(floor(pos.x), floor(pos.y), floor(pos.z))
         }
         referenceActor.moveTo(pos.x, pos.y, pos.z)
-
-        referenceActor.get<Sprite>()?.let { sprite ->
-            sprite.alpha = if (enabled) 1f else 0f
-        }
     }
 
     override fun performAction(): EditorCommand? =
@@ -46,27 +42,29 @@ class BrushTool(
         }
 
     override fun enable() {
-        enabled = true
+        referenceSprite.alpha = 1f
     }
 
     override fun disable() {
-        enabled = false
+        referenceSprite.alpha = 0f
     }
 
     fun selectPrefab(prefab: TilePrefab) {
         log.debug { "tile prefab '${prefab.name}' selected" }
         selection = TileSelection(prefab)
 
-        referenceActor.add(Sprite(prefab.texture, 0f, 16f))
+        referenceSprite.texture = prefab.texture
+        referenceSprite.offsetY = 16f
         // only need colliders when placing actors
         referenceActor.remove<Collider>()
     }
 
-    fun selectPrefab(prefab: ActorPrefab, sprite: Sprite) {
+    fun selectPrefab(prefab: ActorPrefab, texture: String) {
         log.debug { "actor prefab '${prefab.name}' selected" }
         selection = ActorSelection(prefab)
 
-        referenceActor.add(sprite.copy())
+        referenceSprite.texture = texture
+        referenceSprite.offsetY = 0f
         prefab.components
             .filterIsInstance<Collider>()
             .firstOrNull()

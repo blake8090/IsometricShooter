@@ -44,9 +44,12 @@ class EditorState(override val game: Game) : State() {
 
     override suspend fun load() {
         log.info { "Starting editor" }
+
         game.assets.loadAsync("game")
         game.ui.setScreen(editorScreen)
         game.input.addInputProcessor(mouseDragAdapter)
+
+        brushTool.disable()
     }
 
     fun handleEvent(event: EditorEvent) =
@@ -56,7 +59,7 @@ class EditorState(override val game: Game) : State() {
             }
 
             is SelectActorPrefabEvent -> {
-                brushTool.selectPrefab(event.prefab, event.sprite)
+                brushTool.selectPrefab(event.prefab, event.texture)
             }
 
             is SelectPointerToolEvent -> {
@@ -76,17 +79,24 @@ class EditorState(override val game: Game) : State() {
     }
 
     override fun update(deltaTime: Float) {
-        drawGrid()
+        updateTool()
         panCamera()
+        drawGrid()
+    }
 
-        brushTool.update()
+    private fun updateTool() {
+        val tool = selectedTool ?: return
+        tool.update()
         if (editorScreen.hitMainView() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            selectedTool?.performAction()?.let { command ->
-                log.debug { "Executing ${command::class.simpleName}" }
-                command.execute()
-                commands.addFirst(command)
-            }
+            runToolCommand(tool)
         }
+    }
+
+    private fun runToolCommand(tool: EditorTool) {
+        val command = tool.performAction() ?: return
+        log.debug { "Executing ${command::class.simpleName}" }
+        command.execute()
+        commands.addFirst(command)
     }
 
     private fun panCamera() {

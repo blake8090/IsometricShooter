@@ -2,7 +2,6 @@ package bke.iso.editor
 
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
-import bke.iso.engine.render.Sprite
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener
 
@@ -24,7 +23,7 @@ data class SelectTilePrefabEvent(val prefab: TilePrefab) : EditorEvent()
 
 data class SelectActorPrefabEvent(
     val prefab: ActorPrefab,
-    val sprite: Sprite
+    val texture: String
 ) : EditorEvent()
 
 class SelectPointerToolEvent : EditorEvent()

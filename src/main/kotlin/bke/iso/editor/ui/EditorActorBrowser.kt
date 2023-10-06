@@ -61,9 +61,8 @@ class EditorActorBrowser(
     }
 
     private fun createButton(prefab: ActorPrefab, sprite: Sprite): ImageTextButton {
-        val texture = assets.get<Texture>(sprite.texture)
-
         val style = ImageTextButton.ImageTextButtonStyle().apply {
+            val texture = assets.get<Texture>(sprite.texture)
             imageUp = TextureRegionDrawable(TextureRegion(texture))
             over = skin.newTintedDrawable("pixel", "button-over")
             down = skin.newTintedDrawable("pixel", "button-down")
@@ -80,7 +79,7 @@ class EditorActorBrowser(
 
             onChanged {
                 if (isChecked) {
-                    fire(SelectActorPrefabEvent(prefab, sprite))
+                    fire(SelectActorPrefabEvent(prefab, sprite.texture))
                 }
             }
         }

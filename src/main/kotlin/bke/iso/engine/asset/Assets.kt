@@ -35,7 +35,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         register(T::class, assetCache)
 
     fun <T : Any> get(name: String, type: KClass<T>): T =
-        getCache(type)[name] ?: error("")
+        getCache(type)[name] ?: error("Asset not found: '$name' (${type.simpleName})")
 
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)

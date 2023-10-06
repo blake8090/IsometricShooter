@@ -187,11 +187,12 @@ class Renderer(
     }
 
     private fun drawFbo() {
-        fboViewport.apply()
         batch.projectionMatrix = fboViewport.camera.combined
         batch.begin()
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
+        // TODO: add comment explaining why this has to be called last
+        fboViewport.apply()
     }
 
     private fun draw(actor: Actor) {
@@ -207,6 +208,10 @@ class Renderer(
     }
 
     private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
+        if (sprite.texture.isBlank()) {
+            return
+        }
+
         val texture = assets.get<Texture>(sprite.texture)
         val screenPos = toScreen(worldPos)
             .sub(sprite.offsetX, sprite.offsetY)
