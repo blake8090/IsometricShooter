@@ -8,6 +8,7 @@ import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
+import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -49,14 +50,12 @@ class EraserTool(
         return point.dst(bottomCenter)
     }
 
-    override fun performAction(): EditorCommand? {
-        val obj = highlighted?.obj
-        return  if (obj is Actor) {
-            DeleteActorCommand(world, obj)
-        } else {
-            null
+    override fun performAction(): EditorCommand? =
+        when (val obj = highlighted?.obj) {
+            is Actor -> DeleteActorCommand(world, obj)
+            is Tile -> DeleteTileCommand(world, obj.location)
+            else -> null
         }
-    }
 
     override fun enable() {
     }

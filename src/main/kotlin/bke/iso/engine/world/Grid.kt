@@ -37,8 +37,7 @@ class Grid {
         if (!locationsByActor.containsKey(actor)) {
             locationsByActor.put(actor, ObjectSet())
         }
-        val locations = locationsByActor.get(actor)
-        return locations
+        return locationsByActor.get(actor)
     }
 
     fun remove(actor: Actor) {
@@ -72,12 +71,17 @@ class Grid {
         objects.add(tile)
     }
 
+    fun deleteTile(location: Location) {
+        val data = objectMap.get(location) ?: return
+        data.tile?.let(objects::remove)
+        data.tile = null
+    }
+
     private fun getOrPutData(location: Location): GridData {
         if (!objectMap.containsKey(location)) {
             objectMap.put(location, GridData())
         }
-        val data = objectMap.get(location)
-        return data
+        return objectMap.get(location)
     }
 }
 

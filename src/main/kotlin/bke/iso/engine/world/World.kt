@@ -24,6 +24,9 @@ class World {
         grid.setTile(Tile(sprite, location))
     }
 
+    fun deleteTile(location: Location) =
+        grid.deleteTile(location)
+
     fun getObjectsAt(point: Vector3): Set<GameObject> =
         grid.objectsAt(Location(point))
 
