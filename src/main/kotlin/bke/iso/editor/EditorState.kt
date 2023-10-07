@@ -3,6 +3,12 @@ package bke.iso.editor
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.brush.BrushTool
 import bke.iso.editor.eraser.EraserTool
+import bke.iso.editor.event.EditorEvent
+import bke.iso.editor.event.SelectActorPrefabEvent
+import bke.iso.editor.event.SelectBrushToolEvent
+import bke.iso.editor.event.SelectEraserToolEvent
+import bke.iso.editor.event.SelectPointerToolEvent
+import bke.iso.editor.event.SelectTilePrefabEvent
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System

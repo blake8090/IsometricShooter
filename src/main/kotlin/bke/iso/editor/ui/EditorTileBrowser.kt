@@ -1,6 +1,6 @@
 package bke.iso.editor.ui
 
-import bke.iso.editor.SelectTilePrefabEvent
+import bke.iso.editor.event.SelectTilePrefabEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.ui.util.newTintedDrawable

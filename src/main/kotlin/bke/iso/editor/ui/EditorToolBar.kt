@@ -1,8 +1,8 @@
 package bke.iso.editor.ui
 
-import bke.iso.editor.SelectBrushToolEvent
-import bke.iso.editor.SelectEraserToolEvent
-import bke.iso.editor.SelectPointerToolEvent
+import bke.iso.editor.event.SelectBrushToolEvent
+import bke.iso.editor.event.SelectEraserToolEvent
+import bke.iso.editor.event.SelectPointerToolEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
