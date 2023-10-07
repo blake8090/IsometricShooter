@@ -6,15 +6,18 @@ import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.floor
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
-import kotlin.math.floor
 
 class BrushTool(
     private val world: World,
@@ -28,14 +31,20 @@ class BrushTool(
     private var selection: Selection? = null
 
     override fun update() {
+        val pos = getNewPos()
+        referenceActor.moveTo(pos.x, pos.y, pos.z)
+        renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)
+    }
+
+    private fun getNewPos(): Vector3 {
         // TODO: scale position when screen size changes
         val pos = toWorld(renderer.getCursorPos())
 
-        if (selection is TileSelection) {
-            pos.set(floor(pos.x), floor(pos.y), floor(pos.z))
+        if (selection is TileSelection || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+            pos.floor()
         }
-        referenceActor.moveTo(pos.x, pos.y, pos.z)
-        renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)
+
+        return pos
     }
 
     private fun getBox() =
