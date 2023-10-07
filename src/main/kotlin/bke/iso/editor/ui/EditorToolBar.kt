@@ -1,6 +1,7 @@
 package bke.iso.editor.ui
 
 import bke.iso.editor.SelectBrushToolEvent
+import bke.iso.editor.SelectEraserToolEvent
 import bke.iso.editor.SelectPointerToolEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
@@ -47,6 +48,11 @@ class EditorToolBar(
         root.add(brushButton)
 
         val eraserButton = createButton("eraser.png")
+        eraserButton.onChanged {
+            if (isChecked) {
+                fire(SelectEraserToolEvent())
+            }
+        }
         root.add(eraserButton)
 
         ButtonGroup(pointerButton, brushButton, eraserButton)

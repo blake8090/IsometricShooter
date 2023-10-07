@@ -26,3 +26,5 @@ data class SelectActorPrefabEvent(val prefab: ActorPrefab) : EditorEvent()
 class SelectPointerToolEvent : EditorEvent()
 
 class SelectBrushToolEvent : EditorEvent()
+
+class SelectEraserToolEvent : EditorEvent()

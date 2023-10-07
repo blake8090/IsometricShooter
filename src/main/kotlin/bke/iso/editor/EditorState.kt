@@ -2,6 +2,7 @@ package bke.iso.editor
 
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.brush.BrushTool
+import bke.iso.editor.eraser.EraserTool
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -39,6 +40,7 @@ class EditorState(override val game: Game) : State() {
 
     private val pointerTool = PointerTool(game.collisions, game.renderer)
     private val brushTool = BrushTool(game.world, game.renderer)
+    private val eraserTool = EraserTool(game.world, game.renderer, game.collisions)
     private var selectedTool: EditorTool? = null
     private val commands = ArrayDeque<EditorCommand>()
 
@@ -68,6 +70,10 @@ class EditorState(override val game: Game) : State() {
 
             is SelectBrushToolEvent -> {
                 selectTool(brushTool)
+            }
+
+            is SelectEraserToolEvent -> {
+                selectTool(eraserTool)
             }
         }
 
