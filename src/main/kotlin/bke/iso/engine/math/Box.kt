@@ -96,6 +96,14 @@ data class Box(
     fun dst(box: Box): Float =
         pos.dst(box.pos)
 
+    fun contains(point: Vector3): Boolean =
+        min.x <= point.x &&
+                max.x >= point.x &&
+                min.y <= point.y &&
+                max.y >= point.y &&
+                min.z <= point.z &&
+                max.z >= point.z
+
     companion object {
         fun fromMinMax(min: Vector3, max: Vector3): Box {
             val size = Vector3(max).sub(min)

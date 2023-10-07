@@ -37,7 +37,7 @@ class EditorState(override val game: Game) : State() {
     private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.RIGHT)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
-    private val pointerTool = PointerTool()
+    private val pointerTool = PointerTool(game.collisions, game.renderer)
     private val brushTool = BrushTool(game.world, game.renderer)
     private var selectedTool: EditorTool? = null
     private val commands = ArrayDeque<EditorCommand>()

@@ -40,6 +40,20 @@ class Collisions(
     fun getPreviousCollisions(actor: Actor): Set<Collision> =
         previousCollisions[actor].orEmpty()
 
+    fun checkCollisions(point: Vector3): Set<PointCollision> =
+        world
+            .getObjectsAt(point)
+            .mapNotNullTo(mutableSetOf()) { obj -> checkCollision(point, obj) }
+
+    private fun checkCollision(point: Vector3, obj: GameObject): PointCollision? {
+        val objBox = obj.getCollisionBox()
+        return if (objBox == null || !objBox.contains(point)) {
+            null
+        } else {
+            PointCollision(obj, objBox)
+        }
+    }
+
     fun checkCollisions(box: Box): Set<Collision> {
         renderer.debug.addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()

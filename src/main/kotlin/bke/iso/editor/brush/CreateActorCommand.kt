@@ -4,7 +4,9 @@ import bke.iso.editor.EditorCommand
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.withFirstInstance
 import bke.iso.engine.world.Actor
+import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 
@@ -17,17 +19,17 @@ class CreateActorCommand(
     private lateinit var actor: Actor
 
     override fun execute() {
-        actor = world.actors.create(pos.x, pos.y, pos.z,)
-        prefab
-            .components
-            .filterIsInstance<Sprite>()
-            .firstOrNull()
-            ?.let { sprite -> actor.add(sprite.copy()) }
-        prefab
-            .components
-            .filterIsInstance<Collider>()
-            .firstOrNull()
-            ?.let { collider -> actor.add(collider.copy()) }
+        val components = mutableSetOf<Component>()
+
+        prefab.components.withFirstInstance<Sprite> { sprite ->
+            components.add(sprite.copy())
+        }
+
+        prefab.components.withFirstInstance<Collider> { collider ->
+            components.add(collider.copy())
+        }
+
+        actor = world.actors.create(pos.x, pos.y, pos.z, *components.toTypedArray())
     }
 
     override fun undo() {

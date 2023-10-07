@@ -52,3 +52,8 @@ data class SegmentCollision(
     val distanceEnd: Float,
     val points: Set<Vector3>
 )
+
+data class PointCollision(
+    val obj: GameObject,
+    val box: Box
+)
