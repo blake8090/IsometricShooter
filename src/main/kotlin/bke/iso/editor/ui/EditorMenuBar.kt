@@ -1,5 +1,6 @@
 package bke.iso.editor.ui
 
+import bke.iso.editor.event.OpenSceneEvent
 import bke.iso.editor.event.SaveSceneEvent
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
@@ -16,7 +17,12 @@ class EditorMenuBar(private val skin: Skin) {
         menuBar.background = skin.getDrawable("bg")
 
         menuBar.add(createMenuButton("New"))
-        menuBar.add(createMenuButton("Open"))
+
+        val openButton = createMenuButton("Open")
+        menuBar.add(openButton)
+        openButton.onChanged {
+            fire(OpenSceneEvent())
+        }
 
         val saveButton = createMenuButton("Save")
         saveButton.onChanged {

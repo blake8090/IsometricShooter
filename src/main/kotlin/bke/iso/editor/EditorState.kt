@@ -1,8 +1,11 @@
 package bke.iso.editor
 
 import bke.iso.editor.brush.BrushTool
+import bke.iso.editor.brush.CreateActorCommand
+import bke.iso.editor.brush.CreateTileCommand
 import bke.iso.editor.eraser.EraserTool
 import bke.iso.editor.event.EditorEvent
+import bke.iso.editor.event.OpenSceneEvent
 import bke.iso.editor.event.SaveSceneEvent
 import bke.iso.editor.event.SelectActorPrefabEvent
 import bke.iso.editor.event.SelectBrushToolEvent
@@ -17,6 +20,8 @@ import bke.iso.engine.State
 import bke.iso.engine.System
 import bke.iso.engine.TileRecord
 import bke.iso.engine.asset.BASE_PATH
+import bke.iso.engine.asset.cache.ActorPrefab
+import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.Gdx
@@ -33,7 +38,9 @@ import org.lwjgl.util.nfd.NativeFileDialog.NFD_ERROR
 import org.lwjgl.util.nfd.NativeFileDialog.NFD_FreePath
 import org.lwjgl.util.nfd.NativeFileDialog.NFD_GetError
 import org.lwjgl.util.nfd.NativeFileDialog.NFD_OKAY
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_OpenDialog
 import org.lwjgl.util.nfd.NativeFileDialog.NFD_SaveDialog
+import java.io.File
 import kotlin.io.path.Path
 
 interface EditorCommand {
@@ -102,6 +109,10 @@ class EditorState(override val game: Game) : State() {
             is SaveSceneEvent -> {
                 saveScene()
             }
+
+            is OpenSceneEvent -> {
+                loadScene()
+            }
         }
 
     private fun selectTool(tool: EditorTool) {
@@ -162,6 +173,57 @@ class EditorState(override val game: Game) : State() {
                 Color.GREEN
             )
         }
+    }
+
+    private fun loadScene() {
+        val path = launchOpenDialog() ?: return
+        val scene = game.serializer.read<Scene>(File(path).readText())
+
+        for (record in scene.actors) {
+            val prefab = game.assets.get<ActorPrefab>(record.prefab)
+            // TODO: should we avoid calling these commands directly by using a factory?
+            CreateActorCommand(game.world, prefab, record.pos).execute()
+        }
+
+        for (record in scene.tiles) {
+            val prefab = game.assets.get<TilePrefab>(record.prefab)
+            CreateTileCommand(game.world, prefab, record.location).execute()
+        }
+
+        log.info { "Loaded scene: '$path'" }
+    }
+
+    private fun launchOpenDialog(): String? {
+        stackPush().use { stack ->
+            val filters = NFDFilterItem.malloc(1)
+            filters[0]
+                .name(stack.UTF8("Scene"))
+                .spec(stack.UTF8("scene"))
+
+            val pathPointer = stack.mallocPointer(1)
+            val defaultPath = Path(BASE_PATH)
+                .toAbsolutePath()
+                .toString()
+            val result = NFD_OpenDialog(pathPointer, filters, defaultPath)
+
+            when (result) {
+                NFD_OKAY -> {
+                    val path = pathPointer.getStringUTF8(0)
+                    NFD_FreePath(pathPointer.get(0))
+                    return path
+                }
+
+                NFD_CANCEL -> {
+                    log.debug { "User cancelled open" }
+                }
+
+                NFD_ERROR -> {
+                    log.error { "Error opening scene: ${NFD_GetError()}" }
+                }
+            }
+        }
+
+        return null
     }
 
     private fun saveScene() {

@@ -17,3 +17,6 @@ class SelectBrushToolEvent : EditorEvent()
 class SelectEraserToolEvent : EditorEvent()
 
 class SaveSceneEvent : EditorEvent()
+
+class OpenSceneEvent : EditorEvent()
+
