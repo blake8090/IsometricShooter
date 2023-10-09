@@ -1,6 +1,6 @@
 package bke.iso.engine
 
-import bke.iso.engine.world.Tile
+import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -9,12 +9,18 @@ import kotlinx.serialization.Serializable
 data class Scene(
     val version: String,
     val actors: List<ActorRecord>,
-    val tiles: List<Tile>
+    val tiles: List<TileRecord>
 )
 
 @Serializable
 data class ActorRecord(
     @Contextual
     val pos: Vector3,
+    val prefab: String
+)
+
+@Serializable
+data class TileRecord(
+    val location: Location,
     val prefab: String
 )

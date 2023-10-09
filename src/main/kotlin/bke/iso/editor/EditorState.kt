@@ -15,9 +15,10 @@ import bke.iso.engine.Game
 import bke.iso.engine.Scene
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.TileRecord
 import bke.iso.engine.asset.BASE_PATH
+import bke.iso.engine.math.Location
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.Component
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -46,8 +47,6 @@ interface EditorTool {
     fun enable()
     fun disable()
 }
-
-data class ActorPrefabReference(val prefab: String) : Component
 
 class EditorState(override val game: Game) : State() {
 
@@ -169,15 +168,19 @@ class EditorState(override val game: Game) : State() {
         val path = openSaveDialog() ?: return
 
         val actors = mutableListOf<ActorRecord>()
-        game.world.actors.each { actor: Actor, ref: ActorPrefabReference ->
-            actors.add(ActorRecord(actor.pos, ref.prefab))
+        game.world.actors.each { actor: Actor, reference: ActorPrefabReference ->
+            actors.add(ActorRecord(actor.pos, reference.prefab))
         }
-        log.debug { "saving ${actors.size} actor records" }
 
-        val scene = Scene("1", actors, emptyList())
+        val tiles = mutableListOf<TileRecord>()
+        game.world.actors.each { actor: Actor, reference: TilePrefabReference ->
+            tiles.add(TileRecord(Location(actor.pos), reference.prefab))
+        }
+
+        val scene = Scene("1", actors, tiles)
         val content = game.serializer.format.encodeToString(scene)
         game.files.writeFile(path, content)
-        log.info { "Saved scene to '$path'" }
+        log.info { "Saved scene: '$path'" }
     }
 
     private fun openSaveDialog(): String? {
