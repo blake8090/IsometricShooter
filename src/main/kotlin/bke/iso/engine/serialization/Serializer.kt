@@ -28,6 +28,7 @@ class Serializer {
     val format: Json = Json {
         serializersModule = module
         isLenient = true
+        prettyPrint = true
     }
 
     private fun getComponentSubTypes(): List<KClass<out Component>> =

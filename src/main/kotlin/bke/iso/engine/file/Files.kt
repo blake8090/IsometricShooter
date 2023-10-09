@@ -49,4 +49,8 @@ class Files {
             path
         }
     }
+
+    fun writeFile(fileName: String, content: String) {
+        File(fileName).writeText(content)
+    }
 }

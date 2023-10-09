@@ -1,23 +1,39 @@
 package bke.iso.editor
 
-import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.brush.BrushTool
 import bke.iso.editor.eraser.EraserTool
 import bke.iso.editor.event.EditorEvent
+import bke.iso.editor.event.SaveSceneEvent
 import bke.iso.editor.event.SelectActorPrefabEvent
 import bke.iso.editor.event.SelectBrushToolEvent
 import bke.iso.editor.event.SelectEraserToolEvent
 import bke.iso.editor.event.SelectPointerToolEvent
 import bke.iso.editor.event.SelectTilePrefabEvent
+import bke.iso.editor.ui.EditorScreen
+import bke.iso.engine.ActorRecord
 import bke.iso.engine.Game
+import bke.iso.engine.Scene
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.asset.BASE_PATH
+import bke.iso.engine.world.Actor
+import bke.iso.engine.world.Component
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import kotlinx.serialization.encodeToString
 import mu.KotlinLogging
+import org.lwjgl.system.MemoryStack.stackPush
+import org.lwjgl.util.nfd.NFDFilterItem
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_CANCEL
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_ERROR
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_FreePath
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_GetError
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_OKAY
+import org.lwjgl.util.nfd.NativeFileDialog.NFD_SaveDialog
+import kotlin.io.path.Path
 
 interface EditorCommand {
     fun execute()
@@ -30,6 +46,8 @@ interface EditorTool {
     fun enable()
     fun disable()
 }
+
+data class ActorPrefabReference(val prefab: String) : Component
 
 class EditorState(override val game: Game) : State() {
 
@@ -80,6 +98,10 @@ class EditorState(override val game: Game) : State() {
 
             is SelectEraserToolEvent -> {
                 selectTool(eraserTool)
+            }
+
+            is SaveSceneEvent -> {
+                saveScene()
             }
         }
 
@@ -141,5 +163,56 @@ class EditorState(override val game: Game) : State() {
                 Color.GREEN
             )
         }
+    }
+
+    private fun saveScene() {
+        val path = openSaveDialog() ?: return
+
+        val actors = mutableListOf<ActorRecord>()
+        game.world.actors.each { actor: Actor, ref: ActorPrefabReference ->
+            actors.add(ActorRecord(actor.pos, ref.prefab))
+        }
+        log.debug { "saving ${actors.size} actor records" }
+
+        val scene = Scene("1", actors, emptyList())
+        val content = game.serializer.format.encodeToString(scene)
+        game.files.writeFile(path, content)
+        log.info { "Saved scene to '$path'" }
+    }
+
+    private fun openSaveDialog(): String? {
+        log.info { "Opening save scene dialog" }
+
+        stackPush().use { stack ->
+            val filters = NFDFilterItem.malloc(1)
+            filters[0]
+                .name(stack.UTF8("Scene"))
+                .spec(stack.UTF8("scene"))
+
+            val pathPointer = stack.mallocPointer(1)
+            // TODO: investigate why default path setting does not work
+            val defaultPath = Path(BASE_PATH)
+                .toAbsolutePath()
+                .toString()
+            val result = NFD_SaveDialog(pathPointer, filters, defaultPath, "untitled.scene")
+
+            when (result) {
+                NFD_OKAY -> {
+                    val path = pathPointer.getStringUTF8(0)
+                    NFD_FreePath(pathPointer.get(0))
+                    return path
+                }
+
+                NFD_CANCEL -> {
+                    log.debug { "User cancelled save" }
+                }
+
+                NFD_ERROR -> {
+                    log.error { "Error saving scene: ${NFD_GetError()}" }
+                }
+            }
+        }
+
+        return null
     }
 }

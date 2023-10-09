@@ -1,8 +1,10 @@
 package bke.iso.engine.math
 
 import com.badlogic.gdx.math.Vector3
+import kotlinx.serialization.Serializable
 import kotlin.math.floor
 
+@Serializable
 data class Location(
     val x: Int = 0,
     val y: Int = 0,

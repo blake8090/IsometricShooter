@@ -1,6 +1,7 @@
 package bke.iso.editor.brush
 
 import bke.iso.editor.EditorCommand
+import bke.iso.editor.ActorPrefabReference
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
@@ -20,6 +21,7 @@ class CreateActorCommand(
 
     override fun execute() {
         val components = mutableSetOf<Component>()
+        components.add(ActorPrefabReference(prefab.name))
 
         prefab.components.withFirstInstance<Sprite> { sprite ->
             components.add(sprite.copy())
