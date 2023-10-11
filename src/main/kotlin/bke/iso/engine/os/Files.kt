@@ -1,4 +1,4 @@
-package bke.iso.engine.file
+package bke.iso.engine.os
 
 import java.io.File
 import kotlin.io.path.Path
@@ -48,9 +48,5 @@ class Files {
         } else {
             path
         }
-    }
-
-    fun writeFile(fileName: String, content: String) {
-        File(fileName).writeText(content)
     }
 }

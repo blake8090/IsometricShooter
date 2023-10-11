@@ -5,9 +5,10 @@ import bke.iso.engine.asset.cache.ActorPrefabCache
 import bke.iso.engine.asset.cache.FontGeneratorCache
 import bke.iso.engine.asset.cache.TextureCache
 import bke.iso.engine.asset.cache.TilePrefabCache
-import bke.iso.engine.file.Files
+import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
+import bke.iso.engine.os.Dialogs
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
@@ -31,6 +32,7 @@ class Game {
     val systemInfo = SystemInfo()
     val events: Events = Events()
 
+    val dialogs = Dialogs()
     val files: Files = Files()
     val serializer = Serializer()
     val assets: Assets = Assets(files, systemInfo)
