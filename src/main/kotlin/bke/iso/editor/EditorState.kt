@@ -68,8 +68,6 @@ class EditorState(override val game: Game) : State() {
         game.assets.loadAsync("game")
         game.ui.setScreen(editorScreen)
         game.input.addInputProcessor(mouseDragAdapter)
-
-        brushTool.disable()
     }
 
     fun handleEvent(event: EditorEvent) =
@@ -114,6 +112,14 @@ class EditorState(override val game: Game) : State() {
         updateTool()
         panCamera()
         drawGrid()
+
+        val ctrlPressed =
+            Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)
+        if (ctrlPressed && Gdx.input.isKeyPressed(Input.Keys.O)) {
+            loadScene()
+        } else if (ctrlPressed && Gdx.input.isKeyPressed(Input.Keys.S)) {
+            saveScene()
+        }
     }
 
     private fun updateTool() {

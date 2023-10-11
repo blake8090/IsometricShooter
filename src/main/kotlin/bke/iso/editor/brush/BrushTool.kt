@@ -26,7 +26,7 @@ class BrushTool(
 
     private val log = KotlinLogging.logger {}
 
-    private val referenceSprite = Sprite()
+    private val referenceSprite = Sprite(alpha = 0f)
     private val referenceActor = world.actors.create(0f, 0f, 0f, referenceSprite)
     private var selection: Selection? = null
 
