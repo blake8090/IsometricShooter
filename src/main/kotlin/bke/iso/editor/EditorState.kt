@@ -1,8 +1,6 @@
 package bke.iso.editor
 
 import bke.iso.editor.brush.BrushTool
-import bke.iso.editor.brush.CreateActorCommand
-import bke.iso.editor.brush.CreateTileCommand
 import bke.iso.editor.eraser.EraserTool
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.OpenSceneEvent
@@ -177,13 +175,12 @@ class EditorState(override val game: Game) : State() {
 
         for (record in scene.actors) {
             val prefab = game.assets.get<ActorPrefab>(record.prefab)
-            // TODO: should we avoid calling these commands directly by using a factory?
-            CreateActorCommand(game.world, prefab, record.pos).execute()
+            createReferenceActor(game.world, record.pos, prefab)
         }
 
         for (record in scene.tiles) {
             val prefab = game.assets.get<TilePrefab>(record.prefab)
-            CreateTileCommand(game.world, prefab, record.location).execute()
+            createReferenceActor(game.world, record.location, prefab)
         }
 
         log.info { "Loaded scene: '${file.canonicalPath}'" }
