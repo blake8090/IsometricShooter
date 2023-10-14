@@ -4,7 +4,7 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.GameObject
+import bke.iso.engine.world.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
@@ -17,31 +17,26 @@ class PointerTool(
     private var selected: Selection? = null
 
     override fun update() {
-        setHighlightedObject()
-
-        highlighted?.let { (_, box) ->
-            renderer.fgShapes.addBox(box, 1f, Color.WHITE)
-        }
-
-        selected?.let { (_, box) ->
-            renderer.fgShapes.addBox(box, 1f, Color.RED)
-        }
-    }
-
-    private fun setHighlightedObject() {
         val pos = toWorld(renderer.getCursorPos())
         renderer.fgShapes.addPoint(pos, 1f, Color.RED)
 
-        val collision = collisions
-            .checkCollisions(pos)
-            .minByOrNull { collision -> getDistance(pos, collision.box) }
+        highlighted = getSelection(pos)
 
-        highlighted =
-            if (collision == null) {
-                null
-            } else {
-                Selection(collision.obj, collision.box)
-            }
+        drawSelectionBox(highlighted, Color.WHITE)
+        drawSelectionBox(selected, Color.RED)
+    }
+
+    private fun getSelection(point: Vector3): Selection? {
+        val collision = collisions
+            .checkCollisions(point)
+            .minByOrNull { collision -> getDistance(point, collision.box) }
+            ?: return null
+
+        return if (collision.obj is Actor) {
+            Selection(collision.obj, collision.box)
+        } else {
+            null
+        }
     }
 
     private fun getDistance(point: Vector3, box: Box): Float {
@@ -53,9 +48,17 @@ class PointerTool(
         return point.dst(bottomCenter)
     }
 
+    private fun drawSelectionBox(selection: Selection?, color: Color) {
+        if (selection == null) {
+            return
+        }
+        renderer.fgShapes.addBox(selection.box, 1f, color)
+    }
+
     override fun performAction(): EditorCommand? {
-        val (obj, box) = highlighted ?: return null
-        selected = Selection(obj, box)
+        if (highlighted != null) {
+            selected = highlighted
+        }
         return null
     }
 
@@ -68,7 +71,7 @@ class PointerTool(
     }
 
     private data class Selection(
-        val obj: GameObject,
+        val obj: Actor,
         val box: Box
     )
 }

@@ -7,8 +7,6 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -22,22 +20,27 @@ class EraserTool(
     private var highlighted: Selection? = null
 
     override fun update() {
-        val pos = toWorld(renderer.getCursorPos())
-        renderer.fgShapes.addPoint(pos, 1f, Color.RED)
+        val cursorPos = toWorld(renderer.getCursorPos())
+        renderer.fgShapes.addPoint(cursorPos, 1f, Color.RED)
 
+        val selection = getSelection(cursorPos)
+        if (selection != null) {
+            renderer.fgShapes.addBox(selection.box, 1f, Color.RED)
+        }
+
+        highlighted = selection
+    }
+
+    private fun getSelection(point: Vector3): Selection? {
         val collision = collisions
-            .checkCollisions(pos)
-            .minByOrNull { collision -> getDistance(pos, collision.box) }
+            .checkCollisions(point)
+            .minByOrNull { collision -> getDistance(point, collision.box) }
+            ?: return null
 
-        highlighted =
-            if (collision == null) {
-                null
-            } else {
-                Selection(collision.obj, collision.box)
-            }
-
-        highlighted?.let { (_, box) ->
-            renderer.fgShapes.addBox(box, 1f, Color.RED)
+        return if (collision.obj is Actor) {
+            Selection(collision.obj, collision.box)
+        } else {
+            null
         }
     }
 
@@ -50,13 +53,14 @@ class EraserTool(
         return point.dst(bottomCenter)
     }
 
-    override fun performAction(): EditorCommand? =
-        when (val obj = highlighted?.obj) {
-            is Actor -> DeleteActorCommand(world, obj)
-            // TODO: dont need this anymore
-            is Tile -> DeleteTileCommand(world, obj.location)
-            else -> null
+    override fun performAction(): EditorCommand? {
+        val actor = highlighted?.actor
+        return if (actor != null) {
+            DeleteActorCommand(world, actor)
+        } else {
+            null
         }
+    }
 
     override fun enable() {
     }
@@ -65,7 +69,7 @@ class EraserTool(
     }
 
     private data class Selection(
-        val obj: GameObject,
+        val actor: Actor,
         val box: Box
     )
 }
