@@ -53,6 +53,7 @@ class EraserTool(
     override fun performAction(): EditorCommand? =
         when (val obj = highlighted?.obj) {
             is Actor -> DeleteActorCommand(world, obj)
+            // TODO: dont need this anymore
             is Tile -> DeleteTileCommand(world, obj.location)
             else -> null
         }
