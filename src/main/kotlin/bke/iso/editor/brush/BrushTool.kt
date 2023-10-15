@@ -98,10 +98,10 @@ class BrushTool(
         log.debug { "tile prefab '${prefab.name}' selected" }
         selection = TileSelection(prefab)
 
-        brushSprite.texture = prefab.texture
-        brushSprite.offsetX = 0f
-        brushSprite.offsetY = 16f
-        brushSprite.scale = 1f
+        brushSprite.texture = prefab.sprite.texture
+        brushSprite.offsetX = prefab.sprite.offsetX
+        brushSprite.offsetY = prefab.sprite.offsetY
+        brushSprite.scale = prefab.sprite.scale
         // only need colliders when placing actors
         brushActor.remove<Collider>()
     }

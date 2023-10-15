@@ -1,12 +1,18 @@
 [
     {
         "name": "floor",
-        "texture": "floor.png",
+        "sprite": {
+            texture: "floor.png",
+            offsetY: 16.0
+        },
         "solid": true
     },
     {
         "name": "floor2",
-        "texture": "floor2.png",
+        "sprite": {
+            texture: "floor2.png",
+            offsetY: 16.0
+        },
         "solid": true
     }
 ]

@@ -3,7 +3,6 @@ package bke.iso.engine.scene
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
-import bke.iso.engine.render.Sprite
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
@@ -36,9 +35,7 @@ class Scenes(
 
             for (record in scene.tiles) {
                 val prefab = assets.get<TilePrefab>(record.prefab)
-                // TODO: move Sprite into tile prefab!!
-                val sprite = Sprite(prefab.texture, offsetY = 16f)
-                world.setTile(record.location, sprite)
+                world.setTile(record.location, prefab.sprite.copy())
             }
         }
 

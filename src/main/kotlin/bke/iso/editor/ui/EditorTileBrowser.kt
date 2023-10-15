@@ -55,7 +55,7 @@ class EditorTileBrowser(
 
     private fun createButton(prefab: TilePrefab, skin: Skin): ImageTextButton {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
-            val texture = assets.get<Texture>(prefab.texture)
+            val texture = assets.get<Texture>(prefab.sprite.texture)
             imageUp = TextureRegionDrawable(TextureRegion(texture))
 
             over = skin.newTintedDrawable("pixel", "button-over")

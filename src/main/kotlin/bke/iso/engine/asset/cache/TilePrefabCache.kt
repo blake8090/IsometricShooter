@@ -1,5 +1,6 @@
 package bke.iso.engine.asset.cache
 
+import bke.iso.engine.render.Sprite
 import bke.iso.engine.serialization.Serializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -9,7 +10,7 @@ import java.io.File
 @Serializable
 data class TilePrefab(
     val name: String,
-    val texture: String,  // TODO: use Sprite instead
+    val sprite: Sprite,
     val solid: Boolean
 )
 

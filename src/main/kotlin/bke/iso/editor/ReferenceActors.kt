@@ -45,7 +45,7 @@ class ReferenceActors(private val world: World) {
 
         val actor = world.actors.create(
             location,
-            Sprite(prefab.texture, 0f, 16f),
+            prefab.sprite.copy(),
             TilePrefabReference(prefab.name),
             Collider(Vector3(1f, 1f, 0f))
         )

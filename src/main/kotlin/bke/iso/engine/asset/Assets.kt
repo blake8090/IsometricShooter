@@ -75,8 +75,13 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
             log.info { "Skipping '${file.path}': Unknown extension '${file.extension}'" }
             return
         }
-        for ((name, asset) in cache.load(file)) {
-            log.info { "Loaded asset '${name}' (${asset::class.simpleName}) from '${file.canonicalPath}'" }
+        try {
+            for ((name, asset) in cache.load(file)) {
+                log.info { "Loaded asset '${name}' (${asset::class.simpleName}) from '${file.canonicalPath}'" }
+            }
+        } catch (e: Throwable) {
+            log.error("Error loading asset from '${file.canonicalPath}':", e)
+            throw e
         }
     }
 
