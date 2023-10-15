@@ -62,6 +62,8 @@ class PointerTool(
         return null
     }
 
+    override fun performMultiAction(): EditorCommand? = null
+
     override fun enable() {
     }
 

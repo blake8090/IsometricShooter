@@ -71,8 +71,14 @@ class BrushTool(
             else -> null
         }
 
+    override fun performMultiAction(): EditorCommand? =
+        when (val s = selection) {
+            is TileSelection -> paintTile(s.prefab, Location(brushActor.pos))
+            else -> null
+        }
+
     private fun paintTile(prefab: TilePrefab, location: Location): PaintTileCommand? =
-        if (!referenceActors.hasTile(location)) {
+        if (prefab.name != referenceActors.getTilePrefabName(location)) {
             PaintTileCommand(referenceActors, prefab, location)
         } else {
             null

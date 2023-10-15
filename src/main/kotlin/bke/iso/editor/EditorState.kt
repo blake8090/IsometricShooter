@@ -36,7 +36,17 @@ interface EditorCommand {
 
 interface EditorTool {
     fun update()
+
+    /**
+     * Returns a command to be executed when the button is pressed only once.
+     */
     fun performAction(): EditorCommand?
+
+    /**
+     * Returns a command to be executed each frame the button is held down.
+     */
+    fun performMultiAction(): EditorCommand?
+
     fun enable()
     fun disable()
 }
@@ -125,13 +135,17 @@ class EditorState(override val game: Game) : State() {
     private fun updateTool() {
         val tool = selectedTool ?: return
         tool.update()
-        if (editorScreen.hitMainView() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            runToolCommand(tool)
+
+        if (editorScreen.hitMainView()) {
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                tool.performAction()?.let(::execute)
+            } else if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                tool.performMultiAction()?.let(::execute)
+            }
         }
     }
 
-    private fun runToolCommand(tool: EditorTool) {
-        val command = tool.performAction() ?: return
+    private fun execute(command: EditorCommand) {
         log.debug { "Executing ${command::class.simpleName}" }
         command.execute()
         commands.addFirst(command)

@@ -53,7 +53,13 @@ class EraserTool(
         return point.dst(bottomCenter)
     }
 
-    override fun performAction(): EditorCommand? {
+    override fun performAction(): EditorCommand? =
+        deleteActor()
+
+    override fun performMultiAction(): EditorCommand? =
+        deleteActor()
+
+    private fun deleteActor(): EditorCommand? {
         val actor = highlighted?.actor
         return if (actor != null) {
             DeleteActorCommand(referenceActors, actor)

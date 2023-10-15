@@ -17,13 +17,10 @@ data class TilePrefabReference(val prefab: String) : Component
 
 class ReferenceActors(private val world: World) {
 
-    private val tileLocations = mutableSetOf<Location>()
-
-    fun hasTile(location: Location): Boolean =
-        tileLocations.contains(location)
+    private val tilesByLocation = mutableMapOf<Location, Actor>()
 
     fun clear() {
-        tileLocations.clear()
+        tilesByLocation.clear()
     }
 
     fun create(prefab: ActorPrefab, pos: Vector3): Actor {
@@ -42,22 +39,37 @@ class ReferenceActors(private val world: World) {
     }
 
     fun create(prefab: TilePrefab, location: Location): Actor {
-        if (!tileLocations.add(location)) {
+        if (tilesByLocation.containsKey(location)) {
             error("Duplicate tile at location $location")
         }
 
-        return world.actors.create(
+        val actor = world.actors.create(
             location,
             Sprite(prefab.texture, 0f, 16f),
             TilePrefabReference(prefab.name),
             Collider(Vector3(1f, 1f, 0f))
         )
+        tilesByLocation[location] = actor
+        return actor
+    }
+
+    fun getTilePrefabName(location: Location): String? {
+        val actor = tilesByLocation[location] ?: return null
+        val reference = checkNotNull(actor.get<TilePrefabReference>()) {
+            "Expected TilePrefabReference for actor $actor"
+        }
+        return reference.prefab
     }
 
     fun delete(actor: Actor) {
         if (actor.has<TilePrefabReference>()) {
-            tileLocations.remove(Location(actor.pos))
+            tilesByLocation.remove(Location(actor.pos))
         }
         world.actors.delete(actor)
+    }
+
+    fun deleteTile(location: Location) {
+        val actor = tilesByLocation[location] ?: return
+        delete(actor)
     }
 }

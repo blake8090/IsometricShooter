@@ -15,6 +15,7 @@ class PaintTileCommand(
     private lateinit var actor: Actor
 
     override fun execute() {
+        referenceActors.deleteTile(location)
         actor = referenceActors.create(prefab, location)
     }
 
