@@ -2,6 +2,7 @@ package bke.iso.editor.brush
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.EditorTool
+import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.collision.Collider
@@ -20,19 +21,20 @@ import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 
 class BrushTool(
-    private val world: World,
+    val world: World,
+    private val referenceActors: ReferenceActors,
     private val renderer: Renderer
 ) : EditorTool {
 
     private val log = KotlinLogging.logger {}
 
-    private val referenceSprite = Sprite(alpha = 0f)
-    private val referenceActor = world.actors.create(0f, 0f, 0f, referenceSprite)
+    private val brushSprite = Sprite(alpha = 0f)
+    private val brushActor = world.actors.create(0f, 0f, 0f, brushSprite)
     private var selection: Selection? = null
 
     override fun update() {
         val pos = getNewPos()
-        referenceActor.moveTo(pos.x, pos.y, pos.z)
+        brushActor.moveTo(pos.x, pos.y, pos.z)
         renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)
     }
 
@@ -50,43 +52,50 @@ class BrushTool(
     private fun getBox() =
         if (selection is TileSelection) {
             Box.fromMinMax(
-                referenceActor.pos,
-                referenceActor.pos.add(1f, 1f, 0f)
+                brushActor.pos,
+                brushActor.pos.add(1f, 1f, 0f)
             )
         } else {
-            referenceActor
+            brushActor
                 .getCollisionBox()
                 ?: Box.fromMinMax(
-                    referenceActor.pos,
-                    referenceActor.pos.add(1f, 1f, 1f)
+                    brushActor.pos,
+                    brushActor.pos.add(1f, 1f, 1f)
                 )
         }
 
     override fun performAction(): EditorCommand? =
         when (val s = selection) {
-            is TileSelection -> CreateTileCommand(world, s.prefab, Location(referenceActor.pos))
-            is ActorSelection -> CreateActorCommand(world, s.prefab, referenceActor.pos)
+            is TileSelection -> paintTile(s.prefab, Location(brushActor.pos))
+            is ActorSelection -> PaintActorCommand(referenceActors, s.prefab, brushActor.pos)
             else -> null
         }
 
+    private fun paintTile(prefab: TilePrefab, location: Location): PaintTileCommand? =
+        if (!referenceActors.hasTile(location)) {
+            PaintTileCommand(referenceActors, prefab, location)
+        } else {
+            null
+        }
+
     override fun enable() {
-        referenceSprite.alpha = 1f
+        brushSprite.alpha = 1f
     }
 
     override fun disable() {
-        referenceSprite.alpha = 0f
+        brushSprite.alpha = 0f
     }
 
     fun selectPrefab(prefab: TilePrefab) {
         log.debug { "tile prefab '${prefab.name}' selected" }
         selection = TileSelection(prefab)
 
-        referenceSprite.texture = prefab.texture
-        referenceSprite.offsetX = 0f
-        referenceSprite.offsetY = 16f
-        referenceSprite.scale = 1f
+        brushSprite.texture = prefab.texture
+        brushSprite.offsetX = 0f
+        brushSprite.offsetY = 16f
+        brushSprite.scale = 1f
         // only need colliders when placing actors
-        referenceActor.remove<Collider>()
+        brushActor.remove<Collider>()
     }
 
     fun selectPrefab(prefab: ActorPrefab) {
@@ -94,14 +103,14 @@ class BrushTool(
         selection = ActorSelection(prefab)
 
         prefab.components.withFirstInstance<Sprite> { sprite ->
-            referenceSprite.texture = sprite.texture
-            referenceSprite.offsetX = sprite.offsetX
-            referenceSprite.offsetY = sprite.offsetY
-            referenceSprite.scale = sprite.scale
+            brushSprite.texture = sprite.texture
+            brushSprite.offsetX = sprite.offsetX
+            brushSprite.offsetY = sprite.offsetY
+            brushSprite.scale = sprite.scale
         }
 
         prefab.components.withFirstInstance<Collider> { collider ->
-            referenceActor.add(collider.copy())
+            brushActor.add(collider.copy())
         }
     }
 

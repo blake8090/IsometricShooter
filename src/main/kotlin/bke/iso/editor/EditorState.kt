@@ -54,9 +54,11 @@ class EditorState(override val game: Game) : State() {
     private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.RIGHT)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
+    private val referenceActors = ReferenceActors(game.world)
+
     private val pointerTool = PointerTool(game.collisions, game.renderer)
-    private val brushTool = BrushTool(game.world, game.renderer)
-    private val eraserTool = EraserTool(game.world, game.renderer, game.collisions)
+    private val brushTool = BrushTool(game.world, referenceActors, game.renderer)
+    private val eraserTool = EraserTool(referenceActors, game.renderer, game.collisions)
     private var selectedTool: EditorTool? = null
     private val commands = ArrayDeque<EditorCommand>()
 
@@ -171,16 +173,17 @@ class EditorState(override val game: Game) : State() {
         val file = game.dialogs.showOpenFileDialog() ?: return
         val scene = game.serializer.read<Scene>(file.readText())
 
+        referenceActors.clear()
         game.world.clear()
 
         for (record in scene.actors) {
             val prefab = game.assets.get<ActorPrefab>(record.prefab)
-            createReferenceActor(game.world, record.pos, prefab)
+            referenceActors.create(prefab, record.pos)
         }
 
         for (record in scene.tiles) {
             val prefab = game.assets.get<TilePrefab>(record.prefab)
-            createReferenceActor(game.world, record.location, prefab)
+            referenceActors.create(prefab, record.location)
         }
 
         log.info { "Loaded scene: '${file.canonicalPath}'" }

@@ -1,14 +1,13 @@
 package bke.iso.editor.brush
 
 import bke.iso.editor.EditorCommand
-import bke.iso.editor.createReferenceActor
+import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.World
 
-class CreateTileCommand(
-    private val world: World,
+class PaintTileCommand(
+    private val referenceActors: ReferenceActors,
     private val prefab: TilePrefab,
     private val location: Location
 ) : EditorCommand {
@@ -16,10 +15,10 @@ class CreateTileCommand(
     private lateinit var actor: Actor
 
     override fun execute() {
-        actor = createReferenceActor(world, location, prefab)
+        actor = referenceActors.create(prefab, location)
     }
 
     override fun undo() {
-        world.actors.delete(actor)
+        referenceActors.delete(actor)
     }
 }

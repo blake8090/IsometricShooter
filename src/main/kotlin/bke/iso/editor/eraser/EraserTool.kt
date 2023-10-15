@@ -2,17 +2,17 @@ package bke.iso.editor.eraser
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.EditorTool
+import bke.iso.editor.ReferenceActors
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
 class EraserTool(
-    private val world: World,
+    private val referenceActors: ReferenceActors,
     private val renderer: Renderer,
     private val collisions: Collisions
 ) : EditorTool {
@@ -56,7 +56,7 @@ class EraserTool(
     override fun performAction(): EditorCommand? {
         val actor = highlighted?.actor
         return if (actor != null) {
-            DeleteActorCommand(world, actor)
+            DeleteActorCommand(referenceActors, actor)
         } else {
             null
         }

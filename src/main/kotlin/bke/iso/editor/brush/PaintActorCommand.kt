@@ -1,14 +1,13 @@
 package bke.iso.editor.brush
 
 import bke.iso.editor.EditorCommand
-import bke.iso.editor.createReferenceActor
+import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 
-class CreateActorCommand(
-    private val world: World,
+class PaintActorCommand(
+    private val referenceActors: ReferenceActors,
     private val prefab: ActorPrefab,
     private val pos: Vector3
 ) : EditorCommand {
@@ -16,10 +15,10 @@ class CreateActorCommand(
     private lateinit var actor: Actor
 
     override fun execute() {
-        actor = createReferenceActor(world, pos, prefab)
+        actor = referenceActors.create(prefab, pos)
     }
 
     override fun undo() {
-        world.actors.delete(actor)
+        referenceActors.delete(actor)
     }
 }
