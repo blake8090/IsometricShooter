@@ -3,6 +3,7 @@ package bke.iso.engine.serialization
 import bke.iso.engine.world.Component
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
@@ -44,4 +45,7 @@ class Serializer {
 
     inline fun <reified T : Any> read(content: String): T =
         format.decodeFromString(content)
+
+    inline fun <reified T : Any> write(value: T): String =
+        format.encodeToString(value)
 }

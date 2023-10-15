@@ -11,12 +11,12 @@ import bke.iso.editor.event.SelectEraserToolEvent
 import bke.iso.editor.event.SelectPointerToolEvent
 import bke.iso.editor.event.SelectTilePrefabEvent
 import bke.iso.editor.ui.EditorScreen
-import bke.iso.engine.ActorRecord
+import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.Game
-import bke.iso.engine.Scene
+import bke.iso.engine.scene.Scene
 import bke.iso.engine.State
 import bke.iso.engine.System
-import bke.iso.engine.TileRecord
+import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.math.Location

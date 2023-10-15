@@ -11,6 +11,8 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.scene.SceneCache
+import bke.iso.engine.scene.Scenes
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
@@ -41,6 +43,7 @@ class Game {
     val renderer: Renderer = Renderer(world, assets, events)
     val collisions: Collisions = Collisions(renderer, world)
     val physics: Physics = Physics(world, collisions)
+    val scenes = Scenes(assets, serializer, world)
 
     val input: Input = Input(events)
     val ui: UI = UI(input)
@@ -57,6 +60,7 @@ class Game {
                 register(FontGeneratorCache())
                 register(ActorPrefabCache(serializer))
                 register(TilePrefabCache(serializer))
+                register(SceneCache(serializer))
             }
             ui.setLoadingScreen(EmptyLoadingScreen(assets))
         }

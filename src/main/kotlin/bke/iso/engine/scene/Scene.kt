@@ -1,4 +1,4 @@
-package bke.iso.engine
+package bke.iso.engine.scene
 
 import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Vector3

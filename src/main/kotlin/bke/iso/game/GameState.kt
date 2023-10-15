@@ -59,15 +59,8 @@ class GameState(override val game: Game) : State() {
         game.assets.register(GameMapCache())
         game.assets.loadAsync("game")
 
-        loadMap()
-        factory.createLampPost(Location(4, 4, 0))
-            .move(0f, -0.125f, 0f)
-        factory.createLampPost(Location(8, 4, 0))
-            .move(0f, -0.125f, 0f)
-        factory.createPillar(Location(12, 12, 0))
-            .move(-0.5f, 0.5f, 0f)
-        factory.createPillar(Location(10, 12, 0))
-            .move(-0.5f, 0.5f, 0f)
+//        loadMap()
+        game.scenes.load("example.scene")
 
         bindInput()
 
@@ -131,6 +124,7 @@ class GameState(override val game: Game) : State() {
         }
     }
 
+    // TODO: convert existing map files to scenes so that this can be removed
     private fun loadMap() {
         val gameMap = game.assets.get<GameMap>("collision-test.map2")
         for (layer in gameMap.layers) {
@@ -146,6 +140,15 @@ class GameState(override val game: Game) : State() {
                 }
             }
         }
+
+        factory.createLampPost(Location(4, 4, 0))
+            .move(0f, -0.125f, 0f)
+        factory.createLampPost(Location(8, 4, 0))
+            .move(0f, -0.125f, 0f)
+        factory.createPillar(Location(12, 12, 0))
+            .move(-0.5f, 0.5f, 0f)
+        factory.createPillar(Location(10, 12, 0))
+            .move(-0.5f, 0.5f, 0f)
     }
 
     private fun readTile(char: Char, location: Location) {
