@@ -89,7 +89,9 @@ class BrushTool(
     }
 
     override fun disable() {
+        brushSprite.texture = ""
         brushSprite.alpha = 0f
+        selection = null
     }
 
     fun selectPrefab(prefab: TilePrefab) {

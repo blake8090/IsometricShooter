@@ -65,6 +65,10 @@ class EditorScreen(
         return actor.name == MAIN_VIEW_NAME
     }
 
+    fun unselectPrefabs() {
+        assetBrowser.unselectPrefabs()
+    }
+
     private fun createMainView(): Table {
         val mainView = Table()
         mainView.name = MAIN_VIEW_NAME

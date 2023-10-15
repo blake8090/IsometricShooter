@@ -113,6 +113,10 @@ class EditorState(override val game: Game) : State() {
 
     private fun selectTool(tool: EditorTool) {
         selectedTool?.disable()
+        if (selectedTool is BrushTool) {
+            editorScreen.unselectPrefabs()
+        }
+
         tool.enable()
         selectedTool = tool
         log.debug { "Selected tool: ${tool::class.simpleName}" }

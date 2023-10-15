@@ -89,4 +89,9 @@ class EditorAssetBrowser(
         tileBrowser.populate(assets.getAll<TilePrefab>())
         actorBrowser.populate(assets.getAll<ActorPrefab>())
     }
+
+    fun unselectPrefabs() {
+        tileBrowser.unselect()
+        actorBrowser.unselect()
+    }
 }
