@@ -171,7 +171,7 @@ class EditorState(override val game: Game) : State() {
         val file = game.dialogs.showOpenFileDialog() ?: return
         val scene = game.serializer.read<Scene>(file.readText())
 
-        // TODO: clear all game objects before loading!
+        game.world.clear()
 
         for (record in scene.actors) {
             val prefab = game.assets.get<ActorPrefab>(record.prefab)

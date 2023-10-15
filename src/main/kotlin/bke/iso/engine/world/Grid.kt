@@ -71,17 +71,17 @@ class Grid {
         objects.add(tile)
     }
 
-    fun deleteTile(location: Location) {
-        val data = objectMap.get(location) ?: return
-        data.tile?.let(objects::remove)
-        data.tile = null
-    }
-
     private fun getOrPutData(location: Location): GridData {
         if (!objectMap.containsKey(location)) {
             objectMap.put(location, GridData())
         }
         return objectMap.get(location)
+    }
+
+    fun clear() {
+        objectMap.clear()
+        objects.clear()
+        locationsByActor.clear()
     }
 }
 
