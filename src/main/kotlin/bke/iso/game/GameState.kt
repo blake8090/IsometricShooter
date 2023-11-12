@@ -60,13 +60,17 @@ class GameState(override val game: Game) : State() {
         game.assets.loadAsync("game")
 
 //        loadMap()
-        game.scenes.load("example.scene")
+        game.scenes.load("wall-test.scene")
 
         bindInput()
 
         game.renderer.setCursor(crosshair)
         game.ui.setScreen(gameHud)
         gameHud.updateHealth(PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
+
+        game.world.actors.each { actor: Actor, player: Player ->
+            game.world.createShadow(actor)
+        }
     }
 
     override fun handleEvent(event: Event) {
