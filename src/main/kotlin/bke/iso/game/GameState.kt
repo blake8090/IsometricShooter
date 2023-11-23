@@ -1,6 +1,5 @@
 package bke.iso.game
 
-import bke.iso.engine.math.Location
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Game
@@ -12,21 +11,15 @@ import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.render.DrawActorEvent
-import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
-import bke.iso.game.actor.Factory
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.player.PLAYER_MAX_HEALTH
 import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
-import bke.iso.game.actor.createMovingPlatform
-import bke.iso.game.player.createPlayer
-import bke.iso.game.asset.GameMap
-import bke.iso.game.asset.GameMapCache
 import bke.iso.game.combat.Combat
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
@@ -41,7 +34,6 @@ import com.studiohartman.jamepad.ControllerButton
 
 class GameState(override val game: Game) : State() {
 
-    private val factory = Factory(game.world)
     private val combat = Combat(game.world, game.events)
     private val crosshair = CrosshairCursor(game.assets, game.input)
 
@@ -56,11 +48,8 @@ class GameState(override val game: Game) : State() {
     )
 
     override suspend fun load() {
-        game.assets.register(GameMapCache())
         game.assets.loadAsync("game")
-
-//        loadMap()
-        game.scenes.load("wall-test.scene")
+        game.scenes.load("collision-test.scene")
 
         bindInput()
 
@@ -125,57 +114,6 @@ class GameState(override val game: Game) : State() {
                 ControllerBinding(ControllerButton.X.ordinal, ButtonState.DOWN),
                 ControllerBinding(ControllerButton.A.ordinal, ButtonState.DOWN)
             )
-        }
-    }
-
-    // TODO: convert existing map files to scenes so that this can be removed
-    private fun loadMap() {
-        val gameMap = game.assets.get<GameMap>("collision-test.map2")
-        for (layer in gameMap.layers) {
-            for ((y, row) in layer.tiles.reversed().withIndex()) {
-                for ((x, char) in row.withIndex()) {
-                    readTile(char, Location(x, y, layer.z))
-                }
-            }
-
-            for ((y, row) in layer.entities.reversed().withIndex()) {
-                for ((x, char) in row.withIndex()) {
-                    readEntity(char, Location(x, y, layer.z))
-                }
-            }
-        }
-
-        factory.createLampPost(Location(4, 4, 0))
-            .move(0f, -0.125f, 0f)
-        factory.createLampPost(Location(8, 4, 0))
-            .move(0f, -0.125f, 0f)
-        factory.createPillar(Location(12, 12, 0))
-            .move(-0.5f, 0.5f, 0f)
-        factory.createPillar(Location(10, 12, 0))
-            .move(-0.5f, 0.5f, 0f)
-    }
-
-    private fun readTile(char: Char, location: Location) {
-        when (char) {
-            '1' -> game.world.setTile(location, Sprite("floor.png", 0f, 16f))
-            '2' -> game.world.setTile(location, Sprite("floor2.png", 0f, 16f))
-        }
-    }
-
-    private fun readEntity(char: Char, location: Location) {
-        when (char) {
-            'p' -> {
-                val player = game.world.createPlayer(location)
-                game.world.createShadow(player)
-            }
-
-            '#' -> factory.createWall(location)
-            'x' -> factory.createBox(location)
-            't' -> factory.createTurret(location)
-            '_' -> game.world.createMovingPlatform(location)
-            '/' -> factory.createSideFence(location)
-            '=' -> factory.createFrontFence(location)
-            '|' -> factory.createPillar(location)
         }
     }
 
