@@ -1,0 +1,32 @@
+{
+  "name": "lamppost",
+  "components": [
+    {
+      "type": "sprite",
+      "texture": "lamppost.png",
+      "offsetX": 32.0,
+      "offsetY": 16.0
+    },
+    {
+      "type": "collider",
+      "size": {
+        "x": 0.25,
+        "y": 0.25,
+        "z": 2.1
+      },
+      "offset": {
+        "x": -0.125,
+        "y": -0.125,
+        "z": 0.0
+      }
+    },
+    {
+      "type": "debugSettings",
+      "zAxis": false
+    },
+    {
+      "type": "description",
+      "text": "lamppost"
+    }
+  ]
+}

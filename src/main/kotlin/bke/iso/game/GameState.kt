@@ -145,7 +145,7 @@ class GameState(override val game: Game) : State() {
     }
 
 //    private fun generatePrefabs() {
-//        val location = Location()
+//        generatePrefab("lamppost", Factory(game.world).createLampPost(Location()))
 //        generatePrefab("player", game.world.createPlayer(location))
 //        //generatePrefab(game.world.createShadow(player))
 //        generatePrefab("wall", factory.createWall(location))
