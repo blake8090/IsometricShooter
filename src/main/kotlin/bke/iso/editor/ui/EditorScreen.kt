@@ -69,6 +69,10 @@ class EditorScreen(
         assetBrowser.unselectPrefabs()
     }
 
+    fun updateLayerLabel(layer: Float) {
+        toolBar.updateLayerLabel(layer)
+    }
+
     private fun createMainView(): Table {
         val mainView = Table()
         mainView.name = MAIN_VIEW_NAME

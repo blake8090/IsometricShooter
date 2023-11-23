@@ -20,3 +20,6 @@ class SaveSceneEvent : EditorEvent()
 
 class OpenSceneEvent : EditorEvent()
 
+class IncreaseLayerEvent : EditorEvent()
+
+class DecreaseLayerEvent : EditorEvent()

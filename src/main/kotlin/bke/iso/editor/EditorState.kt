@@ -2,7 +2,9 @@ package bke.iso.editor
 
 import bke.iso.editor.brush.BrushTool
 import bke.iso.editor.eraser.EraserTool
+import bke.iso.editor.event.DecreaseLayerEvent
 import bke.iso.editor.event.EditorEvent
+import bke.iso.editor.event.IncreaseLayerEvent
 import bke.iso.editor.event.OpenSceneEvent
 import bke.iso.editor.event.SaveSceneEvent
 import bke.iso.editor.event.SelectActorPrefabEvent
@@ -29,28 +31,6 @@ import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.encodeToString
 import mu.KotlinLogging
 
-interface EditorCommand {
-    fun execute()
-    fun undo()
-}
-
-interface EditorTool {
-    fun update()
-
-    /**
-     * Returns a command to be executed when the button is pressed only once.
-     */
-    fun performAction(): EditorCommand?
-
-    /**
-     * Returns a command to be executed each frame the button is held down.
-     */
-    fun performMultiAction(): EditorCommand?
-
-    fun enable()
-    fun disable()
-}
-
 class EditorState(override val game: Game) : State() {
 
     override val systems = emptySet<System>()
@@ -67,10 +47,12 @@ class EditorState(override val game: Game) : State() {
     private val referenceActors = ReferenceActors(game.world)
 
     private val pointerTool = PointerTool(game.collisions, game.renderer)
-    private val brushTool = BrushTool(game.world, referenceActors, game.renderer)
-    private val eraserTool = EraserTool(referenceActors, game.renderer, game.collisions)
+    private val brushTool = BrushTool(game.collisions, game.world, referenceActors, game.renderer)
+    private val eraserTool = EraserTool(game.collisions, referenceActors, game.renderer)
     private var selectedTool: EditorTool? = null
     private val commands = ArrayDeque<EditorCommand>()
+
+    private var selectedLayer = 0f
 
     override suspend fun load() {
         log.info { "Starting editor" }
@@ -78,6 +60,8 @@ class EditorState(override val game: Game) : State() {
         game.assets.loadAsync("game")
         game.ui.setScreen(editorScreen)
         game.input.addInputProcessor(mouseDragAdapter)
+
+        editorScreen.updateLayerLabel(selectedLayer)
     }
 
     fun handleEvent(event: EditorEvent) =
@@ -109,6 +93,16 @@ class EditorState(override val game: Game) : State() {
             is OpenSceneEvent -> {
                 loadScene()
             }
+
+            is IncreaseLayerEvent -> {
+                selectedLayer++
+                editorScreen.updateLayerLabel(selectedLayer)
+            }
+
+            is DecreaseLayerEvent -> {
+                selectedLayer--
+                editorScreen.updateLayerLabel(selectedLayer)
+            }
         }
 
     private fun selectTool(tool: EditorTool) {
@@ -138,7 +132,8 @@ class EditorState(override val game: Game) : State() {
 
     private fun updateTool() {
         val tool = selectedTool ?: return
-        tool.update()
+        // TODO: scale cursor position when screen size changes
+        tool.update(selectedLayer, game.renderer.getCursorPos())
 
         if (editorScreen.hitMainView()) {
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -170,8 +165,8 @@ class EditorState(override val game: Game) : State() {
     private fun drawGrid() {
         for (x in 0..gridWidth) {
             game.renderer.bgShapes.addLine(
-                Vector3(x.toFloat(), 0f, 0f),
-                Vector3(x.toFloat(), gridLength.toFloat(), 0f),
+                Vector3(x.toFloat(), 0f, selectedLayer),
+                Vector3(x.toFloat(), gridLength.toFloat(), selectedLayer),
                 0.5f,
                 Color.GREEN
             )
@@ -179,8 +174,8 @@ class EditorState(override val game: Game) : State() {
 
         for (y in 0..gridLength) {
             game.renderer.bgShapes.addLine(
-                Vector3(0f, y.toFloat(), 0f),
-                Vector3(gridWidth.toFloat(), y.toFloat(), 0f),
+                Vector3(0f, y.toFloat(), selectedLayer),
+                Vector3(gridWidth.toFloat(), y.toFloat(), selectedLayer),
                 0.5f,
                 Color.GREEN
             )

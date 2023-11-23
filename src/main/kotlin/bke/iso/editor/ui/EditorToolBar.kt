@@ -1,5 +1,7 @@
 package bke.iso.editor.ui
 
+import bke.iso.editor.event.DecreaseLayerEvent
+import bke.iso.editor.event.IncreaseLayerEvent
 import bke.iso.editor.event.SelectBrushToolEvent
 import bke.iso.editor.event.SelectEraserToolEvent
 import bke.iso.editor.event.SelectPointerToolEvent
@@ -20,6 +22,8 @@ class EditorToolBar(
     private val skin: Skin,
     private val assets: Assets
 ) {
+
+    private lateinit var layerLabel: Label
 
     fun create(): Table {
         val root = BorderedTable(skin.getColor("table-border"))
@@ -61,15 +65,26 @@ class EditorToolBar(
         gridButton.style.checked = newTextureDrawable("grid.png", "button-checked")
         root.add(gridButton).spaceLeft(30f)
 
-        root.add(Label("Layer: 1", skin)).spaceLeft(30f)
+        layerLabel = Label("", skin)
+        root.add(layerLabel).spaceLeft(30f)
 
         val decreaseLayerButton = createButton("minus.png").apply {
             style.up = newTextureDrawable("minus.png", "button-up")
+            style.checked = null
+
+            onChanged {
+                fire(DecreaseLayerEvent())
+            }
         }
         root.add(decreaseLayerButton).space(20f)
 
         val increaseLayerButton = createButton("plus.png").apply {
             style.up = newTextureDrawable("plus.png", "button-up")
+            style.checked = null
+
+            onChanged {
+                fire(IncreaseLayerEvent())
+            }
         }
         root.add(increaseLayerButton)
 
@@ -107,5 +122,9 @@ class EditorToolBar(
     private fun newTextureDrawable(textureName: String): TextureRegionDrawable {
         val texture = assets.get<Texture>(textureName)
         return TextureRegionDrawable(TextureRegion(texture))
+    }
+
+    fun updateLayerLabel(layer: Float) {
+        layerLabel.setText("Layer: $layer")
     }
 }
