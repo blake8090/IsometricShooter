@@ -52,7 +52,7 @@ class PlayerSystem(
         val movement = Vector3(
             input.poll("moveX"),
             input.poll("moveY"),
-            input.poll("fly")
+            0f
         )
 
         val magnitude = movement.len()

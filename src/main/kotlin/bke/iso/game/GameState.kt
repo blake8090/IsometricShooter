@@ -93,11 +93,6 @@ class GameState(override val game: Game) : State() {
                 KeyBinding(Input.Keys.A, ButtonState.DOWN),
                 KeyBinding(Input.Keys.D, ButtonState.DOWN)
             )
-            bind(
-                "fly",
-                KeyBinding(Input.Keys.Q, ButtonState.DOWN),
-                KeyBinding(Input.Keys.E, ButtonState.DOWN)
-            )
         }
 
         with(game.input.controller) {
@@ -107,12 +102,8 @@ class GameState(override val game: Game) : State() {
                 "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
                 "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
                 "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
-                "shoot" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.PRESSED)
-            )
-            bind(
-                "fly",
-                ControllerBinding(ControllerButton.X.ordinal, ButtonState.DOWN),
-                ControllerBinding(ControllerButton.A.ordinal, ButtonState.DOWN)
+                "shoot" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.PRESSED),
+                "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED)
             )
         }
     }
