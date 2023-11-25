@@ -33,7 +33,7 @@ class PlayerSystem(
             }
 
             input.onAction("shoot") {
-                combat.shoot(actor, toWorld(renderer.getCursorPos()), BulletType.PLAYER)
+                combat.shoot(actor, toWorld(renderer.getPointerPos()), BulletType.PLAYER)
             }
 //
 //            inputService.onAction("placeBouncyBall") {

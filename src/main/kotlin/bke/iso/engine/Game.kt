@@ -75,7 +75,7 @@ class Game {
     fun update(deltaTime: Float) {
         runFrame(deltaTime)
         ui.draw(deltaTime)
-        renderer.drawCursor()
+        renderer.drawPointer()
     }
 
     private fun runFrame(deltaTime: Float) {
@@ -88,7 +88,7 @@ class Game {
         physics.update(deltaTime)
 
         input.update()
-        renderer.updateCursor(deltaTime)
+        renderer.update(deltaTime)
         state.update(deltaTime)
         world.update()
 

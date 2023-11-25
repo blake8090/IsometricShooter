@@ -24,7 +24,7 @@ import bke.iso.game.combat.Combat
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
-import bke.iso.game.ui.CrosshairCursor
+import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -35,7 +35,7 @@ import com.studiohartman.jamepad.ControllerButton
 class GameState(override val game: Game) : State() {
 
     private val combat = Combat(game.world, game.events)
-    private val crosshair = CrosshairCursor(game.assets, game.input)
+    private val crosshair = CrosshairPointer(game.assets, game.input)
 
     private val gameHud = GameHUD(game.assets)
 
@@ -53,7 +53,7 @@ class GameState(override val game: Game) : State() {
 
         bindInput()
 
-        game.renderer.setCursor(crosshair)
+        game.renderer.setPointer(crosshair)
         game.ui.setScreen(gameHud)
         gameHud.updateHealth(PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 

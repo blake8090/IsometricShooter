@@ -11,7 +11,6 @@ import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Cursor
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Pixmap
@@ -44,10 +43,9 @@ class Renderer(
 
     private val batch = PolygonSpriteBatch()
     private val objectSorter = ObjectSorter()
-    private var customCursor: CustomCursor? = null
+    private var pointer: Pointer = MousePointer()
 
     val debug: DebugRenderer = DebugRenderer()
-
     val bgShapes: Shape3dArray = Shape3dArray()
     val fgShapes: Shape3dArray = Shape3dArray()
     private val shapeDrawer = Shape3dDrawer(batch)
@@ -90,36 +88,25 @@ class Renderer(
         camera.position.set(toScreen(worldPos), 0f)
     }
 
-    fun getCursorPos(): Vector2 {
-        val pos = customCursor
-            ?.getPos()
-            ?: Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
+    fun update(deltaTime: Float) {
+        pointer.update(deltaTime)
+    }
 
-        val screenPos = camera.unproject(Vector3(pos, 0f))
+    fun getPointerPos(): Vector2 {
+        val screenPos = camera.unproject(Vector3(pointer.pos, 0f))
         return Vector2(screenPos.x, screenPos.y)
     }
 
-    fun setCursor(customCursor: CustomCursor) {
-        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None)
-        customCursor.create()
-        this.customCursor = customCursor
-        log.debug { "Set custom cursor: ${customCursor::class.simpleName}" }
+    fun setPointer(newPointer: Pointer) {
+        pointer.hide()
+        newPointer.create()
+        newPointer.show()
+        pointer = newPointer
     }
 
-    fun resetCursor() {
-        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow)
-        customCursor = null
-        log.debug { "Reset cursor" }
-    }
-
-    fun updateCursor(deltaTime: Float) {
-        customCursor?.update(deltaTime)
-    }
-
-    fun drawCursor() {
-        val cursor = customCursor ?: return
+    fun drawPointer() {
         batch.projectionMatrix = camera.combined
-        cursor.draw(batch, getCursorPos())
+        pointer.draw(batch, getPointerPos())
     }
 
     fun draw() {

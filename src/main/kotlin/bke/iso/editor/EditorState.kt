@@ -133,7 +133,7 @@ class EditorState(override val game: Game) : State() {
     private fun updateTool() {
         val tool = selectedTool ?: return
         // TODO: scale cursor position when screen size changes
-        tool.update(selectedLayer, game.renderer.getCursorPos())
+        tool.update(selectedLayer, game.renderer.getPointerPos())
 
         if (editorScreen.hitMainView()) {
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
