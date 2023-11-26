@@ -8,7 +8,6 @@ import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
 import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
-import kotlin.math.abs
 
 class InputState(private val events: Game.Events) {
 
@@ -103,14 +102,15 @@ class InputState(private val events: Game.Events) {
         }
 
         override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
-            if (controller.playerIndex != -1 && abs(value) >= DEFAULT_CONTROLLER_DEADZONE) {
+            if (controller.playerIndex != -1) {
                 switchInput(InputSource.CONTROLLER)
             }
             return false
         }
 
         private fun matchButton(index: Int) =
-            ControllerButton.entries
+            ControllerButton
+                .entries
                 .find { entry -> entry.ordinal == index }
                 ?: error("Unknown ControllerButton index: $index")
     }

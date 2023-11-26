@@ -12,6 +12,7 @@ import bke.iso.game.actor.BulletType
 import com.badlogic.gdx.math.Vector3
 
 private const val PLAYER_JUMP_FORCE = 6f
+private const val CONTROLLER_DEADZONE = 0.1f
 
 class PlayerSystem(
     private val input: Input,
@@ -49,20 +50,6 @@ class PlayerSystem(
     }
 
     private fun updatePlayer(actor: Actor) {
-        val movement = Vector3(
-            input.poll("moveX"),
-            input.poll("moveY"),
-            0f
-        )
-
-        val magnitude = movement.len()
-        // by normalizing the movement vector, we ensure that the player doesn't move faster diagonally
-        movement.nor()
-        // when using a controller, reapply the magnitude to support precise movement
-        if (input.isUsingController()) {
-            movement.scl(magnitude)
-        }
-
         val horizontalSpeed =
             if (input.poll("run") != 0f) {
                 runSpeed
@@ -70,7 +57,7 @@ class PlayerSystem(
                 walkSpeed
             }
 
-        movement.scl(horizontalSpeed, horizontalSpeed, flySpeed)
+        val movement = getMovement().scl(horizontalSpeed, horizontalSpeed, flySpeed)
 
         val body = checkNotNull(actor.get<PhysicsBody>()) {
             "Expected $actor to have a PhysicsBody"
@@ -81,5 +68,27 @@ class PlayerSystem(
         }
 
         renderer.setCameraPos(actor.pos)
+    }
+
+    private fun getMovement(): Vector3 {
+        val movement = Vector3(
+            input.poll("moveX"),
+            input.poll("moveY"),
+            0f
+        )
+
+        var magnitude = movement.len()
+        // by normalizing the movement vector, we ensure that the player doesn't move faster diagonally
+        movement.nor()
+
+        // when using a controller, reapply the magnitude to support precise movement
+        if (input.isUsingController()) {
+            if (magnitude < CONTROLLER_DEADZONE) {
+                magnitude = 0f
+            }
+            movement.scl(magnitude)
+        }
+
+        return movement
     }
 }

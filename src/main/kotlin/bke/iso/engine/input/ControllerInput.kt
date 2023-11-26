@@ -1,9 +1,5 @@
 package bke.iso.engine.input
 
-import kotlin.math.abs
-
-const val DEFAULT_CONTROLLER_DEADZONE: Float = 0.2f
-
 class ControllerInput(private val inputState: InputState) {
 
     private val bindings = Bindings()
@@ -29,14 +25,8 @@ class ControllerInput(private val inputState: InputState) {
         bindings[action] = CompositeBinding(negative, positive)
     }
 
-    fun poll(action: String, deadzone: Float = DEFAULT_CONTROLLER_DEADZONE): Float {
-        val value = bindings.poll(action)
-        return if (abs(value) <= deadzone) {
-            0f
-        } else {
-            value
-        }
-    }
+    fun poll(action: String): Float =
+        bindings.poll(action)
 
     private fun checkButtonDown(binding: ButtonBinding) =
         if (binding is ControllerBinding) {

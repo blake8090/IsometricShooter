@@ -40,8 +40,8 @@ class CrosshairCursor(
         pos.set(width, height)
 
         val axis = Vector2(
-            input.controller.poll("cursorX", 0f),
-            input.controller.poll("cursorY", 0f)
+            input.controller.poll("cursorX"),
+            input.controller.poll("cursorY")
         )
         if (axis.len() <= MINIMUM_AXIS_VALUE) {
             hide = true
