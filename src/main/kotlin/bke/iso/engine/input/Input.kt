@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.controllers.ControllerListener
 import com.badlogic.gdx.controllers.Controllers
+import com.badlogic.gdx.math.Vector2
 
 class Input(events: Game.Events) {
 
@@ -36,6 +37,19 @@ class Input(events: Game.Events) {
         } else {
             keyMouse.poll(action)
         }
+    }
+
+    fun pollAxes(actionX: String, actionY: String, deadzone: Float): Vector2 {
+        val direction = Vector2(poll(actionX), poll(actionY))
+        val magnitude = direction.len()
+
+        if (magnitude < deadzone) {
+            direction.setZero()
+        } else if (magnitude > 1f) {
+            direction.nor()
+        }
+
+        return direction
     }
 
     inline fun onAction(actionName: String, func: (Float) -> Unit) {

@@ -23,7 +23,6 @@ class PlayerSystem(
 
     private val walkSpeed = 5f
     private val runSpeed = 10f
-    private val flySpeed = 4f
 
     override fun update(deltaTime: Float) {
         world.actors.each<Player> { actor, _ ->
@@ -57,7 +56,12 @@ class PlayerSystem(
                 walkSpeed
             }
 
-        val movement = getMovement().scl(horizontalSpeed, horizontalSpeed, flySpeed)
+        val direction = input.pollAxes(actionX = "moveX", actionY = "moveY", CONTROLLER_DEADZONE)
+        val movement = Vector3(
+            direction.x * horizontalSpeed,
+            direction.y * horizontalSpeed,
+            0f
+        )
 
         val body = checkNotNull(actor.get<PhysicsBody>()) {
             "Expected $actor to have a PhysicsBody"
@@ -68,27 +72,5 @@ class PlayerSystem(
         }
 
         renderer.setCameraPos(actor.pos)
-    }
-
-    private fun getMovement(): Vector3 {
-        val movement = Vector3(
-            input.poll("moveX"),
-            input.poll("moveY"),
-            0f
-        )
-
-        var magnitude = movement.len()
-        // by normalizing the movement vector, we ensure that the player doesn't move faster diagonally
-        movement.nor()
-
-        // when using a controller, reapply the magnitude to support precise movement
-        if (input.isUsingController()) {
-            if (magnitude < CONTROLLER_DEADZONE) {
-                magnitude = 0f
-            }
-            movement.scl(magnitude)
-        }
-
-        return movement
     }
 }
