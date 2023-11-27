@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
 
 private const val CONTROLLER_DEADZONE = 0.1f
+private const val SCREEN_RATIO = 0.7f
 
 class CrosshairPointer(
     private val assets: Assets,
@@ -43,13 +44,16 @@ class CrosshairPointer(
             visible = false
         }
 
-        val center = Vector2(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f)
-        pos.set(center)
-
-        val width = Gdx.graphics.width / 2f * 0.7f
-        val height = Gdx.graphics.height / 2f * 0.7f
-        pos.add(direction.x * width, direction.y * height)
+        pos.set(getGraphicsSize().scl(0.5f))
+        val movement = getGraphicsSize()
+            .scl(0.5f)
+            .scl(SCREEN_RATIO)
+            .scl(direction)
+        pos.add(movement)
     }
+
+    private fun getGraphicsSize() =
+        Vector2(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
 
     override fun draw(batch: PolygonSpriteBatch, screenPos: Vector2) {
         if (visible) {
