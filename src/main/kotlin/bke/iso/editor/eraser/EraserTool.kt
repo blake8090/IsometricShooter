@@ -3,8 +3,10 @@ package bke.iso.editor.eraser
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.EditorTool
 import bke.iso.editor.ReferenceActors
+import bke.iso.editor.TilePrefabReference
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.world.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
@@ -14,6 +16,7 @@ class EraserTool(
     private val renderer: Renderer,
 ) : EditorTool() {
 
+    private var previousType: Type? = null
     private var highlighted: PickedActor? = null
 
     override fun update(pointerPos: Vector3) {
@@ -27,20 +30,39 @@ class EraserTool(
         highlighted = picked
     }
 
-    override fun performAction(): EditorCommand? =
-        deleteActor()
+    override fun performAction(): EditorCommand? {
+        val actor = highlighted
+            ?.actor
+            ?: return null
 
-    // TODO: if the previous actor was a tile and the next actor is an actor, don't perform the action.
-    //  avoids accidentally deleting other actors underneath a deleted actor or tile
-    override fun performMultiAction(): EditorCommand? =
-        deleteActor()
+        previousType = getType(actor)
+        return DeleteActorCommand(referenceActors, actor)
+    }
 
-    private fun deleteActor(): EditorCommand? {
-        val actor = highlighted?.actor
-        return if (actor != null) {
+    override fun performMultiAction(): EditorCommand? {
+        val actor = highlighted
+            ?.actor
+            ?: return null
+
+        val type = getType(actor)
+        // avoids accidentally deleting tiles underneath an actor
+        return if (type == Type.TILE && previousType == Type.TILE) {
+            previousType = type
             DeleteActorCommand(referenceActors, actor)
         } else {
             null
         }
+    }
+
+    private fun getType(actor: Actor) =
+        if (actor.has<TilePrefabReference>()) {
+            Type.TILE
+        } else {
+            Type.ACTOR
+        }
+
+    private enum class Type {
+        ACTOR,
+        TILE
     }
 }
