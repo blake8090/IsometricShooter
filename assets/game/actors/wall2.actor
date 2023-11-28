@@ -1,0 +1,28 @@
+{
+  name: "wall2",
+  components: [
+    {
+      type: "sprite",
+      texture: "wall2.png",
+      offsetX: 0.0,
+      offsetY: 16.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "collider",
+      size: {
+        x: 1.0,
+        y: 1.0,
+        z: 2.0
+      }
+    },
+    {
+      type: "debugSettings"
+    },
+    {
+      type: "description",
+      text: "wall"
+    }
+  ]
+}

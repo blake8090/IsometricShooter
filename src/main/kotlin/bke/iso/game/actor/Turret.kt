@@ -1,6 +1,7 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.System
+import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.DebugRenderer
 import bke.iso.engine.world.Actor
@@ -9,6 +10,7 @@ import bke.iso.engine.world.World
 import bke.iso.game.combat.Combat
 import bke.iso.game.player.Player
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -54,7 +56,7 @@ class TurretSystem(
         if (!turret.canShoot) {
             return
         }
-        combat.shoot(turretActor, target.pos, BulletType.TURRET)
+        combat.shoot(turretActor, getTargetPos(target), BulletType.TURRET)
         turret.elapsedCooldownTime = 0f
         turret.canShoot = false
     }
@@ -64,7 +66,7 @@ class TurretSystem(
 
     private fun canSee(actor: Actor, target: Actor): Boolean {
         val start = actor.pos
-        val end = target.pos
+        val end = getTargetPos(target)
 
         val firstCollision = collisions
             .checkCollisions(Segment(start, end))
@@ -84,5 +86,16 @@ class TurretSystem(
             debugRenderer.addLine(start, firstPoint, 1f, Color.RED)
             false
         }
+    }
+
+    private fun getTargetPos(target: Actor): Vector3 {
+        val pos = target.pos
+
+        // aim for center mass!
+        target.get<Collider>()?.let { collider ->
+            pos.z += collider.size.z * 0.5f
+        }
+
+        return pos
     }
 }

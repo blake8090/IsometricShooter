@@ -1,18 +1,26 @@
 [
-    {
-        "name": "floor",
-        "sprite": {
-            texture: "floor.png",
-            offsetY: 16.0
-        },
-        "solid": true
+  {
+    "name": "floor",
+    "sprite": {
+      texture: "floor.png",
+      offsetY: 16.0
     },
-    {
-        "name": "floor2",
-        "sprite": {
-            texture: "floor2.png",
-            offsetY: 16.0
-        },
-        "solid": true
-    }
+    "solid": true
+  },
+  {
+    "name": "floor2",
+    "sprite": {
+      texture: "floor2.png",
+      offsetY: 16.0
+    },
+    "solid": true
+  },
+  {
+    "name": "grass",
+    "sprite": {
+      texture: "grass.png",
+      offsetY: 16.0
+    },
+    "solid": true
+  }
 ]

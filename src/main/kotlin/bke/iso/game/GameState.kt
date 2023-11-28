@@ -15,6 +15,7 @@ import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.BulletSystem
+import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.player.PLAYER_MAX_HEALTH
 import bke.iso.game.player.Player
@@ -49,7 +50,12 @@ class GameState(override val game: Game) : State() {
 
     override suspend fun load() {
         game.assets.loadAsync("game")
-        game.scenes.load("collision-test.scene")
+
+        game.scenes.load("building.scene")
+        // hack to make the moving platform work in building.scene
+        game.world.actors.each<MovingPlatform> { actor, _ ->
+            actor.add(MovingPlatform(speed = 1f, maxZ = 4f, minZ = 2f))
+        }
 
         bindInput()
 

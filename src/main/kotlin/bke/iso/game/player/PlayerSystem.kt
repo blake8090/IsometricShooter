@@ -33,7 +33,9 @@ class PlayerSystem(
             }
 
             input.onAction("shoot") {
-                combat.shoot(actor, toWorld(renderer.getPointerPos()), BulletType.PLAYER)
+                val target = toWorld(renderer.getPointerPos())
+                target.z = actor.z
+                combat.shoot(actor, target, BulletType.PLAYER)
             }
 //
 //            inputService.onAction("placeBouncyBall") {
