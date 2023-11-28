@@ -33,11 +33,11 @@ class BrushTool(
     private val brushActor = world.actors.create(0f, 0f, 0f, brushSprite)
     private var selection: Selection? = null
 
-    override fun update(cursorPos: Vector3) {
+    override fun update(pointerPos: Vector3) {
         if (selection is TileSelection || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-            cursorPos.floor()
+            pointerPos.floor()
         }
-        brushActor.moveTo(cursorPos.x, cursorPos.y, cursorPos.z)
+        brushActor.moveTo(pointerPos.x, pointerPos.y, pointerPos.z)
         renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)
     }
 

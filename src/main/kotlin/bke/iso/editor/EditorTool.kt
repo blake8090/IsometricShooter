@@ -17,18 +17,17 @@ abstract class EditorTool {
 
     protected abstract val collisions: Collisions
 
-    fun update(selectedLayer: Float, cursorPos: Vector2) {
-        // makes sure the cursor's 3D position is relative to the selected layer.
-        // this avoids ...
-        cursorPos.y -= (TILE_SIZE_Z * selectedLayer)
+    fun update(selectedLayer: Float, pointerPos: Vector2) {
+        // fixes an issue where actors placed on different layers don't match the pointer's position
+        pointerPos.y -= (TILE_SIZE_Z * selectedLayer)
 
-        val worldPos = toWorld(cursorPos)
+        val worldPos = toWorld(pointerPos)
         worldPos.z = selectedLayer
 
         update(worldPos)
     }
 
-    protected abstract fun update(cursorPos: Vector3)
+    protected abstract fun update(pointerPos: Vector3)
 
     /**
      * Returns a command to be executed when the button is pressed only once.

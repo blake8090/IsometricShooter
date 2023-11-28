@@ -13,10 +13,10 @@ class PointerTool(
     private var highlighted: PickedActor? = null
     private var selected: PickedActor? = null
 
-    override fun update(cursorPos: Vector3) {
-        renderer.fgShapes.addPoint(cursorPos, 1f, Color.RED)
+    override fun update(pointerPos: Vector3) {
+        renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
-        highlighted = pickActor(cursorPos)
+        highlighted = pickActor(pointerPos)
 
         drawSelectionBox(highlighted, Color.WHITE)
         drawSelectionBox(selected, Color.RED)

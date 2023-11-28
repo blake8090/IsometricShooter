@@ -19,6 +19,7 @@ class MousePointer : Pointer() {
     }
 
     override fun update(deltaTime: Float) {
+        pos.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
     }
 
     override fun draw(batch: PolygonSpriteBatch, screenPos: Vector2) {
