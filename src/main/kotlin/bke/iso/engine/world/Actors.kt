@@ -13,14 +13,30 @@ class Actors(private val grid: Grid) {
 
     fun create(location: Location, vararg components: Component): Actor =
         create(
+            generateActorId(),
             location.x.toFloat(),
             location.y.toFloat(),
             location.z.toFloat(),
             *components
         )
 
-    fun create(x: Float, y: Float, z: Float, vararg components: Component): Actor {
-        val actor = Actor(generateActorId(), this::onMove)
+    fun create(x: Float, y: Float, z: Float, vararg components: Component): Actor =
+        create(
+            generateActorId(),
+            x,
+            y,
+            z,
+            *components
+        )
+
+    fun create(
+        id: String,
+        x: Float,
+        y: Float,
+        z: Float,
+        vararg components: Component
+    ): Actor {
+        val actor = Actor(id, this::onMove)
 
         for (component in components) {
             actor.add(component)

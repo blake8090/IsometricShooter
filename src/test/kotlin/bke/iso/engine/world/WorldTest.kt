@@ -1,18 +1,37 @@
 package bke.iso.engine.world
 
+import bke.iso.engine.math.Box
+import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 
 class WorldTest : StringSpec({
-    // TODO: fix
-//
-//    "should return all objects in area" {
-//        val world = World(mockk<Game>())
-//        val actor = world.newActor(0f, 0f, 0f)
-//        val actor2 = world.newActor(0f, 0f, 1.5f)
-//        val actor3 = world.newActor(1f, 1f, 1f)
-//        world.newActor(1f, 1f, 2.1f)
-//
-//        val area = Box(Vector3(0.5f, 0.5f, 0.5f), Vector3(1f, 1f, 1f))
-//        world.getObjectsInArea(area).shouldContainExactlyInAnyOrder(actor, actor2, actor3)
-//    }
+
+    "should return all objects in area" {
+        val world = World()
+        val actor = world.actors.create("actor", 0f, 0f, 0f)
+        val actor2 = world.actors.create("actor2", 1f, 0f, 0f)
+        world.actors.create("actor3", 2f, 0f, 0f)
+
+        val area = Box(
+            pos = Vector3(0.5f, 0.5f, 0f),
+            size = Vector3(1f, 1f, 1f)
+        )
+
+        world.getObjectsInArea(area).shouldContainExactlyInAnyOrder(actor, actor2)
+    }
+
+    "should return all objects in area with negative positions" {
+        val world = World()
+        val actor = world.actors.create("actor", 0f, 0f, 0f)
+        val actor2 = world.actors.create("actor2", 0f, -1f, 0f)
+        world.actors.create("actor3", -0.5f, -0.5f, 0f)
+
+        val area = Box(
+            pos = Vector3(0.5f, -0.5f, 0f),
+            size = Vector3(0.5f, 0.5f, 0.5f)
+        )
+
+        world.getObjectsInArea(area).shouldContainExactlyInAnyOrder(actor, actor2)
+    }
 })
