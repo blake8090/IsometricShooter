@@ -68,3 +68,14 @@ fun toWorld(screenPos: Vector2): Vector3 {
         0f
     )
 }
+
+/**
+ * Converts a screen position to a world position, including a [zOffset] in world space.
+ * This allows for things like aiming and actor picking to take height into account.
+ */
+fun toWorld(screenPos: Vector2, zOffset: Float): Vector3 {
+    screenPos.y -= (TILE_SIZE_Z * zOffset)
+    val worldPos = toWorld(screenPos)
+    worldPos.z = zOffset
+    return worldPos
+}

@@ -2,7 +2,6 @@ package bke.iso.editor
 
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
-import bke.iso.engine.math.TILE_SIZE_Z
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.world.Actor
 import com.badlogic.gdx.math.Vector2
@@ -18,13 +17,7 @@ abstract class EditorTool {
     protected abstract val collisions: Collisions
 
     fun update(selectedLayer: Float, pointerPos: Vector2) {
-        // fixes an issue where actors placed on different layers don't match the pointer's position
-        pointerPos.y -= (TILE_SIZE_Z * selectedLayer)
-
-        val worldPos = toWorld(pointerPos)
-        worldPos.z = selectedLayer
-
-        update(worldPos)
+        update(toWorld(pointerPos, selectedLayer))
     }
 
     protected abstract fun update(pointerPos: Vector3)

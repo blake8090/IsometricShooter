@@ -33,8 +33,7 @@ class PlayerSystem(
             }
 
             input.onAction("shoot") {
-                val target = toWorld(renderer.getPointerPos())
-                target.z = actor.z
+                val target = toWorld(renderer.getPointerPos(), actor.z)
                 combat.shoot(actor, target, BulletType.PLAYER)
             }
 //
