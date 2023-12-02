@@ -27,6 +27,9 @@ import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
+import bke.iso.game.weapon.WeaponCache
+import bke.iso.game.weapon.WeaponSystem
+import bke.iso.game.weapon.Weapons
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -35,13 +38,15 @@ import com.studiohartman.jamepad.ControllerButton
 
 class GameState(override val game: Game) : State() {
 
-    private val combat = Combat(game.world, game.events)
+    private val gameHud = GameHUD(game.assets)
     private val crosshair = CrosshairPointer(game.assets, game.input)
 
-    private val gameHud = GameHUD(game.assets)
+    private val combat = Combat(game.world, game.events)
+    private val weapons = Weapons(game.assets, game.world)
 
     override val systems: Set<System> = setOf(
-        PlayerSystem(game.input, game.world, game.renderer, combat),
+        WeaponSystem(game.world),
+        PlayerSystem(game.input, game.world, game.renderer, weapons),
         TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
         BulletSystem(game.world, combat, game.collisions),
         MovingPlatformSystem(game.world),
@@ -49,6 +54,7 @@ class GameState(override val game: Game) : State() {
     )
 
     override suspend fun load() {
+        game.assets.register(WeaponCache(game.serializer))
         game.assets.loadAsync("game")
 
         game.scenes.load("building.scene")
@@ -65,6 +71,7 @@ class GameState(override val game: Game) : State() {
 
         game.world.actors.each { actor: Actor, player: Player ->
             game.world.createShadow(actor)
+            weapons.equip(actor, "pistol")
         }
     }
 

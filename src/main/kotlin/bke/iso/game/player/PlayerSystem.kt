@@ -7,18 +7,18 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
-import bke.iso.game.combat.Combat
-import bke.iso.game.actor.BulletType
+import bke.iso.game.weapon.Weapons
 import com.badlogic.gdx.math.Vector3
 
 private const val PLAYER_JUMP_FORCE = 6f
 private const val CONTROLLER_DEADZONE = 0.1f
+private const val BARREL_HEIGHT = 0.6f
 
 class PlayerSystem(
     private val input: Input,
     private val world: World,
     private val renderer: Renderer,
-    private val combat: Combat
+    private val weapons: Weapons
 ) : System {
 
     private val walkSpeed = 5f
@@ -33,8 +33,10 @@ class PlayerSystem(
             }
 
             input.onAction("shoot") {
-                val target = toWorld(renderer.getPointerPos(), actor.z)
-                combat.shoot(actor, target, BulletType.PLAYER)
+                val pos = actor.pos
+                pos.z += BARREL_HEIGHT
+                val target = toWorld(renderer.getPointerPos(), pos.z)
+                weapons.shoot(actor, pos, target)
             }
 //
 //            inputService.onAction("placeBouncyBall") {

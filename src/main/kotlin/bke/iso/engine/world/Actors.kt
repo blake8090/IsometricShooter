@@ -1,6 +1,7 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.ObjectSet
 import kotlin.reflect.KClass
 
@@ -20,6 +21,7 @@ class Actors(private val grid: Grid) {
             *components
         )
 
+    // TODO: remove this overload in favor of the one below
     fun create(x: Float, y: Float, z: Float, vararg components: Component): Actor =
         create(
             generateActorId(),
@@ -28,6 +30,9 @@ class Actors(private val grid: Grid) {
             z,
             *components
         )
+
+    fun create(pos: Vector3, vararg components: Component): Actor =
+        create(pos.x, pos.y, pos.z, *components)
 
     fun create(
         id: String,
