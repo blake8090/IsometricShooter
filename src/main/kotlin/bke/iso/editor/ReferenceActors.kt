@@ -35,7 +35,7 @@ class ReferenceActors(private val world: World) {
             components.add(collider.copy())
         }
 
-        return world.actors.create(pos.x, pos.y, pos.z, *components.toTypedArray())
+        return world.actors.create(pos, *components.toTypedArray())
     }
 
     fun create(prefab: TilePrefab, location: Location): Actor {

@@ -9,7 +9,6 @@ private const val ID_LENGTH = 6
 
 class Actors(private val grid: Grid) {
 
-    //private val allActors = mutableSetOf<Actor>()
     private val deletedActors = ObjectSet<Actor>()
 
     fun create(location: Location, vararg components: Component): Actor =
@@ -21,18 +20,14 @@ class Actors(private val grid: Grid) {
             *components
         )
 
-    // TODO: remove this overload in favor of the one below
-    fun create(x: Float, y: Float, z: Float, vararg components: Component): Actor =
+    fun create(pos: Vector3, vararg components: Component): Actor =
         create(
             generateActorId(),
-            x,
-            y,
-            z,
+            pos.x,
+            pos.y,
+            pos.z,
             *components
         )
-
-    fun create(pos: Vector3, vararg components: Component): Actor =
-        create(pos.x, pos.y, pos.z, *components)
 
     fun create(
         id: String,

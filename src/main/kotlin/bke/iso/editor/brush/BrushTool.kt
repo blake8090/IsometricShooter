@@ -30,7 +30,7 @@ class BrushTool(
     private val log = KotlinLogging.logger {}
 
     private val brushSprite = Sprite(alpha = 0f)
-    private val brushActor = world.actors.create(0f, 0f, 0f, brushSprite)
+    private val brushActor = world.actors.create(Vector3(), brushSprite)
     private var selection: Selection? = null
 
     override fun update(pointerPos: Vector3) {

@@ -81,10 +81,9 @@ class BulletSystem(
 
 fun World.createBullet(shooter: Actor, direction: Vector3, bulletType: BulletType): Actor {
     val pos = shooter.pos
+    pos.z += bulletType.zOffset
     return actors.create(
-        pos.x,
-        pos.y,
-        pos.z + bulletType.zOffset,
+        pos,
         Bullet(shooter.id, pos, bulletType),
         Sprite("bullet.png", 8f, 8f),
         PhysicsBody(mode = PhysicsMode.GHOST, velocity = Vector3(direction).scl(bulletType.speed)),

@@ -25,12 +25,7 @@ class Scenes(
 
             for (record in scene.actors) {
                 val prefab = assets.get<ActorPrefab>(record.prefab)
-                world.actors.create(
-                    record.pos.x,
-                    record.pos.y,
-                    record.pos.z,
-                    *copyComponents(prefab)
-                )
+                world.actors.create(record.pos, *copyComponents(prefab))
             }
 
             for (record in scene.tiles) {

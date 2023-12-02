@@ -84,9 +84,7 @@ class ShadowSystem(
 
 fun World.createShadow(actor: Actor): Actor =
     actors.create(
-        actor.x,
-        actor.y,
-        actor.z,
+        actor.pos,
         // TODO: sprite offsets should be negative for consistency!
         Sprite("shadow.png", 16f, 16f, SPRITE_ALPHA),
         PhysicsBody(PhysicsMode.GHOST),
