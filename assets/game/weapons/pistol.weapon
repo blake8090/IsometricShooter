@@ -2,8 +2,8 @@
   name: "pistol",
   damage: 1,
   magSize: 10,
-  fireRate: 500,
+  fireRate: 200,
   bulletVelocity: 20,
   spread: 1,
-  recoil: 1
+  recoil: 0.6
 }

@@ -5,6 +5,8 @@ import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.get
+import bke.iso.game.weapon.EquippedWeapon
+import bke.iso.game.weapon.Weapon
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -13,11 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
-import kotlin.reflect.cast
-
-private const val HUD_HEALTH_BAR_NAME = "healthBar"
 
 class GameHUD(assets: Assets) : UIScreen(assets) {
+
+    private lateinit var healthBar: HudHealthBar
+    private lateinit var weaponLabel: Label
 
     override fun create() {
         setup()
@@ -30,21 +32,32 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
         table.add(Label("Health", skin))
             .height(100f)
 
-        table.add(HudHealthBar(skin).apply {
-            name = HUD_HEALTH_BAR_NAME
+        healthBar = HudHealthBar(skin).apply {
             barHeight = 32f
             barPadLeft = 20f
             barPadRight = 20f
-        })
+        }
+        table.add(healthBar)
             .width(300f)
             .fillY()
             .right()
+
+        weaponLabel = Label("No Weapon", skin)
+        table.add(weaponLabel)
+            .height(50f)
+            .expandX()
+            .right()
+            .padRight(25f)
     }
 
     fun updateHealth(health: Float, maxHealth: Float) {
-        val actor = HudHealthBar::class.cast(stage.root.findActor(HUD_HEALTH_BAR_NAME))
-        actor.maxValue = maxHealth
-        actor.value = health
+        healthBar.maxValue = maxHealth
+        healthBar.value = health
+    }
+
+    fun updateWeaponText(equippedWeapon: EquippedWeapon) {
+        val weapon = assets.get<Weapon>(equippedWeapon.name)
+        weaponLabel.setText("${weapon.name}: ${equippedWeapon.ammmo}/${weapon.magSize}")
     }
 
     private fun setup() {

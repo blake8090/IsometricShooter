@@ -52,6 +52,7 @@ class Weapons(
 
         equippedWeapon.ammmo--
         equippedWeapon.coolDown = calculateCoolDown(weapon)
+        equippedWeapon.recoil += weapon.recoil
     }
 
     private fun calculateCoolDown(weapon: Weapon): Float {

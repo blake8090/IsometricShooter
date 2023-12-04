@@ -27,6 +27,7 @@ import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
+import bke.iso.game.weapon.EquippedWeapon
 import bke.iso.game.weapon.WeaponCache
 import bke.iso.game.weapon.WeaponSystem
 import bke.iso.game.weapon.Weapons
@@ -39,7 +40,7 @@ import com.studiohartman.jamepad.ControllerButton
 class GameState(override val game: Game) : State() {
 
     private val gameHud = GameHUD(game.assets)
-    private val crosshair = CrosshairPointer(game.assets, game.input)
+    private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer)
 
     private val combat = Combat(game.world, game.events)
     private val weapons = Weapons(game.assets, game.world)
@@ -69,10 +70,20 @@ class GameState(override val game: Game) : State() {
         game.ui.setScreen(gameHud)
         gameHud.updateHealth(PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 
-        game.world.actors.each { actor: Actor, player: Player ->
+        game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
             weapons.equip(actor, "pistol")
         }
+    }
+
+    override fun update(deltaTime: Float) {
+        super.update(deltaTime)
+
+        val equippedWeapon = game.world.actors
+            .find<Player>()
+            ?.get<EquippedWeapon>()
+            ?: return
+        gameHud.updateWeaponText(equippedWeapon)
     }
 
     override fun handleEvent(event: Event) {

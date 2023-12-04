@@ -38,16 +38,6 @@ class PlayerSystem(
                 val target = toWorld(renderer.getPointerPos(), pos.z)
                 weapons.shoot(actor, pos, target)
             }
-//
-//            inputService.onAction("placeBouncyBall") {
-//                val mousePos = inputService.getMousePos()
-//                val target = renderService.unproject(mousePos)
-//                entityFactory.createBouncyBall(target.x, target.y, 0f)
-//            }
-//
-//            inputService.onAction("checkCollisions") {
-//                checkPlayerCollisions(entity)
-//            }
         }
     }
 

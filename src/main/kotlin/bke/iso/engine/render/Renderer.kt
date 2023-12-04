@@ -197,20 +197,35 @@ class Renderer(
         if (sprite.texture.isBlank()) {
             return
         }
+        drawTexture(
+            name = sprite.texture,
+            pos = toScreen(worldPos),
+            offset = Vector2(sprite.offsetX, sprite.offsetY),
+            scale = sprite.scale,
+            alpha = sprite.alpha
+        )
+    }
 
-        val texture = assets.get<Texture>(sprite.texture)
-        val screenPos = toScreen(worldPos)
-            .sub(sprite.offsetX, sprite.offsetY)
+    fun drawTexture(
+        name: String,
+        pos: Vector2,
+        offset: Vector2,
+        scale: Float = 1f,
+        alpha: Float = 1f
+    ) {
+        val texture = assets.get<Texture>(name)
+        val screenPos = Vector2(pos).sub(offset)
 
-        val width = texture.width * sprite.scale
-        val height = texture.height * sprite.scale
+        val width = texture.width * scale
+        val height = texture.height * scale
         // when scaling textures, make sure texture is still centered on origin point
-        if (sprite.scale != 1f) {
+        if (scale != 1f) {
             val diffX = texture.width - width
             val diffY = texture.height - height
             screenPos.add(diffX / 2f, diffY / 2f)
         }
-        val color = Color(batch.color.r, batch.color.g, batch.color.b, sprite.alpha)
+
+        val color = Color(batch.color.r, batch.color.g, batch.color.b, alpha)
         batch.withColor(color) {
             batch.draw(texture, screenPos.x, screenPos.y, width, height)
         }

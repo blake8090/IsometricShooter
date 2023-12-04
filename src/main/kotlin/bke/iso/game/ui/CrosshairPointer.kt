@@ -3,6 +3,10 @@ package bke.iso.game.ui
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.input.Input
 import bke.iso.engine.render.Pointer
+import bke.iso.engine.render.Renderer
+import bke.iso.engine.world.World
+import bke.iso.game.player.Player
+import bke.iso.game.weapon.EquippedWeapon
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -13,7 +17,9 @@ private const val SCREEN_RATIO = 0.7f
 
 class CrosshairPointer(
     private val assets: Assets,
-    private val input: Input
+    private val input: Input,
+    private val world: World,
+    private val renderer: Renderer
 ) : Pointer() {
 
     private lateinit var texture: Texture
@@ -56,11 +62,20 @@ class CrosshairPointer(
         Vector2(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
 
     override fun draw(batch: PolygonSpriteBatch, screenPos: Vector2) {
-        if (visible) {
-            screenPos.sub(offset)
-            batch.begin()
-            batch.draw(texture, screenPos.x, screenPos.y)
-            batch.end()
+        if (!visible) {
+            return
         }
+
+        var scale = 1f
+        val equippedWeapon = world.actors
+            .find<Player>()
+            ?.get<EquippedWeapon>()
+        if (equippedWeapon != null) {
+            scale += equippedWeapon.recoil
+        }
+
+        batch.begin()
+        renderer.drawTexture("crosshair.png", screenPos, offset, scale, 1f)
+        batch.end()
     }
 }
