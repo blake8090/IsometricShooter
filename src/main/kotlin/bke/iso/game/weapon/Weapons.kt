@@ -1,63 +1,48 @@
 package bke.iso.game.weapon
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.collision.Collider
-import bke.iso.engine.physics.PhysicsBody
-import bke.iso.engine.physics.PhysicsMode
-import bke.iso.engine.render.DebugSettings
-import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.Description
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 
 class Weapons(
     private val assets: Assets,
-    private val world: World
+    world: World
 ) {
 
-    fun equip(actor: Actor, name: String): EquippedWeapon {
-        val weapon = assets.get<Weapon>(name)
-        val equippedWeapon = EquippedWeapon(name, weapon.magSize)
-        actor.add(equippedWeapon)
-        return equippedWeapon
+    private val map = mutableMapOf<String, WeaponLogic>()
+
+    init {
+        val rangedWeaponLogic = RangedWeaponLogic(world)
+        map["pistol"] = rangedWeaponLogic
+        map["rifle"] = rangedWeaponLogic
     }
 
-    fun shoot(shooter: Actor, pos: Vector3, target: Vector3) {
-        val equippedWeapon = shooter.get<EquippedWeapon>()
-        if (equippedWeapon == null || equippedWeapon.ammmo <= 0f || equippedWeapon.coolDown > 0f) {
-            return
+    fun equip(actor: Actor, name: String) {
+        val inventory = actor.getOrPut(Inventory())
+        val properties = assets.get<WeaponProperties>(name)
+        if (properties is RangedWeaponProperties) {
+            val weaponItem = RangedWeaponItem(name, properties.magSize, Vector3(0f, 0f, 0.5f))
+            inventory.selectedWeapon = weaponItem
         }
-
-        val weapon = assets.get<Weapon>(equippedWeapon.name)
-        val velocity = Vector3(target)
-            .sub(pos)
-            .nor()
-            .scl(weapon.bulletVelocity)
-
-        world.actors.create(
-            pos,
-            Bullet(shooter.id, weapon.damage, pos),
-            Sprite("bullet.png", 8f, 8f),
-            PhysicsBody(PhysicsMode.GHOST, velocity),
-            Collider(
-                Vector3(0.125f, 0.125f, 0.125f),
-                Vector3(0f, -0.125f, 0f)
-            ),
-            DebugSettings().apply {
-                zAxis = false
-            },
-            Description("bullet")
-        )
-
-        equippedWeapon.ammmo--
-        equippedWeapon.coolDown = calculateCoolDown(weapon)
-        equippedWeapon.recoil += weapon.recoil
     }
 
-    private fun calculateCoolDown(weapon: Weapon): Float {
-        val roundsPerMinute = weapon.fireRate
-        val roundsPerSecond = roundsPerMinute / 60f
-        return 1 / roundsPerSecond
+    fun shoot(actor: Actor, target: Vector3) {
+        val weaponItem = actor.get<Inventory>()
+            ?.selectedWeapon
+            ?: return
+
+        if (weaponItem is RangedWeaponItem) {
+            shootRangedWeapon(actor, target, weaponItem)
+        }
+    }
+
+    private fun shootRangedWeapon(actor: Actor, target: Vector3, weaponItem: RangedWeaponItem) {
+        val name = weaponItem.name
+        val properties = assets.get<WeaponProperties>(name) as RangedWeaponProperties
+        val logic = checkNotNull(map[name] as? RangedWeaponLogic) {
+            "Ranged weapon '$name' not found"
+        }
+        logic.shoot(actor, target, weaponItem, properties)
     }
 }

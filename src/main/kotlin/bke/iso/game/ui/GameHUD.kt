@@ -5,8 +5,10 @@ import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.get
-import bke.iso.game.weapon.EquippedWeapon
-import bke.iso.game.weapon.Weapon
+import bke.iso.game.weapon.RangedWeaponItem
+import bke.iso.game.weapon.RangedWeaponProperties
+import bke.iso.game.weapon.WeaponItem
+import bke.iso.game.weapon.WeaponProperties
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -55,9 +57,16 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
         healthBar.value = health
     }
 
-    fun updateWeaponText(equippedWeapon: EquippedWeapon) {
-        val weapon = assets.get<Weapon>(equippedWeapon.name)
-        weaponLabel.setText("${weapon.name}: ${equippedWeapon.ammmo}/${weapon.magSize}")
+    fun updateWeaponText(weaponItem: WeaponItem) {
+        val builder = StringBuilder()
+        builder.append(weaponItem.name)
+
+        val properties = assets.get<WeaponProperties>(weaponItem.name)
+        if (weaponItem is RangedWeaponItem && properties is RangedWeaponProperties) {
+            builder.append(": ${weaponItem.ammo}/${properties.magSize}")
+        }
+
+        weaponLabel.setText(builder)
     }
 
     private fun setup() {

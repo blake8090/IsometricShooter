@@ -1,4 +1,5 @@
 {
+  type: "ranged",
   name: "pistol",
   damage: 1,
   magSize: 10,

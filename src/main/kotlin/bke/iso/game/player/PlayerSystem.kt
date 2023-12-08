@@ -36,7 +36,7 @@ class PlayerSystem(
                 val pos = actor.pos
                 pos.z += BARREL_HEIGHT
                 val target = toWorld(renderer.getPointerPos(), pos.z)
-                weapons.shoot(actor, pos, target)
+                weapons.shoot(actor, target)
             }
         }
     }

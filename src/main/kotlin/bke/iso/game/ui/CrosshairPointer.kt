@@ -6,11 +6,13 @@ import bke.iso.engine.render.Pointer
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.game.player.Player
-import bke.iso.game.weapon.EquippedWeapon
+import bke.iso.game.weapon.Inventory
+import bke.iso.game.weapon.RangedWeaponItem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
+import kotlin.math.min
 
 private const val CONTROLLER_DEADZONE = 0.1f
 private const val SCREEN_RATIO = 0.7f
@@ -66,16 +68,21 @@ class CrosshairPointer(
             return
         }
 
-        var scale = 1f
-        val equippedWeapon = world.actors
-            .find<Player>()
-            ?.get<EquippedWeapon>()
-        if (equippedWeapon != null) {
-            scale += equippedWeapon.recoil
-        }
-
+        val scale = min(1f + getWeaponRecoil(), 2f)
         batch.begin()
         renderer.drawTexture("crosshair.png", screenPos, offset, scale, 1f)
         batch.end()
+    }
+
+    private fun getWeaponRecoil(): Float {
+        val weaponItem = world.actors
+            .find<Player>()
+            ?.get<Inventory>()
+            ?.selectedWeapon
+        return if (weaponItem is RangedWeaponItem) {
+            weaponItem.recoil
+        } else {
+            0f
+        }
     }
 }

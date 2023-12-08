@@ -1,0 +1,10 @@
+{
+  type: "ranged",
+  name: "rifle",
+  damage: 1,
+  magSize: 30,
+  fireRate: 900,
+  bulletVelocity: 40,
+  spread: 1,
+  recoil: 0.4
+}

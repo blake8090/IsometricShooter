@@ -27,8 +27,9 @@ import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
-import bke.iso.game.weapon.EquippedWeapon
-import bke.iso.game.weapon.WeaponCache
+import bke.iso.game.weapon.Bullet2System
+import bke.iso.game.weapon.Inventory
+import bke.iso.game.weapon.WeaponPropertiesCache
 import bke.iso.game.weapon.WeaponSystem
 import bke.iso.game.weapon.Weapons
 import com.badlogic.gdx.Input
@@ -50,12 +51,13 @@ class GameState(override val game: Game) : State() {
         PlayerSystem(game.input, game.world, game.renderer, weapons),
         TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
         BulletSystem(game.world, combat, game.collisions),
+        Bullet2System(game.world, combat, game.collisions),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions)
     )
 
     override suspend fun load() {
-        game.assets.register(WeaponCache(game.serializer))
+        game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
         game.scenes.load("building.scene")
@@ -72,18 +74,19 @@ class GameState(override val game: Game) : State() {
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
-            weapons.equip(actor, "pistol")
+            weapons.equip(actor, "rifle")
         }
     }
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
 
-        val equippedWeapon = game.world.actors
+        val weaponItem = game.world.actors
             .find<Player>()
-            ?.get<EquippedWeapon>()
+            ?.get<Inventory>()
+            ?.selectedWeapon
             ?: return
-        gameHud.updateWeaponText(equippedWeapon)
+        gameHud.updateWeaponText(weaponItem)
     }
 
     override fun handleEvent(event: Event) {
