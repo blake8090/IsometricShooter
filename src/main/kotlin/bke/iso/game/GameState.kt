@@ -107,7 +107,8 @@ class GameState(override val game: Game) : State() {
                 "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
                 "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
                 "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
-                "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
+                "shootOnce" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
+                "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
                 "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED)
             )
             bind(
@@ -129,7 +130,8 @@ class GameState(override val game: Game) : State() {
                 "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
                 "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
                 "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
-                "shoot" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.PRESSED),
+                "shootOnce" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.PRESSED),
+                "shoot" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
                 "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED)
             )
         }

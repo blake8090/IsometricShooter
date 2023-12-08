@@ -15,6 +15,7 @@ data class Bullet(
     val start: Vector3
 ) : Component
 
+// TODO: rename to Weapon?
 sealed class WeaponItem {
     abstract val name: String
 }

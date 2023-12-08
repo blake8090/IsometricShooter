@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2
 import kotlin.math.min
 
 private const val CONTROLLER_DEADZONE = 0.1f
-private const val SCREEN_RATIO = 0.7f
+private const val SCREEN_RATIO = 0.45f
 
 class CrosshairPointer(
     private val assets: Assets,
@@ -68,7 +68,7 @@ class CrosshairPointer(
             return
         }
 
-        val scale = min(1f + getWeaponRecoil(), 2f)
+        val scale = min(1.5f + getWeaponRecoil(), 2.5f)
         batch.begin()
         renderer.drawTexture("crosshair.png", screenPos, offset, scale, 1f)
         batch.end()
