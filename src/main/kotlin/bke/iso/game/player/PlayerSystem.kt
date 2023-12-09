@@ -2,24 +2,19 @@ package bke.iso.game.player
 
 import bke.iso.engine.System
 import bke.iso.engine.input.Input
-import bke.iso.engine.math.toWorld
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
-import bke.iso.game.weapon.RangedWeaponOffset
-import bke.iso.game.weapon.Weapons
 import com.badlogic.gdx.math.Vector3
 
 private const val PLAYER_JUMP_FORCE = 6f
 private const val CONTROLLER_DEADZONE = 0.1f
-private const val BARREL_HEIGHT = 0.8f
 
 class PlayerSystem(
     private val input: Input,
     private val world: World,
-    private val renderer: Renderer,
-    private val weapons: Weapons
+    private val renderer: Renderer
 ) : System {
 
     private val walkSpeed = 5f
@@ -31,15 +26,6 @@ class PlayerSystem(
 
             input.onAction("toggleDebug") {
                 renderer.debug.toggle()
-            }
-
-            input.onAction("shoot") {
-                val pos = actor.pos
-                pos.z += BARREL_HEIGHT
-                val target = toWorld(renderer.getPointerPos(), pos.z)
-
-                actor.add(RangedWeaponOffset(0f, 0f, BARREL_HEIGHT))
-                weapons.shoot(actor, target)
             }
         }
     }

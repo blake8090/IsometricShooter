@@ -1,10 +1,11 @@
 {
   type: "ranged",
   name: "pistol",
+  fireType: "semi",
   damage: 1,
-  magSize: 10,
+  magSize: 15,
   fireRate: 200,
-  bulletVelocity: 20,
-  spread: 1,
-  recoil: 0.6
+  velocity: 50,
+  spread: 0.05,
+  recoil: 0.2
 }

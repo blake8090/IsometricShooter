@@ -38,7 +38,7 @@ class RangedWeaponLogic(private val world: World) : WeaponLogic {
         val velocity = Vector3(target)
             .sub(start)
             .nor()
-            .scl(properties.bulletVelocity)
+            .scl(properties.velocity)
 
         world.actors.create(
             start,

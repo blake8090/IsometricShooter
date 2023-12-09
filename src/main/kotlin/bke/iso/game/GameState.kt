@@ -25,6 +25,8 @@ import bke.iso.game.combat.Combat
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
+import bke.iso.game.player.PlayerWeaponSystem
+import bke.iso.game.player.SHOOT_ACTION
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
 import bke.iso.game.weapon.Bullet2System
@@ -48,7 +50,8 @@ class GameState(override val game: Game) : State() {
 
     override val systems: Set<System> = setOf(
         WeaponSystem(game.world),
-        PlayerSystem(game.input, game.world, game.renderer, weapons),
+        PlayerSystem(game.input, game.world, game.renderer),
+        PlayerWeaponSystem(game.world, game.input, game.assets, game.renderer, weapons),
         TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
         BulletSystem(game.world, combat, game.collisions),
         Bullet2System(game.world, combat, game.collisions),
@@ -107,8 +110,7 @@ class GameState(override val game: Game) : State() {
                 "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
                 "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
                 "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
-                "shootOnce" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
-                "shoot" to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
+                SHOOT_ACTION to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
                 "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED)
             )
             bind(
@@ -130,8 +132,7 @@ class GameState(override val game: Game) : State() {
                 "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
                 "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
                 "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
-                "shootOnce" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.PRESSED),
-                "shoot" to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
+                SHOOT_ACTION to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
                 "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED)
             )
         }

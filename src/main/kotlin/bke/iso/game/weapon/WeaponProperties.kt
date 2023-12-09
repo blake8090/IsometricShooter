@@ -21,17 +21,26 @@ data class MeleeWeaponProperties(
 ) : WeaponProperties()
 
 @Serializable
+enum class FireType {
+    @SerialName("semi")
+    SEMI,
+
+    @SerialName("auto")
+    AUTO
+}
+
+@Serializable
 @SerialName("ranged")
 data class RangedWeaponProperties(
     override val name: String,
+    val fireType: FireType,
     val damage: Float,
     val magSize: Int,
     val fireRate: Float,
-    val bulletVelocity: Float,
+    val velocity: Float,
     val spread: Float,
     val recoil: Float
 ) : WeaponProperties()
-
 
 class WeaponPropertiesCache(private val serializer: Serializer) : AssetCache<WeaponProperties>() {
 
