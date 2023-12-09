@@ -67,6 +67,11 @@ class Actor(
     inline fun <reified T : Component> getOrPut(defaultValue: T): T =
         components.getOrPut(T::class) { defaultValue } as T
 
+    inline fun <reified T : Component> with(action: (T) -> Unit) {
+        val component = get(T::class) ?: return
+        action.invoke(component)
+    }
+
     inline fun <reified T : Component> has(): Boolean =
         components.contains(T::class)
 

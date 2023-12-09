@@ -30,7 +30,11 @@ class RangedWeaponLogic(private val world: World) : WeaponLogic {
         applySpread(target, properties)
         applyRecoil(target, weapon)
 
-        val start = shooter.pos.add(weapon.offset)
+        val start = shooter.pos
+        shooter.with { offset: RangedWeaponOffset ->
+            start.add(offset.x, offset.y, offset.z)
+        }
+
         val velocity = Vector3(target)
             .sub(start)
             .nor()

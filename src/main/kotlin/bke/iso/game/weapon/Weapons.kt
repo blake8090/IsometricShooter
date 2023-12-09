@@ -22,7 +22,7 @@ class Weapons(
         val inventory = actor.getOrPut(Inventory())
         val properties = assets.get<WeaponProperties>(name)
         if (properties is RangedWeaponProperties) {
-            val weaponItem = RangedWeaponItem(name, properties.magSize, Vector3(0f, 0f, 0.7f))
+            val weaponItem = RangedWeaponItem(name, properties.magSize)
             inventory.selectedWeapon = weaponItem
         }
     }
