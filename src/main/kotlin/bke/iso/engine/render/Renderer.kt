@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -202,7 +203,8 @@ class Renderer(
             pos = toScreen(worldPos),
             offset = Vector2(sprite.offsetX, sprite.offsetY),
             scale = sprite.scale,
-            alpha = sprite.alpha
+            alpha = sprite.alpha,
+            rotation = sprite.rotation
         )
     }
 
@@ -211,23 +213,25 @@ class Renderer(
         pos: Vector2,
         offset: Vector2,
         scale: Float = 1f,
-        alpha: Float = 1f
+        alpha: Float = 1f,
+        rotation: Float = 0f
     ) {
         val texture = assets.get<Texture>(name)
         val screenPos = Vector2(pos).sub(offset)
-
-        val width = texture.width * scale
-        val height = texture.height * scale
-        // when scaling textures, make sure texture is still centered on origin point
-        if (scale != 1f) {
-            val diffX = texture.width - width
-            val diffY = texture.height - height
-            screenPos.add(diffX / 2f, diffY / 2f)
-        }
-
         val color = Color(batch.color.r, batch.color.g, batch.color.b, alpha)
         batch.withColor(color) {
-            batch.draw(texture, screenPos.x, screenPos.y, width, height)
+            batch.draw(
+                /* region = */ TextureRegion(texture),
+                /* x = */ screenPos.x,
+                /* y = */ screenPos.y,
+                /* originX = */ texture.width / 2f,
+                /* originY = */ texture.height / 2f,
+                /* width = */ texture.width.toFloat(),
+                /* height = */ texture.height.toFloat(),
+                /* scaleX = */ scale,
+                /* scaleY = */ scale,
+                /* rotation = */ rotation
+            )
         }
     }
 }

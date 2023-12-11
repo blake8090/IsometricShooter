@@ -1,14 +1,17 @@
 package bke.iso.game.weapon
 
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.math.toScreen
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
+import kotlin.math.atan2
 import kotlin.math.min
 import kotlin.random.Random.Default.nextFloat
 
@@ -68,16 +71,28 @@ class RangedWeaponLogic(private val world: World) : WeaponLogic {
         world.actors.create(
             start,
             Bullet(shooter.id, properties.damage, start),
-            Sprite("bullet.png", 8f, 8f),
+            Sprite(
+                "bullet2.png",
+                offsetX = 16f,
+                offsetY = 16f,
+                scale = 1.2f,
+                rotation = calculateBulletRotationDegrees(start, target)
+            ),
             PhysicsBody(PhysicsMode.GHOST, velocity),
             Collider(
-                Vector3(0.125f, 0.125f, 0.125f),
-                Vector3(0f, -0.125f, 0f)
+                size = Vector3(0.125f, 0.125f, 0.125f),
+                offset = Vector3(0f, -0.125f, 0f)
             ),
             DebugSettings().apply {
                 zAxis = false
             }
         )
+    }
+
+    private fun calculateBulletRotationDegrees(start: Vector3, target: Vector3): Float {
+        val difference = toScreen(target).sub(toScreen(start))
+        val angleRadians = atan2(difference.y, difference.x)
+        return angleRadians * MathUtils.radiansToDegrees
     }
 
     private fun applySpread(target: Vector3, properties: RangedWeaponProperties) {
