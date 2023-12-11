@@ -68,15 +68,22 @@ class RangedWeaponLogic(private val world: World) : WeaponLogic {
             .nor()
             .scl(properties.velocity)
 
+        val rotation =
+            if (properties.bulletRotation) {
+                calculateBulletRotationDegrees(start, target)
+            } else {
+                0f
+            }
+
         world.actors.create(
             start,
             Bullet(shooter.id, properties.damage, start),
             Sprite(
-                "bullet2.png",
+                properties.bulletTexture,
                 offsetX = 16f,
                 offsetY = 16f,
-                scale = 1.2f,
-                rotation = calculateBulletRotationDegrees(start, target)
+                scale = 1f,
+                rotation = rotation
             ),
             PhysicsBody(PhysicsMode.GHOST, velocity),
             Collider(

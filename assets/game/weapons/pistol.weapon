@@ -8,5 +8,7 @@
   velocity: 50,
   spread: 0.05,
   recoil: 0.4,
-  reloadTime: 1.5
+  reloadTime: 1.5,
+  bulletTexture: "bullet2.png",
+  bulletRotation: true
 }
