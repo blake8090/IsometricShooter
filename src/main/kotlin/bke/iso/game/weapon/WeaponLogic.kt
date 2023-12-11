@@ -8,6 +8,7 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 import kotlin.math.min
 import kotlin.random.Random.Default.nextFloat
 
@@ -17,19 +18,43 @@ interface WeaponLogic
 
 class RangedWeaponLogic(private val world: World) : WeaponLogic {
 
+    private val log = KotlinLogging.logger {}
+
     fun shoot(
         shooter: Actor,
         target: Vector3,
         weapon: RangedWeaponItem,
         properties: RangedWeaponProperties
     ) {
-        if (weapon.ammo <= 0 || weapon.coolDown > 0f) {
+        if (weapon.ammo <= 0 || weapon.coolDown > 0f || weapon.reloadCoolDown > 0f) {
             return
         }
 
         applySpread(target, properties)
         applyRecoil(target, weapon)
+        createBullet(shooter, target, properties)
+        weapon.ammo--
+        weapon.coolDown = calculateCoolDown(properties)
+        weapon.recoil = min(weapon.recoil + properties.recoil, MAX_RECOIL)
 
+        if (weapon.ammo <= 0) {
+            reload(weapon, properties)
+        }
+    }
+
+    fun reload(weapon: RangedWeaponItem, properties: RangedWeaponProperties) {
+        if (weapon.reloadCoolDown > 0f) {
+            return
+        }
+        log.debug { "reloading" }
+        weapon.reloadCoolDown = properties.reloadTime
+    }
+
+    private fun createBullet(
+        shooter: Actor,
+        target: Vector3,
+        properties: RangedWeaponProperties
+    ) {
         val start = shooter.pos
         shooter.with { offset: RangedWeaponOffset ->
             start.add(offset.x, offset.y, offset.z)
@@ -53,10 +78,6 @@ class RangedWeaponLogic(private val world: World) : WeaponLogic {
                 zAxis = false
             }
         )
-
-        weapon.ammo--
-        weapon.coolDown = calculateCoolDown(properties)
-        weapon.recoil = min(weapon.recoil + properties.recoil, MAX_RECOIL)
     }
 
     private fun applySpread(target: Vector3, properties: RangedWeaponProperties) {

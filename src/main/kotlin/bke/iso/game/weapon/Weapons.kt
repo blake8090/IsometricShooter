@@ -45,4 +45,13 @@ class Weapons(
         }
         logic.shoot(actor, target, weaponItem, properties)
     }
+
+    fun reload(weapon: RangedWeaponItem) {
+        val name = weapon.name
+        val properties = assets.get<WeaponProperties>(name) as RangedWeaponProperties
+        val logic = checkNotNull(map[name] as? RangedWeaponLogic) {
+            "Ranged weapon '$name' not found"
+        }
+        logic.reload(weapon, properties)
+    }
 }

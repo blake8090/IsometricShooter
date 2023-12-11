@@ -57,13 +57,17 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
         healthBar.value = health
     }
 
-    fun updateWeaponText(weaponItem: WeaponItem) {
+    fun updateWeaponText(weapon: WeaponItem) {
         val builder = StringBuilder()
-        builder.append(weaponItem.name)
+        builder.append(weapon.name)
 
-        val properties = assets.get<WeaponProperties>(weaponItem.name)
-        if (weaponItem is RangedWeaponItem && properties is RangedWeaponProperties) {
-            builder.append(": ${weaponItem.ammo}/${properties.magSize}")
+        val properties = assets.get<WeaponProperties>(weapon.name)
+        if (weapon is RangedWeaponItem && properties is RangedWeaponProperties) {
+            if (weapon.reloadCoolDown > 0f) {
+                builder.append(": reloading")
+            } else {
+                builder.append(": ${weapon.ammo}/${properties.magSize}")
+            }
         }
 
         weaponLabel.setText(builder)

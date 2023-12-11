@@ -16,6 +16,8 @@ import bke.iso.game.weapon.WeaponProperties
 import bke.iso.game.weapon.Weapons
 
 const val SHOOT_ACTION = "shoot"
+const val RELOAD_ACTION = "reload"
+
 private const val BARREL_HEIGHT = 0.7f
 
 class PlayerWeaponSystem(
@@ -42,6 +44,10 @@ class PlayerWeaponSystem(
             val properties = assets.get<WeaponProperties>(weaponItem.name) as RangedWeaponProperties
             if (canShoot(triggerState, properties)) {
                 shoot(actor)
+            }
+
+            input.onAction(RELOAD_ACTION) {
+                weapons.reload(weaponItem)
             }
         }
 

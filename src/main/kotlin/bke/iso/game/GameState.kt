@@ -26,6 +26,7 @@ import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.player.PlayerWeaponSystem
+import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
@@ -49,7 +50,7 @@ class GameState(override val game: Game) : State() {
     private val weapons = Weapons(game.assets, game.world)
 
     override val systems: Set<System> = setOf(
-        WeaponSystem(game.world),
+        WeaponSystem(game.world, game.assets),
         PlayerSystem(game.input, game.world, game.renderer),
         PlayerWeaponSystem(game.world, game.input, game.assets, game.renderer, weapons),
         TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
@@ -77,7 +78,7 @@ class GameState(override val game: Game) : State() {
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
-            weapons.equip(actor, "rifle")
+            weapons.equip(actor, "pistol")
         }
     }
 
@@ -110,8 +111,9 @@ class GameState(override val game: Game) : State() {
                 "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
                 "placeBouncyBall" to KeyBinding(Input.Keys.Z, ButtonState.PRESSED),
                 "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
+                "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED),
                 SHOOT_ACTION to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
-                "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED)
+                RELOAD_ACTION to KeyBinding(Input.Keys.R, ButtonState.PRESSED)
             )
             bind(
                 "moveY",
@@ -132,8 +134,9 @@ class GameState(override val game: Game) : State() {
                 "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
                 "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
                 "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
+                "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED),
                 SHOOT_ACTION to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
-                "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED)
+                RELOAD_ACTION to ControllerBinding(ControllerButton.X.ordinal, ButtonState.PRESSED)
             )
         }
     }

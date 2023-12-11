@@ -7,5 +7,6 @@
   fireRate: 200,
   velocity: 50,
   spread: 0.05,
-  recoil: 0.2
+  recoil: 0.4,
+  reloadTime: 1.5
 }

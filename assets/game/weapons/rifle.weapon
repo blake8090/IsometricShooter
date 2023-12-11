@@ -3,9 +3,10 @@
   name: "rifle",
   fireType: "auto",
   damage: 0.5,
-  magSize: 100,
-  fireRate: 900,
+  magSize: 30,
+  fireRate: 800,
   velocity: 60,
   spread: 0.2,
-  recoil: 0.1
+  recoil: 0.1,
+  reloadTime: 2
 }

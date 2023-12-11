@@ -39,7 +39,8 @@ data class RangedWeaponProperties(
     val fireRate: Float,
     val velocity: Float,
     val spread: Float,
-    val recoil: Float
+    val recoil: Float,
+    val reloadTime: Float
 ) : WeaponProperties()
 
 class WeaponPropertiesCache(private val serializer: Serializer) : AssetCache<WeaponProperties>() {

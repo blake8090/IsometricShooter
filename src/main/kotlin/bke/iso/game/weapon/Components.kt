@@ -24,6 +24,7 @@ data class RangedWeaponItem(
     override val name: String,
     var ammo: Int = 0,
     var coolDown: Float = 0f,
+    var reloadCoolDown: Float = 0f,
     var recoil: Float = 0f
 ) : WeaponItem()
 
