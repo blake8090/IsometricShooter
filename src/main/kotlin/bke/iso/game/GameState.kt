@@ -1,7 +1,5 @@
 package bke.iso.game
 
-import bke.iso.engine.math.toScreen
-import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -10,9 +8,6 @@ import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.render.DrawActorEvent
-import bke.iso.engine.render.makePixelTexture
-import bke.iso.engine.render.withColor
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
@@ -21,28 +16,21 @@ import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.Combat
-import bke.iso.game.combat.Health
-import bke.iso.game.combat.HealthBar
-import bke.iso.game.combat.PlayerDamageEvent
+import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
 import bke.iso.game.ui.CrosshairPointer
-import bke.iso.game.ui.GameHUD
 import bke.iso.game.weapon.BulletSystem
-import bke.iso.game.weapon.Inventory
 import bke.iso.game.weapon.WeaponPropertiesCache
 import bke.iso.game.weapon.WeaponSystem
 import bke.iso.game.weapon.Weapons
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 
 class GameState(override val game: Game) : State() {
 
-    private val gameHud = GameHUD(game.assets)
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer)
 
     private val combat = Combat(game.world, game.events)
@@ -58,6 +46,9 @@ class GameState(override val game: Game) : State() {
         ShadowSystem(game.world, game.collisions)
     )
 
+    private val hud = HudModule(game.world, game.assets)
+    override val modules = setOf(hud)
+
     override suspend fun load() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
@@ -71,35 +62,11 @@ class GameState(override val game: Game) : State() {
         bindInput()
 
         game.renderer.setPointer(crosshair)
-        game.ui.setScreen(gameHud)
-        gameHud.updateHealth(PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
+        hud.init(game.ui, PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
             weapons.equip(actor, "pistol")
-        }
-    }
-
-    override fun update(deltaTime: Float) {
-        super.update(deltaTime)
-
-        val weaponItem = game.world.actors
-            .find<Player>()
-            ?.get<Inventory>()
-            ?.selectedWeapon
-            ?: return
-        gameHud.updateWeaponText(weaponItem)
-    }
-
-    override fun handleEvent(event: Event) {
-        when (event) {
-            is DrawActorEvent -> {
-                drawHealthBar(event.actor, event.batch)
-            }
-
-            is PlayerDamageEvent -> {
-                gameHud.updateHealth(event.health, PLAYER_MAX_HEALTH)
-            }
         }
     }
 
@@ -136,33 +103,6 @@ class GameState(override val game: Game) : State() {
                 SHOOT_ACTION to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
                 RELOAD_ACTION to ControllerBinding(ControllerButton.X.ordinal, ButtonState.PRESSED)
             )
-        }
-    }
-
-    private fun drawHealthBar(actor: Actor, batch: PolygonSpriteBatch) {
-        // we already display the player's health in the HUD!
-        if (actor.has<Player>()) {
-            return
-        }
-
-        val healthBarWidth = 32f
-        val healthBarHeight = 8f
-
-        val health = actor.get<Health>() ?: return
-        val healthBar = actor.get<HealthBar>() ?: return
-
-        val pixel = makePixelTexture()
-        val pos = toScreen(actor.pos)
-            .sub(healthBar.offsetX, healthBar.offsetY)
-
-        batch.withColor(Color.RED) {
-            batch.draw(pixel, pos.x, pos.y, healthBarWidth, healthBarHeight)
-        }
-
-        batch.withColor(Color.GREEN) {
-            val ratio = health.value / health.maxValue
-            val width = healthBarWidth * ratio
-            batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
         }
     }
 

@@ -1,4 +1,4 @@
-package bke.iso.game.ui
+package bke.iso.game.hud
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
@@ -13,12 +13,11 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 
-class GameHUD(assets: Assets) : UIScreen(assets) {
+class HudScreen(assets: Assets) : UIScreen(assets) {
 
     private lateinit var healthBar: HudHealthBar
     private lateinit var weaponLabel: Label
@@ -78,7 +77,7 @@ class GameHUD(assets: Assets) : UIScreen(assets) {
 
         skin.add("default", assets.fonts[FontOptions("roboto.ttf", 25f, Color.WHITE)])
 
-        skin.add("default", LabelStyle().apply {
+        skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")
             background = skin.newDrawable("pixel", Color.DARK_GRAY)
         })

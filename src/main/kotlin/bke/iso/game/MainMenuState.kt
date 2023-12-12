@@ -3,6 +3,7 @@ package bke.iso.game
 import bke.iso.editor.EditorState
 import bke.iso.engine.Event
 import bke.iso.engine.Game
+import bke.iso.engine.Module
 import bke.iso.engine.State
 import bke.iso.engine.System
 import bke.iso.engine.ui.loading.SimpleLoadingScreen
@@ -11,6 +12,7 @@ import bke.iso.game.ui.MainMenuScreen
 class MainMenuState(override val game: Game) : State() {
 
     override val systems: Set<System> = emptySet()
+    override val modules = emptySet<Module>()
 
     override suspend fun load() {
         game.ui.setScreen(MainMenuScreen(game.assets, game.events))

@@ -15,6 +15,7 @@ import bke.iso.editor.event.SelectTilePrefabEvent
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.Game
+import bke.iso.engine.Module
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -34,6 +35,7 @@ import mu.KotlinLogging
 class EditorState(override val game: Game) : State() {
 
     override val systems = emptySet<System>()
+    override val modules = emptySet<Module>()
 
     private val log = KotlinLogging.logger {}
 
