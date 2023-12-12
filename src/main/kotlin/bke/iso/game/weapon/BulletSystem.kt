@@ -10,7 +10,7 @@ import bke.iso.game.combat.Combat
 
 private const val MAX_BULLET_DISTANCE = 50f
 
-class Bullet2System(
+class BulletSystem(
     private val world: World,
     private val combat: Combat,
     private val collisions: Collisions
@@ -35,7 +35,7 @@ class Bullet2System(
 
     private fun handleCollision(actor: Actor, bullet: Bullet, obj: GameObject) {
         if (obj is Actor) {
-            if (obj.has<Bullet>() || obj.has<bke.iso.game.actor.Bullet>() || obj.id == bullet.shooterId) {
+            if (obj.has<Bullet>() || obj.id == bullet.shooterId) {
                 return
             }
             combat.applyDamage(obj, bullet.damage)

@@ -14,7 +14,6 @@ import bke.iso.engine.render.DrawActorEvent
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.Actor
-import bke.iso.game.actor.BulletSystem
 import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.player.PLAYER_MAX_HEALTH
@@ -30,7 +29,7 @@ import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.ui.GameHUD
-import bke.iso.game.weapon.Bullet2System
+import bke.iso.game.weapon.BulletSystem
 import bke.iso.game.weapon.Inventory
 import bke.iso.game.weapon.WeaponPropertiesCache
 import bke.iso.game.weapon.WeaponSystem
@@ -53,9 +52,8 @@ class GameState(override val game: Game) : State() {
         WeaponSystem(game.world, game.assets),
         PlayerSystem(game.input, game.world, game.renderer),
         PlayerWeaponSystem(game.world, game.input, game.assets, game.renderer, weapons),
-        TurretSystem(game.world, game.collisions, game.renderer.debug, combat),
+        TurretSystem(game.world, game.collisions, game.renderer.debug, weapons),
         BulletSystem(game.world, combat, game.collisions),
-        Bullet2System(game.world, combat, game.collisions),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions)
     )
