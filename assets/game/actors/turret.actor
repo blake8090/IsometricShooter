@@ -10,9 +10,7 @@
       scale: 1.0
     },
     {
-      type: "turret",
-      elapsedCooldownTime: 0.0,
-      canShoot: true
+      type: "turret"
     },
     {
       type: "collider",

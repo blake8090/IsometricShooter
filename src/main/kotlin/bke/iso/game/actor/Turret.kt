@@ -7,8 +7,10 @@ import bke.iso.engine.render.DebugRenderer
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
-import bke.iso.game.combat.Combat
 import bke.iso.game.player.Player
+import bke.iso.game.weapon.Inventory
+import bke.iso.game.weapon.RangedWeaponOffset
+import bke.iso.game.weapon.Weapons
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
@@ -17,48 +19,36 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("turret")
-data class Turret(
-    var elapsedCooldownTime: Float = 0f,
-    var canShoot: Boolean = true
-) : Component
+class Turret : Component
 
 private const val RANGE_RADIUS = 12f
-private const val MINIMUM_COOLDOWN_SECONDS = 0.8f
+private const val GUN_HEIGHT = 0.7f
 
 class TurretSystem(
     private val world: World,
     private val collisions: Collisions,
     private val debugRenderer: DebugRenderer,
-    private val combat: Combat
+    private val weapons: Weapons
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.actors.each<Turret> { actor, turret ->
-            turret.elapsedCooldownTime += deltaTime
-            if (turret.elapsedCooldownTime >= MINIMUM_COOLDOWN_SECONDS) {
-                turret.elapsedCooldownTime = 0f
-                turret.canShoot = true
-            }
-
-            debugRenderer.addSphere(actor.pos, RANGE_RADIUS, Color.GOLD)
-            engagePlayer(actor, turret)
+        world.actors.each<Turret> { actor, _ ->
+            update(actor)
         }
     }
 
-    private fun engagePlayer(turretActor: Actor, turret: Turret) {
-        val player = world.actors.find<Player>() ?: return
-        if (withinRange(turretActor, player) && canSee(turretActor, player)) {
-            shoot(turretActor, turret, player)
+    private fun update(turretActor: Actor) {
+        if (!turretActor.has<Inventory>()) {
+            weapons.equip(turretActor, "turret")
+            turretActor.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
         }
-    }
 
-    private fun shoot(turretActor: Actor, turret: Turret, target: Actor) {
-        if (!turret.canShoot) {
-            return
+        debugRenderer.addSphere(turretActor.pos, RANGE_RADIUS, Color.GOLD)
+
+        val playerActor = world.actors.find<Player>() ?: return
+        if (withinRange(turretActor, playerActor) && canSee(turretActor, playerActor)) {
+            weapons.shoot(turretActor, getTargetPos(playerActor))
         }
-        combat.shoot(turretActor, getTargetPos(target), BulletType.TURRET)
-        turret.elapsedCooldownTime = 0f
-        turret.canShoot = false
     }
 
     private fun withinRange(actor: Actor, target: Actor) =
@@ -66,6 +56,7 @@ class TurretSystem(
 
     private fun canSee(actor: Actor, target: Actor): Boolean {
         val start = actor.pos
+        start.z += GUN_HEIGHT
         val end = getTargetPos(target)
 
         val firstCollision = collisions

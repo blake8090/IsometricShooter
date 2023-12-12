@@ -1,0 +1,14 @@
+{
+  type: "ranged",
+  name: "turret",
+  fireType: "auto",
+  damage: 0.2,
+  magSize: 3,
+  fireRate: 600,
+  velocity: 30,
+  spread: 0.05,
+  recoil: 0.4,
+  reloadTime: 1,
+  bulletTexture: "bullet.png",
+  bulletRotation: true
+}

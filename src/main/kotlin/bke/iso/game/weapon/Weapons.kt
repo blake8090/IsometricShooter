@@ -4,11 +4,14 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 
 class Weapons(
     private val assets: Assets,
     world: World
 ) {
+
+    private val log = KotlinLogging.logger {}
 
     private val map = mutableMapOf<String, WeaponLogic>()
 
@@ -16,6 +19,7 @@ class Weapons(
         val rangedWeaponLogic = RangedWeaponLogic(world)
         map["pistol"] = rangedWeaponLogic
         map["rifle"] = rangedWeaponLogic
+        map["turret"] = rangedWeaponLogic
     }
 
     fun equip(actor: Actor, name: String) {
@@ -24,6 +28,7 @@ class Weapons(
         if (properties is RangedWeaponProperties) {
             val weaponItem = RangedWeaponItem(name, properties.magSize)
             inventory.selectedWeapon = weaponItem
+            log.debug { "Actor $actor equipped weapon '${weaponItem.name}'" }
         }
     }
 
