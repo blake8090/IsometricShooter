@@ -5,9 +5,9 @@ import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.get
-import bke.iso.game.weapon.RangedWeaponItem
+import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
-import bke.iso.game.weapon.WeaponItem
+import bke.iso.game.weapon.Weapon
 import bke.iso.game.weapon.WeaponProperties
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -56,12 +56,13 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
         healthBar.value = health
     }
 
-    fun updateWeaponText(weapon: WeaponItem) {
+    // TODO: move logic into hud module
+    fun updateWeaponText(weapon: Weapon) {
         val builder = StringBuilder()
         builder.append(weapon.name)
 
         val properties = assets.get<WeaponProperties>(weapon.name)
-        if (weapon is RangedWeaponItem && properties is RangedWeaponProperties) {
+        if (weapon is RangedWeapon && properties is RangedWeaponProperties) {
             if (weapon.reloadCoolDown > 0f) {
                 builder.append(": reloading")
             } else {

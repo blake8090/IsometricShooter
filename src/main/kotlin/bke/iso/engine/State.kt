@@ -12,8 +12,8 @@ interface Module {
 abstract class State {
 
     protected abstract val game: Game
-    protected abstract val systems: Set<System>
     protected abstract val modules: Set<Module>
+    protected abstract val systems: Set<System>
 
     open suspend fun load() {}
 

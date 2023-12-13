@@ -15,23 +15,6 @@ data class Bullet(
     val start: Vector3
 ) : Component
 
-// TODO: rename to Weapon?
-sealed class WeaponItem {
-    abstract val name: String
-}
-
-data class RangedWeaponItem(
-    override val name: String,
-    var ammo: Int = 0,
-    var coolDown: Float = 0f,
-    var reloadCoolDown: Float = 0f,
-    var recoil: Float = 0f
-) : WeaponItem()
-
-data class Inventory(
-    var selectedWeapon: WeaponItem? = null
-) : Component
-
 /**
  * Provides an offset for projectiles when shooting a ranged weapon, relative to an actor's position.
  */
@@ -39,4 +22,20 @@ data class RangedWeaponOffset(
     val x: Float = 0f,
     val y: Float = 0f,
     val z: Float = 0f
+) : Component
+
+interface Weapon {
+    val name: String
+}
+
+data class RangedWeapon(
+    override val name: String,
+    var ammo: Int = 0,
+    var coolDown: Float = 0f,
+    var reloadCoolDown: Float = 0f,
+    var recoil: Float = 0f
+) : Weapon
+
+data class Inventory(
+    var selectedWeapon: Weapon? = null
 ) : Component

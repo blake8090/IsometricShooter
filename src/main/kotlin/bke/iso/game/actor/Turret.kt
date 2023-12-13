@@ -1,5 +1,6 @@
 package bke.iso.game.actor
 
+import bke.iso.engine.Game
 import bke.iso.engine.System
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
@@ -9,8 +10,9 @@ import bke.iso.engine.world.Component
 import bke.iso.engine.world.World
 import bke.iso.game.player.Player
 import bke.iso.game.weapon.Inventory
+import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponOffset
-import bke.iso.game.weapon.Weapons
+import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
@@ -28,7 +30,8 @@ class TurretSystem(
     private val world: World,
     private val collisions: Collisions,
     private val debugRenderer: DebugRenderer,
-    private val weapons: Weapons
+    private val events: Game.Events,
+    private val weapons: WeaponsModule
 ) : System {
 
     override fun update(deltaTime: Float) {
@@ -47,7 +50,12 @@ class TurretSystem(
 
         val playerActor = world.actors.find<Player>() ?: return
         if (withinRange(turretActor, playerActor) && canSee(turretActor, playerActor)) {
-            weapons.shoot(turretActor, getTargetPos(playerActor))
+            events.fire(WeaponsModule.ShootEvent(turretActor, getTargetPos(playerActor)))
+        }
+
+        val weapon = weapons.getSelectedWeapon(turretActor)
+        if (weapon is RangedWeapon && weapon.ammo <= 0f) {
+            events.fire(WeaponsModule.ReloadEvent(turretActor))
         }
     }
 

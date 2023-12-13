@@ -10,10 +10,10 @@ import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
+import bke.iso.game.PLAYER_MAX_HEALTH
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.combat.PlayerDamageEvent
-import bke.iso.game.player.PLAYER_MAX_HEALTH
 import bke.iso.game.player.Player
 import bke.iso.game.weapon.Inventory
 import com.badlogic.gdx.graphics.Color

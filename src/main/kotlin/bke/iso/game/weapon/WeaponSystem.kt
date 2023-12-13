@@ -22,7 +22,7 @@ class WeaponSystem(
 
     private fun update(inventory: Inventory, deltaTime: Float) {
         val weapon = inventory.selectedWeapon
-        if (weapon is RangedWeaponItem) {
+        if (weapon is RangedWeapon) {
             weapon.coolDown = max(0f, weapon.coolDown - deltaTime)
             weapon.recoil = max(0f, weapon.recoil - deltaTime)
 
@@ -32,7 +32,7 @@ class WeaponSystem(
         }
     }
 
-    private fun reloadWeapon(weapon: RangedWeaponItem, deltaTime: Float) {
+    private fun reloadWeapon(weapon: RangedWeapon, deltaTime: Float) {
         weapon.reloadCoolDown = max(0f, weapon.reloadCoolDown - deltaTime)
 
         if (weapon.reloadCoolDown == 0f) {

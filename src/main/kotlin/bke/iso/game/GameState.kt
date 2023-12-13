@@ -11,7 +11,6 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.world.Actor
 import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
-import bke.iso.game.player.PLAYER_MAX_HEALTH
 import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
@@ -24,30 +23,31 @@ import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.weapon.BulletSystem
 import bke.iso.game.weapon.WeaponPropertiesCache
 import bke.iso.game.weapon.WeaponSystem
-import bke.iso.game.weapon.Weapons
+import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 
+const val PLAYER_MAX_HEALTH: Float = 5f
+
 class GameState(override val game: Game) : State() {
 
-    private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer)
-
     private val combat = Combat(game.world, game.events)
-    private val weapons = Weapons(game.assets, game.world)
+    private val hud = HudModule(game.world, game.assets)
+    private val weapons = WeaponsModule(game.assets, game.world)
+    override val modules = setOf(hud, weapons)
 
     override val systems: Set<System> = setOf(
         WeaponSystem(game.world, game.assets),
         PlayerSystem(game.input, game.world, game.renderer),
-        PlayerWeaponSystem(game.world, game.input, game.assets, game.renderer, weapons),
-        TurretSystem(game.world, game.collisions, game.renderer.debug, weapons),
+        PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weapons),
+        TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weapons),
         BulletSystem(game.world, combat, game.collisions),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions)
     )
 
-    private val hud = HudModule(game.world, game.assets)
-    override val modules = setOf(hud)
+    private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weapons)
 
     override suspend fun load() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
@@ -66,7 +66,7 @@ class GameState(override val game: Game) : State() {
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
-            weapons.equip(actor, "pistol")
+            weapons.equip(actor, "rifle")
         }
     }
 
