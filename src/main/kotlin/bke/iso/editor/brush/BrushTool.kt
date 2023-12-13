@@ -13,6 +13,7 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.withFirstInstance
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -120,9 +121,3 @@ class BrushTool(
 
     private class ActorSelection(val prefab: ActorPrefab) : Selection()
 }
-
-// TODO: replace other filterIsInstance -> let usages with this
-private inline fun <reified T : Any> Collection<*>.withFirstInstance(action: (T) -> Unit) =
-    filterIsInstance<T>()
-        .firstOrNull()
-        ?.let { instance -> action.invoke(instance) }
