@@ -31,7 +31,7 @@ class TurretSystem(
     private val collisions: Collisions,
     private val debugRenderer: DebugRenderer,
     private val events: Game.Events,
-    private val weapons: WeaponsModule
+    private val weaponsModule: WeaponsModule
 ) : System {
 
     override fun update(deltaTime: Float) {
@@ -42,7 +42,7 @@ class TurretSystem(
 
     private fun update(turretActor: Actor) {
         if (!turretActor.has<Inventory>()) {
-            weapons.equip(turretActor, "turret")
+            weaponsModule.equip(turretActor, "turret")
             turretActor.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
         }
 
@@ -53,7 +53,7 @@ class TurretSystem(
             events.fire(WeaponsModule.ShootEvent(turretActor, getTargetPos(playerActor)))
         }
 
-        val weapon = weapons.getSelectedWeapon(turretActor)
+        val weapon = weaponsModule.getSelectedWeapon(turretActor)
         if (weapon is RangedWeapon && weapon.ammo <= 0f) {
             events.fire(WeaponsModule.ReloadEvent(turretActor))
         }

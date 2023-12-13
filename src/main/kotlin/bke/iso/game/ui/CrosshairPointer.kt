@@ -22,7 +22,7 @@ class CrosshairPointer(
     private val input: Input,
     private val world: World,
     private val renderer: Renderer,
-    private val weapons: WeaponsModule
+    private val weaponsModule: WeaponsModule
 ) : Pointer() {
 
     private lateinit var texture: Texture
@@ -77,7 +77,7 @@ class CrosshairPointer(
 
     private fun getWeaponRecoil(): Float {
         val playerActor = world.actors.find<Player>() ?: return 0f
-        val weapon = weapons.getSelectedWeapon(playerActor)
+        val weapon = weaponsModule.getSelectedWeapon(playerActor)
         return if (weapon is RangedWeapon) {
             weapon.recoil
         } else {

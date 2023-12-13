@@ -22,7 +22,7 @@ class PlayerWeaponSystem(
     private val input: Input,
     private val renderer: Renderer,
     private val events: Game.Events,
-    private val weapons: WeaponsModule
+    private val weaponsModule: WeaponsModule
 ) : System {
 
     private var previousTriggerState = false
@@ -48,12 +48,12 @@ class PlayerWeaponSystem(
     }
 
     private fun canShoot(actor: Actor, triggerState: Boolean): Boolean {
-        val weapon = weapons.getSelectedWeapon(actor)
+        val weapon = weaponsModule.getSelectedWeapon(actor)
         if (weapon !is RangedWeapon) {
             return false
         }
 
-        val properties = weapons.getProperties(weapon)
+        val properties = weaponsModule.getProperties(weapon)
         return when (properties.fireType) {
             FireType.SEMI -> {
                 !previousTriggerState && triggerState // only fire when trigger was just pressed
@@ -73,7 +73,7 @@ class PlayerWeaponSystem(
         actor.add(RangedWeaponOffset(0f, 0f, BARREL_HEIGHT))
         events.fire(WeaponsModule.ShootEvent(actor, target))
 
-        val weapon = weapons.getSelectedWeapon(actor)
+        val weapon = weaponsModule.getSelectedWeapon(actor)
         if (weapon is RangedWeapon && weapon.ammo <= 0f) {
             events.fire(WeaponsModule.ReloadEvent(actor))
         }

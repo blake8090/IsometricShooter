@@ -2,17 +2,25 @@ package bke.iso.game.combat
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
+import bke.iso.engine.Module
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.player.Player
 import mu.KotlinLogging
 import kotlin.math.max
 
-data class PlayerDamageEvent(val health: Float) : Event
-
-class Combat(private val world: World, private val events: Game.Events) {
+class CombatModule(
+    private val world: World,
+    private val events: Game.Events
+) : Module {
 
     private val log = KotlinLogging.logger {}
+
+    override fun update(deltaTime: Float) {
+    }
+
+    override fun handleEvent(event: Event) {
+    }
 
     fun applyDamage(actor: Actor, damage: Float) {
         val health = actor.get<Health>() ?: return
@@ -35,4 +43,6 @@ class Combat(private val world: World, private val events: Game.Events) {
         world.actors.delete(actor)
         log.debug { "Actor $actor has been destroyed" }
     }
+
+    data class PlayerDamageEvent(val health: Float) : Event
 }

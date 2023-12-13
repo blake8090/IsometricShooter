@@ -14,7 +14,7 @@ import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
-import bke.iso.game.combat.Combat
+import bke.iso.game.combat.CombatModule
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
@@ -32,22 +32,23 @@ const val PLAYER_MAX_HEALTH: Float = 5f
 
 class GameState(override val game: Game) : State() {
 
-    private val combat = Combat(game.world, game.events)
-    private val hud = HudModule(game.world, game.assets)
-    private val weapons = WeaponsModule(game.assets, game.world)
-    override val modules = setOf(hud, weapons)
+    private val combatModule = CombatModule(game.world, game.events)
+    private val hudModule = HudModule(game.world, game.assets)
+    private val weaponsModule = WeaponsModule(game.assets, game.world)
+
+    override val modules = setOf(hudModule, weaponsModule, combatModule)
 
     override val systems: Set<System> = setOf(
         WeaponSystem(game.world, game.assets),
         PlayerSystem(game.input, game.world, game.renderer),
-        PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weapons),
-        TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weapons),
-        BulletSystem(game.world, combat, game.collisions),
+        PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
+        TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
+        BulletSystem(game.world, combatModule, game.collisions),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions)
     )
 
-    private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weapons)
+    private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
 
     override suspend fun load() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
@@ -62,11 +63,11 @@ class GameState(override val game: Game) : State() {
         bindInput()
 
         game.renderer.setPointer(crosshair)
-        hud.init(game.ui, PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
+        hudModule.init(game.ui, PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
-            weapons.equip(actor, "rifle")
+            weaponsModule.equip(actor, "rifle")
         }
     }
 

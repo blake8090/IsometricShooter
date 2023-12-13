@@ -6,13 +6,13 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
-import bke.iso.game.combat.Combat
+import bke.iso.game.combat.CombatModule
 
 private const val MAX_BULLET_DISTANCE = 50f
 
 class BulletSystem(
     private val world: World,
-    private val combat: Combat,
+    private val combatModule: CombatModule,
     private val collisions: Collisions
 ) : System {
 
@@ -38,7 +38,7 @@ class BulletSystem(
             if (obj.has<Bullet>() || obj.id == bullet.shooterId) {
                 return
             }
-            combat.applyDamage(obj, bullet.damage)
+            combatModule.applyDamage(obj, bullet.damage)
         }
         world.actors.delete(actor)
     }
