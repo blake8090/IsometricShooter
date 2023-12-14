@@ -1,6 +1,7 @@
 package bke.iso.engine.collision
 
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.sub2
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Actor
@@ -84,7 +85,7 @@ class Collisions(
         renderer.debug.addBox(area, 1f, Color.ORANGE)
 
         val direction = Vector3(segment.b)
-            .sub(segment.a)
+            .sub2(segment.a)
             .nor()
         val ray = Ray(segment.a, direction)
 

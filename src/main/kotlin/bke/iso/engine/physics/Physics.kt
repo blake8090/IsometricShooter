@@ -47,7 +47,8 @@ class Physics(
     }
 
     private fun move(actor: Actor, body: PhysicsBody, delta: Vector3) {
-        val collision = collisions.predictCollisions(actor, delta)
+        val predictCollisions = collisions.predictCollisions(actor, delta)
+        val collision = predictCollisions
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
             .firstOrNull { collision -> getPhysicsMode(collision.obj) != PhysicsMode.GHOST }
 

@@ -18,15 +18,15 @@ data class Box(
 ) {
 
     val min: Vector3 = Vector3(
-        pos.x - (size.x / 2f),
-        pos.y - (size.y / 2f),
-        pos.z - (size.z / 2f)
+        sub(pos.x, (size.x / 2f)),
+        sub(pos.y, (size.y / 2f)),
+        sub(pos.z, (size.z / 2f))
     )
 
     val max: Vector3 = Vector3(
-        pos.x + (size.x / 2f),
-        pos.y + (size.y / 2f),
-        pos.z + (size.z / 2f)
+        add(pos.x, (size.x / 2f)),
+        add(pos.y, (size.y / 2f)),
+        add(pos.z, (size.z / 2f))
     )
 
     val segments: List<Segment> = listOf(
@@ -106,7 +106,7 @@ data class Box(
 
     companion object {
         fun fromMinMax(min: Vector3, max: Vector3): Box {
-            val size = Vector3(max).sub(min)
+            val size = Vector3(max).sub2(min)
             val center = Vector3(size)
                 .scl(0.5f)
                 .add(min)

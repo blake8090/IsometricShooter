@@ -42,7 +42,7 @@ class WeaponsModule(
         val properties = assets.get<WeaponProperties>(name)
 
         if (properties is RangedWeaponProperties) {
-            val inventory = actor.getOrPut(Inventory())
+            val inventory = actor.getOrAdd(Inventory())
             inventory.selectedWeapon = RangedWeapon(name, properties.magSize)
             log.debug { "Actor $actor equipped weapon '$name'" }
         }

@@ -40,8 +40,8 @@ class GameState(override val game: Game) : State() {
 
     override val systems: Set<System> = setOf(
         WeaponSystem(game.world, game.assets),
-        PlayerSystem(game.input, game.world, game.renderer),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
+        PlayerSystem(game.input, game.world, game.renderer),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
         MovingPlatformSystem(game.world),
@@ -79,7 +79,8 @@ class GameState(override val game: Game) : State() {
                 "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
                 "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED),
                 SHOOT_ACTION to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
-                RELOAD_ACTION to KeyBinding(Input.Keys.R, ButtonState.PRESSED)
+                RELOAD_ACTION to KeyBinding(Input.Keys.R, ButtonState.PRESSED),
+                "crouch" to KeyBinding(Input.Keys.C, ButtonState.PRESSED)
             )
             bind(
                 "moveY",

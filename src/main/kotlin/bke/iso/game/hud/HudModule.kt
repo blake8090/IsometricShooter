@@ -11,9 +11,9 @@ import bke.iso.engine.ui.UI
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.PLAYER_MAX_HEALTH
+import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
-import bke.iso.game.combat.PlayerDamageEvent
 import bke.iso.game.player.Player
 import bke.iso.game.weapon.Inventory
 import com.badlogic.gdx.graphics.Color
@@ -41,7 +41,7 @@ class HudModule(
     }
 
     override fun handleEvent(event: Event) {
-        if (event is PlayerDamageEvent) {
+        if (event is CombatModule.PlayerDamageEvent) {
             hudScreen.updateHealth(event.health, PLAYER_MAX_HEALTH)
         } else if (event is DrawActorEvent) {
             drawHealthBar(event.actor, event.batch)

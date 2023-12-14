@@ -64,7 +64,7 @@ class Actor(
     inline fun <reified T : Component> get(): T? =
         components[T::class] as T?
 
-    inline fun <reified T : Component> getOrPut(defaultValue: T): T =
+    inline fun <reified T : Component> getOrAdd(defaultValue: T): T =
         components.getOrPut(T::class) { defaultValue } as T
 
     inline fun <reified T : Component> with(action: (T) -> Unit) {

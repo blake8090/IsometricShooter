@@ -9,7 +9,6 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.weapon.FireType
 import bke.iso.game.weapon.RangedWeapon
-import bke.iso.game.weapon.RangedWeaponOffset
 import bke.iso.game.weapon.WeaponsModule
 
 const val SHOOT_ACTION = "shoot"
@@ -70,7 +69,6 @@ class PlayerWeaponSystem(
         pos.z += BARREL_HEIGHT
         val target = toWorld(renderer.getPointerPos(), pos.z)
 
-        actor.add(RangedWeaponOffset(0f, 0f, BARREL_HEIGHT))
         events.fire(WeaponsModule.ShootEvent(actor, target))
 
         val weapon = weaponsModule.getSelectedWeapon(actor)
