@@ -9,11 +9,16 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.weapon.RangedWeaponOffset
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 
-private const val PLAYER_JUMP_FORCE = 6f
+private const val PLAYER_JUMP_FORCE = 5f
 private const val CONTROLLER_DEADZONE = 0.1f
+
+private const val BASE_MOVEMENT_SPEED = 3.5f
+private const val CROUCH_SPEED_MODIFIER = 0.6f
+private const val RUN_SPEED_MODIFIER = 1.6f
 
 class PlayerSystem(
     private val input: Input,
@@ -22,9 +27,6 @@ class PlayerSystem(
 ) : System {
 
     private val log = KotlinLogging.logger {}
-
-    private val walkSpeed = 5f
-    private val runSpeed = 10f
 
     override fun update(deltaTime: Float) {
         world.actors.each<Player> { actor, player ->
@@ -37,14 +39,30 @@ class PlayerSystem(
     }
 
     private fun updatePlayer(playerActor: Actor, player: Player) {
-        val horizontalSpeed =
-            if (input.poll("run") != 0f) {
-                runSpeed
-            } else {
-                walkSpeed
+        input.onAction("crouch") {
+            if (player.state == PlayerState.STAND) {
+                switchState(playerActor, player, PlayerState.CROUCH)
+            } else if (player.state == PlayerState.CROUCH) {
+                switchState(playerActor, player, PlayerState.STAND)
             }
+        }
+
+        if (player.state == PlayerState.NONE) {
+            switchState(playerActor, player, PlayerState.STAND)
+        }
 
         val direction = input.pollAxes(actionX = "moveX", actionY = "moveY", CONTROLLER_DEADZONE)
+        move(playerActor, player, direction)
+
+        renderer.setCameraPos(playerActor.pos)
+    }
+
+    private fun move(
+        playerActor: Actor,
+        player: Player,
+        direction: Vector2,
+    ) {
+        val horizontalSpeed = getHorizontalSpeed(player)
         val movement = Vector3(
             direction.x * horizontalSpeed,
             direction.y * horizontalSpeed,
@@ -58,20 +76,18 @@ class PlayerSystem(
         input.onAction("jump") {
             body.velocity.z = PLAYER_JUMP_FORCE
         }
+    }
 
-        if (player.state == PlayerState.NONE) {
-            switchState(playerActor, player, PlayerState.STAND)
+    private fun getHorizontalSpeed(player: Player): Float {
+        var speed = BASE_MOVEMENT_SPEED
+
+        if (player.state == PlayerState.CROUCH) {
+            speed *= CROUCH_SPEED_MODIFIER
+        } else if (input.poll("run") == 1f) {
+            speed *= RUN_SPEED_MODIFIER
         }
 
-        input.onAction("crouch") {
-            if (player.state == PlayerState.STAND) {
-                switchState(playerActor, player, PlayerState.CROUCH)
-            } else if (player.state == PlayerState.CROUCH) {
-                switchState(playerActor, player, PlayerState.STAND)
-            }
-        }
-
-        renderer.setCameraPos(playerActor.pos)
+        return speed
     }
 
     private fun switchState(playerActor: Actor, player: Player, state: PlayerState) {
