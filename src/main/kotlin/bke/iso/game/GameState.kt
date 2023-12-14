@@ -67,7 +67,7 @@ class GameState(override val game: Game) : State() {
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
-            weaponsModule.equip(actor, "rifle")
+            weaponsModule.equip(actor, "pistol")
         }
     }
 
@@ -102,8 +102,9 @@ class GameState(override val game: Game) : State() {
                 "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
                 "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
                 "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED),
-                SHOOT_ACTION to ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
-                RELOAD_ACTION to ControllerBinding(ControllerButton.X.ordinal, ButtonState.PRESSED)
+                SHOOT_ACTION to ControllerAxisBinding(ControllerAxis.TRIGGERRIGHT.ordinal),//ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
+                RELOAD_ACTION to ControllerBinding(ControllerButton.X.ordinal, ButtonState.PRESSED),
+                "crouch" to ControllerBinding(ControllerButton.LEFTSTICK.ordinal, ButtonState.PRESSED)
             )
         }
     }
