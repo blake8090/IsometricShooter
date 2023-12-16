@@ -28,12 +28,6 @@ import mu.KotlinLogging
 private const val VIRTUAL_WIDTH = 960f
 private const val VIRTUAL_HEIGHT = 540f
 
-// TODO: inner class?
-data class DrawActorEvent(
-    val actor: Actor,
-    val batch: PolygonSpriteBatch
-) : Event
-
 class Renderer(
     private val world: World,
     private val assets: Assets,
@@ -234,6 +228,11 @@ class Renderer(
             )
         }
     }
+
+    data class DrawActorEvent(
+        val actor: Actor,
+        val batch: PolygonSpriteBatch
+    ) : Event
 }
 
 fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
