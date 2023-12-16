@@ -15,13 +15,18 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.player.Player
-import bke.iso.game.weapon.Inventory
+import bke.iso.game.weapon.RangedWeapon
+import bke.iso.game.weapon.RangedWeaponProperties
+import bke.iso.game.weapon.Weapon
+import bke.iso.game.weapon.WeaponProperties
+import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 
 class HudModule(
     private val world: World,
-    assets: Assets
+    private val assets: Assets,
+    private val weaponsModule: WeaponsModule
 ) : Module {
 
     private val hudScreen = HudScreen(assets)
@@ -32,12 +37,33 @@ class HudModule(
     }
 
     override fun update(deltaTime: Float) {
-        val weaponItem = world.actors
-            .find<Player>()
-            ?.get<Inventory>()
-            ?.selectedWeapon
-            ?: return
-        hudScreen.updateWeaponText(weaponItem)
+        val text =
+            when (val weapon = findPlayerWeapon()) {
+                null -> "No weapon"
+                is RangedWeapon -> getRangedWeaponText(weapon)
+                else -> weapon.name
+            }
+        hudScreen.setWeaponText(text)
+    }
+
+    private fun findPlayerWeapon(): Weapon? {
+        val playerActor = world.actors.find<Player>() ?: return null
+        return weaponsModule.getSelectedWeapon(playerActor)
+    }
+
+    private fun getRangedWeaponText(weapon: RangedWeapon): String {
+        val properties = assets.get<WeaponProperties>(weapon.name) as RangedWeaponProperties
+
+        val builder = StringBuilder()
+        builder.append(weapon.name)
+
+        if (weapon.reloadCoolDown > 0f) {
+            builder.append(": reloading")
+        } else {
+            builder.append(": ${weapon.ammo}/${properties.magSize}")
+        }
+
+        return builder.toString()
     }
 
     override fun handleEvent(event: Event) {
