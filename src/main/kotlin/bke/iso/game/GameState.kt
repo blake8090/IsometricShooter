@@ -33,8 +33,8 @@ const val PLAYER_MAX_HEALTH: Float = 5f
 class GameState(override val game: Game) : State() {
 
     private val combatModule = CombatModule(game.world, game.events)
-    private val hudModule = HudModule(game.world, game.assets)
     private val weaponsModule = WeaponsModule(game.assets, game.world)
+    private val hudModule = HudModule(game.world, game.assets, weaponsModule)
 
     override val modules = setOf(hudModule, weaponsModule, combatModule)
 
@@ -67,7 +67,7 @@ class GameState(override val game: Game) : State() {
 
         game.world.actors.each { actor: Actor, _: Player ->
             game.world.createShadow(actor)
-            weaponsModule.equip(actor, "pistol")
+            weaponsModule.equip(actor, "rifle")
         }
     }
 

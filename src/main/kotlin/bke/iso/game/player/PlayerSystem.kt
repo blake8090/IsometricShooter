@@ -57,11 +57,7 @@ class PlayerSystem(
         renderer.setCameraPos(playerActor.pos)
     }
 
-    private fun move(
-        playerActor: Actor,
-        player: Player,
-        direction: Vector2,
-    ) {
+    private fun move(playerActor: Actor, player: Player, direction: Vector2) {
         val horizontalSpeed = getHorizontalSpeed(player)
         val movement = Vector3(
             direction.x * horizontalSpeed,
@@ -103,7 +99,7 @@ class PlayerSystem(
                 )
                 playerActor.add(
                     Collider(
-                        size = Vector3(0.4f, 0.4f, 1.4f),
+                        size = Vector3(0.4f, 0.4f, 1.5f),
                         offset = Vector3(-0.2f, -0.2f, 0.0f)
                     )
                 )
