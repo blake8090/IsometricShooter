@@ -1,5 +1,6 @@
 package bke.iso.editor
 
+import bke.iso.editor.camera.CameraModule
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.EditorEventWrapper
 import bke.iso.editor.event.OpenSceneEvent
@@ -21,7 +22,6 @@ import bke.iso.engine.world.Actor
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.encodeToString
 import mu.KotlinLogging
@@ -34,9 +34,6 @@ class EditorState(override val game: Game) : State() {
     private var gridWidth = 20
     private var gridLength = 20
 
-    private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.RIGHT)
-    private val cameraPanScale = Vector2(0.5f, 0.5f)
-
     private val referenceActors = ReferenceActors(game.world)
     private val layerModule = LayerModule(editorScreen)
     private val toolModule = ToolModule(
@@ -47,7 +44,8 @@ class EditorState(override val game: Game) : State() {
         layerModule,
         editorScreen
     )
-    override val modules = setOf(layerModule, toolModule)
+    private val cameraModule = CameraModule(game.renderer, game.input, editorScreen)
+    override val modules = setOf(layerModule, toolModule, cameraModule)
     override val systems = emptySet<System>()
 
     private val commands = ArrayDeque<EditorCommand>()
@@ -57,7 +55,8 @@ class EditorState(override val game: Game) : State() {
 
         game.assets.loadAsync("game")
         game.ui.setScreen(editorScreen)
-        game.input.addInputProcessor(mouseDragAdapter)
+
+        cameraModule.init()
 
         // TODO: init in layerModule?
         editorScreen.updateLayerLabel(layerModule.selectedLayer.toFloat())
@@ -82,7 +81,6 @@ class EditorState(override val game: Game) : State() {
         super.update(deltaTime)
 
         updateTool()
-        panCamera()
         drawGrid()
 
         val ctrlPressed =
@@ -108,18 +106,6 @@ class EditorState(override val game: Game) : State() {
         log.debug { "Executing ${command::class.simpleName}" }
         command.execute()
         commands.addFirst(command)
-    }
-
-    private fun panCamera() {
-        val delta = mouseDragAdapter.getDelta()
-        if (delta.isZero) {
-            return
-        }
-        val cameraDelta = Vector2(
-            delta.x * cameraPanScale.x * -1, // for some reason the delta's x-axis is inverted!
-            delta.y * cameraPanScale.y
-        )
-        game.renderer.moveCamera(cameraDelta)
     }
 
     private fun drawGrid() {

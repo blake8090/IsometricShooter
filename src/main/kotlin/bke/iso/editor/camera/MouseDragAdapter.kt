@@ -1,4 +1,4 @@
-package bke.iso.editor
+package bke.iso.editor.camera
 
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.math.Vector2
