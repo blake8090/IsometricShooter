@@ -8,7 +8,6 @@ import bke.iso.editor.event.SaveSceneEvent
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
-import bke.iso.editor.v2.LayerModule
 import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.Game
 import bke.iso.engine.scene.Scene
@@ -57,9 +56,7 @@ class EditorState(override val game: Game) : State() {
         game.ui.setScreen(editorScreen)
 
         cameraModule.init()
-
-        // TODO: init in layerModule?
-        editorScreen.updateLayerLabel(layerModule.selectedLayer.toFloat())
+        layerModule.init()
     }
 
     fun handleEvent(event: EditorEvent) =

@@ -1,4 +1,4 @@
-package bke.iso.editor.v2
+package bke.iso.editor
 
 import bke.iso.editor.event.DecreaseLayerEvent
 import bke.iso.editor.event.EditorEvent
@@ -36,5 +36,9 @@ class LayerModule(private val editorScreen: EditorScreen) : Module {
                 editorScreen.updateLayerLabel(selectedLayer.toFloat())
             }
         }
+    }
+
+    fun init() {
+        editorScreen.updateLayerLabel(selectedLayer.toFloat())
     }
 }
