@@ -1,7 +1,7 @@
 package bke.iso.editor.ui
 
-import bke.iso.editor.event.OpenSceneEvent
-import bke.iso.editor.event.SaveSceneEvent
+import bke.iso.editor.OpenSceneEvent
+import bke.iso.editor.SaveSceneEvent
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
