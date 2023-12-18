@@ -1,7 +1,7 @@
-package bke.iso.editor.brush
+package bke.iso.editor.tool.brush
 
-import bke.iso.editor.EditorCommand
-import bke.iso.editor.EditorTool
+import bke.iso.editor.tool.EditorCommand
+import bke.iso.editor.tool.EditorTool
 import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab

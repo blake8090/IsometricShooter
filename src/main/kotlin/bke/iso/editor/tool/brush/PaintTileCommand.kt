@@ -1,6 +1,6 @@
-package bke.iso.editor.brush
+package bke.iso.editor.tool.brush
 
-import bke.iso.editor.EditorCommand
+import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.math.Location

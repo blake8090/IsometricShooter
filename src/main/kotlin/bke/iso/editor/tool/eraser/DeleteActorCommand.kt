@@ -1,6 +1,6 @@
-package bke.iso.editor.eraser
+package bke.iso.editor.tool.eraser
 
-import bke.iso.editor.EditorCommand
+import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.ReferenceActors
 import bke.iso.engine.world.Actor
 

@@ -1,21 +1,15 @@
 package bke.iso.editor
 
-import bke.iso.editor.brush.BrushTool
-import bke.iso.editor.eraser.EraserTool
-import bke.iso.editor.event.DecreaseLayerEvent
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.event.IncreaseLayerEvent
+import bke.iso.editor.event.EditorEventWrapper
 import bke.iso.editor.event.OpenSceneEvent
 import bke.iso.editor.event.SaveSceneEvent
-import bke.iso.editor.event.SelectActorPrefabEvent
-import bke.iso.editor.event.SelectBrushToolEvent
-import bke.iso.editor.event.SelectEraserToolEvent
-import bke.iso.editor.event.SelectPointerToolEvent
-import bke.iso.editor.event.SelectTilePrefabEvent
+import bke.iso.editor.tool.EditorCommand
+import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
+import bke.iso.editor.v2.LayerModule
 import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.Game
-import bke.iso.engine.Module
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -34,9 +28,6 @@ import mu.KotlinLogging
 
 class EditorState(override val game: Game) : State() {
 
-    override val systems = emptySet<System>()
-    override val modules = emptySet<Module>()
-
     private val log = KotlinLogging.logger {}
 
     private val editorScreen = EditorScreen(this, game.assets)
@@ -47,14 +38,19 @@ class EditorState(override val game: Game) : State() {
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
     private val referenceActors = ReferenceActors(game.world)
+    private val layerModule = LayerModule(editorScreen)
+    private val toolModule = ToolModule(
+        game.collisions,
+        game.world,
+        referenceActors,
+        game.renderer,
+        layerModule,
+        editorScreen
+    )
+    override val modules = setOf(layerModule, toolModule)
+    override val systems = emptySet<System>()
 
-    private val pointerTool = PointerTool(game.collisions, game.renderer)
-    private val brushTool = BrushTool(game.collisions, game.world, referenceActors, game.renderer)
-    private val eraserTool = EraserTool(game.collisions, referenceActors, game.renderer)
-    private var selectedTool: EditorTool? = null
     private val commands = ArrayDeque<EditorCommand>()
-
-    private var selectedLayer = 0f
 
     override suspend fun load() {
         log.info { "Starting editor" }
@@ -63,31 +59,12 @@ class EditorState(override val game: Game) : State() {
         game.ui.setScreen(editorScreen)
         game.input.addInputProcessor(mouseDragAdapter)
 
-        editorScreen.updateLayerLabel(selectedLayer)
+        // TODO: init in layerModule?
+        editorScreen.updateLayerLabel(layerModule.selectedLayer.toFloat())
     }
 
     fun handleEvent(event: EditorEvent) =
         when (event) {
-            is SelectTilePrefabEvent -> {
-                brushTool.selectPrefab(event.prefab)
-            }
-
-            is SelectActorPrefabEvent -> {
-                brushTool.selectPrefab(event.prefab)
-            }
-
-            is SelectPointerToolEvent -> {
-                selectTool(pointerTool)
-            }
-
-            is SelectBrushToolEvent -> {
-                selectTool(brushTool)
-            }
-
-            is SelectEraserToolEvent -> {
-                selectTool(eraserTool)
-            }
-
             is SaveSceneEvent -> {
                 saveScene()
             }
@@ -96,29 +73,14 @@ class EditorState(override val game: Game) : State() {
                 loadScene()
             }
 
-            is IncreaseLayerEvent -> {
-                selectedLayer++
-                editorScreen.updateLayerLabel(selectedLayer)
-            }
-
-            is DecreaseLayerEvent -> {
-                selectedLayer--
-                editorScreen.updateLayerLabel(selectedLayer)
+            else -> {
+                game.events.fire(EditorEventWrapper(event))
             }
         }
-
-    private fun selectTool(tool: EditorTool) {
-        selectedTool?.disable()
-        if (selectedTool is BrushTool) {
-            editorScreen.unselectPrefabs()
-        }
-
-        tool.enable()
-        selectedTool = tool
-        log.debug { "Selected tool: ${tool::class.simpleName}" }
-    }
 
     override fun update(deltaTime: Float) {
+        super.update(deltaTime)
+
         updateTool()
         panCamera()
         drawGrid()
@@ -133,15 +95,11 @@ class EditorState(override val game: Game) : State() {
     }
 
     private fun updateTool() {
-        val tool = selectedTool ?: return
-        // TODO: scale cursor position when screen size changes
-        tool.update(selectedLayer, game.renderer.getPointerPos())
-
         if (editorScreen.hitMainView()) {
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                tool.performAction()?.let(::execute)
+                toolModule.performAction()?.let(::execute)
             } else if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                tool.performMultiAction()?.let(::execute)
+                toolModule.performMultiAction()?.let(::execute)
             }
         }
     }
@@ -167,8 +125,8 @@ class EditorState(override val game: Game) : State() {
     private fun drawGrid() {
         for (x in 0..gridWidth) {
             game.renderer.bgShapes.addLine(
-                Vector3(x.toFloat(), 0f, selectedLayer),
-                Vector3(x.toFloat(), gridLength.toFloat(), selectedLayer),
+                Vector3(x.toFloat(), 0f, layerModule.selectedLayer.toFloat()),
+                Vector3(x.toFloat(), gridLength.toFloat(), layerModule.selectedLayer.toFloat()),
                 0.5f,
                 Color.GREEN
             )
@@ -176,8 +134,8 @@ class EditorState(override val game: Game) : State() {
 
         for (y in 0..gridLength) {
             game.renderer.bgShapes.addLine(
-                Vector3(0f, y.toFloat(), selectedLayer),
-                Vector3(gridWidth.toFloat(), y.toFloat(), selectedLayer),
+                Vector3(0f, y.toFloat(), layerModule.selectedLayer.toFloat()),
+                Vector3(gridWidth.toFloat(), y.toFloat(), layerModule.selectedLayer.toFloat()),
                 0.5f,
                 Color.GREEN
             )
