@@ -20,8 +20,6 @@ class EditorState(override val game: Game) : State() {
     private val log = KotlinLogging.logger {}
 
     private val editorScreen = EditorScreen(this, game.assets)
-    private var gridWidth = 20
-    private var gridLength = 20
 
     private val referenceActors = ReferenceActors(game.world)
     private val layerModule = LayerModule(editorScreen)
@@ -48,6 +46,8 @@ class EditorState(override val game: Game) : State() {
     override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule)
     override val systems = emptySet<System>()
 
+    private var gridWidth = 20
+    private var gridLength = 20
     private val commands = ArrayDeque<EditorCommand>()
 
     override suspend fun load() {
@@ -66,7 +66,6 @@ class EditorState(override val game: Game) : State() {
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
-
         updateTool()
         drawGrid()
     }
@@ -106,43 +105,4 @@ class EditorState(override val game: Game) : State() {
             )
         }
     }
-
-//    private fun loadScene() {
-//        val file = game.dialogs.showOpenFileDialog() ?: return
-//        val scene = game.serializer.read<Scene>(file.readText())
-//
-//        referenceActors.clear()
-//        game.world.clear()
-//
-//        for (record in scene.actors) {
-//            val prefab = game.assets.get<ActorPrefab>(record.prefab)
-//            referenceActors.create(prefab, record.pos)
-//        }
-//
-//        for (record in scene.tiles) {
-//            val prefab = game.assets.get<TilePrefab>(record.prefab)
-//            referenceActors.create(prefab, record.location)
-//        }
-//
-//        log.info { "Loaded scene: '${file.canonicalPath}'" }
-//    }
-//
-//    private fun saveScene() {
-//        val file = game.dialogs.showSaveFileDialog() ?: return
-//
-//        val actors = mutableListOf<ActorRecord>()
-//        game.world.actors.each { actor: Actor, reference: ActorPrefabReference ->
-//            actors.add(ActorRecord(actor.pos, reference.prefab))
-//        }
-//
-//        val tiles = mutableListOf<TileRecord>()
-//        game.world.actors.each { actor: Actor, reference: TilePrefabReference ->
-//            tiles.add(TileRecord(Location(actor.pos), reference.prefab))
-//        }
-//
-//        val scene = Scene("1", actors, tiles)
-//        val content = game.serializer.format.encodeToString(scene)
-//        file.writeText(content)
-//        log.info { "Saved scene: '${file.canonicalPath}'" }
-//    }
 }
