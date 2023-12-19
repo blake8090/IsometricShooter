@@ -32,35 +32,29 @@ class LayerModule(
             is IncreaseLayerEvent -> {
                 selectedLayer++
                 editorScreen.updateLayerLabel(selectedLayer.toFloat())
+                showOrHideActors()
             }
 
             is DecreaseLayerEvent -> {
                 selectedLayer--
                 editorScreen.updateLayerLabel(selectedLayer.toFloat())
+                showOrHideActors()
             }
 
             is ToggleUpperLayersHiddenEvent -> {
                 hideUpperLayers = !hideUpperLayers
-                if (hideUpperLayers) {
-                    hideUpperLayers()
-                } else {
-                    showUpperLayers()
-                }
+                showOrHideActors()
             }
         }
     }
 
-    private fun hideUpperLayers() {
+    private fun showOrHideActors() {
         world.actors.each { actor: Actor, sprite: Sprite ->
-            if (actor.z > selectedLayer) {
+            if (hideUpperLayers && actor.z > selectedLayer) {
                 sprite.alpha = 0f
+            } else {
+                sprite.alpha = 1f
             }
-        }
-    }
-
-    private fun showUpperLayers() {
-        world.actors.each { actor: Actor, sprite: Sprite ->
-            sprite.alpha = 1f
         }
     }
 
