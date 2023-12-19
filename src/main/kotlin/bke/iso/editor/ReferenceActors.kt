@@ -15,6 +15,7 @@ data class ActorPrefabReference(val prefab: String) : Component
 
 data class TilePrefabReference(val prefab: String) : Component
 
+// TODO: make into a module?
 class ReferenceActors(private val world: World) {
 
     private val tilesByLocation = mutableMapOf<Location, Actor>()

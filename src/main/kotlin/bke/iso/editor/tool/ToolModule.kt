@@ -3,8 +3,6 @@ package bke.iso.editor.tool
 import bke.iso.editor.ReferenceActors
 import bke.iso.editor.tool.brush.BrushTool
 import bke.iso.editor.tool.eraser.EraserTool
-import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.event.EditorEventWrapper
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.LayerModule
 import bke.iso.engine.Event
@@ -38,14 +36,6 @@ class ToolModule(
     }
 
     override fun handleEvent(event: Event) {
-        when (event) {
-            is EditorEventWrapper -> {
-                handleEvent(event.editorEvent)
-            }
-        }
-    }
-
-    private fun handleEvent(event: EditorEvent) {
         when (event) {
             is SelectTilePrefabEvent -> {
                 brushTool.selectPrefab(event.prefab)

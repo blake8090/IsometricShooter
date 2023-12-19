@@ -1,7 +1,6 @@
 package bke.iso.editor
 
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.event.EditorEventWrapper
 import bke.iso.engine.Event
 import bke.iso.engine.Module
 import bke.iso.engine.asset.Assets
@@ -45,22 +44,10 @@ class SceneModule(
     }
 
     override fun handleEvent(event: Event) {
-        when (event) {
-            is EditorEventWrapper -> {
-                handleEvent(event.editorEvent)
-            }
-        }
-    }
-
-    private fun handleEvent(editorEvent: EditorEvent) {
-        when (editorEvent) {
-            is SaveSceneEvent -> {
-                saveScene()
-            }
-
-            is OpenSceneEvent -> {
-                loadScene()
-            }
+        if (event is SaveSceneEvent) {
+            saveScene()
+        } else if (event is OpenSceneEvent) {
+            loadScene()
         }
     }
 

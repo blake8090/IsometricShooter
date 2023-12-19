@@ -1,7 +1,7 @@
 package bke.iso.editor.ui
 
-import bke.iso.editor.event.DecreaseLayerEvent
-import bke.iso.editor.event.IncreaseLayerEvent
+import bke.iso.editor.DecreaseLayerEvent
+import bke.iso.editor.IncreaseLayerEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
 import bke.iso.editor.tool.SelectEraserToolEvent
 import bke.iso.editor.tool.SelectPointerToolEvent

@@ -2,7 +2,6 @@ package bke.iso.editor
 
 import bke.iso.editor.camera.CameraModule
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.event.EditorEventWrapper
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
@@ -61,7 +60,7 @@ class EditorState(override val game: Game) : State() {
     }
 
     fun handleEvent(event: EditorEvent) {
-        game.events.fire(EditorEventWrapper(event))
+        game.events.fire(event)//EditorEventWrapper(event))
     }
 
     override fun update(deltaTime: Float) {
