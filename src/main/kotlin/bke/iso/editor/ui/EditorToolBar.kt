@@ -2,6 +2,7 @@ package bke.iso.editor.ui
 
 import bke.iso.editor.DecreaseLayerEvent
 import bke.iso.editor.IncreaseLayerEvent
+import bke.iso.editor.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
 import bke.iso.editor.tool.SelectEraserToolEvent
 import bke.iso.editor.tool.SelectPointerToolEvent
@@ -76,7 +77,7 @@ class EditorToolBar(
                 fire(DecreaseLayerEvent())
             }
         }
-        root.add(decreaseLayerButton).space(20f)
+        root.add(decreaseLayerButton).space(10f)
 
         val increaseLayerButton = createButton("plus.png").apply {
             style.up = newTextureDrawable("plus.png", "button-up")
@@ -86,7 +87,13 @@ class EditorToolBar(
                 fire(IncreaseLayerEvent())
             }
         }
-        root.add(increaseLayerButton)
+        root.add(increaseLayerButton).space(10f)
+
+        val hideUpperLayersButton = createButton("hide-layers.png")
+        hideUpperLayersButton.onChanged {
+            fire(ToggleUpperLayersHiddenEvent())
+        }
+        root.add(hideUpperLayersButton)
 
         return root
     }
