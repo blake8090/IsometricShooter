@@ -18,7 +18,6 @@ import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
 import bke.iso.game.MainMenuState
-import com.badlogic.gdx.utils.PerformanceCounter
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.reflect.KClass
@@ -50,9 +49,15 @@ class Game {
 
     private var state: State = EmptyState(this)
 
-    private val performanceCounter = PerformanceCounter("renderer")
+//    private val performanceCounter = PerformanceCounter("renderer")
 
     fun start() {
+        runBlocking {
+            init()
+        }
+    }
+
+    private suspend fun init() {
         val time = measureTimeMillis {
             input.start()
             assets.run {
@@ -66,39 +71,32 @@ class Game {
         }
         log.info { "Initialized modules in $time ms" }
 
-        runBlocking {
-            assets.loadAsync("ui")
-            setState(MainMenuState::class)
-        }
+        assets.loadAsync("ui")
+        setState(MainMenuState::class)
     }
 
     fun update(deltaTime: Float) {
-        runFrame(deltaTime)
-        ui.draw(deltaTime)
-        renderer.drawPointer()
-    }
+        if (!ui.isLoadingScreenActive) {
+            collisions.update()
+            // TODO: investigate using fixed time step
+            physics.update(deltaTime)
 
-    private fun runFrame(deltaTime: Float) {
-        if (ui.isLoadingScreenActive) {
-            return
-        }
-
-        collisions.update()
-        // TODO: investigate using fixed time step
-        physics.update(deltaTime)
-
-        input.update()
-        renderer.update(deltaTime)
-        state.update(deltaTime)
-        world.update()
+            input.update()
+            renderer.update(deltaTime)
+            state.update(deltaTime)
+            world.update()
 
 //        performanceCounter.start()
-        renderer.draw()
+            renderer.draw()
 //        performanceCounter.stop()
 //        performanceCounter.tick()
 //        val mean = performanceCounter.time.value * 1000f
 //        val max = performanceCounter.time.max * 1000f
 //        log.info { "renderer.draw() - max: ${max}ms mean: ${mean}ms load: ${performanceCounter.load.value}" }
+        }
+
+        ui.draw(deltaTime)
+        renderer.drawPointer()
     }
 
     fun <T : State> setState(type: KClass<T>) {
