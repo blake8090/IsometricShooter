@@ -16,6 +16,7 @@ import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.hud.HudModule
+import bke.iso.game.player.PlayerViewSystem
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
@@ -45,7 +46,8 @@ class GameState(override val game: Game) : State() {
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
         MovingPlatformSystem(game.world),
-        ShadowSystem(game.world, game.collisions)
+        ShadowSystem(game.world, game.collisions),
+        PlayerViewSystem(game.world, game.renderer)
     )
 
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
@@ -54,7 +56,7 @@ class GameState(override val game: Game) : State() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
-        game.scenes.load("building.scene")
+        game.scenes.load("occlusion-test.scene")
         // hack to make the moving platform work in building.scene
         game.world.actors.each<MovingPlatform> { actor, _ ->
             actor.add(MovingPlatform(speed = 1f, maxZ = 4f, minZ = 2f))
