@@ -1,14 +1,11 @@
 package bke.iso.engine.render
 
-import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
-import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -30,17 +27,15 @@ const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f
 
 class Renderer(
-    private val world: World,
+    world: World,
     private val assets: Assets,
-    private val events: Game.Events
+    events: Game.Events
 ) {
 
     private val log = KotlinLogging.logger {}
 
     private val batch = PolygonSpriteBatch()
-    private val objectSorter = ObjectSorter()
-    private val renderDataMapper = RenderDataMapper(assets)
-
+    private val gameObjectRenderer = GameObjectRenderer(assets, world, events)
     private var pointer: Pointer = MousePointer()
 
     val debug: DebugRenderer = DebugRenderer()
@@ -86,12 +81,13 @@ class Renderer(
         camera.position.set(toScreen(worldPos), 0f)
     }
 
+    fun setOcclusionTarget(actor: Actor) {
+        gameObjectRenderer.occlusionTarget = actor
+    }
+
     fun update(deltaTime: Float) {
         pointer.update(deltaTime)
     }
-
-    fun getRenderData(gameObject: GameObject): RenderData? =
-        renderDataMapper.map(gameObject)
 
     fun getPointerPos(): Vector2 {
         val screenPos = camera.unproject(Vector3(pointer.pos, 0f))
@@ -154,12 +150,7 @@ class Renderer(
             GL20.GL_ONE_MINUS_SRC_ALPHA,
         )
 
-        objectSorter.forEach(world.getObjects()) {
-            when (it) {
-                is Actor -> draw(it)
-                is Tile -> draw(it)
-            }
-        }
+        gameObjectRenderer.draw(batch)
 
         batch.end()
         fbo.end()
@@ -180,41 +171,6 @@ class Renderer(
         batch.begin()
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
-    }
-
-    private fun draw(actor: Actor) {
-        val sprite = actor.get<Sprite>() ?: return
-        drawSprite(sprite, actor.pos)
-        debug.add(actor)
-        events.fire(DrawActorEvent(actor, batch))
-    }
-
-    private fun draw(tile: Tile) {
-        drawSprite(tile.sprite, tile.location.toVector3())
-        debug.add(tile)
-    }
-
-    private fun drawSprite(sprite: Sprite, worldPos: Vector3) {
-        if (sprite.texture.isBlank()) {
-            return
-        }
-
-        val renderData = renderDataMapper.map(sprite, worldPos)
-        val color = Color(batch.color.r, batch.color.g, batch.color.b, renderData.alpha)
-        batch.withColor(color) {
-            batch.draw(
-                /* region = */ TextureRegion(renderData.texture),
-                /* x = */ renderData.pos.x,
-                /* y = */ renderData.pos.y,
-                /* originX = */ renderData.width / 2f,
-                /* originY = */ renderData.height / 2f,
-                /* width = */ renderData.width,
-                /* height = */ renderData.height,
-                /* scaleX = */ 1f,
-                /* scaleY = */ 1f,
-                /* rotation = */ renderData.rotation
-            )
-        }
     }
 
     fun drawTexture(
@@ -244,10 +200,7 @@ class Renderer(
         }
     }
 
-    data class DrawActorEvent(
-        val actor: Actor,
-        val batch: PolygonSpriteBatch
-    ) : Event
+
 }
 
 fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
