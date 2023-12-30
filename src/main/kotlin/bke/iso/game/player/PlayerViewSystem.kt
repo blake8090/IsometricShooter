@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
+import kotlin.math.floor
 
 class PlayerViewSystem(
     private val world: World,
@@ -44,6 +45,8 @@ class PlayerViewSystem(
         val rect = checkNotNull(getTextureRectangle(playerActor))
 
         val objects = world.getObjectsInArea(area)
+        val hiddenLayers = mutableSetOf<Float>()
+
         for (gameObject in objects) {
             if (playerActor == gameObject || (gameObject is Actor && (gameObject.has<Shadow>() || gameObject.has<Bullet>()))) {
                 continue
@@ -53,6 +56,16 @@ class PlayerViewSystem(
             val rect2 = getTextureRectangle(gameObject) ?: continue
             if (rect2.overlaps(rect) && inFront(box, collisionBox)) {
                 hideObject(gameObject, 0.1f)
+                if (box.min.z >= collisionBox.max.z) {
+                    hiddenLayers.add(floor(box.min.z))
+                }
+            }
+        }
+
+        for (gameObject in objects) {
+            val box = gameObject.getCollisionBox() ?: continue
+            if (hiddenLayers.isNotEmpty() && floor(box.min.z) >= hiddenLayers.min()) {
+                hideObject(gameObject, 0f)
             }
         }
     }

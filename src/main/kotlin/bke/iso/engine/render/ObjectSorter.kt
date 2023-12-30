@@ -23,7 +23,7 @@ class ObjectSorter {
         for (i in contexts.indices) {
             val a = contexts[i]
             for (j in i + 1..<contexts.size) {
-
+                // TODO: add occlusion code here to minimize re-iteration times
                 val b = contexts[j]
                 if (inFront(a, b)) {
                     a.behind.add(b)
