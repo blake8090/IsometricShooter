@@ -7,6 +7,7 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
+import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
@@ -25,8 +26,8 @@ import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import mu.KotlinLogging
 
-private const val VIRTUAL_WIDTH = 960f
-private const val VIRTUAL_HEIGHT = 540f
+const val VIRTUAL_WIDTH = 960f
+const val VIRTUAL_HEIGHT = 540f
 
 class Renderer(
     private val world: World,
@@ -38,6 +39,8 @@ class Renderer(
 
     private val batch = PolygonSpriteBatch()
     private val objectSorter = ObjectSorter()
+    private val renderDataMapper = RenderDataMapper(assets)
+
     private var pointer: Pointer = MousePointer()
 
     val debug: DebugRenderer = DebugRenderer()
@@ -86,6 +89,9 @@ class Renderer(
     fun update(deltaTime: Float) {
         pointer.update(deltaTime)
     }
+
+    fun getRenderData(gameObject: GameObject): RenderData? =
+        renderDataMapper.map(gameObject)
 
     fun getPointerPos(): Vector2 {
         val screenPos = camera.unproject(Vector3(pointer.pos, 0f))
@@ -192,14 +198,23 @@ class Renderer(
         if (sprite.texture.isBlank()) {
             return
         }
-        drawTexture(
-            name = sprite.texture,
-            pos = toScreen(worldPos),
-            offset = Vector2(sprite.offsetX, sprite.offsetY),
-            scale = sprite.scale,
-            alpha = sprite.alpha,
-            rotation = sprite.rotation
-        )
+
+        val renderData = renderDataMapper.map(sprite, worldPos)
+        val color = Color(batch.color.r, batch.color.g, batch.color.b, renderData.alpha)
+        batch.withColor(color) {
+            batch.draw(
+                /* region = */ TextureRegion(renderData.texture),
+                /* x = */ renderData.pos.x,
+                /* y = */ renderData.pos.y,
+                /* originX = */ renderData.width / 2f,
+                /* originY = */ renderData.height / 2f,
+                /* width = */ renderData.width,
+                /* height = */ renderData.height,
+                /* scaleX = */ 1f,
+                /* scaleY = */ 1f,
+                /* rotation = */ renderData.rotation
+            )
+        }
     }
 
     fun drawTexture(
