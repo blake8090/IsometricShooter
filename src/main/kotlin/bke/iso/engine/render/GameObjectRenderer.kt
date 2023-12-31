@@ -27,26 +27,25 @@ class GameObjectRenderer(
 ) {
 
     var occlusionTarget: Actor? = null
+
+    // TODO: just store the minimum hidden layer
     private val hiddenLayers = mutableSetOf<Float>()
 
     fun draw(batch: PolygonSpriteBatch) {
         val objects = world
             .getObjects()
-            .asSequence()
-            .mapNotNull(::map)
-            .toList()
-
+            .mapNotNull(::getRenderData)
 
         for (i in objects.indices) {
             val a = objects[i]
+
             for (j in i + 1..<objects.size) {
                 val b = objects[j]
+
                 if (inFront(a, b)) {
                     a.behind.add(b)
-                    b.inFront.add(a)
                 } else if (inFront(b, a)) {
                     b.behind.add(a)
-                    a.inFront.add(b)
                 }
             }
 
@@ -60,7 +59,7 @@ class GameObjectRenderer(
         hiddenLayers.clear()
     }
 
-    private fun checkOcclusion(renderData: ObjectRenderData) {
+    private fun checkOcclusion(renderData: RenderData) {
         val target = occlusionTarget ?: return
         val gameObject = renderData.gameObject
         // TODO: use a component to mark an object as non-occluding
@@ -68,7 +67,7 @@ class GameObjectRenderer(
             return
         }
 
-        val targetData = map(target) ?: return
+        val targetData = getRenderData(target) ?: return
         val aRect = Rectangle(targetData.pos.x, targetData.pos.y, targetData.width, targetData.height)
         val bRect = Rectangle(renderData.pos.x, renderData.pos.y, renderData.width, renderData.height)
         if (inFront(renderData, targetData) && aRect.overlaps(bRect)) {
@@ -80,15 +79,15 @@ class GameObjectRenderer(
         }
     }
 
-    private fun draw(batch: PolygonSpriteBatch, renderData: ObjectRenderData) {
+    private fun draw(batch: PolygonSpriteBatch, renderData: RenderData) {
         if (renderData.visited) {
             return
         }
         renderData.visited = true
-        for (a in renderData.behind) {
-            draw(batch, a)
-        }
 
+        for (data in renderData.behind) {
+            draw(batch, data)
+        }
 
         if (hiddenLayers.isNotEmpty() && floor(renderData.bounds.min.z) >= hiddenLayers.min()) {
             renderData.alpha = 0f
@@ -115,32 +114,17 @@ class GameObjectRenderer(
         }
     }
 
-    private fun map(gameObject: GameObject): ObjectRenderData? {
+    private fun getRenderData(gameObject: GameObject): RenderData? {
         val sprite = getSprite(gameObject)
         if (sprite == null || sprite.texture.isBlank()) {
             return null
         }
 
-        val worldPos =
-            when (gameObject) {
-                is Actor -> {
-                    gameObject.pos
-                }
-
-                is Tile -> {
-                    gameObject.location.toVector3()
-                }
-
-                else -> {
-                    error("unexpected gameobject")
-                }
-            }
-
-        val texture = assets.get<Texture>(sprite.texture)
-
+        val worldPos = getPos(gameObject)
         val offset = Vector2(sprite.offsetX, sprite.offsetY)
         val pos = toScreen(worldPos).sub(offset)
 
+        val texture = assets.get<Texture>(sprite.texture)
         val width = texture.width * sprite.scale
         val height = texture.height * sprite.scale
 
@@ -153,7 +137,7 @@ class GameObjectRenderer(
 
         val bounds = gameObject.getCollisionBox() ?: Box.fromMinMax(worldPos, worldPos)
 
-        return ObjectRenderData(
+        return RenderData(
             gameObject,
             texture,
             pos,
@@ -172,7 +156,14 @@ class GameObjectRenderer(
             else -> null
         }
 
-    private fun inFront(a: ObjectRenderData, b: ObjectRenderData): Boolean {
+    private fun getPos(gameObject: GameObject) =
+        when (gameObject) {
+            is Actor -> gameObject.pos
+            is Tile -> gameObject.location.toVector3()
+            else -> error("unexpected GameObject ${gameObject::class.simpleName}")
+        }
+
+    private fun inFront(a: RenderData, b: RenderData): Boolean {
         if (a.bounds.max.z <= b.bounds.min.z) {
             return false
         }
@@ -194,7 +185,8 @@ class GameObjectRenderer(
     ) : Event
 }
 
-private data class ObjectRenderData(
+// TODO: pool instances of this
+private data class RenderData(
     val gameObject: GameObject,
     val texture: Texture,
     val pos: Vector2,
@@ -202,9 +194,8 @@ private data class ObjectRenderData(
     val height: Float,
     var alpha: Float,
     val rotation: Float,
-    val bounds: Box,
+    val bounds: Box
 ) {
-    val behind = mutableSetOf<ObjectRenderData>()
-    val inFront = mutableSetOf<ObjectRenderData>()
+    val behind = mutableSetOf<RenderData>()
     var visited = false
 }

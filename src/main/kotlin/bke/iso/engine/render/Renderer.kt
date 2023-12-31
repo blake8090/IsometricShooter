@@ -199,8 +199,6 @@ class Renderer(
             )
         }
     }
-
-
 }
 
 fun Batch.withColor(color: Color, action: (Batch) -> Unit) {
