@@ -2,7 +2,7 @@ package bke.iso.game.ui
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.input.Input
-import bke.iso.engine.render.Pointer
+import bke.iso.engine.render.pointer.Pointer
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.game.player.Player

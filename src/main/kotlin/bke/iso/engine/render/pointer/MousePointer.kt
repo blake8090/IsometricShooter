@@ -1,4 +1,4 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.pointer
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Cursor

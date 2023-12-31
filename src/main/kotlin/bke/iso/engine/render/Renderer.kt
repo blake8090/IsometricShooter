@@ -3,6 +3,8 @@ package bke.iso.engine.render
 import bke.iso.engine.Game
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.render.pointer.MousePointer
+import bke.iso.engine.render.pointer.Pointer
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
 import bke.iso.engine.world.Actor
