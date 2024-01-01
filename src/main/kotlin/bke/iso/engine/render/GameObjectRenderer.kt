@@ -10,8 +10,6 @@ import bke.iso.engine.world.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
-import bke.iso.game.Shadow
-import bke.iso.game.weapon.Bullet
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -62,8 +60,7 @@ class GameObjectRenderer(
     private fun checkOcclusion(renderData: RenderData) {
         val target = occlusionTarget ?: return
         val gameObject = renderData.gameObject
-        // TODO: use a component to mark an object as non-occluding
-        if (gameObject == target || (gameObject is Actor && (gameObject.has<Shadow>() || gameObject.has<Bullet>()))) {
+        if (gameObject == target || (gameObject is Actor && !gameObject.has<Occlude>())) {
             return
         }
 

@@ -23,6 +23,9 @@
     {
       type: "description",
       text: "pillar"
+    },
+    {
+      type: "occlude"
     }
   ]
 }

@@ -32,3 +32,7 @@ data class DebugSettings(
     @Contextual
     var zAxisColor: Color = Color.PURPLE
 ) : Component
+
+@Serializable
+@SerialName("occlude")
+class Occlude : Component
