@@ -21,7 +21,11 @@ class EditorState(override val game: Game) : State() {
     private val editorScreen = EditorScreen(this, game.assets)
 
     private val referenceActors = ReferenceActors(game.world)
-    private val layerModule = LayerModule(editorScreen, game.world)
+    private val layerModule = LayerModule(
+        editorScreen,
+        game.world,
+        game.events
+    )
     private val toolModule = ToolModule(
         game.collisions,
         game.world,
@@ -33,7 +37,9 @@ class EditorState(override val game: Game) : State() {
     private val cameraModule = CameraModule(
         game.renderer,
         game.input,
-        editorScreen
+        editorScreen,
+        game.world,
+        layerModule
     )
     private val sceneModule = SceneModule(
         game.dialogs,

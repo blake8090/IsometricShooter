@@ -83,7 +83,7 @@ class Renderer(
         camera.position.set(toScreen(worldPos), 0f)
     }
 
-    fun setOcclusionTarget(actor: Actor) {
+    fun setOcclusionTarget(actor: Actor?) {
         gameObjectRenderer.occlusionTarget = actor
     }
 

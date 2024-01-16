@@ -3,6 +3,7 @@ package bke.iso.editor
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
+import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Actor
@@ -14,9 +15,12 @@ class IncreaseLayerEvent : EditorEvent()
 
 class DecreaseLayerEvent : EditorEvent()
 
+data class ChangeSelectedLayerEvent(val selectedLayer: Float) : Event
+
 class LayerModule(
     private val editorScreen: EditorScreen,
-    private val world: World
+    private val world: World,
+    private val events: Game.Events
 ) : Module {
 
     var selectedLayer: Int = 0
@@ -33,12 +37,14 @@ class LayerModule(
                 selectedLayer++
                 editorScreen.updateLayerLabel(selectedLayer.toFloat())
                 showOrHideActors()
+                events.fire(ChangeSelectedLayerEvent(selectedLayer.toFloat()))
             }
 
             is DecreaseLayerEvent -> {
                 selectedLayer--
                 editorScreen.updateLayerLabel(selectedLayer.toFloat())
                 showOrHideActors()
+                events.fire(ChangeSelectedLayerEvent(selectedLayer.toFloat()))
             }
 
             is ToggleUpperLayersHiddenEvent -> {
@@ -50,13 +56,16 @@ class LayerModule(
 
     private fun showOrHideActors() {
         world.actors.each { actor: Actor, sprite: Sprite ->
-            if (hideUpperLayers && actor.z > selectedLayer) {
+            if (canHide(actor) && hideUpperLayers && actor.z > selectedLayer) {
                 sprite.alpha = 0f
             } else {
                 sprite.alpha = 1f
             }
         }
     }
+
+    private fun canHide(actor: Actor) =
+        actor.has<TilePrefabReference>() || actor.has<ActorPrefabReference>()
 
     fun init() {
         editorScreen.updateLayerLabel(selectedLayer.toFloat())

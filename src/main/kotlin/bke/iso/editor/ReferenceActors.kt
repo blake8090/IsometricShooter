@@ -4,6 +4,7 @@ import bke.iso.engine.asset.cache.ActorPrefab
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Location
+import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.withFirstInstance
 import bke.iso.engine.world.Actor
@@ -34,6 +35,10 @@ class ReferenceActors(private val world: World) {
 
         prefab.components.withFirstInstance<Collider> { collider ->
             components.add(collider.copy())
+        }
+
+        if (prefab.components.any { component -> component is Occlude }) {
+            components.add(Occlude())
         }
 
         return world.actors.create(pos, *components.toTypedArray())

@@ -3,6 +3,7 @@ package bke.iso.editor.ui
 import bke.iso.editor.DecreaseLayerEvent
 import bke.iso.editor.IncreaseLayerEvent
 import bke.iso.editor.ToggleUpperLayersHiddenEvent
+import bke.iso.editor.camera.ToggleHideWallsEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
 import bke.iso.editor.tool.SelectEraserToolEvent
 import bke.iso.editor.tool.SelectPointerToolEvent
@@ -93,7 +94,13 @@ class EditorToolBar(
         hideUpperLayersButton.onChanged {
             fire(ToggleUpperLayersHiddenEvent())
         }
-        root.add(hideUpperLayersButton)
+        root.add(hideUpperLayersButton).space(10f)
+
+        val hideWallsButton = createButton("hide-walls.png")
+        hideWallsButton.onChanged {
+            fire(ToggleHideWallsEvent())
+        }
+        root.add(hideWallsButton)
 
         return root
     }
