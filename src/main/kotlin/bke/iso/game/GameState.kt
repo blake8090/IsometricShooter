@@ -2,7 +2,6 @@ package bke.iso.game
 
 import bke.iso.engine.Game
 import bke.iso.engine.State
-import bke.iso.engine.System
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
@@ -38,7 +37,7 @@ class GameState(override val game: Game) : State() {
 
     override val modules = setOf(hudModule, weaponsModule, combatModule)
 
-    override val systems: Set<System> = setOf(
+    override val systems = linkedSetOf(
         WeaponSystem(game.world, game.assets),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
         PlayerSystem(game.input, game.world, game.renderer),

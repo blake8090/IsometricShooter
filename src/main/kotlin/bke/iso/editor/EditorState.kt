@@ -43,7 +43,7 @@ class EditorState(override val game: Game) : State() {
         referenceActors
     )
     override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule)
-    override val systems = emptySet<System>()
+    override val systems = linkedSetOf<System>()
 
     private var gridWidth = 20
     private var gridLength = 20
@@ -60,7 +60,7 @@ class EditorState(override val game: Game) : State() {
     }
 
     fun handleEvent(event: EditorEvent) {
-        game.events.fire(event)//EditorEventWrapper(event))
+        game.events.fire(event)
     }
 
     override fun update(deltaTime: Float) {

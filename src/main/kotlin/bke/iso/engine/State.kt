@@ -12,8 +12,8 @@ interface Module {
 abstract class State {
 
     protected abstract val game: Game
+    protected abstract val systems: LinkedHashSet<System>
     protected abstract val modules: Set<Module>
-    protected abstract val systems: Set<System>
 
     open suspend fun load() {}
 
@@ -34,6 +34,6 @@ abstract class State {
 }
 
 class EmptyState(override val game: Game) : State() {
-    override val systems: Set<System> = emptySet()
+    override val systems: LinkedHashSet<System> = linkedSetOf()
     override val modules: Set<Module> = emptySet()
 }

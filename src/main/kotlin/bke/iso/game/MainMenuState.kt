@@ -11,7 +11,7 @@ import bke.iso.game.ui.MainMenuScreen
 
 class MainMenuState(override val game: Game) : State() {
 
-    override val systems: Set<System> = emptySet()
+    override val systems = linkedSetOf<System>()
     override val modules = emptySet<Module>()
 
     override suspend fun load() {
