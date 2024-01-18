@@ -34,7 +34,7 @@ class CameraModule(
     private val log = KotlinLogging.logger {}
 
 
-    private val mouseDragAdapter = MouseDragAdapter(GdxInput.Buttons.RIGHT)
+    private val mouseDragAdapter = MouseDragAdapter(GdxInput.Buttons.MIDDLE)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
     private lateinit var cameraActor: Actor
 
@@ -68,7 +68,7 @@ class CameraModule(
         if (editorScreen.hitMainView()) {
             panCamera()
 
-            if (Gdx.input.isButtonPressed(GdxInput.Buttons.MIDDLE)) {
+            if (Gdx.input.isKeyPressed(GdxInput.Keys.C)) {
                 moveCameraActor()
             }
         }

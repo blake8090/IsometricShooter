@@ -1,5 +1,6 @@
 package bke.iso.editor.ui
 
+import bke.iso.editor.ContextMenuSelection
 import bke.iso.editor.EditorState
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.EditorEventListener
@@ -11,6 +12,8 @@ import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -29,6 +32,9 @@ class EditorScreen(
     private val menuBar = EditorMenuBar(skin)
     private val toolBar = EditorToolBar(skin, assets)
     private val assetBrowser = EditorAssetBrowser(skin, assets)
+    private val contextMenu = EditorContextMenu(skin)
+
+    private var contextMenuActor: Actor? = null
 
     override fun create() {
         setup()
@@ -71,6 +77,20 @@ class EditorScreen(
 
     fun updateLayerLabel(layer: Float) {
         toolBar.updateLayerLabel(layer)
+    }
+
+    fun openContextMenu(vararg selection: ContextMenuSelection) {
+        closeContextMenu()
+
+        val screenPos = Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
+        val stagePos: Vector2 = stage.screenToStageCoordinates(screenPos)
+
+        contextMenuActor = contextMenu.create(stagePos.x, stagePos.y, *selection)
+        stage.addActor(contextMenuActor)
+    }
+
+    fun closeContextMenu() {
+        contextMenuActor?.addAction(Actions.removeActor())
     }
 
     private fun createMainView(): Table {

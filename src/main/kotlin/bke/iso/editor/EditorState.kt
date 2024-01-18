@@ -48,7 +48,9 @@ class EditorState(override val game: Game) : State() {
         game.assets,
         referenceActors
     )
-    override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule)
+    private val contextMenuModule = ContextMenuModule(editorScreen)
+    override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule, contextMenuModule)
+
     override val systems = linkedSetOf<System>()
 
     private var gridWidth = 20
