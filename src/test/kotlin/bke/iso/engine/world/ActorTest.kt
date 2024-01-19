@@ -2,6 +2,7 @@ package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder

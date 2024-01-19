@@ -9,7 +9,7 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3

@@ -3,6 +3,7 @@ package bke.iso.engine.world
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.actor.Actors
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
 import kotlin.math.floor

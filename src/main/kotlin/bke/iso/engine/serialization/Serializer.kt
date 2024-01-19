@@ -1,6 +1,6 @@
 package bke.iso.engine.serialization
 
-import bke.iso.engine.world.Component
+import bke.iso.engine.world.actor.Component
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString

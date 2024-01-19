@@ -3,7 +3,7 @@ package bke.iso.editor.tool
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 

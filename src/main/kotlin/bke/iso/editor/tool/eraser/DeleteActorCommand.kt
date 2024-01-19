@@ -2,7 +2,7 @@ package bke.iso.editor.tool.eraser
 
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.ReferenceActors
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 
 class DeleteActorCommand(
     private val referenceActors: ReferenceActors,

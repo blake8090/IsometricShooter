@@ -12,7 +12,7 @@ import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.serialization.Serializer
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input

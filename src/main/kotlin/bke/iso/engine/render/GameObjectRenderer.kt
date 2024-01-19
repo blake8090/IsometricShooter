@@ -6,7 +6,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World

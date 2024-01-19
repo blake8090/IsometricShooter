@@ -2,7 +2,7 @@ package bke.iso.game.weapon
 
 import bke.iso.engine.System
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import mu.KotlinLogging
 import kotlin.math.max

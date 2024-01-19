@@ -1,6 +1,7 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 import com.badlogic.gdx.utils.OrderedMap

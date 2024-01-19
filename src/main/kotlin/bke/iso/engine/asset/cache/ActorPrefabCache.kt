@@ -1,7 +1,7 @@
 package bke.iso.engine.asset.cache
 
 import bke.iso.engine.serialization.Serializer
-import bke.iso.engine.world.Component
+import bke.iso.engine.world.actor.Component
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable

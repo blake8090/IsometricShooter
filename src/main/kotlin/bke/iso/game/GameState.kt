@@ -7,7 +7,7 @@ import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.player.Player

@@ -6,7 +6,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.weapon.RangedWeaponOffset
 import com.badlogic.gdx.math.Vector2

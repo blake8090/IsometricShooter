@@ -4,7 +4,7 @@ import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.PredictedCollision
 import bke.iso.engine.collision.getCollisionBox
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3

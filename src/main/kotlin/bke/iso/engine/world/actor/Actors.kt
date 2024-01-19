@@ -1,6 +1,7 @@
-package bke.iso.engine.world
+package bke.iso.engine.world.actor
 
 import bke.iso.engine.math.Location
+import bke.iso.engine.world.Grid
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.ObjectSet
 import kotlin.reflect.KClass

@@ -3,7 +3,7 @@ package bke.iso.game.combat
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.player.Player
 import mu.KotlinLogging

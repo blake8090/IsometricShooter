@@ -6,7 +6,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.Module
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 
 class ToggleUpperLayersHiddenEvent : EditorEvent()

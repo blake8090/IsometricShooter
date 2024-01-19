@@ -4,7 +4,7 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.math.sub2
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World

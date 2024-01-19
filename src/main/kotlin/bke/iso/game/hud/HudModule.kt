@@ -8,7 +8,7 @@ import bke.iso.engine.render.GameObjectRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.PLAYER_MAX_HEALTH
 import bke.iso.game.combat.CombatModule

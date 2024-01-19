@@ -4,7 +4,7 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3

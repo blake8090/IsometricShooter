@@ -2,6 +2,7 @@ package bke.iso.engine.world
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.actor.Actor
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder

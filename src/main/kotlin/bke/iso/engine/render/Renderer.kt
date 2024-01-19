@@ -7,7 +7,7 @@ import bke.iso.engine.render.pointer.MousePointer
 import bke.iso.engine.render.pointer.Pointer
 import bke.iso.engine.render.shape.Shape3dArray
 import bke.iso.engine.render.shape.Shape3dDrawer
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color

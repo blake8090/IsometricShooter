@@ -3,7 +3,7 @@ package bke.iso.game.weapon
 import bke.iso.engine.System
 import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.game.combat.CombatModule

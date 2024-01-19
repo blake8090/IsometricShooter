@@ -3,7 +3,7 @@ package bke.iso.editor.tool.brush
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.ActorPrefab
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector3
 
 class PaintActorCommand(

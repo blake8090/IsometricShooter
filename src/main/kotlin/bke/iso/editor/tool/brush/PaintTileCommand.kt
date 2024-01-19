@@ -4,7 +4,7 @@ import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.ReferenceActors
 import bke.iso.engine.asset.cache.TilePrefab
 import bke.iso.engine.math.Location
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 
 class PaintTileCommand(
     private val referenceActors: ReferenceActors,

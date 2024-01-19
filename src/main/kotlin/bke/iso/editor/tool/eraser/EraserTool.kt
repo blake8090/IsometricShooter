@@ -6,7 +6,7 @@ import bke.iso.editor.ReferenceActors
 import bke.iso.editor.TilePrefabReference
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.Actor
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
