@@ -16,11 +16,13 @@ data class Scene(
 data class ActorRecord(
     @Contextual
     val pos: Vector3,
-    val prefab: String
+    val prefab: String,
+    val building: String? = null
 )
 
 @Serializable
 data class TileRecord(
     val location: Location,
-    val prefab: String
+    val prefab: String,
+    val building: String? = null
 )

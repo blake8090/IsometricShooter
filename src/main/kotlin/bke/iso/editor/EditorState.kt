@@ -49,7 +49,8 @@ class EditorState(override val game: Game) : State() {
         referenceActors
     )
     private val contextMenuModule = ContextMenuModule(editorScreen)
-    override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule, contextMenuModule)
+    private val buildingsModule = BuildingsModule(game.world, game.renderer, editorScreen)
+    override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule, contextMenuModule, buildingsModule)
 
     override val systems = linkedSetOf<System>()
 
@@ -65,6 +66,7 @@ class EditorState(override val game: Game) : State() {
 
         cameraModule.init()
         layerModule.init()
+        buildingsModule.init()
     }
 
     fun handleEvent(event: EditorEvent) {

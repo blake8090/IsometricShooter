@@ -15,6 +15,7 @@ class World {
     private val grid = Grid()
 
     val actors = Actors(grid)
+    val buildings = Buildings()
 
     // TODO: property?
     fun getObjects() = grid.getObjects()

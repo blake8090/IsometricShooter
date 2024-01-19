@@ -32,9 +32,11 @@ class EditorScreen(
     private val menuBar = EditorMenuBar(skin)
     private val toolBar = EditorToolBar(skin, assets)
     private val assetBrowser = EditorAssetBrowser(skin, assets)
-    private val contextMenu = EditorContextMenu(skin)
 
+    private val contextMenu = EditorContextMenu(skin)
     private var contextMenuActor: Actor? = null
+
+    private lateinit var infoLabel: Label
 
     override fun create() {
         setup()
@@ -60,6 +62,58 @@ class EditorScreen(
         }
 
         stage.addActor(root)
+    }
+
+    // TODO: use apply() in all places skin is being setup
+    private fun setup() {
+        skin.add("pixel", makePixelTexture())
+        skin.add("bg", makePixelTexture(color(10, 23, 36)))
+
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
+
+        skin.add("default", Label.LabelStyle().apply {
+            font = skin.getFont("default")
+            background = skin.getDrawable("bg")
+        })
+
+        skin.add("info", assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)])
+        skin.add("info", Label.LabelStyle().apply {
+            font = skin.getFont("info")
+        })
+
+        skin.add("button-up", color(20, 51, 82))
+        skin.add("button-over", color(34, 84, 133))
+        skin.add("button-down", color(43, 103, 161))
+        skin.add("button-checked", color(43, 103, 161))
+        skin.add("table-border", color(77, 100, 130))
+
+        skin.add("default", TextButton.TextButtonStyle().apply {
+            font = skin.getFont("default")
+            up = skin.newTintedDrawable("pixel", "button-up")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            over = skin.newTintedDrawable("pixel", "button-over")
+        })
+    }
+
+    private fun createMainView(): Table {
+        val mainView = Table()
+        mainView.name = MAIN_VIEW_NAME
+        mainView.add(toolBar.create())
+            .expandX()
+            .fillX()
+            .top()
+            .left()
+
+        mainView.row()
+
+        infoLabel = Label("", skin, "info")
+        mainView.add(infoLabel)
+            .expand()
+            .pad(5f)
+            .top()
+            .left()
+
+        return mainView
     }
 
     fun hitMainView(): Boolean {
@@ -93,40 +147,7 @@ class EditorScreen(
         contextMenuActor?.addAction(Actions.removeActor())
     }
 
-    private fun createMainView(): Table {
-        val mainView = Table()
-        mainView.name = MAIN_VIEW_NAME
-        mainView.add(toolBar.create())
-            .expand()
-            .fillX()
-            .top()
-            .left()
-        return mainView
-    }
-
-    // TODO: use apply() in all places skin is being setup
-    private fun setup() {
-        skin.add("pixel", makePixelTexture())
-        skin.add("bg", makePixelTexture(color(10, 23, 36)))
-
-        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
-
-        skin.add("default", Label.LabelStyle().apply {
-            font = skin.getFont("default")
-            background = skin.getDrawable("bg")
-        })
-
-        skin.add("button-up", color(20, 51, 82))
-        skin.add("button-over", color(34, 84, 133))
-        skin.add("button-down", color(43, 103, 161))
-        skin.add("button-checked", color(43, 103, 161))
-        skin.add("table-border", color(77, 100, 130))
-
-        skin.add("default", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("default")
-            up = skin.newTintedDrawable("pixel", "button-up")
-            down = skin.newTintedDrawable("pixel", "button-down")
-            over = skin.newTintedDrawable("pixel", "button-over")
-        })
+    fun setInfoText(text: String) {
+        infoLabel.setText(text)
     }
 }
