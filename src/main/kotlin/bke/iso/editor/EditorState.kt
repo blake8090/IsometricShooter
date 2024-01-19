@@ -99,7 +99,7 @@ class EditorState(override val game: Game) : State() {
                 Vector3(x.toFloat(), 0f, layerModule.selectedLayer.toFloat()),
                 Vector3(x.toFloat(), gridLength.toFloat(), layerModule.selectedLayer.toFloat()),
                 0.5f,
-                Color.GREEN
+                Color.WHITE
             )
         }
 
@@ -108,7 +108,7 @@ class EditorState(override val game: Game) : State() {
                 Vector3(0f, y.toFloat(), layerModule.selectedLayer.toFloat()),
                 Vector3(gridWidth.toFloat(), y.toFloat(), layerModule.selectedLayer.toFloat()),
                 0.5f,
-                Color.GREEN
+                Color.WHITE
             )
         }
     }

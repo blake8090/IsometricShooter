@@ -23,7 +23,6 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
-import mu.KotlinLogging
 
 const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f
@@ -34,8 +33,6 @@ class Renderer(
     events: Game.Events
 ) {
 
-    private val log = KotlinLogging.logger {}
-
     private val batch = PolygonSpriteBatch()
     private val gameObjectRenderer = GameObjectRenderer(assets, world, events)
     private var pointer: Pointer = MousePointer()
@@ -44,6 +41,8 @@ class Renderer(
     val bgShapes: Shape3dArray = Shape3dArray()
     val fgShapes: Shape3dArray = Shape3dArray()
     private val shapeDrawer = Shape3dDrawer(batch)
+
+    private val bgColor = Color.GRAY
 
     // TODO: cleanup this fbo code, see LowResGDX on github
     /**
@@ -113,7 +112,7 @@ class Renderer(
 
         drawToFbo()
 
-        Gdx.gl.glClearColor(0f, 0f, 1f, 1f)
+        Gdx.gl.glClearColor(bgColor.r, bgColor.b, bgColor.g, bgColor.a)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         // reset blend function to default
         batch.setBlendFunctionSeparate(
