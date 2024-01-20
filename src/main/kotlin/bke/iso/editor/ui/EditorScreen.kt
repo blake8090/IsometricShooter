@@ -44,6 +44,8 @@ class EditorScreen(
 
     private lateinit var infoLabel: Label
 
+    private val newBuildingDialog = NewBuildingDialog(skin)
+
     override fun create() {
         setup()
 
@@ -110,25 +112,7 @@ class EditorScreen(
 
     private fun createMainView(): Table {
         val mainView = Table()
-        mainView.name = MAIN_VIEW_NAME
-
         mainView.touchable = Touchable.enabled
-        mainView.addListener(object : InputListener() {
-            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                log.debug { "main view - touch down" }
-                mainView.fire(MainViewPressEvent())
-                return true
-            }
-
-            override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
-                log.debug { "main view - touch up" }
-            }
-
-            override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
-                log.debug { "main view - drag event" }
-                mainView.fire(MainViewDragEvent())
-            }
-        })
 
         mainView.add(toolBar.create())
             .expandX()
@@ -140,10 +124,38 @@ class EditorScreen(
 
         infoLabel = Label("", skin, "info")
         mainView.add(infoLabel)
-            .expand()
             .pad(5f)
             .top()
             .left()
+
+        mainView.row()
+
+        val touchableArea = Table()
+        touchableArea.name = MAIN_VIEW_NAME
+        mainView.add(touchableArea).grow()
+
+        mainView.addListener(object : InputListener() {
+            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                if (hitMainView()) {
+                    log.debug { "main view - touch down" }
+                    mainView.fire(MainViewPressEvent())
+                }
+                return true
+            }
+
+            override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
+                if (hitMainView()) {
+                    log.debug { "main view - touch up" }
+                }
+            }
+
+            override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
+                if (hitMainView()) {
+                    log.debug { "main view - drag event" }
+                    mainView.fire(MainViewDragEvent())
+                }
+            }
+        })
 
         return mainView
     }
@@ -181,5 +193,11 @@ class EditorScreen(
 
     fun setInfoText(text: String) {
         infoLabel.setText(text)
+    }
+
+    fun openNewBuildingDialog(action: (String) -> Unit) {
+        newBuildingDialog
+            .create(action)
+            .show(stage)
     }
 }

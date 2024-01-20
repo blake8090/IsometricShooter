@@ -20,7 +20,6 @@ class BuildingsModule(
 
     var selectedBuilding: String? = null
         private set
-    private var numBuildings = 0
 
     fun init() {
     }
@@ -46,11 +45,6 @@ class BuildingsModule(
         val building = selectedBuilding ?: return
         world.buildings.add(actor, building)
         log.debug { "Added actor $actor to building '$building'" }
-    }
-
-    fun newBuilding() {
-        selectBuilding("building$numBuildings")
-        numBuildings++
     }
 
     fun selectBuilding(name: String) {

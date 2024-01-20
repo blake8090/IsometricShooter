@@ -19,8 +19,6 @@ class ContextMenuModule(
     override fun update(deltaTime: Float) {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             openContextMenu()
-        } else if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-//            editorScreen.closeContextMenu()
         }
     }
 
@@ -35,11 +33,13 @@ class ContextMenuModule(
 
         if (buildingsModule.selectedBuilding.isNullOrBlank()) {
             selections.add(ContextMenuSelection("New building") {
-                buildingsModule.newBuilding()
+                editorScreen.openNewBuildingDialog(buildingsModule::selectBuilding)
+                editorScreen.closeContextMenu()
             })
         } else {
             selections.add(ContextMenuSelection("Close building") {
                 buildingsModule.closeBuilding()
+                editorScreen.closeContextMenu()
             })
         }
 
