@@ -60,12 +60,20 @@ class SceneModule(
 
         for (record in scene.actors) {
             val prefab = assets.get<ActorPrefab>(record.prefab)
-            referenceActors.create(prefab, record.pos)
+            val actor = referenceActors.create(prefab, record.pos)
+
+            record.building?.let { building ->
+                world.buildings.add(actor, building)
+            }
         }
 
         for (record in scene.tiles) {
             val prefab = assets.get<TilePrefab>(record.prefab)
-            referenceActors.create(prefab, record.location)
+            val actor = referenceActors.create(prefab, record.location)
+
+            record.building?.let { building ->
+                world.buildings.add(actor, building)
+            }
         }
 
         log.info { "Loaded scene: '${file.canonicalPath}'" }
@@ -76,12 +84,24 @@ class SceneModule(
 
         val actors = mutableListOf<ActorRecord>()
         world.actors.each { actor: Actor, reference: ActorPrefabReference ->
-            actors.add(ActorRecord(actor.pos, reference.prefab))
+            actors.add(
+                ActorRecord(
+                    actor.pos,
+                    reference.prefab,
+                    world.buildings.getBuilding(actor)
+                )
+            )
         }
 
         val tiles = mutableListOf<TileRecord>()
         world.actors.each { actor: Actor, reference: TilePrefabReference ->
-            tiles.add(TileRecord(Location(actor.pos), reference.prefab))
+            tiles.add(
+                TileRecord(
+                    Location(actor.pos),
+                    reference.prefab,
+                    world.buildings.getBuilding(actor)
+                )
+            )
         }
 
         val scene = Scene("1", actors, tiles)

@@ -25,12 +25,20 @@ class Scenes(
 
             for (record in scene.actors) {
                 val prefab = assets.get<ActorPrefab>(record.prefab)
-                world.actors.create(record.pos, *copyComponents(prefab))
+                val actor = world.actors.create(record.pos, *copyComponents(prefab))
+
+                record.building?.let { building ->
+                    world.buildings.add(actor, building)
+                }
             }
 
             for (record in scene.tiles) {
                 val prefab = assets.get<TilePrefab>(record.prefab)
-                world.setTile(record.location, prefab.sprite.copy())
+                val tile = world.setTile(record.location, prefab.sprite.copy())
+
+                record.building?.let { building ->
+                    world.buildings.add(tile, building)
+                }
             }
         }
 

@@ -32,8 +32,10 @@ class World(events: Game.Events) {
         deletedActors.clear()
     }
 
-    fun setTile(location: Location, sprite: Sprite) {
-        grid.setTile(Tile(sprite, location))
+    fun setTile(location: Location, sprite: Sprite): Tile {
+        val tile = Tile(sprite, location)
+        grid.setTile(tile)
+        return tile
     }
 
     fun getObjectsAt(point: Vector3): Set<GameObject> =

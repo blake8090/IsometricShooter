@@ -8,11 +8,17 @@ import com.badlogic.gdx.math.Vector3
 class Buildings {
 
     private val objectsByBuilding = mutableMapOf<String, MutableSet<GameObject>>()
+    private val buildingByObject = mutableMapOf<GameObject, String>()
 
     fun add(gameObject: GameObject, buildingName: String) {
+        require(buildingName.isNotBlank()) {
+            "Building name cannot be blank"
+        }
+
         objectsByBuilding
             .getOrPut(buildingName) { mutableSetOf() }
             .add(gameObject)
+        buildingByObject[gameObject] = buildingName
     }
 
     fun getBounds(buildingName: String): Box? {
@@ -33,10 +39,14 @@ class Buildings {
         return Box.fromMinMax(min, max)
     }
 
+    fun getBuilding(gameObject: GameObject): String? =
+        buildingByObject[gameObject]
+
     fun getAll(): Set<String> =
         objectsByBuilding.keys
 
     fun remove(actor: Actor) {
+        buildingByObject.remove(actor)
         for ((_, objects) in objectsByBuilding) {
             objects.remove(actor)
         }
@@ -44,5 +54,6 @@ class Buildings {
 
     fun clear() {
         objectsByBuilding.clear()
+        buildingByObject.clear()
     }
 }
