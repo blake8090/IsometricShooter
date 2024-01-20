@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 import mu.KotlinLogging
 
 private const val MAIN_VIEW_NAME = "mainView"
@@ -71,33 +72,40 @@ class EditorScreen(
 
     // TODO: use apply() in all places skin is being setup
     private fun setup() {
-        skin.add("pixel", makePixelTexture())
-        skin.add("bg", makePixelTexture(color(10, 23, 36)))
+        skin.apply {
+            add("pixel", makePixelTexture())
+            add("bg", makePixelTexture(color(10, 23, 36)))
 
-        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
+            add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
 
-        skin.add("default", Label.LabelStyle().apply {
-            font = skin.getFont("default")
-            background = skin.getDrawable("bg")
-        })
+            add("default", Label.LabelStyle().apply {
+                font = skin.getFont("default")
+                background = skin.getDrawable("bg")
+            })
 
-        skin.add("info", assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)])
-        skin.add("info", Label.LabelStyle().apply {
-            font = skin.getFont("info")
-        })
+            add("info", assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)])
+            add("info", Label.LabelStyle().apply {
+                font = skin.getFont("info")
+            })
 
-        skin.add("button-up", color(20, 51, 82))
-        skin.add("button-over", color(34, 84, 133))
-        skin.add("button-down", color(43, 103, 161))
-        skin.add("button-checked", color(43, 103, 161))
-        skin.add("table-border", color(77, 100, 130))
+            add("button-up", color(20, 51, 82))
+            add("button-over", color(34, 84, 133))
+            add("button-down", color(43, 103, 161))
+            add("button-checked", color(43, 103, 161))
+            add("table-border", color(77, 100, 130))
 
-        skin.add("default", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("default")
-            up = skin.newTintedDrawable("pixel", "button-up")
-            down = skin.newTintedDrawable("pixel", "button-down")
-            over = skin.newTintedDrawable("pixel", "button-over")
-        })
+            add("default", TextButton.TextButtonStyle().apply {
+                font = skin.getFont("default")
+                up = skin.newTintedDrawable("pixel", "button-up")
+                down = skin.newTintedDrawable("pixel", "button-down")
+                over = skin.newTintedDrawable("pixel", "button-over")
+            })
+
+            add("default", WindowStyle().apply {
+                titleFont = skin.getFont("default")
+                background = skin.getDrawable("bg")
+            })
+        }
     }
 
     private fun createMainView(): Table {
