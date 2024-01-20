@@ -5,7 +5,6 @@ import bke.iso.engine.Game
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Grid
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.ObjectSet
 import kotlin.reflect.KClass
 
 private const val ID_LENGTH = 6
@@ -14,8 +13,6 @@ class Actors(
     private val grid: Grid,
     private val events: Game.Events
 ) {
-
-    private val deletedActors = ObjectSet<Actor>()
 
     fun create(location: Location, vararg components: Component): Actor =
         create(
@@ -53,10 +50,6 @@ class Actors(
         return actor
     }
 
-    fun delete(actor: Actor) {
-        deletedActors.add(actor)
-    }
-
     fun get(id: String): Actor =
         grid.getObjects()
             .filterIsInstance<Actor>()
@@ -83,13 +76,6 @@ class Actors(
 
     inline fun <reified T : Component> find(): Actor? =
         find(T::class)
-
-    fun update() {
-        for (actor in deletedActors) {
-            grid.remove(actor)
-        }
-        deletedActors.clear()
-    }
 
     private fun onMove(actor: Actor) =
         grid.update(actor)

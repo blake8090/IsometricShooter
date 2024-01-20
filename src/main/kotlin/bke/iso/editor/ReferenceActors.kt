@@ -71,7 +71,7 @@ class ReferenceActors(private val world: World) {
         if (actor.has<TilePrefabReference>()) {
             tilesByLocation.remove(Location(actor.pos))
         }
-        world.actors.delete(actor)
+        world.delete(actor)
     }
 
     fun deleteTile(location: Location) {

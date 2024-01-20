@@ -4,6 +4,7 @@ import bke.iso.engine.Game
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
@@ -18,11 +19,17 @@ class World(events: Game.Events) {
     val actors = Actors(grid, events)
     val buildings = Buildings()
 
+    private val deletedActors = mutableSetOf<Actor>()
+
     // TODO: property?
     fun getObjects() = grid.getObjects()
 
     fun update() {
-        actors.update()
+        for (actor in deletedActors) {
+            grid.remove(actor)
+            buildings.remove(actor)
+        }
+        deletedActors.clear()
     }
 
     fun setTile(location: Location, sprite: Sprite) {
@@ -52,7 +59,12 @@ class World(events: Game.Events) {
         return objects
     }
 
+    fun delete(actor: Actor) {
+        deletedActors.add(actor)
+    }
+
     fun clear() {
         grid.clear()
+        buildings.clear()
     }
 }

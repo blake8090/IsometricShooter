@@ -40,7 +40,7 @@ class CombatModule(
         if (actor.has<Player>()) {
             return
         }
-        world.actors.delete(actor)
+        world.delete(actor)
         log.debug { "Actor $actor has been destroyed" }
     }
 

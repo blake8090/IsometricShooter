@@ -2,6 +2,7 @@ package bke.iso.engine.world
 
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector3
 
 class Buildings {
@@ -34,4 +35,14 @@ class Buildings {
 
     fun getAll(): Set<String> =
         objectsByBuilding.keys
+
+    fun remove(actor: Actor) {
+        for ((_, objects) in objectsByBuilding) {
+            objects.remove(actor)
+        }
+    }
+
+    fun clear() {
+        objectsByBuilding.clear()
+    }
 }
