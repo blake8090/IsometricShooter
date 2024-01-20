@@ -53,7 +53,8 @@ class ReferenceActors(private val world: World) {
             location,
             prefab.sprite.copy(),
             TilePrefabReference(prefab.name),
-            Collider(Vector3(1f, 1f, 0f))
+            Collider(Vector3(1f, 1f, 0f)),
+            Occlude() // manually ensure that the reference actor is included in the occlusion system
         )
         tilesByLocation[location] = actor
         return actor
