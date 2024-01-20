@@ -59,24 +59,34 @@ class SceneModule(
         world.clear()
 
         for (record in scene.actors) {
-            val prefab = assets.get<ActorPrefab>(record.prefab)
-            val actor = referenceActors.create(prefab, record.pos)
-
-            record.building?.let { building ->
-                world.buildings.add(actor, building)
-            }
+            load(record)
         }
 
         for (record in scene.tiles) {
-            val prefab = assets.get<TilePrefab>(record.prefab)
-            val actor = referenceActors.create(prefab, record.location)
-
-            record.building?.let { building ->
-                world.buildings.add(actor, building)
-            }
+            load(record)
         }
 
         log.info { "Loaded scene: '${file.canonicalPath}'" }
+    }
+
+    private fun load(record: ActorRecord) {
+        val prefab = assets.get<ActorPrefab>(record.prefab)
+        val actor = referenceActors.create(prefab, record.pos)
+
+        val building = record.building
+        if (!building.isNullOrBlank()) {
+            world.buildings.add(actor, building)
+        }
+    }
+
+    private fun load(record: TileRecord) {
+        val prefab = assets.get<TilePrefab>(record.prefab)
+        val actor = referenceActors.create(prefab, record.location)
+
+        val building = record.building
+        if (!building.isNullOrBlank()) {
+            world.buildings.add(actor, building)
+        }
     }
 
     private fun saveScene() {

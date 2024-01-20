@@ -2,6 +2,7 @@ package bke.iso.editor.ui
 
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
@@ -15,12 +16,13 @@ class NewBuildingDialog(private val skin: Skin) {
 
     private val log = KotlinLogging.logger {}
 
-    fun create(action: (String) -> Unit): Dialog {
+    fun create(stage: Stage, action: (String) -> Unit) {
         setup()
 
         val textField = TextField("", skin, STYLE_NAME)
 
         val dialog = object : Dialog("", skin, STYLE_NAME) {
+
             override fun result(obj: Any) {
                 val result = obj as Boolean
                 val text = textField.text
@@ -43,9 +45,11 @@ class NewBuildingDialog(private val skin: Skin) {
             .button("OK", true)
             .button("Cancel", false)
             .key(Keys.ENTER, true)
+            .key(Keys.NUMPAD_ENTER, true)
             .key(Keys.ESCAPE, false)
 
-        return dialog
+        dialog.show(stage)
+        stage.keyboardFocus = textField
     }
 
     private fun setup() {

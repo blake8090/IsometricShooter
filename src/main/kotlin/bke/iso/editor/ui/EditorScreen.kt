@@ -196,8 +196,6 @@ class EditorScreen(
     }
 
     fun openNewBuildingDialog(action: (String) -> Unit) {
-        newBuildingDialog
-            .create(action)
-            .show(stage)
+        newBuildingDialog.create(stage, action)
     }
 }

@@ -24,30 +24,40 @@ class Scenes(
             world.clear()
 
             for (record in scene.actors) {
-                val prefab = assets.get<ActorPrefab>(record.prefab)
-                val actor = world.actors.create(record.pos, *copyComponents(prefab))
-
-                record.building?.let { building ->
-                    world.buildings.add(actor, building)
-                }
+                load(record)
             }
 
             for (record in scene.tiles) {
-                val prefab = assets.get<TilePrefab>(record.prefab)
-                val tile = world.setTile(record.location, prefab.sprite.copy())
-
-                record.building?.let { building ->
-                    world.buildings.add(tile, building)
-                }
+                load(record)
             }
         }
 
         log.info { "Loaded scene '$name' in $time ms" }
     }
 
+    private fun load(record: ActorRecord) {
+        val prefab = assets.get<ActorPrefab>(record.prefab)
+        val actor = world.actors.create(record.pos, *copyComponents(prefab))
+
+        val building = record.building
+        if (!building.isNullOrBlank()) {
+            world.buildings.add(actor, building)
+        }
+    }
+
     private fun copyComponents(prefab: ActorPrefab): Array<Component> {
         // on deserialization, we'll get completely new references
         val serialized = serializer.write(prefab.components)
         return serializer.read(serialized)
+    }
+
+    private fun load(record: TileRecord) {
+        val prefab = assets.get<TilePrefab>(record.prefab)
+        val tile = world.setTile(record.location, prefab.sprite.copy())
+
+        val building = record.building
+        if (!building.isNullOrBlank()) {
+            world.buildings.add(tile, building)
+        }
     }
 }
