@@ -27,7 +27,7 @@ class GameObjectRenderer(
     var occlusionTarget: Actor? = null
 
     // TODO: just store the minimum hidden layer
-    private val hiddenLayers = mutableSetOf<Float>()
+    private val hiddenBuildingLayers = mutableMapOf<String, MutableSet<Float>>()
 
     fun draw(batch: PolygonSpriteBatch) {
         val objects = world
@@ -54,7 +54,7 @@ class GameObjectRenderer(
             draw(batch, renderData)
         }
 
-        hiddenLayers.clear()
+        hiddenBuildingLayers.clear()
     }
 
     private fun checkOcclusion(renderData: RenderData) {
@@ -71,7 +71,14 @@ class GameObjectRenderer(
             renderData.alpha = 0.1f
 
             if (renderData.bounds.min.z >= targetData.bounds.max.z) {
-                hiddenLayers.add(floor(renderData.bounds.min.z))
+                val layer = floor(renderData.bounds.min.z)
+
+                val building = world.buildings.getBuilding(renderData.gameObject)
+                if (!building.isNullOrBlank()) {
+                    hiddenBuildingLayers
+                        .getOrPut(building) { mutableSetOf() }
+                        .add(layer)
+                }
             }
         }
     }
@@ -86,6 +93,8 @@ class GameObjectRenderer(
             draw(batch, data)
         }
 
+        val building = world.buildings.getBuilding(renderData.gameObject)
+        val hiddenLayers = hiddenBuildingLayers[building] ?: emptySet()
         if (hiddenLayers.isNotEmpty() && floor(renderData.bounds.min.z) >= hiddenLayers.min()) {
             renderData.alpha = 0f
         }
