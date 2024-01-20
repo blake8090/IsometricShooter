@@ -2,14 +2,21 @@ package bke.iso.editor.ui
 
 import bke.iso.editor.ContextMenuSelection
 import bke.iso.engine.ui.util.newTintedDrawable
+import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import mu.KotlinLogging
 
 class EditorContextMenu(private val skin: Skin) {
 
-    fun create(x: Float, y: Float, vararg selections: ContextMenuSelection): Actor {
+    private val log = KotlinLogging.logger {}
+
+    fun create(x: Float, y: Float, selections: Set<ContextMenuSelection>): Actor {
         setup()
 
         val root = Table().top().left()
@@ -17,9 +24,24 @@ class EditorContextMenu(private val skin: Skin) {
         val menu = Table()
         menu.background = skin.getDrawable("bg")
 
+        // prevents clicks on main view when cursor is over the context menu
+        menu.touchable = Touchable.enabled
+        menu.addListener(object : ClickListener() {
+            override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                log.debug { "touched context menu" }
+                return true
+            }
+        })
+
         for (selection in selections) {
-            menu.add(TextButton(selection.text, skin, "context-menu"))
+            val button = TextButton(selection.text, skin, "context-menu")
+            button.onChanged {
+                selection.action.invoke()
+            }
+
+            menu.add(button)
                 .pad(5f)
+
             menu.row()
         }
 

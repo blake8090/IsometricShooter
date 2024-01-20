@@ -1,5 +1,6 @@
 package bke.iso.engine.world
 
+import bke.iso.engine.Game
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
@@ -10,11 +11,11 @@ import kotlin.math.floor
 
 interface GameObject
 
-class World {
+class World(events: Game.Events) {
 
     private val grid = Grid()
 
-    val actors = Actors(grid)
+    val actors = Actors(grid, events)
     val buildings = Buildings()
 
     // TODO: property?

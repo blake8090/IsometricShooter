@@ -60,7 +60,7 @@ class BrushTool(
     override fun performAction(): EditorCommand? =
         when (val s = selection) {
             is TileSelection -> paintTile(s.prefab, Location(brushActor.pos))
-            is ActorSelection -> PaintActorCommand(referenceActors, s.prefab, brushActor.pos, world.buildings)
+            is ActorSelection -> PaintActorCommand(referenceActors, s.prefab, brushActor.pos)
             else -> null
         }
 

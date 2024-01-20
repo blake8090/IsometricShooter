@@ -14,6 +14,10 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 
+class MainViewPressEvent : EditorEvent()
+
+class MainViewDragEvent : EditorEvent()
+
 class EditorState(override val game: Game) : State() {
 
     private val log = KotlinLogging.logger {}
@@ -48,8 +52,8 @@ class EditorState(override val game: Game) : State() {
         game.assets,
         referenceActors
     )
-    private val contextMenuModule = ContextMenuModule(editorScreen)
     private val buildingsModule = BuildingsModule(game.world, game.renderer, editorScreen)
+    private val contextMenuModule = ContextMenuModule(editorScreen, buildingsModule)
     override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule, contextMenuModule, buildingsModule)
 
     override val systems = linkedSetOf<System>()
@@ -70,23 +74,29 @@ class EditorState(override val game: Game) : State() {
     }
 
     fun handleEvent(event: EditorEvent) {
-        game.events.fire(event)
+        when (event) {
+            is MainViewPressEvent -> {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    toolModule.performAction()?.let(::execute)
+                    editorScreen.closeContextMenu()
+                }
+            }
+
+            is MainViewDragEvent -> {
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    toolModule.performMultiAction()?.let(::execute)
+                }
+            }
+
+            else -> {
+                game.events.fire(event)
+            }
+        }
     }
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
-        updateTool()
         drawGrid()
-    }
-
-    private fun updateTool() {
-        if (editorScreen.hitMainView()) {
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                toolModule.performAction()?.let(::execute)
-            } else if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                toolModule.performMultiAction()?.let(::execute)
-            }
-        }
     }
 
     private fun execute(command: EditorCommand) {

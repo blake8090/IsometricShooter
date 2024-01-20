@@ -1,14 +1,20 @@
 package bke.iso.engine.world
 
+import bke.iso.engine.Game
 import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.mockk.every
+import io.mockk.mockk
 
 class WorldTest : StringSpec({
 
+    val events = mockk<Game.Events>()
+    every { events.fire(any()) } returns mockk()
+
     "should return all objects in area" {
-        val world = World()
+        val world = World(events)
         val actor = world.actors.create("actor", 0f, 0f, 0f)
         val actor2 = world.actors.create("actor2", 1f, 0f, 0f)
         world.actors.create("actor3", 2f, 0f, 0f)
@@ -22,7 +28,7 @@ class WorldTest : StringSpec({
     }
 
     "should return all objects in area with negative positions" {
-        val world = World()
+        val world = World(events)
         val actor = world.actors.create("actor", 0f, 0f, 0f)
         val actor2 = world.actors.create("actor2", 0f, -1f, 0f)
         world.actors.create("actor3", -0.5f, -0.5f, 0f)

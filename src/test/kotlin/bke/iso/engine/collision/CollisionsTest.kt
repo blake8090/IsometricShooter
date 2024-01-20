@@ -1,5 +1,6 @@
 package bke.iso.engine.collision
 
+import bke.iso.engine.Game
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.DebugRenderer
@@ -15,12 +16,16 @@ import io.mockk.every
 import io.mockk.mockk
 
 class CollisionsTest : StringSpec({
+
+    val events = mockk<Game.Events>()
+    every { events.fire(any()) } returns mockk()
+
     "when actor stands on top of tile, given precision error, should return collision" {
         val renderer = mockk<Renderer>()
         val debugRenderer = mockk<DebugRenderer>()
         every { debugRenderer.addBox(any<Box>(), any<Float>(), any<Color>()) } returns Unit
         every { renderer.debug } returns debugRenderer
-        val world = World()
+        val world = World(events)
 
         val collisions = Collisions(renderer, world)
 

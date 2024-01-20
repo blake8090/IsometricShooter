@@ -38,7 +38,7 @@ class Game {
     val serializer = Serializer()
     val assets: Assets = Assets(files, systemInfo)
 
-    val world: World = World()
+    val world: World = World(events)
     val renderer: Renderer = Renderer(world, assets, events)
     val collisions: Collisions = Collisions(renderer, world)
     val physics: Physics = Physics(world, collisions)

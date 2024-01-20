@@ -2,6 +2,8 @@ package bke.iso.editor.ui
 
 import bke.iso.editor.ContextMenuSelection
 import bke.iso.editor.EditorState
+import bke.iso.editor.MainViewDragEvent
+import bke.iso.editor.MainViewPressEvent
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.EditorEventListener
 import bke.iso.engine.asset.Assets
@@ -13,6 +15,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -98,6 +103,25 @@ class EditorScreen(
     private fun createMainView(): Table {
         val mainView = Table()
         mainView.name = MAIN_VIEW_NAME
+
+        mainView.touchable = Touchable.enabled
+        mainView.addListener(object : InputListener() {
+            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                log.debug { "main view - touch down" }
+                mainView.fire(MainViewPressEvent())
+                return true
+            }
+
+            override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
+                log.debug { "main view - touch up" }
+            }
+
+            override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
+                log.debug { "main view - drag event" }
+                mainView.fire(MainViewDragEvent())
+            }
+        })
+
         mainView.add(toolBar.create())
             .expandX()
             .fillX()
@@ -133,13 +157,13 @@ class EditorScreen(
         toolBar.updateLayerLabel(layer)
     }
 
-    fun openContextMenu(vararg selection: ContextMenuSelection) {
+    fun openContextMenu(selections: Set<ContextMenuSelection>) {
         closeContextMenu()
 
         val screenPos = Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
         val stagePos: Vector2 = stage.screenToStageCoordinates(screenPos)
 
-        contextMenuActor = contextMenu.create(stagePos.x, stagePos.y, *selection)
+        contextMenuActor = contextMenu.create(stagePos.x, stagePos.y, selections)
         stage.addActor(contextMenuActor)
     }
 

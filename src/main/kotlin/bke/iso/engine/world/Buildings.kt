@@ -31,4 +31,7 @@ class Buildings {
 
         return Box.fromMinMax(min, max)
     }
+
+    fun getAll(): Set<String> =
+        objectsByBuilding.keys
 }

@@ -1,5 +1,7 @@
 package bke.iso.engine.world.actor
 
+import bke.iso.engine.Event
+import bke.iso.engine.Game
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Grid
 import com.badlogic.gdx.math.Vector3
@@ -8,7 +10,10 @@ import kotlin.reflect.KClass
 
 private const val ID_LENGTH = 6
 
-class Actors(private val grid: Grid) {
+class Actors(
+    private val grid: Grid,
+    private val events: Game.Events
+) {
 
     private val deletedActors = ObjectSet<Actor>()
 
@@ -44,6 +49,7 @@ class Actors(private val grid: Grid) {
         }
 
         actor.moveTo(x, y, z)
+        events.fire(CreatedEvent(actor))
         return actor
     }
 
@@ -92,4 +98,6 @@ class Actors(private val grid: Grid) {
         val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         return List(ID_LENGTH) { charPool.random() }.joinToString("")
     }
+
+    data class CreatedEvent(val actor: Actor) : Event
 }
