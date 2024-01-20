@@ -137,7 +137,7 @@ class EditorScreen(
         mainView.addListener(object : InputListener() {
             override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
                 if (hitMainView()) {
-                    log.debug { "main view - touch down" }
+                    log.trace { "main view - touch down" }
                     mainView.fire(MainViewPressEvent())
                 }
                 return true
@@ -145,13 +145,13 @@ class EditorScreen(
 
             override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
                 if (hitMainView()) {
-                    log.debug { "main view - touch up" }
+                    log.trace { "main view - touch up" }
                 }
             }
 
             override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
                 if (hitMainView()) {
-                    log.debug { "main view - drag event" }
+                    log.trace { "main view - drag event" }
                     mainView.fire(MainViewDragEvent())
                 }
             }

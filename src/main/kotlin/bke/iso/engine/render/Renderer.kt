@@ -16,11 +16,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Pools
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 
@@ -43,6 +45,8 @@ class Renderer(
     private val shapeDrawer = Shape3dDrawer(batch)
 
     private val bgColor = Color.GRAY
+
+    private val renderTexts = mutableSetOf<RenderText>()
 
     // TODO: cleanup this fbo code, see LowResGDX on github
     /**
@@ -131,8 +135,24 @@ class Renderer(
         debug.draw(shapeDrawer)
         shapeDrawer.end()
 
+        batch.begin()
+        for (renderText in renderTexts) {
+            val font = checkNotNull(renderText.font) {
+                "Expected a non-null BitmapFont"
+            }
+
+            font.draw(
+                batch,
+                renderText.text,
+                renderText.x,
+                renderText.y,
+            )
+        }
+        batch.end()
+
         bgShapes.clear()
         fgShapes.clear()
+        renderTexts.clear()
     }
 
     private fun drawToFbo() {
@@ -199,6 +219,17 @@ class Renderer(
                 /* rotation = */ rotation
             )
         }
+    }
+
+    fun drawText(text: String, font: BitmapFont, worldPos: Vector3) {
+        val renderText = Pools.obtain(RenderText::class.java)
+        renderText.text = text
+        renderText.font = font
+
+        val pos = toScreen(worldPos)
+        renderText.x = pos.x
+        renderText.y = pos.y
+        renderTexts.add(renderText)
     }
 }
 

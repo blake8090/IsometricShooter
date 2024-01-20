@@ -3,6 +3,8 @@ package bke.iso.editor
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Module
+import bke.iso.engine.asset.Assets
+import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -13,10 +15,13 @@ import mu.KotlinLogging
 class BuildingsModule(
     private val world: World,
     private val renderer: Renderer,
-    private val editorScreen: EditorScreen
+    private val editorScreen: EditorScreen,
+    assets: Assets
 ) : Module {
 
     private val log = KotlinLogging.logger {}
+
+    private val buildingFont = assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
     var selectedBuilding: String? = null
         private set
@@ -25,14 +30,15 @@ class BuildingsModule(
     }
 
     override fun update(deltaTime: Float) {
-        val boundingBoxes = world
-            .buildings
-            .getAll()
-            .mapNotNull { name -> world.buildings.getBounds(name) }
-
-        for (box in boundingBoxes) {
-            renderer.fgShapes.addBox(box, 1f, Color.BLUE)
+        for (buildingName in world.buildings.getAll()) {
+            drawBuilding(buildingName)
         }
+    }
+
+    private fun drawBuilding(name: String) {
+        val box = world.buildings.getBounds(name) ?: return
+        renderer.fgShapes.addBox(box, 1f, Color.BLUE)
+        renderer.drawText(name, buildingFont, box.pos)
     }
 
     override fun handleEvent(event: Event) {

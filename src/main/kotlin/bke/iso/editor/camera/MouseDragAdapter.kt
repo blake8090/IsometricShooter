@@ -20,7 +20,7 @@ class MouseDragAdapter(private val triggerButton: Int) : InputAdapter() {
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         if (button == triggerButton) {
-            log.debug { "start tracking" }
+            log.trace { "start tracking" }
             lastPos.set(screenX.toFloat(), screenY.toFloat())
             tracking = true
         }
@@ -29,7 +29,7 @@ class MouseDragAdapter(private val triggerButton: Int) : InputAdapter() {
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         if (button == triggerButton) {
-            log.debug { "stop tracking" }
+            log.trace { "stop tracking" }
             delta.setZero()
             tracking = false
         }
@@ -43,7 +43,7 @@ class MouseDragAdapter(private val triggerButton: Int) : InputAdapter() {
                 screenY - lastPos.y
             )
             lastPos.set(screenX.toFloat(), screenY.toFloat())
-            log.debug { "mouse drag: $delta pos: ($screenX,$screenY)" }
+            log.trace { "mouse drag: $delta pos: ($screenX,$screenY)" }
         }
         return false
     }
