@@ -43,9 +43,15 @@ class ContextMenuModule(
             })
         }
 
-        if (selections.isNotEmpty()) {
-            editorScreen.openContextMenu(selections)
-        }
+        selections.add(ContextMenuSelection("Edit building") {
+            editorScreen.closeContextMenu()
+        })
+
+        selections.add(ContextMenuSelection("Delete building") {
+            editorScreen.closeContextMenu()
+        })
+
+        editorScreen.openContextMenu(selections)
     }
 
     override fun handleEvent(event: Event) {}

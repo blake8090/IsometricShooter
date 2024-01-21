@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import mu.KotlinLogging
 
 class EditorContextMenu(private val skin: Skin) {
@@ -34,15 +35,21 @@ class EditorContextMenu(private val skin: Skin) {
         })
 
         for (selection in selections) {
-            val button = TextButton(selection.text, skin, "context-menu")
-            button.onChanged {
-                selection.action.invoke()
+            menu.row()
+
+            val button = TextButton(selection.text, skin, "context-menu").apply {
+                padLeft(5f)
+                padRight(5f)
+                label.setAlignment(Align.left)
+
+                onChanged {
+                    selection.action.invoke()
+                }
             }
 
             menu.add(button)
-                .pad(5f)
-
-            menu.row()
+                .grow()
+                .space(5f)
         }
 
         root.add(menu).expand()
@@ -54,7 +61,7 @@ class EditorContextMenu(private val skin: Skin) {
     private fun setup() {
         skin.add("context-menu", TextButton.TextButtonStyle().apply {
             font = skin.getFont("default")
-            up = skin.newTintedDrawable("pixel", "button-up")
+            up = skin.getDrawable("bg")
             down = skin.newTintedDrawable("pixel", "button-down")
             over = skin.newTintedDrawable("pixel", "button-over")
         })

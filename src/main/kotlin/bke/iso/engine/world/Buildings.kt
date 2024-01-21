@@ -22,8 +22,13 @@ class Buildings {
     }
 
     fun getBounds(buildingName: String): Box? {
-        val objects = objectsByBuilding[buildingName] ?: return null
-        val boxes = objects.mapNotNull(GameObject::getCollisionBox)
+        val boxes = objectsByBuilding[buildingName]
+            ?.mapNotNull(GameObject::getCollisionBox)
+            ?: emptyList()
+
+        if (boxes.isEmpty()) {
+            return null
+        }
 
         val min = Vector3(
             boxes.minOf { box -> box.min.x },
