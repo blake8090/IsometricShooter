@@ -29,6 +29,7 @@ object Vector3Serializer : KSerializer<Vector3> {
 
     override fun deserialize(decoder: Decoder): Vector3 =
         decoder.decodeStructure(descriptor) {
+            // TODO: should this default to 0 to allow omitting fields?
             var x: Float? = null
             var y: Float? = null
             var z: Float? = null

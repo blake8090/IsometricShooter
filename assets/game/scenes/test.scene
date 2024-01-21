@@ -1,0 +1,884 @@
+{
+    "version": "1",
+    "actors": [
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-east",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-east",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-east",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-west",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-west",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-west",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-north-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-north",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-south-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-south",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-wall-south",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 2.6875,
+                "y": 1.2812504,
+                "z": 0.0
+            },
+            "prefab": "player"
+        }
+    ],
+    "tiles": [
+        {
+            "location": {
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "shed"
+        }
+    ]
+}

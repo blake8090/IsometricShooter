@@ -53,7 +53,7 @@ class GameState(override val game: Game) : State() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
-        game.scenes.load("occlusion-test3.scene")
+        game.scenes.load("test.scene")
         // hack to make the moving platform work in building.scene
         game.world.actors.each<MovingPlatform> { actor, _ ->
             actor.add(MovingPlatform(speed = 1f, maxZ = 4f, minZ = 2f))

@@ -1,9 +1,9 @@
 {
-  name: "side-fence",
+  name: "basic-wall-north-corner",
   components: [
     {
       type: "sprite",
-      texture: "fence-side.png",
+      texture: "basic-wall-front-corner.png",
       offsetX: 0.0,
       offsetY: 16.0,
       alpha: 1.0,
@@ -12,9 +12,14 @@
     {
       type: "collider",
       size: {
-        x: 0.1,
-        y: 1.0,
-        z: 1.0
+        x: 0.75,
+        y: 0.25,
+        z: 2.0
+      },
+      offset: {
+        x: 0.25,
+        y: 0,
+        z: 0
       }
     },
     {
@@ -22,7 +27,10 @@
     },
     {
       type: "description",
-      text: "side fence"
+      text: "wall"
+    },
+    {
+      type: "occlude"
     }
   ]
 }

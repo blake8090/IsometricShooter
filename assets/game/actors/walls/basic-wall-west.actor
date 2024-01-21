@@ -1,25 +1,20 @@
 {
-  name: "box",
+  name: "basic-wall-west",
   components: [
     {
       type: "sprite",
-      texture: "box.png",
-      offsetX: 16.0,
-      offsetY: 8.0,
+      texture: "basic-wall-side.png",
+      offsetX: 0.0,
+      offsetY: 16.0,
       alpha: 1.0,
       scale: 1.0
     },
     {
       type: "collider",
       size: {
-        x: 0.5,
-        y: 0.5,
-        z: 0.5
-      },
-      offset: {
-        x: -0.25,
-        y: -0.25,
-        z: 0
+        x: 0.25,
+        y: 1.0,
+        z: 2.0
       }
     },
     {
@@ -27,7 +22,10 @@
     },
     {
       type: "description",
-      text: "box"
+      text: "wall"
+    },
+    {
+      type: "occlude"
     }
   ]
 }

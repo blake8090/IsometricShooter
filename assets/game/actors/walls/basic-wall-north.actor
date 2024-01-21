@@ -1,9 +1,9 @@
 {
-  name: "wall-front2",
+  name: "basic-wall-north",
   components: [
     {
       type: "sprite",
-      texture: "wall-front2.png",
+      texture: "basic-wall-front.png",
       offsetX: 0.0,
       offsetY: 16.0,
       alpha: 1.0,
@@ -13,7 +13,7 @@
       type: "collider",
       size: {
         x: 1.0,
-        y: 0.125,
+        y: 0.25,
         z: 2.0
       }
     },
