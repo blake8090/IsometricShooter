@@ -3,6 +3,7 @@ package bke.iso.editor
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Module
+import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 
@@ -13,7 +14,8 @@ data class ContextMenuSelection(
 
 class ContextMenuModule(
     private val editorScreen: EditorScreen,
-    private val buildingsModule: BuildingsModule
+    private val buildingsModule: BuildingsModule,
+    private val world: World
 ) : Module {
 
     override fun update(deltaTime: Float) {
@@ -44,6 +46,10 @@ class ContextMenuModule(
         }
 
         selections.add(ContextMenuSelection("Edit building") {
+            val buildingNames = world.buildings.getAll()
+            editorScreen.openEditBuildingDialog(buildingNames) { name ->
+                buildingsModule.selectBuilding(name)
+            }
             editorScreen.closeContextMenu()
         })
 

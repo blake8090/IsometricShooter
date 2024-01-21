@@ -6,6 +6,8 @@ import bke.iso.editor.MainViewDragEvent
 import bke.iso.editor.MainViewPressEvent
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.EditorEventListener
+import bke.iso.editor.ui.dialog.EditBuildingDialog
+import bke.iso.editor.ui.dialog.NewBuildingDialog
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.FontOptions
 import bke.iso.engine.render.makePixelTexture
@@ -45,6 +47,7 @@ class EditorScreen(
     private lateinit var infoLabel: Label
 
     private val newBuildingDialog = NewBuildingDialog(skin)
+    private val editBuildingDialog = EditBuildingDialog(skin)
 
     override fun create() {
         setup()
@@ -197,5 +200,9 @@ class EditorScreen(
 
     fun openNewBuildingDialog(action: (String) -> Unit) {
         newBuildingDialog.create(stage, action)
+    }
+
+    fun openEditBuildingDialog(buildingNames: Set<String>, action: (String) -> Unit) {
+        editBuildingDialog.create(stage, buildingNames, action)
     }
 }

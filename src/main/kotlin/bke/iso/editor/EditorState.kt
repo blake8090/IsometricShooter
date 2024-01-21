@@ -58,7 +58,11 @@ class EditorState(override val game: Game) : State() {
         editorScreen,
         game.assets
     )
-    private val contextMenuModule = ContextMenuModule(editorScreen, buildingsModule)
+    private val contextMenuModule = ContextMenuModule(
+        editorScreen,
+        buildingsModule,
+        game.world
+    )
     override val modules = setOf(layerModule, toolModule, cameraModule, sceneModule, contextMenuModule, buildingsModule)
 
     override val systems = linkedSetOf<System>()

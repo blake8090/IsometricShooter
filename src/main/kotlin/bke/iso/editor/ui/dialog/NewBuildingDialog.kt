@@ -1,13 +1,13 @@
-package bke.iso.editor.ui
+package bke.iso.editor.ui.dialog
 
-import com.badlogic.gdx.Input.Keys
+import bke.iso.editor.ui.color
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Window
 import mu.KotlinLogging
 
 private const val STYLE_NAME = "new-building-dialog"
@@ -44,9 +44,9 @@ class NewBuildingDialog(private val skin: Skin) {
         dialog
             .button("OK", true)
             .button("Cancel", false)
-            .key(Keys.ENTER, true)
-            .key(Keys.NUMPAD_ENTER, true)
-            .key(Keys.ESCAPE, false)
+            .key(Input.Keys.ENTER, true)
+            .key(Input.Keys.NUMPAD_ENTER, true)
+            .key(Input.Keys.ESCAPE, false)
 
         dialog.show(stage)
         stage.keyboardFocus = textField
@@ -54,7 +54,7 @@ class NewBuildingDialog(private val skin: Skin) {
 
     private fun setup() {
         skin.apply {
-            add(STYLE_NAME, TextFieldStyle().apply {
+            add(STYLE_NAME, TextField.TextFieldStyle().apply {
                 font = skin.getFont("default")
                 fontColor = Color.WHITE
                 focusedFontColor = Color.WHITE
@@ -66,7 +66,7 @@ class NewBuildingDialog(private val skin: Skin) {
                 selection = skin.newDrawable("pixel", color(50, 158, 168))
             })
 
-            add(STYLE_NAME, WindowStyle().apply {
+            add(STYLE_NAME, Window.WindowStyle().apply {
                 background = skin.getDrawable("bg")
                 titleFont = skin.getFont("default")
             })
