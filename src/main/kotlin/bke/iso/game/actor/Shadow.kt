@@ -1,4 +1,4 @@
-package bke.iso.game
+package bke.iso.game.actor
 
 import bke.iso.engine.System
 import bke.iso.engine.math.Box
