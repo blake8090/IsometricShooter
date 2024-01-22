@@ -1,0 +1,50 @@
+{
+  name: "rolling-turret",
+  components: [
+    {
+      type: "sprite",
+      texture: "rolling-turret.png",
+      offsetX: 16.0,
+      offsetY: 0.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "rollingTurret"
+    },
+    {
+      type: "collider",
+      size: {
+        x: 0.25,
+        y: 0.25,
+        z: 0.75
+      },
+      offset: {
+        x: -0.25,
+        y: 0.0,
+        z: 0.0
+      }
+    },
+    {
+      type: "health",
+      maxValue: 3.0,
+      value: 3.0
+    },
+    {
+      type: "healthBar",
+      offsetX: 16.0,
+      offsetY: -36.0
+    },
+    {
+      type: "description",
+      text: "Rolling Turret"
+    },
+    {
+      type: "castShadow"
+    },
+    {
+      type: "physicsBody",
+      mode: "DYNAMIC"
+    }
+  ]
+}

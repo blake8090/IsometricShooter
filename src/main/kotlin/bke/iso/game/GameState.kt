@@ -10,6 +10,7 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
+import bke.iso.game.actor.RollingTurretSystem
 import bke.iso.game.shadow.ShadowSystem
 import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
@@ -45,6 +46,7 @@ class GameState(override val game: Game) : State() {
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
         PlayerSystem(game.input, game.world, game.renderer),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
+        RollingTurretSystem(game.world, game.collisions),
         BulletSystem(game.world, combatModule, game.collisions),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions),

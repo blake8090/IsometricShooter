@@ -171,7 +171,7 @@ class Renderer(
             GL20.GL_ONE_MINUS_SRC_ALPHA,
         )
 
-        gameObjectRenderer.draw(batch)
+        gameObjectRenderer.draw(batch, debug)
 
         batch.end()
         fbo.end()

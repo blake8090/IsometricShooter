@@ -158,9 +158,9 @@ class Physics(
         }
         actor.moveTo(x, y, z)
     }
-
-    private fun getPhysicsMode(obj: GameObject) = (obj as? Actor)
-        ?.get<PhysicsBody>()
-        ?.mode
-        ?: PhysicsMode.SOLID
 }
+
+fun getPhysicsMode(obj: GameObject) = (obj as? Actor)
+    ?.get<PhysicsBody>()
+    ?.mode
+    ?: PhysicsMode.SOLID

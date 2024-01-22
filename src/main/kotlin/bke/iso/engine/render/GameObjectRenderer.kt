@@ -29,7 +29,7 @@ class GameObjectRenderer(
     // TODO: just store the minimum hidden layer
     private val hiddenBuildingLayers = mutableMapOf<String, MutableSet<Float>>()
 
-    fun draw(batch: PolygonSpriteBatch) {
+    fun draw(batch: PolygonSpriteBatch, debugRenderer: DebugRenderer) {
         val objects = world
             .getObjects()
             .mapNotNull(::getRenderData)
@@ -48,6 +48,11 @@ class GameObjectRenderer(
             }
 
             checkOcclusion(a)
+
+            when (val o = a.gameObject) {
+                is Actor -> debugRenderer.add(o)
+                is Tile -> debugRenderer.add(o)
+            }
         }
 
         for (renderData in objects) {

@@ -512,11 +512,26 @@
                 "z": 0.0
             },
             "prefab": "box"
+        },
+        {
+            "pos": {
+                "x": 12.6875,
+                "y": 18.34375,
+                "z": 0.0
+            },
+            "prefab": "rolling-turret"
         }
     ],
     "tiles": [
         {
             "location": {
+                "x": 12,
+                "y": 17
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
                 "x": 5,
                 "y": 7
             },
@@ -1037,13 +1052,6 @@
             "location": {
                 "x": 13,
                 "y": 18
-            },
-            "prefab": "floor"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 17
             },
             "prefab": "floor"
         }
