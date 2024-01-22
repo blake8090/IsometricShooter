@@ -70,7 +70,14 @@ private fun findSweptCollision(entryTime: Vector3, exitTime: Vector3, delta: Vec
     }
 
     // find the longest entry time. the shortest entry time only demonstrates a collision on one axis.
-    val longestEntryTime = maxOf(entryTime.x, entryTime.y, entryTime.z)
+    var longestEntryTime = maxOf(entryTime.x, entryTime.y, entryTime.z)
+
+    // account for floating point precision errors
+    if (longestEntryTime > -0.01f && longestEntryTime < 0f) {
+//        println("longestEntryTime was: $longestEntryTime")
+        longestEntryTime = 0f
+    }
+
     // if the longest entry time is not within the 0-1 range, that means no collision occurred
     return if (longestEntryTime !in 0f..1f) {
         null

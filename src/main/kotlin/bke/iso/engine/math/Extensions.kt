@@ -24,10 +24,10 @@ fun Vector3.sub2(other: Vector3): Vector3 {
     return this
 }
 
-// TODO: unit test
+// TODO: do we really need this?
 fun sub(a: Float, b: Float): Float =
     (a.toBigDecimal() - b.toBigDecimal()).toFloat()
 
-// TODO: unit test
+// TODO: do we really need this?
 fun add(a: Float, b: Float): Float =
     (a.toBigDecimal() + b.toBigDecimal()).toFloat()

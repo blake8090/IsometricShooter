@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.collision.Segment
 import kotlin.math.max
 import kotlin.math.min
 
+private const val PRECISION_ERROR_THRESHOLD = 0.0001f
+
 data class Box(
     /**
      * Center point of the box
@@ -65,10 +67,10 @@ data class Box(
     )
 
     fun intersects(box: Box): Boolean {
-        return min.x < box.max.x &&
-                max.x > box.min.x &&
-                min.y < box.max.y &&
-                max.y > box.min.y &&
+        return min.x < box.max.x - PRECISION_ERROR_THRESHOLD &&
+                max.x > box.min.x + PRECISION_ERROR_THRESHOLD &&
+                min.y < box.max.y - PRECISION_ERROR_THRESHOLD &&
+                max.y > box.min.y + PRECISION_ERROR_THRESHOLD &&
                 min.z < box.max.z &&
                 max.z > box.min.z
     }
