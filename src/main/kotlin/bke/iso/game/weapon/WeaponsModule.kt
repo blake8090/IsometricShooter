@@ -133,7 +133,7 @@ class WeaponsModule(
         )
     }
 
-    private fun getShootPos(actor: Actor): Vector3 {
+    fun getShootPos(actor: Actor): Vector3 {
         val start = actor.pos
 
         actor.with { offset: RangedWeaponOffset ->

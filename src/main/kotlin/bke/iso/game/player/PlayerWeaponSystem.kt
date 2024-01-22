@@ -10,6 +10,7 @@ import bke.iso.engine.world.World
 import bke.iso.game.weapon.FireType
 import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
+import com.badlogic.gdx.graphics.Color
 
 const val SHOOT_ACTION = "shoot"
 const val RELOAD_ACTION = "reload"
@@ -44,6 +45,13 @@ class PlayerWeaponSystem(
         }
 
         previousTriggerState = triggerState
+
+        renderer.fgShapes.addLine(
+            weaponsModule.getShootPos(actor),
+            toWorld(renderer.getPointerPos()),
+            1.25f,
+            Color.RED
+        )
     }
 
     private fun canShoot(actor: Actor, triggerState: Boolean): Boolean {
