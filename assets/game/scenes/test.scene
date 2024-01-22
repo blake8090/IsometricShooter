@@ -1577,6 +1577,14 @@
                 "z": -2.0
             },
             "prefab": "basic-wall-south"
+        },
+        {
+            "pos": {
+                "x": 2.2812495,
+                "y": 13.6875,
+                "z": 0.0
+            },
+            "prefab": "platform"
         }
     ],
     "tiles": [

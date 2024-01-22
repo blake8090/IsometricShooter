@@ -8,7 +8,6 @@ import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.world.actor.Actor
-import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.RollingTurretSystem
 import bke.iso.game.shadow.ShadowSystem
@@ -58,11 +57,7 @@ class GameState(override val game: Game) : State() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
-        game.scenes.load("test2.scene")
-        // hack to make the moving platform work in building.scene
-        game.world.actors.each<MovingPlatform> { actor, _ ->
-            actor.add(MovingPlatform(speed = 1f, maxZ = 4f, minZ = 2f))
-        }
+        game.scenes.load("test.scene")
 
         bindInput()
 
