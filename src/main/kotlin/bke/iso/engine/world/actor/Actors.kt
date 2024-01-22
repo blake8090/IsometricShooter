@@ -77,6 +77,11 @@ class Actors(
     inline fun <reified T : Component> find(): Actor? =
         find(T::class)
 
+    fun find(id: String): Actor? =
+        grid.getObjects()
+            .filterIsInstance<Actor>()
+            .find { actor -> actor.id == id }
+
     private fun onMove(actor: Actor) =
         grid.update(actor)
 

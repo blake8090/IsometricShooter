@@ -10,6 +10,7 @@ import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.actor.MovingPlatformSystem
+import bke.iso.game.shadow.ShadowSystem
 import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
@@ -18,6 +19,7 @@ import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
+import bke.iso.game.shadow.ShadowModule
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.weapon.BulletSystem
 import bke.iso.game.weapon.WeaponPropertiesCache
@@ -34,8 +36,9 @@ class GameState(override val game: Game) : State() {
     private val combatModule = CombatModule(game.world, game.events)
     private val weaponsModule = WeaponsModule(game.assets, game.world)
     private val hudModule = HudModule(game.world, game.assets, weaponsModule)
+    private val shadowModule = ShadowModule(game.world)
 
-    override val modules = setOf(hudModule, weaponsModule, combatModule)
+    override val modules = setOf(hudModule, weaponsModule, combatModule, shadowModule)
 
     override val systems = linkedSetOf(
         WeaponSystem(game.world, game.assets),
@@ -53,7 +56,7 @@ class GameState(override val game: Game) : State() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
-        game.scenes.load("test.scene")
+        game.scenes.load("test2.scene")
         // hack to make the moving platform work in building.scene
         game.world.actors.each<MovingPlatform> { actor, _ ->
             actor.add(MovingPlatform(speed = 1f, maxZ = 4f, minZ = 2f))
@@ -65,7 +68,6 @@ class GameState(override val game: Game) : State() {
         hudModule.init(game.ui, PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 
         game.world.actors.each { actor: Actor, _: Player ->
-            game.world.createShadow(actor)
             weaponsModule.equip(actor, "rifle")
             game.renderer.setOcclusionTarget(actor)
         }

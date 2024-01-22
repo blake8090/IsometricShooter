@@ -45,6 +45,9 @@
     {
       type: "description",
       text: "player"
+    },
+    {
+      type: "castShadow"
     }
   ]
 }
