@@ -5,7 +5,7 @@
       type: "sprite",
       texture: "rolling-turret.png",
       offsetX: 16.0,
-      offsetY: 0.0,
+      offsetY: 8.0,
       alpha: 1.0,
       scale: 1.0
     },
@@ -15,13 +15,13 @@
     {
       type: "collider",
       size: {
-        x: 0.25,
-        y: 0.25,
+        x: 0.5,
+        y: 0.5,
         z: 0.75
       },
       offset: {
         x: -0.25,
-        y: 0.0,
+        y: -0.25,
         z: 0.0
       }
     },
@@ -33,7 +33,7 @@
     {
       type: "healthBar",
       offsetX: 16.0,
-      offsetY: -36.0
+      offsetY: -16.0
     },
     {
       type: "description",
@@ -41,6 +41,9 @@
     },
     {
       type: "castShadow"
+    },
+    {
+      type: "debugSettings"
     },
     {
       type: "physicsBody",
