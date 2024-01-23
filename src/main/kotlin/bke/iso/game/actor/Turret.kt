@@ -91,7 +91,7 @@ class TurretSystem(
         val pos = target.pos
 
         // aim for center mass!
-        target.get<Collider>()?.let { collider ->
+        target.with<Collider> { collider ->
             pos.z += collider.size.z * 0.5f
         }
 
