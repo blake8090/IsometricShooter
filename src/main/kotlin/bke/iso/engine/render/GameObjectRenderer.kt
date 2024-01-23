@@ -71,8 +71,9 @@ class GameObjectRenderer(
         }
 
         val targetData = getRenderData(target) ?: return
-        val aRect = Rectangle(targetData.pos.x, targetData.pos.y, targetData.width, targetData.height)
+        val aRect = getOcclusionRectangle(targetData)
         renderer.debug.addRectangle(aRect, 1f, Color.RED)
+
         val bRect = Rectangle(renderData.pos.x, renderData.pos.y, renderData.width, renderData.height)
         if (inFront(renderData, targetData) && aRect.overlaps(bRect)) {
             renderData.alpha = 0.1f
@@ -88,6 +89,15 @@ class GameObjectRenderer(
                 }
             }
         }
+    }
+
+    // TODO: make this more configurable - refactor into an occlusion strategy class or something
+    private fun getOcclusionRectangle(targetData: RenderData): Rectangle {
+        val w = 100f
+        val h = 150f
+        val x = targetData.pos.x - (w / 2f) + (targetData.width / 2f)
+        val y = targetData.pos.y - (h / 2f) + (targetData.height / 2f)
+        return Rectangle(x, y, w, h)
     }
 
     private fun draw(batch: PolygonSpriteBatch, renderData: RenderData) {

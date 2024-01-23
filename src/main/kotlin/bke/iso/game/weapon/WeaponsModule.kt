@@ -160,6 +160,7 @@ class WeaponsModule(
         target.z += weapon.recoil * nextFloat(-1.0f, 1.0f)
     }
 
+    // TODO: make this a util
     private fun nextFloat(min: Float, max: Float) =
         Random.nextFloat() * (max - min) + min
 
