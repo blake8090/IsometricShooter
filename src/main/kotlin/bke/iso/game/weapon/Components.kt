@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("bullet2")
+@SerialName("bullet")
 data class Bullet(
     val shooterId: String,
     val damage: Float,

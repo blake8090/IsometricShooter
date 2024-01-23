@@ -33,7 +33,7 @@
     {
       type: "healthBar",
       offsetX: 16.0,
-      offsetY: -16.0
+      offsetY: -20.0
     },
     {
       type: "description",
