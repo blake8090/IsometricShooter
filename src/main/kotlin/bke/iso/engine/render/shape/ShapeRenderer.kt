@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
 import space.earlygrey.shapedrawer.ShapeDrawer
 
-class Shape3dDrawer(batch: PolygonSpriteBatch) {
+class ShapeRenderer(batch: PolygonSpriteBatch) {
 
     private val shapeDrawer: ShapeDrawer
 
@@ -34,13 +34,13 @@ class Shape3dDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.batch.end()
     }
 
-    fun drawShape(shape: Shape3D) =
+    fun drawShape(shape: Shape) =
         when (shape) {
             is Line3D -> drawLine(shape)
-//            is DebugRectangle -> shapeDrawer.drawRectangle(shape)
             is Circle3D -> drawCircle(shape)
             is Point3D -> drawPoint(shape)
             is Sphere3D -> drawSphere(shape)
+            is Rectangle2D -> drawRectangle(shape)
         }
 
     fun drawPoint(point: Point3D) {
@@ -51,11 +51,16 @@ class Shape3dDrawer(batch: PolygonSpriteBatch) {
         shapeDrawer.filledCircle(toScreen(worldPos), size, color)
     }
 
-//    fun drawRectangle(rectangle: DebugRectangle) {
-//        val polygon = toScreen(rectangle.rectangle)
-//        shapeDrawer.setColor(rectangle.color)
-//        shapeDrawer.polygon(polygon, rectangle.lineWidth)
-//    }
+    fun drawRectangle(rectangle: Rectangle2D) {
+        shapeDrawer.setColor(rectangle.color)
+        shapeDrawer.rectangle(
+            rectangle.pos.x,
+            rectangle.pos.y,
+            rectangle.size.x,
+            rectangle.size.y,
+            rectangle.lineWidth
+        )
+    }
 
     fun drawLine(line: Line3D) {
         drawLine(line.start, line.end, line.color, line.width)

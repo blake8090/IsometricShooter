@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Vector2
 import kotlin.math.floor
 
 class GameObjectRenderer(
+    private val renderer: Renderer,
     private val assets: Assets,
     private val world: World,
     private val events: Game.Events
@@ -29,7 +30,7 @@ class GameObjectRenderer(
     // TODO: just store the minimum hidden layer
     private val hiddenBuildingLayers = mutableMapOf<String, MutableSet<Float>>()
 
-    fun draw(batch: PolygonSpriteBatch, debugRenderer: DebugRenderer) {
+    fun draw(batch: PolygonSpriteBatch) {
         val objects = world
             .getObjects()
             .mapNotNull(::getRenderData)
@@ -49,9 +50,9 @@ class GameObjectRenderer(
 
             checkOcclusion(a)
 
-            when (val o = a.gameObject) {
-                is Actor -> debugRenderer.add(o)
-                is Tile -> debugRenderer.add(o)
+            when (val obj = a.gameObject) {
+                is Actor -> renderer.debug.add(obj)
+                is Tile -> renderer.debug.add(obj)
             }
         }
 
@@ -71,6 +72,7 @@ class GameObjectRenderer(
 
         val targetData = getRenderData(target) ?: return
         val aRect = Rectangle(targetData.pos.x, targetData.pos.y, targetData.width, targetData.height)
+        renderer.debug.addRectangle(aRect, 1f, Color.RED)
         val bRect = Rectangle(renderData.pos.x, renderData.pos.y, renderData.width, renderData.height)
         if (inFront(renderData, targetData) && aRect.overlaps(bRect)) {
             renderData.alpha = 0.1f

@@ -2,16 +2,17 @@ package bke.iso.engine.render.shape
 
 import bke.iso.engine.math.Box
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pools
 
 /**
- * Provides an interface for creating and storing pooled [Shape3D]s.
+ * Provides an interface for creating and storing pooled [Shape]s.
  */
-class Shape3dArray {
+class ShapeArray {
 
-    private val shapes = Array<Shape3D>()
+    private val shapes = Array<Shape>()
 
     fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
         Pools.obtain(Line3D::class.java).apply {
@@ -24,14 +25,15 @@ class Shape3dArray {
         }
     }
 
-//    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
-//        Pools.obtain(Re::class.java).apply {
-//            this.rectangle.set(rectangle)
-//            this.lineWidth = lineWidth
-//            this.color = color
-//            shapes.add(this)
-//        }
-//    }
+    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
+        Pools.obtain(Rectangle2D::class.java).apply {
+            this.pos.set(rectangle.x, rectangle.y)
+            this.size.set(rectangle.width, rectangle.height)
+            this.lineWidth = lineWidth
+            this.color = color
+            shapes.add(this)
+        }
+    }
 
     fun addCircle(pos: Vector3, radius: Float, color: Color) {
         Pools.obtain(Circle3D::class.java).apply {
@@ -66,7 +68,7 @@ class Shape3dArray {
         }
     }
 
-    operator fun iterator(): Array.ArrayIterator<Shape3D> =
+    operator fun iterator(): Array.ArrayIterator<Shape> =
         shapes.iterator()
 
     fun clear() {

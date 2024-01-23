@@ -2,16 +2,17 @@ package bke.iso.engine.render
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.collision.getCollisionBox
-import bke.iso.engine.render.shape.Shape3dArray
-import bke.iso.engine.render.shape.Shape3dDrawer
+import bke.iso.engine.render.shape.ShapeArray
+import bke.iso.engine.render.shape.ShapeRenderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.Tile
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 
 class DebugRenderer {
 
-    private val shapes = Shape3dArray()
+    private val shapes = ShapeArray()
     private var enabled = false
 
     fun toggle() {
@@ -76,7 +77,13 @@ class DebugRenderer {
         tile.selected = false
     }
 
-    fun draw(shapeDrawer: Shape3dDrawer) {
+    fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
+        if (enabled) {
+            shapes.addRectangle(rectangle, lineWidth, color)
+        }
+    }
+
+    fun draw(shapeDrawer: ShapeRenderer) {
         if (enabled) {
             for (shape in shapes) {
                 shapeDrawer.drawShape(shape)

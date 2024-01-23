@@ -5,8 +5,8 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.pointer.MousePointer
 import bke.iso.engine.render.pointer.Pointer
-import bke.iso.engine.render.shape.Shape3dArray
-import bke.iso.engine.render.shape.Shape3dDrawer
+import bke.iso.engine.render.shape.ShapeArray
+import bke.iso.engine.render.shape.ShapeRenderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
@@ -36,13 +36,13 @@ class Renderer(
 ) {
 
     private val batch = PolygonSpriteBatch()
-    private val gameObjectRenderer = GameObjectRenderer(assets, world, events)
+    private val gameObjectRenderer = GameObjectRenderer(this, assets, world, events)
     private var pointer: Pointer = MousePointer()
 
     val debug: DebugRenderer = DebugRenderer()
-    val bgShapes: Shape3dArray = Shape3dArray()
-    val fgShapes: Shape3dArray = Shape3dArray()
-    private val shapeDrawer = Shape3dDrawer(batch)
+    val bgShapes: ShapeArray = ShapeArray()
+    val fgShapes: ShapeArray = ShapeArray()
+    private val shapeRenderer = ShapeRenderer(batch)
 
     private val bgColor = Color.GRAY
 
@@ -131,9 +131,9 @@ class Renderer(
         drawShapes(fgShapes)
 
         batch.projectionMatrix = camera.combined
-        shapeDrawer.begin()
-        debug.draw(shapeDrawer)
-        shapeDrawer.end()
+        shapeRenderer.begin()
+        debug.draw(shapeRenderer)
+        shapeRenderer.end()
 
         batch.begin()
         for (renderText in renderTexts) {
@@ -171,20 +171,20 @@ class Renderer(
             GL20.GL_ONE_MINUS_SRC_ALPHA,
         )
 
-        gameObjectRenderer.draw(batch, debug)
+        gameObjectRenderer.draw(batch)
 
         batch.end()
         fbo.end()
         fboViewport.apply()
     }
 
-    private fun drawShapes(shapes: Shape3dArray) {
+    private fun drawShapes(shapes: ShapeArray) {
         batch.projectionMatrix = camera.combined
-        shapeDrawer.begin()
+        shapeRenderer.begin()
         for (shape in shapes) {
-            shapeDrawer.drawShape(shape)
+            shapeRenderer.drawShape(shape)
         }
-        shapeDrawer.end()
+        shapeRenderer.end()
     }
 
     private fun drawFbo() {
