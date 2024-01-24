@@ -1,9 +1,13 @@
-package bke.iso.game.weapon
+package bke.iso.game.weapon.system
 
 import bke.iso.engine.System
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.engine.world.actor.Actor
+import bke.iso.game.weapon.Inventory
+import bke.iso.game.weapon.RangedWeapon
+import bke.iso.game.weapon.RangedWeaponProperties
+import bke.iso.game.weapon.WeaponProperties
 import mu.KotlinLogging
 import kotlin.math.max
 

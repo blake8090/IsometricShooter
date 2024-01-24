@@ -9,6 +9,6 @@
   spread: 0.03,
   recoil: 1.2,
   reloadTime: 1,
-  bulletTexture: "bullet.png",
+  bulletTexture: "bullet2.png",
   bulletRotation: true
 }

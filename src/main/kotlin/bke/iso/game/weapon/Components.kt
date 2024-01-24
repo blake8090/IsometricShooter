@@ -39,3 +39,10 @@ data class RangedWeapon(
 data class Inventory(
     var selectedWeapon: Weapon? = null
 ) : Component
+
+@Serializable
+@SerialName("explosion")
+data class Explosion(
+    val timeSeconds: Float = 0f,
+    var timer: Float = timeSeconds
+) : Component

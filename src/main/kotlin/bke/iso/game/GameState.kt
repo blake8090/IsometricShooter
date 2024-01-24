@@ -21,10 +21,11 @@ import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
 import bke.iso.game.shadow.ShadowModule
 import bke.iso.game.ui.CrosshairPointer
-import bke.iso.game.weapon.BulletSystem
+import bke.iso.game.weapon.system.BulletSystem
 import bke.iso.game.weapon.WeaponPropertiesCache
-import bke.iso.game.weapon.WeaponSystem
+import bke.iso.game.weapon.system.WeaponSystem
 import bke.iso.game.weapon.WeaponsModule
+import bke.iso.game.weapon.system.ExplosionSystem
 import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
@@ -47,6 +48,7 @@ class GameState(override val game: Game) : State() {
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
+        ExplosionSystem(game.world),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions),
     )
@@ -57,7 +59,7 @@ class GameState(override val game: Game) : State() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
-        game.scenes.load("city.scene")
+        game.scenes.load("city2.scene")
 
         bindInput()
 
