@@ -1,9 +1,9 @@
 {
-  name: "basic-wall-west",
+  name: "basic-window-side",
   components: [
     {
       type: "sprite",
-      texture: "basic-wall-side.png",
+      texture: "basic-window-side.png",
       offsetX: 0.0,
       offsetY: 16.0,
       alpha: 1.0,

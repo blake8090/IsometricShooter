@@ -1,0 +1,7887 @@
+{
+    "version": "1",
+    "actors": [
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.75,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.75,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.25,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 6.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 8.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 6.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 8.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 7.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 8.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 9.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 6.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 7.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 9.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 6.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 7.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.75,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.75,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 8.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.75,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.75,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "building1"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 5.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 6.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 7.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.75,
+                "y": 5.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.75,
+                "y": 6.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.75,
+                "y": 7.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 11.25,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 12.25,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.75,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.75,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 13.75,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "shed"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "prefab": "cube",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": 1.0
+            },
+            "prefab": "cube",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "cube",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "cube",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": 1.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 8.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 6.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 5.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 5.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 10.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 10.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 10.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 10.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.75,
+                "y": 10.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.75,
+                "y": 10.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 9.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 6.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 7.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 6.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 7.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 8.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 9.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 7.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 8.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 7.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 8.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 5.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 5.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 5.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 9.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.75,
+                "y": 6.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 6.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 7.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 8.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.75,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.75,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.75,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 10.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 8.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 7.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 5.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 7.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 8.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.75,
+                "y": 10.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 6.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 5.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 5.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 10.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 10.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 10.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 5.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 5.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 5.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 9.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 8.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 7.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 6.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 1.6406255,
+                "y": 2.9843755,
+                "z": 0.0
+            },
+            "prefab": "player"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 21.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 17.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 20.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 17.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 20.0,
+                "z": 0.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 21.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 15.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 15.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.25,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 21.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 15.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 16.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 18.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 19.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.75,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 15.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 16.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 18.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 19.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.75,
+                "y": 21.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 16.25,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 21.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 20.0,
+                "z": 0.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 18.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 19.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 20.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.25,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 18.75,
+                "z": 0.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.9453125,
+                "y": 20.726562,
+                "z": 0.0
+            },
+            "prefab": "platform",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 17.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 20.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 15.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 16.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 18.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 21.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 19.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 18.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 18.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 20.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 21.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 16.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 15.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 18.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 19.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.75,
+                "y": 20.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 21.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 20.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.75,
+                "y": 20.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 20.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 15.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 16.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 18.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 20.25,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 21.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 20.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 21.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 18.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 17.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-side",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 15.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 17.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 18.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 20.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.75,
+                "y": 21.75,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.75,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 18.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.75,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.75,
+                "y": 19.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 20.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-window-front",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.75,
+                "y": 15.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 16.0,
+                "z": 2.0
+            },
+            "prefab": "basic-corner",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.3046875,
+                "y": 21.367188,
+                "z": 2.0
+            },
+            "prefab": "box",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.7578125,
+                "y": 20.882812,
+                "z": 3.0
+            },
+            "prefab": "box",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 15.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 1.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 21.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 15.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 15.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 15.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 15.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 15.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "cube",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 2.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 16.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 17.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 18.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 19.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 7.0,
+                "y": 20.0,
+                "z": 4.0
+            },
+            "prefab": "step",
+            "building": "office"
+        },
+        {
+            "pos": {
+                "x": 15.015626,
+                "y": 4.046876,
+                "z": 0.0
+            },
+            "prefab": "pillar",
+            "building": "house"
+        },
+        {
+            "pos": {
+                "x": 18.640625,
+                "y": 4.109376,
+                "z": 0.0
+            },
+            "prefab": "pillar",
+            "building": "house"
+        }
+    ],
+    "tiles": [
+        {
+            "location": {
+                "x": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 4
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 5
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 6
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 7
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 10
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 10
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 11
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 11
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 4
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 5
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 9
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 8
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 7
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 7
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 6
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 5
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 5
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 4
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 8
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 4
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 6
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 9
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 7
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 6
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 5
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor",
+            "building": "building1"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 12
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 13
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 1
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 5
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 4
+            },
+            "prefab": "floor",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 2
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 3
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 7
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 7
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 5
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 6
+            },
+            "prefab": "floor3",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 8
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 6
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 10
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 10
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 10
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 9
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 4
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 5
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 7
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 9
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 10
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 10
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 11
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 8
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 6
+            },
+            "prefab": "floor2",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "shed"
+        },
+        {
+            "location": {
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 19
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 19
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 19
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 19
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 18
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 18
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 18
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 18
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 19
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 19
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 19
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 19
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 18
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 17
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 16
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 15
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 15
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 16
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 17
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 18
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 18
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 17
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 16
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 16
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 15
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 17
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 17
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 16
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 15
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 14
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 15
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 16
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 17
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 17
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 16
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 15
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 16
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 18
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 17
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 13
+            },
+            "prefab": "floor"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 15
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 16
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 17
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 19
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 18
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 14
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 19
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 15
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 18
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 17
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 16
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 10,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 10,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 10,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 9,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 8,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 5,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 6,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 7,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 20
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 20
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 21
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 21
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 21
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 21
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 21
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 21
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 21
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 20
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 20
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 20
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 20
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 20
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 20
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 21
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 21
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 20
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 20
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 21
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 22
+            },
+            "prefab": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 15,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 15,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 15,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 15,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 15,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 15,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor2",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 16,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 17,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 18,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 19,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 21,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 20,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "office"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 4,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 4,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 4,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 4,
+                "z": 2
+            },
+            "prefab": "floor3",
+            "building": "house"
+        }
+    ]
+}

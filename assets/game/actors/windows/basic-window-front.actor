@@ -1,5 +1,5 @@
 {
-  name: "basic-window-north",
+  name: "basic-window-front",
   components: [
     {
       type: "sprite",

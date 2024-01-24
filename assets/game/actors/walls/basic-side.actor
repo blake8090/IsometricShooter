@@ -1,25 +1,20 @@
 {
-  name: "basic-wall-south-corner",
+  name: "basic-side",
   components: [
     {
       type: "sprite",
-      texture: "basic-wall-front-corner.png",
-      offsetX: 8.0,
-      offsetY: 20.0,
+      texture: "basic-side.png",
+      offsetX: 0.0,
+      offsetY: 4.0,
       alpha: 1.0,
       scale: 1.0
     },
     {
       type: "collider",
       size: {
-        x: 0.75,
-        y: 0.25,
-        z: 2.0
-      },
-      offset: {
         x: 0.25,
-        y: -0.25,
-        z: 0
+        y: 0.75,
+        z: 2.0
       }
     },
     {

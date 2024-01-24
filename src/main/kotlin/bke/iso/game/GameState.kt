@@ -57,7 +57,7 @@ class GameState(override val game: Game) : State() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
 
-        game.scenes.load("test.scene")
+        game.scenes.load("city.scene")
 
         bindInput()
 

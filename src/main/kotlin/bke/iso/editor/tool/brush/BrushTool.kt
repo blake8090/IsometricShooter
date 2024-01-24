@@ -37,6 +37,18 @@ class BrushTool(
     override fun update(pointerPos: Vector3) {
         if (selection is TileSelection || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
             pointerPos.floor()
+
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                brushActor.with<Collider> { collider ->
+                    pointerPos.y -= collider.size.y
+                }
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
+                brushActor.with<Collider> { collider ->
+                    pointerPos.x -= collider.size.x
+                }
+            }
         }
         brushActor.moveTo(pointerPos.x, pointerPos.y, pointerPos.z)
         renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)

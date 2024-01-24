@@ -1,18 +1,18 @@
 {
-  name: "basic-wall-north",
+  name: "basic-corner",
   components: [
     {
       type: "sprite",
-      texture: "basic-wall-front.png",
+      texture: "basic-corner.png",
       offsetX: 0.0,
-      offsetY: 16.0,
+      offsetY: 4.0,
       alpha: 1.0,
       scale: 1.0
     },
     {
       type: "collider",
       size: {
-        x: 1.0,
+        x: 0.25,
         y: 0.25,
         z: 2.0
       }

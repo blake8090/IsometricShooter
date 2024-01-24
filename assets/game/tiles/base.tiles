@@ -16,6 +16,14 @@
     "solid": true
   },
   {
+    "name": "floor3",
+    "sprite": {
+      texture: "floor3.png",
+      offsetY: 16.0
+    },
+    "solid": true
+  },
+  {
     "name": "grass",
     "sprite": {
       texture: "grass.png",
