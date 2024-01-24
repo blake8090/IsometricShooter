@@ -219,6 +219,6 @@ private data class RenderData(
     val rotation: Float,
     val bounds: Box
 ) {
-    val behind = mutableSetOf<RenderData>()
+    val behind = mutableListOf<RenderData>()
     var visited = false
 }
