@@ -5,7 +5,7 @@
       type: "sprite",
       texture: "basic-window-side.png",
       offsetX: 0.0,
-      offsetY: 16.0,
+      offsetY: 4.0,
       alpha: 1.0,
       scale: 1.0
     },

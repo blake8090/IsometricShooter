@@ -93,8 +93,8 @@ class GameObjectRenderer(
 
     // TODO: make this more configurable - refactor into an occlusion strategy class or something
     private fun getOcclusionRectangle(targetData: RenderData): Rectangle {
-        val w = 100f
-        val h = 150f
+        val w = 75f
+        val h = 75f
         val x = targetData.pos.x - (w / 2f) + (targetData.width / 2f)
         val y = targetData.pos.y - (h / 2f) + (targetData.height / 2f)
         return Rectangle(x, y, w, h)
