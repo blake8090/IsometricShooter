@@ -31,7 +31,7 @@ data class Box(
         add(pos.z, (size.z / 2f))
     )
 
-    val segments: List<Segment> = listOf(
+    fun getSegments(): List<Segment> = listOf(
         // top
         Segment(Vector3(min.x, min.y, max.z), Vector3(min.x, max.y, max.z)),
         Segment(Vector3(min.x, max.y, max.z), Vector3(max.x, max.y, max.z)),
@@ -51,7 +51,7 @@ data class Box(
         Segment(Vector3(max.x, max.y, min.z), Vector3(max.x, max.y, max.z))
     )
 
-    val faces: List<BoundingBox> = listOf(
+    fun getFaces(): List<BoundingBox> = listOf(
         // top
         BoundingBox(Vector3(min.x, min.y, max.z), Vector3(max.x, max.y, max.z)),
         // bottom

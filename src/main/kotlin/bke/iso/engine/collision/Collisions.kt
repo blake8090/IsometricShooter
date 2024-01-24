@@ -99,7 +99,7 @@ class Collisions(
         val box = gameObject.getCollisionBox() ?: return null
 
         val points = box
-            .faces
+            .getFaces()
             .mapNotNull { face -> findIntersection(ray, face) }
             .toSet()
 

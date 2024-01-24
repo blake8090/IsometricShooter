@@ -54,7 +54,7 @@ class ShapeArray {
     }
 
     fun addBox(box: Box, width: Float, color: Color) {
-        for (segment in box.segments) {
+        for (segment in box.getSegments()) {
             addLine(segment.a, segment.b, width, color)
         }
     }
