@@ -38,7 +38,7 @@ enum class RollingTurretState(val durationSeconds: Float) {
     SHOOT(0.75f)
 }
 
-private const val MOVE_SPEED = 2f
+private const val MOVE_SPEED = 1.5f
 private const val RANGE_RADIUS = 8f
 private const val GUN_HEIGHT = 0.25f
 
