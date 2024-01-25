@@ -17,16 +17,29 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
 
     private lateinit var healthBar: HudHealthBar
     private lateinit var weaponLabel: Label
+    private lateinit var fpsLabel: Label
 
     override fun create() {
         setup()
 
-        val table = Table()
-        table.left().bottom()
-        table.setFillParent(true)
-        stage.addActor(table)
+        val root = Table()
+        root.setFillParent(true)
+        stage.addActor(root)
 
-        table.add(Label("Health", skin))
+        val topRow = Table()
+            .top()
+            .left()
+        fpsLabel = Label("", skin, "hud-fps")
+        topRow.add(fpsLabel)
+        root.add(topRow).grow()
+
+        root.row()
+
+        val bottomRow = Table()
+            .bottom()
+            .left()
+
+        bottomRow.add(Label("Health", skin))
             .height(100f)
 
         healthBar = HudHealthBar(skin).apply {
@@ -34,26 +47,18 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
             barPadLeft = 20f
             barPadRight = 20f
         }
-        table.add(healthBar)
+        bottomRow.add(healthBar)
             .width(300f)
             .fillY()
-            .right()
 
         weaponLabel = Label("No Weapon", skin)
-        table.add(weaponLabel)
+        bottomRow.add(weaponLabel)
             .height(50f)
             .expandX()
             .right()
             .padRight(25f)
-    }
 
-    fun updateHealth(health: Float, maxHealth: Float) {
-        healthBar.maxValue = maxHealth
-        healthBar.value = health
-    }
-
-    fun setWeaponText(text: String) {
-        weaponLabel.setText(text)
+        root.add(bottomRow).grow()
     }
 
     private fun setup() {
@@ -66,6 +71,10 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
             background = skin.newDrawable("pixel", Color.DARK_GRAY)
         })
 
+        skin.add("hud-fps", Label.LabelStyle().apply {
+            font = skin.getFont("default")
+        })
+
         skin.add(
             "default", HudHealthBar.HudHealthBarStyle(
                 skin.newDrawable("pixel", Color.DARK_GRAY),
@@ -73,6 +82,19 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
                 skin.newDrawable("pixel", Color.GREEN)
             )
         )
+    }
+
+    fun updateHealth(health: Float, maxHealth: Float) {
+        healthBar.maxValue = maxHealth
+        healthBar.value = health
+    }
+
+    fun setWeaponText(text: String) {
+        weaponLabel.setText(text)
+    }
+
+    fun updateFps(fps: Int) {
+        fpsLabel.setText("FPS: $fps")
     }
 }
 
@@ -98,7 +120,7 @@ private class HudHealthBar(
         style.background.draw(batch, x, y, width, height)
 
         val barX = x + barPadLeft
-        val barY = (height / 2f) - (barHeight / 2f)
+        val barY = y + (height / 2f) - (barHeight / 2f)
         val barWidth = width - barPadLeft - barPadRight
         style.barBackground.draw(batch, barX, barY, barWidth, barHeight)
 

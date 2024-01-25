@@ -20,6 +20,7 @@ import bke.iso.game.weapon.RangedWeaponProperties
 import bke.iso.game.weapon.Weapon
 import bke.iso.game.weapon.WeaponProperties
 import bke.iso.game.weapon.WeaponsModule
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 
@@ -44,6 +45,7 @@ class HudModule(
                 else -> weapon.name
             }
         hudScreen.setWeaponText(text)
+        hudScreen.updateFps(Gdx.graphics.framesPerSecond)
     }
 
     private fun findPlayerWeapon(): Weapon? {
