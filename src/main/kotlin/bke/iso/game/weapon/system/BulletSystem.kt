@@ -10,8 +10,10 @@ import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Description
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.Bullet
 import bke.iso.game.weapon.Explosion
@@ -26,34 +28,37 @@ class BulletSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.actors.each<Bullet> { actor, bullet ->
-            update(actor, bullet)
+        world.actors.each<Bullet> { bulletActor, bullet ->
+            update(bulletActor, bullet)
         }
     }
 
-    private fun update(actor: Actor, bullet: Bullet) {
-        val distance = bullet.start.dst(actor.pos)
+    private fun update(bulletActor: Actor, bullet: Bullet) {
+        val distance = bullet.start.dst(bulletActor.pos)
         if (distance > MAX_BULLET_DISTANCE) {
-            world.delete(actor)
+            world.delete(bulletActor)
             return
         }
 
         val firstCollision = collisions
-            .getCollisions(actor)
+            .getCollisions(bulletActor)
             .minByOrNull(Collision::distance)
 
         if (firstCollision != null) {
-            handleCollision(actor, bullet, firstCollision)
+            handleCollision(bulletActor, bullet, firstCollision)
         }
     }
 
-    private fun handleCollision(actor: Actor, bullet: Bullet, collision: Collision) {
+    private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
         val obj = collision.obj
-        if (obj is Actor && canShoot(obj, bullet.shooterId)) {
+        if (obj is Tile) {
+            createExplosion(bulletActor.pos, collision)
+            world.delete(bulletActor)
+        } else if (obj is Actor && canShoot(obj, bullet.shooterId)) {
             combatModule.applyDamage(obj, bullet.damage)
+            createExplosion(bulletActor.pos, collision)
+            world.delete(bulletActor)
         }
-        createExplosion(actor.pos, collision)
-        world.delete(actor)
     }
 
     private fun canShoot(target: Actor, shooterId: String): Boolean {
@@ -78,7 +83,8 @@ class BulletSystem(
                 offsetX = 8f,
                 offsetY = 8f
             ),
-            PhysicsBody(mode = PhysicsMode.GHOST)
+            PhysicsBody(mode = PhysicsMode.GHOST),
+            Description("explosion")
         )
         clampPosToCollisionSide(explosion, collision)
     }
