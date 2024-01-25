@@ -16,7 +16,7 @@ import mu.KotlinLogging
 private const val PLAYER_JUMP_FORCE = 5f
 private const val CONTROLLER_DEADZONE = 0.1f
 
-private const val BASE_MOVEMENT_SPEED = 3.5f
+private const val BASE_MOVEMENT_SPEED = 3.0f
 private const val CROUCH_SPEED_MODIFIER = 0.6f
 private const val RUN_SPEED_MODIFIER = 1.6f
 
@@ -64,6 +64,11 @@ class PlayerSystem(
             direction.y * horizontalSpeed,
             0f
         )
+
+        // makes up actually move up
+        if (input.isUsingController()) {
+            movement.rotate(Vector3.Z, 45f)
+        }
 
         val body = checkNotNull(playerActor.get<PhysicsBody>()) {
             "Expected $playerActor to have a PhysicsBody"
