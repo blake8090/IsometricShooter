@@ -1,6 +1,7 @@
 package bke.iso.engine.math
 
 import com.badlogic.gdx.math.Vector3
+import kotlin.random.Random
 
 fun Vector3.floor() = apply {
     x = kotlin.math.floor(x)
@@ -31,3 +32,6 @@ fun sub(a: Float, b: Float): Float =
 // TODO: do we really need this?
 fun add(a: Float, b: Float): Float =
     (a.toBigDecimal() + b.toBigDecimal()).toFloat()
+
+fun nextFloat(min: Float, max: Float) =
+    Random.nextFloat() * (max - min) + min

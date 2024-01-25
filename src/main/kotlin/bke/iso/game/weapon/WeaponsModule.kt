@@ -4,6 +4,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.math.nextFloat
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
@@ -16,7 +17,6 @@ import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 import kotlin.math.atan2
 import kotlin.math.min
-import kotlin.random.Random
 
 private const val MAX_RECOIL = 2f
 
@@ -159,10 +159,6 @@ class WeaponsModule(
         target.y += weapon.recoil * nextFloat(-1.0f, 1.0f) * 0.25f
         target.z += weapon.recoil * nextFloat(-1.0f, 1.0f)
     }
-
-    // TODO: make this a util
-    private fun nextFloat(min: Float, max: Float) =
-        Random.nextFloat() * (max - min) + min
 
     data class ShootEvent(
         val actor: Actor,

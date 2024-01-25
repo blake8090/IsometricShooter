@@ -6,6 +6,7 @@ import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
@@ -67,8 +68,16 @@ class BulletSystem(
         val explosion = world.actors.create(
             pos,
             Explosion(0.25f),
-            Collider(size = Vector3(0.25f, 0.25f, 0.25f), offset = Vector3(-0.125f, -0.125f, -0.125f)),
-            Sprite("bullet.png", scale = 1f, offsetX = 8f, offsetY = 8f),
+            Collider(
+                size = Vector3(0.25f, 0.25f, 0.25f),
+                offset = Vector3(-0.125f, -0.125f, -0.125f)
+            ),
+            Sprite(
+                "bullet.png",
+                scale = nextFloat(0.75f, 1f),
+                offsetX = 8f,
+                offsetY = 8f
+            ),
             PhysicsBody(mode = PhysicsMode.GHOST)
         )
         clampPosToCollisionSide(explosion, collision)

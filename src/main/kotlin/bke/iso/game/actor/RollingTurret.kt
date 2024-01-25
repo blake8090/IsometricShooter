@@ -6,6 +6,7 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
+import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.Tile
@@ -23,7 +24,6 @@ import com.badlogic.gdx.math.collision.Segment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.max
-import kotlin.random.Random
 
 @Serializable
 @SerialName("rollingTurret")
@@ -138,9 +138,6 @@ class RollingTurretSystem(
 
         return true
     }
-
-    private fun nextFloat(min: Float, max: Float) =
-        Random.nextFloat() * (max - min) + min
 
     private fun runShootState(turretActor: Actor) {
         val playerActor = world.actors.find<Player>() ?: return
