@@ -20,7 +20,6 @@ import bke.iso.game.weapon.RangedWeaponOffset
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.math.collision.Segment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.max
@@ -160,8 +159,8 @@ class RollingTurretSystem(
         val end = getTargetPos(target)
 
         val firstCollision = collisions
-            .checkCollisions(Segment(start, end))
-            .filter { collision -> collision.obj is Actor && collision.obj != actor }
+            .checkLineCollisions(start, end)
+            .filter { collision -> collision.obj != actor }
             .minByOrNull { collision -> collision.distanceStart }
             ?: return false
 

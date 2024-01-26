@@ -1,7 +1,6 @@
 package bke.iso.engine.collision
 
 import bke.iso.engine.math.Box
-import bke.iso.engine.math.sub2
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
@@ -80,22 +79,22 @@ class Collisions(
         }
     }
 
-    fun checkCollisions(segment: Segment): Set<SegmentCollision> {
-        val area = Box.fromMinMax(segment)
+    fun checkLineCollisions(start: Vector3, end: Vector3): Set<SegmentCollision> {
+        val area = Box.fromMinMax(Segment(start, end))
         renderer.debug.addBox(area, 1f, Color.ORANGE)
 
-        val direction = Vector3(segment.b)
-            .sub2(segment.a)
+        val direction = Vector3(end)
+            .sub(start)
             .nor()
-        val ray = Ray(segment.a, direction)
+        val ray = Ray(start, direction)
 
         return world
             .getObjectsInArea(area)
-            .mapNotNull { obj -> checkCollision(segment, ray, obj) }
+            .mapNotNull { obj -> checkLineCollision(start, end, ray, obj) }
             .toSet()
     }
 
-    private fun checkCollision(segment: Segment, ray: Ray, gameObject: GameObject): SegmentCollision? {
+    private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, gameObject: GameObject): SegmentCollision? {
         val box = gameObject.getCollisionBox() ?: return null
 
         val points = box
@@ -109,8 +108,8 @@ class Collisions(
 
         return SegmentCollision(
             obj = gameObject,
-            distanceStart = segment.a.dst(box.pos),
-            distanceEnd = segment.b.dst(box.pos),
+            distanceStart = start.dst(box.pos),
+            distanceEnd = end.dst(box.pos),
             points = points
         )
     }
