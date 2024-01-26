@@ -48,6 +48,7 @@ class Physics(
 
     private fun move(actor: Actor, body: PhysicsBody, delta: Vector3) {
         val predictCollisions = collisions.predictCollisions(actor, delta)
+        // TODO: how to resolve multiple collisions to avoid objects falling out of the world?
         val collision = predictCollisions
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
             .firstOrNull { collision -> getPhysicsMode(collision.obj) != PhysicsMode.GHOST }

@@ -42,31 +42,38 @@ class BulletSystem(
 
         val firstCollision = collisions
             .getCollisions(bulletActor)
-            .minByOrNull(Collision::distance)
+            .sortedBy(Collision::distance)
+            .firstOrNull { collision -> canShoot(bullet, collision) }
 
         if (firstCollision != null) {
             handleCollision(bulletActor, bullet, firstCollision)
         }
     }
 
-    private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
-        val obj = collision.obj
-        if (obj is Tile) {
-            createExplosion(bulletActor.pos, collision)
-            world.delete(bulletActor)
-        } else if (obj is Actor && canShoot(obj, bullet.shooterId)) {
-            combatModule.applyDamage(obj, bullet.damage)
-            createExplosion(bulletActor.pos, collision)
-            world.delete(bulletActor)
+    private fun canShoot(bullet: Bullet, collision: Collision): Boolean {
+        val target = collision.obj
+
+        if (target is Tile) {
+            return true
         }
+
+        if (target is Actor) {
+            return target.id != bullet.shooterId
+                    && !target.has<Bullet>()
+                    && !target.has<Explosion>()
+        }
+
+        return false
     }
 
-    private fun canShoot(target: Actor, shooterId: String): Boolean {
-        if (target.id == shooterId) {
-            return false
+    private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
+        val target = collision.obj
+        if (target is Actor) {
+            combatModule.applyDamage(target, bullet.damage)
         }
 
-        return !target.has<Bullet>() && !target.has<Explosion>()
+        createExplosion(bulletActor.pos, collision)
+        world.delete(bulletActor)
     }
 
     private fun createExplosion(pos: Vector3, collision: Collision) {
