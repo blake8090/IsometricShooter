@@ -90,7 +90,7 @@ class Renderer(
         gameObjectRenderer.occlusionTarget = actor
     }
 
-    fun update(deltaTime: Float) {
+    fun updatePointer(deltaTime: Float) {
         pointer.update(deltaTime)
     }
 

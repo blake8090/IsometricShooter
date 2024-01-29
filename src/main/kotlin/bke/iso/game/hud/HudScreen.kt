@@ -26,20 +26,11 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
         root.setFillParent(true)
         stage.addActor(root)
 
-        val topRow = Table()
-            .top()
-            .left()
-        fpsLabel = Label("", skin, "hud-fps")
-        topRow.add(fpsLabel)
-        root.add(topRow).grow()
-
-        root.row()
-
-        val bottomRow = Table()
+        val table = Table()
             .bottom()
             .left()
 
-        bottomRow.add(Label("Health", skin))
+        table.add(Label("Health", skin))
             .height(100f)
 
         healthBar = HudHealthBar(skin).apply {
@@ -47,18 +38,18 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
             barPadLeft = 20f
             barPadRight = 20f
         }
-        bottomRow.add(healthBar)
+        table.add(healthBar)
             .width(300f)
             .fillY()
 
         weaponLabel = Label("No Weapon", skin)
-        bottomRow.add(weaponLabel)
+        table.add(weaponLabel)
             .height(50f)
             .expandX()
             .right()
             .padRight(25f)
 
-        root.add(bottomRow).grow()
+        root.add(table).grow()
     }
 
     private fun setup() {
@@ -91,10 +82,6 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
 
     fun setWeaponText(text: String) {
         weaponLabel.setText(text)
-    }
-
-    fun updateFps(fps: Int) {
-        fpsLabel.setText("FPS: $fps")
     }
 }
 

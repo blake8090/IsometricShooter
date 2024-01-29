@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import mu.KotlinLogging
 
+// TODO: pass assets into dispose method instead of constructor
 abstract class UIScreen(protected val assets: Assets) {
 
     val stage: Stage = Stage(ScreenViewport())

@@ -10,6 +10,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.physics.Physics
+import bke.iso.engine.profiler.Profiler
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.scene.SceneCache
 import bke.iso.engine.scene.Scenes
@@ -49,7 +50,7 @@ class Game {
 
     private var state: State = EmptyState(this)
 
-//    private val performanceCounter = PerformanceCounter("renderer")
+    private val profiler = Profiler(assets, ui, input)
 
     fun start() {
         runBlocking {
@@ -60,6 +61,7 @@ class Game {
     private suspend fun init() {
         val time = measureTimeMillis {
             input.start()
+            profiler.start()
             assets.run {
                 register(TextureCache())
                 register(FontGeneratorCache())
@@ -77,23 +79,35 @@ class Game {
 
     fun update(deltaTime: Float) {
         if (!ui.isLoadingScreenActive) {
-            collisions.update()
-            // TODO: investigate using fixed time step
-            physics.update(deltaTime)
+            profiler.profile("collisions") {
+                collisions.update()
+            }
 
-            input.update()
-            renderer.update(deltaTime)
-            state.update(deltaTime)
-            world.update()
+            profiler.profile("physics") {
+                // TODO: investigate using fixed time step
+                physics.update(deltaTime)
+            }
 
-//        performanceCounter.start()
-            renderer.draw()
-//        performanceCounter.stop()
-//        performanceCounter.tick()
-//        val mean = performanceCounter.time.value * 1000f
-//        val max = performanceCounter.time.max * 1000f
-//        log.info { "renderer.draw() - max: ${max}ms mean: ${mean}ms load: ${performanceCounter.load.value}" }
+            profiler.profile("input") {
+                input.update()
+            }
+
+            renderer.updatePointer(deltaTime)
+
+            profiler.profile("state") {
+                state.update(deltaTime)
+            }
+
+            profiler.profile("world") {
+                world.update()
+            }
+
+            profiler.profile("renderer") {
+                renderer.draw()
+            }
         }
+
+        profiler.update(deltaTime)
 
         ui.draw(deltaTime)
         renderer.drawPointer()

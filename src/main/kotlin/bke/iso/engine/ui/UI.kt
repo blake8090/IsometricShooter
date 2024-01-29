@@ -43,8 +43,12 @@ class UI(private val input: Input) {
 
     fun setScreen(screen: UIScreen) {
         clear()
-
         log.debug { "Setting screen to ${screen::class.simpleName}" }
+        addScreen(screen)
+    }
+
+    fun addScreen(screen: UIScreen) {
+        log.debug { "Adding screen ${screen::class.simpleName}" }
 
         screens.add(screen)
         input.addInputProcessor(screen.stage)
