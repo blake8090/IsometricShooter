@@ -17,7 +17,6 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
 
     private lateinit var healthBar: HudHealthBar
     private lateinit var weaponLabel: Label
-    private lateinit var fpsLabel: Label
 
     override fun create() {
         setup()
