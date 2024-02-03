@@ -1,6 +1,6 @@
 package bke.iso.engine.asset.cache
 
-import bke.iso.engine.Disposer
+import bke.iso.engine.asset.AssetDisposer
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.OrderedMap
 import java.io.File
@@ -34,13 +34,14 @@ abstract class AssetCache<T : Any> {
 
     protected abstract suspend fun loadAssets(file: File): List<LoadedAsset<T>>
 
-    fun dispose() {
+    fun dispose(assetDisposer: AssetDisposer) {
         for (entry in assetToName) {
             val name = entry.key
             val asset = entry.value
             if (asset is Disposable) {
-                Disposer.dispose(asset, name)
+                assetDisposer.dispose(asset, name)
             }
         }
+        assetToName.clear()
     }
 }

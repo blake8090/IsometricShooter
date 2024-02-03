@@ -1,13 +1,12 @@
-package bke.iso.engine
+package bke.iso.engine.asset
 
 import com.badlogic.gdx.utils.Disposable
 import mu.KotlinLogging
 
-// TODO: make this a dependency instead of an object to facilitate unit testing?
 /**
  * Keeps track of disposed objects to avoid `Class already disposed!` errors.
  */
-object Disposer {
+class AssetDisposer {
 
     private val log = KotlinLogging.logger {}
 

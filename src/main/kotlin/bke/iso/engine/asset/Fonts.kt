@@ -1,6 +1,5 @@
 package bke.iso.engine.asset
 
-import bke.iso.engine.Disposer
 import bke.iso.engine.SystemInfo
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -67,11 +66,11 @@ class Fonts(
         return generator.generateFont(parameter)
     }
 
-    fun dispose() {
+    fun dispose(assetDisposer: AssetDisposer) {
         log.debug { "Disposing fonts" }
-        for ((options, font) in cache) {
-            // TODO: use bitmap font name
-            Disposer.dispose(font, options.name)
+        for (font in cache.values) {
+            assetDisposer.dispose(font, font.data.name)
         }
+        cache.clear()
     }
 }

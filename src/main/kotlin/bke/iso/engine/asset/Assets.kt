@@ -21,6 +21,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     private val cacheByExtension = OrderedMap<String, AssetCache<*>>()
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
+    private val assetDisposer = AssetDisposer()
 
     fun <T : Any> register(assetType: KClass<T>, assetCache: AssetCache<T>) {
         for (extension in assetCache.extensions) {
@@ -95,9 +96,9 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         }
 
     fun dispose() {
-        fonts.dispose()
+        fonts.dispose(assetDisposer)
         for (cache in cacheByType.values()) {
-            cache.dispose()
+            cache.dispose(assetDisposer)
         }
     }
 }
