@@ -5,6 +5,7 @@ import bke.iso.editor.tool.brush.BrushTool
 import bke.iso.editor.tool.eraser.EraserTool
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.LayerModule
+import bke.iso.editor.tool.room.RoomTool
 import bke.iso.engine.Event
 import bke.iso.engine.Module
 import bke.iso.engine.collision.Collisions
@@ -26,6 +27,7 @@ class ToolModule(
     private val pointerTool = PointerTool(collisions, renderer)
     private val brushTool = BrushTool(collisions, world, referenceActors, renderer)
     private val eraserTool = EraserTool(collisions, referenceActors, renderer)
+    private val roomTool = RoomTool(collisions, renderer, referenceActors)
 
     private var selectedTool: EditorTool? = null
 
@@ -39,10 +41,12 @@ class ToolModule(
         when (event) {
             is SelectTilePrefabEvent -> {
                 brushTool.selectPrefab(event.prefab)
+                roomTool.selectedPrefab = null
             }
 
             is SelectActorPrefabEvent -> {
                 brushTool.selectPrefab(event.prefab)
+                roomTool.selectedPrefab = event.prefab
             }
 
             is SelectPointerToolEvent -> {
@@ -56,6 +60,10 @@ class ToolModule(
             is SelectEraserToolEvent -> {
                 selectTool(eraserTool)
             }
+
+            is SelectRoomToolEvent -> {
+                selectTool(roomTool)
+            }
         }
     }
 
@@ -64,6 +72,9 @@ class ToolModule(
 
     fun performMultiAction(): EditorCommand? =
         selectedTool?.performMultiAction()
+
+    fun performReleaseAction(): EditorCommand? =
+        selectedTool?.performReleaseAction()
 
     private fun selectTool(tool: EditorTool) {
         selectedTool?.disable()

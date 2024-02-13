@@ -7,6 +7,7 @@ import bke.iso.editor.camera.ToggleHideWallsEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
 import bke.iso.editor.tool.SelectEraserToolEvent
 import bke.iso.editor.tool.SelectPointerToolEvent
+import bke.iso.editor.tool.SelectRoomToolEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
@@ -61,7 +62,15 @@ class EditorToolBar(
         }
         root.add(eraserButton)
 
-        ButtonGroup(pointerButton, brushButton, eraserButton)
+        val roomButton = createButton("icon-room.png")
+        roomButton.onChanged {
+            if (isChecked) {
+                fire(SelectRoomToolEvent())
+            }
+        }
+        root.add(roomButton)
+
+        ButtonGroup(pointerButton, brushButton, eraserButton, roomButton)
 
         val gridButton = createButton("grid.png")
         gridButton.style.checked = newTextureDrawable("grid.png", "button-checked")

@@ -82,6 +82,8 @@ class BrushTool(
             else -> null
         }
 
+    override fun performReleaseAction(): EditorCommand? = null
+
     private fun paintTile(prefab: TilePrefab, location: Location): PaintTileCommand? =
         if (prefab.name != referenceActors.getTilePrefabName(location)) {
             PaintTileCommand(referenceActors, prefab, location)

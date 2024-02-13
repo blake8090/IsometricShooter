@@ -38,6 +38,8 @@ class PointerTool(
 
     override fun performMultiAction(): EditorCommand? = null
 
+    override fun performReleaseAction(): EditorCommand? = null
+
     override fun disable() {
         highlighted = null
         selected = null

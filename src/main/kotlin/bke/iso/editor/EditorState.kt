@@ -8,7 +8,8 @@ import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
-import com.badlogic.gdx.Gdx
+import bke.iso.engine.input.ButtonState
+import bke.iso.engine.input.MouseBinding
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -80,19 +81,18 @@ class EditorState(override val game: Game) : State() {
         cameraModule.init()
         layerModule.init()
         buildingsModule.init()
+
+        game.input.keyMouse.bind(
+            "toolDown" to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
+            "toolPress" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
+            "toolRelease" to MouseBinding(Input.Buttons.LEFT, ButtonState.RELEASED)
+        )
     }
 
     fun handleEvent(event: EditorEvent) {
         when (event) {
-            is MainViewPressEvent -> {
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                    toolModule.performAction()?.let(::execute)
-                    editorScreen.closeContextMenu()
-                }
-            }
-
             is MainViewDragEvent -> {
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                game.input.onAction("toolDown") {
                     toolModule.performMultiAction()?.let(::execute)
                 }
             }
@@ -105,6 +105,20 @@ class EditorState(override val game: Game) : State() {
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
+
+        if (editorScreen.hitMainView()) {
+            game.input.onAction("toolPress") {
+                println("tool press")
+                toolModule.performAction()?.let(::execute)
+                editorScreen.closeContextMenu()
+            }
+
+            game.input.onAction("toolRelease") {
+                println("tool release")
+                toolModule.performReleaseAction()?.let(::execute)
+            }
+        }
+
         drawGrid()
     }
 

@@ -54,6 +54,8 @@ class EraserTool(
         }
     }
 
+    override fun performReleaseAction(): EditorCommand? = null
+
     private fun getType(actor: Actor) =
         if (actor.has<TilePrefabReference>()) {
             Type.TILE

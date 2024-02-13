@@ -33,6 +33,11 @@ abstract class EditorTool {
     abstract fun performMultiAction(): EditorCommand?
 
     /**
+     * Returns a command to be executed when the button is released.
+     */
+    abstract fun performReleaseAction(): EditorCommand?
+
+    /**
      * Called when the tool has been selected.
      */
     open fun enable() {}
