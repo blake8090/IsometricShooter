@@ -1,0 +1,10 @@
+[
+  {
+    "name": "graybox-tile",
+    "sprite": {
+      texture: "gb-tile-64x32.png",
+      offsetY: 16.0
+    },
+    "solid": true
+  }
+]

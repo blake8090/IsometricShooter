@@ -1,0 +1,31 @@
+{
+  name: "graybox-32x80",
+  components: [
+    {
+      type: "sprite",
+      texture: "gb-box-32x80.png",
+      offsetX: 0.0,
+      offsetY: 8.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "collider",
+      size: {
+        x: 0.5,
+        y: 0.5,
+        z: 2.0
+      }
+    },
+    {
+      type: "debugSettings"
+    },
+    {
+      type: "description",
+      text: "wall"
+    },
+    {
+      type: "occlude"
+    }
+  ]
+}
