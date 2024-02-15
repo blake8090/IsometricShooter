@@ -7,6 +7,7 @@ import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
 import bke.iso.engine.render.shape.ShapeRenderer
+import bke.iso.engine.world.Tile
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
@@ -30,7 +31,7 @@ const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f
 
 class Renderer(
-    world: World,
+    private val world: World,
     private val assets: Assets,
     events: Game.Events
 ) {
@@ -62,7 +63,7 @@ class Renderer(
     private val shapeRenderer = ShapeRenderer(batch)
 
     private val bgColor = Color.GRAY
-    private val gameObjectRenderer = GameObjectRenderer(this, assets, world, events)
+    private val gameObjectRenderer = GameObjectRenderer(assets, world, events)
     private val textRenderer = TextRenderer()
 
     init {
@@ -98,7 +99,7 @@ class Renderer(
         batch.projectionMatrix = camera.combined
 
         fboBegin()
-        gameObjectRenderer.draw(batch)
+        drawGameObjects()
         fboEnd()
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.b, bgColor.g, bgColor.a)
@@ -144,6 +145,18 @@ class Renderer(
             GL20.GL_SRC_ALPHA,
             GL20.GL_ONE_MINUS_SRC_ALPHA
         )
+    }
+
+    private fun drawGameObjects() {
+        for (gameObject in world.getObjects()) {
+            when (gameObject) {
+                is Actor -> debug.category("actors").add(gameObject)
+                is Tile -> debug.category("actors").add(gameObject)
+            }
+            gameObjectRenderer.add(gameObject)
+        }
+
+        gameObjectRenderer.draw(batch)
     }
 
     private fun drawFbo() {

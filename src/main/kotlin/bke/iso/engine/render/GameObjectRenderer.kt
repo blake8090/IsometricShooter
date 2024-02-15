@@ -6,138 +6,175 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Pool
 import kotlin.math.floor
 
 class GameObjectRenderer(
-    private val renderer: Renderer,
     private val assets: Assets,
     private val world: World,
     private val events: Game.Events
 ) {
 
+    private val pool = object : Pool<GameObjectRenderable>() {
+        override fun newObject() = GameObjectRenderable()
+    }
+
+    private val renderables = mutableListOf<GameObjectRenderable>()
+
     var occlusionTarget: Actor? = null
+    private var occlusionTargetRenderable: GameObjectRenderable? = null
 
     // TODO: just store the minimum hidden layer
-    private val hiddenBuildingLayers = mutableMapOf<String, MutableSet<Float>>()
+    private val hiddenBuildingLayers = mutableMapOf<String, MutableList<Float>>()
 
-    fun draw(batch: PolygonSpriteBatch) {
-        val objects = world
-            .getObjects()
-            .mapNotNull(::getRenderData)
+    fun add(gameObject: GameObject) {
+        val renderable = getRenderable(gameObject)
+        if (renderable != null) {
+            renderables.add(renderable)
 
-        for (i in objects.indices) {
-            val a = objects[i]
+            if (gameObject == occlusionTarget) {
+                occlusionTargetRenderable = renderable
+            }
+        }
+    }
 
-            for (j in i + 1..<objects.size) {
-                val b = objects[j]
+    private fun sortRenderables() {
+        for (i in renderables.indices) {
+            val a = renderables[i]
+            val aBounds = checkNotNull(a.bounds) { "Expected bounds to not be null" }
 
-                if (inFront(a, b)) {
+            for (j in i + 1..<renderables.size) {
+                val b = renderables[j]
+                val bBounds = checkNotNull(b.bounds) { "Expected bounds to not be null" }
+
+                if (inFront(aBounds, bBounds)) {
                     a.behind.add(b)
-                } else if (inFront(b, a)) {
+                } else if (inFront(bBounds, aBounds)) {
                     b.behind.add(a)
                 }
             }
 
             checkOcclusion(a)
+        }
+    }
 
-            when (val obj = a.gameObject) {
-                is Actor -> renderer.debug.category("actors").add(obj)
-                is Tile -> renderer.debug.category("actors").add(obj)
-            }
+    fun draw(batch: PolygonSpriteBatch) {
+        sortRenderables()
+
+        // TODO: avoid iterator creation here
+        for (renderable in renderables) {
+            draw(renderable, batch)
         }
 
-        for (renderData in objects) {
-            draw(batch, renderData)
+        // TODO: avoid iterator creation here
+        for (renderable in renderables) {
+//        for (i in renderables.indices) {
+            pool.free(renderable)
         }
 
+        renderables.clear()
         hiddenBuildingLayers.clear()
     }
 
-    private fun checkOcclusion(renderData: RenderData) {
-        val target = occlusionTarget ?: return
-        val gameObject = renderData.gameObject
-        if (gameObject == target || (gameObject is Actor && !gameObject.has<Occlude>())) {
+    private fun draw(renderable: GameObjectRenderable, batch: PolygonSpriteBatch) {
+        if (renderable.visited) {
+            return
+        }
+        renderable.visited = true
+
+        // TODO: avoid iterator creation here
+        for (data in renderable.behind) {
+            draw(data, batch)
+        }
+
+        val building = world.buildings.getBuilding(renderable.gameObject!!)
+        val hiddenLayers = hiddenBuildingLayers[building] ?: emptyList()
+        if (hiddenLayers.isNotEmpty() && floor(renderable.bounds!!.min.z) >= hiddenLayers.min()) {
+            renderable.alpha = 0f
+        }
+
+        val color = Color(batch.color.r, batch.color.g, batch.color.b, renderable.alpha)
+        batch.withColor(color) {
+            batch.draw(
+                /* region = */ TextureRegion(renderable.texture),
+                /* x = */ renderable.x,
+                /* y = */ renderable.y,
+                /* originX = */ renderable.width / 2f,
+                /* originY = */ renderable.height / 2f,
+                /* width = */ renderable.width,
+                /* height = */ renderable.height,
+                /* scaleX = */ 1f,
+                /* scaleY = */ 1f,
+                /* rotation = */ renderable.rotation
+            )
+        }
+
+        val obj = renderable.gameObject
+        if (obj is Actor) {
+            events.fire(DrawActorEvent(obj, batch))
+        }
+    }
+
+    private fun checkOcclusion(renderable: GameObjectRenderable) {
+        if (occlusionTarget == null) {
             return
         }
 
-        val targetData = getRenderData(target) ?: return
-        val aRect = getOcclusionRectangle(targetData)
-        renderer.debug.category("occlusion").addRectangle(aRect, 1f, Color.RED)
+        val gameObject = renderable.gameObject
+        if (gameObject == occlusionTarget || (gameObject is Actor && !gameObject.has<Occlude>())) {
+            return
+        }
 
-        val bRect = Rectangle(renderData.pos.x, renderData.pos.y, renderData.width, renderData.height)
-        if (inFront(renderData, targetData) && aRect.overlaps(bRect)) {
-            renderData.alpha = 0.1f
+        val targetRenderable = checkNotNull(occlusionTargetRenderable) {
+            "Expected renderable for occlusion target $occlusionTarget"
+        }
 
-            if (renderData.bounds.min.z >= targetData.bounds.max.z) {
-                val layer = floor(renderData.bounds.min.z)
+        val occlusionRect = getOcclusionRectangle(targetRenderable)
+//        renderer.debug.category("occlusion").addRectangle(aRect, 1f, Color.RED)
+        val rect = Rectangle(renderable.x, renderable.y, renderable.width, renderable.height)
 
-                val building = world.buildings.getBuilding(renderData.gameObject)
+        val bounds = checkNotNull(renderable.bounds) {
+            "Expected bounds for renderable ${renderable.gameObject}"
+        }
+        val targetBounds = checkNotNull(targetRenderable.bounds) {
+            "Expected bounds for renderable ${targetRenderable.gameObject}"
+        }
+
+        if (inFront(bounds, targetBounds) && occlusionRect.overlaps(rect)) {
+            renderable.alpha = 0.1f
+
+            if (bounds.min.z >= targetBounds.max.z) {
+                val layer = floor(bounds.min.z)
+
+                val building = world.buildings.getBuilding(renderable.gameObject!!)
                 if (!building.isNullOrBlank()) {
                     hiddenBuildingLayers
-                        .getOrPut(building) { mutableSetOf() }
+                        .getOrPut(building) { mutableListOf() }
                         .add(layer)
                 }
             }
         }
     }
 
-    // TODO: make this more configurable - refactor into an occlusion strategy class or something
-    private fun getOcclusionRectangle(targetData: RenderData): Rectangle {
+    private fun getOcclusionRectangle(renderable: GameObjectRenderable): Rectangle {
         val w = 75f
         val h = 75f
-        val x = targetData.pos.x - (w / 2f) + (targetData.width / 2f)
-        val y = targetData.pos.y - (h / 2f) + (targetData.height / 2f)
+        val x = renderable.x - (w / 2f) + (renderable.width / 2f)
+        val y = renderable.y - (h / 2f) + (renderable.height / 2f)
         return Rectangle(x, y, w, h)
     }
 
-    private fun draw(batch: PolygonSpriteBatch, renderData: RenderData) {
-        if (renderData.visited) {
-            return
-        }
-        renderData.visited = true
-
-        for (data in renderData.behind) {
-            draw(batch, data)
-        }
-
-        val building = world.buildings.getBuilding(renderData.gameObject)
-        val hiddenLayers = hiddenBuildingLayers[building] ?: emptySet()
-        if (hiddenLayers.isNotEmpty() && floor(renderData.bounds.min.z) >= hiddenLayers.min()) {
-            renderData.alpha = 0f
-        }
-
-        val color = Color(batch.color.r, batch.color.g, batch.color.b, renderData.alpha)
-        batch.withColor(color) {
-            batch.draw(
-                /* region = */ TextureRegion(renderData.texture),
-                /* x = */ renderData.pos.x,
-                /* y = */ renderData.pos.y,
-                /* originX = */ renderData.width / 2f,
-                /* originY = */ renderData.height / 2f,
-                /* width = */ renderData.width,
-                /* height = */ renderData.height,
-                /* scaleX = */ 1f,
-                /* scaleY = */ 1f,
-                /* rotation = */ renderData.rotation
-            )
-        }
-
-        if (renderData.gameObject is Actor) {
-            events.fire(DrawActorEvent(renderData.gameObject, batch))
-        }
-    }
-
-    private fun getRenderData(gameObject: GameObject): RenderData? {
+    private fun getRenderable(gameObject: GameObject): GameObjectRenderable? {
         val sprite = getSprite(gameObject)
         if (sprite == null || sprite.texture.isBlank()) {
             return null
@@ -160,16 +197,20 @@ class GameObjectRenderer(
 
         val bounds = gameObject.getCollisionBox() ?: Box.fromMinMax(worldPos, worldPos)
 
-        return RenderData(
-            gameObject,
-            texture,
-            pos,
-            width,
-            height,
-            sprite.alpha,
-            sprite.rotation,
-            bounds
-        )
+        val renderable = pool.obtain()
+        renderable.gameObject = gameObject
+        renderable.texture = texture
+        renderable.bounds = bounds
+        renderable.x = pos.x
+        renderable.y = pos.y
+        renderable.offsetX = offset.x
+        renderable.offsetY = offset.y
+        renderable.width = width
+        renderable.height = height
+        renderable.alpha = sprite.alpha
+        renderable.rotation = sprite.rotation
+
+        return renderable
     }
 
     private fun getSprite(gameObject: GameObject): Sprite? =
@@ -186,16 +227,16 @@ class GameObjectRenderer(
             else -> error("unexpected GameObject ${gameObject::class.simpleName}")
         }
 
-    private fun inFront(a: RenderData, b: RenderData): Boolean {
-        if (a.bounds.max.z <= b.bounds.min.z) {
+    private fun inFront(a: Box, b: Box): Boolean {
+        if (a.max.z <= b.min.z) {
             return false
         }
 
-        if (a.bounds.min.y - b.bounds.max.y >= 0) {
+        if (a.min.y - b.max.y >= 0) {
             return false
         }
 
-        if (a.bounds.max.x - b.bounds.min.x <= 0) {
+        if (a.max.x - b.min.x <= 0) {
             return false
         }
 
@@ -206,19 +247,4 @@ class GameObjectRenderer(
         val actor: Actor,
         val batch: PolygonSpriteBatch
     ) : Event
-}
-
-// TODO: pool instances of this
-private data class RenderData(
-    val gameObject: GameObject,
-    val texture: Texture,
-    val pos: Vector2,
-    val width: Float,
-    val height: Float,
-    var alpha: Float,
-    val rotation: Float,
-    val bounds: Box
-) {
-    val behind = mutableListOf<RenderData>()
-    var visited = false
 }
