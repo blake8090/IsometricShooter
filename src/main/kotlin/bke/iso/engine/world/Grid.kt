@@ -6,12 +6,18 @@ import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.OrderedSet
+import com.badlogic.gdx.utils.Pool
+import com.badlogic.gdx.utils.Pool.Poolable
 
 class Grid {
 
     private val objectMap = OrderedMap<Location, GridData>()
     private val objects = OrderedSet<GameObject>()
     private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
+
+    private val pool = object : Pool<GridData>() {
+        override fun newObject() = GridData()
+    }
 
     init {
         // improves performance when removing objects
@@ -53,6 +59,11 @@ class Grid {
                 "Expected GridData for $location from $actor"
             }
             data.actors.remove(actor)
+
+            if (data.tile == null && data.actors.isEmpty) {
+                pool.free(data)
+                objectMap.remove(location)
+            }
         }
         locationsByActor.remove(actor)
     }
@@ -85,7 +96,7 @@ class Grid {
 
     private fun getOrPutData(location: Location): GridData {
         if (!objectMap.containsKey(location)) {
-            objectMap.put(location, GridData())
+            objectMap.put(location, pool.obtain())
         }
         return objectMap.get(location)
     }
@@ -97,7 +108,13 @@ class Grid {
     }
 }
 
-private data class GridData(
+data class GridData(
     val actors: ObjectSet<Actor> = ObjectSet(),
     var tile: Tile? = null
-)
+) : Poolable {
+
+    override fun reset() {
+        actors.clear()
+        tile = null
+    }
+}
