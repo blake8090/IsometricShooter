@@ -88,7 +88,7 @@ class CameraModule(
 
     private fun moveCameraActor() {
         val z = getZ(layerModule.selectedLayer.toFloat())
-        val pos = toWorld(renderer.getPointerPos(), z)
+        val pos = toWorld(renderer.pointer.pos, z)
         cameraActor.moveTo(pos.x, pos.y, pos.z)
     }
 

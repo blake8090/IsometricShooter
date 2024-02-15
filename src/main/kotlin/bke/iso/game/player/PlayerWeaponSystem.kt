@@ -48,7 +48,7 @@ class PlayerWeaponSystem(
 
         renderer.fgShapes.addLine(
             weaponsModule.getShootPos(actor),
-            toWorld(renderer.getPointerPos()),
+            renderer.pointer.worldPos,
             1.25f,
             Color.RED
         )
@@ -75,7 +75,7 @@ class PlayerWeaponSystem(
     private fun shoot(actor: Actor) {
         val pos = actor.pos
         pos.z += BARREL_HEIGHT
-        val target = toWorld(renderer.getPointerPos(), pos.z)
+        val target = toWorld(renderer.pointer.pos, pos.z)
 
         events.fire(WeaponsModule.ShootEvent(actor, target))
 

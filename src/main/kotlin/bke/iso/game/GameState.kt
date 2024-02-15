@@ -63,7 +63,7 @@ class GameState(override val game: Game) : State() {
 
         bindInput()
 
-        game.renderer.setPointer(crosshair)
+        game.renderer.pointer.set(crosshair)
         hudModule.init(game.ui, PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 
         game.world.actors.each { actor: Actor, _: Player ->

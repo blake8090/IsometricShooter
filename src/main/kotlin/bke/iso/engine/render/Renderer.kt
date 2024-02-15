@@ -3,8 +3,7 @@ package bke.iso.engine.render
 import bke.iso.engine.Game
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.render.pointer.MousePointer
-import bke.iso.engine.render.pointer.Pointer
+import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
 import bke.iso.engine.render.shape.ShapeRenderer
 import bke.iso.engine.world.actor.Actor
@@ -36,17 +35,6 @@ class Renderer(
 ) {
 
     private val batch = PolygonSpriteBatch()
-    private val gameObjectRenderer = GameObjectRenderer(this, assets, world, events)
-    private var pointer: Pointer = MousePointer()
-
-    val debug: DebugRenderer = DebugRenderer()
-    val bgShapes: ShapeArray = ShapeArray()
-    val fgShapes: ShapeArray = ShapeArray()
-    private val shapeRenderer = ShapeRenderer(batch)
-
-    private val bgColor = Color.GRAY
-
-    private val renderTexts = mutableSetOf<RenderText>()
 
     // TODO: cleanup this fbo code, see LowResGDX on github
     /**
@@ -63,6 +51,17 @@ class Renderer(
      * Only used for game-logic, i.e. following the player
      */
     private val camera = OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+
+    val pointer = PointerRenderer(camera, batch)
+
+    val debug: DebugRenderer = DebugRenderer()
+    val bgShapes: ShapeArray = ShapeArray()
+    val fgShapes: ShapeArray = ShapeArray()
+    private val shapeRenderer = ShapeRenderer(batch)
+
+    private val bgColor = Color.GRAY
+    private val gameObjectRenderer = GameObjectRenderer(this, assets, world, events)
+    private val renderTexts = mutableSetOf<RenderText>()
 
     init {
         // enables somewhat pixel-perfect rendering!
@@ -88,27 +87,6 @@ class Renderer(
 
     fun setOcclusionTarget(actor: Actor?) {
         gameObjectRenderer.occlusionTarget = actor
-    }
-
-    fun updatePointer(deltaTime: Float) {
-        pointer.update(deltaTime)
-    }
-
-    fun getPointerPos(): Vector2 {
-        val screenPos = camera.unproject(Vector3(pointer.pos, 0f))
-        return Vector2(screenPos.x, screenPos.y)
-    }
-
-    fun setPointer(newPointer: Pointer) {
-        pointer.hide()
-        newPointer.create()
-        newPointer.show()
-        pointer = newPointer
-    }
-
-    fun drawPointer() {
-        batch.projectionMatrix = camera.combined
-        pointer.draw(batch, getPointerPos())
     }
 
     fun draw() {

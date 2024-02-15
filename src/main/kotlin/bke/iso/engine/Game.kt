@@ -92,7 +92,7 @@ class Game {
                 input.update()
             }
 
-            renderer.updatePointer(deltaTime)
+            renderer.pointer.update(deltaTime)
 
             profiler.profile("state") {
                 state.update(deltaTime)
@@ -110,7 +110,7 @@ class Game {
         profiler.update(deltaTime)
 
         ui.draw(deltaTime)
-        renderer.drawPointer()
+        renderer.pointer.draw()
     }
 
     fun <T : State> setState(type: KClass<T>) {

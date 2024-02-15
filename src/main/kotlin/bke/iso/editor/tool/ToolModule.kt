@@ -34,7 +34,7 @@ class ToolModule(
     override fun update(deltaTime: Float) {
         val tool = selectedTool ?: return
         // TODO: scale cursor position when screen size changes
-        tool.update(layerModule.selectedLayer.toFloat(), renderer.getPointerPos())
+        tool.update(layerModule.selectedLayer.toFloat(), renderer.pointer.pos)
     }
 
     override fun handleEvent(event: Event) {
