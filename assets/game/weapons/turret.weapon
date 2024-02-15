@@ -2,7 +2,7 @@
   type: "ranged",
   name: "turret",
   fireType: "auto",
-  damage: 0.2,
+  damage: 5,
   magSize: 3,
   fireRate: 600,
   velocity: 30,

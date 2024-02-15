@@ -15,6 +15,7 @@ import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.CombatModule
+import bke.iso.game.combat.Health
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
@@ -30,7 +31,7 @@ import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 
-const val PLAYER_MAX_HEALTH: Float = 5f
+//const val PLAYER_MAX_HEALTH: Float = 100f
 
 class GameState(override val game: Game) : State() {
 
@@ -64,11 +65,14 @@ class GameState(override val game: Game) : State() {
         bindInput()
 
         game.renderer.pointer.set(crosshair)
-        hudModule.init(game.ui, PLAYER_MAX_HEALTH, PLAYER_MAX_HEALTH)
 
         game.world.actors.each { actor: Actor, _: Player ->
             weaponsModule.equip(actor, "rifle")
             game.renderer.setOcclusionTarget(actor)
+
+            actor.with<Health> { health ->
+                hudModule.init(game.ui, health.value, health.maxValue)
+            }
         }
     }
 

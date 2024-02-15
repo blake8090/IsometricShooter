@@ -10,7 +10,6 @@ import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
-import bke.iso.game.PLAYER_MAX_HEALTH
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
@@ -33,7 +32,8 @@ class HudModule(
 
     fun init(ui: UI, health: Float, maxHealth: Float) {
         ui.setScreen(hudScreen)
-        hudScreen.updateHealth(health, maxHealth)
+        hudScreen.setHealth(health)
+        hudScreen.setMaxHealth(maxHealth)
     }
 
     override fun update(deltaTime: Float) {
@@ -68,7 +68,7 @@ class HudModule(
 
     override fun handleEvent(event: Event) {
         if (event is CombatModule.PlayerDamageEvent) {
-            hudScreen.updateHealth(event.health, PLAYER_MAX_HEALTH)
+            hudScreen.setHealth(event.health)
         } else if (event is GameObjectRenderer.DrawActorEvent) {
             drawHealthBar(event.actor, event.batch)
         }

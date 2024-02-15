@@ -2,7 +2,7 @@
   type: "ranged",
   name: "pistol",
   fireType: "semi",
-  damage: 0.5,
+  damage: 50,
   magSize: 15,
   fireRate: 200,
   velocity: 50,

@@ -27,8 +27,8 @@
     },
     {
       type: "health",
-      maxValue: 5.0,
-      value: 5.0
+      maxValue: 100.0,
+      value: 100.0
     },
     {
       type: "healthBar",

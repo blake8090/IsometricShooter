@@ -74,9 +74,12 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
         )
     }
 
-    fun updateHealth(health: Float, maxHealth: Float) {
-        healthBar.maxValue = maxHealth
+    fun setHealth(health: Float) {
         healthBar.value = health
+    }
+
+    fun setMaxHealth(maxHealth: Float) {
+        healthBar.maxValue = maxHealth
     }
 
     fun setWeaponText(text: String) {
@@ -111,6 +114,7 @@ private class HudHealthBar(
         style.barBackground.draw(batch, barX, barY, barWidth, barHeight)
 
         val ratio = value / maxValue
+//        println("ratio: $ratio")
         val fgWidth = barWidth * ratio
         style.barForeground.draw(batch, barX, barY, fgWidth, barHeight)
     }

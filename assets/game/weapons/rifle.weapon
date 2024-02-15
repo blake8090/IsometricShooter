@@ -2,7 +2,7 @@
   type: "ranged",
   name: "rifle",
   fireType: "auto",
-  damage: 1,
+  damage: 30,
   magSize: 30,
   fireRate: 800,
   velocity: 60,
