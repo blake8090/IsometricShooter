@@ -26,32 +26,28 @@ class ShapeRenderer(batch: PolygonSpriteBatch) {
         shapeDrawer.update()
     }
 
-    fun begin() {
+    fun draw(shapeArray: ShapeArray) {
         shapeDrawer.batch.begin()
-    }
-
-    fun end() {
+        for (shape in shapeArray) {
+            drawShape(shape)
+        }
         shapeDrawer.batch.end()
     }
 
-    fun drawShape(shape: Shape) =
+    private fun drawShape(shape: Shape) =
         when (shape) {
-            is Line3D -> drawLine(shape)
-            is Circle3D -> drawCircle(shape)
-            is Point3D -> drawPoint(shape)
+            is Line3D -> drawLine(shape.start, shape.end, shape.color, shape.width)
+            is Circle3D -> drawCircle(shape.pos, shape.radius, shape.color)
+            is Point3D -> drawPoint(shape.pos, shape.size, shape.color)
             is Sphere3D -> drawSphere(shape)
             is Rectangle2D -> drawRectangle(shape)
         }
-
-    fun drawPoint(point: Point3D) {
-        drawPoint(point.pos, point.size, point.color)
-    }
 
     private fun drawPoint(worldPos: Vector3, size: Float, color: Color) {
         shapeDrawer.filledCircle(toScreen(worldPos), size, color)
     }
 
-    fun drawRectangle(rectangle: Rectangle2D) {
+    private fun drawRectangle(rectangle: Rectangle2D) {
         shapeDrawer.setColor(rectangle.color)
         shapeDrawer.rectangle(
             rectangle.pos.x,
@@ -62,22 +58,9 @@ class ShapeRenderer(batch: PolygonSpriteBatch) {
         )
     }
 
-    fun drawLine(line: Line3D) {
-        drawLine(line.start, line.end, line.color, line.width)
-    }
-
     private fun drawLine(start: Vector3, end: Vector3, color: Color, width: Float = 1f) {
         shapeDrawer.setColor(color)
         shapeDrawer.line(toScreen(start), toScreen(end), width)
-    }
-
-    fun drawCircle(circle: Circle3D) {
-        val ratio = getIsometricRatio()
-        val width = circle.radius * (TILE_SIZE_X / 2) * ratio
-        val height = circle.radius * (TILE_SIZE_Y / 2) * ratio
-        val pos = toScreen(circle.pos)
-        shapeDrawer.setColor(circle.color)
-        shapeDrawer.ellipse(pos.x, pos.y, width, height)
     }
 
     private fun drawCircle(worldPos: Vector3, worldRadius: Float, color: Color) {

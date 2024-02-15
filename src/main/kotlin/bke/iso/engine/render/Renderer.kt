@@ -100,13 +100,11 @@ class Renderer(
         Gdx.gl.glClearColor(bgColor.r, bgColor.b, bgColor.g, bgColor.a)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        drawShapes(bgShapes)
+        shapeRenderer.update()
+        shapeRenderer.draw(bgShapes)
         drawFbo()
-        drawShapes(fgShapes)
-
-        shapeRenderer.begin()
+        shapeRenderer.draw(fgShapes)
         debug.draw(shapeRenderer)
-        shapeRenderer.end()
 
         batch.begin()
         for (renderText in renderTexts) {
@@ -156,14 +154,6 @@ class Renderer(
             GL20.GL_SRC_ALPHA,
             GL20.GL_ONE_MINUS_SRC_ALPHA
         )
-    }
-
-    private fun drawShapes(shapes: ShapeArray) {
-        shapeRenderer.begin()
-        for (shape in shapes) {
-            shapeRenderer.drawShape(shape)
-        }
-        shapeRenderer.end()
     }
 
     private fun drawFbo() {
