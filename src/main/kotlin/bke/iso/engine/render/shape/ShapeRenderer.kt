@@ -10,9 +10,12 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 import space.earlygrey.shapedrawer.ShapeDrawer
 
 class ShapeRenderer(batch: PolygonSpriteBatch) {
+
+    private val log = KotlinLogging.logger {}
 
     private val shapeDrawer: ShapeDrawer
 
@@ -118,5 +121,10 @@ class ShapeRenderer(batch: PolygonSpriteBatch) {
         val height = radius * TILE_SIZE_Z + (TILE_SIZE_Z / 2f)
         shapeDrawer.setColor(sphere.color)
         shapeDrawer.ellipse(screenPos.x, screenPos.y, width, height)
+    }
+
+    fun dispose() {
+        shapeDrawer.region.texture.dispose()
+        log.info { "Disposed shapeDrawer" }
     }
 }

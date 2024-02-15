@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Pools
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
+import mu.KotlinLogging
 
 const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f
@@ -33,6 +34,8 @@ class Renderer(
     private val assets: Assets,
     events: Game.Events
 ) {
+
+    private val log = KotlinLogging.logger {}
 
     private val batch = PolygonSpriteBatch()
 
@@ -71,6 +74,8 @@ class Renderer(
     fun dispose() {
         batch.dispose()
         fbo.dispose()
+        shapeRenderer.dispose()
+        log.info { "Disposed Renderer" }
     }
 
     fun resize(width: Int, height: Int) {
