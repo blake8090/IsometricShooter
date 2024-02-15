@@ -51,8 +51,8 @@ class GameObjectRenderer(
             checkOcclusion(a)
 
             when (val obj = a.gameObject) {
-                is Actor -> renderer.debug.add(obj)
-                is Tile -> renderer.debug.add(obj)
+                is Actor -> renderer.debug.category("actors").add(obj)
+                is Tile -> renderer.debug.category("actors").add(obj)
             }
         }
 
@@ -72,7 +72,7 @@ class GameObjectRenderer(
 
         val targetData = getRenderData(target) ?: return
         val aRect = getOcclusionRectangle(targetData)
-        renderer.debug.addRectangle(aRect, 1f, Color.RED)
+        renderer.debug.category("occlusion").addRectangle(aRect, 1f, Color.RED)
 
         val bRect = Rectangle(renderData.pos.x, renderData.pos.y, renderData.width, renderData.height)
         if (inFront(renderData, targetData) && aRect.overlaps(bRect)) {

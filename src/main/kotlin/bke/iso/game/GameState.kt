@@ -31,8 +31,6 @@ import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
 
-//const val PLAYER_MAX_HEALTH: Float = 100f
-
 class GameState(override val game: Game) : State() {
 
     private val combatModule = CombatModule(game.world, game.events)
@@ -74,6 +72,8 @@ class GameState(override val game: Game) : State() {
                 hudModule.init(game.ui, health.value, health.maxValue)
             }
         }
+
+        game.renderer.debug.enableCategories("vision", "turret", "collisions")
     }
 
     private fun bindInput() {

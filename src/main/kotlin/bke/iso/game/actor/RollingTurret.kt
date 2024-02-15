@@ -167,13 +167,13 @@ class RollingTurretSystem(
         val firstPoint = firstCollision
             .points
             .minBy { point -> start.dst(point) }
-        renderer.debug.addPoint(firstPoint, 3f, Color.RED)
+        renderer.debug.category("vision").addPoint(firstPoint, 3f, Color.RED)
 
         return if (firstCollision.obj == target) {
-            renderer.debug.addLine(start, end, 1f, Color.RED)
+            renderer.debug.category("vision").addLine(start, end, 1f, Color.RED)
             true
         } else {
-            renderer.debug.addLine(start, firstPoint, 1f, Color.RED)
+            renderer.debug.category("vision").addLine(start, firstPoint, 1f, Color.RED)
             false
         }
     }

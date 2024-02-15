@@ -4,7 +4,7 @@ import bke.iso.engine.Game
 import bke.iso.engine.System
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.render.DebugRenderer
+import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
@@ -45,7 +45,7 @@ class TurretSystem(
             turretActor.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
         }
 
-        debugRenderer.addSphere(turretActor.pos, RANGE_RADIUS, Color.GOLD)
+        debugRenderer.category("turret").addSphere(turretActor.pos, RANGE_RADIUS, Color.GOLD)
 
         val playerActor = world.actors.find<Player>() ?: return
         if (withinRange(turretActor, playerActor) && canSee(turretActor, playerActor)) {
@@ -75,13 +75,13 @@ class TurretSystem(
         val firstPoint = firstCollision
             .points
             .minBy { point -> start.dst(point) }
-        debugRenderer.addPoint(firstPoint, 3f, Color.RED)
+        debugRenderer.category("vision").addPoint(firstPoint, 3f, Color.RED)
 
         return if (firstCollision.obj == target) {
-            debugRenderer.addLine(start, end, 1f, Color.RED)
+            debugRenderer.category("vision").addLine(start, end, 1f, Color.RED)
             true
         } else {
-            debugRenderer.addLine(start, firstPoint, 1f, Color.RED)
+            debugRenderer.category("vision").addLine(start, firstPoint, 1f, Color.RED)
             false
         }
     }

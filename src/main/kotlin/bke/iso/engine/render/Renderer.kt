@@ -3,6 +3,7 @@ package bke.iso.engine.render
 import bke.iso.engine.Game
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
 import bke.iso.engine.render.shape.ShapeRenderer

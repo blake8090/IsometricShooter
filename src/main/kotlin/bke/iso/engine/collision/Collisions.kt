@@ -55,7 +55,7 @@ class Collisions(
     }
 
     fun checkCollisions(box: Box): Set<Collision> {
-        renderer.debug.addBox(box, 1f, Color.SKY)
+        renderer.debug.category("collisions").addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
         val objects = world.getObjectsInArea(box)
         for (obj in objects) {
@@ -81,7 +81,7 @@ class Collisions(
 
     fun checkLineCollisions(start: Vector3, end: Vector3): Set<SegmentCollision> {
         val area = Box.fromMinMax(Segment(start, end))
-        renderer.debug.addBox(area, 1f, Color.ORANGE)
+        renderer.debug.category("collisions").addBox(area, 1f, Color.ORANGE)
 
         val direction = Vector3(end)
             .sub(start)
@@ -136,7 +136,7 @@ class Collisions(
             py * delta.y.sign,
             pz * delta.z.sign,
         )
-        renderer.debug.addBox(projectedBox, 1f, Color.ORANGE)
+        renderer.debug.category("collisions").addBox(projectedBox, 1f, Color.ORANGE)
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()

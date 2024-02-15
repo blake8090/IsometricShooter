@@ -1,14 +1,13 @@
 package bke.iso.engine.collision
 
 import bke.iso.engine.Game
-import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
-import bke.iso.engine.render.DebugRenderer
+import bke.iso.engine.render.debug.DebugCategory
+import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -23,7 +22,7 @@ class CollisionsTest : StringSpec({
     "when actor stands on top of tile, given precision error, should return collision" {
         val renderer = mockk<Renderer>()
         val debugRenderer = mockk<DebugRenderer>()
-        every { debugRenderer.addBox(any<Box>(), any<Float>(), any<Color>()) } returns Unit
+        every { debugRenderer.category(any<String>()) } returns DebugCategory()
         every { renderer.debug } returns debugRenderer
         val world = World(events)
 

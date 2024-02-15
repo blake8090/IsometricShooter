@@ -1,23 +1,19 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.debug
 
-import bke.iso.engine.math.Box
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.math.Box
+import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.shape.ShapeArray
-import bke.iso.engine.render.shape.ShapeRenderer
-import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.Tile
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 
-class DebugRenderer {
+class DebugCategory {
 
-    private val shapes = ShapeArray()
-    private var enabled = false
-
-    fun toggle() {
-        enabled = enabled.not()
-    }
+    var enabled = false
+    val shapes = ShapeArray()
 
     fun addLine(start: Vector3, end: Vector3, width: Float, color: Color) {
         if (enabled) {
@@ -83,10 +79,7 @@ class DebugRenderer {
         }
     }
 
-    fun draw(shapeDrawer: ShapeRenderer) {
-        if (enabled) {
-            shapeDrawer.draw(shapes)
-        }
+    fun clear() {
         shapes.clear()
     }
 }
