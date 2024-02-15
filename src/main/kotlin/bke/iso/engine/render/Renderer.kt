@@ -39,7 +39,6 @@ class Renderer(
 
     private val batch = PolygonSpriteBatch()
 
-    // TODO: cleanup this fbo code, see LowResGDX on github
     /**
      * Game world is drawn to this FBO. Enables things such as post-processing and pixel-perfect scaling.
      */
@@ -163,6 +162,7 @@ class Renderer(
 
     private fun drawFbo() {
         batch.projectionMatrix = fboViewport.camera.combined
+        fboViewport.camera.up
         batch.begin()
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
