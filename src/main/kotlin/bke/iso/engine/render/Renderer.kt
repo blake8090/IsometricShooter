@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Pools
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import mu.KotlinLogging
@@ -64,7 +63,7 @@ class Renderer(
 
     private val bgColor = Color.GRAY
     private val gameObjectRenderer = GameObjectRenderer(this, assets, world, events)
-    private val renderTexts = mutableSetOf<RenderText>()
+    private val textRenderer = TextRenderer()
 
     init {
         // enables somewhat pixel-perfect rendering!
@@ -111,24 +110,10 @@ class Renderer(
         shapeRenderer.draw(fgShapes)
         debug.draw(shapeRenderer)
 
-        batch.begin()
-        for (renderText in renderTexts) {
-            val font = checkNotNull(renderText.font) {
-                "Expected a non-null BitmapFont"
-            }
-
-            font.draw(
-                batch,
-                renderText.text,
-                renderText.x,
-                renderText.y,
-            )
-        }
-        batch.end()
+        textRenderer.draw(batch)
 
         bgShapes.clear()
         fgShapes.clear()
-        renderTexts.clear()
     }
 
     private fun fboBegin() {
@@ -198,14 +183,7 @@ class Renderer(
     }
 
     fun drawText(text: String, font: BitmapFont, worldPos: Vector3) {
-        val renderText = Pools.obtain(RenderText::class.java)
-        renderText.text = text
-        renderText.font = font
-
-        val pos = toScreen(worldPos)
-        renderText.x = pos.x
-        renderText.y = pos.y
-        renderTexts.add(renderText)
+        textRenderer.add(text, font, worldPos)
     }
 }
 
