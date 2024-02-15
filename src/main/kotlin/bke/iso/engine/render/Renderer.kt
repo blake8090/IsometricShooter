@@ -91,24 +91,19 @@ class Renderer(
 
     fun draw() {
         camera.update()
+        batch.projectionMatrix = camera.combined
 
-        drawToFbo()
+        fboBegin()
+        gameObjectRenderer.draw(batch)
+        fboEnd()
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.b, bgColor.g, bgColor.a)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        // reset blend function to default
-        batch.setBlendFunctionSeparate(
-            GL20.GL_SRC_ALPHA,
-            GL20.GL_ONE_MINUS_SRC_ALPHA,
-            GL20.GL_SRC_ALPHA,
-            GL20.GL_ONE_MINUS_SRC_ALPHA
-        )
 
         drawShapes(bgShapes)
         drawFbo()
         drawShapes(fgShapes)
 
-        batch.projectionMatrix = camera.combined
         shapeRenderer.begin()
         debug.draw(shapeRenderer)
         shapeRenderer.end()
@@ -133,31 +128,37 @@ class Renderer(
         renderTexts.clear()
     }
 
-    private fun drawToFbo() {
-        batch.projectionMatrix = camera.combined
-
+    private fun fboBegin() {
         fbo.begin()
         batch.begin()
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
         // keep FBO's transparent pixels from mixing into other pixels
         batch.setBlendFunctionSeparate(
             GL20.GL_SRC_ALPHA,
             GL20.GL_ONE_MINUS_SRC_ALPHA,
             GL20.GL_ONE,
-            GL20.GL_ONE_MINUS_SRC_ALPHA,
+            GL20.GL_ONE_MINUS_SRC_ALPHA
         )
+    }
 
-        gameObjectRenderer.draw(batch)
-
+    private fun fboEnd() {
         batch.end()
         fbo.end()
         fboViewport.apply()
+
+        // reset blend function to default
+        batch.setBlendFunctionSeparate(
+            GL20.GL_SRC_ALPHA,
+            GL20.GL_ONE_MINUS_SRC_ALPHA,
+            GL20.GL_SRC_ALPHA,
+            GL20.GL_ONE_MINUS_SRC_ALPHA
+        )
     }
 
     private fun drawShapes(shapes: ShapeArray) {
-        batch.projectionMatrix = camera.combined
         shapeRenderer.begin()
         for (shape in shapes) {
             shapeRenderer.drawShape(shape)
@@ -170,6 +171,7 @@ class Renderer(
         batch.begin()
         batch.draw(fbo.colorBufferTexture, 0f, 0f, fboViewport.worldWidth, fboViewport.worldHeight, 0f, 0f, 1f, 1f)
         batch.end()
+        batch.projectionMatrix = camera.combined
     }
 
     fun drawTexture(

@@ -34,7 +34,6 @@ class PointerRenderer(
     }
 
     fun draw() {
-        batch.projectionMatrix = camera.combined
         pointer.draw(batch, pos)
     }
 }
