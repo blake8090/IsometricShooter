@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool
 import kotlin.math.floor
 
@@ -29,7 +30,7 @@ class GameObjectRenderer(
         override fun newObject() = GameObjectRenderable()
     }
 
-    private val renderables = mutableListOf<GameObjectRenderable>()
+    private val renderables = Array<GameObjectRenderable>()
 
     var occlusionTarget: Actor? = null
     private var occlusionTargetRenderable: GameObjectRenderable? = null
@@ -49,7 +50,7 @@ class GameObjectRenderer(
     }
 
     private fun sortRenderables() {
-        for (i in renderables.indices) {
+        for (i in 0..<renderables.size) {
             val a = renderables[i]
             val aBounds = checkNotNull(a.bounds) { "Expected bounds to not be null" }
 
