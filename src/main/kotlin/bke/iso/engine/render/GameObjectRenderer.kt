@@ -49,6 +49,21 @@ class GameObjectRenderer(
         }
     }
 
+    fun draw(batch: PolygonSpriteBatch) {
+        sortRenderables()
+
+        for (renderable in renderables) {
+            draw(renderable, batch)
+        }
+
+        for (renderable in renderables) {
+            pool.free(renderable)
+        }
+
+        renderables.clear()
+        hiddenBuildingLayers.clear()
+    }
+
     private fun sortRenderables() {
         for (i in 0..<renderables.size) {
             val a = renderables[i]
@@ -67,24 +82,6 @@ class GameObjectRenderer(
 
             checkOcclusion(a)
         }
-    }
-
-    fun draw(batch: PolygonSpriteBatch) {
-        sortRenderables()
-
-        // TODO: avoid iterator creation here
-        for (renderable in renderables) {
-            draw(renderable, batch)
-        }
-
-        // TODO: avoid iterator creation here
-        for (renderable in renderables) {
-//        for (i in renderables.indices) {
-            pool.free(renderable)
-        }
-
-        renderables.clear()
-        hiddenBuildingLayers.clear()
     }
 
     private fun draw(renderable: GameObjectRenderable, batch: PolygonSpriteBatch) {
