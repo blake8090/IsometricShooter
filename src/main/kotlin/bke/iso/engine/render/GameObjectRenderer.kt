@@ -103,11 +103,7 @@ class GameObjectRenderer(
             draw(data, batch)
         }
 
-        val building = world.buildings.getBuilding(renderable.gameObject!!)
-        val hiddenLayers = hiddenBuildingLayers[building] ?: emptyList()
-        if (hiddenLayers.isNotEmpty() && floor(renderable.bounds!!.min.z) >= hiddenLayers.min()) {
-            renderable.alpha = 0f
-        }
+        applyOcclusion(renderable)
 
         val color = Color(batch.color.r, batch.color.g, batch.color.b, renderable.alpha)
         batch.withColor(color) {
@@ -178,6 +174,14 @@ class GameObjectRenderer(
         val x = renderable.x - (w / 2f) + (renderable.width / 2f)
         val y = renderable.y - (h / 2f) + (renderable.height / 2f)
         return Rectangle(x, y, w, h)
+    }
+
+    private fun applyOcclusion(renderable: GameObjectRenderable) {
+        val building = world.buildings.getBuilding(renderable.gameObject!!)
+        val hiddenLayers = hiddenBuildingLayers[building] ?: emptyList()
+        if (hiddenLayers.isNotEmpty() && floor(renderable.bounds!!.min.z) >= hiddenLayers.min()) {
+            renderable.alpha = 0f
+        }
     }
 
     private fun getRenderable(gameObject: GameObject): GameObjectRenderable? {
