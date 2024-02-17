@@ -5,6 +5,7 @@ import bke.iso.engine.world.GameObject
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool.Poolable
 
 //open class TextureRenderable(
@@ -63,7 +64,7 @@ open class GameObjectRenderable(
     var rotation: Float = 0f
 ) : Poolable {
 
-    val behind = mutableListOf<GameObjectRenderable>()
+    val behind = Array<GameObjectRenderable>()
     var visited = false
 
     override fun reset() {
