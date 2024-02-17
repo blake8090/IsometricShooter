@@ -45,7 +45,11 @@ class GameObjectRenderer(
             addRenderable(gameObject)
         }
 
-        sortRenderables()
+        for (i in 0..<renderables.size) {
+            val renderable = renderables[i]
+            sortRenderables(i)
+            checkOcclusion(renderable)
+        }
 
         for (renderable in renderables) {
             draw(renderable, batch)
@@ -73,23 +77,19 @@ class GameObjectRenderer(
         }
     }
 
-    private fun sortRenderables() {
-        for (i in 0..<renderables.size) {
-            val a = renderables[i]
-            val aBounds = checkNotNull(a.bounds) { "Expected bounds to not be null" }
+    private fun sortRenderables(start: Int) {
+        val a = renderables[start]
+        val aBounds = checkNotNull(a.bounds) { "Expected bounds to not be null" }
 
-            for (j in i + 1..<renderables.size) {
-                val b = renderables[j]
-                val bBounds = checkNotNull(b.bounds) { "Expected bounds to not be null" }
+        for (j in start + 1..<renderables.size) {
+            val b = renderables[j]
+            val bBounds = checkNotNull(b.bounds) { "Expected bounds to not be null" }
 
-                if (inFront(aBounds, bBounds)) {
-                    a.behind.add(b)
-                } else if (inFront(bBounds, aBounds)) {
-                    b.behind.add(a)
-                }
+            if (inFront(aBounds, bBounds)) {
+                a.behind.add(b)
+            } else if (inFront(bBounds, aBounds)) {
+                b.behind.add(a)
             }
-
-            checkOcclusion(a)
         }
     }
 
