@@ -6,6 +6,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
@@ -23,7 +24,8 @@ import kotlin.math.floor
 class GameObjectRenderer(
     private val assets: Assets,
     private val world: World,
-    private val events: Game.Events
+    private val events: Game.Events,
+    private val debug: DebugRenderer
 ) {
 
     private val pool = object : Pool<GameObjectRenderable>() {
@@ -38,18 +40,11 @@ class GameObjectRenderer(
     // TODO: just store the minimum hidden layer
     private val hiddenBuildingLayers = mutableMapOf<String, MutableList<Float>>()
 
-    fun add(gameObject: GameObject) {
-        val renderable = getRenderable(gameObject)
-        if (renderable != null) {
-            renderables.add(renderable)
-
-            if (gameObject == occlusionTarget) {
-                occlusionTargetRenderable = renderable
-            }
-        }
-    }
-
     fun draw(batch: PolygonSpriteBatch) {
+        for (gameObject in world.getObjects()) {
+            addRenderable(gameObject)
+        }
+
         sortRenderables()
 
         for (renderable in renderables) {
@@ -62,6 +57,20 @@ class GameObjectRenderer(
 
         renderables.clear()
         hiddenBuildingLayers.clear()
+    }
+
+    private fun addRenderable(gameObject: GameObject) {
+        val renderable = getRenderable(gameObject) ?: return
+        renderables.add(renderable)
+
+        if (gameObject == occlusionTarget) {
+            occlusionTargetRenderable = renderable
+        }
+
+        when (gameObject) {
+            is Actor -> debug.category("actors").add(gameObject)
+            is Tile -> debug.category("actors").add(gameObject)
+        }
     }
 
     private fun sortRenderables() {
