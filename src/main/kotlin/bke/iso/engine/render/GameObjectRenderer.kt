@@ -37,8 +37,7 @@ class GameObjectRenderer(
     var occlusionTarget: Actor? = null
     private var occlusionTargetRenderable: GameObjectRenderable? = null
 
-    // TODO: just store the minimum hidden layer
-    private val hiddenBuildingLayers = mutableMapOf<String, MutableList<Float>>()
+    private val minimumHiddenBuildingLayer = mutableMapOf<String, Float>()
 
     fun draw(batch: PolygonSpriteBatch) {
         for (gameObject in world.getObjects()) {
@@ -60,7 +59,7 @@ class GameObjectRenderer(
         }
 
         renderables.clear()
-        hiddenBuildingLayers.clear()
+        minimumHiddenBuildingLayer.clear()
     }
 
     private fun addRenderable(gameObject: GameObject) {
@@ -142,7 +141,7 @@ class GameObjectRenderer(
         }
 
         val occlusionRect = getOcclusionRectangle(targetRenderable)
-//        renderer.debug.category("occlusion").addRectangle(aRect, 1f, Color.RED)
+        debug.category("occlusion").addRectangle(occlusionRect, 1f, Color.RED)
         val rect = Rectangle(renderable.x, renderable.y, renderable.width, renderable.height)
 
         val bounds = checkNotNull(renderable.bounds) {
@@ -156,13 +155,15 @@ class GameObjectRenderer(
             renderable.alpha = 0.1f
 
             if (bounds.min.z >= targetBounds.max.z) {
-                val layer = floor(bounds.min.z)
-
                 val building = world.buildings.getBuilding(renderable.gameObject!!)
+
                 if (!building.isNullOrBlank()) {
-                    hiddenBuildingLayers
-                        .getOrPut(building) { mutableListOf() }
-                        .add(layer)
+                    val layer = floor(bounds.min.z)
+                    val minLayer = minimumHiddenBuildingLayer[building]
+
+                    if (minLayer == null || layer < minLayer) {
+                        minimumHiddenBuildingLayer[building] = layer
+                    }
                 }
             }
         }
@@ -178,8 +179,8 @@ class GameObjectRenderer(
 
     private fun applyOcclusion(renderable: GameObjectRenderable) {
         val building = world.buildings.getBuilding(renderable.gameObject!!)
-        val hiddenLayers = hiddenBuildingLayers[building] ?: emptyList()
-        if (hiddenLayers.isNotEmpty() && floor(renderable.bounds!!.min.z) >= hiddenLayers.min()) {
+        val minLayer = minimumHiddenBuildingLayer[building]
+        if (minLayer != null && floor(renderable.bounds!!.min.z) >= minLayer) {
             renderable.alpha = 0f
         }
     }
