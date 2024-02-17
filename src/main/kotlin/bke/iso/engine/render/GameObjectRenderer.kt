@@ -90,7 +90,6 @@ class GameObjectRenderer(
         }
         renderable.visited = true
 
-        // TODO: avoid iterator creation here
         for (data in renderable.behind) {
             draw(data, batch)
         }
