@@ -1,0 +1,33 @@
+{
+  name: "medkit",
+  components: [
+    {
+      type: "sprite",
+      texture: "medkit.png",
+      offsetX: 0.0,
+      offsetY: 4.0,
+      alpha: 1.0,
+      scale: 1.0
+    },
+    {
+      type: "collider",
+      size: {
+        x: 0.25,
+        y: 0.25,
+        z: 0.25
+      },
+      offset: {
+        x: -0,
+        y: -0,
+        z: 0
+      }
+    },
+    {
+      type: "debugSettings"
+    },
+    {
+      type: "description",
+      text: "Medkit"
+    }
+  ]
+}
