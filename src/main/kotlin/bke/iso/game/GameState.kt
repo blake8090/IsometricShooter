@@ -15,6 +15,7 @@ import bke.iso.game.player.Player
 import bke.iso.game.player.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.CombatModule
+import bke.iso.game.combat.HealSystem
 import bke.iso.game.combat.Health
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
@@ -43,13 +44,14 @@ class GameState(override val game: Game) : State() {
     override val systems = linkedSetOf(
         WeaponSystem(game.world, game.assets),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
-        PlayerSystem(game.input, game.world, game.renderer, game.collisions),
+        PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
         ExplosionSystem(game.world),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions),
+        HealSystem(game.world, game.events)
     )
 
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
@@ -85,7 +87,8 @@ class GameState(override val game: Game) : State() {
                 "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED),
                 SHOOT_ACTION to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
                 RELOAD_ACTION to KeyBinding(Input.Keys.R, ButtonState.PRESSED),
-                "crouch" to KeyBinding(Input.Keys.C, ButtonState.PRESSED)
+                "crouch" to KeyBinding(Input.Keys.C, ButtonState.PRESSED),
+                "useMedkit" to KeyBinding(Input.Keys.E, ButtonState.PRESSED)
             )
             bind(
                 "moveY",
@@ -109,7 +112,8 @@ class GameState(override val game: Game) : State() {
                 "jump" to ControllerBinding(ControllerButton.A.ordinal, ButtonState.PRESSED),
                 SHOOT_ACTION to ControllerAxisBinding(ControllerAxis.TRIGGERRIGHT.ordinal),//ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
                 RELOAD_ACTION to ControllerBinding(ControllerButton.X.ordinal, ButtonState.PRESSED),
-                "crouch" to ControllerBinding(ControllerButton.LEFTSTICK.ordinal, ButtonState.PRESSED)
+                "crouch" to ControllerBinding(ControllerButton.LEFTSTICK.ordinal, ButtonState.PRESSED),
+                "useMedkit" to ControllerBinding(ControllerButton.DPAD_UP.ordinal, ButtonState.PRESSED)
             )
         }
     }

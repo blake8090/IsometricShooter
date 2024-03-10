@@ -17,3 +17,11 @@ data class HealthBar(
     val offsetX: Float,
     val offsetY: Float
 ) : Component
+
+@Serializable
+@SerialName("healEffect")
+data class HealEffect(
+    val amountPerSecond: Float,
+    val durationSeconds: Float,
+    var elapsedTime: Float = 0f
+) : Component

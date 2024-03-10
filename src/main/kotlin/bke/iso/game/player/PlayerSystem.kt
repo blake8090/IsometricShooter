@@ -12,6 +12,7 @@ import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit
+import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.RangedWeaponOffset
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -28,7 +29,8 @@ class PlayerSystem(
     private val input: Input,
     private val world: World,
     private val renderer: Renderer,
-    private val collisions: Collisions
+    private val collisions: Collisions,
+    private val combatModule: CombatModule
 ) : System {
 
     private val log = KotlinLogging.logger {}
@@ -63,6 +65,10 @@ class PlayerSystem(
 
         for (collision in collisions.getCollisions(playerActor)) {
             handleCollision(playerActor, collision)
+        }
+
+        input.onAction("useMedkit") {
+            useMedkit(playerActor)
         }
     }
 
@@ -109,6 +115,19 @@ class PlayerSystem(
             log.debug { "Picked up medkit. Player now has ${inventory.numMedkits} medkits" }
             world.delete(obj)
         }
+    }
+
+    private fun useMedkit(playerActor: Actor) {
+        val inventory = playerActor.get<Inventory>()
+
+        if (inventory == null || inventory.numMedkits <= 0) {
+            log.debug { "No medkits" }
+            return
+        }
+
+        combatModule.heal(playerActor)
+        inventory.numMedkits--
+        log.debug { "used medkit" }
     }
 
     private fun switchState(playerActor: Actor, player: Player, state: PlayerState) {

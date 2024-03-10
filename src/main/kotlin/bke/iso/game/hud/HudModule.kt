@@ -80,7 +80,7 @@ class HudModule(
     }
 
     override fun handleEvent(event: Event) {
-        if (event is CombatModule.PlayerDamageEvent) {
+        if (event is CombatModule.PlayerHealthChangeEvent) {
             hudScreen.setHealth(event.health)
         } else if (event is GameObjectRenderer.DrawActorEvent) {
             drawHealthBar(event.actor, event.batch)

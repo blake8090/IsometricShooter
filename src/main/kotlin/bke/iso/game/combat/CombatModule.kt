@@ -9,6 +9,9 @@ import bke.iso.game.player.Player
 import mu.KotlinLogging
 import kotlin.math.max
 
+private const val MEDKIT_HEALTH_PERCENTAGE = 0.05f
+private const val MEDKIT_DURATION_SECONDS = 10f
+
 class CombatModule(
     private val world: World,
     private val events: Game.Events
@@ -28,7 +31,7 @@ class CombatModule(
         log.debug { "Actor $actor received damage: $damage Remaining health: ${health.value}" }
 
         if (actor.has<Player>()) {
-            events.fire(PlayerDamageEvent(health.value))
+            events.fire(PlayerHealthChangeEvent(health.value))
         }
 
         if (health.value == 0f) {
@@ -44,5 +47,16 @@ class CombatModule(
         log.debug { "Actor $actor has been destroyed" }
     }
 
-    data class PlayerDamageEvent(val health: Float) : Event
+    fun heal(actor: Actor) {
+        val health = actor.get<Health>() ?: return
+
+        if (actor.has<HealEffect>()) {
+            return
+        }
+
+        val amountPerSecond = health.maxValue * MEDKIT_HEALTH_PERCENTAGE
+        actor.add(HealEffect(amountPerSecond, MEDKIT_DURATION_SECONDS))
+    }
+
+    data class PlayerHealthChangeEvent(val health: Float) : Event
 }
