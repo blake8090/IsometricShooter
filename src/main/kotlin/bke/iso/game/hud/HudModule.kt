@@ -10,6 +10,7 @@ import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.game.actor.Inventory
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
@@ -44,6 +45,8 @@ class HudModule(
                 else -> weapon.name
             }
         hudScreen.setWeaponText(text)
+
+        updateMedkitText()
     }
 
     private fun findPlayerWeapon(): Weapon? {
@@ -64,6 +67,16 @@ class HudModule(
         }
 
         return builder.toString()
+    }
+
+    private fun updateMedkitText() {
+        val inventory = world
+            .actors
+            .find<Player>()
+            ?.get<Inventory>()
+            ?: return
+
+        hudScreen.setMedkitsText(inventory.numMedkits)
     }
 
     override fun handleEvent(event: Event) {
