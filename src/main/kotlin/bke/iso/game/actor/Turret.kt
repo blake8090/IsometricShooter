@@ -9,7 +9,6 @@ import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
 import bke.iso.game.player.Player
-import bke.iso.game.weapon.Inventory
 import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponOffset
 import bke.iso.game.weapon.WeaponsModule

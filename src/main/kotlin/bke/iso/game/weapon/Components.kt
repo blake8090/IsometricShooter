@@ -36,10 +36,6 @@ data class RangedWeapon(
     var recoil: Float = 0f
 ) : Weapon
 
-data class Inventory(
-    var selectedWeapon: Weapon? = null
-) : Component
-
 @Serializable
 @SerialName("explosion")
 data class Explosion(

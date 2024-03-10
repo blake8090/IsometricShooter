@@ -2,12 +2,16 @@ package bke.iso.game.player
 
 import bke.iso.engine.System
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.collision.Collision
+import bke.iso.engine.collision.Collisions
 import bke.iso.engine.input.Input
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.game.actor.Inventory
+import bke.iso.game.actor.Medkit
 import bke.iso.game.weapon.RangedWeaponOffset
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -23,7 +27,8 @@ private const val RUN_SPEED_MODIFIER = 1.6f
 class PlayerSystem(
     private val input: Input,
     private val world: World,
-    private val renderer: Renderer
+    private val renderer: Renderer,
+    private val collisions: Collisions
 ) : System {
 
     private val log = KotlinLogging.logger {}
@@ -55,6 +60,10 @@ class PlayerSystem(
         move(playerActor, player, direction)
 
         renderer.setCameraPos(playerActor.pos)
+
+        for (collision in collisions.getCollisions(playerActor)) {
+            handleCollision(playerActor, collision)
+        }
     }
 
     private fun move(playerActor: Actor, player: Player, direction: Vector2) {
@@ -89,6 +98,17 @@ class PlayerSystem(
         }
 
         return speed
+    }
+
+    private fun handleCollision(playerActor: Actor, collision: Collision) {
+        val obj = collision.obj
+
+        if (obj is Actor && obj.has<Medkit>()) {
+            val inventory = playerActor.getOrAdd(Inventory())
+            inventory.numMedkits++
+            log.debug { "Picked up medkit. Player now has ${inventory.numMedkits} medkits" }
+            world.delete(obj)
+        }
     }
 
     private fun switchState(playerActor: Actor, player: Player, state: PlayerState) {

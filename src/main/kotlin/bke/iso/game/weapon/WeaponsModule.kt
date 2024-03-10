@@ -12,6 +12,7 @@ import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.game.actor.Inventory
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging

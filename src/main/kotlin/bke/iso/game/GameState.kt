@@ -43,7 +43,7 @@ class GameState(override val game: Game) : State() {
     override val systems = linkedSetOf(
         WeaponSystem(game.world, game.assets),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
-        PlayerSystem(game.input, game.world, game.renderer),
+        PlayerSystem(game.input, game.world, game.renderer, game.collisions),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
