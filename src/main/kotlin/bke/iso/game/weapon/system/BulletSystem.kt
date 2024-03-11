@@ -18,6 +18,7 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.Bullet
 import bke.iso.game.weapon.Explosion
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 
 private const val MAX_BULLET_DISTANCE = 50f
 
@@ -26,6 +27,8 @@ class BulletSystem(
     private val combatModule: CombatModule,
     private val collisions: Collisions
 ) : System {
+
+    private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
         world.actors.each<Bullet> { bulletActor, bullet ->
@@ -69,11 +72,25 @@ class BulletSystem(
     private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
         val target = collision.obj
         if (target is Actor) {
-            combatModule.applyDamage(target, bullet.damage)
+            val damage = calculateDamage(bulletActor, bullet)
+            combatModule.applyDamage(target, damage)
         }
 
         createExplosion(bulletActor.pos, collision)
         world.delete(bulletActor)
+    }
+
+    private fun calculateDamage(bulletActor: Actor, bullet: Bullet): Float {
+        val distance = bulletActor.pos.dst(bullet.start)
+        if (distance <= bullet.range) {
+            return bullet.damage
+        }
+
+        val ratio = bullet.range / distance
+        val damage = bullet.damage * ratio
+        log.debug { "Bullet range: ${bullet.range} dist: $distance ratio: $ratio damage: $damage" }
+
+        return damage
     }
 
     private fun createExplosion(pos: Vector3, collision: Collision) {

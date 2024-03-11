@@ -115,7 +115,7 @@ class WeaponsModule(
 
         world.actors.create(
             start,
-            Bullet(shooter.id, properties.damage, start),
+            Bullet(shooter.id, properties.damage, properties.range, start),
             Sprite(
                 properties.bulletTexture,
                 offsetX = 16f,

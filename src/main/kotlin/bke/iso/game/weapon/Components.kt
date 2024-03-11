@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 data class Bullet(
     val shooterId: String,
     val damage: Float,
+    val range: Float,
     @Contextual
     val start: Vector3
 ) : Component

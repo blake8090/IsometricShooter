@@ -3,6 +3,7 @@
   name: "pistol",
   fireType: "semi",
   damage: 50,
+  range: 2,
   magSize: 15,
   fireRate: 200,
   velocity: 50,

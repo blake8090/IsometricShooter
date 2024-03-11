@@ -3,6 +3,7 @@
   name: "rifle",
   fireType: "auto",
   damage: 30,
+  range: 5,
   magSize: 30,
   fireRate: 800,
   velocity: 60,

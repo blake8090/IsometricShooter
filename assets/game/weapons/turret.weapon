@@ -3,6 +3,7 @@
   name: "turret",
   fireType: "auto",
   damage: 5,
+  range: 5,
   magSize: 3,
   fireRate: 600,
   velocity: 30,

@@ -35,6 +35,7 @@ data class RangedWeaponProperties(
     override val name: String,
     val fireType: FireType,
     val damage: Float,
+    val range: Float,
     val magSize: Int,
     val fireRate: Float,
     val velocity: Float,
