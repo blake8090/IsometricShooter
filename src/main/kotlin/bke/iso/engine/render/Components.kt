@@ -17,6 +17,14 @@ data class Sprite(
     var rotation: Float = 0f
 ) : Component
 
+@Serializable
+@SerialName("spriteColor")
+data class SpriteColor(
+    var r: Float = 0f,
+    var g: Float = 0f,
+    var b: Float = 0f
+) : Component
+
 // TODO: don't bother serializing this, add it dynamically
 @Serializable
 @SerialName("debugSettings")

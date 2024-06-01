@@ -7,6 +7,7 @@ import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.render.SpriteColor
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.RollingTurretSystem
@@ -59,6 +60,7 @@ class GameState(override val game: Game) : State() {
     override suspend fun load() {
         game.assets.register(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
+        game.assets.shaders.compileAll()
 
         game.scenes.load("city2.scene")
 
@@ -73,6 +75,9 @@ class GameState(override val game: Game) : State() {
             actor.with<Health> { health ->
                 hudModule.init(game.ui, health.value, health.maxValue)
             }
+
+            // TODO: debug, remove this
+            actor.add(SpriteColor(1f, 0f, 0f))
         }
 
         game.renderer.debug.enableCategories("vision", "turret", "collisions")

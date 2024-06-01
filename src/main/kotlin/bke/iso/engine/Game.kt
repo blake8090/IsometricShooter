@@ -3,6 +3,7 @@ package bke.iso.engine
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.cache.ActorPrefabCache
 import bke.iso.engine.asset.cache.FontGeneratorCache
+import bke.iso.engine.asset.cache.ShaderFileCache
 import bke.iso.engine.asset.cache.TextureCache
 import bke.iso.engine.asset.cache.TilePrefabCache
 import bke.iso.engine.os.Files
@@ -68,6 +69,7 @@ class Game {
                 register(ActorPrefabCache(serializer))
                 register(TilePrefabCache(serializer))
                 register(SceneCache(serializer))
+                register(ShaderFileCache())
             }
             ui.setLoadingScreen(EmptyLoadingScreen(assets))
         }

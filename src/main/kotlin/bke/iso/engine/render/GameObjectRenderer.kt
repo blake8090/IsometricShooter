@@ -106,6 +106,18 @@ class GameObjectRenderer(
 
         val color = Color(batch.color.r, batch.color.g, batch.color.b, renderable.alpha)
         batch.withColor(color) {
+            val spriteColor = renderable.color
+            if (spriteColor != null) {
+                batch.shader = assets.shaders["color"]
+                batch.shader.setUniformf(
+                    "u_color",
+                    spriteColor.r * 255,
+                    spriteColor.g * 255,
+                    spriteColor.b * 255,
+                    255f
+                )
+            }
+
             batch.draw(
                 /* region = */ TextureRegion(renderable.texture),
                 /* x = */ renderable.x,
@@ -118,6 +130,8 @@ class GameObjectRenderer(
                 /* scaleY = */ 1f,
                 /* rotation = */ renderable.rotation
             )
+
+            batch.shader = null
         }
 
         val obj = renderable.gameObject
@@ -220,6 +234,12 @@ class GameObjectRenderer(
         renderable.height = height
         renderable.alpha = sprite.alpha
         renderable.rotation = sprite.rotation
+
+        if (gameObject is Actor) {
+            gameObject.with<SpriteColor> { spriteColor ->
+                renderable.color = Color(spriteColor.r, spriteColor.g, spriteColor.b, 0f)
+            }
+        }
 
         return renderable
     }

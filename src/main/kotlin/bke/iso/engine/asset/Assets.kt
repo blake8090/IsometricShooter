@@ -18,6 +18,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     private val log = KotlinLogging.logger {}
 
     val fonts: Fonts = Fonts(this, systemInfo)
+    val shaders: Shaders = Shaders(this)
 
     private val cacheByExtension = OrderedMap<String, AssetCache<*>>()
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
