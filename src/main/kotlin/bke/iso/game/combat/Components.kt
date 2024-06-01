@@ -25,3 +25,10 @@ data class HealEffect(
     val durationSeconds: Float,
     var elapsedTime: Float = 0f
 ) : Component
+
+@Serializable
+@SerialName("hitEffect")
+data class HitEffect(
+    val durationSeconds: Float,
+    var elapsedTime: Float = 0f
+) : Component

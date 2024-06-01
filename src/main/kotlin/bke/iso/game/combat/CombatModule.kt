@@ -11,6 +11,7 @@ import kotlin.math.max
 
 private const val MEDKIT_HEALTH_PERCENTAGE = 0.05f
 private const val MEDKIT_DURATION_SECONDS = 10f
+private const val HIT_EFFECT_DURATION_SECONDS = 0.05f
 
 class CombatModule(
     private val world: World,
@@ -33,6 +34,8 @@ class CombatModule(
         if (actor.has<Player>()) {
             events.fire(PlayerHealthChangeEvent(health.value))
         }
+
+        actor.add(HitEffect(HIT_EFFECT_DURATION_SECONDS))
 
         if (health.value == 0f) {
             onDeath(actor)

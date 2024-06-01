@@ -7,7 +7,6 @@ import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.engine.render.SpriteColor
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.RollingTurretSystem
@@ -18,6 +17,7 @@ import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.HealSystem
 import bke.iso.game.combat.Health
+import bke.iso.game.combat.HitEffectSystem
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
@@ -52,7 +52,8 @@ class GameState(override val game: Game) : State() {
         ExplosionSystem(game.world),
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions),
-        HealSystem(game.world, game.events)
+        HealSystem(game.world, game.events),
+        HitEffectSystem(game.world)
     )
 
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
@@ -75,9 +76,6 @@ class GameState(override val game: Game) : State() {
             actor.with<Health> { health ->
                 hudModule.init(game.ui, health.value, health.maxValue)
             }
-
-            // TODO: debug, remove this
-            actor.add(SpriteColor(1f, 0f, 0f))
         }
 
         game.renderer.debug.enableCategories("vision", "turret", "collisions")
