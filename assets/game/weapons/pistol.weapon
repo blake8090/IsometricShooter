@@ -4,7 +4,7 @@
   fireType: "semi",
   damage: 50,
   range: 2,
-  magSize: 15,
+  magSize: 8,
   fireRate: 200,
   velocity: 50,
   spread: 0.05,

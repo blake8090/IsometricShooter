@@ -70,7 +70,7 @@ class GameState(override val game: Game) : State() {
         game.renderer.pointer.set(crosshair)
 
         game.world.actors.each { actor: Actor, _: Player ->
-            weaponsModule.equip(actor, "rifle")
+            weaponsModule.equip(actor, "pistol")
             game.renderer.setOcclusionTarget(actor)
 
             actor.with<Health> { health ->
