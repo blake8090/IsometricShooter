@@ -13,6 +13,19 @@
       type: "flyingTurret"
     },
     {
+      type: "inventory",
+      selectedWeapon: {
+        type: "rangedWeapon",
+        name: "flying-turret"
+      }
+    },
+    {
+      type: "rangedWeaponOffset",
+      x: 0,
+      y: 0,
+      z: 0.25
+    },
+    {
       type: "collider",
       size: {
         x: 0.5,

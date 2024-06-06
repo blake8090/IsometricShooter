@@ -1,6 +1,8 @@
 package bke.iso.engine.serialization
 
 import bke.iso.engine.world.actor.Component
+import bke.iso.game.weapon.RangedWeapon
+import bke.iso.game.weapon.Weapon
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -9,6 +11,7 @@ import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.serializer
 import org.reflections.Reflections
 import kotlin.reflect.KClass
@@ -19,10 +22,15 @@ class Serializer {
 
     private val module = SerializersModule {
         contextual(Vector3Serializer)
+
         polymorphic(Component::class) {
             for (kClass in getComponentSubTypes()) {
                 subclass(kClass)
             }
+        }
+
+        polymorphic(Weapon::class) {
+            subclass(RangedWeapon::class)
         }
     }
 

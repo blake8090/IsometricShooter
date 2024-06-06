@@ -19,6 +19,8 @@ data class Bullet(
 /**
  * Provides an offset for projectiles when shooting a ranged weapon, relative to an actor's position.
  */
+@Serializable
+@SerialName("rangedWeaponOffset")
 data class RangedWeaponOffset(
     val x: Float = 0f,
     val y: Float = 0f,
@@ -29,6 +31,8 @@ interface Weapon {
     val name: String
 }
 
+@Serializable
+@SerialName("rangedWeapon")
 data class RangedWeapon(
     override val name: String,
     var ammo: Int = 0,

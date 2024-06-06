@@ -1,0 +1,15 @@
+{
+  type: "ranged",
+  name: "flying-turret",
+  fireType: "auto",
+  damage: 10,
+  range: 5,
+  magSize: 5,
+  fireRate: 100,
+  velocity: 15,
+  spread: 0.03,
+  recoil: 1.2,
+  reloadTime: 1,
+  bulletTexture: "bullet2.png",
+  bulletRotation: true
+}

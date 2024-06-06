@@ -45,7 +45,6 @@ private const val BOUNCE_RANGE = 0.1f
 private const val BOUNCE_SPEED = 0.4f
 
 private const val VISION_RADIUS = 8f
-private const val GUN_HEIGHT = 0.25f
 
 class FlyingTurretSystem(
     private val world: World,
@@ -62,11 +61,6 @@ class FlyingTurretSystem(
     }
 
     private fun update(actor: Actor, flyingTurret: FlyingTurret, deltaTime: Float) {
-        if (!actor.has<Inventory>()) {
-            weaponsModule.equip(actor, "turret")
-            actor.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
-        }
-
         when (flyingTurret.state) {
             FlyingTurretState.IDLE -> setClimbState(actor, flyingTurret)
             FlyingTurretState.CLIMB -> runClimbState(actor, flyingTurret)
@@ -189,7 +183,9 @@ class FlyingTurretSystem(
         }
 
         val start = actor.pos
-        start.z += GUN_HEIGHT
+        actor.with<RangedWeaponOffset> { offset ->
+            start.z += offset.z
+        }
         val end = getTargetPos(target)
 
         val firstCollision = collisions
