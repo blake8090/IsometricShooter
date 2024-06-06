@@ -9,7 +9,6 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
@@ -111,9 +110,19 @@ class FlyingTurretSystem(
         val body = checkNotNull(actor.get<PhysicsBody>()) {
             "Expected $actor to have a PhysicsBody"
         }
-        if (shouldMove(actor, flyingTurret, body)) {
+        if (shouldStartMoving(flyingTurret, body)) {
             startMoving(body)
             flyingTurret.movementTimer = 0f
+        }
+
+        val collision = collisions
+            .getCollisions(actor)
+            .firstOrNull { collision ->
+                collision.obj !is Actor || !collision.obj.has<Bullet>()
+            }
+
+        if (collision != null) {
+            bounce(body, collision)
         }
 
         val targetHeight = checkNotNull(flyingTurret.targetHeight) {
@@ -131,28 +140,11 @@ class FlyingTurretSystem(
         findAndShootPlayer(actor)
     }
 
-    private fun shouldMove(actor: Actor, flyingTurret: FlyingTurret, body: PhysicsBody): Boolean {
+    private fun shouldStartMoving(flyingTurret: FlyingTurret, body: PhysicsBody): Boolean {
         if (body.velocity.x == 0f && body.velocity.y == 0f) {
             return true
-        } else if (flyingTurret.movementTimer > MOVE_TIMER_SECONDS) {
-            return true
         }
-
-        val collision = collisions
-            .getCollisions(actor)
-            .firstOrNull(::validCollision)
-
-        return collision != null
-    }
-
-    private fun validCollision(collision: Collision): Boolean {
-        if (collision.obj is Tile) {
-            return false
-        } else if (collision.obj is Actor && collision.obj.has<Bullet>()) {
-            println("bullet")
-            return false
-        }
-        return collision.side != CollisionSide.TOP && collision.side != CollisionSide.BOTTOM
+        return flyingTurret.movementTimer > MOVE_TIMER_SECONDS
     }
 
     private fun startMoving(physicsBody: PhysicsBody) {
@@ -169,6 +161,14 @@ class FlyingTurretSystem(
             } else {
                 MOVE_SPEED
             }
+    }
+
+    private fun bounce(body: PhysicsBody, collision: Collision) {
+        if (collision.side == CollisionSide.LEFT || collision.side == CollisionSide.RIGHT) {
+            body.velocity.x *= -1f
+        } else if (collision.side == CollisionSide.FRONT || collision.side == CollisionSide.BACK) {
+            body.velocity.y *= -1f
+        }
     }
 
     private fun findAndShootPlayer(actor: Actor) {
