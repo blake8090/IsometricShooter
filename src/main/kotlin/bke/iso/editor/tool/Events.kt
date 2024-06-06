@@ -15,3 +15,5 @@ class SelectBrushToolEvent : EditorEvent()
 class SelectEraserToolEvent : EditorEvent()
 
 class SelectRoomToolEvent : EditorEvent()
+
+class SelectFillToolEvent : EditorEvent()

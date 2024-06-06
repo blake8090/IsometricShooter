@@ -6,6 +6,7 @@ import bke.iso.editor.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.camera.ToggleHideWallsEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
 import bke.iso.editor.tool.SelectEraserToolEvent
+import bke.iso.editor.tool.SelectFillToolEvent
 import bke.iso.editor.tool.SelectPointerToolEvent
 import bke.iso.editor.tool.SelectRoomToolEvent
 import bke.iso.engine.asset.Assets
@@ -70,7 +71,15 @@ class EditorToolBar(
         }
         root.add(roomButton)
 
-        ButtonGroup(pointerButton, brushButton, eraserButton, roomButton)
+        val fillButton = createButton("fill.png")
+        fillButton.onChanged {
+            if (isChecked) {
+                fire(SelectFillToolEvent())
+            }
+        }
+        root.add(fillButton)
+
+        ButtonGroup(pointerButton, brushButton, eraserButton, roomButton, fillButton)
 
         val gridButton = createButton("grid.png")
         gridButton.style.checked = newTextureDrawable("grid.png", "button-checked")
