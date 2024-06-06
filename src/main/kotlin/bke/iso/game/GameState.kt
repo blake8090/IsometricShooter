@@ -65,7 +65,7 @@ class GameState(override val game: Game) : State() {
         game.assets.loadAsync("game")
         game.assets.shaders.compileAll()
 
-        game.scenes.load("turret-test.scene")
+        game.scenes.load("test.scene")
 
         bindInput()
 

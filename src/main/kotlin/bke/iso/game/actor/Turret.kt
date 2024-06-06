@@ -22,7 +22,6 @@ import kotlinx.serialization.Serializable
 class Turret : Component
 
 private const val RANGE_RADIUS = 12f
-private const val GUN_HEIGHT = 0.7f
 
 class TurretSystem(
     private val world: World,
@@ -39,11 +38,6 @@ class TurretSystem(
     }
 
     private fun update(turretActor: Actor) {
-        if (!turretActor.has<Inventory>()) {
-            weaponsModule.equip(turretActor, "turret")
-            turretActor.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
-        }
-
         debugRenderer.category("turret").addSphere(turretActor.pos, RANGE_RADIUS, Color.GOLD)
 
         val playerActor = world.actors.find<Player>() ?: return
@@ -62,7 +56,9 @@ class TurretSystem(
 
     private fun canSee(actor: Actor, target: Actor): Boolean {
         val start = actor.pos
-        start.z += GUN_HEIGHT
+        actor.with<RangedWeaponOffset> { offset ->
+            start.z += offset.z
+        }
         val end = getTargetPos(target)
 
         val firstCollision = collisions
