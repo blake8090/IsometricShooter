@@ -8,6 +8,7 @@ import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.world.actor.Actor
+import bke.iso.game.actor.FlyingTurretSystem
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.RollingTurretSystem
 import bke.iso.game.shadow.ShadowSystem
@@ -48,6 +49,7 @@ class GameState(override val game: Game) : State() {
         PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
+        FlyingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
         ExplosionSystem(game.world),
         MovingPlatformSystem(game.world),
@@ -63,7 +65,7 @@ class GameState(override val game: Game) : State() {
         game.assets.loadAsync("game")
         game.assets.shaders.compileAll()
 
-        game.scenes.load("city2.scene")
+        game.scenes.load("turret-test.scene")
 
         bindInput()
 
