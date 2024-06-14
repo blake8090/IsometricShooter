@@ -80,9 +80,6 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         }
         try {
             cache.load(file)
-//            for ((name, asset) in cache.load(file)) {
-//                log.info { "Loaded asset '${name}' (${asset::class.simpleName}) from '${file.canonicalPath}'" }
-//            }
         } catch (e: Throwable) {
             log.error("Error loading asset from '${file.canonicalPath}':", e)
             throw e

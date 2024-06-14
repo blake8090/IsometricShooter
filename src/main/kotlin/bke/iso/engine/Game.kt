@@ -6,6 +6,7 @@ import bke.iso.engine.asset.font.FontGeneratorCache
 import bke.iso.engine.asset.shader.ShaderFileCache
 import bke.iso.engine.asset.TextureCache
 import bke.iso.engine.asset.prefab.TilePrefabCache
+import bke.iso.engine.asset.shader.ShaderInfoCache
 import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
@@ -70,6 +71,7 @@ class Game {
                 register(TilePrefabCache(serializer))
                 register(SceneCache(serializer))
                 register(ShaderFileCache())
+                register(ShaderInfoCache(serializer))
             }
             ui.setLoadingScreen(EmptyLoadingScreen(assets))
         }

@@ -17,42 +17,22 @@ class Shaders(private val assets: Assets) {
         programsByName[name]
 
     fun compileAll() {
-        val filesByName = assets.getAll<ShaderFile>()
-            .groupBy { getShaderName(it) }
-
-        for ((shaderName, files) in filesByName) {
-            val program = getShaderProgram(shaderName, files)
-            check(program.isCompiled) {
-                "Shader program '$shaderName' was not compiled:\n${program.log}"
-            }
-
-            programsByName[shaderName] = program
-            log.info { "Compiled shader '$shaderName' from ${files.map(ShaderFile::fileName)}" }
+        for (shaderInfo in assets.getAll<ShaderInfo>()) {
+            compile(shaderInfo)
         }
     }
 
-    private fun getShaderProgram(shaderName: String, files: List<ShaderFile>): ShaderProgram {
-        check(files.size == 2) {
-            "Expected only 2 files for shader '$shaderName'"
+    private fun compile(shaderInfo: ShaderInfo) {
+        val shaderName = shaderInfo.name
+        val vertexShader = assets.get<ShaderFile>(shaderInfo.vertexShader)
+        val fragShader = assets.get<ShaderFile>(shaderInfo.fragmentShader)
+
+        val program = ShaderProgram(vertexShader.content, fragShader.content)
+        check(program.isCompiled) {
+            "Shader program '$shaderName' was not compiled:\n${program.log}"
         }
 
-        val vertShaderFile = checkNotNull(files.find { file -> file.fileName == "$shaderName.vert.glsl" }) {
-            "Missing vertex shaders for '$shaderName'"
-        }
-
-        val fragShaderFile = checkNotNull(files.find { file -> file.fileName == "$shaderName.frag.glsl" }) {
-            "Missing frag shaders for '$shaderName'"
-        }
-
-        return ShaderProgram(vertShaderFile.content, fragShaderFile.content)
-    }
-
-    /**
-     * Parses the shader name from the filename, assuming the format "{name}.{frag/vert}.glsl"
-     */
-    private fun getShaderName(shaderFile: ShaderFile): String {
-        return shaderFile.fileName.split('.', limit = 2)
-            .firstOrNull()
-            ?: throw IllegalArgumentException("filename ${shaderFile.fileName} not formatted properly")
+        programsByName[shaderName] = program
+        log.info { "Compiled shader '$shaderName' from vert: '${vertexShader.fileName}' frag: '${fragShader.fileName}'" }
     }
 }
