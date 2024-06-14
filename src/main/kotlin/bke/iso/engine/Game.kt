@@ -64,15 +64,15 @@ class Game {
         val time = measureTimeMillis {
             input.start()
             profiler.start()
-            assets.run {
-                register(TextureCache())
-                register(FontGeneratorCache())
-                register(ActorPrefabCache(serializer))
-                register(TilePrefabCache(serializer))
-                register(SceneCache(serializer))
-                register(ShaderFileCache())
-                register(ShaderInfoCache(serializer))
-            }
+
+            assets.addCache(TextureCache())
+            assets.addCache(FontGeneratorCache())
+            assets.addCache(ActorPrefabCache(serializer))
+            assets.addCache(TilePrefabCache(serializer))
+            assets.addCache(SceneCache(serializer))
+            assets.addCache(ShaderFileCache())
+            assets.addCache(ShaderInfoCache(serializer))
+
             ui.setLoadingScreen(EmptyLoadingScreen(assets))
         }
         log.info { "Initialized modules in $time ms" }

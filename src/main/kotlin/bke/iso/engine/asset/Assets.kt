@@ -25,7 +25,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
     private val assetDisposer = AssetDisposer()
 
-    fun <T : Any> register(assetType: KClass<T>, assetCache: AssetCache<T>) {
+    fun <T : Any> addCache(assetType: KClass<T>, assetCache: AssetCache<T>) {
         for (extension in assetCache.extensions) {
             cacheByExtension.put(extension, assetCache)?.let { existing ->
                 error("Extension '$extension' already registered to ${existing::class.simpleName}")
@@ -34,8 +34,8 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         cacheByType.put(assetType, assetCache)
     }
 
-    inline fun <reified T : Any> register(assetCache: AssetCache<T>) =
-        register(T::class, assetCache)
+    inline fun <reified T : Any> addCache(assetCache: AssetCache<T>) =
+        addCache(T::class, assetCache)
 
     fun <T : Any> get(name: String, type: KClass<T>): T =
         getCache(type).get(name) ?: error("Asset not found: '$name' (${type.simpleName})")

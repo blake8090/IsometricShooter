@@ -61,7 +61,7 @@ class GameState(override val game: Game) : State() {
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
 
     override suspend fun load() {
-        game.assets.register(WeaponPropertiesCache(game.serializer))
+        game.assets.addCache(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
         game.assets.shaders.compileAll()
 

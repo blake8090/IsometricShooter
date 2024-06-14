@@ -29,8 +29,8 @@ class AssetsTest : StringSpec({
 
         val exception = shouldThrow<IllegalStateException> {
             val assets = Assets(files, systemInfo)
-            assets.register(LoaderA())
-            assets.register(LoaderB())
+            assets.addCache(LoaderA())
+            assets.addCache(LoaderB())
         }
         exception.message shouldBe "Extension 'txt' already registered to LoaderA"
     }
@@ -66,7 +66,7 @@ class AssetsTest : StringSpec({
             coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
 
             val assets = Assets(files, systemInfo)
-            assets.register(LoaderA())
+            assets.addCache(LoaderA())
 
             assets.loadAsync(path)
             assets.get<String>("file.txt") shouldBe "file.txt: test"
@@ -96,7 +96,7 @@ class AssetsTest : StringSpec({
             coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
 
             val assets = Assets(files, systemInfo)
-            assets.register(LoaderA())
+            assets.addCache(LoaderA())
 
             assets.loadAsync(path)
             assets.contains(expectedValue) shouldBe true
@@ -125,7 +125,7 @@ class AssetsTest : StringSpec({
             coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
 
             val assets = Assets(files, systemInfo)
-            assets.register(LoaderA())
+            assets.addCache(LoaderA())
 
             assets.loadAsync(path)
             assets.contains("some other value") shouldBe false
@@ -154,7 +154,7 @@ class AssetsTest : StringSpec({
             coEvery { files.combinePaths(BASE_PATH, path) } returns fullPath
 
             val assets = Assets(files, systemInfo)
-            assets.register(LoaderA())
+            assets.addCache(LoaderA())
 
             assets.loadAsync(path)
             assets.contains(555f) shouldBe false
