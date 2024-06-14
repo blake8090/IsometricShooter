@@ -1,7 +1,7 @@
 package bke.iso.editor
 
-import bke.iso.engine.asset.cache.ActorPrefab
-import bke.iso.engine.asset.cache.TilePrefab
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Occlude

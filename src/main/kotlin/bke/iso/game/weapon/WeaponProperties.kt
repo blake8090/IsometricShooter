@@ -1,7 +1,7 @@
 package bke.iso.game.weapon
 
-import bke.iso.engine.asset.cache.AssetCache
-import bke.iso.engine.asset.cache.LoadedAsset
+import bke.iso.engine.asset.AssetCache
+import bke.iso.engine.asset.LoadedAsset
 import bke.iso.engine.serialization.Serializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

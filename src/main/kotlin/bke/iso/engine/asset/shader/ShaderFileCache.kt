@@ -1,5 +1,7 @@
-package bke.iso.engine.asset.cache
+package bke.iso.engine.asset.shader
 
+import bke.iso.engine.asset.AssetCache
+import bke.iso.engine.asset.LoadedAsset
 import java.io.File
 
 data class ShaderFile(

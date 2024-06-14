@@ -2,7 +2,7 @@ package bke.iso.editor.ui
 
 import bke.iso.editor.tool.SelectActorPrefabEvent
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.cache.ActorPrefab
+import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged

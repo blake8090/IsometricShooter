@@ -1,8 +1,8 @@
 package bke.iso.editor.tool
 
 import bke.iso.editor.event.EditorEvent
-import bke.iso.engine.asset.cache.ActorPrefab
-import bke.iso.engine.asset.cache.TilePrefab
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 
 data class SelectTilePrefabEvent(val prefab: TilePrefab) : EditorEvent()
 

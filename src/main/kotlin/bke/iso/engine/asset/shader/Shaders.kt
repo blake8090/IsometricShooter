@@ -1,6 +1,6 @@
-package bke.iso.engine.asset
+package bke.iso.engine.asset.shader
 
-import bke.iso.engine.asset.cache.ShaderFile
+import bke.iso.engine.asset.Assets
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import mu.KotlinLogging
 

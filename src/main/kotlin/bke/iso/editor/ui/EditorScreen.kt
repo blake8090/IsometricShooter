@@ -9,7 +9,7 @@ import bke.iso.editor.event.EditorEventListener
 import bke.iso.editor.ui.dialog.EditBuildingDialog
 import bke.iso.editor.ui.dialog.NewBuildingDialog
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.FontOptions
+import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.newTintedDrawable

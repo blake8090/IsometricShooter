@@ -2,7 +2,7 @@ package bke.iso.editor.ui
 
 import bke.iso.editor.tool.SelectTilePrefabEvent
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.cache.TilePrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Texture

@@ -1,6 +1,8 @@
-package bke.iso.engine.asset
+package bke.iso.engine.asset.font
 
 import bke.iso.engine.SystemInfo
+import bke.iso.engine.asset.AssetDisposer
+import bke.iso.engine.asset.Assets
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont

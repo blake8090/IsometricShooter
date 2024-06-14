@@ -1,7 +1,7 @@
 package bke.iso.engine.profiler
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.FontOptions
+import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import com.badlogic.gdx.graphics.Color

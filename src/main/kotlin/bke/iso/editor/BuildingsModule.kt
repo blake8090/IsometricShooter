@@ -4,7 +4,7 @@ import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Module
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.FontOptions
+import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor

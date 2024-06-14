@@ -3,8 +3,8 @@ package bke.iso.editor.tool.brush
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.tool.EditorTool
 import bke.iso.editor.ReferenceActors
-import bke.iso.engine.asset.cache.ActorPrefab
-import bke.iso.engine.asset.cache.TilePrefab
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox

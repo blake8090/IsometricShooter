@@ -1,4 +1,4 @@
-package bke.iso.engine.asset.cache
+package bke.iso.engine.asset
 
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture

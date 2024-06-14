@@ -1,5 +1,7 @@
-package bke.iso.engine.asset.cache
+package bke.iso.engine.asset.font
 
+import bke.iso.engine.asset.AssetCache
+import bke.iso.engine.asset.LoadedAsset
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import kotlinx.coroutines.Dispatchers

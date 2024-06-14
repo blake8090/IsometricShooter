@@ -1,11 +1,11 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.cache.ActorPrefabCache
-import bke.iso.engine.asset.cache.FontGeneratorCache
-import bke.iso.engine.asset.cache.ShaderFileCache
-import bke.iso.engine.asset.cache.TextureCache
-import bke.iso.engine.asset.cache.TilePrefabCache
+import bke.iso.engine.asset.prefab.ActorPrefabCache
+import bke.iso.engine.asset.font.FontGeneratorCache
+import bke.iso.engine.asset.shader.ShaderFileCache
+import bke.iso.engine.asset.TextureCache
+import bke.iso.engine.asset.prefab.TilePrefabCache
 import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions

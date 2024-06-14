@@ -1,6 +1,5 @@
-package bke.iso.engine.asset.cache
+package bke.iso.engine.asset
 
-import bke.iso.engine.asset.AssetDisposer
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.OrderedMap
 import java.io.File

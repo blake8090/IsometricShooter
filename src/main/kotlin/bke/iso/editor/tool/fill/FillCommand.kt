@@ -2,7 +2,7 @@ package bke.iso.editor.tool.fill
 
 import bke.iso.editor.ReferenceActors
 import bke.iso.editor.tool.EditorCommand
-import bke.iso.engine.asset.cache.ActorPrefab
+import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.actor.Actor

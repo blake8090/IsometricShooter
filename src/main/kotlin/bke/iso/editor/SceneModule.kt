@@ -4,8 +4,8 @@ import bke.iso.editor.event.EditorEvent
 import bke.iso.engine.Event
 import bke.iso.engine.Module
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.cache.ActorPrefab
-import bke.iso.engine.asset.cache.TilePrefab
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.math.Location
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.scene.ActorRecord
