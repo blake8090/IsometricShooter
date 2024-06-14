@@ -1,7 +1,6 @@
 package bke.iso.game.weapon
 
 import bke.iso.engine.asset.AssetCache
-import bke.iso.engine.asset.LoadedAsset
 import bke.iso.engine.serialization.Serializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -50,9 +49,10 @@ class WeaponPropertiesCache(private val serializer: Serializer) : AssetCache<Wea
 
     override val extensions = setOf("weapon")
 
-    override suspend fun loadAssets(file: File): List<LoadedAsset<WeaponProperties>> =
+    override suspend fun load(file: File) {
         withContext(Dispatchers.IO) {
             val properties = serializer.read<WeaponProperties>(file.readText())
-            listOf(LoadedAsset(properties.name, properties))
+            store(file, properties.name, properties)
         }
+    }
 }

@@ -1,7 +1,6 @@
 package bke.iso.engine.asset.prefab
 
 import bke.iso.engine.asset.AssetCache
-import bke.iso.engine.asset.LoadedAsset
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.serialization.Serializer
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +18,12 @@ data class TilePrefab(
 class TilePrefabCache(private val serializer: Serializer) : AssetCache<TilePrefab>() {
     override val extensions: Set<String> = setOf("tiles")
 
-    override suspend fun loadAssets(file: File): List<LoadedAsset<TilePrefab>> =
+    override suspend fun load(file: File) {
         withContext(Dispatchers.IO) {
-            serializer.read<List<TilePrefab>>(file.readText())
-                .map { prefab -> LoadedAsset(prefab.name, prefab) }
-                .toList()
+            val prefabs = serializer.read<List<TilePrefab>>(file.readText())
+            for (prefab in prefabs) {
+                store(file, prefab.name, prefab)
+            }
         }
+    }
 }

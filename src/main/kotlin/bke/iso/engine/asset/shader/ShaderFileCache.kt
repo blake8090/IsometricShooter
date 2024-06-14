@@ -1,7 +1,6 @@
 package bke.iso.engine.asset.shader
 
 import bke.iso.engine.asset.AssetCache
-import bke.iso.engine.asset.LoadedAsset
 import java.io.File
 
 data class ShaderFile(
@@ -12,8 +11,8 @@ data class ShaderFile(
 class ShaderFileCache : AssetCache<ShaderFile>() {
     override val extensions: Set<String> = setOf("glsl")
 
-    override suspend fun loadAssets(file: File): List<LoadedAsset<ShaderFile>> {
+    override suspend fun load(file: File) {
         val asset = ShaderFile(file.name, file.readText())
-        return listOf(LoadedAsset(file.name, asset))
+        store(file, file.name, asset)
     }
 }

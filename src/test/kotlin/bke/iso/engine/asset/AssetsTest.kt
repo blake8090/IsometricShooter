@@ -19,17 +19,12 @@ class AssetsTest : StringSpec({
     "should throw exception when duplicate loader registered" {
         class LoaderA : AssetCache<String>() {
             override val extensions: Set<String> = setOf("txt")
-
-
-            override suspend fun loadAssets(file: File): List<LoadedAsset<String>> =
-                emptyList()
+            override suspend fun load(file: File) {}
         }
 
         class LoaderB : AssetCache<String>() {
             override val extensions: Set<String> = setOf("txt")
-
-            override suspend fun loadAssets(file: File) =
-                listOf(LoadedAsset("test", "test"))
+            override suspend fun load(file: File) {}
         }
 
         val exception = shouldThrow<IllegalStateException> {
@@ -52,8 +47,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetCache<String>() {
             override val extensions: Set<String> = setOf("txt")
 
-            override suspend fun loadAssets(file: File) =
-                listOf(LoadedAsset(file.name, "${file.name}: test"))
+            override suspend fun load(file: File) {
+                store(file, file.name, "${file.name}: test")
+            }
         }
         runBlocking {
             val file = mockk<File>()
@@ -84,8 +80,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetCache<String>() {
             override val extensions: Set<String> = setOf("txt")
 
-            override suspend fun loadAssets(file: File) =
-                listOf(LoadedAsset("name", expectedValue))
+            override suspend fun load(file: File) {
+                store(file, "name", expectedValue)
+            }
         }
 
         runBlocking {
@@ -112,8 +109,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetCache<String>() {
             override val extensions: Set<String> = setOf("txt")
 
-            override suspend fun loadAssets(file: File) =
-                listOf(LoadedAsset("name", value))
+            override suspend fun load(file: File) {
+                store(file, "name", value)
+            }
         }
 
         runBlocking {
@@ -140,8 +138,9 @@ class AssetsTest : StringSpec({
         class LoaderA : AssetCache<String>() {
             override val extensions: Set<String> = setOf("txt")
 
-            override suspend fun loadAssets(file: File) =
-                listOf(LoadedAsset("name", value))
+            override suspend fun load(file: File) {
+                store(file, "name", value)
+            }
         }
 
         runBlocking {

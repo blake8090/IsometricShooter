@@ -1,7 +1,6 @@
 package bke.iso.engine.scene
 
 import bke.iso.engine.asset.AssetCache
-import bke.iso.engine.asset.LoadedAsset
 import bke.iso.engine.serialization.Serializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,9 +10,10 @@ class SceneCache(private val serializer: Serializer) : AssetCache<Scene>() {
 
     override val extensions: Set<String> = setOf("scene")
 
-    override suspend fun loadAssets(file: File): List<LoadedAsset<Scene>> =
+    override suspend fun load(file: File) {
         withContext(Dispatchers.IO) {
             val scene = serializer.read<Scene>(file.readText())
-            listOf(LoadedAsset(file.name, scene))
+            store(file, file.name, scene)
         }
+    }
 }

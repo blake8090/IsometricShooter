@@ -10,18 +10,16 @@ class AssetDisposer {
 
     private val log = KotlinLogging.logger {}
 
-    private val disposed = mutableSetOf<Disposable>()
+    private val disposed = mutableSetOf<String>()
 
-    fun <T : Disposable> dispose(disposable: T, disposableName: String? = null) {
-        val name = disposableName ?: disposable.toString()
+    fun <T : Disposable> dispose(name: String, disposable: T) {
         val className = disposable::class.simpleName
 
-        if (!disposed.add(disposable)) {
-            log.debug { "Disposable $className: '$name' has already been disposed" }
-            return
+        if (disposed.add(name)) {
+            disposable.dispose()
+            log.debug { "Disposed '$name' ($className)" }
+        } else {
+            log.debug { "Asset '$name' ($className) has already been disposed" }
         }
-
-        disposable.dispose()
-        log.debug { "Disposed $className: '$name'" }
     }
 }

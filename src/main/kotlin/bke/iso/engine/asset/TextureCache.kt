@@ -7,9 +7,9 @@ import java.io.File
 class TextureCache : AssetCache<Texture>() {
     override val extensions: Set<String> = setOf("png", "jpg")
 
-    override suspend fun loadAssets(file: File): List<LoadedAsset<Texture>> {
+    override suspend fun load(file: File) {
         val texture = Texture(FileHandle(file), true)
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
-        return listOf(LoadedAsset(file.name, texture))
+        store(file, file.name, texture)
     }
 }

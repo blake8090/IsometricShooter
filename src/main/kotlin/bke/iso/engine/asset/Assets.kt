@@ -38,7 +38,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         register(T::class, assetCache)
 
     fun <T : Any> get(name: String, type: KClass<T>): T =
-        getCache(type)[name] ?: error("Asset not found: '$name' (${type.simpleName})")
+        getCache(type).get(name) ?: error("Asset not found: '$name' (${type.simpleName})")
 
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
@@ -79,9 +79,10 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
             return
         }
         try {
-            for ((name, asset) in cache.load(file)) {
-                log.info { "Loaded asset '${name}' (${asset::class.simpleName}) from '${file.canonicalPath}'" }
-            }
+            cache.load(file)
+//            for ((name, asset) in cache.load(file)) {
+//                log.info { "Loaded asset '${name}' (${asset::class.simpleName}) from '${file.canonicalPath}'" }
+//            }
         } catch (e: Throwable) {
             log.error("Error loading asset from '${file.canonicalPath}':", e)
             throw e

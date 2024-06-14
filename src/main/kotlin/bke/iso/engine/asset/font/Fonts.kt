@@ -71,7 +71,7 @@ class Fonts(
     fun dispose(assetDisposer: AssetDisposer) {
         log.debug { "Disposing fonts" }
         for (font in cache.values) {
-            assetDisposer.dispose(font, font.data.name)
+            assetDisposer.dispose(font.data.name, font)
         }
         cache.clear()
     }
