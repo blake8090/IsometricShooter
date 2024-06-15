@@ -1,7 +1,7 @@
 package bke.iso.game.combat
 
 import bke.iso.engine.System
-import bke.iso.engine.render.SpriteColor
+import bke.iso.engine.render.SpriteFillColor
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 
@@ -13,9 +13,9 @@ class HitEffectSystem(private val world: World) : System {
 
             if (hitEffect.elapsedTime > hitEffect.durationSeconds) {
                 actor.remove<HitEffect>()
-                actor.remove<SpriteColor>()
+                actor.remove<SpriteFillColor>()
             } else {
-                actor.add(SpriteColor(1f, 1f, 1f))
+                actor.add(SpriteFillColor(1f, 1f, 1f))
             }
         }
     }

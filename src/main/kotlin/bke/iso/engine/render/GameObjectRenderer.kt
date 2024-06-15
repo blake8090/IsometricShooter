@@ -105,19 +105,26 @@ class GameObjectRenderer(
         applyOcclusion(renderable)
 
         val color = Color(batch.color.r, batch.color.g, batch.color.b, renderable.alpha)
-        batch.withColor(color) {
-            val spriteColor = renderable.color
-            if (spriteColor != null) {
-                batch.shader = assets.shaders["color"]
-                batch.shader.setUniformf(
-                    "u_color",
-                    spriteColor.r * 255,
-                    spriteColor.g * 255,
-                    spriteColor.b * 255,
-                    255f
-                )
-            }
+        val fillColor = renderable.fillColor
+        val tintColor = renderable.tintColor
 
+        // fill should always override tint
+        if (fillColor != null) {
+            batch.shader = assets.shaders["color"]
+            batch.shader.setUniformf(
+                "u_color",
+                fillColor.r * 255,
+                fillColor.g * 255,
+                fillColor.b * 255,
+                255f
+            )
+        } else if (tintColor != null) {
+            color.r = tintColor.r
+            color.g = tintColor.g
+            color.b = tintColor.b
+        }
+
+        batch.withColor(color) {
             batch.draw(
                 /* region = */ TextureRegion(renderable.texture),
                 /* x = */ renderable.x,
@@ -236,8 +243,11 @@ class GameObjectRenderer(
         renderable.rotation = sprite.rotation
 
         if (gameObject is Actor) {
-            gameObject.with<SpriteColor> { spriteColor ->
-                renderable.color = Color(spriteColor.r, spriteColor.g, spriteColor.b, 0f)
+            gameObject.with<SpriteFillColor> { spriteFillColor ->
+                renderable.fillColor = Color(spriteFillColor.r, spriteFillColor.g, spriteFillColor.b, 1f)
+            }
+            gameObject.with<SpriteTintColor> { spriteTintColor ->
+                renderable.tintColor = Color(spriteTintColor.r, spriteTintColor.g, spriteTintColor.b, 1f)
             }
         }
 

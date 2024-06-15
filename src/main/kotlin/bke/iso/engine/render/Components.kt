@@ -18,8 +18,16 @@ data class Sprite(
 ) : Component
 
 @Serializable
-@SerialName("spriteColor")
-data class SpriteColor(
+@SerialName("spriteFillColor")
+data class SpriteFillColor(
+    var r: Float = 0f,
+    var g: Float = 0f,
+    var b: Float = 0f
+) : Component
+
+@Serializable
+@SerialName("spriteTintColor")
+data class SpriteTintColor(
     var r: Float = 0f,
     var g: Float = 0f,
     var b: Float = 0f

@@ -8,31 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool.Poolable
 
-//open class TextureRenderable(
-//    var textureRegion: TextureRegion? = null,
-//    var x: Float = 0f,
-//    var y: Float = 0f,
-//    var offsetX: Float = 0f,
-//    var offsetY: Float = 0f,
-//    var width: Int = 0,
-//    var height: Int = 0,
-//    var alpha: Float = 0f,
-//    var rotation: Float = 0f
-//) : Poolable {
-//
-//    override fun reset() {
-//        textureRegion = null
-//        x = 0f
-//        y = 0f
-//        offsetX = 0f
-//        offsetY = 0f
-//        width = 0
-//        height = 0
-//        alpha = 0f
-//        rotation = 0f
-//    }
-//}
-
 class TextRenderable(
     var font: BitmapFont? = null,
     var text: String = "",
@@ -62,7 +37,8 @@ open class GameObjectRenderable(
     var height: Float = 0f,
     var alpha: Float = 0f,
     var rotation: Float = 0f,
-    var color: Color? = null
+    var fillColor: Color? = null,
+    var tintColor: Color? = null
 ) : Poolable {
 
     val behind = Array<GameObjectRenderable>()
@@ -80,7 +56,8 @@ open class GameObjectRenderable(
         height = 0f
         alpha = 0f
         rotation = 0f
-        color = null
+        fillColor = null
+        tintColor = null
 
         behind.clear()
         visited = false

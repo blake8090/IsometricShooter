@@ -2,6 +2,7 @@ package bke.iso.editor.ui
 
 import bke.iso.editor.DecreaseLayerEvent
 import bke.iso.editor.IncreaseLayerEvent
+import bke.iso.editor.ToggleHighlightLayerEvent
 import bke.iso.editor.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.camera.ToggleHideWallsEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
@@ -118,7 +119,13 @@ class EditorToolBar(
         hideWallsButton.onChanged {
             fire(ToggleHideWallsEvent())
         }
-        root.add(hideWallsButton)
+        root.add(hideWallsButton).space(10f)
+
+        val highlightLayerButton = createButton("highlight-layer.png")
+        highlightLayerButton.onChanged {
+            fire(ToggleHighlightLayerEvent())
+        }
+        root.add(highlightLayerButton)
 
         return root
     }
