@@ -4,7 +4,7 @@
   fireType: "auto",
   damage: 5,
   range: 5,
-  magSize: 3,
+  magSize: 5,
   fireRate: 600,
   velocity: 30,
   spread: 0.03,
