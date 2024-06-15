@@ -27,9 +27,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     fun <T : Any> addCache(assetType: KClass<T>, assetCache: AssetCache<T>) {
         for (extension in assetCache.extensions) {
-            cacheByExtension.put(extension, assetCache)?.let { existing ->
-                error("Extension '$extension' already registered to ${existing::class.simpleName}")
-            }
+            addCache(extension, assetCache)
         }
         cacheByType.put(assetType, assetCache)
     }
@@ -37,21 +35,33 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     inline fun <reified T : Any> addCache(assetCache: AssetCache<T>) =
         addCache(T::class, assetCache)
 
-    fun <T : Any> get(name: String, type: KClass<T>): T =
-        getCache(type).get(name) ?: error("Asset not found: '$name' (${type.simpleName})")
+    private fun <T : Any> addCache(extension: String, assetCache: AssetCache<T>) {
+        val existing = cacheByExtension[extension]
+        if (existing != null) {
+            error("Extension '$extension' already registered to ${existing::class.simpleName}")
+        }
+        cacheByExtension.put(extension, assetCache)
+    }
+
+    fun <T : Any> get(path: String, type: KClass<T>): T =
+        checkNotNull(getCache(type).get(path)) {
+            "Asset not found: '$path' (${type.simpleName})"
+        }
 
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
 
     @Suppress("UNCHECKED_CAST")
-    operator fun <T : Any> contains(asset: T) =
+    operator fun <T : Any> contains(asset: T): Boolean {
         if (asset is BitmapFont) {
-            asset in fonts
-        } else {
-            tryGetCache(asset::class as KClass<T>)
-                ?.contains(asset)
-                ?: false
+            return asset in fonts
         }
+
+        val cache = cacheByType[asset::class] as? AssetCache<T>
+        return cache
+            ?.contains(asset)
+            ?: false
+    }
 
     fun <T : Any> getAll(type: KClass<T>): List<T> =
         getCache(type).getAll()
@@ -63,21 +73,22 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         val assetsPath = files.combinePaths(BASE_PATH, path)
         log.info { "Loading assets in path '$assetsPath'" }
 
-        val files = withContext(Dispatchers.IO) {
+        val allFiles = withContext(Dispatchers.IO) {
             files.listFiles(assetsPath)
         }
 
-        val fileToCache = files.associateWith { file -> cacheByExtension[file.extension] }
-        for ((file, cache) in fileToCache) {
-            loadFileAsync(file, cache)
+        for (file in allFiles) {
+            loadFileAsync(file)
         }
     }
 
-    private suspend fun loadFileAsync(file: File, cache: AssetCache<*>?) {
+    private suspend fun loadFileAsync(file: File) {
+        val cache = cacheByExtension[file.extension]
         if (cache == null) {
-            log.info { "Skipping '${file.path}': Unknown extension '${file.extension}'" }
+            log.info { "Skipping '${file.canonicalPath}': Unknown extension '${file.extension}'" }
             return
         }
+
         try {
             cache.load(file)
         } catch (e: Throwable) {
