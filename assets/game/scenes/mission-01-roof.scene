@@ -1,5 +1,11 @@
 {
     "version": "1",
+    "backgroundColor": {
+        "r": 0.043,
+        "g": 0.18,
+        "b": 0.31,
+        "a": 1
+    }
     "actors": [
         {
             "pos": {

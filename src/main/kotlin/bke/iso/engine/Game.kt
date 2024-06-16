@@ -45,7 +45,7 @@ class Game {
     val renderer: Renderer = Renderer(world, assets, events)
     val collisions: Collisions = Collisions(renderer, world)
     val physics: Physics = Physics(world, collisions)
-    val scenes = Scenes(assets, serializer, world)
+    val scenes = Scenes(assets, serializer, world, renderer)
 
     val input: Input = Input(events)
     val ui: UI = UI(input)

@@ -61,7 +61,8 @@ class Renderer(
     val fgShapes: ShapeArray = ShapeArray()
     private val shapeRenderer = ShapeRenderer(batch)
 
-    private val bgColor = Color.GRAY
+    var bgColor: Color = Color.GRAY
+
     private val gameObjectRenderer = GameObjectRenderer(assets, world, events, debug)
     private val textRenderer = TextRenderer()
 
@@ -101,7 +102,7 @@ class Renderer(
         gameObjectRenderer.draw(batch)
         fboEnd()
 
-        Gdx.gl.glClearColor(bgColor.r, bgColor.b, bgColor.g, bgColor.a)
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         shapeRenderer.update()

@@ -1,6 +1,7 @@
 package bke.iso.engine.scene
 
 import bke.iso.engine.math.Location
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -9,7 +10,9 @@ import kotlinx.serialization.Serializable
 data class Scene(
     val version: String,
     val actors: List<ActorRecord>,
-    val tiles: List<TileRecord>
+    val tiles: List<TileRecord>,
+    @Contextual
+    val backgroundColor: Color? = null
 )
 
 @Serializable

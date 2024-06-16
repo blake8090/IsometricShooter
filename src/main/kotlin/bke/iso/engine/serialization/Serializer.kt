@@ -22,6 +22,7 @@ class Serializer {
 
     private val module = SerializersModule {
         contextual(Vector3Serializer)
+        contextual(ColorSerializer)
 
         polymorphic(Component::class) {
             for (kClass in getComponentSubTypes()) {

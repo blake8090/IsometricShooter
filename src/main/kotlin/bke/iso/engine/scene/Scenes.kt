@@ -3,6 +3,7 @@ package bke.iso.engine.scene
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
@@ -12,7 +13,8 @@ import kotlin.system.measureTimeMillis
 class Scenes(
     private val assets: Assets,
     private val serializer: Serializer,
-    private val world: World
+    private val world: World,
+    private val renderer: Renderer
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -29,6 +31,10 @@ class Scenes(
 
             for (record in scene.tiles) {
                 load(record)
+            }
+
+            if (scene.backgroundColor != null) {
+                renderer.bgColor = scene.backgroundColor
             }
         }
 
