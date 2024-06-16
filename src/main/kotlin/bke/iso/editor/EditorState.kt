@@ -19,6 +19,8 @@ class MainViewPressEvent : EditorEvent()
 
 class MainViewDragEvent : EditorEvent()
 
+class PerformActionEvent : EditorEvent()
+
 class EditorState(override val game: Game) : State() {
 
     private val log = KotlinLogging.logger {}
@@ -126,6 +128,7 @@ class EditorState(override val game: Game) : State() {
         log.debug { "Executing ${command::class.simpleName}" }
         command.execute()
         commands.addFirst(command)
+        handleEvent(PerformActionEvent())
     }
 
     private fun drawGrid() {

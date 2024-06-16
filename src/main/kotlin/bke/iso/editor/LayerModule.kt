@@ -62,6 +62,10 @@ class LayerModule(
                 highlightLayer = !highlightLayer
                 highlightActors()
             }
+
+            is PerformActionEvent -> {
+                highlightActors()
+            }
         }
     }
 
