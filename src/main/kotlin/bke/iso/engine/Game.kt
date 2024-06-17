@@ -120,7 +120,8 @@ class Game {
     fun <T : State> setState(type: KClass<T>) {
         log.debug { "Switching to state ${type.simpleName}" }
         state = requireNotNull(type.primaryConstructor).call(this)
-        ui.loadingScreen.start(state::load)
+        // TODO: does state.load need to be a suspend fun anymore?
+        runBlocking { state.load() }
     }
 
     fun resize(width: Int, height: Int) {

@@ -22,10 +22,13 @@
     },
     {
       type: "description",
-      text: "wall"
+      text: "graybox-door-front"
     },
     {
       type: "occlude"
+    },
+    {
+      type: "door"
     }
   ]
 }

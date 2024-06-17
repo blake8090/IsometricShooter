@@ -18,6 +18,7 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
     private lateinit var healthBar: HudHealthBar
     private lateinit var medkitsLabel: Label
     private lateinit var weaponLabel: Label
+    private lateinit var interactionLabel: Label
 
     override fun create() {
         setup()
@@ -32,6 +33,14 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
             .left()
             .pad(20f)
         setMedkitsText(0)
+
+        interactionLabel = Label("", skin, "interaction")
+        interactionLabel.isVisible = false
+        root.add(interactionLabel)
+            .expand()
+            .bottom()
+            .left()
+            .pad(20f)
 
         root.add(createSelectedWeaponTable())
             .bottom()
@@ -49,6 +58,11 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
 
         skin.add("hud-fps", Label.LabelStyle().apply {
             font = skin.getFont("default")
+        })
+
+        skin.add("interaction", Label.LabelStyle().apply {
+            font = skin.getFont("default")
+            background = skin.newDrawable("pixel", Color(0.353f, 0.439f, 0.522f, 0.75f))
         })
 
         skin.add(
@@ -108,6 +122,15 @@ class HudScreen(assets: Assets) : UIScreen(assets) {
 
     fun setMedkitsText(numMedkits: Int) {
         medkitsLabel.setText("Medkits: $numMedkits")
+    }
+
+    fun setInteractionText(text: String) {
+        interactionLabel.isVisible = true
+        interactionLabel.setText(text)
+    }
+
+    fun hideInteractionText() {
+        interactionLabel.isVisible = false
     }
 }
 

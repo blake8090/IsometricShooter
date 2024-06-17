@@ -16,13 +16,16 @@ class MainMenuState(override val game: Game) : State() {
 
     override suspend fun load() {
         game.ui.setScreen(MainMenuScreen(game.assets, game.events))
+        game.ui.setLoadingScreen(SimpleLoadingScreen(game.assets))
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
             is StartEvent -> {
-                game.ui.setLoadingScreen(SimpleLoadingScreen(game.assets))
-                game.setState(GameState::class)
+                game.ui.loadingScreen.start {
+                    game.setState(GameState::class)
+                    game.events.fire(GameState.LoadSceneEvent("mission-01-roof.scene"))
+                }
             }
 
             is EditorEvent -> {

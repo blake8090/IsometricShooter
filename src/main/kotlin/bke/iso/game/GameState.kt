@@ -1,5 +1,6 @@
 package bke.iso.game
 
+import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.input.ButtonState
@@ -19,6 +20,9 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.HealSystem
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HitEffectSystem
+import bke.iso.game.door.Door
+import bke.iso.game.door.DoorChangeSceneAction
+import bke.iso.game.door.DoorModule
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
@@ -33,20 +37,30 @@ import bke.iso.game.weapon.system.ExplosionSystem
 import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
+import mu.KotlinLogging
 
 class GameState(override val game: Game) : State() {
 
+    private val log = KotlinLogging.logger {}
+
     private val combatModule = CombatModule(game.world, game.events)
     private val weaponsModule = WeaponsModule(game.assets, game.world)
-    private val hudModule = HudModule(game.world, game.assets, weaponsModule)
+    private val doorModule = DoorModule(game.world, game.ui, game.events)
+    private val hudModule = HudModule(game.world, game.assets, weaponsModule, doorModule)
     private val shadowModule = ShadowModule(game.world)
 
-    override val modules = setOf(hudModule, weaponsModule, combatModule, shadowModule)
+    override val modules = setOf(
+        hudModule,
+        weaponsModule,
+        combatModule,
+        shadowModule,
+        doorModule
+    )
 
     override val systems = linkedSetOf(
         WeaponSystem(game.world, game.assets),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
-        PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule),
+        PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule, doorModule),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         FlyingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
@@ -61,26 +75,24 @@ class GameState(override val game: Game) : State() {
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
 
     override suspend fun load() {
+        bindInput()
+
         game.assets.addCache(WeaponPropertiesCache(game.serializer))
         game.assets.loadAsync("game")
         game.assets.shaders.compileAll()
 
-        game.scenes.load("mission-01-roof.scene")
-
-        bindInput()
-
+        hudModule.init(game.ui)
         game.renderer.pointer.set(crosshair)
 
-        game.world.actors.each { actor: Actor, _: Player ->
-            weaponsModule.equip(actor, "pistol")
-            game.renderer.setOcclusionTarget(actor)
-
-            actor.with<Health> { health ->
-                hudModule.init(game.ui, health.value, health.maxValue)
-            }
-        }
-
         game.renderer.debug.enableCategories("vision", "turret", "collisions")
+    }
+
+    override fun handleEvent(event: Event) {
+        super.handleEvent(event)
+
+        if (event is LoadSceneEvent) {
+            loadScene(event.sceneName)
+        }
     }
 
     private fun bindInput() {
@@ -93,7 +105,8 @@ class GameState(override val game: Game) : State() {
                 SHOOT_ACTION to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
                 RELOAD_ACTION to KeyBinding(Input.Keys.R, ButtonState.PRESSED),
                 "crouch" to KeyBinding(Input.Keys.C, ButtonState.PRESSED),
-                "useMedkit" to KeyBinding(Input.Keys.E, ButtonState.PRESSED)
+                "useMedkit" to KeyBinding(Input.Keys.Q, ButtonState.PRESSED),
+                "openDoor" to KeyBinding(Input.Keys.E, ButtonState.PRESSED)
             )
             bind(
                 "moveY",
@@ -118,29 +131,48 @@ class GameState(override val game: Game) : State() {
                 SHOOT_ACTION to ControllerAxisBinding(ControllerAxis.TRIGGERRIGHT.ordinal),//ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
                 RELOAD_ACTION to ControllerBinding(ControllerButton.X.ordinal, ButtonState.PRESSED),
                 "crouch" to ControllerBinding(ControllerButton.LEFTSTICK.ordinal, ButtonState.PRESSED),
-                "useMedkit" to ControllerBinding(ControllerButton.DPAD_UP.ordinal, ButtonState.PRESSED)
+                "useMedkit" to ControllerBinding(ControllerButton.DPAD_UP.ordinal, ButtonState.PRESSED),
+                "openDoor" to ControllerBinding(ControllerButton.Y.ordinal, ButtonState.PRESSED)
             )
         }
     }
 
-//    private fun generatePrefabs() {
-//        generatePrefab("lamppost", Factory(game.world).createLampPost(Location()))
-//        generatePrefab("player", game.world.createPlayer(location))
-//        //generatePrefab(game.world.createShadow(player))
-//        generatePrefab("wall", factory.createWall(location))
-//        generatePrefab("box", factory.createBox(location))
-//        generatePrefab("turret", factory.createTurret(location))
-//        generatePrefab("platform", game.world.createMovingPlatform(location))
-//        generatePrefab("side-fence", factory.createSideFence(location))
-//        generatePrefab("front-fence", factory.createFrontFence(location))
-//        generatePrefab("pillar", factory.createPillar(location))
-//        generatePrefab("bullet", game.world.createBullet(Actor(""), Vector3(), BulletType.PLAYER))
-//    }
-//
-//    private fun generatePrefab(name: String, actor: Actor) {
-//        val prefab = ActorPrefab(name, actor.components.values.toList())
-//        val json = game.serializer.write(prefab)
-//        println("PREFAB $name\n$json\n")
-//        game.world.actors.delete(actor)
-//    }
+    private fun loadScene(name: String) {
+        game.scenes.load(name)
+        initPlayer()
+
+        when (name) {
+            "mission-01-roof.scene" -> initMission1RoofScene()
+            "city2.scene" -> initCity2Scene()
+        }
+    }
+
+    private fun initPlayer() {
+        game.world.actors.each { actor: Actor, _: Player ->
+            game.renderer.setOcclusionTarget(actor)
+
+            actor.with<Health> { health ->
+                hudModule.updateHealthBar(health.value, health.maxValue)
+            }
+        }
+    }
+
+    private fun initMission1RoofScene() {
+        game.world.actors.each<Player> { actor, _ ->
+            weaponsModule.equip(actor, "pistol")
+        }
+
+        game.world.actors.each<Door> { actor, _ ->
+            actor.add(DoorChangeSceneAction("city2.scene"))
+            log.debug { "Set up door $actor" }
+        }
+    }
+
+    private fun initCity2Scene() {
+        game.world.actors.each<Player> { actor, _ ->
+            weaponsModule.equip(actor, "rifle")
+        }
+    }
+
+    data class LoadSceneEvent(val sceneName: String) : Event
 }

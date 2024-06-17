@@ -21,10 +21,6 @@
       type: "debugSettings"
     },
     {
-      type: "description",
-      text: "wall"
-    },
-    {
       type: "occlude"
     }
   ]

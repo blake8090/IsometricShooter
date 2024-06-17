@@ -82,6 +82,14 @@ class Actors(
             .filterIsInstance<Actor>()
             .find { actor -> actor.id == id }
 
+    fun <T : Component> findAll(type: KClass<out T>): List<Actor> =
+        grid.getObjects()
+            .filterIsInstance<Actor>()
+            .filter { actor -> actor.components.containsKey(type) }
+
+    inline fun <reified T : Component> findAll(): List<Actor> =
+        findAll(T::class)
+
     private fun onMove(actor: Actor) =
         grid.update(actor)
 

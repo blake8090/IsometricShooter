@@ -13,10 +13,13 @@ import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit
 import bke.iso.game.combat.CombatModule
+import bke.iso.game.door.DoorModule
 import bke.iso.game.weapon.RangedWeaponOffset
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
+
+const val PLAYER_DOOR_ACTION_RADIUS = 1.2f
 
 private const val PLAYER_JUMP_FORCE = 5f
 private const val CONTROLLER_DEADZONE = 0.1f
@@ -30,7 +33,8 @@ class PlayerSystem(
     private val world: World,
     private val renderer: Renderer,
     private val collisions: Collisions,
-    private val combatModule: CombatModule
+    private val combatModule: CombatModule,
+    private val doorModule: DoorModule
 ) : System {
 
     private val log = KotlinLogging.logger {}
@@ -69,6 +73,13 @@ class PlayerSystem(
 
         input.onAction("useMedkit") {
             useMedkit(playerActor)
+        }
+
+        input.onAction("openDoor") {
+            val door = doorModule.getNearestDoor(playerActor.pos, PLAYER_DOOR_ACTION_RADIUS)
+            if (door != null) {
+                doorModule.openDoor(playerActor, door)
+            }
         }
     }
 

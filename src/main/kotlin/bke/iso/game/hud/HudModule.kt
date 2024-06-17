@@ -14,6 +14,10 @@ import bke.iso.game.actor.Inventory
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
+import bke.iso.game.door.DoorChangeSceneAction
+import bke.iso.game.door.DoorModule
+import bke.iso.game.door.DoorOpenAction
+import bke.iso.game.player.PLAYER_DOOR_ACTION_RADIUS
 import bke.iso.game.player.Player
 import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
@@ -26,13 +30,18 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 class HudModule(
     private val world: World,
     private val assets: Assets,
-    private val weaponsModule: WeaponsModule
+    private val weaponsModule: WeaponsModule,
+    private val doorModule: DoorModule
 ) : Module {
 
-    private val hudScreen = HudScreen(assets)
+    private lateinit var hudScreen: HudScreen
 
-    fun init(ui: UI, health: Float, maxHealth: Float) {
+    fun init(ui: UI) {
+        hudScreen = HudScreen(assets)
         ui.setScreen(hudScreen)
+    }
+
+    fun updateHealthBar(health: Float, maxHealth: Float) {
         hudScreen.setHealth(health)
         hudScreen.setMaxHealth(maxHealth)
     }
@@ -47,6 +56,7 @@ class HudModule(
         hudScreen.setWeaponText(text)
 
         updateMedkitText()
+        updateInteractionText()
     }
 
     private fun findPlayerWeapon(): Weapon? {
@@ -84,6 +94,19 @@ class HudModule(
             hudScreen.setHealth(event.health)
         } else if (event is GameObjectRenderer.DrawActorEvent) {
             drawHealthBar(event.actor, event.batch)
+        }
+    }
+
+    private fun updateInteractionText() {
+        hudScreen.hideInteractionText()
+
+        val playerActor = world.actors.find<Player>() ?: return
+
+        val doorActor = doorModule.getNearestDoor(playerActor.pos, PLAYER_DOOR_ACTION_RADIUS) ?: return
+        if (doorActor.has<DoorOpenAction>()) {
+            hudScreen.setInteractionText("Press E or Y to open")
+        } else if (doorActor.has<DoorChangeSceneAction>()) {
+            hudScreen.setInteractionText("Press E or Y to enter")
         }
     }
 
