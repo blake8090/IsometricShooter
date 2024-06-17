@@ -24,6 +24,7 @@ import bke.iso.game.door.Door
 import bke.iso.game.door.DoorChangeSceneAction
 import bke.iso.game.door.DoorModule
 import bke.iso.game.hud.HudModule
+import bke.iso.game.player.PlayerStateModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
 import bke.iso.game.player.SHOOT_ACTION
@@ -48,6 +49,7 @@ class GameState(override val game: Game) : State() {
     private val doorModule = DoorModule(game.world, game.ui, game.events)
     private val hudModule = HudModule(game.world, game.assets, weaponsModule, doorModule)
     private val shadowModule = ShadowModule(game.world)
+    private val playerStateModule = PlayerStateModule(game.world)
 
     override val modules = setOf(
         hudModule,
@@ -91,7 +93,7 @@ class GameState(override val game: Game) : State() {
         super.handleEvent(event)
 
         if (event is LoadSceneEvent) {
-            loadScene(event.sceneName)
+            loadScene(event.sceneName, event.savePlayerData)
         }
     }
 
@@ -137,13 +139,21 @@ class GameState(override val game: Game) : State() {
         }
     }
 
-    private fun loadScene(name: String) {
+    private fun loadScene(name: String, savePlayerData: Boolean) {
+        if (savePlayerData) {
+            playerStateModule.saveState()
+        }
+
         game.scenes.load(name)
+
+        if (savePlayerData) {
+            playerStateModule.loadState()
+        }
+
         initPlayer()
 
         when (name) {
             "mission-01-roof.scene" -> initMission1RoofScene()
-            "city2.scene" -> initCity2Scene()
         }
     }
 
@@ -168,11 +178,8 @@ class GameState(override val game: Game) : State() {
         }
     }
 
-    private fun initCity2Scene() {
-        game.world.actors.each<Player> { actor, _ ->
-            weaponsModule.equip(actor, "rifle")
-        }
-    }
-
-    data class LoadSceneEvent(val sceneName: String) : Event
+    data class LoadSceneEvent(
+        val sceneName: String,
+        val savePlayerData: Boolean
+    ) : Event
 }

@@ -33,7 +33,7 @@ class DoorModule(private val world: World, private val ui: UI, private val event
         val changeSceneAction = doorActor.get<DoorChangeSceneAction>()
         if (changeSceneAction != null && actor.has<Player>()) {
             ui.loadingScreen.start {
-                events.fire(GameState.LoadSceneEvent(changeSceneAction.sceneName))
+                events.fire(GameState.LoadSceneEvent(changeSceneAction.sceneName, true))
             }
         } else if (doorActor.has<DoorOpenAction>()) {
             println("opening door")

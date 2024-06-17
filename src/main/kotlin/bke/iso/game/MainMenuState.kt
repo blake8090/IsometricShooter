@@ -24,7 +24,7 @@ class MainMenuState(override val game: Game) : State() {
             is StartEvent -> {
                 game.ui.loadingScreen.start {
                     game.setState(GameState::class)
-                    game.events.fire(GameState.LoadSceneEvent("mission-01-roof.scene"))
+                    game.events.fire(GameState.LoadSceneEvent("mission-01-roof.scene", false))
                 }
             }
 
