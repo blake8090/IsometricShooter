@@ -37,6 +37,7 @@ class DoorModule(private val world: World, private val ui: UI, private val event
             }
         } else if (doorActor.has<DoorOpenAction>()) {
             println("opening door")
+            world.delete(doorActor)
         }
     }
 

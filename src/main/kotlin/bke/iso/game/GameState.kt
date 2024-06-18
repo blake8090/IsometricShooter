@@ -23,6 +23,7 @@ import bke.iso.game.combat.HitEffectSystem
 import bke.iso.game.door.Door
 import bke.iso.game.door.DoorChangeSceneAction
 import bke.iso.game.door.DoorModule
+import bke.iso.game.door.DoorOpenAction
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerStateModule
 import bke.iso.game.player.PlayerWeaponSystem
@@ -154,6 +155,7 @@ class GameState(override val game: Game) : State() {
 
         when (name) {
             "mission-01-roof.scene" -> initMission1RoofScene()
+            "mission-01-interior.scene" -> initMission1InteriorScene()
         }
     }
 
@@ -173,7 +175,14 @@ class GameState(override val game: Game) : State() {
         }
 
         game.world.actors.each<Door> { actor, _ ->
-            actor.add(DoorChangeSceneAction("city2.scene"))
+            actor.add(DoorChangeSceneAction("mission-01-interior.scene"))
+            log.debug { "Set up door $actor" }
+        }
+    }
+
+    private fun initMission1InteriorScene() {
+        game.world.actors.each<Door> { actor, _ ->
+            actor.add(DoorOpenAction())
             log.debug { "Set up door $actor" }
         }
     }
