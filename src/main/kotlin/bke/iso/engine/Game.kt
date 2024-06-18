@@ -20,12 +20,10 @@ import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
-import bke.iso.game.MainMenuState
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
-import kotlin.system.measureTimeMillis
 
 interface Event
 
@@ -54,31 +52,25 @@ class Game {
 
     private val profiler = Profiler(assets, ui, input)
 
-    fun start() {
+    fun start(gameInfo: GameInfo) {
+        input.start()
+        profiler.start()
+
+        assets.addCache(TextureCache())
+        assets.addCache(FontGeneratorCache())
+        assets.addCache(ActorPrefabCache(serializer))
+        assets.addCache(TilePrefabCache(serializer))
+        assets.addCache(SceneCache(serializer))
+        assets.addCache(ShaderFileCache())
+        assets.addCache(ShaderInfoCache(serializer))
+
+        ui.setLoadingScreen(EmptyLoadingScreen(assets))
+
         runBlocking {
-            init()
+            assets.loadAsync("ui")
         }
-    }
 
-    private suspend fun init() {
-        val time = measureTimeMillis {
-            input.start()
-            profiler.start()
-
-            assets.addCache(TextureCache())
-            assets.addCache(FontGeneratorCache())
-            assets.addCache(ActorPrefabCache(serializer))
-            assets.addCache(TilePrefabCache(serializer))
-            assets.addCache(SceneCache(serializer))
-            assets.addCache(ShaderFileCache())
-            assets.addCache(ShaderInfoCache(serializer))
-
-            ui.setLoadingScreen(EmptyLoadingScreen(assets))
-        }
-        log.info { "Initialized modules in $time ms" }
-
-        assets.loadAsync("ui")
-        setState(MainMenuState::class)
+        gameInfo.start(this)
     }
 
     fun update(deltaTime: Float) {

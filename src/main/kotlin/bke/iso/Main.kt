@@ -1,5 +1,6 @@
 package bke.iso
 
+import bke.iso.game.IsometricShooter
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import mu.KotlinLogging
 import kotlin.system.exitProcess
@@ -7,11 +8,11 @@ import kotlin.system.exitProcess
 private val log = KotlinLogging.logger {}
 
 fun main() {
-    Thread.currentThread().setUncaughtExceptionHandler { t, e ->
+    Thread.currentThread().setUncaughtExceptionHandler { _, e ->
         log.error(e) { "Uncaught exception" }
         exitProcess(-1)
     }
 
-    val app = App("Isometric Shooter")
-    Lwjgl3Application(app, app.config)
+    val app = App(IsometricShooter())
+    Lwjgl3Application(app, app.getConfig())
 }
