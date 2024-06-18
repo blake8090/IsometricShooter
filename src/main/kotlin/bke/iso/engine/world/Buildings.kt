@@ -50,6 +50,11 @@ class Buildings {
     fun getAll(): Set<String> =
         objectsByBuilding.keys
 
+    fun getAllObjects(buildingName: String): Set<GameObject> =
+        checkNotNull(objectsByBuilding[buildingName]) {
+            "Building $buildingName not found"
+        }
+
     fun remove(actor: Actor) {
         buildingByObject.remove(actor)
         for ((_, objects) in objectsByBuilding) {

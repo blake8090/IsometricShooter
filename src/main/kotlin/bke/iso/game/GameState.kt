@@ -25,6 +25,7 @@ import bke.iso.game.door.DoorChangeSceneAction
 import bke.iso.game.door.DoorModule
 import bke.iso.game.door.DoorOpenAction
 import bke.iso.game.hud.HudModule
+import bke.iso.game.player.PlayerBuildingVisibilitySystem
 import bke.iso.game.player.PlayerStateModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.player.RELOAD_ACTION
@@ -72,7 +73,8 @@ class GameState(override val game: Game) : State() {
         MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions),
         HealSystem(game.world, game.events),
-        HitEffectSystem(game.world)
+        HitEffectSystem(game.world),
+        PlayerBuildingVisibilitySystem(game.world)
     )
 
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
