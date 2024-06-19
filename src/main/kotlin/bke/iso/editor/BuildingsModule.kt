@@ -37,7 +37,15 @@ class BuildingsModule(
 
     private fun drawBuilding(name: String) {
         val box = world.buildings.getBounds(name) ?: return
-        renderer.fgShapes.addBox(box, 1f, Color.BLUE)
+
+        val color =
+            if (selectedBuilding == name) {
+                Color.WHITE
+            } else {
+                Color.BLUE
+            }
+
+        renderer.fgShapes.addBox(box, 1f, color)
         renderer.drawText(name, buildingFont, box.pos)
     }
 
