@@ -66,15 +66,6 @@
         },
         {
             "pos": {
-                "x": 8.5,
-                "y": 1.5,
-                "z": 0.0
-            },
-            "prefab": "graybox-32x80",
-            "building": "hallway"
-        },
-        {
-            "pos": {
                 "x": 4.0,
                 "y": 2.0,
                 "z": 0.0
@@ -84,25 +75,7 @@
         },
         {
             "pos": {
-                "x": 8.5,
-                "y": 2.0,
-                "z": 0.0
-            },
-            "prefab": "graybox-32x80",
-            "building": "hallway"
-        },
-        {
-            "pos": {
                 "x": 4.0,
-                "y": 2.5,
-                "z": 0.0
-            },
-            "prefab": "graybox-32x80",
-            "building": "hallway"
-        },
-        {
-            "pos": {
-                "x": 8.5,
                 "y": 2.5,
                 "z": 0.0
             },
@@ -1432,525 +1405,938 @@
                 "z": 0.0
             },
             "prefab": "medkit"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 11.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 11.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 10.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 10.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 9.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 9.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 8.5,
+                "y": 2.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-door-side",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 8.5,
+                "y": 1.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 0.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 18.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 18.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 1.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 18.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 2.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 2.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 3.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 19.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 12.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 13.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 13.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 14.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 14.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 15.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 15.5,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-door-front",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 16.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 3.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-door-front",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 4.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 4.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 5.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 6.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 15.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 7.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 14.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 8.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 16.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 9.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.0,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 10.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 9.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 8.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 8.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 7.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 7.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 6.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 6.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 5.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 5.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 4.5,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 17.5,
+                "y": 4.0,
+                "z": 0.0
+            },
+            "prefab": "graybox-32x80",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.0078125,
+                "y": 10.0703125,
+                "z": 0.0
+            },
+            "prefab": "barrel",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.875,
+                "y": 5.5,
+                "z": 0.0
+            },
+            "prefab": "barrel",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.7578125,
+                "y": 6.2890625,
+                "z": 0.0
+            },
+            "prefab": "barrel",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 11.8984375,
+                "y": 7.1796875,
+                "z": 0.0
+            },
+            "prefab": "box",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.515625,
+                "y": 7.015625,
+                "z": 0.0
+            },
+            "prefab": "box",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.0078125,
+                "y": 7.1015625,
+                "z": 0.0
+            },
+            "prefab": "box",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 14.015625,
+                "y": 6.015625,
+                "z": 1.0
+            },
+            "prefab": "barrel",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.6484375,
+                "y": 10.1796875,
+                "z": 0.0
+            },
+            "prefab": "barrel",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 16.640625,
+                "y": 6.921875,
+                "z": 0.0
+            },
+            "prefab": "barrel",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.65625,
+                "y": 9.15625,
+                "z": 0.0
+            },
+            "prefab": "turret",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 16.601562,
+                "y": 9.4140625,
+                "z": 0.0
+            },
+            "prefab": "turret",
+            "building": "storage2"
         }
     ],
     "tiles": [
         {
             "location": {
-                "x": 11,
-                "y": 13
+                "x": 1,
+                "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
+            "building": "storage"
         },
         {
             "location": {
                 "x": 11,
-                "y": 16
+                "y": 2
             },
             "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 16
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 15
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 13
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 14
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 12
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
+            "building": "hallway2"
         },
         {
             "location": {
                 "x": 8,
                 "y": 11
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 10
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 9
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 8
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 7
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 6
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 5
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 4
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 3
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 3
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 3
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 3
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -1974,14 +2360,29 @@
         {
             "location": {
                 "x": 4,
-                "y": 5
+                "y": 15
             },
             "prefab": "graybox-tile",
             "building": "hallway"
         },
         {
             "location": {
-                "x": 4,
+                "x": 5,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 8,
                 "y": 6
             },
             "prefab": "graybox-tile",
@@ -1989,15 +2390,7 @@
         },
         {
             "location": {
-                "x": 4,
-                "y": 7
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
+                "x": 8,
                 "y": 8
             },
             "prefab": "graybox-tile",
@@ -2005,151 +2398,15 @@
         },
         {
             "location": {
-                "x": 4,
-                "y": 9
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 10
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 11
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 12
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
                 "x": 7,
-                "y": 12
+                "y": 14
             },
             "prefab": "graybox-tile",
             "building": "hallway"
         },
         {
             "location": {
-                "x": 7,
-                "y": 11
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 11
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 10
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 9
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 12
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 12
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 11
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 10
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 9
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 8
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 7
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 6
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
-                "y": 5
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 6,
+                "x": 8,
                 "y": 4
             },
             "prefab": "graybox-tile",
@@ -2157,8 +2414,24 @@
         },
         {
             "location": {
-                "x": 5,
-                "y": 4
+                "x": 6,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 13
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2166,6 +2439,38 @@
         {
             "location": {
                 "x": 5,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 4,
                 "y": 5
             },
             "prefab": "graybox-tile",
@@ -2173,23 +2478,23 @@
         },
         {
             "location": {
-                "x": 5,
-                "y": 6
+                "x": 6,
+                "y": 15
             },
             "prefab": "graybox-tile",
             "building": "hallway"
         },
         {
             "location": {
-                "x": 5,
-                "y": 7
+                "x": 7,
+                "y": 15
             },
             "prefab": "graybox-tile",
             "building": "hallway"
         },
         {
             "location": {
-                "x": 5,
+                "x": 4,
                 "y": 8
             },
             "prefab": "graybox-tile",
@@ -2197,23 +2502,15 @@
         },
         {
             "location": {
-                "x": 7,
-                "y": 5
+                "x": 4,
+                "y": 7
             },
             "prefab": "graybox-tile",
             "building": "hallway"
         },
         {
             "location": {
-                "x": 7,
-                "y": 4
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
+                "x": 4,
                 "y": 6
             },
             "prefab": "graybox-tile",
@@ -2222,7 +2519,7 @@
         {
             "location": {
                 "x": 7,
-                "y": 7
+                "y": 1
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2230,30 +2527,7 @@
         {
             "location": {
                 "x": 7,
-                "y": 8
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 9
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 10
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4
+                "y": 2
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2268,7 +2542,7 @@
         },
         {
             "location": {
-                "x": 4,
+                "x": 8,
                 "y": 2
             },
             "prefab": "graybox-tile",
@@ -2276,8 +2550,24 @@
         },
         {
             "location": {
-                "x": 5,
-                "y": 2
+                "x": 6,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 8
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2292,24 +2582,8 @@
         },
         {
             "location": {
-                "x": 7,
-                "y": 2
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 2
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 1
+                "x": 6,
+                "y": 4
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2323,6 +2597,14 @@
         },
         {
             "location": {
+                "x": 6,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
                 "x": 7
             },
             "prefab": "graybox-tile",
@@ -2330,7 +2612,24 @@
         },
         {
             "location": {
-                "x": 6
+                "x": 4,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 8
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2344,8 +2643,8 @@
         },
         {
             "location": {
-                "x": 5,
-                "y": 1
+                "x": 8,
+                "y": 5
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2360,7 +2659,15 @@
         },
         {
             "location": {
-                "x": 7,
+                "x": 4,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
                 "y": 1
             },
             "prefab": "graybox-tile",
@@ -2369,10 +2676,247 @@
         {
             "location": {
                 "x": 4,
-                "y": 17
+                "y": 10
             },
             "prefab": "graybox-tile",
             "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 19
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
         },
         {
             "location": {
@@ -2384,6 +2928,69 @@
         },
         {
             "location": {
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 18
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
                 "x": 4,
                 "y": 19
             },
@@ -2400,7 +3007,7 @@
         },
         {
             "location": {
-                "x": 6,
+                "x": 7,
                 "y": 19
             },
             "prefab": "graybox-tile",
@@ -2408,8 +3015,8 @@
         },
         {
             "location": {
-                "x": 7,
-                "y": 19
+                "x": 4,
+                "y": 12
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2424,15 +3031,7 @@
         },
         {
             "location": {
-                "x": 8,
-                "y": 18
-            },
-            "prefab": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
+                "x": 4,
                 "y": 17
             },
             "prefab": "graybox-tile",
@@ -2440,7 +3039,30 @@
         },
         {
             "location": {
-                "x": 7,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 17
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
                 "y": 18
             },
             "prefab": "graybox-tile",
@@ -2456,6 +3078,14 @@
         },
         {
             "location": {
+                "x": 3,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
                 "x": 5,
                 "y": 18
             },
@@ -2464,7 +3094,54 @@
         },
         {
             "location": {
-                "x": 5,
+                "x": 3,
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 11
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 8,
                 "y": 17
             },
             "prefab": "graybox-tile",
@@ -2472,8 +3149,16 @@
         },
         {
             "location": {
-                "x": 6,
-                "y": 17
+                "x": 2,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 9
             },
             "prefab": "graybox-tile",
             "building": "hallway"
@@ -2488,19 +3173,11 @@
         },
         {
             "location": {
-                "x": 3,
-                "y": 10
+                "x": 8,
+                "y": 7
             },
             "prefab": "graybox-tile",
-            "building": "storage"
-        },
-        {
-            "location": {
-                "x": 2,
-                "y": 10
-            },
-            "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "hallway"
         },
         {
             "location": {
@@ -2512,72 +3189,1010 @@
         },
         {
             "location": {
-                "x": 1,
-                "y": 11
+                "x": 11,
+                "y": 1
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "hallway2"
         },
         {
             "location": {
-                "y": 11
+                "x": 6
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "hallway"
         },
         {
             "location": {
+                "x": 8,
                 "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "hallway"
         },
         {
             "location": {
-                "x": 1,
+                "x": 6,
+                "y": 17
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 9,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 10,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "location": {
+                "x": 5,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 6,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 7,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 8,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 4,
+                "y": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "location": {
+                "x": 12
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 13
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 14
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 15
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 16
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 17
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 18
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 19
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 19,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 3
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 18,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 1
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 2
+            },
+            "prefab": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 15,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 11,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 11,
                 "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "storage2"
         },
         {
             "location": {
-                "y": 12
+                "x": 12,
+                "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "storage2"
         },
         {
             "location": {
-                "x": 2,
-                "y": 12
+                "x": 13,
+                "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "storage2"
         },
         {
             "location": {
-                "x": 3,
-                "y": 11
+                "x": 14,
+                "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "storage2"
         },
         {
             "location": {
-                "x": 3,
-                "y": 12
+                "x": 15,
+                "y": 10
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "storage2"
         },
         {
             "location": {
-                "x": 1,
-                "y": 12
+                "x": 15,
+                "y": 9
             },
             "prefab": "graybox-tile",
-            "building": "storage"
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 14,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 13,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 16,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 5
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 6
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 7
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 8
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 9
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 17,
+                "y": 10
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "location": {
+                "x": 12,
+                "y": 4
+            },
+            "prefab": "graybox-tile",
+            "building": "storage2"
         }
     ]
 }
