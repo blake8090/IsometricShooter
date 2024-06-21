@@ -2,6 +2,7 @@ package bke.iso.editor.tool
 
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
@@ -44,4 +45,7 @@ class PointerTool(
         highlighted = null
         selected = null
     }
+
+    fun getSelectedActor(): Actor? =
+        selected?.actor
 }

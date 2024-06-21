@@ -7,6 +7,7 @@ import bke.iso.editor.MainViewPressEvent
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.EditorEventListener
 import bke.iso.editor.ui.dialog.EditBuildingDialog
+import bke.iso.editor.ui.dialog.EditTagsDialog
 import bke.iso.editor.ui.dialog.NewBuildingDialog
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
@@ -48,6 +49,7 @@ class EditorScreen(
 
     private val newBuildingDialog = NewBuildingDialog(skin)
     private val editBuildingDialog = EditBuildingDialog(skin)
+    private val editTagsDialog = EditTagsDialog(skin)
 
     override fun create() {
         setup()
@@ -204,5 +206,9 @@ class EditorScreen(
 
     fun openEditBuildingDialog(buildingNames: Set<String>, action: (String) -> Unit) {
         editBuildingDialog.create(stage, buildingNames, action)
+    }
+
+    fun openEditTagsDialog(actor: bke.iso.engine.world.actor.Actor) {
+        editTagsDialog.create(stage, actor)
     }
 }

@@ -8,3 +8,7 @@ interface Component
 @Serializable
 @SerialName("description")
 data class Description(val text: String) : Component
+
+@Serializable
+@SerialName("tags")
+data class Tags(val tags: List<String>) : Component

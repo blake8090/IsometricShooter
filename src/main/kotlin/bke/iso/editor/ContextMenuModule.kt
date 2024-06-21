@@ -1,5 +1,6 @@
 package bke.iso.editor
 
+import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Module
@@ -15,7 +16,8 @@ data class ContextMenuSelection(
 class ContextMenuModule(
     private val editorScreen: EditorScreen,
     private val buildingsModule: BuildingsModule,
-    private val world: World
+    private val world: World,
+    private val toolModule: ToolModule
 ) : Module {
 
     override fun update(deltaTime: Float) {
@@ -56,6 +58,15 @@ class ContextMenuModule(
         selections.add(ContextMenuSelection("Delete building") {
             editorScreen.closeContextMenu()
         })
+
+        val selectedActor = toolModule.getSelectedActor()
+        if (selectedActor != null && selectedActor.has<ActorPrefabReference>()) {
+            selections.add(ContextMenuSelection("Edit tags") {
+                println("Editing tags for actor $selectedActor")
+                editorScreen.openEditTagsDialog(selectedActor)
+                editorScreen.closeContextMenu()
+            })
+        }
 
         editorScreen.openContextMenu(selections)
     }
