@@ -16,10 +16,7 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.HealSystem
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HitEffectSystem
-import bke.iso.game.door.Door
-import bke.iso.game.door.DoorChangeSceneAction
 import bke.iso.game.door.DoorModule
-import bke.iso.game.door.DoorOpenAction
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerBuildingVisibilitySystem
 import bke.iso.game.player.PlayerStateModule
@@ -102,7 +99,6 @@ class GameState(override val game: Game) : State() {
 
         when (name) {
             "mission-01-roof.scene" -> initMission1RoofScene()
-            "mission-01-interior.scene" -> initMission1InteriorScene()
         }
 
         game.world.actors.each<Tags> { actor, tags ->
@@ -123,18 +119,6 @@ class GameState(override val game: Game) : State() {
     private fun initMission1RoofScene() {
         game.world.actors.each<Player> { actor, _ ->
             weaponsModule.equip(actor, "pistol")
-        }
-
-        game.world.actors.each<Door> { actor, _ ->
-            actor.add(DoorChangeSceneAction("mission-01-interior.scene"))
-            log.debug { "Set up door $actor" }
-        }
-    }
-
-    private fun initMission1InteriorScene() {
-        game.world.actors.each<Door> { actor, _ ->
-            actor.add(DoorOpenAction())
-            log.debug { "Set up door $actor" }
         }
     }
 

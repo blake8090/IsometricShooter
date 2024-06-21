@@ -1,11 +1,5 @@
 {
     "version": "1",
-    "backgroundColor": {
-        "r": 0.043,
-        "g": 0.18,
-        "b": 0.31,
-        "a": 1
-    }
     "actors": [
         {
             "pos": {
@@ -4077,7 +4071,15 @@
                 "y": 9.0,
                 "z": 2.0
             },
-            "prefab": "graybox-door-side"
+            "prefab": "graybox-door-side",
+            "componentOverrides": [
+                {
+                    "type": "tags",
+                    "tags": [
+                        "scene:mission-01-interior.scene"
+                    ]
+                }
+            ]
         },
         {
             "pos": {

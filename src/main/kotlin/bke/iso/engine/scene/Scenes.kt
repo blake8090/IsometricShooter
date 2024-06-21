@@ -43,11 +43,13 @@ class Scenes(
 
     private fun load(record: ActorRecord) {
         val prefab = assets.get<ActorPrefab>(record.prefab)
-        val actor = world.actors.create(record.pos, *copyComponents(prefab))
 
+        val components = copyComponents(prefab).toMutableList()
         for (component in record.componentOverrides) {
-            actor.add(component)
+            components.add(component)
         }
+
+        val actor = world.actors.create(record.pos, *components.toTypedArray())
 
         val building = record.building
         if (!building.isNullOrBlank()) {

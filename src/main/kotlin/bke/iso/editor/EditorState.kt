@@ -5,6 +5,7 @@ import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
+import bke.iso.editor.ui.color
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
@@ -164,7 +165,7 @@ class EditorState(override val game: Game) : State() {
             val box = actor.getCollisionBox() ?: return@each
 
             if (tags.tags.isNotEmpty()) {
-                game.renderer.fgShapes.addBox(box, 1f, Color.GREEN)
+                game.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
             }
         }
     }

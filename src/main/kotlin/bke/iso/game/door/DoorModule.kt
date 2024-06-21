@@ -6,17 +6,52 @@ import bke.iso.engine.Module
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Actors
+import bke.iso.engine.world.actor.Tags
 import bke.iso.game.GameState
 import bke.iso.game.player.Player
 import com.badlogic.gdx.math.Vector3
+import mu.KotlinLogging
 
-class DoorModule(private val world: World, private val ui: UI, private val events: Game.Events) : Module {
+class DoorModule(
+    private val world: World,
+    private val ui: UI,
+    private val events: Game.Events
+) : Module {
+
+    private val log = KotlinLogging.logger { }
 
     override fun update(deltaTime: Float) {}
 
     override fun handleEvent(event: Event) {
         if (event is OpenDoorEvent) {
             openDoor(event.actor, event.doorActor)
+        } else if (event is Actors.CreatedEvent) {
+            if (event.actor.has<Door>()) {
+                setupDoor(event.actor)
+            }
+        }
+    }
+
+    private fun setupDoor(actor: Actor) {
+        log.debug { "setting up door $actor" }
+
+        val sceneTag = findSceneTag(actor)
+        if (sceneTag != null) {
+            val sceneName = sceneTag.substringAfter(":")
+            actor.add(DoorChangeSceneAction(sceneName))
+            log.debug { "set up door $actor with action: change scene to '$sceneName'" }
+        } else {
+            actor.add(DoorOpenAction())
+            log.debug { "set up door $actor with action: open" }
+        }
+    }
+
+    private fun findSceneTag(actor: Actor): String? {
+        val tags = actor.get<Tags>() ?: return null
+
+        return tags.tags.firstOrNull { tag ->
+            tag.startsWith("scene")
         }
     }
 
