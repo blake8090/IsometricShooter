@@ -75,6 +75,10 @@ class ToolModule(
         }
     }
 
+    fun draw() {
+        selectedTool?.draw()
+    }
+
     fun performAction(): EditorCommand? =
         selectedTool?.performAction()
 

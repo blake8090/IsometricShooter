@@ -29,7 +29,9 @@ class BuildingsModule(
     fun init() {
     }
 
-    override fun update(deltaTime: Float) {
+    override fun update(deltaTime: Float) {}
+
+    fun draw() {
         for (buildingName in world.buildings.getAll()) {
             drawBuilding(buildingName)
         }

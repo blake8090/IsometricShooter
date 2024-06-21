@@ -8,8 +8,10 @@ import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.System
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -123,6 +125,11 @@ class EditorState(override val game: Game) : State() {
         }
 
         drawGrid()
+
+        buildingsModule.draw()
+        cameraModule.draw()
+        drawTaggedActors()
+        toolModule.draw()
     }
 
     private fun execute(command: EditorCommand) {
@@ -149,6 +156,16 @@ class EditorState(override val game: Game) : State() {
                 0.5f,
                 Color.WHITE
             )
+        }
+    }
+
+    private fun drawTaggedActors() {
+        game.world.actors.each<Tags> { actor, tags ->
+            val box = actor.getCollisionBox() ?: return@each
+
+            if (tags.tags.isNotEmpty()) {
+                game.renderer.fgShapes.addBox(box, 1f, Color.GREEN)
+            }
         }
     }
 }

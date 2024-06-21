@@ -34,23 +34,28 @@ class BrushTool(
     private val brushActor = world.actors.create(Vector3(), brushSprite)
     private var selection: Selection? = null
 
-    override fun update(pointerPos: Vector3) {
+    override fun update() {
+        val pos = Vector3(pointerPos)
+
         if (selection is TileSelection || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-            pointerPos.floor()
+            pos.floor()
 
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                 brushActor.with<Collider> { collider ->
-                    pointerPos.y -= collider.size.y
+                    pos.y -= collider.size.y
                 }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
                 brushActor.with<Collider> { collider ->
-                    pointerPos.x -= collider.size.x
+                    pos.x -= collider.size.x
                 }
             }
         }
-        brushActor.moveTo(pointerPos.x, pointerPos.y, pointerPos.z)
+        brushActor.moveTo(pos.x, pos.y, pos.z)
+    }
+
+    override fun draw() {
         renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)
     }
 

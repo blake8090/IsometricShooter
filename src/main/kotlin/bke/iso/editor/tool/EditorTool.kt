@@ -16,11 +16,16 @@ abstract class EditorTool {
 
     protected abstract val collisions: Collisions
 
+    protected val pointerPos = Vector3()
+
     fun update(selectedLayer: Float, pointerPos: Vector2) {
-        update(toWorld(pointerPos, selectedLayer))
+        this.pointerPos.set(toWorld(pointerPos, selectedLayer))
+        update()
     }
 
-    protected abstract fun update(pointerPos: Vector3)
+    protected abstract fun update()
+
+    abstract fun draw()
 
     /**
      * Returns a command to be executed when the button is pressed only once.
@@ -47,6 +52,7 @@ abstract class EditorTool {
      */
     open fun disable() {}
 
+    // TODO: use the field instead of passing the point?
     protected fun pickActor(point: Vector3): PickedActor? {
         val collision = collisions
             .checkCollisions(point)

@@ -26,17 +26,21 @@ class FillTool(
 
     var selectedPrefab: ActorPrefab? = null
 
-    override fun update(pointerPos: Vector3) {
+    override fun update() {
         val pos = Vector3(pointerPos).floor()
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             if (!dragging) {
                 startDragging(pos)
             }
-            renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
         } else if (dragging) {
             stopDragging(pos)
         }
+    }
+
+    override fun draw() {
+        val pos = Vector3(pointerPos).floor()
+        renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
     }
 
     private fun startDragging(pointerPos: Vector3) {

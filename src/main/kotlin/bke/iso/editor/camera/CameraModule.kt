@@ -61,16 +61,18 @@ class CameraModule(
     }
 
     override fun update(deltaTime: Float) {
-        cameraActor.getCollisionBox()?.let { box ->
-            renderer.fgShapes.addBox(box, 1f, Color.CYAN)
-        }
-
         if (editorScreen.hitMainView()) {
             panCamera()
 
             if (Gdx.input.isKeyPressed(GdxInput.Keys.C)) {
                 moveCameraActor()
             }
+        }
+    }
+
+    fun draw() {
+        cameraActor.getCollisionBox()?.let { box ->
+            renderer.fgShapes.addBox(box, 1f, Color.CYAN)
         }
     }
 

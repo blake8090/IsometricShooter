@@ -4,7 +4,6 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.math.Vector3
 
 class PointerTool(
     override val collisions: Collisions,
@@ -14,11 +13,12 @@ class PointerTool(
     private var highlighted: PickedActor? = null
     private var selected: PickedActor? = null
 
-    override fun update(pointerPos: Vector3) {
-        renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
-
+    override fun update() {
         highlighted = pickActor(pointerPos)
+    }
 
+    override fun draw() {
+        renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
         drawSelectionBox(highlighted, Color.WHITE)
         drawSelectionBox(selected, Color.RED)
     }
