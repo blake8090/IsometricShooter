@@ -35,6 +35,15 @@ class ContextMenuModule(
     private fun openMainViewContextMenu() {
         val selections = mutableSetOf<ContextMenuSelection>()
 
+        val selectedActor = toolModule.getSelectedActor()
+        if (selectedActor != null && selectedActor.has<ActorPrefabReference>()) {
+            selections.add(ContextMenuSelection("Edit tags") {
+                println("Editing tags for actor $selectedActor")
+                editorScreen.openEditTagsDialog(selectedActor)
+                editorScreen.closeContextMenu()
+            })
+        }
+
         if (buildingsModule.selectedBuilding.isNullOrBlank()) {
             selections.add(ContextMenuSelection("New building") {
                 editorScreen.openNewBuildingDialog(buildingsModule::selectBuilding)
@@ -58,15 +67,6 @@ class ContextMenuModule(
         selections.add(ContextMenuSelection("Delete building") {
             editorScreen.closeContextMenu()
         })
-
-        val selectedActor = toolModule.getSelectedActor()
-        if (selectedActor != null && selectedActor.has<ActorPrefabReference>()) {
-            selections.add(ContextMenuSelection("Edit tags") {
-                println("Editing tags for actor $selectedActor")
-                editorScreen.openEditTagsDialog(selectedActor)
-                editorScreen.closeContextMenu()
-            })
-        }
 
         editorScreen.openContextMenu(selections)
     }

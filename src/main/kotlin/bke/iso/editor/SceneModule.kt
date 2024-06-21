@@ -14,6 +14,8 @@ import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import kotlinx.serialization.encodeToString
@@ -73,6 +75,10 @@ class SceneModule(
         val prefab = assets.get<ActorPrefab>(record.prefab)
         val actor = referenceActors.create(prefab, record.pos)
 
+        for (component in record.componentOverrides) {
+            actor.add(component)
+        }
+
         val building = record.building
         if (!building.isNullOrBlank()) {
             world.buildings.add(actor, building)
@@ -93,14 +99,8 @@ class SceneModule(
         val file = dialogs.showSaveFileDialog() ?: return
 
         val actors = mutableListOf<ActorRecord>()
-        world.actors.each { actor: Actor, reference: ActorPrefabReference ->
-            actors.add(
-                ActorRecord(
-                    actor.pos,
-                    reference.prefab,
-                    world.buildings.getBuilding(actor)
-                )
-            )
+        world.actors.each<ActorPrefabReference> { actor, reference ->
+            actors.add(createActorRecord(actor, reference))
         }
 
         val tiles = mutableListOf<TileRecord>()
@@ -118,5 +118,17 @@ class SceneModule(
         val content = serializer.format.encodeToString(scene)
         file.writeText(content)
         log.info { "Saved scene: '${file.canonicalPath}'" }
+    }
+
+    private fun createActorRecord(actor: Actor, reference: ActorPrefabReference): ActorRecord {
+        val componentOverrides = mutableListOf<Component>()
+        actor.with<Tags>(componentOverrides::add)
+
+        return ActorRecord(
+            actor.pos,
+            reference.prefab,
+            world.buildings.getBuilding(actor),
+            componentOverrides
+        )
     }
 }

@@ -4,6 +4,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.State
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Tags
 import bke.iso.game.actor.FlyingTurretSystem
 import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.RollingTurretSystem
@@ -102,6 +103,10 @@ class GameState(override val game: Game) : State() {
         when (name) {
             "mission-01-roof.scene" -> initMission1RoofScene()
             "mission-01-interior.scene" -> initMission1InteriorScene()
+        }
+
+        game.world.actors.each<Tags> { actor, tags ->
+            log.debug { "Actor $actor has tags ${tags.tags}" }
         }
     }
 
