@@ -19,6 +19,7 @@ import bke.iso.game.combat.HitEffectSystem
 import bke.iso.game.door.DoorModule
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerBuildingVisibilitySystem
+import bke.iso.game.player.PlayerInteractionSystem
 import bke.iso.game.player.PlayerStateModule
 import bke.iso.game.player.PlayerWeaponSystem
 import bke.iso.game.shadow.ShadowModule
@@ -36,7 +37,7 @@ class GameState(override val game: Game) : State() {
     private val combatModule = CombatModule(game.world, game.events)
     private val weaponsModule = WeaponsModule(game.assets, game.world)
     private val doorModule = DoorModule(game.world, game.ui, game.events)
-    private val hudModule = HudModule(game.world, game.assets, weaponsModule, doorModule)
+    private val hudModule = HudModule(game.world, game.assets, weaponsModule)
     private val shadowModule = ShadowModule(game.world)
     private val playerStateModule = PlayerStateModule(game.world)
 
@@ -52,6 +53,7 @@ class GameState(override val game: Game) : State() {
         WeaponSystem(game.world, game.assets),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
         PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule, doorModule),
+        PlayerInteractionSystem(game.world, game.input, hudModule, doorModule),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         FlyingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
