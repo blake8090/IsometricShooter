@@ -4,7 +4,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.render.GameObjectRenderer
+import bke.iso.engine.render.gameobject.GameObjectRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI

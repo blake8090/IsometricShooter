@@ -1,4 +1,4 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.gameobject
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.GameObject

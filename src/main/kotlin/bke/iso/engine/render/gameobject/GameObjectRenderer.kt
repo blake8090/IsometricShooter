@@ -1,4 +1,4 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.gameobject
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
@@ -6,7 +6,12 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toScreen
+import bke.iso.engine.render.Occlude
+import bke.iso.engine.render.Sprite
+import bke.iso.engine.render.SpriteFillColor
+import bke.iso.engine.render.SpriteTintColor
 import bke.iso.engine.render.debug.DebugRenderer
+import bke.iso.engine.render.withColor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
