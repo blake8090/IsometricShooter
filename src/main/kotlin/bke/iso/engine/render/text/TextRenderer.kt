@@ -1,4 +1,4 @@
-package bke.iso.engine.render
+package bke.iso.engine.render.text
 
 import bke.iso.engine.math.toScreen
 import com.badlogic.gdx.graphics.g2d.BitmapFont

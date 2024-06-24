@@ -7,6 +7,7 @@ import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
 import bke.iso.engine.render.shape.ShapeRenderer
+import bke.iso.engine.render.text.TextRenderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
