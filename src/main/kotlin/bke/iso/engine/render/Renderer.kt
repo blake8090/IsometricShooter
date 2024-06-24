@@ -93,7 +93,7 @@ class Renderer(
     }
 
     fun setOcclusionTarget(actor: Actor?) {
-        gameObjectRenderer.occlusionTarget = actor
+        gameObjectRenderer.setOcclusionTarget(actor)
     }
 
     fun draw() {

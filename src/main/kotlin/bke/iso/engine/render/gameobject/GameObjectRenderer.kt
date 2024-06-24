@@ -6,11 +6,11 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.SpriteFillColor
 import bke.iso.engine.render.SpriteTintColor
 import bke.iso.engine.render.debug.DebugRenderer
+import bke.iso.engine.render.gameobject.occlusion.Occlusion
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
@@ -20,11 +20,9 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool
-import kotlin.math.floor
 
 class GameObjectRenderer(
     private val assets: Assets,
@@ -38,11 +36,11 @@ class GameObjectRenderer(
     }
 
     private val renderables = Array<GameObjectRenderable>()
+    private val occlusion = Occlusion(world)
 
-    var occlusionTarget: Actor? = null
-    private var occlusionTargetRenderable: GameObjectRenderable? = null
-
-    private val minimumHiddenBuildingLayer = mutableMapOf<String, Float>()
+    fun setOcclusionTarget(actor: Actor?) {
+        occlusion.target = actor
+    }
 
     fun draw(batch: PolygonSpriteBatch) {
         for (gameObject in world.getObjects()) {
@@ -52,7 +50,7 @@ class GameObjectRenderer(
         for (i in 0..<renderables.size) {
             val renderable = renderables[i]
             sortRenderables(i)
-            checkOcclusion(renderable)
+            occlusion.firstPass(renderable)
         }
 
         for (renderable in renderables) {
@@ -64,16 +62,14 @@ class GameObjectRenderer(
         }
 
         renderables.clear()
-        minimumHiddenBuildingLayer.clear()
+        occlusion.endFrame()
     }
 
     private fun addRenderable(gameObject: GameObject) {
         val renderable = getRenderable(gameObject) ?: return
         renderables.add(renderable)
 
-        if (gameObject == occlusionTarget) {
-            occlusionTargetRenderable = renderable
-        }
+        occlusion.prepare(renderable)
 
         when (gameObject) {
             is Actor -> debug.category("actors").add(gameObject)
@@ -107,7 +103,7 @@ class GameObjectRenderer(
             draw(data, batch)
         }
 
-        applyOcclusion(renderable)
+        occlusion.secondPass(renderable)
 
         val color = Color(batch.color.r, batch.color.g, batch.color.b, renderable.alpha)
         val fillColor = renderable.fillColor
@@ -149,65 +145,6 @@ class GameObjectRenderer(
         val obj = renderable.gameObject
         if (obj is Actor) {
             events.fire(DrawActorEvent(obj, batch))
-        }
-    }
-
-    private fun checkOcclusion(renderable: GameObjectRenderable) {
-        if (occlusionTarget == null) {
-            return
-        }
-
-        val gameObject = renderable.gameObject
-        if (gameObject == occlusionTarget || (gameObject is Actor && !gameObject.has<Occlude>())) {
-            return
-        }
-
-        val targetRenderable = checkNotNull(occlusionTargetRenderable) {
-            "Expected renderable for occlusion target $occlusionTarget"
-        }
-
-        val occlusionRect = getOcclusionRectangle(targetRenderable)
-        debug.category("occlusion").addRectangle(occlusionRect, 1f, Color.RED)
-        val rect = Rectangle(renderable.x, renderable.y, renderable.width, renderable.height)
-
-        val bounds = checkNotNull(renderable.bounds) {
-            "Expected bounds for renderable ${renderable.gameObject}"
-        }
-        val targetBounds = checkNotNull(targetRenderable.bounds) {
-            "Expected bounds for renderable ${targetRenderable.gameObject}"
-        }
-
-        if (inFront(bounds, targetBounds) && occlusionRect.overlaps(rect)) {
-            renderable.alpha = 0.1f
-
-            if (bounds.min.z >= targetBounds.max.z) {
-                val building = world.buildings.getBuilding(renderable.gameObject!!)
-
-                if (!building.isNullOrBlank()) {
-                    val layer = floor(bounds.min.z)
-                    val minLayer = minimumHiddenBuildingLayer[building]
-
-                    if (minLayer == null || layer < minLayer) {
-                        minimumHiddenBuildingLayer[building] = layer
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getOcclusionRectangle(renderable: GameObjectRenderable): Rectangle {
-        val w = 75f
-        val h = 75f
-        val x = renderable.x - (w / 2f) + (renderable.width / 2f)
-        val y = renderable.y - (h / 2f) + (renderable.height / 2f)
-        return Rectangle(x, y, w, h)
-    }
-
-    private fun applyOcclusion(renderable: GameObjectRenderable) {
-        val building = world.buildings.getBuilding(renderable.gameObject!!)
-        val minLayer = minimumHiddenBuildingLayer[building]
-        if (minLayer != null && floor(renderable.bounds!!.min.z) >= minLayer) {
-            renderable.alpha = 0f
         }
     }
 
