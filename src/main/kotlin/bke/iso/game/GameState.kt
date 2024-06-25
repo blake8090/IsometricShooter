@@ -6,7 +6,6 @@ import bke.iso.engine.State
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Tags
 import bke.iso.game.actor.FlyingTurretSystem
-import bke.iso.game.actor.MovingPlatformSystem
 import bke.iso.game.actor.RollingTurretSystem
 import bke.iso.game.shadow.ShadowSystem
 import bke.iso.game.player.Player
@@ -17,6 +16,8 @@ import bke.iso.game.combat.HealSystem
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HitEffectSystem
 import bke.iso.game.door.DoorModule
+import bke.iso.game.elevator.ElevatorModule
+import bke.iso.game.elevator.ElevatorSystem
 import bke.iso.game.hud.HudModule
 import bke.iso.game.player.PlayerBuildingVisibilitySystem
 import bke.iso.game.player.PlayerInteractionSystem
@@ -40,30 +41,32 @@ class GameState(override val game: Game) : State() {
     private val hudModule = HudModule(game.world, game.assets, weaponsModule)
     private val shadowModule = ShadowModule(game.world)
     private val playerStateModule = PlayerStateModule(game.world)
+    private val elevatorModule = ElevatorModule(game.collisions)
 
     override val modules = setOf(
         hudModule,
         weaponsModule,
         combatModule,
         shadowModule,
-        doorModule
+        doorModule,
+        elevatorModule
     )
 
     override val systems = linkedSetOf(
         WeaponSystem(game.world, game.assets),
         PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
-        PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule, doorModule),
-        PlayerInteractionSystem(game.world, game.input, hudModule, doorModule),
+        PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule),
+        PlayerInteractionSystem(game.world, game.input, hudModule, doorModule, elevatorModule),
         TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
         RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         FlyingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
         BulletSystem(game.world, combatModule, game.collisions),
         ExplosionSystem(game.world),
-        MovingPlatformSystem(game.world),
         ShadowSystem(game.world, game.collisions),
         HealSystem(game.world, game.events),
         HitEffectSystem(game.world),
-        PlayerBuildingVisibilitySystem(game.world)
+        PlayerBuildingVisibilitySystem(game.world),
+        ElevatorSystem(game.world)
     )
 
     private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)

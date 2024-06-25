@@ -46,7 +46,7 @@ class IsometricShooter : GameInfo() {
                 ),
                 "crouch" to KeyBinding(Input.Keys.C, ButtonState.PRESSED),
                 "useMedkit" to KeyBinding(Input.Keys.Q, ButtonState.PRESSED),
-                "openDoor" to KeyBinding(Input.Keys.E, ButtonState.PRESSED)
+                "interact" to KeyBinding(Input.Keys.E, ButtonState.PRESSED)
             )
             bind(
                 "moveY",
@@ -87,10 +87,7 @@ class IsometricShooter : GameInfo() {
                     ControllerButton.DPAD_UP.ordinal,
                     ButtonState.PRESSED
                 ),
-                "openDoor" to ControllerBinding(
-                    ControllerButton.Y.ordinal,
-                    ButtonState.PRESSED
-                )
+                "interact" to ControllerBinding(ControllerButton.Y.ordinal, ButtonState.PRESSED)
             )
         }
     }

@@ -10,12 +10,8 @@
       scale: 1.0
     },
     {
-      type: "movingPlatform",
-      speed: 1.0,
-      maxZ: 2.0,
-      minZ: 0.0,
-      pauseSeconds: 1.0,
-      movingUp: true
+      type: "elevator",
+      speed: 1
     },
     {
       type: "collider",

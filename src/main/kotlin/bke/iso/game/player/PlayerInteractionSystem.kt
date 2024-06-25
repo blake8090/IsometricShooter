@@ -4,18 +4,18 @@ import bke.iso.engine.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
-import bke.iso.game.actor.MovingPlatform
 import bke.iso.game.door.DoorChangeSceneAction
 import bke.iso.game.door.DoorModule
 import bke.iso.game.door.DoorOpenAction
+import bke.iso.game.elevator.ElevatorModule
 import bke.iso.game.hud.HudModule
-import com.badlogic.gdx.math.Vector3
 
 class PlayerInteractionSystem(
     private val world: World,
     private val input: Input,
     private val hudModule: HudModule,
-    private val doorModule: DoorModule
+    private val doorModule: DoorModule,
+    private val elevatorModule: ElevatorModule
 ) : System {
     override fun update(deltaTime: Float) {
         world.actors.each<Player> { actor, _ ->
@@ -27,12 +27,12 @@ class PlayerInteractionSystem(
         hudModule.hideInteractionText()
 
         val doorActor = doorModule.getNearestDoor(actor.pos, PLAYER_DOOR_ACTION_RADIUS)
-        val platform = getNearestPlatform(actor.pos, PLAYER_DOOR_ACTION_RADIUS)
+        val elevatorActor = elevatorModule.findElevatorUnderneath(actor)
 
         if (doorActor != null) {
             handleDoor(actor, doorActor)
-        } else if (platform != null) {
-            hudModule.setInteractionText("Press E or Y to ride")
+        } else if (elevatorActor != null) {
+            handleElevator(elevatorActor)
         }
     }
 
@@ -48,12 +48,13 @@ class PlayerInteractionSystem(
         }
     }
 
-    private fun getNearestPlatform(pos: Vector3, range: Float): Actor? {
-        for (actor in world.actors.findAll<MovingPlatform>()) {
-            if (actor.pos.dst(pos) <= range) {
-                return actor
-            }
+    private fun handleElevator(elevatorActor: Actor) {
+        if (elevatorModule.canStartElevator(elevatorActor)) {
+            hudModule.setInteractionText("Press E or Y to ride")
         }
-        return null
+
+        input.onAction("interact") {
+            elevatorModule.startElevator(elevatorActor)
+        }
     }
 }
