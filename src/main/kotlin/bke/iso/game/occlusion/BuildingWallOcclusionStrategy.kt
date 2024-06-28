@@ -13,7 +13,11 @@ import bke.iso.game.actor.door.Door
 class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {
 
 
-    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable) {
+    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
+        if (targetRenderable == null) {
+            return
+        }
+
         val gameObject = checkNotNull(renderable.gameObject)
         val building = world.buildings.getBuilding(gameObject) ?: return
         val buildingBounds = world.buildings.getBounds(building) ?: return
@@ -33,9 +37,7 @@ class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrateg
         return box.max.x >= buildingBounds.max.x || box.min.y <= buildingBounds.min.y
     }
 
-    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable) {
-
-    }
+    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {}
 
     override fun endFrame() {
     }

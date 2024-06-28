@@ -25,16 +25,14 @@ class Occlusion {
     }
 
     fun firstPass(renderable: GameObjectRenderable) {
-        val t = targetRenderable ?: return
         for (strategy in strategies) {
-            strategy.firstPass(renderable, t)
+            strategy.firstPass(renderable, targetRenderable)
         }
     }
 
     fun secondPass(renderable: GameObjectRenderable) {
-        val t = targetRenderable ?: return
         for (strategy in strategies) {
-            strategy.secondPass(renderable, t)
+            strategy.secondPass(renderable, targetRenderable)
         }
     }
 
@@ -42,6 +40,7 @@ class Occlusion {
         for (strategy in strategies) {
             strategy.endFrame()
         }
+        targetRenderable = null
     }
 
     fun resetStrategies() {

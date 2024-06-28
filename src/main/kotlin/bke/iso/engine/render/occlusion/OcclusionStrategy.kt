@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Rectangle
 
 abstract class OcclusionStrategy {
 
-    abstract fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable)
+    abstract fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?)
 
-    abstract fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable)
+    abstract fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?)
 
     abstract fun endFrame()
 

@@ -11,7 +11,11 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
 
     private var minimumLayer: Float? = null
 
-    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable) {
+    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
+        if (targetRenderable == null) {
+            return
+        }
+
         val targetFloor = getFloor(targetRenderable)
         val floor = getFloor(renderable)
         if (floor != targetFloor) {
@@ -33,8 +37,7 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
         }
     }
 
-    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable) {
-    }
+    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {}
 
     override fun endFrame() {
         minimumLayer = null

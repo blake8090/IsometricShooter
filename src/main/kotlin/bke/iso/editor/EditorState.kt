@@ -34,7 +34,8 @@ class EditorState(override val game: Game) : State() {
     private val layerModule = LayerModule(
         editorScreen,
         game.world,
-        game.events
+        game.events,
+        game.renderer
     )
     private val toolModule = ToolModule(
         game.collisions,
