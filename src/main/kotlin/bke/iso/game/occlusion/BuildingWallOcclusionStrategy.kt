@@ -8,7 +8,7 @@ import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.has
-import bke.iso.game.door.Door
+import bke.iso.game.actor.door.Door
 
 class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {
 

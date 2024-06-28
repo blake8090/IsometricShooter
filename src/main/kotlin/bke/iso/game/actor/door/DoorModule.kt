@@ -1,4 +1,4 @@
-package bke.iso.game.door
+package bke.iso.game.actor.door
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
@@ -9,7 +9,7 @@ import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
 import bke.iso.engine.world.actor.Tags
 import bke.iso.game.GameState
-import bke.iso.game.player.Player
+import bke.iso.game.actor.player.Player
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
 

@@ -1,4 +1,4 @@
-package bke.iso.game.player
+package bke.iso.game.actor.player
 
 import bke.iso.engine.world.actor.Component
 import kotlinx.serialization.SerialName

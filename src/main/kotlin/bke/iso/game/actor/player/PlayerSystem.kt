@@ -1,4 +1,4 @@
-package bke.iso.game.player
+package bke.iso.game.actor.player
 
 import bke.iso.engine.System
 import bke.iso.engine.collision.Collider

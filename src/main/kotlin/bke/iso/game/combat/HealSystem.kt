@@ -4,7 +4,7 @@ import bke.iso.engine.Game
 import bke.iso.engine.System
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
-import bke.iso.game.player.Player
+import bke.iso.game.actor.player.Player
 import kotlin.math.min
 
 class HealSystem(

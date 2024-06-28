@@ -1,4 +1,4 @@
-package bke.iso.game.shadow
+package bke.iso.game.actor.shadow
 
 import bke.iso.engine.Event
 import bke.iso.engine.Module

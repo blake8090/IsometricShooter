@@ -14,7 +14,7 @@ import bke.iso.game.actor.Inventory
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
-import bke.iso.game.player.Player
+import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
 import bke.iso.game.weapon.Weapon

@@ -1,4 +1,4 @@
-package bke.iso.game.shadow
+package bke.iso.game.actor.shadow
 
 import bke.iso.engine.world.actor.Component
 import kotlinx.serialization.SerialName

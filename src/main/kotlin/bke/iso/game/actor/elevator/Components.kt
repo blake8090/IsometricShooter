@@ -1,4 +1,4 @@
-package bke.iso.game.elevator
+package bke.iso.game.actor.elevator
 
 import bke.iso.engine.world.actor.Component
 import kotlinx.serialization.SerialName

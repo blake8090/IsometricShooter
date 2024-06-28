@@ -1,4 +1,4 @@
-package bke.iso.game.door
+package bke.iso.game.actor.door
 
 import bke.iso.engine.world.actor.Component
 import kotlinx.serialization.SerialName

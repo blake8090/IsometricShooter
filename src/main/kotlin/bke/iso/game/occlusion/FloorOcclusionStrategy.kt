@@ -4,7 +4,7 @@ import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.actor.has
-import bke.iso.game.elevator.Elevator
+import bke.iso.game.actor.elevator.Elevator
 import kotlin.math.floor
 
 class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy() {

@@ -1,4 +1,4 @@
-package bke.iso.game.elevator
+package bke.iso.game.actor.elevator
 
 import bke.iso.engine.Event
 import bke.iso.engine.Module

@@ -1,13 +1,13 @@
-package bke.iso.game.player
+package bke.iso.game.actor.player
 
 import bke.iso.engine.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
-import bke.iso.game.door.DoorChangeSceneAction
-import bke.iso.game.door.DoorModule
-import bke.iso.game.door.DoorOpenAction
-import bke.iso.game.elevator.ElevatorModule
+import bke.iso.game.actor.door.DoorChangeSceneAction
+import bke.iso.game.actor.door.DoorModule
+import bke.iso.game.actor.door.DoorOpenAction
+import bke.iso.game.actor.elevator.ElevatorModule
 import bke.iso.game.hud.HudModule
 
 class PlayerInteractionSystem(
