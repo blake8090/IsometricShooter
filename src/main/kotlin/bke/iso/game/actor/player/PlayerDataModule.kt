@@ -7,15 +7,15 @@ import bke.iso.game.weapon.Weapon
 import mu.KotlinLogging
 
 /**
- * Keeps track of the player's state when changing scenes; health, weapons, ammo, etc.
+ * Keeps track of the player's data when changing scenes; health, weapons, ammo, etc.
  */
-class PlayerStateModule(private val world: World) {
+class PlayerDataModule(private val world: World) {
 
     private val log = KotlinLogging.logger {}
 
     private var savedData: PlayerData? = null
 
-    fun saveState() {
+    fun saveData() {
         val actor = world.actors.find<Player>() ?: return
 
         val health = checkNotNull(actor.get<Health>()) {
@@ -35,7 +35,7 @@ class PlayerStateModule(private val world: World) {
         log.debug { "Saved player data" }
     }
 
-    fun loadState() {
+    fun loadData() {
         val data = savedData ?: return
         val actor = world.actors.find<Player>() ?: return
 

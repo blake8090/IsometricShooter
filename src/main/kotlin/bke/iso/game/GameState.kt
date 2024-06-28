@@ -22,7 +22,7 @@ import bke.iso.game.hud.HudModule
 import bke.iso.game.occlusion.BuildingWallOcclusionStrategy
 import bke.iso.game.occlusion.FloorOcclusionStrategy
 import bke.iso.game.actor.player.PlayerInteractionSystem
-import bke.iso.game.actor.player.PlayerStateModule
+import bke.iso.game.actor.player.PlayerDataModule
 import bke.iso.game.actor.player.PlayerWeaponSystem
 import bke.iso.game.actor.shadow.ShadowModule
 import bke.iso.game.ui.CrosshairPointer
@@ -41,7 +41,7 @@ class GameState(override val game: Game) : State() {
     private val doorModule = DoorModule(game.world, game.ui, game.events)
     private val hudModule = HudModule(game.world, game.assets, weaponsModule)
     private val shadowModule = ShadowModule(game.world)
-    private val playerStateModule = PlayerStateModule(game.world)
+    private val playerDataModule = PlayerDataModule(game.world)
     private val elevatorModule = ElevatorModule(game.collisions)
 
     override val modules = setOf(
@@ -91,13 +91,13 @@ class GameState(override val game: Game) : State() {
 
     private fun loadScene(name: String, savePlayerData: Boolean) {
         if (savePlayerData) {
-            playerStateModule.saveState()
+            playerDataModule.saveData()
         }
 
         game.scenes.load(name)
 
         if (savePlayerData) {
-            playerStateModule.loadState()
+            playerDataModule.loadData()
         }
 
         initPlayer()
