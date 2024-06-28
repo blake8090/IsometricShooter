@@ -50,14 +50,14 @@ class PlayerSystem(
     private fun updatePlayer(playerActor: Actor, player: Player) {
         input.onAction("crouch") {
             if (player.state == PlayerState.STAND) {
-                switchState(playerActor, player, PlayerState.CROUCH)
+                setCrouchState(playerActor, player)
             } else if (player.state == PlayerState.CROUCH) {
-                switchState(playerActor, player, PlayerState.STAND)
+                setStandState(playerActor, player)
             }
         }
 
         if (player.state == PlayerState.NONE) {
-            switchState(playerActor, player, PlayerState.STAND)
+            setStandState(playerActor, player)
         }
 
         val direction = input.pollAxes(actionX = "moveX", actionY = "moveY", CONTROLLER_DEADZONE)
@@ -132,44 +132,37 @@ class PlayerSystem(
         log.debug { "used medkit" }
     }
 
-    private fun switchState(playerActor: Actor, player: Player, state: PlayerState) {
-        log.debug { "player state set from ${player.state} to $state at z: ${playerActor.z}" }
-        when (state) {
-            PlayerState.STAND -> {
-                player.state = PlayerState.STAND
-                playerActor.add(
-                    Sprite(
-                        texture = "character-stand.png",
-                        offsetX = 16.0f
-                    )
-                )
-                playerActor.add(
-                    Collider(
-                        size = Vector3(0.4f, 0.4f, 1.5f),
-                        offset = Vector3(-0.2f, -0.2f, 0.0f)
-                    )
-                )
-                playerActor.add(RangedWeaponOffset(0f, 0f, 1.13f))
-            }
+    private fun setStandState(playerActor: Actor, player: Player) {
+        player.state = PlayerState.STAND
+        playerActor.add(
+            Sprite(
+                texture = "character-stand.png",
+                offsetX = 16.0f
+            )
+        )
+        playerActor.add(
+            Collider(
+                size = Vector3(0.4f, 0.4f, 1.5f),
+                offset = Vector3(-0.2f, -0.2f, 0.0f)
+            )
+        )
+        playerActor.add(RangedWeaponOffset(0f, 0f, 1.13f))
+    }
 
-            PlayerState.CROUCH -> {
-                player.state = PlayerState.CROUCH
-                playerActor.add(
-                    Sprite(
-                        texture = "character-crouch.png",
-                        offsetX = 18.0f,
-                    )
-                )
-                playerActor.add(
-                    Collider(
-                        size = Vector3(0.4f, 0.4f, 1.0f),
-                        offset = Vector3(-0.2f, -0.2f, 0.0f)
-                    )
-                )
-                playerActor.add(RangedWeaponOffset(0f, 0f, 0.7f))
-            }
-
-            else -> {}
-        }
+    private fun setCrouchState(playerActor: Actor, player: Player) {
+        player.state = PlayerState.CROUCH
+        playerActor.add(
+            Sprite(
+                texture = "character-crouch.png",
+                offsetX = 18.0f,
+            )
+        )
+        playerActor.add(
+            Collider(
+                size = Vector3(0.4f, 0.4f, 1.0f),
+                offset = Vector3(-0.2f, -0.2f, 0.0f)
+            )
+        )
+        playerActor.add(RangedWeaponOffset(0f, 0f, 0.7f))
     }
 }
