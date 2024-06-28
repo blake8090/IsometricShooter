@@ -14,6 +14,7 @@ class Occlusion(world: World) {
     init {
         strategies.add(BasicOcclusionStrategy())
         strategies.add(BuildingLayerOcclusionStrategy(world))
+        strategies.add(FloorOcclusionStrategy())
     }
 
     fun prepare(renderable: GameObjectRenderable) {
@@ -40,5 +41,10 @@ class Occlusion(world: World) {
         for (strategy in strategies) {
             strategy.endFrame()
         }
+    }
+
+    fun resetStrategies() {
+        strategies.clear()
+        strategies.add(BasicOcclusionStrategy())
     }
 }
