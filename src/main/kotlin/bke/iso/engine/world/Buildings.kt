@@ -9,6 +9,7 @@ class Buildings {
 
     private val objectsByBuilding = mutableMapOf<String, MutableSet<GameObject>>()
     private val buildingByObject = mutableMapOf<GameObject, String>()
+    private val boundsByBuilding = mutableMapOf<String, Box>()
 
     fun add(gameObject: GameObject, buildingName: String) {
         require(buildingName.isNotBlank()) {
@@ -19,9 +20,18 @@ class Buildings {
             .getOrPut(buildingName) { mutableSetOf() }
             .add(gameObject)
         buildingByObject[gameObject] = buildingName
+
+        val bounds = generateBounds(buildingName)
+        if (bounds != null) {
+            boundsByBuilding[buildingName] = bounds
+        }
     }
 
     fun getBounds(buildingName: String): Box? {
+        return boundsByBuilding[buildingName]
+    }
+
+    private fun generateBounds(buildingName: String): Box? {
         val boxes = objectsByBuilding[buildingName]
             ?.mapNotNull(GameObject::getCollisionBox)
             ?: emptyList()
@@ -50,11 +60,6 @@ class Buildings {
     fun getAll(): Set<String> =
         objectsByBuilding.keys
 
-    fun getAllObjects(buildingName: String): Set<GameObject> =
-        checkNotNull(objectsByBuilding[buildingName]) {
-            "Building $buildingName not found"
-        }
-
     fun remove(actor: Actor) {
         buildingByObject.remove(actor)
         for ((_, objects) in objectsByBuilding) {
@@ -65,5 +70,6 @@ class Buildings {
     fun clear() {
         objectsByBuilding.clear()
         buildingByObject.clear()
+        boundsByBuilding.clear()
     }
 }
