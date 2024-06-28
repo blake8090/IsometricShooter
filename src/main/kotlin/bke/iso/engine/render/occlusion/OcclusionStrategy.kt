@@ -1,4 +1,4 @@
-package bke.iso.engine.render.gameobject.occlusion
+package bke.iso.engine.render.occlusion
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Occlude

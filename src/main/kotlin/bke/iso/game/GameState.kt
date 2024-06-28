@@ -104,6 +104,7 @@ class GameState(override val game: Game) : State() {
 
         when (name) {
             "mission-01-roof.scene" -> initMission1RoofScene()
+            "mission-01-interior.scene" -> initMission1InteriorScene()
         }
 
         game.world.actors.each<Tags> { actor, tags ->
@@ -113,7 +114,7 @@ class GameState(override val game: Game) : State() {
 
     private fun initPlayer() {
         game.world.actors.each { actor: Actor, _: Player ->
-            game.renderer.setOcclusionTarget(actor)
+            game.renderer.occlusion.target = actor
 
             actor.with<Health> { health ->
                 hudModule.updateHealthBar(health.value, health.maxValue)
@@ -125,6 +126,11 @@ class GameState(override val game: Game) : State() {
         game.world.actors.each<Player> { actor, _ ->
             weaponsModule.equip(actor, "pistol")
         }
+    }
+
+    private fun initMission1InteriorScene() {
+        game.renderer.occlusion.resetStrategies()
+        game.renderer.occlusion.addStrategy(FloorOcclusionStrategy(floorHeight = 2f))
     }
 
     data class LoadSceneEvent(

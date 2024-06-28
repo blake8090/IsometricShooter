@@ -1,4 +1,4 @@
-package bke.iso.engine.render.gameobject.occlusion
+package bke.iso.engine.render.occlusion
 
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.world.World

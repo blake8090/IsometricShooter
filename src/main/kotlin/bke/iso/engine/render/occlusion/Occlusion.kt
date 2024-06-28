@@ -1,10 +1,9 @@
-package bke.iso.engine.render.gameobject.occlusion
+package bke.iso.engine.render.occlusion
 
 import bke.iso.engine.render.gameobject.GameObjectRenderable
-import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 
-class Occlusion(world: World) {
+class Occlusion {
 
     var target: Actor? = null
     private var targetRenderable: GameObjectRenderable? = null
@@ -12,9 +11,11 @@ class Occlusion(world: World) {
     private val strategies = mutableListOf<OcclusionStrategy>()
 
     init {
-        strategies.add(BasicOcclusionStrategy())
-        strategies.add(BuildingLayerOcclusionStrategy(world))
-        strategies.add(FloorOcclusionStrategy())
+        resetStrategies()
+    }
+
+    fun addStrategy(occlusionStrategy: OcclusionStrategy) {
+        strategies.add(occlusionStrategy)
     }
 
     fun prepare(renderable: GameObjectRenderable) {

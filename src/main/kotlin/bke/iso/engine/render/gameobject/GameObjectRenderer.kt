@@ -10,7 +10,7 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.SpriteFillColor
 import bke.iso.engine.render.SpriteTintColor
 import bke.iso.engine.render.debug.DebugRenderer
-import bke.iso.engine.render.gameobject.occlusion.Occlusion
+import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
@@ -28,7 +28,8 @@ class GameObjectRenderer(
     private val assets: Assets,
     private val world: World,
     private val events: Game.Events,
-    private val debug: DebugRenderer
+    private val debug: DebugRenderer,
+    private val occlusion: Occlusion
 ) {
 
     private val pool = object : Pool<GameObjectRenderable>() {
@@ -36,11 +37,6 @@ class GameObjectRenderer(
     }
 
     private val renderables = Array<GameObjectRenderable>()
-    private val occlusion = Occlusion(world)
-
-    fun setOcclusionTarget(actor: Actor?) {
-        occlusion.target = actor
-    }
 
     fun draw(batch: PolygonSpriteBatch) {
         for (gameObject in world.getObjects()) {

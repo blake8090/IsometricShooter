@@ -5,11 +5,11 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.gameobject.GameObjectRenderer
+import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
 import bke.iso.engine.render.shape.ShapeRenderer
 import bke.iso.engine.render.text.TextRenderer
-import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -65,7 +65,8 @@ class Renderer(
 
     var bgColor: Color = Color.GRAY
 
-    private val gameObjectRenderer = GameObjectRenderer(assets, world, events, debug)
+    val occlusion = Occlusion()
+    private val gameObjectRenderer = GameObjectRenderer(assets, world, events, debug, occlusion)
     private val textRenderer = TextRenderer()
 
     init {
@@ -90,10 +91,6 @@ class Renderer(
 
     fun setCameraPos(worldPos: Vector3) {
         camera.position.set(toScreen(worldPos), 0f)
-    }
-
-    fun setOcclusionTarget(actor: Actor?) {
-        gameObjectRenderer.setOcclusionTarget(actor)
     }
 
     fun draw() {

@@ -110,10 +110,10 @@ class CameraModule(
         wallsHidden = !wallsHidden
         if (wallsHidden) {
             log.debug { "Hiding walls" }
-            renderer.setOcclusionTarget(cameraActor)
+            renderer.occlusion.target = cameraActor
         } else {
             log.debug { "Showing walls" }
-            renderer.setOcclusionTarget(null)
+            renderer.occlusion.target = null
         }
     }
 
