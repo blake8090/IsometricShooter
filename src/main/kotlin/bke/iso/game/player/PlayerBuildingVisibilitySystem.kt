@@ -11,6 +11,7 @@ import bke.iso.game.door.Door
 /**
  * When the player enters a building, hides walls on the south and east sides so that the player is not obscured.
  */
+// TODO: make this an occlusion strategy
 class PlayerBuildingVisibilitySystem(private val world: World) : System {
 
     override fun update(deltaTime: Float) {
