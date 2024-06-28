@@ -7,6 +7,7 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.engine.world.actor.has
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max
 
@@ -72,7 +73,7 @@ class ShadowSystem(
     private fun filterCollision(parent: Actor, collision: Collision) =
         if (parent == collision.obj) {
             false
-        } else if (collision.obj is Actor && collision.obj.has<Shadow>()) {
+        } else if (collision.obj.has<Shadow>()) {
             false
         } else {
             true

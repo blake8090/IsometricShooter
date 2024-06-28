@@ -5,7 +5,7 @@ import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.has
 import com.badlogic.gdx.math.Rectangle
 
 abstract class OcclusionStrategy {
@@ -36,7 +36,7 @@ abstract class OcclusionStrategy {
         return if (gameObject is Tile) {
             true
         } else {
-            gameObject is Actor && gameObject.has<Occlude>()
+            gameObject.has<Occlude>()
         }
     }
 
