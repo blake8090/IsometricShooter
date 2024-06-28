@@ -36,10 +36,24 @@ class GameState(override val game: Game) : State() {
 
     private val log = KotlinLogging.logger {}
 
-    private val combatModule = CombatModule(game.world, game.events)
-    private val weaponsModule = WeaponsModule(game.assets, game.world)
-    private val doorModule = DoorModule(game.world, game.ui, game.events)
-    private val hudModule = HudModule(game.world, game.assets, weaponsModule)
+    private val combatModule = CombatModule(
+        game.world,
+        game.events
+    )
+    private val weaponsModule = WeaponsModule(
+        game.assets,
+        game.world
+    )
+    private val doorModule = DoorModule(
+        game.world,
+        game.ui,
+        game.events
+    )
+    private val hudModule = HudModule(
+        game.world,
+        game.assets,
+        weaponsModule
+    )
     private val shadowModule = ShadowModule(game.world)
     private val playerDataModule = PlayerDataModule(game.world)
     private val elevatorModule = ElevatorModule(game.collisions)
@@ -54,22 +68,77 @@ class GameState(override val game: Game) : State() {
     )
 
     override val systems = linkedSetOf(
-        WeaponSystem(game.world, game.assets),
-        PlayerWeaponSystem(game.world, game.input, game.renderer, game.events, weaponsModule),
-        PlayerSystem(game.input, game.world, game.renderer, game.collisions, combatModule),
-        PlayerInteractionSystem(game.world, game.input, hudModule, doorModule, elevatorModule),
-        TurretSystem(game.world, game.collisions, game.renderer.debug, game.events, weaponsModule),
-        RollingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
-        FlyingTurretSystem(game.world, game.collisions, game.renderer, game.events, weaponsModule),
-        BulletSystem(game.world, combatModule, game.collisions),
+        WeaponSystem(
+            game.world,
+            game.assets
+        ),
+        PlayerWeaponSystem(
+            game.world,
+            game.input,
+            game.renderer,
+            game.events,
+            weaponsModule
+        ),
+        PlayerSystem(
+            game.input,
+            game.world,
+            game.renderer,
+            game.collisions,
+            combatModule
+        ),
+        PlayerInteractionSystem(
+            game.world,
+            game.input,
+            hudModule,
+            doorModule,
+            elevatorModule
+        ),
+        TurretSystem(
+            game.world,
+            game.collisions,
+            game.renderer.debug,
+            game.events,
+            weaponsModule
+        ),
+        RollingTurretSystem(
+            game.world,
+            game.collisions,
+            game.renderer,
+            game.events,
+            weaponsModule
+        ),
+        FlyingTurretSystem(
+            game.world,
+            game.collisions,
+            game.renderer,
+            game.events,
+            weaponsModule
+        ),
+        BulletSystem(
+            game.world,
+            combatModule,
+            game.collisions
+        ),
         ExplosionSystem(game.world),
-        ShadowSystem(game.world, game.collisions),
-        HealSystem(game.world, game.events),
+        ShadowSystem(
+            game.world,
+            game.collisions
+        ),
+        HealSystem(
+            game.world,
+            game.events
+        ),
         HitEffectSystem(game.world),
         ElevatorSystem(game.world)
     )
 
-    private val crosshair = CrosshairPointer(game.assets, game.input, game.world, game.renderer, weaponsModule)
+    private val crosshair = CrosshairPointer(
+        game.assets,
+        game.input,
+        game.world,
+        game.renderer,
+        weaponsModule
+    )
 
     override suspend fun load() {
         game.assets.loadAsync("game")
