@@ -19,7 +19,8 @@ import bke.iso.game.door.DoorModule
 import bke.iso.game.elevator.ElevatorModule
 import bke.iso.game.elevator.ElevatorSystem
 import bke.iso.game.hud.HudModule
-import bke.iso.game.player.PlayerBuildingVisibilitySystem
+import bke.iso.game.occlusion.BuildingWallOcclusionStrategy
+import bke.iso.game.occlusion.FloorOcclusionStrategy
 import bke.iso.game.player.PlayerInteractionSystem
 import bke.iso.game.player.PlayerStateModule
 import bke.iso.game.player.PlayerWeaponSystem
@@ -65,7 +66,6 @@ class GameState(override val game: Game) : State() {
         ShadowSystem(game.world, game.collisions),
         HealSystem(game.world, game.events),
         HitEffectSystem(game.world),
-        PlayerBuildingVisibilitySystem(game.world),
         ElevatorSystem(game.world)
     )
 
@@ -129,8 +129,11 @@ class GameState(override val game: Game) : State() {
     }
 
     private fun initMission1InteriorScene() {
-        game.renderer.occlusion.resetStrategies()
-        game.renderer.occlusion.addStrategy(FloorOcclusionStrategy(floorHeight = 2f))
+        game.renderer.occlusion.apply {
+            resetStrategies()
+            addStrategy(BuildingWallOcclusionStrategy(game.world))
+            addStrategy(FloorOcclusionStrategy(floorHeight = 2f))
+        }
     }
 
     data class LoadSceneEvent(

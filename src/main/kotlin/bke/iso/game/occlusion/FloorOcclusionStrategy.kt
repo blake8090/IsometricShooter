@@ -1,4 +1,4 @@
-package bke.iso.game
+package bke.iso.game.occlusion
 
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
