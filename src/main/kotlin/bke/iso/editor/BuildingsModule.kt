@@ -16,6 +16,7 @@ class BuildingsModule(
     private val world: World,
     private val renderer: Renderer,
     private val editorScreen: EditorScreen,
+    private val layerModule: LayerModule,
     assets: Assets
 ) : Module {
 
@@ -39,6 +40,10 @@ class BuildingsModule(
 
     private fun drawBuilding(name: String) {
         val box = world.buildings.getBounds(name) ?: return
+
+        if (box.min.z > layerModule.selectedLayer && layerModule.hideUpperLayers) {
+            return
+        }
 
         val color =
             if (selectedBuilding == name) {
