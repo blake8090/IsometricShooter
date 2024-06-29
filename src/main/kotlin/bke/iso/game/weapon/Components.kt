@@ -47,3 +47,7 @@ data class Explosion(
     val timeSeconds: Float = 0f,
     var timer: Float = timeSeconds
 ) : Component
+
+@Serializable
+@SerialName("weaponPickup")
+data class WeaponPickup(val name: String) : Component

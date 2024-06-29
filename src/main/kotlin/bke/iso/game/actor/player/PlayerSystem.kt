@@ -14,6 +14,8 @@ import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.RangedWeaponOffset
+import bke.iso.game.weapon.WeaponPickup
+import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import mu.KotlinLogging
@@ -32,7 +34,8 @@ class PlayerSystem(
     private val world: World,
     private val renderer: Renderer,
     private val collisions: Collisions,
-    private val combatModule: CombatModule
+    private val combatModule: CombatModule,
+    private val weaponsModule: WeaponsModule
 ) : System {
 
     private val log = KotlinLogging.logger {}
@@ -115,6 +118,11 @@ class PlayerSystem(
             val inventory = playerActor.getOrAdd(Inventory())
             inventory.numMedkits++
             log.debug { "Picked up medkit. Player now has ${inventory.numMedkits} medkits" }
+            world.delete(obj)
+        } else if (obj is Actor && obj.has<WeaponPickup>()) {
+            log.debug { "Picking up weapon" }
+            val weaponName = obj.get<WeaponPickup>()!!.name
+            weaponsModule.equip(playerActor, weaponName)
             world.delete(obj)
         }
     }

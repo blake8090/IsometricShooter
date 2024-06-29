@@ -84,7 +84,8 @@ class GameState(override val game: Game) : State() {
             game.world,
             game.renderer,
             game.collisions,
-            combatModule
+            combatModule,
+            weaponsModule
         ),
         PlayerInteractionSystem(
             game.world,
