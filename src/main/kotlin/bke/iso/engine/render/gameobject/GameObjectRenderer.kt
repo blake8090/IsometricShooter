@@ -101,6 +101,10 @@ class GameObjectRenderer(
 
         occlusion.secondPass(renderable)
 
+        if (renderable.alpha == 0f) {
+            return
+        }
+
         val color = Color(batch.color.r, batch.color.g, batch.color.b, renderable.alpha)
         val fillColor = renderable.fillColor
         val tintColor = renderable.tintColor
