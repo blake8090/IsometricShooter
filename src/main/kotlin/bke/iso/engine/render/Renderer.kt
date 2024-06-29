@@ -66,7 +66,15 @@ class Renderer(
     var bgColor: Color = Color.GRAY
 
     val occlusion = Occlusion()
-    private val gameObjectRenderer = GameObjectRenderer(assets, world, events, debug, occlusion)
+
+    private val gameObjectRenderer = GameObjectRenderer(
+        assets,
+        world,
+        events,
+        debug,
+        occlusion,
+        camera
+    )
     private val textRenderer = TextRenderer()
 
     init {

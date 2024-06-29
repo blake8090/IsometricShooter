@@ -17,6 +17,7 @@ import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -29,7 +30,8 @@ class GameObjectRenderer(
     private val world: World,
     private val events: Game.Events,
     private val debug: DebugRenderer,
-    private val occlusion: Occlusion
+    private val occlusion: Occlusion,
+    private val camera: OrthographicCamera
 ) {
 
     private val pool = object : Pool<GameObjectRenderable>() {
@@ -62,7 +64,11 @@ class GameObjectRenderer(
     }
 
     private fun addRenderable(gameObject: GameObject) {
-        val renderable = getRenderable(gameObject) ?: return
+        val renderable = getRenderable(gameObject)
+        if (renderable == null || !inFrustum(renderable)) {
+            return
+        }
+
         renderables.add(renderable)
 
         occlusion.prepare(renderable)
@@ -72,6 +78,16 @@ class GameObjectRenderer(
             is Tile -> debug.category("actors").add(gameObject)
         }
     }
+
+    private fun inFrustum(renderable: GameObjectRenderable): Boolean =
+        camera.frustum.boundsInFrustum(
+            /* x = */ renderable.x,
+            /* y = */ renderable.y,
+            /* z = */ 0f,
+            /* halfWidth = */ renderable.width,
+            /* halfHeight = */ renderable.height,
+            /* halfDepth = */ 0f
+        )
 
     private fun sortRenderables(start: Int) {
         val a = renderables[start]
