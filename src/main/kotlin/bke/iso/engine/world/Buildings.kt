@@ -21,23 +21,19 @@ class Buildings {
             .add(gameObject)
         buildingByObject[gameObject] = buildingName
 
-        val bounds = generateBounds(buildingName)
-        if (bounds != null) {
-            boundsByBuilding[buildingName] = bounds
-        }
+        regenerateBounds(buildingName)
     }
 
-    fun getBounds(buildingName: String): Box? {
-        return boundsByBuilding[buildingName]
-    }
+    fun getBounds(buildingName: String): Box? =
+        boundsByBuilding[buildingName]
 
-    private fun generateBounds(buildingName: String): Box? {
+    private fun regenerateBounds(buildingName: String) {
         val boxes = objectsByBuilding[buildingName]
             ?.mapNotNull(GameObject::getCollisionBox)
             ?: emptyList()
 
         if (boxes.isEmpty()) {
-            return null
+            return
         }
 
         val min = Vector3(
@@ -51,7 +47,7 @@ class Buildings {
             boxes.maxOf { box -> box.max.z },
         )
 
-        return Box.fromMinMax(min, max)
+        boundsByBuilding[buildingName] = Box.fromMinMax(min, max)
     }
 
     fun getBuilding(gameObject: GameObject): String? =
@@ -62,8 +58,9 @@ class Buildings {
 
     fun remove(actor: Actor) {
         buildingByObject.remove(actor)
-        for ((_, objects) in objectsByBuilding) {
+        for ((buildingName, objects) in objectsByBuilding) {
             objects.remove(actor)
+            regenerateBounds(buildingName)
         }
     }
 
