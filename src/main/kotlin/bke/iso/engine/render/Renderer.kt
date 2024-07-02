@@ -65,7 +65,7 @@ class Renderer(
 
     var bgColor: Color = Color.GRAY
 
-    val occlusion = Occlusion()
+    val occlusion = Occlusion(world)
 
     private val gameObjectRenderer = GameObjectRenderer(
         assets,

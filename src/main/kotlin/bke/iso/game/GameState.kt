@@ -2,6 +2,7 @@ package bke.iso.game
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
+import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
 import bke.iso.engine.state.State
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Tags
@@ -200,6 +201,7 @@ class GameState(override val game: Game) : State() {
             resetStrategies()
             addStrategy(BuildingWallOcclusionStrategy(game.world))
             addStrategy(FloorOcclusionStrategy(floorHeight = 2f))
+            removeStrategy(BuildingLayerOcclusionStrategy::class)
         }
     }
 

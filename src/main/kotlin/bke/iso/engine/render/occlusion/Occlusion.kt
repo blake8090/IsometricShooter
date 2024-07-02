@@ -1,9 +1,11 @@
 package bke.iso.engine.render.occlusion
 
 import bke.iso.engine.render.gameobject.GameObjectRenderable
+import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
+import kotlin.reflect.KClass
 
-class Occlusion {
+class Occlusion(private val world: World) {
 
     var target: Actor? = null
     private var targetRenderable: GameObjectRenderable? = null
@@ -46,5 +48,10 @@ class Occlusion {
     fun resetStrategies() {
         strategies.clear()
         strategies.add(BasicOcclusionStrategy())
+        strategies.add(BuildingLayerOcclusionStrategy(world))
+    }
+
+    fun <T : OcclusionStrategy> removeStrategy(type: KClass<T>) {
+        strategies.removeIf { strategy -> type.isInstance(strategy) }
     }
 }
