@@ -13,7 +13,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.math.floor
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.withFirstInstance
+import bke.iso.editor.withFirstInstance
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input

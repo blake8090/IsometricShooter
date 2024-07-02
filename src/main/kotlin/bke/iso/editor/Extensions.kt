@@ -1,6 +1,5 @@
-package bke.iso.engine
+package bke.iso.editor
 
-// TODO: move to editor package for now
 inline fun <reified T : Any> Collection<*>.withFirstInstance(action: (T) -> Unit) =
     filterIsInstance<T>()
         .firstOrNull()

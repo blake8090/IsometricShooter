@@ -6,7 +6,6 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.withFirstInstance
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
