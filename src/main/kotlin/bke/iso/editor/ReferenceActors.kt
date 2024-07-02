@@ -44,7 +44,7 @@ class ReferenceActors(private val world: World) {
     }
 
     fun create(prefab: TilePrefab, location: Location): Actor {
-        if (tilesByLocation.containsKey(location)) {
+        if (tileExists(location)) {
             error("Duplicate tile at location $location")
         }
 
@@ -58,6 +58,9 @@ class ReferenceActors(private val world: World) {
         tilesByLocation[location] = actor
         return actor
     }
+
+    fun tileExists(location: Location) =
+        tilesByLocation.containsKey(location)
 
     fun getTilePrefabName(location: Location): String? {
         val actor = tilesByLocation[location] ?: return null

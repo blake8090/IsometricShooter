@@ -45,12 +45,13 @@ class ToolModule(
             is SelectTilePrefabEvent -> {
                 brushTool.selectPrefab(event.prefab)
                 roomTool.selectedPrefab = null
+                fillTool.selectPrefab(event.prefab)
             }
 
             is SelectActorPrefabEvent -> {
                 brushTool.selectPrefab(event.prefab)
                 roomTool.selectedPrefab = event.prefab
-                fillTool.selectedPrefab = event.prefab
+                fillTool.selectPrefab(event.prefab)
             }
 
             is SelectPointerToolEvent -> {

@@ -4,6 +4,7 @@ import bke.iso.editor.ReferenceActors
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.tool.EditorTool
 import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.floor
@@ -13,6 +14,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
+import mu.KotlinLogging
 
 class FillTool(
     override val collisions: Collisions,
@@ -20,11 +22,13 @@ class FillTool(
     private val referenceActors: ReferenceActors
 ) : EditorTool() {
 
+    private val log = KotlinLogging.logger {}
+
     private var dragging = false
     private val start = Vector3()
     private val end = Vector3()
 
-    var selectedPrefab: ActorPrefab? = null
+    private var selection: Selection? = null
 
     override fun update() {
         val pos = Vector3(pointerPos).floor()
@@ -45,6 +49,16 @@ class FillTool(
         }
     }
 
+    fun selectPrefab(prefab: TilePrefab) {
+        log.debug { "tile prefab '${prefab.name}' selected" }
+        selection = TileSelection(prefab)
+    }
+
+    fun selectPrefab(prefab: ActorPrefab) {
+        log.debug { "actor prefab '${prefab.name}' selected" }
+        selection = ActorSelection(prefab)
+    }
+
     private fun startDragging(pointerPos: Vector3) {
         dragging = true
         start.set(pointerPos)
@@ -60,8 +74,24 @@ class FillTool(
     override fun performMultiAction(): EditorCommand? = null
 
     override fun performReleaseAction(): EditorCommand? {
-        val prefab = selectedPrefab ?: return null
         val box = Box.fromMinMax(Segment(start, end))
-        return FillCommand(referenceActors, prefab, box)
+
+        return when (val selected = selection) {
+            is ActorSelection -> {
+                FillActorCommand(referenceActors, selected.prefab, box)
+            }
+
+            is TileSelection -> {
+                FillTileCommand(referenceActors, selected.prefab, box)
+            }
+
+            else -> null
+        }
     }
+
+    private sealed class Selection
+
+    private class TileSelection(val prefab: TilePrefab) : Selection()
+
+    private class ActorSelection(val prefab: ActorPrefab) : Selection()
 }
