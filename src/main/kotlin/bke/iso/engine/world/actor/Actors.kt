@@ -1,7 +1,7 @@
 package bke.iso.engine.world.actor
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Grid
 import com.badlogic.gdx.math.Vector3
@@ -11,7 +11,7 @@ private const val ID_LENGTH = 6
 
 class Actors(
     private val grid: Grid,
-    private val events: Game.Events
+    private val events: Events
 ) {
 
     fun create(location: Location, vararg components: Component): Actor =

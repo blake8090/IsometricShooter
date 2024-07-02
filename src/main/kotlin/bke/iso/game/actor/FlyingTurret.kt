@@ -1,6 +1,6 @@
 package bke.iso.game.actor
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collision
@@ -50,7 +50,7 @@ class FlyingTurretSystem(
     private val world: World,
     private val collisions: Collisions,
     private val renderer: Renderer,
-    private val events: Game.Events,
+    private val events: Events,
     private val weaponsModule: WeaponsModule
 ) : System {
 

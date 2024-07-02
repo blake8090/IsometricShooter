@@ -1,6 +1,6 @@
 package bke.iso.engine.world
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
@@ -10,7 +10,7 @@ import io.mockk.mockk
 
 class WorldTest : StringSpec({
 
-    val events = mockk<Game.Events>()
+    val events = mockk<Events>()
     every { events.fire(any()) } returns mockk()
 
     "should return all objects in area" {

@@ -1,6 +1,6 @@
 package bke.iso.engine.collision
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.debug.DebugCategory
 import bke.iso.engine.render.debug.DebugRenderer
@@ -16,7 +16,7 @@ import io.mockk.mockk
 
 class CollisionsTest : StringSpec({
 
-    val events = mockk<Game.Events>()
+    val events = mockk<Events>()
     every { events.fire(any()) } returns mockk()
 
     "when actor stands on top of tile, given precision error, should return collision" {

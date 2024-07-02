@@ -1,6 +1,6 @@
 package bke.iso.engine.input
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
@@ -8,7 +8,7 @@ import com.badlogic.gdx.controllers.ControllerListener
 import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.math.Vector2
 
-class Input(events: Game.Events) {
+class Input(events: Events) {
 
     private val inputMultiplexer = InputMultiplexer()
     private val inputState = InputState(events)

@@ -1,6 +1,6 @@
 package bke.iso.game.ui
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 
 class MainMenuScreen(
     assets: Assets,
-    private val events: Game.Events
+    private val events: Events
 ) : UIScreen(assets) {
 
     override fun create() {

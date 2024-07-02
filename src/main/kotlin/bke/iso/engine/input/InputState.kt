@@ -1,7 +1,7 @@
 package bke.iso.engine.input
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
@@ -9,7 +9,7 @@ import com.badlogic.gdx.controllers.Controllers
 import com.studiohartman.jamepad.ControllerButton
 import mu.KotlinLogging
 
-class InputState(private val events: Game.Events) {
+class InputState(private val events: Events) {
 
     private val log = KotlinLogging.logger {}
 

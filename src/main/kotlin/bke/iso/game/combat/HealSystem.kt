@@ -1,6 +1,6 @@
 package bke.iso.game.combat
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -9,7 +9,7 @@ import kotlin.math.min
 
 class HealSystem(
     private val world: World,
-    private val events: Game.Events
+    private val events: Events
 ) : System {
 
     override fun update(deltaTime: Float) {

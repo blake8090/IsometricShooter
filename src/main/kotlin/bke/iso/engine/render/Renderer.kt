@@ -1,6 +1,6 @@
 package bke.iso.engine.render
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.debug.DebugRenderer
@@ -34,7 +34,7 @@ const val VIRTUAL_HEIGHT = 540f
 class Renderer(
     world: World,
     private val assets: Assets,
-    events: Game.Events
+    events: Events
 ) {
 
     private val log = KotlinLogging.logger {}

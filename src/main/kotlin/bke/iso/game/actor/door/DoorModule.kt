@@ -1,7 +1,7 @@
 package bke.iso.game.actor.door
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.state.Module
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
@@ -16,7 +16,7 @@ import mu.KotlinLogging
 class DoorModule(
     private val world: World,
     private val ui: UI,
-    private val events: Game.Events
+    private val events: Events
 ) : Module {
 
     private val log = KotlinLogging.logger { }

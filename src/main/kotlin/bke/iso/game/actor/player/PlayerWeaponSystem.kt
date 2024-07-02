@@ -1,6 +1,6 @@
 package bke.iso.game.actor.player
 
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.toWorld
@@ -21,7 +21,7 @@ class PlayerWeaponSystem(
     private val world: World,
     private val input: Input,
     private val renderer: Renderer,
-    private val events: Game.Events,
+    private val events: Events,
     private val weaponsModule: WeaponsModule
 ) : System {
 

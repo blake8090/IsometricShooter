@@ -1,7 +1,7 @@
 package bke.iso.engine.render.gameobject
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Pool
 class GameObjectRenderer(
     private val assets: Assets,
     private val world: World,
-    private val events: Game.Events,
+    private val events: Events,
     private val debug: DebugRenderer,
     private val occlusion: Occlusion,
     private val camera: OrthographicCamera

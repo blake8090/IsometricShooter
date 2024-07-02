@@ -1,7 +1,7 @@
 package bke.iso.game.combat
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.state.Module
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
@@ -15,7 +15,7 @@ private const val HIT_EFFECT_DURATION_SECONDS = 0.05f
 
 class CombatModule(
     private val world: World,
-    private val events: Game.Events
+    private val events: Events
 ) : Module {
 
     private val log = KotlinLogging.logger {}

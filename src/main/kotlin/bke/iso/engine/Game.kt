@@ -25,14 +25,12 @@ import bke.iso.engine.world.World
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 
-interface Event
-
 class Game {
 
     private val log = KotlinLogging.logger {}
 
     val systemInfo = SystemInfo()
-    val events: Events = Events()
+    val events: Events = Events(::handleEvent)
 
     val dialogs = Dialogs()
     val files: Files = Files()
@@ -122,11 +120,8 @@ class Game {
         renderer.dispose()
     }
 
-    // TODO: separate into different class!
-    inner class Events {
-        fun fire(event: Event) {
-            states.currentState.handleEvent(event)
-            ui.handleEvent(event)
-        }
+    private fun handleEvent(event: Event) {
+        states.currentState.handleEvent(event)
+        ui.handleEvent(event)
     }
 }

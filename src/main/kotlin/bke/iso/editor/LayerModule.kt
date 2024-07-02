@@ -4,7 +4,7 @@ import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.layer.UpperLayerOcclusionStrategy
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Events
 import bke.iso.engine.state.Module
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
@@ -26,7 +26,7 @@ data class ChangeSelectedLayerEvent(val selectedLayer: Float) : Event
 class LayerModule(
     private val editorScreen: EditorScreen,
     private val world: World,
-    private val events: Game.Events,
+    private val events: Events,
     private val renderer: Renderer
 ) : Module {
 
