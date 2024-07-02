@@ -142,9 +142,6 @@ class GameState(override val game: Game) : State() {
     )
 
     override suspend fun load() {
-        game.assets.loadAsync("game")
-        game.assets.shaders.compileAll()
-
         hudModule.init(game.ui)
         game.renderer.pointer.set(crosshair)
 

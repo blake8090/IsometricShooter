@@ -90,7 +90,6 @@ class EditorState(override val game: Game) : State() {
     override suspend fun load() {
         log.info { "Starting editor" }
 
-        game.assets.loadAsync("game")
         game.ui.setScreen(editorScreen)
 
         cameraModule.init()

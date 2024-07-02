@@ -20,18 +20,32 @@ class MainMenuState(override val game: Game) : State() {
     }
 
     override fun handleEvent(event: Event) {
-        when (event) {
-            is StartEvent -> {
-                game.ui.loadingScreen.start {
-                    game.states.setState<GameState>()
-                    game.events.fire(GameState.LoadSceneEvent("mission-01-roof.scene", false))
-                }
-            }
+        super.handleEvent(event)
 
-            is EditorEvent -> {
-                game.states.setState<EditorState>()
-            }
+        when (event) {
+            is StartEvent -> startGame()
+            is EditorEvent -> startEditor()
         }
+    }
+
+    private fun startGame() {
+        game.ui.loadingScreen.start {
+            loadGameAssets()
+            game.states.setState<GameState>()
+            game.events.fire(GameState.LoadSceneEvent("mission-01-roof.scene", false))
+        }
+    }
+
+    private fun startEditor() {
+        game.ui.loadingScreen.start {
+            loadGameAssets()
+            game.states.setState<EditorState>()
+        }
+    }
+
+    private suspend fun loadGameAssets() {
+        game.assets.loadAsync("game")
+        game.assets.shaders.compileAll()
     }
 
     class StartEvent : Event
