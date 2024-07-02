@@ -39,8 +39,10 @@ class FillTool(
     }
 
     override fun draw() {
-        val pos = Vector3(pointerPos).floor()
-        renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
+        if (dragging) {
+            val pos = Vector3(pointerPos).floor()
+            renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
+        }
     }
 
     private fun startDragging(pointerPos: Vector3) {
