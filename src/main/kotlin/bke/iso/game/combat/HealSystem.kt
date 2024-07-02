@@ -1,7 +1,7 @@
 package bke.iso.game.combat
 
 import bke.iso.engine.Game
-import bke.iso.engine.System
+import bke.iso.engine.state.System
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.player.Player

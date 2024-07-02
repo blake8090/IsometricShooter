@@ -2,7 +2,7 @@ package bke.iso.game
 
 import bke.iso.engine.Event
 import bke.iso.engine.Game
-import bke.iso.engine.State
+import bke.iso.engine.state.State
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Tags
 import bke.iso.game.actor.FlyingTurretSystem

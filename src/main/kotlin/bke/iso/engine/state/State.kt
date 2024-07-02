@@ -1,4 +1,7 @@
-package bke.iso.engine
+package bke.iso.engine.state
+
+import bke.iso.engine.Event
+import bke.iso.engine.Game
 
 interface System {
     fun update(deltaTime: Float)
@@ -33,7 +36,4 @@ abstract class State {
     }
 }
 
-class EmptyState(override val game: Game) : State() {
-    override val systems: LinkedHashSet<System> = linkedSetOf()
-    override val modules: Set<Module> = emptySet()
-}
+

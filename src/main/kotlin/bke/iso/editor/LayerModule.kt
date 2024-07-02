@@ -5,7 +5,7 @@ import bke.iso.editor.layer.UpperLayerOcclusionStrategy
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Game
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.SpriteTintColor

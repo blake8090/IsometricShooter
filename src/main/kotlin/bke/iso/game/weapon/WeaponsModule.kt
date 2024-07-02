@@ -1,7 +1,7 @@
 package bke.iso.game.weapon
 
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.nextFloat

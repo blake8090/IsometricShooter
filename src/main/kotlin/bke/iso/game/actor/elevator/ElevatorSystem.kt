@@ -1,6 +1,6 @@
 package bke.iso.game.actor.elevator
 
-import bke.iso.engine.System
+import bke.iso.engine.state.System
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor

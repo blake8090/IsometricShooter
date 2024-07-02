@@ -8,7 +8,7 @@ import bke.iso.editor.LayerModule
 import bke.iso.editor.tool.fill.FillTool
 import bke.iso.editor.tool.room.RoomTool
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World

@@ -3,7 +3,7 @@ package bke.iso.editor
 import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input

@@ -23,7 +23,7 @@ class IsometricShooter : GameInfo() {
 
         bindInput(game)
 
-        game.setState(MainMenuState::class)
+        game.states.setState<MainMenuState>()
     }
 
     private fun bindInput(game: Game) {

@@ -3,9 +3,9 @@ package bke.iso.game
 import bke.iso.editor.EditorState
 import bke.iso.engine.Event
 import bke.iso.engine.Game
-import bke.iso.engine.Module
-import bke.iso.engine.State
-import bke.iso.engine.System
+import bke.iso.engine.state.Module
+import bke.iso.engine.state.State
+import bke.iso.engine.state.System
 import bke.iso.engine.ui.loading.SimpleLoadingScreen
 import bke.iso.game.ui.MainMenuScreen
 
@@ -23,13 +23,13 @@ class MainMenuState(override val game: Game) : State() {
         when (event) {
             is StartEvent -> {
                 game.ui.loadingScreen.start {
-                    game.setState(GameState::class)
+                    game.states.setState<GameState>()
                     game.events.fire(GameState.LoadSceneEvent("mission-01-roof.scene", false))
                 }
             }
 
             is EditorEvent -> {
-                game.setState(EditorState::class)
+                game.states.setState<EditorState>()
             }
         }
     }

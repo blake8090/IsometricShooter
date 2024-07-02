@@ -1,7 +1,7 @@
 package bke.iso.game.actor.player
 
 import bke.iso.engine.Game
-import bke.iso.engine.System
+import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer

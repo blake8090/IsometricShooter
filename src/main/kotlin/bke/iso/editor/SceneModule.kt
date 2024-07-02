@@ -2,7 +2,7 @@ package bke.iso.editor
 
 import bke.iso.editor.event.EditorEvent
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab

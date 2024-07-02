@@ -1,6 +1,6 @@
 package bke.iso.game.actor.shadow
 
-import bke.iso.engine.System
+import bke.iso.engine.state.System
 import bke.iso.engine.math.Box
 import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.Collisions

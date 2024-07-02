@@ -1,7 +1,7 @@
 package bke.iso.game.actor.elevator
 
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.physics.PhysicsBody

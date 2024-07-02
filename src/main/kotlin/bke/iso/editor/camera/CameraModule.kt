@@ -5,7 +5,7 @@ import bke.iso.editor.LayerModule
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.Input

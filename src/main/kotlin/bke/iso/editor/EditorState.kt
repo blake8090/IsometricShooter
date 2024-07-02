@@ -7,8 +7,8 @@ import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.ui.color
 import bke.iso.engine.Game
-import bke.iso.engine.State
-import bke.iso.engine.System
+import bke.iso.engine.state.State
+import bke.iso.engine.state.System
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.MouseBinding

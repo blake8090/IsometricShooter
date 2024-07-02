@@ -1,6 +1,6 @@
 package bke.iso.game.weapon.system
 
-import bke.iso.engine.System
+import bke.iso.engine.state.System
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor

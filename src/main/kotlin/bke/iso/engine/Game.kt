@@ -18,13 +18,12 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.scene.SceneCache
 import bke.iso.engine.scene.Scenes
 import bke.iso.engine.serialization.Serializer
+import bke.iso.engine.state.States
 import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 interface Event
 
@@ -49,7 +48,7 @@ class Game {
     val input: Input = Input(events)
     val ui: UI = UI(input)
 
-    private var state: State = EmptyState(this)
+    val states = States(this)
 
     private val profiler = Profiler(assets, ui, input)
 
@@ -92,7 +91,7 @@ class Game {
             renderer.pointer.update(deltaTime)
 
             profiler.profile("state") {
-                state.update(deltaTime)
+                states.currentState.update(deltaTime)
             }
 
             profiler.profile("world") {
@@ -108,13 +107,6 @@ class Game {
 
         ui.draw(deltaTime)
         renderer.pointer.draw()
-    }
-
-    fun <T : State> setState(type: KClass<T>) {
-        log.debug { "Switching to state ${type.simpleName}" }
-        state = requireNotNull(type.primaryConstructor).call(this)
-        // TODO: does state.load need to be a suspend fun anymore?
-        runBlocking { state.load() }
     }
 
     fun resize(width: Int, height: Int) {
@@ -133,7 +125,7 @@ class Game {
     // TODO: separate into different class!
     inner class Events {
         fun fire(event: Event) {
-            state.handleEvent(event)
+            states.currentState.handleEvent(event)
             ui.handleEvent(event)
         }
     }

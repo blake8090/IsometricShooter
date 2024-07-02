@@ -2,7 +2,7 @@ package bke.iso.editor
 
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
-import bke.iso.engine.Module
+import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.Renderer
