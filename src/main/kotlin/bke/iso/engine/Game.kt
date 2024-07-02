@@ -11,6 +11,7 @@ import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.os.Dialogs
+import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.profiler.Profiler
 import bke.iso.engine.render.Renderer

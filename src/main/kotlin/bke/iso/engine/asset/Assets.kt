@@ -1,6 +1,6 @@
 package bke.iso.engine.asset
 
-import bke.iso.engine.SystemInfo
+import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.asset.font.Fonts
 import bke.iso.engine.asset.shader.Shaders
 import bke.iso.engine.os.Files

@@ -1,6 +1,6 @@
 package bke.iso.engine.asset.font
 
-import bke.iso.engine.SystemInfo
+import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.asset.AssetDisposer
 import bke.iso.engine.asset.Assets
 import com.badlogic.gdx.graphics.Color
