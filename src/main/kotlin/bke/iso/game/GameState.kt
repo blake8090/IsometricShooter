@@ -171,6 +171,7 @@ class GameState(override val game: Game) : State() {
         initPlayer()
 
         when (name) {
+            "mission-01-start.scene" -> initMission1StartScene()
             "mission-01-roof.scene" -> initMission1RoofScene()
             "mission-01-interior.scene" -> initMission1InteriorScene()
         }
@@ -187,6 +188,12 @@ class GameState(override val game: Game) : State() {
             actor.with<Health> { health ->
                 hudModule.updateHealthBar(health.value, health.maxValue)
             }
+        }
+    }
+
+    private fun initMission1StartScene() {
+        game.world.actors.each<Player> { actor, _ ->
+            weaponsModule.equip(actor, "pistol")
         }
     }
 
