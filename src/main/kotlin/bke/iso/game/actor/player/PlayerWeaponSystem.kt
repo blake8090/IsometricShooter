@@ -8,7 +8,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.weapon.FireType
-import bke.iso.game.weapon.RangedWeapon
+import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color
 

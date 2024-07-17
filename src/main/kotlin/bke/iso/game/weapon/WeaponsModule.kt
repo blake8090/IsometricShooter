@@ -13,6 +13,9 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
+import bke.iso.game.weapon.system.Bullet
+import bke.iso.game.weapon.system.RangedWeapon
+import bke.iso.game.weapon.system.RangedWeaponOffset
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging

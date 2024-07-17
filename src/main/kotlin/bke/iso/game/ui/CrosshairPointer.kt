@@ -6,7 +6,7 @@ import bke.iso.engine.render.pointer.Pointer
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.game.actor.player.Player
-import bke.iso.game.weapon.RangedWeapon
+import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture

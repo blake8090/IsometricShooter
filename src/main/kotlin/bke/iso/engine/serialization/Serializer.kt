@@ -1,8 +1,8 @@
 package bke.iso.engine.serialization
 
 import bke.iso.engine.world.actor.Component
-import bke.iso.game.weapon.RangedWeapon
-import bke.iso.game.weapon.Weapon
+import bke.iso.game.weapon.system.RangedWeapon
+import bke.iso.game.weapon.system.Weapon
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString

@@ -9,8 +9,8 @@ import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
 import bke.iso.game.actor.player.Player
-import bke.iso.game.weapon.RangedWeapon
-import bke.iso.game.weapon.RangedWeaponOffset
+import bke.iso.game.weapon.system.RangedWeapon
+import bke.iso.game.weapon.system.RangedWeaponOffset
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3

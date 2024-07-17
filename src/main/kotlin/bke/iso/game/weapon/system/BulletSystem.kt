@@ -15,8 +15,6 @@ import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
 import bke.iso.game.combat.CombatModule
-import bke.iso.game.weapon.Bullet
-import bke.iso.game.weapon.Explosion
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 

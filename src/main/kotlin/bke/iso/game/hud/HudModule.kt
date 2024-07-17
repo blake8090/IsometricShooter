@@ -15,9 +15,9 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.Health
 import bke.iso.game.combat.HealthBar
 import bke.iso.game.actor.player.Player
-import bke.iso.game.weapon.RangedWeapon
+import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
-import bke.iso.game.weapon.Weapon
+import bke.iso.game.weapon.system.Weapon
 import bke.iso.game.weapon.WeaponProperties
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color

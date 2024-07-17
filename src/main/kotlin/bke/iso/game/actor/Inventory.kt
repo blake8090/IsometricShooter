@@ -1,7 +1,7 @@
 package bke.iso.game.actor
 
 import bke.iso.engine.world.actor.Component
-import bke.iso.game.weapon.Weapon
+import bke.iso.game.weapon.system.Weapon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

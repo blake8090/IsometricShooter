@@ -1,4 +1,4 @@
-package bke.iso.game.weapon
+package bke.iso.game.weapon.system
 
 import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.math.Vector3

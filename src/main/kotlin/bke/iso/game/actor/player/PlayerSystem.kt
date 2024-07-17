@@ -13,8 +13,8 @@ import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit
 import bke.iso.game.combat.CombatModule
-import bke.iso.game.weapon.RangedWeaponOffset
-import bke.iso.game.weapon.WeaponPickup
+import bke.iso.game.weapon.system.RangedWeaponOffset
+import bke.iso.game.weapon.system.WeaponPickup
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3

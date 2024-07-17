@@ -5,7 +5,6 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.Inventory
-import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
 import bke.iso.game.weapon.WeaponProperties
 import io.github.oshai.kotlinlogging.KotlinLogging
