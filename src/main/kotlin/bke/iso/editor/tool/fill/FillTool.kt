@@ -14,7 +14,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Segment
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class FillTool(
     override val collisions: Collisions,

@@ -19,7 +19,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class BrushTool(
     override val collisions: Collisions,

@@ -1,7 +1,7 @@
 package bke.iso.engine.asset
 
 import com.badlogic.gdx.utils.Disposable
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
  * Keeps track of disposed objects to avoid `Class already disposed!` errors.

@@ -7,7 +7,7 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class PaintRoomCommand(
     private val referenceActors: ReferenceActors,

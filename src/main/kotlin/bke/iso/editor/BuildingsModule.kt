@@ -10,7 +10,7 @@ import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
 import com.badlogic.gdx.graphics.Color
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class BuildingsModule(
     private val world: World,

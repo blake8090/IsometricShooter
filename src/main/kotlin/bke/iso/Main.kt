@@ -2,7 +2,7 @@ package bke.iso
 
 import bke.iso.game.IsometricShooter
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.system.exitProcess
 
 private val log = KotlinLogging.logger {}

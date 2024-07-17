@@ -6,7 +6,7 @@ import bke.iso.engine.state.Module
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.player.Player
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.max
 
 private const val MEDKIT_HEALTH_PERCENTAGE = 0.05f

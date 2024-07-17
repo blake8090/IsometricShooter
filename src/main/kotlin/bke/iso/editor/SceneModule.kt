@@ -18,8 +18,8 @@ import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.encodeToString
-import mu.KotlinLogging
 
 class SaveSceneEvent : EditorEvent()
 

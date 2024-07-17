@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Window
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 private const val STYLE_NAME = "edit-building-dialog"
 

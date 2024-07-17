@@ -13,7 +13,7 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ToolModule(
     collisions: Collisions,

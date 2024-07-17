@@ -2,7 +2,7 @@ package bke.iso.engine.os
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class SystemInfo {
 

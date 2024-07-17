@@ -31,7 +31,7 @@ import bke.iso.game.weapon.system.BulletSystem
 import bke.iso.game.weapon.system.WeaponSystem
 import bke.iso.game.weapon.WeaponsModule
 import bke.iso.game.weapon.system.ExplosionSystem
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class GameState(override val game: Game) : State() {
 

@@ -7,7 +7,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.system.measureTimeMillis
 
 class Scenes(

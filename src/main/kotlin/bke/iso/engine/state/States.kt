@@ -1,8 +1,8 @@
 package bke.iso.engine.state
 
 import bke.iso.engine.Game
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.utils.Pools
 import com.studiohartman.jamepad.ControllerButton
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ControllerNavigation : ControllerAdapter() {
 

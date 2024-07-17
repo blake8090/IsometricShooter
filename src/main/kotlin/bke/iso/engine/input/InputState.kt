@@ -7,7 +7,7 @@ import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
 import com.studiohartman.jamepad.ControllerButton
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class InputState(private val events: Events) {
 

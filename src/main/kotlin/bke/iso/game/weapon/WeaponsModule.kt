@@ -15,7 +15,7 @@ import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.atan2
 import kotlin.math.min
 

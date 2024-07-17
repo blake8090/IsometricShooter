@@ -2,7 +2,7 @@ package bke.iso.engine.asset
 
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.OrderedMap
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 
 abstract class AssetCache<T : Any> {

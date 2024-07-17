@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f

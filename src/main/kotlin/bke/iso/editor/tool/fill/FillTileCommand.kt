@@ -6,7 +6,7 @@ import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.actor.Actor
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class FillTileCommand(
     private val referenceActors: ReferenceActors,

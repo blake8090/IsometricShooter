@@ -8,7 +8,7 @@ import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.abs
 
 const val DEFAULT_GRAVITY: Float = -12f

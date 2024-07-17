@@ -4,7 +4,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.input.Input
 import bke.iso.engine.ui.loading.LoadingScreen
 import com.badlogic.gdx.utils.Array
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class UI(private val input: Input) {
 

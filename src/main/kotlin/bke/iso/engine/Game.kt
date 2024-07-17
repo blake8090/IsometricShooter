@@ -22,8 +22,8 @@ import bke.iso.engine.state.States
 import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 
 class Game {
 

@@ -1,7 +1,7 @@
 package bke.iso.engine.os
 
 import bke.iso.engine.asset.BASE_PATH
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.util.nfd.NFDFilterItem
 import org.lwjgl.util.nfd.NativeFileDialog

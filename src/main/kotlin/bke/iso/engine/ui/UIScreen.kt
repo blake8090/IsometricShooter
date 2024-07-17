@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 // TODO: pass assets into dispose method instead of constructor
 abstract class UIScreen(protected val assets: Assets) {

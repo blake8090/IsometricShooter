@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 private const val MAIN_VIEW_NAME = "mainView"
 

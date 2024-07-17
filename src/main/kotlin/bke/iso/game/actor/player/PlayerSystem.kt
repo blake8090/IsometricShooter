@@ -18,7 +18,7 @@ import bke.iso.game.weapon.WeaponPickup
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 const val PLAYER_DOOR_ACTION_RADIUS = 1.2f
 

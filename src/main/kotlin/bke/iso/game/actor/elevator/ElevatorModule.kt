@@ -8,7 +8,7 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
 import bke.iso.engine.world.actor.Tags
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ElevatorModule(private val collisions: Collisions) : Module {
 

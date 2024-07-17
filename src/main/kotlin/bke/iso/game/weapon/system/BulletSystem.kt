@@ -18,7 +18,7 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.Bullet
 import bke.iso.game.weapon.Explosion
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 private const val MAX_BULLET_DISTANCE = 50f
 

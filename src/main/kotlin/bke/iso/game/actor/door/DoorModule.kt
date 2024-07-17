@@ -11,7 +11,7 @@ import bke.iso.engine.world.actor.Tags
 import bke.iso.game.GameState
 import bke.iso.game.actor.player.Player
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class DoorModule(
     private val world: World,

@@ -2,10 +2,10 @@ package bke.iso.engine.ui.loading
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.UIScreen
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
 import ktx.async.skipFrame
-import mu.KotlinLogging
 import kotlin.system.measureTimeMillis
 
 abstract class LoadingScreen(assets: Assets) : UIScreen(assets) {

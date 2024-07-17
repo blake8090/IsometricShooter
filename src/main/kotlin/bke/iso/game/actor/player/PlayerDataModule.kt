@@ -4,7 +4,7 @@ import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.combat.Health
 import bke.iso.game.weapon.Weapon
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
  * Keeps track of the player's data when changing scenes; health, weapons, ammo, etc.

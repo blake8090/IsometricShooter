@@ -6,9 +6,9 @@ import bke.iso.engine.asset.shader.Shaders
 import bke.iso.engine.os.Files
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.OrderedMap
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import mu.KotlinLogging
 import java.io.File
 import kotlin.reflect.KClass
 
@@ -92,7 +92,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
         try {
             cache.load(file)
         } catch (e: Throwable) {
-            log.error("Error loading asset from '${file.canonicalPath}':", e)
+            log.error(e) { "Error loading asset from '${file.canonicalPath}':" }
             throw e
         }
     }

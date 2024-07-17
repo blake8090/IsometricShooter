@@ -2,7 +2,7 @@ package bke.iso.editor.camera
 
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.math.Vector2
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class MouseDragAdapter(private val triggerButton: Int) : InputAdapter() {
 

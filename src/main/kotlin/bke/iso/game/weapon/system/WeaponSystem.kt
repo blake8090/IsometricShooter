@@ -8,7 +8,7 @@ import bke.iso.game.actor.Inventory
 import bke.iso.game.weapon.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
 import bke.iso.game.weapon.WeaponProperties
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.max
 
 class WeaponSystem(

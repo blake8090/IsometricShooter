@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import space.earlygrey.shapedrawer.ShapeDrawer
 
 class ShapeRenderer(batch: PolygonSpriteBatch) {

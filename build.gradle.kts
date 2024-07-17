@@ -37,9 +37,9 @@ dependencies {
     implementation("org.lwjgl:lwjgl-nfd:3.3.2")
     runtimeOnly("org.lwjgl:lwjgl-nfd:3.3.2:natives-windows")
 
-    implementation("ch.qos.logback:logback-classic:1.4.6")
-    implementation("org.slf4j:slf4j-api:2.0.7")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("io.github.oshai:kotlin-logging-jvm:5.1.4")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
