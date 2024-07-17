@@ -2,6 +2,7 @@ package bke.iso.editor
 
 import bke.iso.editor.camera.CameraModule
 import bke.iso.editor.event.EditorEvent
+import bke.iso.editor.layer.LayerModule
 import bke.iso.editor.tool.EditorCommand
 import bke.iso.editor.tool.ToolModule
 import bke.iso.editor.ui.EditorScreen

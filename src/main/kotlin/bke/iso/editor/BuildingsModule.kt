@@ -1,5 +1,6 @@
 package bke.iso.editor
 
+import bke.iso.editor.layer.LayerModule
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.state.Module

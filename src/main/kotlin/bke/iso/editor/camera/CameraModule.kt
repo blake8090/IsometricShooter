@@ -1,7 +1,7 @@
 package bke.iso.editor.camera
 
-import bke.iso.editor.ChangeSelectedLayerEvent
-import bke.iso.editor.LayerModule
+import bke.iso.editor.layer.ChangeSelectedLayerEvent
+import bke.iso.editor.layer.LayerModule
 import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event

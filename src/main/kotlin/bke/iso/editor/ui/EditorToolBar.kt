@@ -1,9 +1,9 @@
 package bke.iso.editor.ui
 
-import bke.iso.editor.DecreaseLayerEvent
-import bke.iso.editor.IncreaseLayerEvent
-import bke.iso.editor.ToggleHighlightLayerEvent
-import bke.iso.editor.ToggleUpperLayersHiddenEvent
+import bke.iso.editor.layer.DecreaseLayerEvent
+import bke.iso.editor.layer.IncreaseLayerEvent
+import bke.iso.editor.layer.ToggleHighlightLayerEvent
+import bke.iso.editor.layer.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.camera.ToggleHideWallsEvent
 import bke.iso.editor.tool.SelectBrushToolEvent
 import bke.iso.editor.tool.SelectEraserToolEvent

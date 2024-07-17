@@ -1,7 +1,6 @@
 package bke.iso.editor.layer
 
 import bke.iso.editor.ActorPrefabReference
-import bke.iso.editor.LayerModule
 import bke.iso.editor.TilePrefabReference
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy

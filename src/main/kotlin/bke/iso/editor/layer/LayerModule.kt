@@ -1,7 +1,7 @@
-package bke.iso.editor
+package bke.iso.editor.layer
 
+import bke.iso.editor.PerformActionEvent
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.layer.UpperLayerOcclusionStrategy
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.engine.Event
 import bke.iso.engine.Events

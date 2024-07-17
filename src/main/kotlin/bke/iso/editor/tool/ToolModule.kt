@@ -4,7 +4,7 @@ import bke.iso.editor.ReferenceActors
 import bke.iso.editor.tool.brush.BrushTool
 import bke.iso.editor.tool.eraser.EraserTool
 import bke.iso.editor.ui.EditorScreen
-import bke.iso.editor.LayerModule
+import bke.iso.editor.layer.LayerModule
 import bke.iso.editor.tool.fill.FillTool
 import bke.iso.editor.tool.room.RoomTool
 import bke.iso.engine.Event
