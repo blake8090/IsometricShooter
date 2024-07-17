@@ -1,9 +1,11 @@
 import org.gradle.kotlin.dsl.application
+import io.github.fourlastor.construo.Target
 
 plugins {
     kotlin("jvm") version "1.9.10"
     kotlin("plugin.serialization") version "1.9.0"
     id("io.gitlab.arturbosch.detekt").version("1.23.1")
+    id("io.github.fourlastor.construo") version "1.2.0"
     application
 }
 
@@ -63,4 +65,36 @@ tasks.register<JavaExec>("start") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("bke.iso.MainKt")
     dependsOn("test")
+}
+
+tasks.jar {
+    manifest.attributes["Main-Class"] = application.mainClass
+    val dependencies = configurations
+        .runtimeClasspath
+        .get()
+        .map(::zipTree)
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+construo {
+    name.set("IsometricShooter")
+    humanName.set("IsometricShooter")
+
+    jlink {
+        modules.addAll("java.naming", "jdk.unsupported", "java.xml")
+        guessModulesFromJar.set(false)
+    }
+
+    roast {
+        // required by kotlinx-serialization in order to find polymorphic serializers
+        useMainAsContextClassLoader.set(true)
+    }
+
+    targets {
+        create<Target.Windows>("winX64") {
+            architecture.set(Target.Architecture.X86_64)
+            jdkUrl.set("https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2%2B9/OpenJDK20U-jdk_x64_windows_hotspot_20.0.2_9.zip")
+        }
+    }
 }
