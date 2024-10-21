@@ -7,8 +7,8 @@ import bke.iso.engine.input.ControllerAxisBinding
 import bke.iso.engine.input.ControllerBinding
 import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
-import bke.iso.game.actor.player.RELOAD_ACTION
-import bke.iso.game.actor.player.SHOOT_ACTION
+import bke.iso.game.actor.player.system.RELOAD_ACTION
+import bke.iso.game.actor.player.system.SHOOT_ACTION
 import bke.iso.game.weapon.WeaponPropertiesCache
 import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis

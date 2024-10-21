@@ -10,7 +10,7 @@ import bke.iso.game.actor.FlyingTurretSystem
 import bke.iso.game.actor.RollingTurretSystem
 import bke.iso.game.actor.shadow.ShadowSystem
 import bke.iso.game.actor.player.Player
-import bke.iso.game.actor.player.PlayerSystem
+import bke.iso.game.actor.player.system.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.HealSystem
@@ -22,9 +22,10 @@ import bke.iso.game.actor.elevator.ElevatorSystem
 import bke.iso.game.hud.HudModule
 import bke.iso.game.occlusion.BuildingWallOcclusionStrategy
 import bke.iso.game.occlusion.FloorOcclusionStrategy
-import bke.iso.game.actor.player.PlayerInteractionSystem
+import bke.iso.game.actor.player.system.PlayerInteractionSystem
 import bke.iso.game.actor.player.PlayerDataModule
-import bke.iso.game.actor.player.PlayerWeaponSystem
+import bke.iso.game.actor.player.system.PlayerCrosshairLaserSystem
+import bke.iso.game.actor.player.system.PlayerWeaponSystem
 import bke.iso.game.actor.shadow.ShadowModule
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.weapon.system.BulletSystem
@@ -94,6 +95,12 @@ class GameState(override val game: Game) : State() {
             hudModule,
             doorModule,
             elevatorModule
+        ),
+        PlayerCrosshairLaserSystem(
+            game.world,
+            game.renderer,
+            weaponsModule,
+            game.collisions
         ),
         TurretSystem(
             game.world,

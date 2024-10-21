@@ -1,4 +1,4 @@
-package bke.iso.game.actor.player
+package bke.iso.game.actor.player.system
 
 import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
@@ -8,6 +8,7 @@ import bke.iso.game.actor.door.DoorChangeSceneAction
 import bke.iso.game.actor.door.DoorModule
 import bke.iso.game.actor.door.DoorOpenAction
 import bke.iso.game.actor.elevator.ElevatorModule
+import bke.iso.game.actor.player.Player
 import bke.iso.game.hud.HudModule
 
 class PlayerInteractionSystem(

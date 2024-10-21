@@ -1,4 +1,4 @@
-package bke.iso.game.actor.player
+package bke.iso.game.actor.player.system
 
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.Collider
@@ -12,6 +12,8 @@ import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit
+import bke.iso.game.actor.player.Player
+import bke.iso.game.actor.player.PlayerState
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.system.RangedWeaponOffset
 import bke.iso.game.weapon.system.WeaponPickup

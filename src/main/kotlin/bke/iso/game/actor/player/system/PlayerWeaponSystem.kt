@@ -1,21 +1,20 @@
-package bke.iso.game.actor.player
+package bke.iso.game.actor.player.system
 
 import bke.iso.engine.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
-import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
+import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.FireType
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 
 const val SHOOT_ACTION = "shoot"
 const val RELOAD_ACTION = "reload"
-
-private const val BARREL_HEIGHT = 0.7f
 
 class PlayerWeaponSystem(
     private val world: World,
@@ -36,8 +35,14 @@ class PlayerWeaponSystem(
     private fun update(actor: Actor) {
         val triggerState = input.poll(SHOOT_ACTION) == 1f
 
+        val shootPos = weaponsModule.getShootPos(actor)
+        val target = renderer.pointer.worldPos
+        target.z = shootPos.z
+
+        drawDebug(shootPos, target)
+
         if (canShoot(actor, triggerState)) {
-            shoot(actor)
+            shoot(actor, target)
         }
 
         input.onAction(RELOAD_ACTION) {
@@ -45,13 +50,6 @@ class PlayerWeaponSystem(
         }
 
         previousTriggerState = triggerState
-
-        renderer.fgShapes.addLine(
-            weaponsModule.getShootPos(actor),
-            renderer.pointer.worldPos,
-            1.25f,
-            Color.RED
-        )
     }
 
     private fun canShoot(actor: Actor, triggerState: Boolean): Boolean {
@@ -72,16 +70,28 @@ class PlayerWeaponSystem(
         }
     }
 
-    private fun shoot(actor: Actor) {
-        val pos = actor.pos
-        pos.z += BARREL_HEIGHT
-        val target = toWorld(renderer.pointer.pos, pos.z)
-
+    private fun shoot(actor: Actor, target: Vector3) {
         events.fire(WeaponsModule.ShootEvent(actor, target))
 
         val weapon = weaponsModule.getSelectedWeapon(actor)
         if (weapon is RangedWeapon && weapon.ammo <= 0f) {
             events.fire(WeaponsModule.ReloadEvent(actor))
         }
+    }
+
+    private fun drawDebug(shootPos: Vector3, target: Vector3) {
+        renderer.fgShapes.addLine(
+            shootPos,
+            target,
+            1.25f,
+            Color.CYAN
+        )
+
+        renderer.fgShapes.addLine(
+            target,
+            Vector3(target.x, target.y, 0f),
+            1.25f,
+            Color.CYAN
+        )
     }
 }
