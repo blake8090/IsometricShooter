@@ -8,6 +8,9 @@ abstract class Pointer {
 
     val pos = Vector2()
 
+    var visible: Boolean = true
+        protected set
+
     abstract fun create()
 
     abstract fun show()

@@ -32,6 +32,10 @@ class PlayerCrosshairLaserSystem(
     }
 
     private fun update(playerActor: Actor) {
+        if (!renderer.pointer.visible) {
+            return
+        }
+
         val start = weaponsModule.getShootPos(playerActor)
 
         val mid = renderer.pointer.worldPos

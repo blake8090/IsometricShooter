@@ -27,7 +27,6 @@ class CrosshairPointer(
 
     private lateinit var texture: Texture
     private lateinit var offset: Vector2
-    private var visible = true
 
     override fun create() {
         texture = assets.get<Texture>("crosshair.png")

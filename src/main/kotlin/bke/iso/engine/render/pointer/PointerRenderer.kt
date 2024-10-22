@@ -13,6 +13,9 @@ class PointerRenderer(
 
     private var pointer: Pointer = MousePointer()
 
+    val visible: Boolean
+        get() = pointer.visible
+
     val pos: Vector2
         get() =
             camera
