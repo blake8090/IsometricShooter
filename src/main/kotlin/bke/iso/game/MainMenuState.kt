@@ -32,7 +32,7 @@ class MainMenuState(override val game: Game) : State() {
         game.ui.loadingScreen.start {
             loadGameAssets()
             game.states.setState<GameState>()
-            game.events.fire(GameState.LoadSceneEvent("city2.scene", false))
+            game.events.fire(GameState.LoadSceneEvent("mission-01-start.scene", false))
         }
     }
 
