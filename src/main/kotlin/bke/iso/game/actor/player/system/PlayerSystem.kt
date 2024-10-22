@@ -156,7 +156,7 @@ class PlayerSystem(
                 offset = Vector3(-0.2f, -0.2f, 0.0f)
             )
         )
-        playerActor.add(RangedWeaponOffset(0f, 0f, 1.13f))
+        playerActor.add(RangedWeaponOffset(0f, 0f, 0.95f))
     }
 
     private fun setCrouchState(playerActor: Actor, player: Player) {

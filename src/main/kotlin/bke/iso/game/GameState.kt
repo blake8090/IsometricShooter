@@ -153,7 +153,12 @@ class GameState(override val game: Game) : State() {
         hudModule.init(game.ui)
         game.renderer.pointer.set(crosshair)
 
-        game.renderer.debug.enableCategories("vision", "turret", "collisions")
+        game.renderer.debug.enableCategories(
+//            "vision",
+//            "turret",
+            "collisions", // TODO: use constants instead
+            "weapon"
+        )
     }
 
     override fun handleEvent(event: Event) {

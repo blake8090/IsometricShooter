@@ -80,14 +80,14 @@ class PlayerWeaponSystem(
     }
 
     private fun drawDebug(shootPos: Vector3, target: Vector3) {
-        renderer.fgShapes.addLine(
+        renderer.debug.category("weapon").addLine(
             shootPos,
             target,
             1.25f,
             Color.CYAN
         )
 
-        renderer.fgShapes.addLine(
+        renderer.debug.category("weapon").addLine(
             target,
             Vector3(target.x, target.y, 0f),
             1.25f,
