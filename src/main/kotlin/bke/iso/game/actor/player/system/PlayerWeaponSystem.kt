@@ -3,6 +3,7 @@ package bke.iso.game.actor.player.system
 import bke.iso.engine.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
+import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
@@ -10,6 +11,7 @@ import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.FireType
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
+import bke.iso.game.weapon.applyRangedWeaponOffset
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
@@ -35,9 +37,11 @@ class PlayerWeaponSystem(
     private fun update(actor: Actor) {
         val triggerState = input.poll(SHOOT_ACTION) == 1f
 
-        val shootPos = weaponsModule.getShootPos(actor)
-        val target = renderer.pointer.worldPos
-        target.z = shootPos.z
+        val shootPos = actor.pos
+        applyRangedWeaponOffset(actor, shootPos)
+
+        val target = toWorld(renderer.pointer.pos, actor.z)
+        applyRangedWeaponOffset(actor, target)
 
         drawDebug(shootPos, target)
 

@@ -30,7 +30,7 @@ class CrosshairPointer(
 
     override fun create() {
         texture = assets.get<Texture>("crosshair.png")
-        offset = Vector2(texture.width / 2f, -1f * (texture.height / 2f))
+        offset = Vector2(texture.width / 2f, 0f)
     }
 
     override fun show() {

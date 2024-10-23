@@ -2,12 +2,13 @@ package bke.iso.game.actor.player.system
 
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.SegmentCollision
+import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.state.System
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.player.Player
-import bke.iso.game.weapon.WeaponsModule
+import bke.iso.game.weapon.applyRangedWeaponOffset
 import bke.iso.game.weapon.system.Bullet
 import bke.iso.game.weapon.system.Explosion
 import com.badlogic.gdx.graphics.Color
@@ -21,7 +22,6 @@ import kotlin.math.max
 class PlayerCrosshairLaserSystem(
     private val world: World,
     private val renderer: Renderer,
-    private val weaponsModule: WeaponsModule,
     private val collisions: Collisions
 ) : System {
 
@@ -36,10 +36,11 @@ class PlayerCrosshairLaserSystem(
             return
         }
 
-        val start = weaponsModule.getShootPos(playerActor)
+        val start = playerActor.pos
+        applyRangedWeaponOffset(playerActor, start)
 
-        val mid = renderer.pointer.worldPos
-        mid.z = start.z
+        val mid = toWorld(renderer.pointer.pos, playerActor.z)
+        applyRangedWeaponOffset(playerActor, mid)
 
         val end = extend(start, mid, 3f)
 

@@ -1,6 +1,5 @@
 package bke.iso.engine.render.pointer
 
-import bke.iso.engine.math.toWorld
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Vector2
@@ -21,9 +20,6 @@ class PointerRenderer(
             camera
                 .unproject(Vector3(pointer.pos, 0f))
                 .toVector2()
-
-    val worldPos: Vector3
-        get() = toWorld(pos)
 
     fun set(newPointer: Pointer) {
         pointer.hide()

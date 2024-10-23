@@ -102,7 +102,9 @@ class WeaponsModule(
     }
 
     private fun createBullet(shooter: Actor, target: Vector3, properties: RangedWeaponProperties) {
-        val start = getShootPos(shooter)
+        // TODO: should the shootPos be included on the event object instead?
+        val start = shooter.pos
+        applyRangedWeaponOffset(shooter, start)
 
         val velocity = Vector3(target)
             .sub(start)
@@ -137,16 +139,6 @@ class WeaponsModule(
         )
     }
 
-    fun getShootPos(actor: Actor): Vector3 {
-        val start = actor.pos
-
-        actor.with { offset: RangedWeaponOffset ->
-            start.add(offset.x, offset.y, offset.z)
-        }
-
-        return start
-    }
-
     private fun calculateBulletRotationDegrees(start: Vector3, target: Vector3): Float {
         val difference = toScreen(target).sub(toScreen(start))
         val angleRadians = atan2(difference.y, difference.x)
@@ -170,4 +162,10 @@ class WeaponsModule(
     ) : Event
 
     data class ReloadEvent(val actor: Actor) : Event
+}
+
+fun applyRangedWeaponOffset(actor: Actor, pos: Vector3) {
+    actor.with { offset: RangedWeaponOffset ->
+        pos.add(offset.x, offset.y, offset.z)
+    }
 }
