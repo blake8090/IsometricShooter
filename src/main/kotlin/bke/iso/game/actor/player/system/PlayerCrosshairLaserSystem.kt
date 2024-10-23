@@ -8,9 +8,11 @@ import bke.iso.engine.state.System
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.game.actor.player.Player
+import bke.iso.game.weapon.WeaponsModule
 import bke.iso.game.weapon.applyRangedWeaponOffset
 import bke.iso.game.weapon.system.Bullet
 import bke.iso.game.weapon.system.Explosion
+import bke.iso.game.weapon.system.RangedWeapon
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.Ray
@@ -22,7 +24,8 @@ import kotlin.math.max
 class PlayerCrosshairLaserSystem(
     private val world: World,
     private val renderer: Renderer,
-    private val collisions: Collisions
+    private val collisions: Collisions,
+    private val weaponsModule: WeaponsModule
 ) : System {
 
     override fun update(deltaTime: Float) {
@@ -32,7 +35,7 @@ class PlayerCrosshairLaserSystem(
     }
 
     private fun update(playerActor: Actor) {
-        if (!renderer.pointer.visible) {
+        if (!renderer.pointer.visible || weaponsModule.getSelectedWeapon(playerActor) !is RangedWeapon) {
             return
         }
 
