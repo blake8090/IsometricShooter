@@ -99,7 +99,6 @@ class GameState(override val game: Game) : State() {
         PlayerCrosshairLaserSystem(
             game.world,
             game.renderer,
-            weaponsModule,
             game.collisions
         ),
         TurretSystem(
