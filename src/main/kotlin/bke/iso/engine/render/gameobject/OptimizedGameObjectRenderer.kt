@@ -26,6 +26,8 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool
 import kotlin.math.floor
 
+// TODO: before we can really use this, we need to fix multiple sorting and rendering issues
+//  with health bars and objects being present in multiple layers
 class OptimizedGameObjectRenderer(
     private val assets: Assets,
     private val world: World,
