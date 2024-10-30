@@ -12,6 +12,7 @@ import bke.iso.engine.state.State
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.input.KeyBinding
 import bke.iso.engine.input.MouseBinding
 import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
@@ -100,7 +101,9 @@ class EditorState(override val game: Game) : State() {
         game.input.keyMouse.bind(
             "toolDown" to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
             "toolPress" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
-            "toolRelease" to MouseBinding(Input.Buttons.LEFT, ButtonState.RELEASED)
+            "toolRelease" to MouseBinding(Input.Buttons.LEFT, ButtonState.RELEASED),
+            "resetZoom" to KeyBinding(Input.Keys.Q, ButtonState.PRESSED),
+            "moveCamera" to KeyBinding(Input.Keys.C, ButtonState.PRESSED),
         )
     }
 

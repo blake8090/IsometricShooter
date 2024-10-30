@@ -101,6 +101,14 @@ class Renderer(
         camera.position.set(toScreen(worldPos), 0f)
     }
 
+    fun zoomCamera(amount: Float) {
+        camera.zoom += amount
+    }
+
+    fun resetCameraZoom() {
+        camera.zoom = 1f
+    }
+
     fun draw() {
         camera.update()
         batch.projectionMatrix = camera.combined

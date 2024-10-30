@@ -14,7 +14,6 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -33,6 +32,8 @@ class CameraModule(
 
     private val log = KotlinLogging.logger {}
 
+    private val mouseScrollAdapter = MouseScrollAdapter()
+    private val cameraZoomSpeed = 35f
 
     private val mouseDragAdapter = MouseDragAdapter(GdxInput.Buttons.MIDDLE)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
@@ -42,6 +43,7 @@ class CameraModule(
 
     fun init() {
         input.addInputProcessor(mouseDragAdapter)
+        input.addInputProcessor(mouseScrollAdapter)
         initCamera()
     }
 
@@ -64,8 +66,16 @@ class CameraModule(
         if (editorScreen.hitMainView()) {
             panCamera()
 
-            if (Gdx.input.isKeyPressed(GdxInput.Keys.C)) {
+            input.onAction("moveCamera") {
                 moveCameraActor()
+            }
+
+            input.onAction("resetZoom") {
+                renderer.resetCameraZoom()
+            }
+
+            mouseScrollAdapter.onScroll { _, y ->
+                renderer.zoomCamera(y * cameraZoomSpeed * deltaTime)
             }
         }
     }
