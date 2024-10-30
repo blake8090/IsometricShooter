@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.math.sign
 import com.badlogic.gdx.Input as GdxInput
 
 class ToggleHideWallsEvent : EditorEvent()
@@ -33,7 +34,7 @@ class CameraModule(
     private val log = KotlinLogging.logger {}
 
     private val mouseScrollAdapter = MouseScrollAdapter()
-    private val cameraZoomSpeed = 35f
+    private val cameraZoomIncrements = 0.25f
 
     private val mouseDragAdapter = MouseDragAdapter(GdxInput.Buttons.MIDDLE)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
@@ -75,7 +76,7 @@ class CameraModule(
             }
 
             mouseScrollAdapter.onScroll { _, y ->
-                renderer.zoomCamera(y * cameraZoomSpeed * deltaTime)
+                renderer.zoomCamera(cameraZoomIncrements * y.sign)
             }
         }
     }
