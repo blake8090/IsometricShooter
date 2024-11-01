@@ -26,8 +26,16 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool
 import kotlin.math.floor
 
-// TODO: before we can really use this, we need to fix multiple sorting and rendering issues
-//  with health bars and objects being present in multiple layers
+/**
+ * This renderer has massive performance gains due to grouping renderables by rows (y-axis)
+ * instead of grouping by layer (z-axis).
+ *
+ * Consider that [OptimizedGameObjectRenderer.sortRenderables] is of quadratic time complexity.
+ * When renderables are grouped by layer, there are fewer but larger lists, as many objects share the same layer.
+ * When grouped by rows, there are numerous but much smaller lists, since most objects do not share the same row.
+ *
+ * Since quadratic algorithms perform best on very small lists, grouping by rows will net significant performance gains.
+ */
 class OptimizedGameObjectRenderer(
     private val assets: Assets,
     private val world: World,
@@ -42,14 +50,14 @@ class OptimizedGameObjectRenderer(
     }
 
     private val renderables = Array<GameObjectRenderable>()
-    private val renderablesByLayer = mutableMapOf<Float, MutableList<GameObjectRenderable>>()
+    private val renderablesByRow = mutableMapOf<Float, MutableList<GameObjectRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch) {
         for (gameObject in world.getObjects()) {
             addRenderable(gameObject)
         }
 
-        for ((_, list) in renderablesByLayer) {
+        for ((_, list) in renderablesByRow) {
             for (i in 0..<list.size) {
                 val renderable = list[i]
                 sortRenderables(list, i)
@@ -57,8 +65,9 @@ class OptimizedGameObjectRenderer(
             }
         }
 
-        for (layer in renderablesByLayer.keys.sorted()) {
-            val list = renderablesByLayer[layer] ?: continue
+        // we sort by descending here as isometric objects must be drawn from back-to-front, not front-to-back.
+        for (row in renderablesByRow.keys.sortedDescending()) {
+            val list = renderablesByRow[row] ?: continue
             for (renderable in list) {
                 draw(renderable, batch)
             }
@@ -69,7 +78,7 @@ class OptimizedGameObjectRenderer(
         }
 
         renderables.clear()
-        renderablesByLayer.clear()
+        renderablesByRow.clear()
         occlusion.endFrame()
     }
 
@@ -81,8 +90,11 @@ class OptimizedGameObjectRenderer(
 
         renderables.add(renderable)
 
-        renderablesByLayer
-            .getOrPut(renderable.layer) { mutableListOf() }
+        val bounds = checkNotNull(renderable.bounds) { "Expected bounds to not be null" }
+        val row = floor(bounds.min.y)
+
+        renderablesByRow
+            .getOrPut(row) { mutableListOf() }
             .add(renderable)
 
         occlusion.prepare(renderable)
@@ -207,7 +219,6 @@ class OptimizedGameObjectRenderer(
         renderable.bounds = bounds
         renderable.x = pos.x
         renderable.y = pos.y
-        renderable.layer = floor(worldPos.z)
         renderable.offsetX = offset.x
         renderable.offsetY = offset.y
         renderable.width = width

@@ -4,7 +4,7 @@ import bke.iso.engine.Event
 import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.render.gameobject.GameObjectRenderer
+import bke.iso.engine.render.gameobject.OptimizedGameObjectRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
@@ -94,7 +94,7 @@ class HudModule(
     override fun handleEvent(event: Event) {
         if (event is CombatModule.PlayerHealthChangeEvent) {
             hudScreen.setHealth(event.health)
-        } else if (event is GameObjectRenderer.DrawActorEvent) {
+        } else if (event is OptimizedGameObjectRenderer.DrawActorEvent) {
             drawHealthBar(event.actor, event.batch)
         }
     }

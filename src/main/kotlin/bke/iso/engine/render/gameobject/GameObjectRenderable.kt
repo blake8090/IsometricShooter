@@ -13,7 +13,6 @@ open class GameObjectRenderable(
     var bounds: Box? = null,
     var x: Float = 0f,
     var y: Float = 0f,
-    var layer: Float = 0f,
     var offsetX: Float = 0f,
     var offsetY: Float = 0f,
     var width: Float = 0f,
@@ -33,7 +32,6 @@ open class GameObjectRenderable(
         bounds = null
         x = 0f
         y = 0f
-        layer = 0f
         offsetX = 0f
         offsetY = 0f
         width = 0f
