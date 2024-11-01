@@ -20,7 +20,8 @@ open class GameObjectRenderable(
     var alpha: Float = 0f,
     var rotation: Float = 0f,
     var fillColor: Color? = null,
-    var tintColor: Color? = null
+    var tintColor: Color? = null,
+    var drawn: Boolean = false
 ) : Poolable {
 
     val behind = Array<GameObjectRenderable>()
@@ -43,5 +44,6 @@ open class GameObjectRenderable(
 
         behind.clear()
         visited = false
+        drawn = false
     }
 }

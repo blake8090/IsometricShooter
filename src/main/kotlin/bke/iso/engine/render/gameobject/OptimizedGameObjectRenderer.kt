@@ -49,35 +49,33 @@ class OptimizedGameObjectRenderer(
         override fun newObject() = GameObjectRenderable()
     }
 
-    private val renderables = Array<GameObjectRenderable>()
-    private val renderablesByRow = mutableMapOf<Float, MutableList<GameObjectRenderable>>()
+    private val renderablesByRow = mutableMapOf<Float, Array<GameObjectRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch) {
         for (gameObject in world.getObjects()) {
             addRenderable(gameObject)
         }
 
-        for ((_, list) in renderablesByRow) {
-            for (i in 0..<list.size) {
-                val renderable = list[i]
-                sortRenderables(list, i)
+        for ((_, renderables) in renderablesByRow) {
+            for (i in 0..<renderables.size) {
+                val renderable = renderables[i]
+                sortRenderables(renderables, i)
                 occlusion.firstPass(renderable)
             }
         }
 
         // we sort by descending here as isometric objects must be drawn from back-to-front, not front-to-back.
         for (row in renderablesByRow.keys.sortedDescending()) {
-            val list = renderablesByRow[row] ?: continue
-            for (renderable in list) {
+            val renderables = renderablesByRow[row] ?: continue
+            for (renderable in renderables) {
                 draw(renderable, batch)
             }
         }
 
-        for (renderable in renderables) {
-            pool.free(renderable)
+        for (renderables in renderablesByRow.values) {
+            pool.freeAll(renderables)
         }
 
-        renderables.clear()
         renderablesByRow.clear()
         occlusion.endFrame()
     }
@@ -88,13 +86,11 @@ class OptimizedGameObjectRenderer(
             return
         }
 
-        renderables.add(renderable)
-
         val bounds = checkNotNull(renderable.bounds) { "Expected bounds to not be null" }
         val row = floor(bounds.min.y)
 
         renderablesByRow
-            .getOrPut(row) { mutableListOf() }
+            .getOrPut(row) { Array() }
             .add(renderable)
 
         occlusion.prepare(renderable)
@@ -115,12 +111,12 @@ class OptimizedGameObjectRenderer(
             /* halfDepth = */ 0f
         )
 
-    private fun sortRenderables(r: List<GameObjectRenderable>, start: Int) {
-        val a = r[start]
+    private fun sortRenderables(renderables: Array<GameObjectRenderable>, start: Int) {
+        val a = renderables[start]
         val aBounds = checkNotNull(a.bounds) { "Expected bounds to not be null" }
 
-        for (j in start + 1..<r.size) {
-            val b = r[j]
+        for (j in start + 1..<renderables.size) {
+            val b = renderables[j]
             val bBounds = checkNotNull(b.bounds) { "Expected bounds to not be null" }
 
             if (inFront(aBounds, bBounds)) {
