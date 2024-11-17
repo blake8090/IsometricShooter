@@ -3,7 +3,7 @@ package bke.iso.engine.profiler
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
-import bke.iso.engine.input.KeyBinding
+import bke.iso.engine.input.keymouse.KeyBinding
 import bke.iso.engine.ui.UI
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.ObjectFloatMap

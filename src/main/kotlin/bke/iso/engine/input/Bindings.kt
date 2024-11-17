@@ -1,8 +1,8 @@
 package bke.iso.engine.input
 
-sealed class Binding
+open class Binding
 
-sealed class ButtonBinding : Binding() {
+abstract class ButtonBinding : Binding() {
     abstract val code: Int
     abstract val state: ButtonState
 }
@@ -19,31 +19,10 @@ data class CompositeBinding<T : ButtonBinding>(
     val positiveBinding: T
 ) : Binding()
 
-sealed class AxisBinding : Binding() {
+abstract class AxisBinding : Binding() {
     abstract val code: Int
     abstract val invert: Boolean
 }
-
-data class MouseBinding(
-    override val code: Int,
-    override val state: ButtonState
-) : ButtonBinding()
-
-data class KeyBinding(
-    override val code: Int,
-    override val state: ButtonState
-) : ButtonBinding()
-
-
-data class ControllerBinding(
-    override val code: Int,
-    override val state: ButtonState
-) : ButtonBinding()
-
-data class ControllerAxisBinding(
-    override val code: Int,
-    override val invert: Boolean = false
-) : AxisBinding()
 
 class Bindings {
     private val bindingByAction = mutableMapOf<String, Binding>()

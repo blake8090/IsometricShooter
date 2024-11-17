@@ -1,5 +1,9 @@
-package bke.iso.engine.input
+package bke.iso.engine.input.keymouse
 
+import bke.iso.engine.input.Binding
+import bke.iso.engine.input.Bindings
+import bke.iso.engine.input.ButtonBinding
+import bke.iso.engine.input.CompositeBinding
 import com.badlogic.gdx.Gdx
 
 class KeyMouseInput {

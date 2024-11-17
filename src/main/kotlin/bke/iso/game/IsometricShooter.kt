@@ -3,10 +3,10 @@ package bke.iso.game
 import bke.iso.engine.Game
 import bke.iso.engine.GameInfo
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.input.ControllerAxisBinding
-import bke.iso.engine.input.ControllerBinding
-import bke.iso.engine.input.KeyBinding
-import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.input.controller.ControllerAxisBinding
+import bke.iso.engine.input.controller.ControllerBinding
+import bke.iso.engine.input.keymouse.KeyBinding
+import bke.iso.engine.input.keymouse.MouseBinding
 import bke.iso.game.actor.player.system.RELOAD_ACTION
 import bke.iso.game.actor.player.system.SHOOT_ACTION
 import bke.iso.game.weapon.WeaponPropertiesCache

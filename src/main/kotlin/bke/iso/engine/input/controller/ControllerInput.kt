@@ -1,4 +1,11 @@
-package bke.iso.engine.input
+package bke.iso.engine.input.controller
+
+import bke.iso.engine.input.AxisBinding
+import bke.iso.engine.input.Binding
+import bke.iso.engine.input.Bindings
+import bke.iso.engine.input.ButtonBinding
+import bke.iso.engine.input.CompositeBinding
+import bke.iso.engine.input.InputState
 
 class ControllerInput(private val inputState: InputState) {
 

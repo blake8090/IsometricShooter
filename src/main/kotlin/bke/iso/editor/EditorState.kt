@@ -12,8 +12,8 @@ import bke.iso.engine.state.State
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.input.KeyBinding
-import bke.iso.engine.input.MouseBinding
+import bke.iso.engine.input.keymouse.KeyBinding
+import bke.iso.engine.input.keymouse.MouseBinding
 import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color

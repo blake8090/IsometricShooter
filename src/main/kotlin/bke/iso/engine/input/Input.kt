@@ -1,6 +1,8 @@
 package bke.iso.engine.input
 
 import bke.iso.engine.Events
+import bke.iso.engine.input.controller.ControllerInput
+import bke.iso.engine.input.keymouse.KeyMouseInput
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
