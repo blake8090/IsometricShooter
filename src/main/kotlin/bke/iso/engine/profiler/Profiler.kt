@@ -3,7 +3,6 @@ package bke.iso.engine.profiler
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
-import bke.iso.engine.input.keymouse.KeyBinding
 import bke.iso.engine.ui.UI
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.ObjectFloatMap
@@ -27,8 +26,8 @@ class Profiler(
     private val profilerScreen = ProfilerScreen(assets)
 
     fun start() {
-        input.keyMouse.bind("profiler-modifier" to KeyBinding(GdxInput.Keys.SHIFT_LEFT, ButtonState.DOWN))
-        input.keyMouse.bind("profiler-enable" to KeyBinding(GdxInput.Keys.P, ButtonState.PRESSED))
+        input.keyMouse.bindKey("profiler-modifier", GdxInput.Keys.SHIFT_LEFT, ButtonState.DOWN)
+        input.keyMouse.bindKey("profiler-enable", GdxInput.Keys.P, ButtonState.PRESSED)
     }
 
     inline fun profile(name: String, action: () -> Unit) {

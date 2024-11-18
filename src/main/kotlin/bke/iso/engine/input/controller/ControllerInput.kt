@@ -1,11 +1,12 @@
 package bke.iso.engine.input.controller
 
 import bke.iso.engine.input.AxisBinding
-import bke.iso.engine.input.Binding
 import bke.iso.engine.input.Bindings
 import bke.iso.engine.input.ButtonBinding
-import bke.iso.engine.input.CompositeBinding
+import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.InputState
+import com.studiohartman.jamepad.ControllerAxis
+import com.studiohartman.jamepad.ControllerButton
 
 class ControllerInput(private val inputState: InputState) {
 
@@ -20,16 +21,12 @@ class ControllerInput(private val inputState: InputState) {
         bindings.update()
     }
 
-    fun bind(vararg bindings: Pair<String, Binding>) {
-        for ((action, binding) in bindings) {
-            if (binding is ControllerBinding || binding is ControllerAxisBinding) {
-                this.bindings[action] = binding
-            }
-        }
+    fun bindButton(action: String, button: ControllerButton, state: ButtonState) {
+        bindings[action] = ControllerBinding(button.ordinal, state)
     }
 
-    fun bind(action: String, negative: ControllerBinding, positive: ControllerBinding) {
-        bindings[action] = CompositeBinding(negative, positive)
+    fun bindAxis(action: String, axis: ControllerAxis, invert: Boolean = false) {
+        bindings[action] = ControllerAxisBinding(axis.ordinal, invert)
     }
 
     fun poll(action: String): Float =

@@ -12,8 +12,6 @@ import bke.iso.engine.state.State
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.input.keymouse.KeyBinding
-import bke.iso.engine.input.keymouse.MouseBinding
 import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -98,13 +96,14 @@ class EditorState(override val game: Game) : State() {
         layerModule.init()
         buildingsModule.init()
 
-        game.input.keyMouse.bind(
-            "toolDown" to MouseBinding(Input.Buttons.LEFT, ButtonState.DOWN),
-            "toolPress" to MouseBinding(Input.Buttons.LEFT, ButtonState.PRESSED),
-            "toolRelease" to MouseBinding(Input.Buttons.LEFT, ButtonState.RELEASED),
-            "resetZoom" to KeyBinding(Input.Keys.Q, ButtonState.PRESSED),
-            "moveCamera" to KeyBinding(Input.Keys.C, ButtonState.PRESSED),
-        )
+        with(game.input.keyMouse) {
+            bindMouse("toolDown", Input.Buttons.LEFT, ButtonState.DOWN)
+            bindMouse("toolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
+            bindMouse("toolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
+
+            bindKey("resetZoom", Input.Keys.Q, ButtonState.PRESSED)
+            bindKey("moveCamera", Input.Keys.C, ButtonState.PRESSED)
+        }
     }
 
     fun handleEvent(event: EditorEvent) {

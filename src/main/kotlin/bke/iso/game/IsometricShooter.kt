@@ -3,10 +3,6 @@ package bke.iso.game
 import bke.iso.engine.Game
 import bke.iso.engine.GameInfo
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.input.controller.ControllerAxisBinding
-import bke.iso.engine.input.controller.ControllerBinding
-import bke.iso.engine.input.keymouse.KeyBinding
-import bke.iso.engine.input.keymouse.MouseBinding
 import bke.iso.game.actor.player.system.RELOAD_ACTION
 import bke.iso.game.actor.player.system.SHOOT_ACTION
 import bke.iso.game.weapon.WeaponPropertiesCache
@@ -28,67 +24,51 @@ class IsometricShooter : GameInfo() {
 
     private fun bindInput(game: Game) {
         with(game.input.keyMouse) {
-            bind(
-                "toggleDebug" to KeyBinding(Input.Keys.M, ButtonState.PRESSED),
-                "placeBouncyBall" to KeyBinding(
-                    Input.Keys.Z,
-                    ButtonState.PRESSED
-                ),
-                "run" to KeyBinding(Input.Keys.SHIFT_LEFT, ButtonState.DOWN),
-                "jump" to KeyBinding(Input.Keys.SPACE, ButtonState.PRESSED),
-                SHOOT_ACTION to MouseBinding(
-                    Input.Buttons.LEFT,
-                    ButtonState.DOWN
-                ),
-                RELOAD_ACTION to KeyBinding(
-                    Input.Keys.R,
-                    ButtonState.PRESSED
-                ),
-                "crouch" to KeyBinding(Input.Keys.C, ButtonState.PRESSED),
-                "useMedkit" to KeyBinding(Input.Keys.Q, ButtonState.PRESSED),
-                "interact" to KeyBinding(Input.Keys.E, ButtonState.PRESSED)
+            bindKey("toggleDebug", Input.Keys.M, ButtonState.PRESSED)
+
+            bindKey("run", Input.Keys.SHIFT_LEFT, ButtonState.DOWN)
+            bindKey("jump", Input.Keys.SPACE, ButtonState.PRESSED)
+            bindKey("crouch", Input.Keys.C, ButtonState.PRESSED)
+
+            bindCompositeKey(
+                action = "moveX",
+                negativeKey = Input.Keys.A,
+                negativeState = ButtonState.DOWN,
+                positiveKey = Input.Keys.D,
+                positiveState = ButtonState.DOWN,
             )
-            bind(
-                "moveY",
-                KeyBinding(Input.Keys.S, ButtonState.DOWN),
-                KeyBinding(Input.Keys.W, ButtonState.DOWN)
+
+            bindCompositeKey(
+                action = "moveY",
+                negativeKey = Input.Keys.S,
+                negativeState = ButtonState.DOWN,
+                positiveKey = Input.Keys.W,
+                positiveState = ButtonState.DOWN,
             )
-            bind(
-                "moveX",
-                KeyBinding(Input.Keys.A, ButtonState.DOWN),
-                KeyBinding(Input.Keys.D, ButtonState.DOWN)
-            )
+
+            bindMouse(SHOOT_ACTION, Input.Buttons.LEFT, ButtonState.DOWN)
+            bindKey(RELOAD_ACTION, Input.Keys.R, ButtonState.PRESSED)
+
+            bindKey("useMedkit", Input.Keys.Q, ButtonState.PRESSED)
+            bindKey("interact", Input.Keys.E, ButtonState.PRESSED)
         }
 
         with(game.input.controller) {
-            bind(
-                "run" to ControllerBinding(
-                    ControllerButton.LEFTBUMPER.ordinal,
-                    ButtonState.DOWN
-                ),
-                "moveX" to ControllerAxisBinding(ControllerAxis.LEFTX.ordinal),
-                "moveY" to ControllerAxisBinding(ControllerAxis.LEFTY.ordinal, true),
-                "cursorX" to ControllerAxisBinding(ControllerAxis.RIGHTX.ordinal),
-                "cursorY" to ControllerAxisBinding(ControllerAxis.RIGHTY.ordinal),
-                "jump" to ControllerBinding(
-                    ControllerButton.A.ordinal,
-                    ButtonState.PRESSED
-                ),
-                SHOOT_ACTION to ControllerAxisBinding(ControllerAxis.TRIGGERRIGHT.ordinal),//ControllerBinding(ControllerButton.RIGHTBUMPER.ordinal, ButtonState.DOWN),
-                RELOAD_ACTION to ControllerBinding(
-                    ControllerButton.X.ordinal,
-                    ButtonState.PRESSED
-                ),
-                "crouch" to ControllerBinding(
-                    ControllerButton.LEFTSTICK.ordinal,
-                    ButtonState.PRESSED
-                ),
-                "useMedkit" to ControllerBinding(
-                    ControllerButton.DPAD_UP.ordinal,
-                    ButtonState.PRESSED
-                ),
-                "interact" to ControllerBinding(ControllerButton.Y.ordinal, ButtonState.PRESSED)
-            )
+            bindAxis("moveX", ControllerAxis.LEFTX)
+            bindAxis("moveY", ControllerAxis.LEFTY, true)
+
+            bindAxis("cursorX", ControllerAxis.RIGHTX)
+            bindAxis("cursorY", ControllerAxis.RIGHTY)
+
+            bindButton("run", ControllerButton.LEFTBUMPER, ButtonState.DOWN)
+            bindButton("jump", ControllerButton.A, ButtonState.PRESSED)
+            bindButton("crouch", ControllerButton.LEFTSTICK, ButtonState.PRESSED)
+
+            bindAxis(SHOOT_ACTION, ControllerAxis.TRIGGERRIGHT)
+            bindButton(RELOAD_ACTION, ControllerButton.X, ButtonState.PRESSED)
+
+            bindButton("useMedkit", ControllerButton.DPAD_UP, ButtonState.PRESSED)
+            bindButton("interact", ControllerButton.Y, ButtonState.PRESSED)
         }
     }
 }

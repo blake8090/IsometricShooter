@@ -1,8 +1,8 @@
 package bke.iso.engine.input.keymouse
 
-import bke.iso.engine.input.Binding
 import bke.iso.engine.input.Bindings
 import bke.iso.engine.input.ButtonBinding
+import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.CompositeBinding
 import com.badlogic.gdx.Gdx
 
@@ -18,16 +18,25 @@ class KeyMouseInput {
         bindings.update()
     }
 
-    fun bind(vararg bindings: Pair<String, Binding>) {
-        for ((action, binding) in bindings) {
-            if (binding is KeyBinding || binding is MouseBinding) {
-                this.bindings[action] = binding
-            }
-        }
+    fun bindKey(action: String, key: Int, state: ButtonState) {
+        bindings[action] = KeyBinding(key, state)
     }
 
-    fun bind(action: String, negative: KeyBinding, positive: KeyBinding) {
-        bindings[action] = CompositeBinding(negative, positive)
+    fun bindCompositeKey(
+        action: String,
+        negativeKey: Int,
+        negativeState: ButtonState,
+        positiveKey: Int,
+        positiveState: ButtonState
+    ) {
+        bindings[action] = CompositeBinding(
+            KeyBinding(negativeKey, negativeState),
+            KeyBinding(positiveKey, positiveState)
+        )
+    }
+
+    fun bindMouse(action: String, button: Int, state: ButtonState) {
+        bindings[action] = MouseBinding(button, state)
     }
 
     fun poll(action: String): Float =
