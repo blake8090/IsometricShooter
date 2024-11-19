@@ -2,7 +2,7 @@ package bke.iso.game.actor.player
 
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
-import bke.iso.game.combat.Health
+import bke.iso.game.combat.system.Health
 import bke.iso.game.weapon.system.Weapon
 import io.github.oshai.kotlinlogging.KotlinLogging
 

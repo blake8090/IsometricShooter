@@ -2,8 +2,8 @@ import org.gradle.kotlin.dsl.application
 import io.github.fourlastor.construo.Target
 
 plugins {
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.serialization") version "1.9.0"
+    kotlin("jvm") version "2.0.21"
+    kotlin("plugin.serialization") version "2.0.21"
     id("io.gitlab.arturbosch.detekt").version("1.23.1")
     id("io.github.fourlastor.construo") version "1.2.0"
     application
@@ -23,8 +23,8 @@ repositories {
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.1")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.reflections:reflections:0.10.2")
 
     implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.0")
@@ -39,16 +39,16 @@ dependencies {
     implementation("org.lwjgl:lwjgl-nfd:3.3.2")
     runtimeOnly("org.lwjgl:lwjgl-nfd:3.3.2:natives-windows")
 
-    implementation("ch.qos.logback:logback-classic:1.5.6")
-    implementation("org.slf4j:slf4j-api:2.0.13")
-    implementation("io.github.oshai:kotlin-logging-jvm:5.1.4")
+    implementation("ch.qos.logback:logback-classic:1.5.12")
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("io.kotest:kotest-runner-junit5:5.6.2")
-    testImplementation("io.kotest:kotest-assertions-core:5.6.2")
-    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+    testImplementation("io.mockk:mockk:1.13.13")
 }
 
 application {

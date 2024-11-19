@@ -4,6 +4,7 @@ import bke.iso.engine.asset.config.Config
 import bke.iso.engine.world.actor.Component
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.Weapon
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -42,10 +43,12 @@ class Serializer {
         }
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     val format: Json = Json {
         serializersModule = module
         isLenient = true
         prettyPrint = true
+        allowComments = true
     }
 
     private fun getComponentSubTypes(): List<KClass<out Component>> =

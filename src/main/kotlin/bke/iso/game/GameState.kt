@@ -13,9 +13,9 @@ import bke.iso.game.actor.player.Player
 import bke.iso.game.actor.player.system.PlayerSystem
 import bke.iso.game.actor.TurretSystem
 import bke.iso.game.combat.CombatModule
-import bke.iso.game.combat.HealSystem
-import bke.iso.game.combat.Health
-import bke.iso.game.combat.HitEffectSystem
+import bke.iso.game.combat.system.HealSystem
+import bke.iso.game.combat.system.Health
+import bke.iso.game.combat.system.HitEffectSystem
 import bke.iso.game.actor.door.DoorModule
 import bke.iso.game.actor.elevator.ElevatorModule
 import bke.iso.game.actor.elevator.ElevatorSystem
@@ -40,7 +40,8 @@ class GameState(override val game: Game) : State() {
 
     private val combatModule = CombatModule(
         game.world,
-        game.events
+        game.events,
+        game.assets.configs
     )
     private val weaponsModule = WeaponsModule(
         game.assets,

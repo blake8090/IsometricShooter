@@ -1,4 +1,4 @@
-package bke.iso.game.combat
+package bke.iso.game.combat.system
 
 import bke.iso.engine.state.System
 import bke.iso.engine.render.SpriteFillColor

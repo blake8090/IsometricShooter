@@ -1,4 +1,4 @@
-package bke.iso.game.combat
+package bke.iso.game.combat.system
 
 import bke.iso.engine.world.actor.Component
 import kotlinx.serialization.SerialName
