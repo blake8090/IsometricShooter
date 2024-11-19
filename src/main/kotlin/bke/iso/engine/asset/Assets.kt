@@ -1,5 +1,6 @@
 package bke.iso.engine.asset
 
+import bke.iso.engine.asset.config.Configs
 import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.asset.font.Fonts
 import bke.iso.engine.asset.shader.Shaders
@@ -20,6 +21,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     val fonts: Fonts = Fonts(this, systemInfo)
     val shaders: Shaders = Shaders(this)
+    val configs = Configs(this)
 
     private val cacheByExtension = OrderedMap<String, AssetCache<*>>()
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()

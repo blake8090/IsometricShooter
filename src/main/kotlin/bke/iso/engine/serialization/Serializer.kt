@@ -1,5 +1,6 @@
 package bke.iso.engine.serialization
 
+import bke.iso.engine.asset.config.Config
 import bke.iso.engine.world.actor.Component
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.Weapon
@@ -26,12 +27,18 @@ class Serializer {
 
         polymorphic(Component::class) {
             for (kClass in getComponentSubTypes()) {
-                subclass(kClass)
+                componentSubclass(kClass)
             }
         }
 
         polymorphic(Weapon::class) {
             subclass(RangedWeapon::class)
+        }
+
+        polymorphic(Config::class) {
+            for (kClass in getConfigSubTypes()) {
+                configSubclass(kClass)
+            }
         }
     }
 
@@ -47,8 +54,19 @@ class Serializer {
             .map(Class<out Component>::kotlin)
             .filter { kClass -> kClass.hasAnnotation<Serializable>() }
 
+    private fun getConfigSubTypes(): List<KClass<out Config>> =
+        Reflections("bke.iso")
+            .getSubTypesOf(Config::class.java)
+            .map(Class<out Config>::kotlin)
+            .filter { kClass -> kClass.hasAnnotation<Serializable>() }
+
     @Suppress("UNCHECKED_CAST")
-    private fun <T : Component> PolymorphicModuleBuilder<Component>.subclass(kClass: KClass<T>) {
+    private fun <T : Component> PolymorphicModuleBuilder<Component>.componentSubclass(kClass: KClass<T>) {
+        subclass(kClass, serializer(kClass.createType()) as KSerializer<T>)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Config> PolymorphicModuleBuilder<Config>.configSubclass(kClass: KClass<T>) {
         subclass(kClass, serializer(kClass.createType()) as KSerializer<T>)
     }
 

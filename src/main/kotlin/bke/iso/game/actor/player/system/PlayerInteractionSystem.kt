@@ -11,6 +11,8 @@ import bke.iso.game.actor.elevator.ElevatorModule
 import bke.iso.game.actor.player.Player
 import bke.iso.game.hud.HudModule
 
+private const val PLAYER_DOOR_ACTION_RADIUS = 1.2f
+
 class PlayerInteractionSystem(
     private val world: World,
     private val input: Input,

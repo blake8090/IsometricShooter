@@ -1,5 +1,6 @@
 package bke.iso.game.actor.player.system
 
+import bke.iso.engine.asset.config.Configs
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collision
@@ -13,6 +14,7 @@ import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit
 import bke.iso.game.actor.player.Player
+import bke.iso.game.actor.player.PlayerConfig
 import bke.iso.game.actor.player.PlayerState
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.system.RangedWeaponOffset
@@ -22,14 +24,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-const val PLAYER_DOOR_ACTION_RADIUS = 1.2f
-
-private const val PLAYER_JUMP_FORCE = 5f
 private const val CONTROLLER_DEADZONE = 0.1f
-
-private const val BASE_MOVEMENT_SPEED = 3.0f
-private const val CROUCH_SPEED_MODIFIER = 0.6f
-private const val RUN_SPEED_MODIFIER = 1.6f
 
 class PlayerSystem(
     private val input: Input,
@@ -37,7 +32,8 @@ class PlayerSystem(
     private val renderer: Renderer,
     private val collisions: Collisions,
     private val combatModule: CombatModule,
-    private val weaponsModule: WeaponsModule
+    private val weaponsModule: WeaponsModule,
+    private val configs: Configs
 ) : System {
 
     private val log = KotlinLogging.logger {}
@@ -80,7 +76,9 @@ class PlayerSystem(
     }
 
     private fun move(playerActor: Actor, player: Player, direction: Vector2) {
-        val horizontalSpeed = getHorizontalSpeed(player)
+        val playerConfig = configs.get("player.cfg", PlayerConfig::class)
+
+        val horizontalSpeed = getHorizontalSpeed(player, playerConfig)
         val movement = Vector3(
             direction.x * horizontalSpeed,
             direction.y * horizontalSpeed,
@@ -97,17 +95,17 @@ class PlayerSystem(
         }
         body.forces.add(movement)
         input.onAction("jump") {
-            body.velocity.z = PLAYER_JUMP_FORCE
+            body.velocity.z = playerConfig.jumpForce
         }
     }
 
-    private fun getHorizontalSpeed(player: Player): Float {
-        var speed = BASE_MOVEMENT_SPEED
+    private fun getHorizontalSpeed(player: Player, playerConfig: PlayerConfig): Float {
+        var speed = playerConfig.baseMovementSpeed
 
         if (player.state == PlayerState.CROUCH) {
-            speed *= CROUCH_SPEED_MODIFIER
+            speed *= playerConfig.crouchSpeedModifier
         } else if (input.poll("run") == 1f) {
-            speed *= RUN_SPEED_MODIFIER
+            speed *= playerConfig.runSpeedModifier
         }
 
         return speed
