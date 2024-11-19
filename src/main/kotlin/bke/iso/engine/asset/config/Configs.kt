@@ -6,6 +6,9 @@ import kotlin.reflect.cast
 
 class Configs(private val assets: Assets) {
 
+    inline fun <reified T : Config> get(name: String) =
+        get(name, T::class)
+
     fun <T : Config> get(name: String, type: KClass<T>): T {
         val config = assets.get<Config>(name)
 

@@ -76,7 +76,7 @@ class PlayerSystem(
     }
 
     private fun move(playerActor: Actor, player: Player, direction: Vector2) {
-        val playerConfig = configs.get("player.cfg", PlayerConfig::class)
+        val playerConfig = configs.get<PlayerConfig>("player.cfg")
 
         val horizontalSpeed = getHorizontalSpeed(player, playerConfig)
         val movement = Vector3(
