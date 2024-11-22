@@ -1,8 +1,10 @@
-package bke.iso.editorv2.scene
+package bke.iso.editorv2.scene.ui
 
 import bke.iso.editor.ui.EditorAssetBrowser
 import bke.iso.editor.ui.EditorToolBar
 import bke.iso.editor.ui.color
+import bke.iso.editorv2.scene.OpenSceneEvent
+import bke.iso.editorv2.scene.SaveSceneEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.ui.util.BorderedTable
@@ -14,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 
 private const val SCENE_TAB_STYLE = "sceneTab"
 
-class SceneTab(
+class EditorSceneTab(
     private val skin: Skin,
     private val assets: Assets
 ) {
@@ -24,6 +26,7 @@ class SceneTab(
 
     private val assetBrowser = EditorAssetBrowser(skin, assets)
     private val editorToolBar = EditorToolBar(skin, assets)
+    private val sceneInspector = EditorSceneInspector(skin, assets)
 
     fun create() {
         setup()
@@ -53,13 +56,21 @@ class SceneTab(
             }
         })
 
-        mainView.add(assetBrowser.create())
-
         mainView.add(editorToolBar.create())
-            .expand()
-            .fillX()
+            .growX()
             .top()
             .left()
+            .colspan(2)
+
+        mainView.row()
+        mainView.add(assetBrowser.create())
+            .expandX()
+            .left()
+        mainView.add(sceneInspector.create())
+            .top()
+            .right()
+//            .minWidth(200f)
+            .growY()
     }
 
     private fun setup() {
