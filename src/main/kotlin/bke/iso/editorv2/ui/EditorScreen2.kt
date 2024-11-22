@@ -38,7 +38,7 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         val menuBarStack = Stack()
         menuBarStack.add(sceneTab.menuBar)
         menuBarStack.add(actorTab.menuBar)
-        root.add(menuBarStack).expandX().left()
+        root.add(menuBarStack).growX().left()
 
         root.row()
         root.add(createTabs())

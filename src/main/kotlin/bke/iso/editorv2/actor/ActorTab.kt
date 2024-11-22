@@ -22,10 +22,11 @@ class ActorTab(
     fun create() {
         setup()
 
-        menuBar.add(TextButton("New", skin, ACTOR_TAB_STYLE))
-        menuBar.add(TextButton("Open", skin, ACTOR_TAB_STYLE))
-        menuBar.add(TextButton("Save", skin, ACTOR_TAB_STYLE))
-        menuBar.add(TextButton("Save As", skin, ACTOR_TAB_STYLE))
+        menuBar.background = skin.getDrawable("bg")
+        menuBar.add(createMenuButton("New"))
+        menuBar.add(createMenuButton("Open"))
+        menuBar.add(createMenuButton("Save"))
+        menuBar.add(createMenuButton("Save As"))
     }
 
     private fun setup() {
@@ -33,7 +34,13 @@ class ActorTab(
             font = assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)]
             down = skin.newDrawable("pixel", color(43, 103, 161))
             over = skin.newDrawable("pixel", color(34, 84, 133))
-            checked = skin.newDrawable("pixel", color(43, 103, 161))
+//            checked = skin.newDrawable("pixel", color(43, 103, 161))
         })
+    }
+
+    private fun createMenuButton(text: String): TextButton {
+        return TextButton(text, skin, ACTOR_TAB_STYLE).apply {
+            pad(5f)
+        }
     }
 }

@@ -22,11 +22,12 @@ class SceneTab(
     fun create() {
         setup()
 
-        menuBar.add(TextButton("New", skin, SCENE_TAB_STYLE))
-        menuBar.add(TextButton("Open", skin, SCENE_TAB_STYLE))
-        menuBar.add(TextButton("Save", skin, SCENE_TAB_STYLE))
-        menuBar.add(TextButton("Save As", skin, SCENE_TAB_STYLE))
-        menuBar.add(TextButton("View", skin, SCENE_TAB_STYLE))
+        menuBar.background = skin.getDrawable("bg")
+        menuBar.add(createMenuButton("New"))
+        menuBar.add(createMenuButton("Open"))
+        menuBar.add(createMenuButton("Save"))
+        menuBar.add(createMenuButton("Save As"))
+        menuBar.add(createMenuButton("View"))
     }
 
     private fun setup() {
@@ -34,7 +35,13 @@ class SceneTab(
             font = assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)]
             down = skin.newDrawable("pixel", color(43, 103, 161))
             over = skin.newDrawable("pixel", color(34, 84, 133))
-            checked = skin.newDrawable("pixel", color(43, 103, 161))
+//            checked = skin.newDrawable("pixel", color(43, 103, 161))
         })
+    }
+
+    private fun createMenuButton(text: String): TextButton {
+        return TextButton(text, skin, SCENE_TAB_STYLE).apply {
+            pad(5f)
+        }
     }
 }
