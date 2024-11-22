@@ -6,6 +6,7 @@ import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.ui.util.BorderedTable
+import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -28,11 +29,29 @@ class SceneTab(
         setup()
 
         menuBar.background = skin.getDrawable("bg")
-        menuBar.add(createMenuButton("New"))
-        menuBar.add(createMenuButton("Open"))
-        menuBar.add(createMenuButton("Save"))
-        menuBar.add(createMenuButton("Save As"))
-        menuBar.add(createMenuButton("View"))
+        menuBar.add(createMenuButton("New").apply {
+            onChanged {
+            }
+        })
+        menuBar.add(createMenuButton("Open").apply {
+            onChanged {
+                fire(OpenSceneEvent())
+            }
+        })
+        menuBar.add(createMenuButton("Save").apply {
+            onChanged {
+                fire(SaveSceneEvent())
+            }
+        })
+        menuBar.add(createMenuButton("Save As").apply {
+            onChanged {
+                fire(SaveSceneEvent())
+            }
+        })
+        menuBar.add(createMenuButton("View").apply {
+            onChanged {
+            }
+        })
 
         mainView.add(assetBrowser.create())
 
