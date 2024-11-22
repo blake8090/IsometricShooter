@@ -1,5 +1,6 @@
 package bke.iso.editorv2.scene
 
+import bke.iso.editor.ui.EditorToolBar
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
@@ -19,6 +20,8 @@ class SceneTab(
     val menuBar: Table = Table().left()
     val mainView: Table = BorderedTable(color(43, 103, 161))
 
+    private val editorToolBar = EditorToolBar(skin, assets)
+
     fun create() {
         setup()
 
@@ -28,6 +31,12 @@ class SceneTab(
         menuBar.add(createMenuButton("Save"))
         menuBar.add(createMenuButton("Save As"))
         menuBar.add(createMenuButton("View"))
+
+        mainView.add(editorToolBar.create())
+            .expand()
+            .fillX()
+            .top()
+            .left()
     }
 
     private fun setup() {

@@ -1,5 +1,6 @@
 package bke.iso.editorv2
 
+import bke.iso.editor.event.EditorEvent
 import bke.iso.editorv2.ui.EditorScreen2
 import bke.iso.engine.Game
 import bke.iso.engine.state.Module
@@ -13,11 +14,15 @@ class EditorState2(override val game: Game) : State() {
     override val systems: LinkedHashSet<System> = linkedSetOf()
     override val modules: Set<Module> = setOf()
 
-    private val screen = EditorScreen2(game.assets)
+    private val screen = EditorScreen2(this, game.assets)
 
     override suspend fun load() {
         log.info { "Starting editor" }
 
         game.ui.setScreen(screen)
+    }
+
+    fun handleEvent(event: EditorEvent) {
+        log.debug { "Fired event ${event::class.simpleName}" }
     }
 }

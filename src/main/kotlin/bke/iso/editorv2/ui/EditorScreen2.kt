@@ -1,6 +1,9 @@
 package bke.iso.editorv2.ui
 
+import bke.iso.editor.event.EditorEvent
+import bke.iso.editor.event.EditorEventListener
 import bke.iso.editor.ui.color
+import bke.iso.editorv2.EditorState2
 import bke.iso.editorv2.actor.ActorTab
 import bke.iso.editorv2.scene.SceneTab
 import bke.iso.engine.asset.Assets
@@ -10,6 +13,7 @@ import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -17,7 +21,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private const val TABS_STYLE = "tabs"
 
-class EditorScreen2(assets: Assets) : UIScreen(assets) {
+class EditorScreen2(
+    private val editorState: EditorState2,
+    assets: Assets
+) : UIScreen(assets) {
 
     private val log = KotlinLogging.logger {}
 
@@ -38,7 +45,9 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         val menuBarStack = Stack()
         menuBarStack.add(sceneTab.menuBar)
         menuBarStack.add(actorTab.menuBar)
-        root.add(menuBarStack).growX().left()
+        root.add(menuBarStack)
+            .growX()
+            .left()
 
         root.row()
         root.add(createTabs())
@@ -46,6 +55,18 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
             .top()
             .left()
 
+        root.row()
+
+        val mainViewStack = Stack()
+        mainViewStack.add(sceneTab.mainView)
+        mainViewStack.add(actorTab.mainView)
+        root.add(mainViewStack).grow()
+
+        root.addListener(object : EditorEventListener {
+            override fun handle(event: EditorEvent) {
+                editorState.handleEvent(event)
+            }
+        })
 
         stage.addActor(root)
     }
@@ -60,6 +81,23 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
             over = skin.newDrawable("pixel", color(34, 84, 133))
             checked = skin.newDrawable("pixel", color(43, 103, 161))
         })
+
+        setupDefaultStyle()
+    }
+
+    private fun setupDefaultStyle() {
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
+
+        skin.add("default", Label.LabelStyle().apply {
+            font = skin.getFont("default")
+            background = skin.getDrawable("bg")
+        })
+
+        skin.add("button-up", color(20, 51, 82))
+        skin.add("button-over", color(34, 84, 133))
+        skin.add("button-down", color(43, 103, 161))
+        skin.add("button-checked", color(43, 103, 161))
+        skin.add("table-border", color(77, 100, 130))
     }
 
     private fun createTabs(): Table {
