@@ -56,20 +56,14 @@ class EditorSceneTab(
             }
         })
 
+        mainView.row()
+        mainView.add(assetBrowser.create())
+
         mainView.add(editorToolBar.create())
             .growX()
             .top()
-            .left()
-            .colspan(2)
 
-        mainView.row()
-        mainView.add(assetBrowser.create())
-            .expandX()
-            .left()
         mainView.add(sceneInspector.create())
-            .top()
-            .right()
-//            .minWidth(200f)
             .growY()
     }
 
