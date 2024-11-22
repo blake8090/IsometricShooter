@@ -59,9 +59,8 @@ class EditorSceneTab(
         mainView.row()
         mainView.add(assetBrowser.create())
 
-        mainView.add(editorToolBar.create())
-            .growX()
-            .top()
+        mainView.add(createMainViewArea())
+            .grow()
 
         mainView.add(sceneInspector.create())
             .growY()
@@ -80,5 +79,18 @@ class EditorSceneTab(
         return TextButton(text, skin, SCENE_TAB_STYLE).apply {
             pad(5f)
         }
+    }
+
+    private fun createMainViewArea(): Table {
+        val table = Table().top()
+
+        table.add(editorToolBar.create())
+            .growX()
+
+        table.row()
+        val viewArea = Table()
+        table.add(viewArea).grow()
+
+        return table
     }
 }
