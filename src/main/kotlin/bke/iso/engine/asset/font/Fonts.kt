@@ -31,6 +31,7 @@ class Fonts(
 
     private val cache = mutableMapOf<FontOptions, BitmapFont>()
 
+    // TODO: use multiple params for cleanliness
     operator fun get(options: FontOptions): BitmapFont =
         cache.getOrPut(options) { generateFont(options) }
 

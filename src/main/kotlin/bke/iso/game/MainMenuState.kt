@@ -1,6 +1,7 @@
 package bke.iso.game
 
-import bke.iso.editor.EditorState
+//import bke.iso.editor.EditorState
+import bke.iso.editorv2.EditorState2
 import bke.iso.engine.Event
 import bke.iso.engine.Game
 import bke.iso.engine.state.Module
@@ -39,7 +40,7 @@ class MainMenuState(override val game: Game) : State() {
     private fun startEditor() {
         game.ui.loadingScreen.start {
             loadGameAssets()
-            game.states.setState<EditorState>()
+            game.states.setState<EditorState2>()
         }
     }
 
