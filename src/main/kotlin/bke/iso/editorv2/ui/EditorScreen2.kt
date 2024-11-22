@@ -30,7 +30,7 @@ class EditorScreen2(
 
     private val root = Table().top()
 
-    private val editorSceneTab = EditorSceneTab(skin, assets)
+    private val editorSceneTab = EditorSceneTab(skin, assets, stage)
     private val editorActorTab = EditorActorTab(skin, assets)
 
 
