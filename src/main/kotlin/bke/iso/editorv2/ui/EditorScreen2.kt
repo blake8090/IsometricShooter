@@ -6,6 +6,7 @@ import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -54,8 +55,13 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         val tabs = Table().left()
         tabs.background = skin.getDrawable("bg")
 
-        tabs.add(createTab("Scene"))
-        tabs.add(createTab("Actor"))
+        val sceneTab = createTab("Scene")
+        val actorTab = createTab("Actor")
+
+        tabs.add(sceneTab)
+        tabs.add(actorTab)
+
+        ButtonGroup<TextButton>().add(sceneTab, actorTab)
 
         return tabs
     }
