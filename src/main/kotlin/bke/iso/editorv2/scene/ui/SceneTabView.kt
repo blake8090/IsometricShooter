@@ -2,7 +2,6 @@ package bke.iso.editorv2.scene.ui
 
 import bke.iso.editor.MainViewDragEvent
 import bke.iso.editor.MainViewPressEvent
-import bke.iso.editor.ui.EditorAssetBrowser
 import bke.iso.editor.ui.color
 import bke.iso.editorv2.scene.OpenSceneEvent
 import bke.iso.editorv2.scene.SaveSceneEvent
@@ -36,7 +35,7 @@ class SceneTabView(
     val menuBar: Table = Table().left()
     val mainView: Table = BorderedTable(color(43, 103, 161))
 
-    private val assetBrowser = EditorAssetBrowser(skin, assets)
+    private val assetBrowser = SceneAssetBrowserView(skin, assets)
     private val toolBarView = SceneToolbarView(skin, assets)
     private val sceneInspectorView = SceneInspectorView(skin, assets)
 
