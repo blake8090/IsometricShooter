@@ -37,7 +37,7 @@ class SceneTabView(
 
     private val assetBrowser = SceneAssetBrowserView(skin, assets)
     private val toolBarView = SceneToolbarView(skin, assets)
-    private val sceneInspectorView = SceneInspectorView(skin, assets)
+    val sceneInspectorView = SceneInspectorView(skin, assets)
 
     fun create() {
         setup()

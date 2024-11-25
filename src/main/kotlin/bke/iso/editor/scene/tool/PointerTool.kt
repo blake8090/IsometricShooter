@@ -1,6 +1,7 @@
 package bke.iso.editor.scene.tool
 
 import bke.iso.editor.EditorCommand
+import bke.iso.engine.Events
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
@@ -8,7 +9,8 @@ import com.badlogic.gdx.graphics.Color
 
 class PointerTool(
     override val collisions: Collisions,
-    private val renderer: Renderer
+    private val renderer: Renderer,
+    private val events: Events
 ) : SceneTabTool() {
 
     private var highlighted: PickedActor? = null
@@ -32,9 +34,15 @@ class PointerTool(
     }
 
     override fun performAction(): EditorCommand? {
-        if (highlighted != null) {
-            selected = highlighted
+        val currentlyHighlighted = highlighted
+
+        if (currentlyHighlighted != null) {
+            selected = currentlyHighlighted
+            events.fire(PointerSelectActorEvent(currentlyHighlighted.actor))
+        } else {
+            events.fire(PointerDeselectActorEvent())
         }
+
         return null
     }
 
@@ -45,6 +53,7 @@ class PointerTool(
     override fun disable() {
         highlighted = null
         selected = null
+        events.fire(PointerDeselectActorEvent())
     }
 
     fun getSelectedActor(): Actor? =

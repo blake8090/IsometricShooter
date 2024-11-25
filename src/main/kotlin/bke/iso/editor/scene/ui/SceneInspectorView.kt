@@ -5,6 +5,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.newTintedDrawable
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.List
@@ -26,6 +27,12 @@ class SceneInspectorView(
         .padLeft(5f)
         .padRight(5f)
 
+    private lateinit var idTextField: TextField
+    private lateinit var descriptionTextField: TextField
+    private lateinit var xPosTextField: TextField
+    private lateinit var yPosTextField: TextField
+    private lateinit var zPosTextField: TextField
+
     fun create(): Actor {
         setup()
 
@@ -35,7 +42,7 @@ class SceneInspectorView(
             .left()
 
         root.row()
-        root.add(createVariablesSection())
+        root.add(createPropertiesSection())
             .growX()
             .padTop(15f)
 
@@ -49,6 +56,18 @@ class SceneInspectorView(
             .growX()
             .padTop(15f)
         return root
+    }
+
+    fun updateProperties(
+        id: String,
+        description: String,
+        pos: Vector3
+    ) {
+        idTextField.text = id
+        descriptionTextField.text = description
+        xPosTextField.text = pos.x.toString()
+        yPosTextField.text = pos.y.toString()
+        zPosTextField.text = pos.z.toString()
     }
 
     private fun setup() {
@@ -73,16 +92,18 @@ class SceneInspectorView(
         })
     }
 
-    private fun createVariablesSection(): Table {
+    private fun createPropertiesSection(): Table {
         val table = BorderedTable(color(43, 103, 161))
             .padLeft(5f)
             .padRight(5f)
 
-        table.add(Label("name:", skin))
+        table.add(Label("id:", skin))
             .left()
             .padRight(5f)
             .padBottom(5f)
-        table.add(TextField("asd asd", skin, "sceneInspector"))
+        idTextField = TextField("", skin, "sceneInspector")
+        idTextField.isDisabled = true
+        table.add(idTextField)
             .growX()
 
         table.row()
@@ -90,7 +111,8 @@ class SceneInspectorView(
             .left()
             .padRight(5f)
             .padBottom(5f)
-        table.add(TextField("Test description", skin, "sceneInspector"))
+        descriptionTextField = TextField("", skin, "sceneInspector")
+        table.add(descriptionTextField)
             .growX()
 
         table.row()
@@ -98,7 +120,8 @@ class SceneInspectorView(
             .left()
             .padRight(5f)
             .padBottom(5f)
-        table.add(TextField("000.00", skin, "sceneInspector"))
+        xPosTextField = TextField("", skin, "sceneInspector")
+        table.add(xPosTextField)
             .growX()
 
         table.row()
@@ -106,7 +129,8 @@ class SceneInspectorView(
             .left()
             .padRight(5f)
             .padBottom(5f)
-        table.add(TextField("000.00", skin, "sceneInspector"))
+        yPosTextField = TextField("", skin, "sceneInspector")
+        table.add(yPosTextField)
             .growX()
 
         table.row()
@@ -114,7 +138,8 @@ class SceneInspectorView(
             .left()
             .padRight(5f)
             .padBottom(5f)
-        table.add(TextField("000.00", skin, "sceneInspector"))
+        zPosTextField = TextField("", skin, "sceneInspector")
+        table.add(zPosTextField)
             .growX()
 
         return table

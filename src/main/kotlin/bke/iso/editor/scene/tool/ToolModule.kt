@@ -9,6 +9,7 @@ import bke.iso.editor.scene.tool.fill.FillTool
 import bke.iso.editor.scene.tool.room.RoomTool
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.Event
+import bke.iso.engine.Events
 import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
@@ -22,12 +23,13 @@ class ToolModule(
     referenceActorModule: ReferenceActorModule,
     private val renderer: Renderer,
     private val layerModule: LayerModule,
-    private val sceneTabView: SceneTabView
+    private val sceneTabView: SceneTabView,
+    events: Events
 ) : Module {
 
     private val log = KotlinLogging.logger {}
 
-    private val pointerTool = PointerTool(collisions, renderer)
+    private val pointerTool = PointerTool(collisions, renderer, events)
     private val brushTool = BrushTool(collisions, world, referenceActorModule, renderer)
     private val eraserTool = EraserTool(collisions, referenceActorModule, renderer)
     private val roomTool = RoomTool(collisions, renderer, referenceActorModule)

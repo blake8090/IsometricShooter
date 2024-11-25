@@ -42,7 +42,12 @@ class SceneTabViewController(
         referenceActorModule,
         game.renderer,
         layerModule,
-        sceneTabView
+        sceneTabView,
+        game.events
+    )
+
+    private val sceneInspectorModule = SceneInspectorModule(
+        sceneTabView.sceneInspectorView
     )
 
     fun getModules() = setOf(
@@ -50,7 +55,8 @@ class SceneTabViewController(
         sceneModule,
         cameraModule,
         layerModule,
-        toolModule
+        toolModule,
+        sceneInspectorModule
     )
 
     fun init() {
