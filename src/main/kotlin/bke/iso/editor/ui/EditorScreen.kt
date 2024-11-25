@@ -1,5 +1,6 @@
 package bke.iso.editor.ui
 
+import bke.iso.editor.ContextMenuSelection
 import bke.iso.editor.EditorEvent
 import bke.iso.editor.EditorEventListener
 import bke.iso.editor.EditorState
@@ -12,24 +13,27 @@ import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import io.github.oshai.kotlinlogging.KotlinLogging
 
 class EditorScreen(
     private val editorState: EditorState,
     assets: Assets
 ) : UIScreen(assets) {
 
-    private val log = KotlinLogging.logger {}
-
     private val root = Table().top()
 
     val sceneTabView = SceneTabView(skin, assets, stage)
     private val actorTabView = ActorTabView(skin, assets)
+
+    private val contextMenuView = ContextMenuView(skin)
+    private var contextMenuActor: Actor? = null
 
     override fun create() {
         setup()
@@ -143,4 +147,27 @@ class EditorScreen(
             padRight(hPad)
         }
     }
+
+    fun openContextMenu(pos: Vector2, selections: Set<ContextMenuSelection>) {
+        closeContextMenu()
+
+        val stagePos = stage.screenToStageCoordinates(pos)
+        val newActor = contextMenuView.create(stagePos.x, stagePos.y, selections)
+        // since this is not a child of the root actor, we have to manually add an event listener handler
+        newActor.addListener(object : EditorEventListener {
+            override fun handle(event: EditorEvent) {
+                editorState.handleEvent(event)
+            }
+        })
+
+        contextMenuActor = newActor
+        stage.addActor(contextMenuActor)
+    }
+
+    fun closeContextMenu() {
+        contextMenuActor?.addAction(Actions.removeActor())
+    }
+
+    fun touchedContextMenu() =
+        contextMenuView.touchedContextMenu(stage)
 }

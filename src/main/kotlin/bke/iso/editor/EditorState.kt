@@ -25,8 +25,10 @@ class EditorState(override val game: Game) : State() {
     private val editorScreen = EditorScreen(this, game.assets)
     private val sceneTabController = SceneTabViewController(game, editorScreen.sceneTabView)
 
+    private val contextMenuModule = ContextMenuModule(editorScreen)
+
     override val modules: Set<Module> =
-        sceneTabController.getModules()
+        sceneTabController.getModules() + contextMenuModule
 
     override val systems: LinkedHashSet<System> =
         linkedSetOf()
@@ -45,6 +47,7 @@ class EditorState(override val game: Game) : State() {
             bindMouse("toolDown", Input.Buttons.LEFT, ButtonState.DOWN)
             bindMouse("toolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
             bindMouse("toolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
+            bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
 
             bindKey("resetZoom", Input.Keys.Q, ButtonState.PRESSED)
             bindKey("moveCamera", Input.Keys.C, ButtonState.PRESSED)
@@ -70,7 +73,6 @@ class EditorState(override val game: Game) : State() {
             game.input.onAction("toolPress") {
                 println("tool press")
                 sceneTabController.toolModule.performAction()?.let(::execute)
-//                editorScreen.closeContextMenu()
             }
 
             game.input.onAction("toolRelease") {
@@ -82,6 +84,10 @@ class EditorState(override val game: Game) : State() {
         drawGrid()
 
         sceneTabController.draw()
+
+        game.input.onAction("openContextMenu") {
+            // TODO: delegate to either sceneTab or actorTab
+        }
     }
 
     private fun execute(command: EditorCommand) {

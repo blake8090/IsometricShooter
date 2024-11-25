@@ -1,7 +1,9 @@
 package bke.iso.editor.scene.ui
 
+import bke.iso.editor.ContextMenuSelection
 import bke.iso.editor.MainViewDragEvent
 import bke.iso.editor.MainViewPressEvent
+import bke.iso.editor.OpenContextMenuEvent
 import bke.iso.editor.scene.OpenSceneEvent
 import bke.iso.editor.scene.SaveSceneEvent
 import bke.iso.editor.ui.color
@@ -60,6 +62,39 @@ class SceneTabView(
         })
         menuBar.add(createMenuButton("View").apply {
             onChanged {
+                val pos = Vector2(
+                    this.x,
+                    this.y + this.height
+                )
+
+                fire(OpenContextMenuEvent(
+                    pos,
+                    setOf(
+                        ContextMenuSelection("Show Grid") {},
+                        ContextMenuSelection("Show Collision Boxes") {},
+                        ContextMenuSelection("Hide Walls") {},
+                        ContextMenuSelection("Hide Upper Layers") {},
+                        ContextMenuSelection("Highlight Selected Layer") {}
+                    )
+                ))
+            }
+        })
+        menuBar.add(createMenuButton("Buildings").apply {
+            onChanged {
+                val pos = Vector2(
+                    this.x,
+                    this.y + this.height
+                )
+
+                fire(OpenContextMenuEvent(
+                    pos,
+                    setOf(
+                        ContextMenuSelection("New Building") {},
+                        ContextMenuSelection("Edit Building") {},
+                        ContextMenuSelection("Close Building") {},
+                        ContextMenuSelection("Delete Building") {}
+                    )
+                ))
             }
         })
 
