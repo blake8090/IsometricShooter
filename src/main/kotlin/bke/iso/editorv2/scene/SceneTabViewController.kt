@@ -1,6 +1,5 @@
 package bke.iso.editorv2.scene
 
-import bke.iso.editor.ReferenceActors
 import bke.iso.editorv2.scene.camera.CameraModule2
 import bke.iso.editorv2.scene.layer.LayerModule2
 import bke.iso.editorv2.scene.tool.ToolModule2
@@ -40,7 +39,7 @@ class SceneTabViewController(
     val toolModule = ToolModule2(
         game.collisions,
         game.world,
-        ReferenceActors(game.world),
+        referenceActorModule,
         game.renderer,
         layerModule,
         sceneTabView

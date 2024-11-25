@@ -1,9 +1,6 @@
 package bke.iso.editorv2
 
-import bke.iso.editor.MainViewDragEvent
-import bke.iso.editor.PerformActionEvent
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.tool.EditorCommand
 import bke.iso.editorv2.scene.SceneTabViewController
 import bke.iso.editorv2.ui.EditorScreen
 import bke.iso.engine.Game
@@ -15,6 +12,12 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+
+class MainViewPressEvent : EditorEvent()
+
+class MainViewDragEvent : EditorEvent()
+
+class PerformActionEvent : EditorEvent()
 
 class EditorState2(override val game: Game) : State() {
 

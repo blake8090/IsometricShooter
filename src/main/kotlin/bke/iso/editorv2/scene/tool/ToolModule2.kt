@@ -1,14 +1,12 @@
 package bke.iso.editorv2.scene.tool
 
-import bke.iso.editor.ReferenceActors
-import bke.iso.editor.tool.brush.BrushTool
-import bke.iso.editor.tool.eraser.EraserTool
-import bke.iso.editor.tool.EditorCommand
-import bke.iso.editor.tool.EditorTool
-import bke.iso.editor.tool.PointerTool
-import bke.iso.editor.tool.fill.FillTool
-import bke.iso.editor.tool.room.RoomTool
+import bke.iso.editorv2.EditorCommand
+import bke.iso.editorv2.scene.ReferenceActorModule
 import bke.iso.editorv2.scene.layer.LayerModule2
+import bke.iso.editorv2.scene.tool.brush.BrushTool
+import bke.iso.editorv2.scene.tool.eraser.EraserTool
+import bke.iso.editorv2.scene.tool.fill.FillTool
+import bke.iso.editorv2.scene.tool.room.RoomTool
 import bke.iso.editorv2.scene.ui.SceneTabView
 import bke.iso.engine.Event
 import bke.iso.engine.state.Module
@@ -21,7 +19,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 class ToolModule2(
     collisions: Collisions,
     world: World,
-    referenceActors: ReferenceActors,
+    referenceActorModule: ReferenceActorModule,
     private val renderer: Renderer,
     private val layerModule: LayerModule2,
     private val sceneTabView: SceneTabView
@@ -30,12 +28,12 @@ class ToolModule2(
     private val log = KotlinLogging.logger {}
 
     private val pointerTool = PointerTool(collisions, renderer)
-    private val brushTool = BrushTool(collisions, world, referenceActors, renderer)
-    private val eraserTool = EraserTool(collisions, referenceActors, renderer)
-    private val roomTool = RoomTool(collisions, renderer, referenceActors)
-    private val fillTool = FillTool(collisions, renderer, referenceActors)
+    private val brushTool = BrushTool(collisions, world, referenceActorModule, renderer)
+    private val eraserTool = EraserTool(collisions, referenceActorModule, renderer)
+    private val roomTool = RoomTool(collisions, renderer, referenceActorModule)
+    private val fillTool = FillTool(collisions, renderer, referenceActorModule)
 
-    private var selectedTool: EditorTool? = null
+    private var selectedTool: SceneTabTool? = null
 
     override fun update(deltaTime: Float) {
         val tool = selectedTool ?: return
@@ -92,7 +90,7 @@ class ToolModule2(
     fun performReleaseAction(): EditorCommand? =
         selectedTool?.performReleaseAction()
 
-    private fun selectTool(tool: EditorTool) {
+    private fun selectTool(tool: SceneTabTool) {
         selectedTool?.disable()
         if (selectedTool is BrushTool) {
             sceneTabView.unselectPrefabs()
