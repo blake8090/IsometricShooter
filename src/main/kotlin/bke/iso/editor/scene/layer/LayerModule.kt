@@ -35,7 +35,9 @@ class LayerModule(
 
     var hideUpperLayers = false
         private set
-    private var highlightLayer = false
+
+    var highlightLayer = false
+        private set
 
     override fun update(deltaTime: Float) {}
 

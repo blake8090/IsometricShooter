@@ -40,7 +40,8 @@ class CameraModule(
     private val cameraPanScale = Vector2(0.5f, 0.5f)
     private lateinit var cameraActor: Actor
 
-    private var wallsHidden = false
+    var wallsHidden = false
+        private set
 
     fun init() {
         input.addInputProcessor(mouseDragAdapter)

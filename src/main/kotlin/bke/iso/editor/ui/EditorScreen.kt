@@ -32,7 +32,7 @@ class EditorScreen(
     val sceneTabView = SceneTabView(skin, assets, stage)
     private val actorTabView = ActorTabView(skin, assets)
 
-    private val contextMenuView = ContextMenuView(skin)
+    private val contextMenuView = ContextMenuView(skin, assets)
     private var contextMenuActor: Actor? = null
 
     override fun create() {

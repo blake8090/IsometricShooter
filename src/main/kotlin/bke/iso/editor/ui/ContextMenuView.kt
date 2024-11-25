@@ -1,22 +1,34 @@
 package bke.iso.editor.ui
 
+import bke.iso.editor.CheckableContextMenuSelection
 import bke.iso.editor.CloseContextMenuEvent
 import bke.iso.editor.ContextMenuSelection
+import bke.iso.editor.DefaultContextMenuSelection
+import bke.iso.engine.asset.Assets
+import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 private const val CONTEXT_MENU_ACTOR_NAME = "contextMenu"
 
-class ContextMenuView(private val skin: Skin) {
+class ContextMenuView(
+    private val skin: Skin,
+    private val assets: Assets
+) {
 
     private val log = KotlinLogging.logger {}
 
@@ -41,7 +53,28 @@ class ContextMenuView(private val skin: Skin) {
     private fun addButton(menu: Table, selection: ContextMenuSelection) {
         menu.row()
 
-        val button = TextButton(selection.text, skin).apply {
+        val button =
+            when (selection) {
+                is DefaultContextMenuSelection -> {
+                    createDefaultButton(selection)
+                }
+
+                is CheckableContextMenuSelection -> {
+                    createCheckableSelection(selection)
+                }
+
+                else -> {
+                    error("unknown selection type ${selection::class.simpleName}")
+                }
+            }
+
+        menu.add(button)
+            .grow()
+            .space(5f)
+    }
+
+    private fun createDefaultButton(selection: DefaultContextMenuSelection): Button =
+        TextButton(selection.text, skin).apply {
             padLeft(5f)
             padRight(5f)
             label.setAlignment(Align.left)
@@ -52,9 +85,36 @@ class ContextMenuView(private val skin: Skin) {
             }
         }
 
-        menu.add(button)
-            .grow()
-            .space(5f)
+    private fun createCheckableSelection(selection: CheckableContextMenuSelection): Button {
+        val style = ImageTextButton.ImageTextButtonStyle().apply {
+            val texture =
+                if (selection.isChecked()) {
+                    assets.get<Texture>("checkbox-checked.png")
+                } else {
+                    assets.get<Texture>("checkbox.png")
+                }
+
+
+            imageUp = TextureRegionDrawable(TextureRegion(texture))
+            over = skin.newTintedDrawable("pixel", "button-over")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            checked = skin.newTintedDrawable("pixel", "button-checked")
+            font = skin.getFont("default")
+        }
+
+        return ImageTextButton(selection.text, style).apply {
+            left()
+
+            // only known way to customize padding is to delete and re-add the children...
+            clearChildren()
+            add(image).padRight(5f)
+            add(label)
+
+            onChanged {
+                selection.action.invoke()
+                fire(CloseContextMenuEvent())
+            }
+        }
     }
 
     fun touchedContextMenu(stage: Stage): Boolean {

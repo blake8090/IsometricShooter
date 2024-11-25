@@ -63,6 +63,7 @@ class EditorState(override val game: Game) : State() {
             }
         } else {
             game.events.fire(event)
+            sceneTabController.handleEvent(event)
         }
     }
 

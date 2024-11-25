@@ -7,10 +7,18 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
 
-data class ContextMenuSelection(
+interface ContextMenuSelection
+
+data class DefaultContextMenuSelection(
     val text: String,
     val action: () -> Unit
-)
+) : ContextMenuSelection
+
+data class CheckableContextMenuSelection(
+    val text: String,
+    val action: () -> Unit,
+    val isChecked: () -> Boolean
+) : ContextMenuSelection
 
 data class OpenContextMenuEvent(
     val pos: Vector2,
