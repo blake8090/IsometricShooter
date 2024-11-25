@@ -9,6 +9,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.UIScreen
+import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -17,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import io.github.oshai.kotlinlogging.KotlinLogging
-
-private const val TABS_STYLE = "tabs"
 
 class EditorScreen(
     private val editorState: EditorState,
@@ -30,7 +29,7 @@ class EditorScreen(
     private val root = Table().top()
 
     val sceneTabView = SceneTabView(skin, assets, stage)
-    val actorTabView = ActorTabView(skin, assets)
+    private val actorTabView = ActorTabView(skin, assets)
 
     override fun create() {
         setup()
@@ -72,30 +71,36 @@ class EditorScreen(
     private fun setup() {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
+        skin.add("table-border", color(77, 100, 130))
 
-        skin.add(TABS_STYLE, TextButton.TextButtonStyle().apply {
-            font = assets.fonts[FontOptions("roboto.ttf", 14f, Color.WHITE)]
-            down = skin.newDrawable("pixel", color(43, 103, 161))
-            over = skin.newDrawable("pixel", color(34, 84, 133))
-            checked = skin.newDrawable("pixel", color(43, 103, 161))
-        })
-
-        setupDefaultStyle()
-    }
-
-    private fun setupDefaultStyle() {
-        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 14f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")
             background = skin.getDrawable("bg")
         })
 
+        setupButtonStyles()
+    }
+
+    private fun setupButtonStyles() {
         skin.add("button-up", color(20, 51, 82))
         skin.add("button-over", color(34, 84, 133))
         skin.add("button-down", color(43, 103, 161))
         skin.add("button-checked", color(43, 103, 161))
-        skin.add("table-border", color(77, 100, 130))
+
+        skin.add("default", TextButton.TextButtonStyle().apply {
+            font = skin.getFont("default")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            over = skin.newTintedDrawable("pixel", "button-over")
+        })
+
+        skin.add("checkable", TextButton.TextButtonStyle().apply {
+            font = skin.getFont("default")
+            down = skin.newTintedDrawable("pixel", "button-down")
+            over = skin.newTintedDrawable("pixel", "button-over")
+            checked = skin.newTintedDrawable("pixel", "button-checked")
+        })
     }
 
     private fun createTabs(): Table {
@@ -131,7 +136,7 @@ class EditorScreen(
     private fun createButton(text: String): TextButton {
         val vPad = 10f
         val hPad = 10f
-        return TextButton(text, skin, TABS_STYLE).apply {
+        return TextButton(text, skin, "checkable").apply {
             padTop(vPad)
             padBottom(vPad)
             padLeft(hPad)

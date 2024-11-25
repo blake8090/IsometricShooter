@@ -6,11 +6,9 @@ import bke.iso.editor.scene.OpenSceneEvent
 import bke.iso.editor.scene.SaveSceneEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
@@ -21,12 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-private const val SCENE_TAB_STYLE = "sceneTab"
 private const val TOUCHABLE_AREA_NAME = "touchableArea"
 
 class SceneTabView(
     private val skin: Skin,
-    private val assets: Assets,
+    assets: Assets,
     private val stage: Stage
 ) {
 
@@ -40,9 +37,8 @@ class SceneTabView(
     val sceneInspectorView = SceneInspectorView(skin, assets)
 
     fun create() {
-        setup()
-
         menuBar.background = skin.getDrawable("bg")
+
         menuBar.add(createMenuButton("New").apply {
             onChanged {
             }
@@ -100,17 +96,8 @@ class SceneTabView(
         })
     }
 
-    private fun setup() {
-        skin.add(SCENE_TAB_STYLE, TextButton.TextButtonStyle().apply {
-            font = assets.fonts[FontOptions("roboto.ttf", 13f, Color.WHITE)]
-            down = skin.newDrawable("pixel", color(43, 103, 161))
-            over = skin.newDrawable("pixel", color(34, 84, 133))
-//            checked = skin.newDrawable("pixel", color(43, 103, 161))
-        })
-    }
-
     private fun createMenuButton(text: String): TextButton {
-        return TextButton(text, skin, SCENE_TAB_STYLE).apply {
+        return TextButton(text, skin).apply {
             pad(5f)
         }
     }

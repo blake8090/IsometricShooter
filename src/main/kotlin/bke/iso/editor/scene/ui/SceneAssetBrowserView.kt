@@ -4,7 +4,6 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.ui.util.BorderedTable
-import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -24,12 +23,10 @@ class SceneAssetBrowserView(
     private val stack = Stack()
 
     fun create(): Actor {
-        setup()
+        val root = BorderedTable(skin.getColor("table-border"))
+        root.background = skin.getDrawable("bg")
 
-        val root = BorderedTable(skin.getColor("table-border")).apply {
-            borderSize = 1f
-            background = this@SceneAssetBrowserView.skin.getDrawable("bg")
-
+        root.apply {
             add(createTabs())
                 .expandX()
                 .padTop(5f)
@@ -43,23 +40,14 @@ class SceneAssetBrowserView(
         }
 
         populateBrowsers()
-        return root
-    }
 
-    private fun setup() {
-        skin.add("asset-browser", TextButton.TextButtonStyle().apply {
-            font = skin.getFont("default")
-            up = skin.newTintedDrawable("pixel", "button-up")
-            down = skin.newTintedDrawable("pixel", "button-down")
-            over = skin.newTintedDrawable("pixel", "button-over")
-            checked = skin.newTintedDrawable("pixel", "button-checked")
-        })
+        return root
     }
 
     private fun createTabs(): Table {
         val table = Table()
 
-        val tileButton = TextButton("Tiles", skin, "asset-browser").apply {
+        val tileButton = TextButton("Tiles", skin).apply {
             padLeft(Value.percentWidth(.25f, this))
             padRight(Value.percentWidth(.25f, this))
             onChanged {
@@ -70,7 +58,7 @@ class SceneAssetBrowserView(
         }
         table.add(tileButton)
 
-        val actorButton = TextButton("Actors", skin, "asset-browser").apply {
+        val actorButton = TextButton("Actors", skin).apply {
             padLeft(Value.percentWidth(.25f, this))
             padRight(Value.percentWidth(.25f, this))
             onChanged {
