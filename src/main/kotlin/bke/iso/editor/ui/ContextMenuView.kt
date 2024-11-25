@@ -87,14 +87,7 @@ class ContextMenuView(
 
     private fun createCheckableSelection(selection: CheckableContextMenuSelection): Button {
         val style = ImageTextButton.ImageTextButtonStyle().apply {
-            val texture =
-                if (selection.isChecked()) {
-                    assets.get<Texture>("checkbox-checked.png")
-                } else {
-                    assets.get<Texture>("checkbox.png")
-                }
-
-
+            val texture = assets.get<Texture>("checkbox.png")
             imageUp = TextureRegionDrawable(TextureRegion(texture))
             over = skin.newTintedDrawable("pixel", "button-over")
             down = skin.newTintedDrawable("pixel", "button-down")
@@ -109,6 +102,10 @@ class ContextMenuView(
             clearChildren()
             add(image).padRight(5f)
             add(label)
+
+            if (!selection.isChecked()) {
+                image.setColor(1f, 1f, 1f, 0f)
+            }
 
             onChanged {
                 selection.action.invoke()
