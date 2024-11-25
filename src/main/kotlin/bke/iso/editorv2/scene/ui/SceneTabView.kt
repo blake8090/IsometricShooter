@@ -1,10 +1,10 @@
 package bke.iso.editorv2.scene.ui
 
-import bke.iso.editor.ui.color
 import bke.iso.editorv2.MainViewDragEvent
 import bke.iso.editorv2.MainViewPressEvent
 import bke.iso.editorv2.scene.OpenSceneEvent
 import bke.iso.editorv2.scene.SaveSceneEvent
+import bke.iso.editorv2.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.ui.util.BorderedTable

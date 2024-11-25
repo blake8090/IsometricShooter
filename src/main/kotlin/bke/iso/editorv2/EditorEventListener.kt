@@ -1,4 +1,4 @@
-package bke.iso.editor.event
+package bke.iso.editorv2
 
 import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.EventListener

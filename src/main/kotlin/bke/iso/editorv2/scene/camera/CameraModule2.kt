@@ -1,6 +1,6 @@
 package bke.iso.editorv2.scene.camera
 
-import bke.iso.editor.event.EditorEvent
+import bke.iso.editorv2.EditorEvent
 import bke.iso.editorv2.scene.layer.ChangeSelectedLayerEvent
 import bke.iso.editorv2.scene.layer.LayerModule2
 import bke.iso.editorv2.scene.ui.SceneTabView

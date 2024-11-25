@@ -1,6 +1,6 @@
 package bke.iso.editorv2.scene
 
-import bke.iso.editor.event.EditorEvent
+import bke.iso.editorv2.EditorEvent
 import bke.iso.engine.Event
 import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets

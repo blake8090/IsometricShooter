@@ -1,8 +1,8 @@
 package bke.iso.editorv2.scene.tool.eraser
 
-import bke.iso.editor.TilePrefabReference
 import bke.iso.editorv2.EditorCommand
 import bke.iso.editorv2.scene.ReferenceActorModule
+import bke.iso.editorv2.scene.TilePrefabReference
 import bke.iso.editorv2.scene.tool.SceneTabTool
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer

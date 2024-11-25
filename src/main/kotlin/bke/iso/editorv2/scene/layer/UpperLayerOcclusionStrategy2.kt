@@ -1,7 +1,7 @@
 package bke.iso.editorv2.scene.layer
 
-import bke.iso.editor.ActorPrefabReference
-import bke.iso.editor.TilePrefabReference
+import bke.iso.editorv2.scene.ActorPrefabReference
+import bke.iso.editorv2.scene.TilePrefabReference
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.actor.Actor

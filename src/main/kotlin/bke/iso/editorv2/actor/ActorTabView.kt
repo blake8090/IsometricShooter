@@ -1,6 +1,6 @@
 package bke.iso.editorv2.actor
 
-import bke.iso.editor.ui.color
+import bke.iso.editorv2.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.ui.util.BorderedTable

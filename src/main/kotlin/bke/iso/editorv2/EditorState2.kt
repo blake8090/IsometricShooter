@@ -1,6 +1,5 @@
 package bke.iso.editorv2
 
-import bke.iso.editor.event.EditorEvent
 import bke.iso.editorv2.scene.SceneTabViewController
 import bke.iso.editorv2.ui.EditorScreen
 import bke.iso.engine.Game

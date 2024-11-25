@@ -1,4 +1,4 @@
-package bke.iso.editor.ui
+package bke.iso.editorv2.ui
 
 import com.badlogic.gdx.graphics.Color
 

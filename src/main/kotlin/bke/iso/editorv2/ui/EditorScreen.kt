@@ -1,8 +1,7 @@
 package bke.iso.editorv2.ui
 
-import bke.iso.editor.event.EditorEvent
-import bke.iso.editor.event.EditorEventListener
-import bke.iso.editor.ui.color
+import bke.iso.editorv2.EditorEvent
+import bke.iso.editorv2.EditorEventListener
 import bke.iso.editorv2.EditorState2
 import bke.iso.editorv2.actor.ActorTabView
 import bke.iso.editorv2.scene.ui.SceneTabView

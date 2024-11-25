@@ -1,7 +1,7 @@
 package bke.iso.editorv2.scene.layer
 
-import bke.iso.editor.PerformActionEvent
-import bke.iso.editor.event.EditorEvent
+import bke.iso.editorv2.EditorEvent
+import bke.iso.editorv2.PerformActionEvent
 import bke.iso.editorv2.scene.ui.SceneTabView
 import bke.iso.engine.Event
 import bke.iso.engine.Events

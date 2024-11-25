@@ -10,10 +10,10 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.math.floor
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
-import bke.iso.editor.withFirstInstance
 import bke.iso.editorv2.EditorCommand
 import bke.iso.editorv2.scene.ReferenceActorModule
 import bke.iso.editorv2.scene.tool.SceneTabTool
+import bke.iso.editorv2.withFirstInstance
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
