@@ -1,15 +1,15 @@
 package bke.iso.editorv2.scene.ui
 
-import bke.iso.editor.camera.ToggleHideWallsEvent
-import bke.iso.editor.tool.SelectBrushToolEvent
-import bke.iso.editor.tool.SelectEraserToolEvent
-import bke.iso.editor.tool.SelectFillToolEvent
-import bke.iso.editor.tool.SelectPointerToolEvent
-import bke.iso.editor.tool.SelectRoomToolEvent
+import bke.iso.editorv2.scene.camera.ToggleHideWallsEvent
 import bke.iso.editorv2.scene.layer.DecreaseLayerEvent
 import bke.iso.editorv2.scene.layer.IncreaseLayerEvent
 import bke.iso.editorv2.scene.layer.ToggleHighlightLayerEvent
 import bke.iso.editorv2.scene.layer.ToggleUpperLayersHiddenEvent
+import bke.iso.editorv2.scene.tool.SelectBrushToolEvent
+import bke.iso.editorv2.scene.tool.SelectEraserToolEvent
+import bke.iso.editorv2.scene.tool.SelectFillToolEvent
+import bke.iso.editorv2.scene.tool.SelectPointerToolEvent
+import bke.iso.editorv2.scene.tool.SelectRoomToolEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged

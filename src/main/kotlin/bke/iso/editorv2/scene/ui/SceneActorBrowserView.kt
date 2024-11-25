@@ -1,6 +1,6 @@
 package bke.iso.editorv2.scene.ui
 
-import bke.iso.editor.tool.SelectActorPrefabEvent
+import bke.iso.editorv2.scene.tool.SelectActorPrefabEvent
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.render.Sprite

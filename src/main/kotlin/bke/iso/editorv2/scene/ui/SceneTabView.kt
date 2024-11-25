@@ -144,4 +144,8 @@ class SceneTabView(
     fun updateLayerLabel(layer: Float) {
         toolBarView.updateLayerLabel(layer)
     }
+
+    fun unselectPrefabs() {
+        assetBrowser.unselectPrefabs()
+    }
 }
