@@ -130,6 +130,7 @@ class SceneToolbarView(
         return root
     }
 
+    // TODO: Use this same pattern for creating buttons in the asset browser
     private fun createButton(texture: String): Button {
         val style = Button.ButtonStyle().apply {
             up = newTextureDrawable(texture)

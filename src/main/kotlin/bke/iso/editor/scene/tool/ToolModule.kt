@@ -94,10 +94,6 @@ class ToolModule(
 
     private fun selectTool(tool: SceneTabTool) {
         selectedTool?.disable()
-        if (selectedTool is BrushTool) {
-            sceneTabView.unselectPrefabs()
-        }
-
         tool.enable()
         selectedTool = tool
         log.debug { "Selected tool: ${tool::class.simpleName}" }
