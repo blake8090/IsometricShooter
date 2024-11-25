@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 
 private const val ACTOR_TAB_STYLE = "actorTab"
 
-class EditorActorTab(
+class ActorTabView(
     private val skin: Skin,
     private val assets: Assets
 ) {

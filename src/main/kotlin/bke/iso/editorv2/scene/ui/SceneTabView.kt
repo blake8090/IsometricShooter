@@ -3,7 +3,6 @@ package bke.iso.editorv2.scene.ui
 import bke.iso.editor.MainViewDragEvent
 import bke.iso.editor.MainViewPressEvent
 import bke.iso.editor.ui.EditorAssetBrowser
-import bke.iso.editor.ui.EditorToolBar
 import bke.iso.editor.ui.color
 import bke.iso.editorv2.scene.OpenSceneEvent
 import bke.iso.editorv2.scene.SaveSceneEvent
@@ -26,7 +25,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 private const val SCENE_TAB_STYLE = "sceneTab"
 private const val TOUCHABLE_AREA_NAME = "touchableArea"
 
-class EditorSceneTab(
+class SceneTabView(
     private val skin: Skin,
     private val assets: Assets,
     private val stage: Stage
@@ -38,8 +37,8 @@ class EditorSceneTab(
     val mainView: Table = BorderedTable(color(43, 103, 161))
 
     private val assetBrowser = EditorAssetBrowser(skin, assets)
-    private val editorToolBar = EditorToolBar(skin, assets)
-    private val sceneInspector = EditorSceneInspector(skin, assets)
+    private val toolBarView = SceneToolbarView(skin, assets)
+    private val sceneInspectorView = SceneInspectorView(skin, assets)
 
     fun create() {
         setup()
@@ -75,7 +74,7 @@ class EditorSceneTab(
         mainView.add(createMainViewArea())
             .grow()
 
-        mainView.add(sceneInspector.create())
+        mainView.add(sceneInspectorView.create())
             .growY()
 
         mainView.addListener(object : InputListener() {
@@ -121,7 +120,7 @@ class EditorSceneTab(
         val area = Table().top()
         area.touchable = Touchable.enabled
 
-        area.add(editorToolBar.create())
+        area.add(toolBarView.create())
             .growX()
 
         area.row()
@@ -141,5 +140,9 @@ class EditorSceneTab(
         val actor = stage.hit(stagePos.x, stagePos.y, false) ?: return false
         log.trace { "hit actor ${actor::class.simpleName} ${actor.name}" }
         return actor.name == TOUCHABLE_AREA_NAME
+    }
+
+    fun updateLayerLabel(layer: Float) {
+        toolBarView.updateLayerLabel(layer)
     }
 }

@@ -1,9 +1,9 @@
 package bke.iso.editorv2.scene.camera
 
-import bke.iso.editor.camera.ToggleHideWallsEvent
-import bke.iso.editor.layer.ChangeSelectedLayerEvent
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editorv2.scene.ui.EditorSceneTab
+import bke.iso.editorv2.scene.layer.ChangeSelectedLayerEvent
+import bke.iso.editorv2.scene.layer.LayerModule2
+import bke.iso.editorv2.scene.ui.SceneTabView
 import bke.iso.engine.Event
 import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collider
@@ -27,8 +27,8 @@ class CameraModule2(
     private val renderer: Renderer,
     private val input: Input,
     private val world: World,
-//    private val layerModule: LayerModule,
-    private val editorSceneTab: EditorSceneTab
+    private val layerModule: LayerModule2,
+    private val sceneTabView: SceneTabView
 ) : Module {
 
     private val log = KotlinLogging.logger {}
@@ -64,7 +64,7 @@ class CameraModule2(
     }
 
     override fun update(deltaTime: Float) {
-        if (editorSceneTab.hitTouchableArea()) {
+        if (sceneTabView.hitTouchableArea()) {
 
             panCamera()
 
@@ -102,8 +102,7 @@ class CameraModule2(
     }
 
     private fun moveCameraActor() {
-//        val z = getZ(layerModule.selectedLayer.toFloat())
-        val z = 0f
+        val z = getZ(layerModule.selectedLayer.toFloat())
         val pos = toWorld(renderer.pointer.pos, z)
         cameraActor.moveTo(pos.x, pos.y, pos.z)
     }

@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 
-class EditorSceneInspector(
+class SceneInspectorView(
     private val skin: Skin,
     private val assets: Assets
 ) {

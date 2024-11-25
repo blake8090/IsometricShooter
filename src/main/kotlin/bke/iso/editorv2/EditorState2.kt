@@ -1,8 +1,8 @@
 package bke.iso.editorv2
 
 import bke.iso.editor.event.EditorEvent
-import bke.iso.editorv2.scene.EditorSceneTabController
-import bke.iso.editorv2.ui.EditorScreen2
+import bke.iso.editorv2.scene.SceneTabViewController
+import bke.iso.editorv2.ui.EditorScreen
 import bke.iso.engine.Game
 import bke.iso.engine.state.Module
 import bke.iso.engine.state.State
@@ -13,8 +13,8 @@ class EditorState2(override val game: Game) : State() {
 
     private val log = KotlinLogging.logger {}
 
-    private val screen = EditorScreen2(this, game.assets)
-    private val sceneTabController = EditorSceneTabController(game, screen)
+    private val editorScreen = EditorScreen(this, game.assets)
+    private val sceneTabController = SceneTabViewController(game, editorScreen.sceneTabView)
 
     override val modules: Set<Module> =
         sceneTabController.getModules()
@@ -24,7 +24,7 @@ class EditorState2(override val game: Game) : State() {
 
     override suspend fun load() {
         log.info { "Starting editor" }
-        game.ui.setScreen(screen)
+        game.ui.setScreen(editorScreen)
 
         sceneTabController.init()
     }

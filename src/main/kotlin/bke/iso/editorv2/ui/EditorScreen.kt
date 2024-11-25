@@ -4,8 +4,8 @@ import bke.iso.editor.event.EditorEvent
 import bke.iso.editor.event.EditorEventListener
 import bke.iso.editor.ui.color
 import bke.iso.editorv2.EditorState2
-import bke.iso.editorv2.actor.EditorActorTab
-import bke.iso.editorv2.scene.ui.EditorSceneTab
+import bke.iso.editorv2.actor.ActorTabView
+import bke.iso.editorv2.scene.ui.SceneTabView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
@@ -21,7 +21,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private const val TABS_STYLE = "tabs"
 
-class EditorScreen2(
+class EditorScreen(
     private val editorState: EditorState2,
     assets: Assets
 ) : UIScreen(assets) {
@@ -30,20 +30,20 @@ class EditorScreen2(
 
     private val root = Table().top()
 
-    val editorSceneTab = EditorSceneTab(skin, assets, stage)
-    val editorActorTab = EditorActorTab(skin, assets)
+    val sceneTabView = SceneTabView(skin, assets, stage)
+    val actorTabView = ActorTabView(skin, assets)
 
     override fun create() {
         setup()
 
-        editorSceneTab.create()
-        editorActorTab.create()
+        sceneTabView.create()
+        actorTabView.create()
 
         root.setFillParent(true)
 
         val menuBarStack = Stack()
-        menuBarStack.add(editorSceneTab.menuBar)
-        menuBarStack.add(editorActorTab.menuBar)
+        menuBarStack.add(sceneTabView.menuBar)
+        menuBarStack.add(actorTabView.menuBar)
         root.add(menuBarStack)
             .growX()
             .left()
@@ -57,8 +57,8 @@ class EditorScreen2(
         root.row()
 
         val mainViewStack = Stack()
-        mainViewStack.add(editorSceneTab.mainView)
-        mainViewStack.add(editorActorTab.mainView)
+        mainViewStack.add(sceneTabView.mainView)
+        mainViewStack.add(actorTabView.mainView)
         root.add(mainViewStack).grow()
 
         root.addListener(object : EditorEventListener {
@@ -105,20 +105,20 @@ class EditorScreen2(
 
         val sceneButton = createButton("Scene")
         sceneButton.onChanged {
-            editorSceneTab.menuBar.isVisible = true
-            editorSceneTab.mainView.isVisible = true
+            sceneTabView.menuBar.isVisible = true
+            sceneTabView.mainView.isVisible = true
 
-            editorActorTab.menuBar.isVisible = false
-            editorActorTab.mainView.isVisible = false
+            actorTabView.menuBar.isVisible = false
+            actorTabView.mainView.isVisible = false
         }
 
         val actorButton = createButton("Actor")
         actorButton.onChanged {
-            editorSceneTab.menuBar.isVisible = false
-            editorSceneTab.mainView.isVisible = false
+            sceneTabView.menuBar.isVisible = false
+            sceneTabView.mainView.isVisible = false
 
-            editorActorTab.menuBar.isVisible = true
-            editorActorTab.mainView.isVisible = true
+            actorTabView.menuBar.isVisible = true
+            actorTabView.mainView.isVisible = true
         }
 
         tabs.add(sceneButton)
