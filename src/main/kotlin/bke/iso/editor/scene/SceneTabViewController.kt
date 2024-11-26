@@ -101,6 +101,26 @@ class SceneTabViewController(
         }
     }
 
+    fun openContextMenu(pos: Vector2) {
+        val event = OpenContextMenuEvent(
+            pos,
+            setOf(
+                DefaultContextMenuSelection("Edit Building") {
+                    sceneTabView.openEditBuildingDialog(game.world.buildings.getAll()) { name ->
+                        log.info { "Selected building '$name'" }
+                        buildingsModule.selectBuilding(name)
+                    }
+                },
+
+                DefaultContextMenuSelection("Close Building") {
+                    buildingsModule.closeBuilding()
+                },
+            )
+        )
+
+        game.events.fire(event)
+    }
+
     private fun openViewMenu(pos: Vector2) {
         val event = OpenContextMenuEvent(
             pos,
@@ -139,7 +159,7 @@ class SceneTabViewController(
                     action = {
                         game.events.fire(ToggleHighlightLayerEvent())
                     }
-                ),
+                )
             )
         )
 

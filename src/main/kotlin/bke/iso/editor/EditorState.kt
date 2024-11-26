@@ -2,6 +2,7 @@ package bke.iso.editor
 
 import bke.iso.editor.scene.SceneTabViewController
 import bke.iso.editor.ui.EditorScreen
+import bke.iso.editor.ui.Tab
 import bke.iso.engine.Game
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.state.Module
@@ -87,7 +88,7 @@ class EditorState(override val game: Game) : State() {
         sceneTabController.draw()
 
         game.input.onAction("openContextMenu") {
-            // TODO: delegate to either sceneTab or actorTab
+            openContextMenu()
         }
     }
 
@@ -115,6 +116,23 @@ class EditorState(override val game: Game) : State() {
                 0.5f,
                 Color.WHITE
             )
+        }
+    }
+
+    private fun openContextMenu() {
+        when (editorScreen.activeTab) {
+            Tab.SCENE -> {
+                log.debug { "Delegating context menu to SCENE tab" }
+                sceneTabController.openContextMenu(game.renderer.pointer.screenPos)
+            }
+
+            Tab.ACTOR -> {
+                log.debug { "Delegating context menu to ACTOR tab" }
+            }
+
+            else -> {
+                log.warn { "No active tab selected - cannot open context menu" }
+            }
         }
     }
 }

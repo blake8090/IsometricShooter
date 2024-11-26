@@ -21,6 +21,9 @@ class PointerRenderer(
                 .unproject(Vector3(pointer.pos, 0f))
                 .toVector2()
 
+    val screenPos: Vector2
+        get() = pointer.pos
+
     fun set(newPointer: Pointer) {
         pointer.hide()
         newPointer.create()

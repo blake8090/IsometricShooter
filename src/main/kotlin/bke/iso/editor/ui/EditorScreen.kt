@@ -23,11 +23,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Window
+import io.github.oshai.kotlinlogging.KotlinLogging
+
+enum class Tab {
+    SCENE,
+    ACTOR,
+    NONE
+}
 
 class EditorScreen(
     private val editorState: EditorState,
     assets: Assets
 ) : UIScreen(assets) {
+
+    private val log = KotlinLogging.logger { }
 
     private val root = Table().top()
 
@@ -36,6 +45,9 @@ class EditorScreen(
 
     private val contextMenuView = ContextMenuView(skin, assets)
     private var contextMenuActor: Actor? = null
+
+    var activeTab: Tab = Tab.NONE
+        private set
 
     override fun create() {
         setup()
@@ -132,20 +144,16 @@ class EditorScreen(
 
         val sceneButton = createButton("Scene")
         sceneButton.onChanged {
-            sceneTabView.menuBar.isVisible = true
-            sceneTabView.mainView.isVisible = true
-
-            actorTabView.menuBar.isVisible = false
-            actorTabView.mainView.isVisible = false
+            if (sceneButton.isChecked) {
+                selectTab(Tab.SCENE)
+            }
         }
 
         val actorButton = createButton("Actor")
         actorButton.onChanged {
-            sceneTabView.menuBar.isVisible = false
-            sceneTabView.mainView.isVisible = false
-
-            actorTabView.menuBar.isVisible = true
-            actorTabView.mainView.isVisible = true
+            if (actorButton.isChecked) {
+                selectTab(Tab.ACTOR)
+            }
         }
 
         tabs.add(sceneButton)
@@ -164,6 +172,25 @@ class EditorScreen(
             padBottom(vPad)
             padLeft(hPad)
             padRight(hPad)
+        }
+    }
+
+    private fun selectTab(tab: Tab) {
+        log.info { "Selected tab $tab" }
+        activeTab = Tab.SCENE
+
+        if (tab == Tab.SCENE) {
+            sceneTabView.menuBar.isVisible = true
+            sceneTabView.mainView.isVisible = true
+
+            actorTabView.menuBar.isVisible = false
+            actorTabView.mainView.isVisible = false
+        } else if (tab == Tab.ACTOR) {
+            sceneTabView.menuBar.isVisible = false
+            sceneTabView.mainView.isVisible = false
+
+            actorTabView.menuBar.isVisible = true
+            actorTabView.mainView.isVisible = true
         }
     }
 
