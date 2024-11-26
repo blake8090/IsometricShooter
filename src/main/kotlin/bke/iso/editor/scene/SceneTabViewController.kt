@@ -65,13 +65,22 @@ class SceneTabViewController(
         sceneTabView.sceneInspectorView
     )
 
+    private val buildingsModule = BuildingsModule(
+        game.world,
+        game.renderer,
+        sceneTabView,
+        layerModule,
+        game.assets
+    )
+
     fun getModules() = setOf(
         referenceActorModule,
         sceneModule,
         cameraModule,
         layerModule,
         toolModule,
-        sceneInspectorModule
+        sceneInspectorModule,
+        buildingsModule
     )
 
     fun init() {
@@ -82,6 +91,7 @@ class SceneTabViewController(
     fun draw() {
         cameraModule.draw()
         toolModule.draw()
+        buildingsModule.draw()
     }
 
     fun handleEvent(event: EditorEvent) {
@@ -143,13 +153,19 @@ class SceneTabViewController(
                 DefaultContextMenuSelection("New Building") {
                     sceneTabView.openNewBuildingDialog { name ->
                         log.info { "Created new building '$name'" }
+                        buildingsModule.selectBuilding(name)
                     }
                 },
 
                 DefaultContextMenuSelection("Edit Building") {
                     sceneTabView.openEditBuildingDialog(game.world.buildings.getAll()) { name ->
                         log.info { "Selected building '$name'" }
+                        buildingsModule.selectBuilding(name)
                     }
+                },
+
+                DefaultContextMenuSelection("Close Building") {
+                    buildingsModule.closeBuilding()
                 },
 
                 DefaultContextMenuSelection("Delete Building") {}

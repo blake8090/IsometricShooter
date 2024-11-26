@@ -8,14 +8,18 @@ import bke.iso.editor.scene.OpenViewMenuEvent
 import bke.iso.editor.scene.SaveSceneEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -25,7 +29,7 @@ private const val TOUCHABLE_AREA_NAME = "touchableArea"
 
 class SceneTabView(
     private val skin: Skin,
-    assets: Assets,
+    private val assets: Assets,
     private val stage: Stage
 ) {
 
@@ -41,7 +45,11 @@ class SceneTabView(
     private val newBuildingDialog = NewBuildingDialog(skin)
     private val editBuildingDialog = EditBuildingDialog(skin)
 
+    private lateinit var infoLabel: Label
+
     fun create() {
+        setup()
+
         menuBar.background = skin.getDrawable("bg")
 
         menuBar.add(createMenuButton("New").apply {
@@ -107,6 +115,12 @@ class SceneTabView(
         })
     }
 
+    private fun setup() {
+        skin.add("sceneTabInfo", LabelStyle().apply {
+            font = assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)]
+        })
+    }
+
     private fun createMenuButton(text: String): TextButton {
         return TextButton(text, skin).apply {
             pad(5f)
@@ -121,7 +135,12 @@ class SceneTabView(
             .growX()
 
         area.row()
+        infoLabel = Label("", skin, "sceneTabInfo")
+        area.add(infoLabel)
+            .left()
+            .padLeft(5f)
 
+        area.row()
         val touchableArea = Table()
         touchableArea.name = TOUCHABLE_AREA_NAME
         area.add(touchableArea)
@@ -141,6 +160,10 @@ class SceneTabView(
 
     fun updateLayerLabel(layer: Float) {
         toolBarView.updateLayerLabel(layer)
+    }
+
+    fun updateInfoLabel(text: String) {
+        infoLabel.setText(text)
     }
 
     fun unselectPrefabs() {
