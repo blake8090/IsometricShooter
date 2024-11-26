@@ -3,11 +3,14 @@ package bke.iso.editor
 import bke.iso.editor.scene.SceneTabViewController
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.ui.Tab
+import bke.iso.editor.ui.color
 import bke.iso.engine.Game
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.state.Module
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
+import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -84,7 +87,7 @@ class EditorState(override val game: Game) : State() {
         }
 
         drawGrid()
-
+        drawTaggedActors()
         sceneTabController.draw()
 
         game.input.onAction("openContextMenu") {
@@ -132,6 +135,15 @@ class EditorState(override val game: Game) : State() {
 
             else -> {
                 log.warn { "No active tab selected - cannot open context menu" }
+            }
+        }
+    }
+
+    private fun drawTaggedActors() {
+        game.world.actors.each<Tags> { actor, tags ->
+            val box = actor.getCollisionBox()
+            if (box != null && tags.tags.isNotEmpty()) {
+                game.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
             }
         }
     }

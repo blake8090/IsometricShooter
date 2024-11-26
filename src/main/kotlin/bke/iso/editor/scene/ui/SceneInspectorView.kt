@@ -1,9 +1,12 @@
 package bke.iso.editor.scene.ui
 
+import bke.iso.editor.scene.CreateTagEvent
+import bke.iso.editor.scene.DeleteTagEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.newTintedDrawable
+import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -33,6 +36,8 @@ class SceneInspectorView(
     private lateinit var yPosTextField: TextField
     private lateinit var zPosTextField: TextField
 
+    private lateinit var tagsTable: Table
+
     fun create(): Actor {
         setup()
 
@@ -55,6 +60,7 @@ class SceneInspectorView(
         root.add(createBuildingSection())
             .growX()
             .padTop(15f)
+
         return root
     }
 
@@ -68,6 +74,33 @@ class SceneInspectorView(
         xPosTextField.text = pos.x.toString()
         yPosTextField.text = pos.y.toString()
         zPosTextField.text = pos.z.toString()
+    }
+
+    fun clear() {
+        idTextField.text = ""
+        descriptionTextField.text = ""
+        xPosTextField.text = ""
+        yPosTextField.text = ""
+        zPosTextField.text = ""
+
+        tagsTable.clearChildren()
+    }
+
+    fun updateTags(tags: kotlin.collections.List<String>) {
+        tagsTable.clearChildren()
+
+        for (tag in tags) {
+            tagsTable.row()
+
+            tagsTable.add(Label(tag, skin))
+                .padRight(10f)
+
+            val deleteButton = TextButton("Delete", skin, "sceneInspector")
+            deleteButton.onChanged {
+                fire(DeleteTagEvent(tag))
+            }
+            tagsTable.add(deleteButton)
+        }
     }
 
     private fun setup() {
@@ -84,11 +117,9 @@ class SceneInspectorView(
         })
 
         skin.add("sceneInspector", TextButton.TextButtonStyle().apply {
-//            font = assets.fonts[FontOptions("roboto.ttf", 14f, Color.WHITE)]
             font = skin.getFont("default")
             down = skin.newDrawable("pixel", color(43, 103, 161))
             over = skin.newDrawable("pixel", color(34, 84, 133))
-//            checked = skin.newDrawable("pixel", color(43, 103, 161))
         })
     }
 
@@ -146,37 +177,31 @@ class SceneInspectorView(
     }
 
     private fun createTagsSection(): Table {
-        val table = BorderedTable(color(43, 103, 161))
+        val table = BorderedTable(skin.getColor("table-border"))
             .padLeft(5f)
             .padRight(5f)
 
         table.add(Label("Tags", skin))
-            .colspan(2)
-            .left()
+            .space(5f)
 
         table.row()
-        table.add(Label("example:tag", skin))
-            .left()
-            .padRight(5f)
-        table.add(TextButton("Delete", skin, "sceneInspector"))
+        tagsTable = Table()
+        table.add(tagsTable)
 
         table.row()
-        table.add(Label("scene:mission-01.scene", skin))
-            .left()
-            .padRight(5f)
-        table.add(TextButton("Delete", skin, "sceneInspector"))
 
-        table.row()
-        table.add(Label("health:100", skin))
-            .left()
-            .padRight(5f)
-        table.add(TextButton("Delete", skin, "sceneInspector"))
-
-        table.row()
-        table.add(TextField("My new tag", skin, "sceneInspector"))
-            .left()
+        val newTagField = TextField("", skin, "sceneInspector")
+        table.add(newTagField)
             .growX()
-        table.add(TextButton("Add", skin, "sceneInspector"))
+            .left()
+
+        val addTagButton = TextButton("Add", skin, "sceneInspector")
+        table.add(addTagButton)
+        addTagButton.onChanged {
+            if (!newTagField.text.isNullOrBlank()) {
+                fire(CreateTagEvent(newTagField.text))
+            }
+        }
 
         return table
     }
