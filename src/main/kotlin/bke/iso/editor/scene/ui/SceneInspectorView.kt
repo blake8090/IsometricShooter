@@ -1,29 +1,22 @@
 package bke.iso.editor.scene.ui
 
+import bke.iso.editor.scene.ApplyBuildingEvent
 import bke.iso.editor.scene.CreateTagEvent
 import bke.iso.editor.scene.DeleteTagEvent
 import bke.iso.editor.ui.color
-import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
-import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.List
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 
-class SceneInspectorView(
-    private val skin: Skin,
-    private val assets: Assets
-) {
+class SceneInspectorView(private val skin: Skin) {
 
     private val root = Table()
         .top()
@@ -37,6 +30,8 @@ class SceneInspectorView(
     private lateinit var zPosTextField: TextField
 
     private lateinit var tagsTable: Table
+
+    private lateinit var buildingSelectBox: SelectBox<String>
 
     fun create(): Actor {
         setup()
@@ -86,7 +81,7 @@ class SceneInspectorView(
         tagsTable.clearChildren()
     }
 
-    fun updateTags(tags: kotlin.collections.List<String>) {
+    fun updateTags(tags: List<String>) {
         tagsTable.clearChildren()
 
         for (tag in tags) {
@@ -100,6 +95,23 @@ class SceneInspectorView(
                 fire(DeleteTagEvent(tag))
             }
             tagsTable.add(deleteButton)
+        }
+    }
+
+    fun updateBuildingsList(names: Set<String>) {
+        val allNames = mutableSetOf<String>()
+        allNames.add("None")
+        allNames.addAll(names)
+
+        buildingSelectBox.setItems(*allNames.toTypedArray())
+    }
+
+    fun updateSelectedBuilding(name: String) {
+        if (name.isBlank()) {
+            buildingSelectBox.selectedIndex = 0
+        } else {
+            val i = buildingSelectBox.items.indexOfFirst { item -> item == name }
+            buildingSelectBox.selectedIndex = i
         }
     }
 
@@ -207,26 +219,29 @@ class SceneInspectorView(
     }
 
     private fun createBuildingSection(): Table {
-        val table = BorderedTable(color(43, 103, 161))
+        val table = BorderedTable(skin.getColor("table-border"))
             .padLeft(5f)
             .padRight(5f)
-
-        table.add(Label("Selected Building:", skin))
             .left()
 
-        val selectBox = SelectBox<String>(SelectBoxStyle().apply {
-            font = skin.getFont("default")
-            listStyle = List.ListStyle().apply {
-                selection = skin.newTintedDrawable("pixel", "button-over")
-                scrollStyle = ScrollPane.ScrollPaneStyle().apply {
-                    font = skin.getFont("default")
-                    background = skin.getDrawable("bg")
-                }
-            }
-        })
-        selectBox.setItems("None", "Building #1", "Building #2", "Building #3")
-        table.add(selectBox)
-            .padLeft(5f)
+        table.add(Label("Buildings", skin))
+            .space(5f)
+            .grow()
+
+        table.row()
+        table.add(Label("Selected:", skin))
+            .left()
+
+        buildingSelectBox = SelectBox<String>(skin)
+        table.add(buildingSelectBox)
+            .grow()
+            .padRight(5f)
+
+        val applyButton = TextButton("Apply", skin)
+        applyButton.onChanged {
+            fire(ApplyBuildingEvent(buildingSelectBox.selected))
+        }
+        table.add(applyButton)
 
         return table
     }

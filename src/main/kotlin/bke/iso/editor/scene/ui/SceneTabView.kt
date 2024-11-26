@@ -40,7 +40,7 @@ class SceneTabView(
 
     private val assetBrowser = SceneAssetBrowserView(skin, assets)
     private val toolBarView = SceneToolbarView(skin, assets)
-    val sceneInspectorView = SceneInspectorView(skin, assets)
+    val sceneInspectorView = SceneInspectorView(skin)
 
     private val newBuildingDialog = NewBuildingDialog(skin)
     private val editBuildingDialog = EditBuildingDialog(skin)

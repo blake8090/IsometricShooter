@@ -2,6 +2,7 @@ package bke.iso.editor.scene
 
 import bke.iso.editor.EditorEvent
 import bke.iso.engine.Event
+import bke.iso.engine.Events
 import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -25,12 +26,15 @@ class SaveSceneEvent : EditorEvent()
 
 class OpenSceneEvent : EditorEvent()
 
+class SceneLoadedEvent : EditorEvent()
+
 class SceneModule(
     private val dialogs: Dialogs,
     private val serializer: Serializer,
     private val world: World,
     private val assets: Assets,
-    private val referenceActorModule: ReferenceActorModule
+    private val referenceActorModule: ReferenceActorModule,
+    private val events: Events
 ) : Module {
 
     private val log = KotlinLogging.logger {}
@@ -68,6 +72,7 @@ class SceneModule(
             load(record)
         }
 
+        events.fire(SceneLoadedEvent())
         log.info { "Loaded scene: '${file.canonicalPath}'" }
     }
 

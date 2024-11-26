@@ -5,7 +5,9 @@ import bke.iso.editor.scene.tool.PointerDeselectActorEvent
 import bke.iso.editor.scene.tool.PointerSelectActorEvent
 import bke.iso.editor.scene.ui.SceneInspectorView
 import bke.iso.engine.Event
+import bke.iso.engine.Events
 import bke.iso.engine.state.Module
+import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
 import bke.iso.engine.world.actor.Tags
@@ -15,8 +17,12 @@ data class CreateTagEvent(val tag: String) : EditorEvent()
 
 data class DeleteTagEvent(val tag: String) : EditorEvent()
 
+data class ApplyBuildingEvent(val name: String) : EditorEvent()
+
 class SceneInspectorModule(
-    private val sceneInspectorView: SceneInspectorView
+    private val sceneInspectorView: SceneInspectorView,
+    private val world: World,
+    private val events: Events
 ) : Module {
 
     private val log = KotlinLogging.logger {}
@@ -31,6 +37,9 @@ class SceneInspectorModule(
             is PointerDeselectActorEvent -> clear()
             is CreateTagEvent -> createTag(event.tag)
             is DeleteTagEvent -> deleteTag(event.tag)
+            is SceneLoadedEvent -> updateBuildings()
+            is BuildingUpdatedEvent -> updateBuildings()
+            is ApplyBuildingEvent -> applyBuilding(event.name)
         }
     }
 
@@ -47,7 +56,11 @@ class SceneInspectorModule(
             description = description,
             pos = actor.pos
         )
+
         loadTags(actor)
+
+        val building = world.buildings.getBuilding(actor) ?: ""
+        sceneInspectorView.updateSelectedBuilding(building)
     }
 
     private fun loadTags(actor: Actor) {
@@ -61,6 +74,7 @@ class SceneInspectorModule(
     private fun clear() {
         selectedActor = null
         sceneInspectorView.clear()
+        sceneInspectorView.updateSelectedBuilding("")
     }
 
     private fun createTag(tag: String) {
@@ -95,5 +109,14 @@ class SceneInspectorModule(
         currentActor.add(Tags(tagsList))
 
         sceneInspectorView.updateTags(tagsList)
+    }
+
+    private fun updateBuildings() {
+        sceneInspectorView.updateBuildingsList(world.buildings.getAll())
+    }
+
+    private fun applyBuilding(name: String) {
+        val currentActor = selectedActor ?: return
+        events.fire(SetBuildingEvent(currentActor, name))
     }
 }

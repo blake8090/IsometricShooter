@@ -1,8 +1,10 @@
 package bke.iso.editor.scene
 
+import bke.iso.editor.EditorEvent
 import bke.iso.editor.scene.layer.LayerModule
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.Event
+import bke.iso.engine.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.Renderer
@@ -13,12 +15,20 @@ import bke.iso.engine.world.actor.Actors
 import com.badlogic.gdx.graphics.Color
 import io.github.oshai.kotlinlogging.KotlinLogging
 
+class BuildingUpdatedEvent : EditorEvent()
+
+data class SetBuildingEvent(
+    val actor: Actor,
+    val name: String
+) : EditorEvent()
+
 class BuildingsModule(
     private val world: World,
     private val renderer: Renderer,
     private val sceneTabView: SceneTabView,
     private val layerModule: LayerModule,
-    assets: Assets
+    assets: Assets,
+    private val events: Events
 ) : Module {
 
     private val log = KotlinLogging.logger {}
@@ -31,6 +41,7 @@ class BuildingsModule(
     override fun handleEvent(event: Event) {
         when (event) {
             is Actors.CreatedEvent -> addActor(event.actor)
+            is SetBuildingEvent -> setActorBuilding(event.actor, event.name)
         }
     }
 
@@ -60,8 +71,18 @@ class BuildingsModule(
 
     private fun addActor(actor: Actor) {
         val building = selectedBuilding ?: return
-        world.buildings.add(actor, building)
-        log.debug { "Added actor $actor to building '$building'" }
+        setActorBuilding(actor, building)
+        // if this is a building not previously listed, we need to know about it
+        events.fire(BuildingUpdatedEvent())
+    }
+
+    private fun setActorBuilding(actor: Actor, name: String) {
+        if (name.isBlank() || name == "None") {
+            world.buildings.remove(actor)
+        } else {
+            world.buildings.add(actor, name)
+            log.debug { "Added actor $actor to building '$name'" }
+        }
     }
 
     fun selectBuilding(name: String) {

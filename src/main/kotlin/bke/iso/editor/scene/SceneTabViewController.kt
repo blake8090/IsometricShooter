@@ -33,7 +33,8 @@ class SceneTabViewController(
         game.serializer,
         game.world,
         game.assets,
-        referenceActorModule
+        referenceActorModule,
+        game.events
     )
 
     val layerModule = LayerModule(
@@ -62,7 +63,9 @@ class SceneTabViewController(
     )
 
     private val sceneInspectorModule = SceneInspectorModule(
-        sceneTabView.sceneInspectorView
+        sceneTabView.sceneInspectorView,
+        game.world,
+        game.events
     )
 
     private val buildingsModule = BuildingsModule(
@@ -70,7 +73,8 @@ class SceneTabViewController(
         game.renderer,
         sceneTabView,
         layerModule,
-        game.assets
+        game.assets,
+        game.events
     )
 
     fun getModules() = setOf(

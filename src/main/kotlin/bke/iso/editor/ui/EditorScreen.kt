@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.List
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -116,6 +119,20 @@ class EditorScreen(
         })
 
         setupButtonStyles()
+
+        skin.add("default", SelectBoxStyle().apply {
+            background = skin.newTintedDrawable("pixel", "button-over")
+
+            scrollStyle = ScrollPane.ScrollPaneStyle().apply {
+                font = skin.getFont("default")
+            }
+
+            listStyle = List.ListStyle().apply {
+                font = skin.getFont("default")
+                selection = skin.newTintedDrawable("pixel", "button-over")
+                over = skin.newTintedDrawable("pixel", "button-over")
+            }
+        })
     }
 
     private fun setupButtonStyles() {
