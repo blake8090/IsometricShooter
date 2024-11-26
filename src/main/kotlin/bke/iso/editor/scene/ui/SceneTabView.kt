@@ -38,6 +38,9 @@ class SceneTabView(
     private val toolBarView = SceneToolbarView(skin, assets)
     val sceneInspectorView = SceneInspectorView(skin, assets)
 
+    private val newBuildingDialog = NewBuildingDialog(skin)
+    private val editBuildingDialog = EditBuildingDialog(skin)
+
     fun create() {
         menuBar.background = skin.getDrawable("bg")
 
@@ -142,5 +145,13 @@ class SceneTabView(
 
     fun unselectPrefabs() {
         assetBrowser.unselectPrefabs()
+    }
+
+    fun openNewBuildingDialog(action: (String) -> Unit) {
+        newBuildingDialog.create(stage, action)
+    }
+
+    fun openEditBuildingDialog(buildingNames: Set<String>, action: (String) -> Unit) {
+        editBuildingDialog.create(stage, buildingNames, action)
     }
 }

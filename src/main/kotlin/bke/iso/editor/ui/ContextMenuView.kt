@@ -100,7 +100,9 @@ class ContextMenuView(
 
             // only known way to customize padding is to delete and re-add the children...
             clearChildren()
-            add(image).padRight(5f)
+            add(image)
+                .padLeft(5f)
+                .padRight(5f)
             add(label)
 
             if (!selection.isChecked()) {

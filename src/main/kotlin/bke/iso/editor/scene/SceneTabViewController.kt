@@ -1,6 +1,7 @@
 package bke.iso.editor.scene
 
 import bke.iso.editor.CheckableContextMenuSelection
+import bke.iso.editor.DefaultContextMenuSelection
 import bke.iso.editor.EditorEvent
 import bke.iso.editor.OpenContextMenuEvent
 import bke.iso.editor.scene.camera.CameraModule
@@ -12,6 +13,7 @@ import bke.iso.editor.scene.tool.ToolModule
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.Game
 import com.badlogic.gdx.math.Vector2
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 data class OpenViewMenuEvent(val pos: Vector2) : EditorEvent()
 
@@ -19,8 +21,10 @@ data class OpenBuildingsMenuEvent(val pos: Vector2) : EditorEvent()
 
 class SceneTabViewController(
     private val game: Game,
-    sceneTabView: SceneTabView
+    private val sceneTabView: SceneTabView
 ) {
+
+    private val log = KotlinLogging.logger { }
 
     private val referenceActorModule = ReferenceActorModule(game.world)
 
@@ -81,8 +85,9 @@ class SceneTabViewController(
     }
 
     fun handleEvent(event: EditorEvent) {
-        if (event is OpenViewMenuEvent) {
-            openViewMenu(event.pos)
+        when (event) {
+            is OpenViewMenuEvent -> openViewMenu(event.pos)
+            is OpenBuildingsMenuEvent -> openBuildingsMenu(event.pos)
         }
     }
 
@@ -125,6 +130,29 @@ class SceneTabViewController(
                         game.events.fire(ToggleHighlightLayerEvent())
                     }
                 ),
+            )
+        )
+
+        game.events.fire(event)
+    }
+
+    private fun openBuildingsMenu(pos: Vector2) {
+        val event = OpenContextMenuEvent(
+            pos,
+            setOf(
+                DefaultContextMenuSelection("New Building") {
+                    sceneTabView.openNewBuildingDialog { name ->
+                        log.info { "Created new building '$name'" }
+                    }
+                },
+
+                DefaultContextMenuSelection("Edit Building") {
+                    sceneTabView.openEditBuildingDialog(game.world.buildings.getAll()) { name ->
+                        log.info { "Selected building '$name'" }
+                    }
+                },
+
+                DefaultContextMenuSelection("Delete Building") {}
             )
         )
 

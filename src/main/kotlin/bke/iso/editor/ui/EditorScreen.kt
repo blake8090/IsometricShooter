@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.TextField
+import com.badlogic.gdx.scenes.scene2d.ui.Window
 
 class EditorScreen(
     private val editorState: EditorState,
@@ -82,6 +84,23 @@ class EditorScreen(
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")
             background = skin.getDrawable("bg")
+        })
+
+        skin.add("default", TextField.TextFieldStyle().apply {
+            font = skin.getFont("default")
+            fontColor = Color.WHITE
+            focusedFontColor = Color.WHITE
+
+            background = skin.newDrawable("pixel", Color.BLACK)
+            focusedBackground = skin.newDrawable("pixel", Color.BLACK)
+
+            cursor = skin.newDrawable("pixel", color(50, 158, 168))
+            selection = skin.newDrawable("pixel", color(50, 158, 168))
+        })
+
+        skin.add("default", Window.WindowStyle().apply {
+            background = skin.getDrawable("bg")
+            titleFont = skin.getFont("default")
         })
 
         setupButtonStyles()
