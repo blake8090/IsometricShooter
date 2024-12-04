@@ -1,11 +1,12 @@
 import org.gradle.kotlin.dsl.application
 import io.github.fourlastor.construo.Target
+import io.github.fourlastor.construo.task.jvm.RoastTask
 
 plugins {
     kotlin("jvm") version "2.0.21"
     kotlin("plugin.serialization") version "2.0.21"
     id("io.gitlab.arturbosch.detekt").version("1.23.1")
-    id("io.github.fourlastor.construo") version "1.2.0"
+    id("io.github.fourlastor.construo") version "1.5.1"
     application
 }
 
@@ -55,6 +56,8 @@ application {
     mainClass.set("bke.iso.MainKt")
 }
 
+version = "alpha"
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
@@ -77,6 +80,15 @@ tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+tasks.withType<RoastTask> {
+    doLast {
+        val source = File("${projectDir}/assets")
+        val destination = File("${output.get()}/assets")
+        source.copyRecursively(destination, overwrite = true)
+        println("Copied assets from '$source' to '$destination'")
+    }
+}
+
 construo {
     name.set("IsometricShooter")
     humanName.set("IsometricShooter")
@@ -95,6 +107,10 @@ construo {
         create<Target.Windows>("winX64") {
             architecture.set(Target.Architecture.X86_64)
             jdkUrl.set("https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2%2B9/OpenJDK20U-jdk_x64_windows_hotspot_20.0.2_9.zip")
+        }
+        create<Target.Linux>("linuxX64") {
+            architecture.set(Target.Architecture.X86_64)
+            jdkUrl.set("https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.1%2B9/OpenJDK20U-jdk_x64_linux_hotspot_20.0.1_9.tar.gz")
         }
     }
 }
