@@ -46,6 +46,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
+    implementation("org.apache.commons:commons-lang3:3.17.0")
+
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.kotest:kotest-assertions-core:5.9.1")

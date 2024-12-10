@@ -1,30 +1,40 @@
 package bke.iso.engine.os
 
+import bke.iso.engine.GameInfo
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SystemInfo {
+class SystemInfo(private val files: Files) {
 
     private val log = KotlinLogging.logger {}
 
-    val displayModes: List<Graphics.DisplayMode>
+    private val displayModes: List<Graphics.DisplayMode>
     val maxDisplayMode: Graphics.DisplayMode
-    val screenDensity: Float
+    private val maxRefreshRate: Int
+
+    val screenDensity
+        get() = Gdx.graphics.density
 
     init {
         val modes = Gdx.graphics.displayModes
-        val maxRefreshRate = modes.maxOf(Graphics.DisplayMode::refreshRate)
+        maxRefreshRate = modes.maxOf(Graphics.DisplayMode::refreshRate)
 
         displayModes = modes.filter { mode -> mode.refreshRate == maxRefreshRate }
         maxDisplayMode = displayModes.maxBy { mode -> mode.width + mode.height }
+    }
 
-        log.info { "System info - Max refresh rate: $maxRefreshRate" }
-        log.info { "System info - Supported resolutions:\n${displayModes.joinToString("\n")}" }
-        log.info { "System info - Maximum supported resolution: $maxDisplayMode" }
+    fun logInfo(gameInfo: GameInfo) {
+        log.info { "--- Logging system information ---" }
+        log.info { "Max refresh rate: $maxRefreshRate" }
+        log.info { "Supported resolutions:\n${displayModes.joinToString("\n")}" }
+        log.info { "Maximum supported resolution: $maxDisplayMode" }
 
-        screenDensity = Gdx.graphics.density
-        log.info { "System info - Screen PPI: ${screenDensity * 160f}" }
-        log.info { "System info - Screen PPI ratio: $screenDensity" }
+        log.info { "Screen PPI: ${screenDensity * 160f}" }
+        log.info { "Screen PPI ratio: $screenDensity" }
+
+        log.info { "OS name: ${System.getProperty("os.name")}" }
+        log.info { "User home directory: ${files.getHomeDirectory()}" }
+        log.info { "Game data path: ${files.getGameDataPath(gameInfo)}" }
     }
 }

@@ -14,6 +14,8 @@ class IsometricShooter : GameInfo() {
 
     override val windowTitle = "Isometric Shooter"
 
+    override val folderName = "IsometricShooter"
+
     override fun start(game: Game) {
         game.assets.addCache(WeaponPropertiesCache(game.serializer))
 

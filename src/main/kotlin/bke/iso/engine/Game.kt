@@ -30,11 +30,15 @@ class Game {
 
     private val log = KotlinLogging.logger {}
 
-    val systemInfo = SystemInfo()
-    val events: Events = Events(::handleEvent)
-
+    private val files: Files = Files()
+    private val systemInfo = SystemInfo(files)
     val dialogs = Dialogs()
-    val files: Files = Files()
+
+    val states = States(this)
+    val events: Events = Events(::handleEvent)
+    val input: Input = Input(events)
+    val ui: UI = UI(input)
+
     val serializer = Serializer()
     val assets: Assets = Assets(files, systemInfo)
 
@@ -44,14 +48,10 @@ class Game {
     val physics: Physics = Physics(world, collisions)
     val scenes = Scenes(assets, serializer, world, renderer)
 
-    val input: Input = Input(events)
-    val ui: UI = UI(input)
-
-    val states = States(this)
-
     private val profiler = Profiler(assets, ui, input)
 
     fun start(gameInfo: GameInfo) {
+        systemInfo.logInfo(gameInfo)
         input.start()
         profiler.start()
 
