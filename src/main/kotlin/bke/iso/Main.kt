@@ -8,14 +8,14 @@ import kotlin.system.exitProcess
 private val log = KotlinLogging.logger {}
 
 fun main() {
-    val app = App(IsometricShooter())
-
-    configureLogging("${app.paths.getGameDataPath()}/main.log")
-
     Thread.currentThread().setUncaughtExceptionHandler { _, e ->
         log.error(e) { "Uncaught exception" }
         exitProcess(-1)
     }
+
+    val app = App(IsometricShooter())
+
+    configureLogging("${app.paths.getGameDataPath()}/main.log")
 
     Lwjgl3Application(app, app.getConfig())
 }
