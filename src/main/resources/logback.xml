@@ -5,7 +5,15 @@
         </encoder>
     </appender>
 
+    <appender name="file" class="bke.iso.DynamicFileAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="debug">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="file" />
     </root>
+
 </configuration>

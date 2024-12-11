@@ -9,6 +9,8 @@ import ktx.async.KtxAsync
 
 class App(private val gameInfo: GameInfo) : ApplicationAdapter() {
 
+    val paths = AppPaths(gameInfo)
+
     private lateinit var game: Game
 
     fun getConfig() =
@@ -20,7 +22,7 @@ class App(private val gameInfo: GameInfo) : ApplicationAdapter() {
 
     override fun create() {
         KtxAsync.initiate()
-        game = Game()
+        game = Game(paths)
         game.start(gameInfo)
     }
 

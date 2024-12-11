@@ -1,11 +1,11 @@
 package bke.iso.engine.os
 
-import bke.iso.engine.GameInfo
+import bke.iso.AppPaths
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SystemInfo(private val files: Files) {
+class SystemInfo(private val appPaths: AppPaths) {
 
     private val log = KotlinLogging.logger {}
 
@@ -24,7 +24,7 @@ class SystemInfo(private val files: Files) {
         maxDisplayMode = displayModes.maxBy { mode -> mode.width + mode.height }
     }
 
-    fun logInfo(gameInfo: GameInfo) {
+    fun logInfo() {
         log.info { "--- Logging system information ---" }
         log.info { "Max refresh rate: $maxRefreshRate" }
         log.info { "Supported resolutions:\n${displayModes.joinToString("\n")}" }
@@ -34,7 +34,7 @@ class SystemInfo(private val files: Files) {
         log.info { "Screen PPI ratio: $screenDensity" }
 
         log.info { "OS name: ${System.getProperty("os.name")}" }
-        log.info { "User home directory: ${files.getHomeDirectory()}" }
-        log.info { "Game data path: ${files.getGameDataPath(gameInfo)}" }
+        log.info { "User home directory: ${appPaths.getHomeDirectory()}" }
+        log.info { "Game data path: ${appPaths.getGameDataPath()}" }
     }
 }
