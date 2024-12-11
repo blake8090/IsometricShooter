@@ -239,7 +239,9 @@ class SceneInspectorView(private val skin: Skin) {
 
         val applyButton = TextButton("Apply", skin)
         applyButton.onChanged {
-            fire(ApplyBuildingEvent(buildingSelectBox.selected))
+            if (buildingSelectBox.selected != null) {
+                fire(ApplyBuildingEvent(buildingSelectBox.selected))
+            }
         }
         table.add(applyButton)
 
