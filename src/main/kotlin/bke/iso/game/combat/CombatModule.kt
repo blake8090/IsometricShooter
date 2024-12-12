@@ -3,7 +3,7 @@ package bke.iso.game.combat
 import bke.iso.engine.Event
 import bke.iso.engine.Events
 import bke.iso.engine.asset.config.Configs
-import bke.iso.engine.state.Module
+import bke.iso.engine.core.Module
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.player.Player
@@ -24,12 +24,6 @@ class CombatModule(
 ) : Module {
 
     private val log = KotlinLogging.logger {}
-
-    override fun update(deltaTime: Float) {
-    }
-
-    override fun handleEvent(event: Event) {
-    }
 
     fun applyDamage(actor: Actor, damage: Float) {
         val health = actor.get<Health>() ?: return

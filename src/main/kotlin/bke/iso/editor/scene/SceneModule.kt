@@ -3,10 +3,10 @@ package bke.iso.editor.scene
 import bke.iso.editor.EditorEvent
 import bke.iso.engine.Event
 import bke.iso.engine.Events
-import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.core.Module
 import bke.iso.engine.math.Location
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.scene.ActorRecord

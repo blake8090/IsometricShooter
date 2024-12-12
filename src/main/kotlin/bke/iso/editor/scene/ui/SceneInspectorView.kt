@@ -107,7 +107,9 @@ class SceneInspectorView(private val skin: Skin) {
     }
 
     fun updateSelectedBuilding(name: String) {
-        if (name.isBlank()) {
+        if (buildingSelectBox.items.isEmpty) {
+            return
+        } else if (name.isBlank()) {
             buildingSelectBox.selectedIndex = 0
         } else {
             val i = buildingSelectBox.items.indexOfFirst { item -> item == name }

@@ -1,8 +1,8 @@
 package bke.iso.game.actor.shadow
 
 import bke.iso.engine.Event
-import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.core.Module
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
@@ -16,8 +16,6 @@ const val SHADOW_SPRITE_ALPHA = 0.5f
 const val SHADOW_Z_OFFSET = 0.0001f
 
 class ShadowModule(private val world: World) : Module {
-
-    override fun update(deltaTime: Float) {}
 
     override fun handleEvent(event: Event) {
         if (event is Actors.CreatedEvent && event.actor.has<CastShadow>()) {

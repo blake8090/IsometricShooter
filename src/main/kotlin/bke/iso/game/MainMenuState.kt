@@ -3,7 +3,7 @@ package bke.iso.game
 import bke.iso.editor.EditorState
 import bke.iso.engine.Event
 import bke.iso.engine.Engine
-import bke.iso.engine.state.Module
+import bke.iso.engine.core.Module
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
 import bke.iso.engine.ui.loading.SimpleLoadingScreen

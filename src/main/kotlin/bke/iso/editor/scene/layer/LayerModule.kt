@@ -5,7 +5,7 @@ import bke.iso.editor.PerformActionEvent
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.Event
 import bke.iso.engine.Events
-import bke.iso.engine.state.Module
+import bke.iso.engine.core.Module
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.SpriteTintColor
@@ -38,8 +38,6 @@ class LayerModule(
 
     var highlightLayer = false
         private set
-
-    override fun update(deltaTime: Float) {}
 
     override fun handleEvent(event: Event) {
         when (event) {

@@ -1,5 +1,6 @@
 package bke.iso.game.actor.player
 
+import bke.iso.engine.core.Module
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.combat.system.Health
@@ -9,7 +10,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 /**
  * Keeps track of the player's data when changing scenes; health, weapons, ammo, etc.
  */
-class PlayerDataModule(private val world: World) {
+class PlayerDataModule(private val world: World) : Module {
 
     private val log = KotlinLogging.logger {}
 

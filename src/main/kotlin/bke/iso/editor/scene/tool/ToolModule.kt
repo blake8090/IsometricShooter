@@ -10,8 +10,8 @@ import bke.iso.editor.scene.tool.room.RoomTool
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.Event
 import bke.iso.engine.Events
-import bke.iso.engine.state.Module
 import bke.iso.engine.collision.Collisions
+import bke.iso.engine.core.Module
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor

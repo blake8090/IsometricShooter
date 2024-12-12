@@ -2,14 +2,10 @@ package bke.iso.engine.state
 
 import bke.iso.engine.Event
 import bke.iso.engine.Engine
+import bke.iso.engine.core.Module
 
 interface System {
     fun update(deltaTime: Float)
-}
-
-interface Module {
-    fun update(deltaTime: Float)
-    fun handleEvent(event: Event)
 }
 
 abstract class State {
@@ -35,5 +31,3 @@ abstract class State {
         }
     }
 }
-
-

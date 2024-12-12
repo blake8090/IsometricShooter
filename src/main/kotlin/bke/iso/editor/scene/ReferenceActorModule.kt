@@ -1,14 +1,13 @@
 package bke.iso.editor.scene
 
 import bke.iso.editor.withFirstInstance
-import bke.iso.engine.Event
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.core.Module
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.state.Module
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
@@ -21,10 +20,6 @@ data class TilePrefabReference(val prefab: String) : Component
 class ReferenceActorModule(private val world: World) : Module {
 
     private val tilesByLocation = mutableMapOf<Location, Actor>()
-
-    override fun update(deltaTime: Float) {}
-
-    override fun handleEvent(event: Event) {}
 
     fun clear() {
         tilesByLocation.clear()

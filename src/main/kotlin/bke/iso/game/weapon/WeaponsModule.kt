@@ -1,9 +1,9 @@
 package bke.iso.game.weapon
 
 import bke.iso.engine.Event
-import bke.iso.engine.state.Module
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.core.Module
 import bke.iso.engine.math.nextFloat
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.physics.PhysicsBody
@@ -30,9 +30,6 @@ class WeaponsModule(
 ) : Module {
 
     private val log = KotlinLogging.logger {}
-
-    override fun update(deltaTime: Float) {
-    }
 
     override fun handleEvent(event: Event) {
         if (event is ShootEvent) {

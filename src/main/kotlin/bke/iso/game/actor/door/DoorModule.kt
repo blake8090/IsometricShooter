@@ -2,7 +2,7 @@ package bke.iso.game.actor.door
 
 import bke.iso.engine.Event
 import bke.iso.engine.Events
-import bke.iso.engine.state.Module
+import bke.iso.engine.core.Module
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -20,8 +20,6 @@ class DoorModule(
 ) : Module {
 
     private val log = KotlinLogging.logger { }
-
-    override fun update(deltaTime: Float) {}
 
     override fun handleEvent(event: Event) {
         if (event is OpenDoorEvent) {

@@ -12,6 +12,7 @@ import bke.iso.editor.scene.layer.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.scene.tool.ToolModule
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.Engine
+import bke.iso.engine.core.Module
 import com.badlogic.gdx.math.Vector2
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -77,7 +78,7 @@ class SceneTabViewController(
         engine.events
     )
 
-    fun getModules() = setOf(
+    fun getModules(): Set<Module> = setOf(
         referenceActorModule,
         sceneModule,
         cameraModule,

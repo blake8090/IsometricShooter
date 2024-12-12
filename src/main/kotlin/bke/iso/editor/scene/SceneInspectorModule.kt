@@ -6,7 +6,7 @@ import bke.iso.editor.scene.tool.PointerSelectActorEvent
 import bke.iso.editor.scene.ui.SceneInspectorView
 import bke.iso.engine.Event
 import bke.iso.engine.Events
-import bke.iso.engine.state.Module
+import bke.iso.engine.core.Module
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
@@ -28,8 +28,6 @@ class SceneInspectorModule(
     private val log = KotlinLogging.logger {}
 
     private var selectedActor: Actor? = null
-
-    override fun update(deltaTime: Float) {}
 
     override fun handleEvent(event: Event) {
         when (event) {

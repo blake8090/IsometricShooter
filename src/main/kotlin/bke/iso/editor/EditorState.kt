@@ -6,8 +6,8 @@ import bke.iso.editor.ui.Tab
 import bke.iso.editor.ui.color
 import bke.iso.engine.Engine
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.core.Module
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.state.Module
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
 import bke.iso.engine.world.actor.Tags
