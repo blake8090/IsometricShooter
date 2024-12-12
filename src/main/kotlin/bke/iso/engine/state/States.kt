@@ -1,6 +1,7 @@
 package bke.iso.engine.state
 
 import bke.iso.engine.Engine
+import bke.iso.engine.Event
 import bke.iso.engine.core.EngineModule
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
@@ -15,11 +16,14 @@ class States(private val engine: Engine) : EngineModule() {
     override val updateWhileLoading = false
     override val profilingEnabled = true
 
-    var currentState: State = EmptyState(engine)
-        private set
+    private var currentState: State = EmptyState(engine)
 
     override fun update(deltaTime: Float) {
         currentState.update(deltaTime)
+    }
+
+    override fun handleEvent(event: Event) {
+        currentState.handleEvent(event)
     }
 
     fun <T : State> setState(type: KClass<T>) {
@@ -31,6 +35,4 @@ class States(private val engine: Engine) : EngineModule() {
 
     inline fun <reified T : State> setState() =
         setState(T::class)
-
-
 }

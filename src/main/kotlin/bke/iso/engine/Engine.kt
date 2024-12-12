@@ -49,11 +49,25 @@ class Engine(val game: Game) {
     val physics: Physics = Physics(world, collisions)
     val scenes = Scenes(assets, serializer, world, renderer)
 
+    private val modules = listOf(
+        collisions,
+        physics,
+        input,
+        states,
+        world,
+        renderer,
+        ui
+    )
+
     private val profiler = Profiler(assets, ui, input)
 
     fun start() {
         systemInfo.logInfo()
-        input.start()
+
+        for (module in modules) {
+            module.start()
+        }
+
         profiler.start()
 
         assets.addCache(TextureCache())
@@ -115,13 +129,17 @@ class Engine(val game: Game) {
 
     fun stop() {
         log.info { "Stopping game" }
-        ui.dispose()
+
+        for (module in modules) {
+            module.stop()
+        }
+
         assets.dispose()
-        renderer.dispose()
     }
 
     private fun handleEvent(event: Event) {
-        states.currentState.handleEvent(event)
-        ui.handleEvent(event)
+        for (module in modules) {
+            module.handleEvent(event)
+        }
     }
 }

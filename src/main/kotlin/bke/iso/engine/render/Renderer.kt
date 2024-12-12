@@ -88,8 +88,7 @@ class Renderer(
         fbo.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
     }
 
-    // TODO: use stop()
-    fun dispose() {
+    override fun stop() {
         batch.dispose()
         fbo.dispose()
         shapeRenderer.dispose()
