@@ -1,11 +1,11 @@
 package bke.iso.engine.os
 
-import bke.iso.AppPaths
+import bke.iso.engine.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SystemInfo(private val appPaths: AppPaths) {
+class SystemInfo(private val game: Game) {
 
     private val log = KotlinLogging.logger {}
 
@@ -34,7 +34,7 @@ class SystemInfo(private val appPaths: AppPaths) {
         log.info { "Screen PPI ratio: $screenDensity" }
 
         log.info { "OS name: ${System.getProperty("os.name")}" }
-        log.info { "User home directory: ${appPaths.getHomeDirectory()}" }
-        log.info { "Game data path: ${appPaths.getGameDataPath()}" }
+        log.info { "User home directory: ${game.userHomePath}" }
+        log.info { "Game data path: ${game.gameDataPath}" }
     }
 }

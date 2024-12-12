@@ -1,7 +1,7 @@
 package bke.iso
 
 import bke.iso.engine.Engine
-import bke.iso.engine.GameInfo
+import bke.iso.engine.Game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
@@ -20,18 +20,16 @@ data class AppConfig(
     val fullscreen: Boolean
 )
 
-class App(private val gameInfo: GameInfo) : ApplicationAdapter() {
+class App(private val game: Game) : ApplicationAdapter() {
 
     private val log = KotlinLogging.logger { }
-
-    val paths = AppPaths(gameInfo)
 
     private lateinit var engine: Engine
 
     override fun create() {
         KtxAsync.initiate()
-        engine = Engine(paths)
-        engine.start(gameInfo)
+        engine = Engine(game)
+        engine.start()
     }
 
     override fun render() {
@@ -52,7 +50,7 @@ class App(private val gameInfo: GameInfo) : ApplicationAdapter() {
             prettyPrint = true
         }
 
-        val file = File("${paths.getGameDataPath()}/app.cfg")
+        val file = File("${game.gameDataPath}/app.cfg")
 
         val config: AppConfig =
             if (file.exists()) {
@@ -66,7 +64,7 @@ class App(private val gameInfo: GameInfo) : ApplicationAdapter() {
             }
 
         return Lwjgl3ApplicationConfiguration().apply {
-            setTitle(gameInfo.windowTitle)
+            setTitle(game.windowTitle)
             useVsync(config.vsyncEnabled)
 
             if (config.fullscreen) {

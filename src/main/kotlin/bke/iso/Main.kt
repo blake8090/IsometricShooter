@@ -13,9 +13,10 @@ fun main() {
         exitProcess(-1)
     }
 
-    val app = App(IsometricShooter())
+    val game = IsometricShooter()
+    val app = App(game)
 
-    configureLogging("${app.paths.getGameDataPath()}/main.log")
+    configureLogging("${game.gameDataPath}/main.log")
 
     Lwjgl3Application(app, app.getConfig())
 }

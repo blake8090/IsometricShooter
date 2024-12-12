@@ -1,6 +1,5 @@
 package bke.iso.engine
 
-import bke.iso.AppPaths
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefabCache
 import bke.iso.engine.asset.font.FontGeneratorCache
@@ -27,12 +26,12 @@ import bke.iso.engine.world.World
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 
-class Engine(appPaths: AppPaths) {
+class Engine(val game: Game) {
 
     private val log = KotlinLogging.logger {}
 
     private val files: Files = Files()
-    private val systemInfo = SystemInfo(appPaths)
+    private val systemInfo = SystemInfo(game)
     val dialogs = Dialogs()
 
     val states = States(this)
@@ -51,7 +50,7 @@ class Engine(appPaths: AppPaths) {
 
     private val profiler = Profiler(assets, ui, input)
 
-    fun start(gameInfo: GameInfo) {
+    fun start() {
         systemInfo.logInfo()
         input.start()
         profiler.start()
@@ -71,7 +70,7 @@ class Engine(appPaths: AppPaths) {
             assets.loadAsync("ui")
         }
 
-        gameInfo.start(this)
+        game.start(this)
     }
 
     fun update(deltaTime: Float) {
