@@ -2,6 +2,7 @@ package bke.iso.engine.render
 
 import bke.iso.engine.Events
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.gameobject.OptimizedGameObjectRenderer
@@ -35,9 +36,13 @@ class Renderer(
     world: World,
     private val assets: Assets,
     events: Events
-) {
+) : EngineModule() {
 
     private val log = KotlinLogging.logger {}
+
+    override val moduleName = "renderer"
+    override val updateWhileLoading = false
+    override val profilingEnabled = true
 
     private val batch = PolygonSpriteBatch()
 
@@ -83,6 +88,7 @@ class Renderer(
         fbo.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
     }
 
+    // TODO: use stop()
     fun dispose() {
         batch.dispose()
         fbo.dispose()
@@ -110,7 +116,7 @@ class Renderer(
         camera.zoom = 1f
     }
 
-    fun draw() {
+    override fun update(deltaTime: Float) {
         camera.update()
         batch.projectionMatrix = camera.combined
 

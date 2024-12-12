@@ -75,36 +75,21 @@ class Engine(val game: Game) {
     }
 
     fun update(deltaTime: Float) {
+        updateModule(collisions, deltaTime)
+        updateModule(physics, deltaTime)
+        updateModule(input, deltaTime)
+
         if (!ui.isLoadingScreenActive) {
-            profiler.profile("collisions") {
-                collisions.update()
-            }
-
-            profiler.profile("physics") {
-                // TODO: investigate using fixed time step
-                physics.update(deltaTime)
-            }
-
-            updateModule(input, deltaTime)
-
             renderer.pointer.update(deltaTime)
-
-            profiler.profile("state") {
-                states.currentState.update(deltaTime)
-            }
-
-            profiler.profile("world") {
-                world.update()
-            }
-
-            profiler.profile("renderer") {
-                renderer.draw()
-            }
         }
+
+        updateModule(states, deltaTime)
+        updateModule(world, deltaTime)
+        updateModule(renderer, deltaTime)
+        updateModule(ui, deltaTime)
 
         profiler.update(deltaTime)
 
-        ui.draw(deltaTime)
         renderer.pointer.draw()
     }
 

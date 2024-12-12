@@ -1,14 +1,19 @@
 package bke.iso.engine.ui
 
 import bke.iso.engine.Event
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.input.Input
 import bke.iso.engine.ui.loading.LoadingScreen
 import com.badlogic.gdx.utils.Array
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class UI(private val input: Input) {
+class UI(private val input: Input) : EngineModule() {
 
     private val log = KotlinLogging.logger {}
+
+    override val moduleName = "ui"
+    override val updateWhileLoading = true
+    override val profilingEnabled = true
 
     private val screens = Array<UIScreen>()
 
@@ -18,7 +23,7 @@ class UI(private val input: Input) {
     val isLoadingScreenActive: Boolean
         get() = loadingScreen.active
 
-    fun draw(deltaTime: Float) {
+    override fun update(deltaTime: Float) {
         if (loadingScreen.active) {
             loadingScreen.draw(deltaTime)
             return
@@ -29,15 +34,25 @@ class UI(private val input: Input) {
         }
     }
 
-    fun resize(width: Int, height: Int) {
+    override fun handleEvent(event: Event) {
         for (screen in screens) {
-            screen.resize(width, height)
+            screen.handleEvent(event)
         }
     }
 
-    fun handleEvent(event: Event) {
+    override fun stop() {
         for (screen in screens) {
-            screen.handleEvent(event)
+            log.debug { "Disposing screen ${screen::class.simpleName}" }
+            input.removeInputProcessor(screen.stage)
+            input.removeControllerListener(screen.controllerNavigation)
+            screen.dispose()
+        }
+        screens.clear()
+    }
+
+    fun resize(width: Int, height: Int) {
+        for (screen in screens) {
+            screen.resize(width, height)
         }
     }
 

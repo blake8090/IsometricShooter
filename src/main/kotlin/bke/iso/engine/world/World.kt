@@ -1,6 +1,7 @@
 package bke.iso.engine.world
 
 import bke.iso.engine.Events
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Sprite
@@ -12,7 +13,11 @@ import kotlin.math.floor
 
 interface GameObject
 
-class World(events: Events) {
+class World(events: Events) : EngineModule() {
+
+    override val moduleName = "world"
+    override val updateWhileLoading = false
+    override val profilingEnabled = true
 
     private val grid = Grid()
 
@@ -24,7 +29,7 @@ class World(events: Events) {
     // TODO: property?
     fun getObjects() = grid.getObjects()
 
-    fun update() {
+    override fun update(deltaTime: Float) {
         for (actor in deletedActors) {
             grid.remove(actor)
             buildings.remove(actor)

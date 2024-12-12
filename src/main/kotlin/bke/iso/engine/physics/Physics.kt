@@ -4,6 +4,7 @@ import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.PredictedCollision
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
@@ -16,11 +17,15 @@ const val DEFAULT_GRAVITY: Float = -12f
 class Physics(
     private val world: World,
     private val collisions: Collisions
-) {
+) : EngineModule() {
 
     private val log = KotlinLogging.logger {}
 
-    fun update(deltaTime: Float) {
+    override val moduleName = "physics"
+    override val updateWhileLoading = false
+    override val profilingEnabled = true
+
+    override fun update(deltaTime: Float) {
         world.actors.each { actor, body: PhysicsBody ->
             update(actor, body, deltaTime)
         }

@@ -1,5 +1,6 @@
 package bke.iso.engine.collision
 
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
@@ -13,7 +14,6 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
-import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sign
@@ -21,14 +21,16 @@ import kotlin.math.sign
 class Collisions(
     private val renderer: Renderer,
     private val world: World
-) {
+) : EngineModule() {
 
-    private val log = KotlinLogging.logger {}
+    override val moduleName = "collisions"
+    override val updateWhileLoading = false
+    override val profilingEnabled = true
 
     private val previousCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
     private val currentCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
 
-    fun update() {
+    override fun update(deltaTime: Float) {
         previousCollisions.clear()
         previousCollisions.putAll(currentCollisions)
         currentCollisions.clear()
@@ -202,6 +204,7 @@ class Collisions(
             Vector3(0f, 0f, 1f) -> CollisionSide.TOP
             else -> CollisionSide.CORNER
         }
+
 }
 
 fun GameObject.getCollisionBox(): Box? =
