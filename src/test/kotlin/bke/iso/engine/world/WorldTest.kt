@@ -1,6 +1,6 @@
 package bke.iso.engine.world
 
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec

@@ -1,7 +1,7 @@
 package bke.iso.game
 
 import bke.iso.engine.Engine
-import bke.iso.engine.Game
+import bke.iso.engine.core.Game
 import bke.iso.engine.input.ButtonState
 import bke.iso.game.actor.player.system.RELOAD_ACTION
 import bke.iso.game.actor.player.system.SHOOT_ACTION

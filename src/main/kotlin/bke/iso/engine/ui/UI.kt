@@ -1,6 +1,6 @@
 package bke.iso.engine.ui
 
-import bke.iso.engine.Event
+import bke.iso.engine.core.Event
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.input.Input
 import bke.iso.engine.ui.loading.LoadingScreen

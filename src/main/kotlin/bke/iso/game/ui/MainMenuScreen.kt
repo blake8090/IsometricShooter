@@ -1,6 +1,6 @@
 package bke.iso.game.ui
 
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture

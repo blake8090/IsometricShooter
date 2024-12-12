@@ -1,6 +1,6 @@
 package bke.iso.game.combat.system
 
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor

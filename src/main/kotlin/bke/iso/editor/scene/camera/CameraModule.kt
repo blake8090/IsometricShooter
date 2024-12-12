@@ -4,7 +4,7 @@ import bke.iso.editor.EditorEvent
 import bke.iso.editor.scene.layer.ChangeSelectedLayerEvent
 import bke.iso.editor.scene.layer.LayerModule
 import bke.iso.editor.scene.ui.SceneTabView
-import bke.iso.engine.Event
+import bke.iso.engine.core.Event
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module

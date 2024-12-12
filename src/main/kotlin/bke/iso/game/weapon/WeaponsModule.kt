@@ -1,6 +1,6 @@
 package bke.iso.game.weapon
 
-import bke.iso.engine.Event
+import bke.iso.engine.core.Event
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Module

@@ -12,6 +12,9 @@ import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.EngineModule
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
+import bke.iso.engine.core.Game
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.physics.Physics

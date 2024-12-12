@@ -1,7 +1,5 @@
 package bke.iso.engine.core
 
-import bke.iso.engine.Event
-
 interface Module {
     fun start() {}
     fun stop() {}

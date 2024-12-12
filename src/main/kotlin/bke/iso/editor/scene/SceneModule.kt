@@ -1,8 +1,8 @@
 package bke.iso.editor.scene
 
 import bke.iso.editor.EditorEvent
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab

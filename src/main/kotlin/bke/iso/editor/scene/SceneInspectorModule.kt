@@ -4,8 +4,8 @@ import bke.iso.editor.EditorEvent
 import bke.iso.editor.scene.tool.PointerDeselectActorEvent
 import bke.iso.editor.scene.tool.PointerSelectActorEvent
 import bke.iso.editor.scene.ui.SceneInspectorView
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor

@@ -1,7 +1,7 @@
 package bke.iso.game
 
 import bke.iso.editor.EditorState
-import bke.iso.engine.Event
+import bke.iso.engine.core.Event
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Module
 import bke.iso.engine.state.State

@@ -1,7 +1,7 @@
 package bke.iso.editor.scene.tool
 
 import bke.iso.editor.EditorCommand
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor

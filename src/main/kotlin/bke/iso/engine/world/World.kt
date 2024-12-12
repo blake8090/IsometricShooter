@@ -1,6 +1,6 @@
 package bke.iso.engine.world
 
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.Box

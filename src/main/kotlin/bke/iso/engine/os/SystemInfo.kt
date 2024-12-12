@@ -1,6 +1,6 @@
 package bke.iso.engine.os
 
-import bke.iso.engine.Game
+import bke.iso.engine.core.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Graphics
 import io.github.oshai.kotlinlogging.KotlinLogging

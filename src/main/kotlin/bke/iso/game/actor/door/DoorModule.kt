@@ -1,7 +1,7 @@
 package bke.iso.game.actor.door
 
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World

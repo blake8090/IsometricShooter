@@ -1,7 +1,7 @@
 package bke.iso
 
 import bke.iso.engine.Engine
-import bke.iso.engine.Game
+import bke.iso.engine.core.Game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration

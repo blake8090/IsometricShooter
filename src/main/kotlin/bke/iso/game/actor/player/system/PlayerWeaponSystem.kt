@@ -1,6 +1,6 @@
 package bke.iso.game.actor.player.system
 
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.toWorld

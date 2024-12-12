@@ -8,8 +8,8 @@ import bke.iso.editor.scene.tool.eraser.EraserTool
 import bke.iso.editor.scene.tool.fill.FillTool
 import bke.iso.editor.scene.tool.room.RoomTool
 import bke.iso.editor.scene.ui.SceneTabView
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Module
 import bke.iso.engine.render.Renderer

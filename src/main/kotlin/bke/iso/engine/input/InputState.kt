@@ -1,7 +1,7 @@
 package bke.iso.engine.input
 
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter

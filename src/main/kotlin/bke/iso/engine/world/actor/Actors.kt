@@ -1,7 +1,7 @@
 package bke.iso.engine.world.actor
 
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Grid
 import com.badlogic.gdx.math.Vector3

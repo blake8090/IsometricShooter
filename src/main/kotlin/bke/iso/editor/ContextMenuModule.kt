@@ -1,7 +1,7 @@
 package bke.iso.editor
 
 import bke.iso.editor.ui.EditorScreen
-import bke.iso.engine.Event
+import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input

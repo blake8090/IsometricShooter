@@ -1,7 +1,7 @@
 package bke.iso.game.combat
 
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.asset.config.Configs
 import bke.iso.engine.core.Module
 import bke.iso.engine.world.actor.Actor

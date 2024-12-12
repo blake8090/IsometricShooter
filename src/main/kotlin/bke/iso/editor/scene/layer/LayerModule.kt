@@ -3,8 +3,8 @@ package bke.iso.editor.scene.layer
 import bke.iso.editor.EditorEvent
 import bke.iso.editor.PerformActionEvent
 import bke.iso.editor.scene.ui.SceneTabView
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite

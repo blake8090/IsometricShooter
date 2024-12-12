@@ -1,5 +1,6 @@
-package bke.iso.engine
+package bke.iso.engine.core
 
+import bke.iso.engine.Engine
 import org.apache.commons.lang3.SystemUtils
 
 abstract class Game {

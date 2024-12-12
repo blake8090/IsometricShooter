@@ -1,6 +1,6 @@
 package bke.iso.engine.collision
 
-import bke.iso.engine.Events
+import bke.iso.engine.core.Events
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.debug.DebugCategory
 import bke.iso.engine.render.debug.DebugRenderer

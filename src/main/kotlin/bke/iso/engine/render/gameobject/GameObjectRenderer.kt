@@ -1,7 +1,7 @@
 package bke.iso.engine.render.gameobject
 
-import bke.iso.engine.Event
-import bke.iso.engine.Events
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box

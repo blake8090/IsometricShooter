@@ -1,7 +1,7 @@
 package bke.iso.engine.state
 
 import bke.iso.engine.Engine
-import bke.iso.engine.Event
+import bke.iso.engine.core.Event
 import bke.iso.engine.core.EngineModule
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
