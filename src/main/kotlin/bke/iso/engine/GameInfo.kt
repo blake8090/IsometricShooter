@@ -8,5 +8,5 @@ abstract class GameInfo {
      */
     abstract val folderName: String
 
-    abstract fun start(game: Game)
+    abstract fun start(engine: Engine)
 }

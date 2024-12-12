@@ -1,6 +1,6 @@
 package bke.iso
 
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 import bke.iso.engine.GameInfo
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
@@ -26,24 +26,24 @@ class App(private val gameInfo: GameInfo) : ApplicationAdapter() {
 
     val paths = AppPaths(gameInfo)
 
-    private lateinit var game: Game
+    private lateinit var engine: Engine
 
     override fun create() {
         KtxAsync.initiate()
-        game = Game(paths)
-        game.start(gameInfo)
+        engine = Engine(paths)
+        engine.start(gameInfo)
     }
 
     override fun render() {
-        game.update(Gdx.graphics.deltaTime)
+        engine.update(Gdx.graphics.deltaTime)
     }
 
     override fun dispose() {
-        game.stop()
+        engine.stop()
     }
 
     override fun resize(width: Int, height: Int) {
-        game.resize(width, height)
+        engine.resize(width, height)
     }
 
     fun getConfig(): Lwjgl3ApplicationConfiguration {

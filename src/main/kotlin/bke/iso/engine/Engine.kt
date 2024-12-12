@@ -27,7 +27,7 @@ import bke.iso.engine.world.World
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 
-class Game(appPaths: AppPaths) {
+class Engine(appPaths: AppPaths) {
 
     private val log = KotlinLogging.logger {}
 

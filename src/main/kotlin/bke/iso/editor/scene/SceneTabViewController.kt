@@ -11,7 +11,7 @@ import bke.iso.editor.scene.layer.ToggleHighlightLayerEvent
 import bke.iso.editor.scene.layer.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.scene.tool.ToolModule
 import bke.iso.editor.scene.ui.SceneTabView
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 import com.badlogic.gdx.math.Vector2
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -20,61 +20,61 @@ data class OpenViewMenuEvent(val pos: Vector2) : EditorEvent()
 data class OpenBuildingsMenuEvent(val pos: Vector2) : EditorEvent()
 
 class SceneTabViewController(
-    private val game: Game,
+    private val engine: Engine,
     private val sceneTabView: SceneTabView
 ) {
 
     private val log = KotlinLogging.logger { }
 
-    private val referenceActorModule = ReferenceActorModule(game.world)
+    private val referenceActorModule = ReferenceActorModule(engine.world)
 
     private val sceneModule = SceneModule(
-        game.dialogs,
-        game.serializer,
-        game.world,
-        game.assets,
+        engine.dialogs,
+        engine.serializer,
+        engine.world,
+        engine.assets,
         referenceActorModule,
-        game.events
+        engine.events
     )
 
     val layerModule = LayerModule(
         sceneTabView,
-        game.world,
-        game.events,
-        game.renderer
+        engine.world,
+        engine.events,
+        engine.renderer
     )
 
     private val cameraModule = CameraModule(
-        game.renderer,
-        game.input,
-        game.world,
+        engine.renderer,
+        engine.input,
+        engine.world,
         layerModule,
         sceneTabView
     )
 
     val toolModule = ToolModule(
-        game.collisions,
-        game.world,
+        engine.collisions,
+        engine.world,
         referenceActorModule,
-        game.renderer,
+        engine.renderer,
         layerModule,
         sceneTabView,
-        game.events
+        engine.events
     )
 
     private val sceneInspectorModule = SceneInspectorModule(
         sceneTabView.sceneInspectorView,
-        game.world,
-        game.events
+        engine.world,
+        engine.events
     )
 
     private val buildingsModule = BuildingsModule(
-        game.world,
-        game.renderer,
+        engine.world,
+        engine.renderer,
         sceneTabView,
         layerModule,
-        game.assets,
-        game.events
+        engine.assets,
+        engine.events
     )
 
     fun getModules() = setOf(
@@ -110,7 +110,7 @@ class SceneTabViewController(
             pos,
             setOf(
                 DefaultContextMenuSelection("Edit Building") {
-                    sceneTabView.openEditBuildingDialog(game.world.buildings.getAll()) { name ->
+                    sceneTabView.openEditBuildingDialog(engine.world.buildings.getAll()) { name ->
                         log.info { "Selected building '$name'" }
                         buildingsModule.selectBuilding(name)
                     }
@@ -122,7 +122,7 @@ class SceneTabViewController(
             )
         )
 
-        game.events.fire(event)
+        engine.events.fire(event)
     }
 
     private fun openViewMenu(pos: Vector2) {
@@ -145,7 +145,7 @@ class SceneTabViewController(
                     text = "Hide Walls",
                     isChecked = { cameraModule.wallsHidden },
                     action = {
-                        game.events.fire(ToggleHideWallsEvent())
+                        engine.events.fire(ToggleHideWallsEvent())
                     }
                 ),
 
@@ -153,7 +153,7 @@ class SceneTabViewController(
                     text = "Hide Upper Layers",
                     isChecked = { layerModule.hideUpperLayers },
                     action = {
-                        game.events.fire(ToggleUpperLayersHiddenEvent())
+                        engine.events.fire(ToggleUpperLayersHiddenEvent())
                     }
                 ),
 
@@ -161,13 +161,13 @@ class SceneTabViewController(
                     text = "Highlight Selected Layer",
                     isChecked = { layerModule.highlightLayer },
                     action = {
-                        game.events.fire(ToggleHighlightLayerEvent())
+                        engine.events.fire(ToggleHighlightLayerEvent())
                     }
                 )
             )
         )
 
-        game.events.fire(event)
+        engine.events.fire(event)
     }
 
     private fun openBuildingsMenu(pos: Vector2) {
@@ -182,7 +182,7 @@ class SceneTabViewController(
                 },
 
                 DefaultContextMenuSelection("Edit Building") {
-                    sceneTabView.openEditBuildingDialog(game.world.buildings.getAll()) { name ->
+                    sceneTabView.openEditBuildingDialog(engine.world.buildings.getAll()) { name ->
                         log.info { "Selected building '$name'" }
                         buildingsModule.selectBuilding(name)
                     }
@@ -196,6 +196,6 @@ class SceneTabViewController(
             )
         )
 
-        game.events.fire(event)
+        engine.events.fire(event)
     }
 }

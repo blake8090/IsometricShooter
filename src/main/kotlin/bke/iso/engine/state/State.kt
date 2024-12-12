@@ -1,7 +1,7 @@
 package bke.iso.engine.state
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 
 interface System {
     fun update(deltaTime: Float)
@@ -14,7 +14,7 @@ interface Module {
 
 abstract class State {
 
-    protected abstract val game: Game
+    protected abstract val engine: Engine
     protected abstract val systems: LinkedHashSet<System>
     protected abstract val modules: Set<Module>
 

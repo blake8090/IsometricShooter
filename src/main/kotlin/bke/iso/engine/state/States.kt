@@ -1,21 +1,21 @@
 package bke.iso.engine.state
 
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-class States(private val game: Game) {
+class States(private val engine: Engine) {
 
     private val log = KotlinLogging.logger { }
 
-    var currentState: State = EmptyState(game)
+    var currentState: State = EmptyState(engine)
         private set
 
     fun <T : State> setState(type: KClass<T>) {
         log.debug { "Switching to state ${type.simpleName}" }
-        currentState = requireNotNull(type.primaryConstructor).call(game)
+        currentState = requireNotNull(type.primaryConstructor).call(engine)
         // TODO: does state.load need to be a suspend fun anymore?
         runBlocking { currentState.load() }
     }

@@ -1,6 +1,6 @@
 package bke.iso.game
 
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 import bke.iso.engine.GameInfo
 import bke.iso.engine.input.ButtonState
 import bke.iso.game.actor.player.system.RELOAD_ACTION
@@ -16,16 +16,16 @@ class IsometricShooter : GameInfo() {
 
     override val folderName = "IsometricShooter"
 
-    override fun start(game: Game) {
-        game.assets.addCache(WeaponPropertiesCache(game.serializer))
+    override fun start(engine: Engine) {
+        engine.assets.addCache(WeaponPropertiesCache(engine.serializer))
 
-        bindInput(game)
+        bindInput(engine)
 
-        game.states.setState<MainMenuState>()
+        engine.states.setState<MainMenuState>()
     }
 
-    private fun bindInput(game: Game) {
-        with(game.input.keyMouse) {
+    private fun bindInput(engine: Engine) {
+        with(engine.input.keyMouse) {
             bindKey("toggleDebug", Input.Keys.M, ButtonState.PRESSED)
 
             bindKey("run", Input.Keys.SHIFT_LEFT, ButtonState.DOWN)
@@ -55,7 +55,7 @@ class IsometricShooter : GameInfo() {
             bindKey("interact", Input.Keys.E, ButtonState.PRESSED)
         }
 
-        with(game.input.controller) {
+        with(engine.input.controller) {
             bindAxis("moveX", ControllerAxis.LEFTX)
             bindAxis("moveY", ControllerAxis.LEFTY, true)
 

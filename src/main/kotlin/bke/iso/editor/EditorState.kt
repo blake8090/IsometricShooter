@@ -4,7 +4,7 @@ import bke.iso.editor.scene.SceneTabViewController
 import bke.iso.editor.ui.EditorScreen
 import bke.iso.editor.ui.Tab
 import bke.iso.editor.ui.color
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.state.Module
@@ -22,12 +22,12 @@ class MainViewDragEvent : EditorEvent()
 
 class PerformActionEvent : EditorEvent()
 
-class EditorState(override val game: Game) : State() {
+class EditorState(override val engine: Engine) : State() {
 
     private val log = KotlinLogging.logger {}
 
-    private val editorScreen = EditorScreen(this, game.assets)
-    private val sceneTabController = SceneTabViewController(game, editorScreen.sceneTabView)
+    private val editorScreen = EditorScreen(this, engine.assets)
+    private val sceneTabController = SceneTabViewController(engine, editorScreen.sceneTabView)
 
     private val contextMenuModule = ContextMenuModule(editorScreen)
 
@@ -43,11 +43,11 @@ class EditorState(override val game: Game) : State() {
 
     override suspend fun load() {
         log.info { "Starting editor" }
-        game.ui.setScreen(editorScreen)
+        engine.ui.setScreen(editorScreen)
 
         sceneTabController.init()
 
-        with(game.input.keyMouse) {
+        with(engine.input.keyMouse) {
             bindMouse("toolDown", Input.Buttons.LEFT, ButtonState.DOWN)
             bindMouse("toolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
             bindMouse("toolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
@@ -62,11 +62,11 @@ class EditorState(override val game: Game) : State() {
         log.debug { "Fired event ${event::class.simpleName}" }
 
         if (event is MainViewDragEvent) {
-            game.input.onAction("toolDown") {
+            engine.input.onAction("toolDown") {
                 sceneTabController.toolModule.performMultiAction()?.let(::execute)
             }
         } else {
-            game.events.fire(event)
+            engine.events.fire(event)
             sceneTabController.handleEvent(event)
         }
     }
@@ -75,12 +75,12 @@ class EditorState(override val game: Game) : State() {
         super.update(deltaTime)
 
         if (editorScreen.sceneTabView.hitTouchableArea()) {
-            game.input.onAction("toolPress") {
+            engine.input.onAction("toolPress") {
                 println("tool press")
                 sceneTabController.toolModule.performAction()?.let(::execute)
             }
 
-            game.input.onAction("toolRelease") {
+            engine.input.onAction("toolRelease") {
                 println("tool release")
                 sceneTabController.toolModule.performReleaseAction()?.let(::execute)
             }
@@ -90,7 +90,7 @@ class EditorState(override val game: Game) : State() {
         drawTaggedActors()
         sceneTabController.draw()
 
-        game.input.onAction("openContextMenu") {
+        engine.input.onAction("openContextMenu") {
             openContextMenu()
         }
     }
@@ -104,7 +104,7 @@ class EditorState(override val game: Game) : State() {
 
     private fun drawGrid() {
         for (x in 0..gridWidth) {
-            game.renderer.bgShapes.addLine(
+            engine.renderer.bgShapes.addLine(
                 Vector3(x.toFloat(), 0f, sceneTabController.layerModule.selectedLayer.toFloat()),
                 Vector3(x.toFloat(), gridLength.toFloat(), sceneTabController.layerModule.selectedLayer.toFloat()),
                 0.5f,
@@ -113,7 +113,7 @@ class EditorState(override val game: Game) : State() {
         }
 
         for (y in 0..gridLength) {
-            game.renderer.bgShapes.addLine(
+            engine.renderer.bgShapes.addLine(
                 Vector3(0f, y.toFloat(), sceneTabController.layerModule.selectedLayer.toFloat()),
                 Vector3(gridWidth.toFloat(), y.toFloat(), sceneTabController.layerModule.selectedLayer.toFloat()),
                 0.5f,
@@ -126,7 +126,7 @@ class EditorState(override val game: Game) : State() {
         when (editorScreen.activeTab) {
             Tab.SCENE -> {
                 log.debug { "Delegating context menu to SCENE tab" }
-                sceneTabController.openContextMenu(game.renderer.pointer.screenPos)
+                sceneTabController.openContextMenu(engine.renderer.pointer.screenPos)
             }
 
             Tab.ACTOR -> {
@@ -140,10 +140,10 @@ class EditorState(override val game: Game) : State() {
     }
 
     private fun drawTaggedActors() {
-        game.world.actors.each<Tags> { actor, tags ->
+        engine.world.actors.each<Tags> { actor, tags ->
             val box = actor.getCollisionBox()
             if (box != null && tags.tags.isNotEmpty()) {
-                game.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
+                engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
             }
         }
     }

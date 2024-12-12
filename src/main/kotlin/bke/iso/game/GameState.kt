@@ -1,7 +1,7 @@
 package bke.iso.game
 
 import bke.iso.engine.Event
-import bke.iso.engine.Game
+import bke.iso.engine.Engine
 import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
 import bke.iso.engine.state.State
 import bke.iso.engine.world.actor.Actor
@@ -34,32 +34,32 @@ import bke.iso.game.weapon.WeaponsModule
 import bke.iso.game.weapon.system.ExplosionSystem
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class GameState(override val game: Game) : State() {
+class GameState(override val engine: Engine) : State() {
 
     private val log = KotlinLogging.logger {}
 
     private val combatModule = CombatModule(
-        game.world,
-        game.events,
-        game.assets.configs
+        engine.world,
+        engine.events,
+        engine.assets.configs
     )
     private val weaponsModule = WeaponsModule(
-        game.assets,
-        game.world
+        engine.assets,
+        engine.world
     )
     private val doorModule = DoorModule(
-        game.world,
-        game.ui,
-        game.events
+        engine.world,
+        engine.ui,
+        engine.events
     )
     private val hudModule = HudModule(
-        game.world,
-        game.assets,
+        engine.world,
+        engine.assets,
         weaponsModule
     )
-    private val shadowModule = ShadowModule(game.world)
-    private val playerDataModule = PlayerDataModule(game.world)
-    private val elevatorModule = ElevatorModule(game.collisions)
+    private val shadowModule = ShadowModule(engine.world)
+    private val playerDataModule = PlayerDataModule(engine.world)
+    private val elevatorModule = ElevatorModule(engine.collisions)
 
     override val modules = setOf(
         hudModule,
@@ -72,90 +72,90 @@ class GameState(override val game: Game) : State() {
 
     override val systems = linkedSetOf(
         WeaponSystem(
-            game.world,
-            game.assets
+            engine.world,
+            engine.assets
         ),
         PlayerWeaponSystem(
-            game.world,
-            game.input,
-            game.renderer,
-            game.events,
+            engine.world,
+            engine.input,
+            engine.renderer,
+            engine.events,
             weaponsModule
         ),
         PlayerSystem(
-            game.input,
-            game.world,
-            game.renderer,
-            game.collisions,
+            engine.input,
+            engine.world,
+            engine.renderer,
+            engine.collisions,
             combatModule,
             weaponsModule,
-            game.assets.configs
+            engine.assets.configs
         ),
         PlayerInteractionSystem(
-            game.world,
-            game.input,
+            engine.world,
+            engine.input,
             hudModule,
             doorModule,
             elevatorModule
         ),
         PlayerCrosshairLaserSystem(
-            game.world,
-            game.renderer,
-            game.collisions,
+            engine.world,
+            engine.renderer,
+            engine.collisions,
             weaponsModule
         ),
         TurretSystem(
-            game.world,
-            game.collisions,
-            game.renderer.debug,
-            game.events,
+            engine.world,
+            engine.collisions,
+            engine.renderer.debug,
+            engine.events,
             weaponsModule
         ),
         RollingTurretSystem(
-            game.world,
-            game.collisions,
-            game.renderer,
-            game.events,
+            engine.world,
+            engine.collisions,
+            engine.renderer,
+            engine.events,
             weaponsModule
         ),
         FlyingTurretSystem(
-            game.world,
-            game.collisions,
-            game.renderer,
-            game.events,
+            engine.world,
+            engine.collisions,
+            engine.renderer,
+            engine.events,
             weaponsModule
         ),
         BulletSystem(
-            game.world,
+            engine.world,
             combatModule,
-            game.collisions
+            engine.collisions
         ),
-        ExplosionSystem(game.world),
+        ExplosionSystem(engine.world),
         ShadowSystem(
-            game.world,
-            game.collisions
+            engine.world,
+            engine.collisions
         ),
         HealSystem(
-            game.world,
-            game.events
+            engine.world,
+            engine.events
         ),
-        HitEffectSystem(game.world),
-        ElevatorSystem(game.world)
+        HitEffectSystem(engine.world),
+        ElevatorSystem(engine.world)
     )
 
     private val crosshair = CrosshairPointer(
-        game.assets,
-        game.input,
-        game.world,
-        game.renderer,
+        engine.assets,
+        engine.input,
+        engine.world,
+        engine.renderer,
         weaponsModule
     )
 
     override suspend fun load() {
-        hudModule.init(game.ui)
-        game.renderer.pointer.set(crosshair)
+        hudModule.init(engine.ui)
+        engine.renderer.pointer.set(crosshair)
 
-        game.renderer.debug.enableCategories(
+        engine.renderer.debug.enableCategories(
 //            "vision",
 //            "turret",
             "collisions", // TODO: use constants instead
@@ -176,7 +176,7 @@ class GameState(override val game: Game) : State() {
             playerDataModule.saveData()
         }
 
-        game.scenes.load(name)
+        engine.scenes.load(name)
 
         if (savePlayerData) {
             playerDataModule.loadData()
@@ -190,14 +190,14 @@ class GameState(override val game: Game) : State() {
             "mission-01-interior.scene" -> initMission1InteriorScene()
         }
 
-        game.world.actors.each<Tags> { actor, tags ->
+        engine.world.actors.each<Tags> { actor, tags ->
             log.debug { "Actor $actor has tags ${tags.tags}" }
         }
     }
 
     private fun initPlayer() {
-        game.world.actors.each { actor: Actor, _: Player ->
-            game.renderer.occlusion.target = actor
+        engine.world.actors.each { actor: Actor, _: Player ->
+            engine.renderer.occlusion.target = actor
 
             actor.with<Health> { health ->
                 hudModule.updateHealthBar(health.value, health.maxValue)
@@ -206,21 +206,21 @@ class GameState(override val game: Game) : State() {
     }
 
     private fun initMission1StartScene() {
-        game.world.actors.each<Player> { actor, _ ->
+        engine.world.actors.each<Player> { actor, _ ->
             weaponsModule.equip(actor, "pistol")
         }
     }
 
     private fun initMission1RoofScene() {
-        game.world.actors.each<Player> { actor, _ ->
+        engine.world.actors.each<Player> { actor, _ ->
             weaponsModule.equip(actor, "pistol")
         }
     }
 
     private fun initMission1InteriorScene() {
-        game.renderer.occlusion.apply {
+        engine.renderer.occlusion.apply {
             resetStrategies()
-            addStrategy(BuildingWallOcclusionStrategy(game.world))
+            addStrategy(BuildingWallOcclusionStrategy(engine.world))
             addStrategy(FloorOcclusionStrategy(floorHeight = 2f))
             removeStrategy(BuildingLayerOcclusionStrategy::class)
         }
