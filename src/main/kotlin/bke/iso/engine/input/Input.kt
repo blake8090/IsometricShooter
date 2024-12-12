@@ -1,6 +1,7 @@
 package bke.iso.engine.input
 
 import bke.iso.engine.Events
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.input.controller.ControllerInput
 import bke.iso.engine.input.keymouse.KeyMouseInput
 import com.badlogic.gdx.Gdx
@@ -10,7 +11,11 @@ import com.badlogic.gdx.controllers.ControllerListener
 import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.math.Vector2
 
-class Input(events: Events) {
+class Input(events: Events) : EngineModule() {
+
+    override val moduleName = "input"
+    override val updateWhileLoading = false
+    override val profilingEnabled = true
 
     private val inputMultiplexer = InputMultiplexer()
     private val inputState = InputState(events)
@@ -18,14 +23,14 @@ class Input(events: Events) {
     val keyMouse: KeyMouseInput = KeyMouseInput()
     val controller: ControllerInput = ControllerInput(inputState)
 
-    fun start() {
+    override fun start() {
         Gdx.input.inputProcessor = inputMultiplexer
         addInputProcessor(inputState.keyMouseHandler)
         Controllers.addListener(inputState.controllerHandler)
         inputState.start()
     }
 
-    fun update() {
+    override fun update(deltaTime: Float) {
         keyMouse.update()
         controller.update()
     }

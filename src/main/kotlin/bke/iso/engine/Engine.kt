@@ -11,6 +11,7 @@ import bke.iso.engine.asset.shader.ShaderInfoCache
 import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
+import bke.iso.engine.core.EngineModule
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.physics.Physics
@@ -84,9 +85,7 @@ class Engine(val game: Game) {
                 physics.update(deltaTime)
             }
 
-            profiler.profile("input") {
-                input.update()
-            }
+            updateModule(input, deltaTime)
 
             renderer.pointer.update(deltaTime)
 
@@ -107,6 +106,20 @@ class Engine(val game: Game) {
 
         ui.draw(deltaTime)
         renderer.pointer.draw()
+    }
+
+    private fun updateModule(module: EngineModule, deltaTime: Float) {
+        if (ui.isLoadingScreenActive && !module.updateWhileLoading) {
+            return
+        }
+
+        if (module.profilingEnabled) {
+            profiler.profile(module.moduleName) {
+                module.update(deltaTime)
+            }
+        } else {
+            module.update(deltaTime)
+        }
     }
 
     fun resize(width: Int, height: Int) {
