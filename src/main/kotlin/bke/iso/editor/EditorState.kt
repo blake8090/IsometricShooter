@@ -60,7 +60,7 @@ class EditorState(override val engine: Engine) : State() {
 
         when (editorScreen.activeTab) {
             Tab.SCENE -> sceneTabController.update()
-            Tab.ACTOR -> {}
+            Tab.ACTOR -> actorTabViewController.update()
             Tab.NONE -> TODO()
         }
 
