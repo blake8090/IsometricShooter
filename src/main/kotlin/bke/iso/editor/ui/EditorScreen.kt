@@ -44,7 +44,7 @@ class EditorScreen(
     private val root = Table().top()
 
     val sceneTabView = SceneTabView(skin, assets, stage)
-    private val actorTabView = ActorTabView(skin, assets)
+    val actorTabView = ActorTabView(skin, assets, stage)
 
     private val contextMenuView = ContextMenuView(skin, assets)
     private var contextMenuActor: Actor? = null
@@ -82,7 +82,7 @@ class EditorScreen(
 
         root.addListener(object : EditorEventListener {
             override fun handle(event: EditorEvent) {
-                editorState.handleEvent(event)
+                editorState.handleEditorEvent(event)
             }
         })
 
@@ -194,7 +194,7 @@ class EditorScreen(
 
     private fun selectTab(tab: Tab) {
         log.info { "Selected tab $tab" }
-        activeTab = Tab.SCENE
+        activeTab = tab
 
         if (tab == Tab.SCENE) {
             sceneTabView.menuBar.isVisible = true
@@ -219,7 +219,7 @@ class EditorScreen(
         // since this is not a child of the root actor, we have to manually add an event listener handler
         newActor.addListener(object : EditorEventListener {
             override fun handle(event: EditorEvent) {
-                editorState.handleEvent(event)
+                editorState.handleEditorEvent(event)
             }
         })
 

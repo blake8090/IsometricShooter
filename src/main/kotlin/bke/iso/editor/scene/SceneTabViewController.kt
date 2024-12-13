@@ -4,6 +4,7 @@ import bke.iso.editor.CheckableContextMenuSelection
 import bke.iso.editor.DefaultContextMenuSelection
 import bke.iso.editor.EditorEvent
 import bke.iso.editor.OpenContextMenuEvent
+import bke.iso.editor.PerformCommandEvent
 import bke.iso.editor.scene.camera.CameraModule
 import bke.iso.editor.scene.camera.ToggleHideWallsEvent
 import bke.iso.editor.scene.layer.LayerModule
@@ -11,10 +12,21 @@ import bke.iso.editor.scene.layer.ToggleHighlightLayerEvent
 import bke.iso.editor.scene.layer.ToggleUpperLayersHiddenEvent
 import bke.iso.editor.scene.tool.ToolModule
 import bke.iso.editor.scene.ui.SceneTabView
+import bke.iso.editor.ui.color
 import bke.iso.engine.Engine
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module
+import bke.iso.engine.input.ButtonState
+import bke.iso.engine.world.actor.Tags
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+
+class MainViewPressEvent : EditorEvent()
+
+class MainViewDragEvent : EditorEvent()
 
 data class OpenViewMenuEvent(val pos: Vector2) : EditorEvent()
 
@@ -27,6 +39,9 @@ class SceneTabViewController(
 
     private val log = KotlinLogging.logger { }
 
+    private var gridWidth = 20
+    private var gridLength = 20
+
     private val referenceActorModule = ReferenceActorModule(engine.world)
 
     private val sceneModule = SceneModule(
@@ -38,7 +53,7 @@ class SceneTabViewController(
         engine.events
     )
 
-    val layerModule = LayerModule(
+    private val layerModule = LayerModule(
         sceneTabView,
         engine.world,
         engine.events,
@@ -89,20 +104,60 @@ class SceneTabViewController(
     )
 
     fun init() {
+        with(engine.input.keyMouse) {
+            bindMouse("toolDown", Input.Buttons.LEFT, ButtonState.DOWN)
+            bindMouse("toolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
+            bindMouse("toolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
+            bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
+
+            bindKey("resetZoom", Input.Keys.Q, ButtonState.PRESSED)
+            bindKey("moveCamera", Input.Keys.C, ButtonState.PRESSED)
+        }
+
         cameraModule.init()
         layerModule.init()
+
     }
 
-    fun draw() {
+    fun update() {
+        if (sceneTabView.hitTouchableArea()) {
+            engine.input.onAction("toolPress") {
+                println("tool press")
+                toolModule.performAction()?.let { command ->
+                    engine.events.fire(PerformCommandEvent(command))
+                }
+            }
+
+            engine.input.onAction("toolRelease") {
+                println("tool release")
+                toolModule.performReleaseAction()?.let { command ->
+                    engine.events.fire(PerformCommandEvent(command))
+                }
+            }
+        }
+
         cameraModule.draw()
         toolModule.draw()
         buildingsModule.draw()
+
+        drawGrid()
+        drawTaggedActors()
     }
 
-    fun handleEvent(event: EditorEvent) {
+    fun handleEditorEvent(event: EditorEvent) {
         when (event) {
+            is MainViewDragEvent -> performMultiAction()
             is OpenViewMenuEvent -> openViewMenu(event.pos)
             is OpenBuildingsMenuEvent -> openBuildingsMenu(event.pos)
+        }
+    }
+
+    private fun performMultiAction() {
+        engine.input.onAction("toolDown") {
+            toolModule.performMultiAction()?.let { command ->
+                println("fire event!")
+                engine.events.fire(PerformCommandEvent(command))
+            }
         }
     }
 
@@ -198,5 +253,34 @@ class SceneTabViewController(
         )
 
         engine.events.fire(event)
+    }
+
+    private fun drawGrid() {
+        for (x in 0..gridWidth) {
+            engine.renderer.bgShapes.addLine(
+                Vector3(x.toFloat(), 0f, layerModule.selectedLayer.toFloat()),
+                Vector3(x.toFloat(), gridLength.toFloat(), layerModule.selectedLayer.toFloat()),
+                0.5f,
+                Color.WHITE
+            )
+        }
+
+        for (y in 0..gridLength) {
+            engine.renderer.bgShapes.addLine(
+                Vector3(0f, y.toFloat(), layerModule.selectedLayer.toFloat()),
+                Vector3(gridWidth.toFloat(), y.toFloat(), layerModule.selectedLayer.toFloat()),
+                0.5f,
+                Color.WHITE
+            )
+        }
+    }
+
+    private fun drawTaggedActors() {
+        engine.world.actors.each<Tags> { actor, tags ->
+            val box = actor.getCollisionBox()
+            if (box != null && tags.tags.isNotEmpty()) {
+                engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
+            }
+        }
     }
 }

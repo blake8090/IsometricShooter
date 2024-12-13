@@ -1,7 +1,7 @@
 package bke.iso.editor.scene.ui
 
-import bke.iso.editor.MainViewDragEvent
-import bke.iso.editor.MainViewPressEvent
+import bke.iso.editor.scene.MainViewDragEvent
+import bke.iso.editor.scene.MainViewPressEvent
 import bke.iso.editor.scene.OpenBuildingsMenuEvent
 import bke.iso.editor.scene.OpenSceneEvent
 import bke.iso.editor.scene.OpenViewMenuEvent
