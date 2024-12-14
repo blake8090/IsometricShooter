@@ -38,7 +38,6 @@ import kotlin.math.floor
  */
 class OptimizedGameObjectRenderer(
     private val assets: Assets,
-    private val world: World,
     private val events: Events,
     private val debug: DebugRenderer,
     private val occlusion: Occlusion,
@@ -51,7 +50,7 @@ class OptimizedGameObjectRenderer(
 
     private val renderablesByRow = mutableMapOf<Float, Array<GameObjectRenderable>>()
 
-    fun draw(batch: PolygonSpriteBatch) {
+    fun draw(batch: PolygonSpriteBatch, world: World) {
         for (gameObject in world.getObjects()) {
             addRenderable(gameObject)
         }

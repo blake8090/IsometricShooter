@@ -20,6 +20,7 @@ import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.profiler.Profiler
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.render.RendererManager
 import bke.iso.engine.scene.SceneCache
 import bke.iso.engine.scene.Scenes
 import bke.iso.engine.serialization.Serializer
@@ -47,7 +48,10 @@ class Engine(val game: Game) {
     val assets: Assets = Assets(files, systemInfo)
 
     val world: World = World(events)
+
     val renderer: Renderer = Renderer(world, assets, events)
+    val rendererManager = RendererManager(renderer)
+
     val collisions: Collisions = Collisions(renderer, world)
     val physics: Physics = Physics(world, collisions)
     val scenes = Scenes(assets, serializer, world, renderer)
@@ -58,7 +62,7 @@ class Engine(val game: Game) {
         input,
         states,
         world,
-        renderer,
+        rendererManager,
         ui
     )
 
@@ -102,7 +106,7 @@ class Engine(val game: Game) {
 
         updateModule(states, deltaTime)
         updateModule(world, deltaTime)
-        updateModule(renderer, deltaTime)
+        updateModule(rendererManager, deltaTime)
         updateModule(ui, deltaTime)
 
         profiler.update(deltaTime)
@@ -126,7 +130,7 @@ class Engine(val game: Game) {
 
     fun resize(width: Int, height: Int) {
         log.info { "Resizing to ${width}x$height" }
-        renderer.resize(width, height)
+        rendererManager.resize(width, height)
         ui.resize(width, height)
     }
 

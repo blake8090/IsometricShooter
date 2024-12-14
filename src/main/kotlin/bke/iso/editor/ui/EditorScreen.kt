@@ -4,6 +4,7 @@ import bke.iso.editor.ContextMenuSelection
 import bke.iso.editor.EditorEvent
 import bke.iso.editor.EditorEventListener
 import bke.iso.editor.EditorState
+import bke.iso.editor.SelectTabEvent
 import bke.iso.editor.actor.ActorTabView
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.asset.Assets
@@ -44,7 +45,7 @@ class EditorScreen(
     private val root = Table().top()
 
     val sceneTabView = SceneTabView(skin, assets, stage)
-    val actorTabView = ActorTabView(skin, assets, stage)
+    val actorTabView = ActorTabView(skin)
 
     private val contextMenuView = ContextMenuView(skin, assets)
     private var contextMenuActor: Actor? = null
@@ -202,12 +203,16 @@ class EditorScreen(
 
             actorTabView.menuBar.isVisible = false
             actorTabView.mainView.isVisible = false
+
+            root.fire(SelectTabEvent(Tab.SCENE))
         } else if (tab == Tab.ACTOR) {
             sceneTabView.menuBar.isVisible = false
             sceneTabView.mainView.isVisible = false
 
             actorTabView.menuBar.isVisible = true
             actorTabView.mainView.isVisible = true
+
+            root.fire(SelectTabEvent(Tab.ACTOR))
         }
     }
 

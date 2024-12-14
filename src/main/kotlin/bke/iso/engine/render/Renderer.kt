@@ -2,7 +2,6 @@ package bke.iso.engine.render
 
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.gameobject.OptimizedGameObjectRenderer
@@ -33,16 +32,12 @@ const val VIRTUAL_WIDTH = 960f
 const val VIRTUAL_HEIGHT = 540f
 
 class Renderer(
-    world: World,
+    private val world: World,
     private val assets: Assets,
     events: Events
-) : EngineModule() {
+) {
 
     private val log = KotlinLogging.logger {}
-
-    override val moduleName = "renderer"
-    override val updateWhileLoading = false
-    override val profilingEnabled = true
 
     private val batch = PolygonSpriteBatch()
 
@@ -74,7 +69,6 @@ class Renderer(
 
     private val gameObjectRenderer = OptimizedGameObjectRenderer(
         assets,
-        world,
         events,
         debug,
         occlusion,
@@ -88,7 +82,7 @@ class Renderer(
         fbo.colorBufferTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
     }
 
-    override fun stop() {
+    fun stop() {
         batch.dispose()
         fbo.dispose()
         shapeRenderer.dispose()
@@ -115,12 +109,12 @@ class Renderer(
         camera.zoom = 1f
     }
 
-    override fun update(deltaTime: Float) {
+    fun draw() {
         camera.update()
         batch.projectionMatrix = camera.combined
 
         fboBegin()
-        gameObjectRenderer.draw(batch)
+        gameObjectRenderer.draw(batch, world)
         fboEnd()
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a)

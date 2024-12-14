@@ -15,6 +15,8 @@ class PerformActionEvent : Event
 
 data class PerformCommandEvent(val editorCommand: EditorCommand) : EditorEvent()
 
+data class SelectTabEvent(val tab: Tab) : EditorEvent()
+
 class EditorState(override val engine: Engine) : State() {
 
     private val log = KotlinLogging.logger {}
@@ -44,8 +46,17 @@ class EditorState(override val engine: Engine) : State() {
         super.handleEvent(event)
 
         if (event is PerformCommandEvent) {
-            println("performing command")
             execute(event.editorCommand)
+        } else if (event is SelectTabEvent) {
+            onSelectTab(event.tab)
+        }
+    }
+
+    private fun onSelectTab(tab: Tab) {
+        if (tab == Tab.SCENE) {
+            engine.rendererManager.reset()
+        } else if (tab == Tab.ACTOR) {
+            actorTabViewController.enable()
         }
     }
 
@@ -61,7 +72,7 @@ class EditorState(override val engine: Engine) : State() {
         when (editorScreen.activeTab) {
             Tab.SCENE -> sceneTabController.update()
             Tab.ACTOR -> actorTabViewController.update()
-            Tab.NONE -> TODO()
+            Tab.NONE -> error("No tab selected")
         }
 
         engine.input.onAction("openContextMenu") {
