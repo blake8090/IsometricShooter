@@ -68,7 +68,7 @@ class SceneTabViewController(
         sceneTabView
     )
 
-    val toolModule = ToolModule(
+    private val toolModule = ToolModule(
         engine.collisions,
         engine.world,
         referenceActorModule,
@@ -113,10 +113,6 @@ class SceneTabViewController(
             bindKey("resetZoom", Input.Keys.Q, ButtonState.PRESSED)
             bindKey("moveCamera", Input.Keys.C, ButtonState.PRESSED)
         }
-
-        cameraModule.init()
-        layerModule.init()
-
     }
 
     fun update() {

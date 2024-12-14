@@ -43,7 +43,7 @@ class CameraModule(
     var wallsHidden = false
         private set
 
-    fun init() {
+    override fun start() {
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
         initCamera()

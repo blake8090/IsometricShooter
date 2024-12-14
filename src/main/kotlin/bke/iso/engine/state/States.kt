@@ -28,9 +28,13 @@ class States(private val engine: Engine) : EngineModule() {
 
     fun <T : State> setState(type: KClass<T>) {
         log.debug { "Switching to state ${type.simpleName}" }
+        // TODO: call state.stop()
         currentState = requireNotNull(type.primaryConstructor).call(engine)
         // TODO: does state.load need to be a suspend fun anymore?
-        runBlocking { currentState.load() }
+        runBlocking {
+            currentState.load()
+            currentState.start()
+        }
     }
 
     inline fun <reified T : State> setState() =

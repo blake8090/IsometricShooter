@@ -14,6 +14,12 @@ abstract class State {
     protected abstract val systems: LinkedHashSet<System>
     protected abstract val modules: Set<Module>
 
+    fun start() {
+        for (module in modules) {
+            module.start()
+        }
+    }
+
     open suspend fun load() {}
 
     open fun update(deltaTime: Float) {

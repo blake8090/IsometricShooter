@@ -39,6 +39,12 @@ class LayerModule(
     var highlightLayer = false
         private set
 
+    override fun start() {
+        sceneTab.updateLayerLabel(selectedLayer.toFloat())
+        renderer.occlusion.resetStrategies()
+        renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
+    }
+
     override fun handleEvent(event: Event) {
         when (event) {
             is IncreaseLayerEvent -> {
@@ -81,10 +87,4 @@ class LayerModule(
 
     private fun canHighlight(actor: Actor) =
         highlightLayer && floor(actor.z).toInt() == selectedLayer
-
-    fun init() {
-        sceneTab.updateLayerLabel(selectedLayer.toFloat())
-        renderer.occlusion.resetStrategies()
-        renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
-    }
 }

@@ -24,6 +24,7 @@ class ActorTabViewController(
     private val actorModule = ActorModule(
         engine.dialogs,
         engine.serializer,
+        world
     )
 
     fun getModules(): Set<Module> = setOf(
