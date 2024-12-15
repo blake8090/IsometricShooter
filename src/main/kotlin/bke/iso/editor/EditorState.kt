@@ -40,6 +40,7 @@ class EditorState(override val engine: Engine) : State() {
         engine.ui.setScreen(editorScreen)
 
         sceneTabController.init()
+        actorTabViewController.init()
     }
 
     override fun handleEvent(event: Event) {

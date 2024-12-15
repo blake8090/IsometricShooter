@@ -83,6 +83,7 @@ class CameraModule(
         }
     }
 
+    // todo: incorporate into update
     fun draw() {
         cameraActor.getCollisionBox()?.let { box ->
             renderer.fgShapes.addBox(box, 1f, Color.CYAN)

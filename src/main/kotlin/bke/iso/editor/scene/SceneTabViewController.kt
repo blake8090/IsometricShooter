@@ -105,6 +105,7 @@ class SceneTabViewController(
 
     fun init() {
         with(engine.input.keyMouse) {
+            // todo: only bind inputs specific to scene tab
             bindMouse("toolDown", Input.Buttons.LEFT, ButtonState.DOWN)
             bindMouse("toolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
             bindMouse("toolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
