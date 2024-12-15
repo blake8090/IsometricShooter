@@ -41,6 +41,8 @@ class ToolModule(
         val tool = selectedTool ?: return
         // TODO: scale cursor position when screen size changes
         tool.update(layerModule.selectedLayer.toFloat(), renderer.pointer.pos)
+
+        tool.draw()
     }
 
     override fun handleEvent(event: Event) {
@@ -77,10 +79,6 @@ class ToolModule(
                 selectTool(fillTool)
             }
         }
-    }
-
-    fun draw() {
-        selectedTool?.draw()
     }
 
     fun performAction(): EditorCommand? =

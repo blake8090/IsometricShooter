@@ -36,16 +36,16 @@ class BuildingsModule(
     private val buildingFont = assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
     private var selectedBuilding: String? = null
 
+    override fun update(deltaTime: Float) {
+        for (buildingName in world.buildings.getAll()) {
+            drawBuilding(buildingName)
+        }
+    }
+
     override fun handleEvent(event: Event) {
         when (event) {
             is Actors.CreatedEvent -> addActor(event.actor)
             is SetBuildingEvent -> setActorBuilding(event.actor, event.name)
-        }
-    }
-
-    fun draw() {
-        for (buildingName in world.buildings.getAll()) {
-            drawBuilding(buildingName)
         }
     }
 

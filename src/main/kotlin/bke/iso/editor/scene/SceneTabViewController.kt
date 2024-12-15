@@ -133,10 +133,6 @@ class SceneTabViewController(
             }
         }
 
-        cameraModule.draw()
-        toolModule.draw()
-        buildingsModule.draw()
-
         drawGrid()
         drawTaggedActors()
     }
