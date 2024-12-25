@@ -1,5 +1,7 @@
 package bke.iso.editor.actor.ui
 
+import bke.iso.editor.actor.ui.component.createColliderControls
+import bke.iso.editor.actor.ui.component.createSpriteControls
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Component
@@ -16,7 +18,6 @@ class ActorInspectorView(private val skin: Skin) {
         .top()
         .padLeft(5f)
         .padRight(5f)
-
 
     private lateinit var editorTable: Table
 
@@ -41,190 +42,9 @@ class ActorInspectorView(private val skin: Skin) {
         editorTable.clearChildren()
 
         when (component) {
-            is Sprite -> createSpriteControls(component)
-            is Collider -> createColliderControls(component)
+            is Sprite -> createSpriteControls(editorTable, skin, component)
+            is Collider -> createColliderControls(editorTable, skin, component)
         }
-    }
-
-    private fun createSpriteControls(sprite: Sprite) {
-        editorTable.add(Label("texture:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(sprite.texture, skin).apply {
-                onChanged {
-                    println("changed texture to $text")
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("offsetX:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(sprite.offsetX.toString(), skin).apply {
-                onChanged {
-                    sprite.offsetX = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("offsetY:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(sprite.offsetY.toString(), skin).apply {
-                onChanged {
-                    sprite.offsetY = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("alpha:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(sprite.alpha.toString(), skin).apply {
-                onChanged {
-                    println("changed alpha to $text")
-                    sprite.alpha = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("scale:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(sprite.scale.toString(), skin).apply {
-                onChanged {
-                    println("changed scale to $text")
-                    sprite.scale = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("rotation:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(sprite.rotation.toString(), skin).apply {
-                onChanged {
-                    println("changed scale to $text")
-                    sprite.rotation = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-    }
-
-    private fun createColliderControls(collider: Collider) {
-        editorTable.add(Label("size", skin))
-            .left()
-
-        editorTable.row()
-        editorTable.add(Label("x:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(collider.size.x.toString(), skin).apply {
-                onChanged {
-                    collider.size.x = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("y:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(collider.size.y.toString(), skin).apply {
-                onChanged {
-                    collider.size.y = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("z:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(collider.size.z.toString(), skin).apply {
-                onChanged {
-                    collider.size.z = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("offset", skin))
-            .left()
-
-        editorTable.row()
-        editorTable.add(Label("x:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(collider.offset.x.toString(), skin).apply {
-                onChanged {
-                    collider.offset.x = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("y:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(collider.offset.y.toString(), skin).apply {
-                onChanged {
-                    collider.offset.y = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
-
-        editorTable.row()
-        editorTable.add(Label("z:", skin))
-            .left()
-            .padRight(5f)
-            .padBottom(5f)
-
-        editorTable.add(
-            TextField(collider.offset.z.toString(), skin).apply {
-                onChanged {
-                    collider.offset.z = text.toFloatOrNull() ?: 0f
-                }
-            })
-            .growX()
     }
 }
 
