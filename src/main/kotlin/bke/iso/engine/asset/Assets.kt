@@ -53,6 +53,10 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
 
+    fun <T: Any> contains(name: String, type: KClass<T>): Boolean {
+        return getCache(type).get(name) != null
+    }
+
     @Suppress("UNCHECKED_CAST")
     operator fun <T : Any> contains(asset: T): Boolean {
         if (asset is BitmapFont) {

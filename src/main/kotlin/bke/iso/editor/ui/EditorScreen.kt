@@ -45,7 +45,7 @@ class EditorScreen(
     private val root = Table().top()
 
     val sceneTabView = SceneTabView(skin, assets, stage)
-    val actorTabView = ActorTabView(skin)
+    val actorTabView = ActorTabView(skin, assets)
 
     private val contextMenuView = ContextMenuView(skin, assets)
     private var contextMenuActor: Actor? = null

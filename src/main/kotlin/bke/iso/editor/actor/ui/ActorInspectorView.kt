@@ -1,13 +1,19 @@
 package bke.iso.editor.actor.ui
 
+import bke.iso.engine.asset.Assets
+import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.world.actor.Component
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty1
@@ -15,7 +21,10 @@ import kotlin.reflect.cast
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.typeOf
 
-class ActorInspectorView(private val skin: Skin) {
+class ActorInspectorView(
+    private val skin: Skin,
+    private val assets: Assets
+) {
 
     private val log = KotlinLogging.logger { }
 
@@ -27,6 +36,8 @@ class ActorInspectorView(private val skin: Skin) {
     private lateinit var editorTable: Table
 
     fun create(): Actor {
+        setup()
+
         root.background = skin.getDrawable("bg")
 
         root.add(Label("Component Editor", skin))
@@ -43,6 +54,15 @@ class ActorInspectorView(private val skin: Skin) {
         return root
     }
 
+    private fun setup() {
+        skin.add("actorInspectorView", ImageButton.ImageButtonStyle().apply {
+            imageChecked = TextureRegionDrawable(TextureRegion(assets.get<Texture>("checkbox.png")))
+            imageUp = TextureRegionDrawable(TextureRegion(assets.get<Texture>("unchecked.png")))
+            over = skin.newTintedDrawable("pixel", "button-over")
+            down = skin.newTintedDrawable("pixel", "button-down")
+        })
+    }
+
     fun updateComponent(component: Component) {
         editorTable.clearChildren()
         generateControls(component)
@@ -55,6 +75,7 @@ class ActorInspectorView(private val skin: Skin) {
                 typeOf<Float>() -> generateFloatControls(component, memberProperty)
                 typeOf<Float?>() -> generateFloatControls(component, memberProperty)
                 typeOf<Int>() -> generateIntControls(component, memberProperty)
+                typeOf<Boolean>() -> generateBooleanControls(component, memberProperty)
                 typeOf<String>() -> generateStringControls(component, memberProperty)
                 typeOf<Vector3>() -> generateVector3Controls(component, memberProperty)
                 else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - KType ${memberProperty.returnType}" }
@@ -94,6 +115,23 @@ class ActorInspectorView(private val skin: Skin) {
             .growX()
     }
 
+    private fun generateBooleanControls(component: Component, memberProperty: KProperty1<out Component, *>) {
+        editorTable.add(Label(memberProperty.name, skin))
+            .left()
+            .padRight(5f)
+
+        editorTable.add(
+            ImageButton(skin, "actorInspectorView").apply {
+                isChecked = memberProperty.getter.call(component) as Boolean == true
+                onChanged {
+                    if (memberProperty is KMutableProperty<*>) {
+                        memberProperty.setter.call(component, isChecked)
+                    }
+                }
+            })
+            .growX()
+    }
+
     private fun generateStringControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
@@ -101,10 +139,13 @@ class ActorInspectorView(private val skin: Skin) {
 
         editorTable.add(
             TextField(memberProperty.getter.call(component).toString(), skin).apply {
+                if (memberProperty !is KMutableProperty<*>) {
+                    isDisabled = true
+                }
+
                 onChanged {
                     if (memberProperty is KMutableProperty<*>) {
-                        // make sure to validate texture
-                        if (memberProperty.name != "texture") {
+                        if (memberProperty.name != "texture" || assets.contains(text, Texture::class)) {
                             memberProperty.setter.call(component, text)
                         }
                     }
@@ -161,7 +202,7 @@ class ActorInspectorView(private val skin: Skin) {
     }
 }
 
-fun <T : TextField> T.onChanged(action: T.() -> Unit) {
+fun <T : Actor> T.onChanged(action: T.() -> Unit) {
     addListener(object : ChangeListener() {
         override fun changed(event: ChangeEvent, actor: Actor) {
             action.invoke(this@onChanged)

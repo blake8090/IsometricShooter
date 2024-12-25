@@ -2,18 +2,19 @@ package bke.iso.editor.actor.ui
 
 import bke.iso.editor.actor.OpenActorEvent
 import bke.iso.editor.ui.color
+import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 
-class ActorTabView(private val skin: Skin) {
+class ActorTabView(private val skin: Skin, assets: Assets) {
 
     val menuBar: Table = Table().left()
     val mainView: Table = BorderedTable(color(43, 103, 161))
 
-    val actorInspectorView = ActorInspectorView(skin)
+    val actorInspectorView = ActorInspectorView(skin, assets)
     val actorComponentBrowserView = ActorComponentBrowserView(skin)
 
     fun create() {
