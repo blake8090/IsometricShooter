@@ -63,7 +63,13 @@ class EditorState(override val engine: Engine) : State() {
 
     fun handleEditorEvent(event: EditorEvent) {
         log.debug { "Fired event ${event::class.simpleName}" }
-        sceneTabController.handleEditorEvent(event)
+
+        when (editorScreen.activeTab) {
+            Tab.SCENE -> sceneTabController.handleEditorEvent(event)
+            Tab.ACTOR -> actorTabViewController.handleEditorEvent(event)
+            Tab.NONE -> error("No tab selected")
+        }
+
         engine.events.fire(event)
     }
 

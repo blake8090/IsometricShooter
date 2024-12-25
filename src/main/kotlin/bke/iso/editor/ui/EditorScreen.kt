@@ -5,7 +5,7 @@ import bke.iso.editor.EditorEvent
 import bke.iso.editor.EditorEventListener
 import bke.iso.editor.EditorState
 import bke.iso.editor.SelectTabEvent
-import bke.iso.editor.actor.ActorTabView
+import bke.iso.editor.actor.ui.ActorTabView
 import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions

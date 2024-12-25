@@ -1,5 +1,7 @@
 package bke.iso.editor.actor
 
+import bke.iso.editor.EditorEvent
+import bke.iso.editor.actor.ui.ActorTabView
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
 import bke.iso.engine.Engine
@@ -37,7 +39,8 @@ class ActorTabViewController(
         engine.dialogs,
         engine.serializer,
         world,
-        actorTabRenderer
+        actorTabRenderer,
+        actorTabView.actorComponentBrowserView
     )
 
     fun init() {
@@ -56,6 +59,12 @@ class ActorTabViewController(
 
     fun enable() {
         engine.rendererManager.setActiveRenderer(actorTabRenderer)
+    }
+
+    fun handleEditorEvent(event: EditorEvent) {
+        if (event is SelectComponentEvent) {
+            actorTabView.actorInspectorView.updateComponent(event.component)
+        }
     }
 
     fun update() {

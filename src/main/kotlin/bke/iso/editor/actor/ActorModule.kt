@@ -1,6 +1,7 @@
 package bke.iso.editor.actor
 
 import bke.iso.editor.EditorEvent
+import bke.iso.editor.actor.ui.ActorComponentBrowserView
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.collision.Collider
@@ -13,24 +14,26 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class OpenActorEvent : EditorEvent()
 
+class SelectComponentEvent(val component: Component) : EditorEvent()
+
 class ActorModule(
     private val dialogs: Dialogs,
     private val serializer: Serializer,
     private val world: World,
-    private val actorTabRenderer: Renderer
+    private val actorTabRenderer: Renderer,
+    private val actorComponentBrowserView: ActorComponentBrowserView
 ) : Module {
 
     private val log = KotlinLogging.logger {}
 
-    var selectedActor: ActorPrefab? = null
-        private set
-
+    private var selectedPrefab: ActorPrefab? = null
     private lateinit var referenceActor: Actor
 
     override fun start() {
@@ -40,12 +43,12 @@ class ActorModule(
 
     override fun handleEvent(event: Event) {
         if (event is OpenActorEvent) {
-            loadActor()
+            loadActorPrefab()
         }
     }
 
     override fun update(deltaTime: Float) {
-        val actor = selectedActor ?: return
+        val actor = selectedPrefab ?: return
         actor.components.withFirstInstance<Collider> { collider ->
             val min = referenceActor.pos.add(collider.offset)
             val max = Vector3(min).add(collider.size)
@@ -54,14 +57,16 @@ class ActorModule(
         }
     }
 
-    private fun loadActor() {
+    private fun loadActorPrefab() {
         val file = dialogs.showOpenActorDialog() ?: return
-        val actor = serializer.read<ActorPrefab>(file.readText())
+        val prefab = serializer.read<ActorPrefab>(file.readText())
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
-        selectedActor = actor
+        selectedPrefab = prefab
 
-        actor.components.withFirstInstance<Sprite> { sprite ->
+        prefab.components.withFirstInstance<Sprite> { sprite ->
             referenceActor.add(sprite)
         }
+
+        actorComponentBrowserView.updateComponents(prefab.components)
     }
 }
