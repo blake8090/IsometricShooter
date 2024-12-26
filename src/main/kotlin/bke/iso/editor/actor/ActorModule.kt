@@ -48,12 +48,17 @@ class ActorModule(
     }
 
     override fun update(deltaTime: Float) {
-        val actor = selectedPrefab ?: return
-        actor.components.withFirstInstance<Collider> { collider ->
+        actorTabRenderer.fgShapes.addPoint(referenceActor.pos, 2f, Color.RED)
+        selectedPrefab?.let(::drawPrefab)
+    }
+
+    private fun drawPrefab(prefab: ActorPrefab) {
+        prefab.components.withFirstInstance<Collider> { collider ->
             val min = referenceActor.pos.add(collider.offset)
             val max = Vector3(min).add(collider.size)
             val box = Box.fromMinMax(min, max)
             actorTabRenderer.fgShapes.addBox(box, 1f, Color.CYAN)
+            actorTabRenderer.fgShapes.addPoint(box.pos, 2f, Color.CYAN)
         }
     }
 
