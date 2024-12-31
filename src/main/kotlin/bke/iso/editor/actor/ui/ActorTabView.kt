@@ -38,8 +38,9 @@ class ActorTabView(private val skin: Skin, assets: Assets) {
         mainView.add(actorInspectorView.create())
             .top()
             .right()
-            .expand()
+            .expandX()
             .growY()
+            .minWidth(Value.percentWidth(0.175f, mainView))
     }
 
     private fun createMenuButton(text: String): TextButton {

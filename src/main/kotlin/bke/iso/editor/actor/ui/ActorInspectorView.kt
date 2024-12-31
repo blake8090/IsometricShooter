@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
+import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -28,10 +29,10 @@ class ActorInspectorView(
 
     private val log = KotlinLogging.logger { }
 
-    private val root = Table()
-        .top()
-        .padLeft(5f)
-        .padRight(5f)
+    private val root = Table().apply {
+        top()
+        left()
+    }
 
     private lateinit var editorTable: Table
 
@@ -46,10 +47,9 @@ class ActorInspectorView(
         root.row()
         editorTable = Table()
         root.add(editorTable)
-            .expand()
-            .top()
-            .left()
-            .padTop(5f)
+            .growX()
+            .padTop(Value.percentHeight(0.01f, root))
+            .padRight(Value.percentWidth(0.01f, root))
 
         return root
     }
@@ -86,7 +86,7 @@ class ActorInspectorView(
     private fun generateFloatControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
-            .padRight(5f)
+            .padRight(Value.percentWidth(0.05f, editorTable))
 
         editorTable.add(
             TextField(memberProperty.getter.call(component).toString(), skin).apply {
@@ -102,7 +102,7 @@ class ActorInspectorView(
     private fun generateIntControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
-            .padRight(5f)
+            .padRight(Value.percentWidth(0.05f, editorTable))
 
         editorTable.add(
             TextField(memberProperty.getter.call(component).toString(), skin).apply {
@@ -118,7 +118,6 @@ class ActorInspectorView(
     private fun generateBooleanControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
-            .padRight(5f)
 
         editorTable.add(
             ImageButton(skin, "actorInspectorView").apply {
@@ -129,13 +128,14 @@ class ActorInspectorView(
                     }
                 }
             })
-            .growX()
+            .expandX()
+            .right()
     }
 
     private fun generateStringControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
-            .padRight(5f)
+            .padRight(Value.percentWidth(0.05f, editorTable))
 
         editorTable.add(
             TextField(memberProperty.getter.call(component).toString(), skin).apply {
@@ -157,14 +157,13 @@ class ActorInspectorView(
     private fun generateVector3Controls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
-            .padRight(5f)
 
         val vector = Vector3::class.cast(memberProperty.getter.call(component))
 
         editorTable.row()
         editorTable.add(Label("x", skin))
             .right()
-            .padRight(5f)
+            .padRight(Value.percentWidth(0.05f, editorTable))
 
         editorTable.add(
             TextField(vector.x.toString(), skin).apply {
@@ -177,7 +176,7 @@ class ActorInspectorView(
         editorTable.row()
         editorTable.add(Label("y", skin))
             .right()
-            .padRight(5f)
+            .padRight(Value.percentWidth(0.05f, editorTable))
 
         editorTable.add(
             TextField(vector.y.toString(), skin).apply {
@@ -190,7 +189,7 @@ class ActorInspectorView(
         editorTable.row()
         editorTable.add(Label("z", skin))
             .right()
-            .padRight(5f)
+            .padRight(Value.percentWidth(0.05f, editorTable))
 
         editorTable.add(
             TextField(vector.z.toString(), skin).apply {
