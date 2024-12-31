@@ -8,6 +8,7 @@ import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Value
 
 class ActorTabView(private val skin: Skin, assets: Assets) {
 
@@ -32,6 +33,7 @@ class ActorTabView(private val skin: Skin, assets: Assets) {
             .top()
             .left()
             .growY()
+            .minWidth(Value.percentWidth(0.1f, mainView))
 
         mainView.add(actorInspectorView.create())
             .top()

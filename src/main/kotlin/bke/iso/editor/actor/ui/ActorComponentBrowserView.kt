@@ -14,10 +14,10 @@ import com.badlogic.gdx.utils.Align
 
 class ActorComponentBrowserView(private val skin: Skin) {
 
-    private val root = Table()
-        .top()
-        .padLeft(5f)
-        .padRight(5f)
+    private val root = Table().apply {
+        top()
+        left()
+    }
 
     private lateinit var componentList: Table
 
@@ -25,18 +25,17 @@ class ActorComponentBrowserView(private val skin: Skin) {
         root.background = skin.getDrawable("bg")
 
         root.add(Label("Components", skin))
-            .left()
 
         root.row()
 
         root.add(TextButton("Add", skin))
-            .padTop(10f)
             .left()
 
-        componentList = BorderedTable(skin.getColor("table-border")).left()
+        componentList = BorderedTable(skin.getColor("table-border"))
 
         root.row()
         root.add(componentList)
+            .growX()
 
         return root
     }
@@ -46,14 +45,7 @@ class ActorComponentBrowserView(private val skin: Skin) {
 
         val buttonGroup = ButtonGroup<TextButton>()
         for (component in components) {
-            val textButton = TextButton(component::class.simpleName, skin, "checkable")
-            textButton.label.setAlignment(Align.left)
-            textButton.onChanged {
-                if (isChecked) {
-                    fire(SelectComponentEvent(component))
-                }
-            }
-
+            val textButton = createTextButton(component)
             buttonGroup.add(textButton)
             componentList.add(textButton)
                 .left()
@@ -67,4 +59,14 @@ class ActorComponentBrowserView(private val skin: Skin) {
             .firstOrNull()
             ?.isChecked = true
     }
+
+    private fun createTextButton(component: Component): TextButton =
+        TextButton(component::class.simpleName, skin, "checkable").apply {
+            label.setAlignment(Align.left)
+            onChanged {
+                if (isChecked) {
+                    fire(SelectComponentEvent(component))
+                }
+            }
+        }
 }
