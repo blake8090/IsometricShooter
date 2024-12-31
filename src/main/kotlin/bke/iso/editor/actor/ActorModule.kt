@@ -23,6 +23,8 @@ import kotlin.reflect.full.createInstance
 
 class OpenActorEvent : EditorEvent()
 
+class DeleteComponentEvent(val type: String) : EditorEvent()
+
 class SelectComponentEvent(val component: Component) : EditorEvent()
 
 class ActorModule(
@@ -47,6 +49,8 @@ class ActorModule(
     override fun handleEvent(event: Event) {
         if (event is OpenActorEvent) {
             loadActorPrefab()
+        } else if (event is DeleteComponentEvent) {
+            deleteComponent(event.type)
         }
     }
 
@@ -78,6 +82,8 @@ class ActorModule(
     }
 
     private fun updateComponentsView() {
+        referenceActor.components.clear()
+
         selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
             referenceActor.add(sprite)
         }
@@ -89,5 +95,22 @@ class ActorModule(
         selectedPrefab.components.add(component)
         updateComponentsView()
         log.debug { "Added component type '${type.simpleName}' to prefab" }
+    }
+
+    private fun deleteComponent(type: String) {
+        val typeToIndex = mutableMapOf<String, Int>()
+        for ((index, component) in selectedPrefab.components.withIndex()) {
+            val name = component::class.simpleName ?: continue
+            typeToIndex[name] = index
+        }
+
+        val index = typeToIndex[type]
+        if (index == null) {
+            log.debug { "Type '$type' not found in prefab's components" }
+        } else {
+            selectedPrefab.components.removeAt(index)
+            updateComponentsView()
+            log.debug { "Deleted component '$type'" }
+        }
     }
 }
