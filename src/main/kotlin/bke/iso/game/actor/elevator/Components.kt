@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("elevator")
-class Elevator(val speed: Float) : Component
+class Elevator(val speed: Float = 0f) : Component
 
 @Serializable
 @SerialName("elevatorTask")
 data class ElevatorTask(
-    val targetZ: Float,
-    val direction: ElevatorDirection
+    val targetZ: Float = 0f,
+    val direction: ElevatorDirection = ElevatorDirection.UP
 ) : Component
 
 enum class ElevatorDirection {

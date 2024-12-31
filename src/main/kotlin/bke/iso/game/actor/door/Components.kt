@@ -14,4 +14,4 @@ class DoorOpenAction : Component
 
 @Serializable
 @SerialName("doorChangeSceneAction")
-data class DoorChangeSceneAction(val sceneName: String) : Component
+data class DoorChangeSceneAction(val sceneName: String = "") : Component

@@ -137,7 +137,7 @@ class EditorScreen(
 
         skin.add("default", ScrollPane.ScrollPaneStyle().apply {
             vScrollKnob = skin.newTintedDrawable("pixel", "button-over")
-            vScrollKnob.minWidth = 10f // TODO: use value for resolution independence
+            vScrollKnob.minWidth = 16f // TODO: use value for resolution independence
         })
     }
 

@@ -1,5 +1,6 @@
 package bke.iso.editor.actor.ui
 
+import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.Input
@@ -21,13 +22,16 @@ class SelectComponentTypeDialog2(skin: Skin) : Dialog("Add Component", skin) {
         text("Select a component:")
         contentTable.row()
 
-        val content = Table().top().left()
+        val borderedTable = BorderedTable(skin.getColor("table-border"))
 
+        val content = Table()
         val scrollPane = ScrollPane(content, skin)
         scrollPane.setScrollbarsVisible(true)
         scrollPane.fadeScrollBars = false
 
-        contentTable.add(scrollPane)
+        borderedTable.add(scrollPane)
+            .grow()
+        contentTable.add(borderedTable)
             .grow()
 
         for (type in componentTypes.sortedBy { s -> s.simpleName }) {

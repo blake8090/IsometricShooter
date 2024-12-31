@@ -50,4 +50,4 @@ data class Explosion(
 
 @Serializable
 @SerialName("weaponPickup")
-data class WeaponPickup(val name: String) : Component
+data class WeaponPickup(val name: String = "") : Component

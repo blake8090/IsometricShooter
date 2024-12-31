@@ -25,7 +25,7 @@ enum class PhysicsMode {
 @Serializable
 @SerialName("physicsBody")
 data class PhysicsBody(
-    val mode: PhysicsMode,
+    val mode: PhysicsMode = PhysicsMode.SOLID,
     @Contextual
     val velocity: Vector3 = Vector3(),
     val mass: Float = 1f,

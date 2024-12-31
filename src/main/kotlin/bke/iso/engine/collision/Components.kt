@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @SerialName("collider")
 data class Collider(
     @Contextual
-    val size: Vector3,
+    val size: Vector3 = Vector3(),
     @Contextual
     val offset: Vector3 = Vector3()
 ) : Component
