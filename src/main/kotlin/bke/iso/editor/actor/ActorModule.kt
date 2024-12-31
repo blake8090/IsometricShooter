@@ -21,7 +21,9 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
-class OpenActorEvent : EditorEvent()
+class OpenActorPrefabEvent : EditorEvent()
+
+class SaveActorPrefabEvent : EditorEvent()
 
 class DeleteComponentEvent(val type: String) : EditorEvent()
 
@@ -47,10 +49,18 @@ class ActorModule(
     }
 
     override fun handleEvent(event: Event) {
-        if (event is OpenActorEvent) {
-            loadActorPrefab()
-        } else if (event is DeleteComponentEvent) {
-            deleteComponent(event.type)
+        when (event) {
+            is OpenActorPrefabEvent -> {
+                loadActorPrefab()
+            }
+
+            is DeleteComponentEvent -> {
+                deleteComponent(event.type)
+            }
+
+            is SaveActorPrefabEvent -> {
+                savePrefab()
+            }
         }
     }
 
@@ -112,5 +122,13 @@ class ActorModule(
             updateComponentsView()
             log.debug { "Deleted component '$type'" }
         }
+    }
+
+    private fun savePrefab() {
+        val file = dialogs.showSaveFileDialog("Actor Prefab", "actor") ?: return
+        val prefab = ActorPrefab(file.nameWithoutExtension, selectedPrefab.components)
+        val content = serializer.write(prefab)
+        file.writeText(content)
+        log.info { "Saved actor prefab: '${file.canonicalPath}'" }
     }
 }

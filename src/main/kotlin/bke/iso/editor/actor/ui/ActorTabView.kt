@@ -1,6 +1,7 @@
 package bke.iso.editor.actor.ui
 
-import bke.iso.editor.actor.OpenActorEvent
+import bke.iso.editor.actor.OpenActorPrefabEvent
+import bke.iso.editor.actor.SaveActorPrefabEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
@@ -30,10 +31,14 @@ class ActorTabView(
         menuBar.add(createMenuButton("New"))
         menuBar.add(createMenuButton("Open").apply {
             onChanged {
-                fire(OpenActorEvent())
+                fire(OpenActorPrefabEvent())
             }
         })
-        menuBar.add(createMenuButton("Save"))
+        menuBar.add(createMenuButton("Save").apply {
+            onChanged {
+                fire(SaveActorPrefabEvent())
+            }
+        })
         menuBar.add(createMenuButton("Save As"))
 
         mainView.add(actorComponentBrowserView.create())

@@ -101,7 +101,7 @@ class SceneModule(
     }
 
     private fun saveScene() {
-        val file = dialogs.showSaveFileDialog() ?: return
+        val file = dialogs.showSaveFileDialog("Scene", "scene") ?: return
 
         val actors = mutableListOf<ActorRecord>()
         world.actors.each<ActorPrefabReference> { actor, reference ->
