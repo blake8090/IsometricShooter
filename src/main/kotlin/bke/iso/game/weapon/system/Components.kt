@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("bullet")
 data class Bullet(
-    val shooterId: String,
-    val damage: Float,
-    val range: Float,
+    val shooterId: String = "",
+    val damage: Float = 0f,
+    val range: Float = 0f,
     @Contextual
-    val start: Vector3
+    val start: Vector3 = Vector3()
 ) : Component
 
 /**

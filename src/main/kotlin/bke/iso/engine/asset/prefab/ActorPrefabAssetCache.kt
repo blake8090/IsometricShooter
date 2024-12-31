@@ -11,7 +11,7 @@ import java.io.File
 @Serializable
 data class ActorPrefab(
     val name: String,
-    val components: List<Component>
+    val components: MutableList<Component>
 )
 
 class ActorPrefabAssetCache(private val serializer: Serializer) : AssetCache<ActorPrefab>() {

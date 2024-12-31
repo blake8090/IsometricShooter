@@ -45,7 +45,7 @@ class EditorScreen(
     private val root = Table().top()
 
     val sceneTabView = SceneTabView(skin, assets, stage)
-    val actorTabView = ActorTabView(skin, assets)
+    val actorTabView = ActorTabView(skin, stage, assets)
 
     private val contextMenuView = ContextMenuView(skin, assets)
     private var contextMenuActor: Actor? = null
@@ -133,6 +133,11 @@ class EditorScreen(
                 selection = skin.newTintedDrawable("pixel", "button-over")
                 over = skin.newTintedDrawable("pixel", "button-over")
             }
+        })
+
+        skin.add("default", ScrollPane.ScrollPaneStyle().apply {
+            vScrollKnob = skin.newTintedDrawable("pixel", "button-over")
+            vScrollKnob.minWidth = 10f // TODO: use value for resolution independence
         })
     }
 

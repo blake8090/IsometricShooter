@@ -5,12 +5,19 @@ import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
+import bke.iso.engine.world.actor.Component
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Value
+import kotlin.reflect.KClass
 
-class ActorTabView(private val skin: Skin, assets: Assets) {
+class ActorTabView(
+    private val skin: Skin,
+    private val stage: Stage,
+    assets: Assets
+) {
 
     val menuBar: Table = Table().left()
     val mainView: Table = BorderedTable(color(43, 103, 161))
@@ -47,5 +54,10 @@ class ActorTabView(private val skin: Skin, assets: Assets) {
         return TextButton(text, skin).apply {
             pad(5f)
         }
+    }
+
+    fun openAddComponentDialog(componentTypes: List<KClass<out Component>>,  action: (KClass<out Component>) -> Unit) {
+        SelectComponentTypeDialog2(skin)
+            .create(stage, componentTypes, action)
     }
 }

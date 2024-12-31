@@ -18,6 +18,8 @@ import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
 
 class OpenActorEvent : EditorEvent()
 
@@ -33,11 +35,12 @@ class ActorModule(
 
     private val log = KotlinLogging.logger {}
 
-    private var selectedPrefab: ActorPrefab? = null
+    private lateinit var selectedPrefab: ActorPrefab
     private lateinit var referenceActor: Actor
 
     override fun start() {
         referenceActor = world.actors.create(Vector3())
+        loadPrefab(ActorPrefab("", mutableListOf()))
         log.debug { "started actor tab" }
     }
 
@@ -49,11 +52,11 @@ class ActorModule(
 
     override fun update(deltaTime: Float) {
         actorTabRenderer.fgShapes.addPoint(referenceActor.pos, 2f, Color.RED)
-        selectedPrefab?.let(::drawPrefab)
+        drawPrefab()
     }
 
-    private fun drawPrefab(prefab: ActorPrefab) {
-        prefab.components.withFirstInstance<Collider> { collider ->
+    private fun drawPrefab() {
+        selectedPrefab.components.withFirstInstance<Collider> { collider ->
             val min = referenceActor.pos.add(collider.offset)
             val max = Vector3(min).add(collider.size)
             val box = Box.fromMinMax(min, max)
@@ -65,13 +68,26 @@ class ActorModule(
     private fun loadActorPrefab() {
         val file = dialogs.showOpenActorDialog() ?: return
         val prefab = serializer.read<ActorPrefab>(file.readText())
+        loadPrefab(prefab)
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
-        selectedPrefab = prefab
+    }
 
-        prefab.components.withFirstInstance<Sprite> { sprite ->
+    private fun loadPrefab(prefab: ActorPrefab) {
+        selectedPrefab = prefab
+        updateComponentsView()
+    }
+
+    private fun updateComponentsView() {
+        selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
             referenceActor.add(sprite)
         }
+        actorComponentBrowserView.updateComponents(selectedPrefab.components)
+    }
 
-        actorComponentBrowserView.updateComponents(prefab.components)
+    fun <T : KClass<out Component>> addNewComponent(type: T) {
+        val component = type.createInstance()
+        selectedPrefab.components.add(component)
+        updateComponentsView()
+        log.debug { "Added component type '${type.simpleName}' to prefab" }
     }
 }

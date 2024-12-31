@@ -9,12 +9,18 @@ import bke.iso.engine.core.Module
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
+import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.Serializable
+import org.reflections.Reflections
 import kotlin.math.sign
+import kotlin.reflect.full.hasAnnotation
+
+class OpenAddComponentDialogEvent : EditorEvent()
 
 class ActorTabViewController(
     private val engine: Engine,
@@ -64,6 +70,20 @@ class ActorTabViewController(
     fun handleEditorEvent(event: EditorEvent) {
         if (event is SelectComponentEvent) {
             actorTabView.actorInspectorView.updateComponent(event.component)
+        } else if (event is OpenAddComponentDialogEvent) {
+            openAddComponentDialog()
+        }
+    }
+
+    private fun openAddComponentDialog() {
+        val componentTypes = Reflections("bke.iso")
+            .getSubTypesOf(Component::class.java)
+            .map(Class<out Component>::kotlin)
+            .filter { kClass -> kClass.hasAnnotation<Serializable>() }
+
+        actorTabView.openAddComponentDialog(componentTypes) { result ->
+            log.debug { "Add component type $result" }
+            actorModule.addNewComponent(result)
         }
     }
 

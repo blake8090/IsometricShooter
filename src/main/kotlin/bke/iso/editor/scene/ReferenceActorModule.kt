@@ -13,9 +13,9 @@ import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 
-data class ActorPrefabReference(val prefab: String) : Component
+data class ActorPrefabReference(val prefab: String = "") : Component
 
-data class TilePrefabReference(val prefab: String) : Component
+data class TilePrefabReference(val prefab: String = "") : Component
 
 class ReferenceActorModule(private val world: World) : Module {
 

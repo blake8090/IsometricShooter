@@ -1,5 +1,6 @@
 package bke.iso.editor.actor.ui
 
+import bke.iso.editor.actor.OpenAddComponentDialogEvent
 import bke.iso.editor.actor.SelectComponentEvent
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
@@ -28,7 +29,7 @@ class ActorComponentBrowserView(private val skin: Skin) {
 
         root.row()
 
-        root.add(TextButton("Add", skin))
+        root.add(createAddComponentButton(skin))
             .left()
 
         componentList = BorderedTable(skin.getColor("table-border"))
@@ -39,6 +40,13 @@ class ActorComponentBrowserView(private val skin: Skin) {
 
         return root
     }
+
+    private fun createAddComponentButton(skin: Skin): TextButton =
+        TextButton("Add", skin).apply {
+            onChanged {
+                fire(OpenAddComponentDialogEvent())
+            }
+        }
 
     fun updateComponents(components: List<Component>) {
         componentList.clearChildren()
