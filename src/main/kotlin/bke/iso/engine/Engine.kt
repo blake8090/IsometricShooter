@@ -1,13 +1,13 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.ActorPrefabCache
-import bke.iso.engine.asset.font.FontGeneratorCache
-import bke.iso.engine.asset.shader.ShaderFileCache
-import bke.iso.engine.asset.TextureCache
-import bke.iso.engine.asset.config.ConfigCache
-import bke.iso.engine.asset.prefab.TilePrefabCache
-import bke.iso.engine.asset.shader.ShaderInfoCache
+import bke.iso.engine.asset.prefab.ActorPrefabAssetCache
+import bke.iso.engine.asset.font.FontGeneratorAssetCache
+import bke.iso.engine.asset.shader.ShaderFileAssetCache
+import bke.iso.engine.asset.TextureAssetCache
+import bke.iso.engine.asset.config.ConfigAssetCache
+import bke.iso.engine.asset.prefab.TilePrefabAssetCache
+import bke.iso.engine.asset.shader.ShaderInfoAssetCache
 import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
@@ -21,7 +21,7 @@ import bke.iso.engine.physics.Physics
 import bke.iso.engine.profiler.Profiler
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.RendererManager
-import bke.iso.engine.scene.SceneCache
+import bke.iso.engine.scene.SceneAssetCache
 import bke.iso.engine.scene.Scenes
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.state.States
@@ -77,14 +77,14 @@ class Engine(val game: Game) {
 
         profiler.start()
 
-        assets.addCache(TextureCache())
-        assets.addCache(FontGeneratorCache())
-        assets.addCache(ActorPrefabCache(serializer))
-        assets.addCache(TilePrefabCache(serializer))
-        assets.addCache(SceneCache(serializer))
-        assets.addCache(ShaderFileCache())
-        assets.addCache(ShaderInfoCache(serializer))
-        assets.addCache(ConfigCache(serializer))
+        assets.addCache(TextureAssetCache())
+        assets.addCache(FontGeneratorAssetCache())
+        assets.addCache(ActorPrefabAssetCache(serializer))
+        assets.addCache(TilePrefabAssetCache(serializer))
+        assets.addCache(SceneAssetCache(serializer))
+        assets.addCache(ShaderFileAssetCache())
+        assets.addCache(ShaderInfoAssetCache(serializer))
+        assets.addCache(ConfigAssetCache(serializer))
 
         ui.setLoadingScreen(EmptyLoadingScreen(assets))
 

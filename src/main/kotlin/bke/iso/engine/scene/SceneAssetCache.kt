@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class SceneCache(private val serializer: Serializer) : AssetCache<Scene>() {
+class SceneAssetCache(private val serializer: Serializer) : AssetCache<Scene>() {
 
     override val extensions: Set<String> = setOf("scene")
 

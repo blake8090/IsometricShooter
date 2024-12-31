@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class FontGeneratorCache : AssetCache<FreeTypeFontGenerator>() {
+class FontGeneratorAssetCache : AssetCache<FreeTypeFontGenerator>() {
     override val extensions: Set<String> = setOf("ttf")
 
     override suspend fun load(file: File) {

@@ -14,7 +14,7 @@ data class ActorPrefab(
     val components: List<Component>
 )
 
-class ActorPrefabCache(private val serializer: Serializer) : AssetCache<ActorPrefab>() {
+class ActorPrefabAssetCache(private val serializer: Serializer) : AssetCache<ActorPrefab>() {
     override val extensions: Set<String> = setOf("actor")
 
     override suspend fun load(file: File) =

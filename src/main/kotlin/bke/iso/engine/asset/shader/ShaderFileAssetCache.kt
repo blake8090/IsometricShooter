@@ -8,7 +8,7 @@ data class ShaderFile(
     val content: String
 )
 
-class ShaderFileCache : AssetCache<ShaderFile>() {
+class ShaderFileAssetCache : AssetCache<ShaderFile>() {
     override val extensions: Set<String> = setOf("glsl")
 
     override suspend fun load(file: File) {

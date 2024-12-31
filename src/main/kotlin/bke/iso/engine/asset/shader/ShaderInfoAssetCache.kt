@@ -12,7 +12,7 @@ data class ShaderInfo(
     val vertexShader: String
 )
 
-class ShaderInfoCache(private val serializer: Serializer) : AssetCache<ShaderInfo>() {
+class ShaderInfoAssetCache(private val serializer: Serializer) : AssetCache<ShaderInfo>() {
     override val extensions: Set<String> = setOf("shader")
 
     override suspend fun load(file: File) {

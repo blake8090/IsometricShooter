@@ -8,7 +8,7 @@ import java.io.File
 
 interface Config
 
-class ConfigCache(private val serializer: Serializer) : AssetCache<Config>() {
+class ConfigAssetCache(private val serializer: Serializer) : AssetCache<Config>() {
     override val extensions: Set<String> = setOf("cfg")
 
     override suspend fun load(file: File) {

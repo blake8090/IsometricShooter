@@ -5,7 +5,7 @@ import bke.iso.engine.core.Game
 import bke.iso.engine.input.ButtonState
 import bke.iso.game.actor.player.system.RELOAD_ACTION
 import bke.iso.game.actor.player.system.SHOOT_ACTION
-import bke.iso.game.weapon.WeaponPropertiesCache
+import bke.iso.game.weapon.WeaponPropertiesAssetCache
 import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis
 import com.studiohartman.jamepad.ControllerButton
@@ -17,7 +17,7 @@ class IsometricShooter : Game() {
     override val folderName = "IsometricShooter"
 
     override fun start(engine: Engine) {
-        engine.assets.addCache(WeaponPropertiesCache(engine.serializer))
+        engine.assets.addCache(WeaponPropertiesAssetCache(engine.serializer))
 
         bindInput(engine)
 

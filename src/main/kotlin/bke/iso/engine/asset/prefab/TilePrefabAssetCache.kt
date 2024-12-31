@@ -15,7 +15,7 @@ data class TilePrefab(
     val solid: Boolean
 )
 
-class TilePrefabCache(private val serializer: Serializer) : AssetCache<TilePrefab>() {
+class TilePrefabAssetCache(private val serializer: Serializer) : AssetCache<TilePrefab>() {
     override val extensions: Set<String> = setOf("tiles")
 
     override suspend fun load(file: File) {

@@ -45,7 +45,7 @@ data class RangedWeaponProperties(
     val bulletRotation: Boolean
 ) : WeaponProperties()
 
-class WeaponPropertiesCache(private val serializer: Serializer) : AssetCache<WeaponProperties>() {
+class WeaponPropertiesAssetCache(private val serializer: Serializer) : AssetCache<WeaponProperties>() {
 
     override val extensions = setOf("weapon")
 

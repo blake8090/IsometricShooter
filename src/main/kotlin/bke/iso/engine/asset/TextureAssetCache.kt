@@ -4,7 +4,7 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import java.io.File
 
-class TextureCache : AssetCache<Texture>() {
+class TextureAssetCache : AssetCache<Texture>() {
     override val extensions: Set<String> = setOf("png", "jpg")
 
     override suspend fun load(file: File) {
