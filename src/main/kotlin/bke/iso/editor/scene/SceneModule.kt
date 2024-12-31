@@ -58,7 +58,7 @@ class SceneModule(
     }
 
     private fun loadScene() {
-        val file = dialogs.showOpenFileDialog() ?: return
+        val file = dialogs.showOpenFileDialog("Scene", "scene") ?: return
         val scene = serializer.read<Scene>(file.readText())
 
         referenceActorModule.clear()

@@ -66,7 +66,7 @@ class ActorModule(
     }
 
     private fun loadActorPrefab() {
-        val file = dialogs.showOpenActorDialog() ?: return
+        val file = dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
         val prefab = serializer.read<ActorPrefab>(file.readText())
         loadPrefab(prefab)
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
