@@ -65,8 +65,8 @@ class ActorModule(
     }
 
     override fun update(deltaTime: Float) {
-        actorTabRenderer.fgShapes.addPoint(referenceActor.pos, 2f, Color.RED)
         drawPrefab()
+        actorTabRenderer.fgShapes.addPoint(referenceActor.pos, 1.25f, Color.RED)
     }
 
     private fun drawPrefab() {
@@ -74,8 +74,8 @@ class ActorModule(
             val min = referenceActor.pos.add(collider.offset)
             val max = Vector3(min).add(collider.size)
             val box = Box.fromMinMax(min, max)
-            actorTabRenderer.fgShapes.addBox(box, 1f, Color.CYAN)
-            actorTabRenderer.fgShapes.addPoint(box.pos, 2f, Color.CYAN)
+            actorTabRenderer.fgShapes.addBox(box, 0.75f, Color.CYAN)
+            actorTabRenderer.fgShapes.addPoint(box.pos, 1.5f, Color.CYAN)
         }
     }
 
