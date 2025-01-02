@@ -15,6 +15,7 @@ import bke.iso.engine.core.EngineModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Game
+import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.physics.Physics
@@ -56,6 +57,8 @@ class Engine(val game: Game) {
     val physics: Physics = Physics(world, collisions)
     val scenes = Scenes(assets, serializer, world, renderer)
 
+    val loadingScreens = LoadingScreens()
+
     private val modules = listOf(
         collisions,
         physics,
@@ -63,7 +66,8 @@ class Engine(val game: Game) {
         states,
         world,
         rendererManager,
-        ui
+        ui,
+        loadingScreens
     )
 
     private val profiler = Profiler(assets, ui, input)
@@ -108,6 +112,7 @@ class Engine(val game: Game) {
         updateModule(world, deltaTime)
         updateModule(rendererManager, deltaTime)
         updateModule(ui, deltaTime)
+        updateModule(loadingScreens, deltaTime)
 
         profiler.update(deltaTime)
 
@@ -115,7 +120,7 @@ class Engine(val game: Game) {
     }
 
     private fun updateModule(module: EngineModule, deltaTime: Float) {
-        if (ui.isLoadingScreenActive && !module.updateWhileLoading) {
+        if (loadingScreens.isLoading() && !module.updateWhileLoading) {
             return
         }
 
