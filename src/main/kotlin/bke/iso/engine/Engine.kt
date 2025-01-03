@@ -28,7 +28,6 @@ import bke.iso.engine.scene.Scenes
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.state.States
 import bke.iso.engine.ui.UI
-import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -91,8 +90,6 @@ class Engine(val game: Game) {
         assets.addCache(ShaderFileAssetCache())
         assets.addCache(ShaderInfoAssetCache(serializer))
         assets.addCache(ConfigAssetCache(serializer))
-
-        ui.setLoadingScreen(EmptyLoadingScreen(assets))
 
         runBlocking {
             assets.loadAsync("ui")

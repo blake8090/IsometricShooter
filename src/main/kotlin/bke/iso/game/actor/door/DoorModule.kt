@@ -4,7 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
-import bke.iso.engine.loading.SimpleLoadingScreen2
+import bke.iso.engine.loading.SimpleLoadingScreen
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -68,7 +68,7 @@ class DoorModule(
     fun openDoor(actor: Actor, doorActor: Actor) {
         val changeSceneAction = doorActor.get<DoorChangeSceneAction>()
         if (changeSceneAction != null && actor.has<Player>()) {
-            loadingScreens.start(SimpleLoadingScreen2(assets)) {
+            loadingScreens.start(SimpleLoadingScreen(assets)) {
                 events.fire(GameState.LoadSceneEvent(changeSceneAction.sceneName, true))
             }
         } else if (doorActor.has<DoorOpenAction>()) {

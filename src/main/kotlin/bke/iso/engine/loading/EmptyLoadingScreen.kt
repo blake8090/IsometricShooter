@@ -1,6 +1,6 @@
 package bke.iso.engine.loading
 
-class EmptyLoadingScreen2 : LoadingScreen2() {
+class EmptyLoadingScreen : LoadingScreen() {
 
     override val transitionInState: TransitionInState = object : TransitionInState() {
         override fun start() {

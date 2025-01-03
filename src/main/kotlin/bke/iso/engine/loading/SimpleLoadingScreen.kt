@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.min
 
-class SimpleLoadingScreen2(private val assets: Assets) : LoadingScreen2() {
+class SimpleLoadingScreen(private val assets: Assets) : LoadingScreen() {
 
     private val log = KotlinLogging.logger { }
 

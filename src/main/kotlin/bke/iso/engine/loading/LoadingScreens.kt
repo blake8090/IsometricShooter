@@ -15,9 +15,9 @@ class LoadingScreens(private val events: Events) : EngineModule() {
 
     private val log = KotlinLogging.logger { }
 
-    private var currentScreen: LoadingScreen2? = null
+    private var currentScreen: LoadingScreen? = null
 
-    fun start(loadingScreen: LoadingScreen2, action: suspend () -> Unit) {
+    fun start(loadingScreen: LoadingScreen, action: suspend () -> Unit) {
         log.debug { "Starting loading sequence with ${loadingScreen::class.simpleName}" }
         loadingScreen.start(action)
         loadingScreen.onActionComplete = {

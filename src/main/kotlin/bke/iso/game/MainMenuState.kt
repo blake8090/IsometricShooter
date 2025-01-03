@@ -4,10 +4,10 @@ import bke.iso.editor.EditorState
 import bke.iso.engine.core.Event
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Module
-import bke.iso.engine.loading.SimpleLoadingScreen2
+import bke.iso.engine.loading.EmptyLoadingScreen
+import bke.iso.engine.loading.SimpleLoadingScreen
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
-import bke.iso.engine.ui.loading.SimpleLoadingScreen
 import bke.iso.game.ui.MainMenuScreen
 
 class MainMenuState(override val engine: Engine) : State() {
@@ -17,7 +17,6 @@ class MainMenuState(override val engine: Engine) : State() {
 
     override suspend fun load() {
         engine.ui.setScreen(MainMenuScreen(engine.assets, engine.events))
-        engine.ui.setLoadingScreen(SimpleLoadingScreen(engine.assets))
     }
 
     override fun handleEvent(event: Event) {
@@ -30,7 +29,7 @@ class MainMenuState(override val engine: Engine) : State() {
     }
 
     private fun startGame() {
-        engine.loadingScreens.start(SimpleLoadingScreen2(engine.assets)) {
+        engine.loadingScreens.start(SimpleLoadingScreen(engine.assets)) {
             loadGameAssets()
             engine.states.setState<GameState>()
             engine.events.fire(GameState.LoadSceneEvent("mission-01-start.scene", false))
@@ -38,7 +37,7 @@ class MainMenuState(override val engine: Engine) : State() {
     }
 
     private fun startEditor() {
-        engine.ui.loadingScreen.start {
+        engine.loadingScreens.start(EmptyLoadingScreen()) {
             loadGameAssets()
             engine.states.setState<EditorState>()
         }

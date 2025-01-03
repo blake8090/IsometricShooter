@@ -7,7 +7,7 @@ import ktx.async.skipFrame
 import kotlin.system.measureTimeMillis
 
 /**
- * A [LoadingScreen2] represents a loading sequence consisting of 4 states:
+ * A [LoadingScreen] represents a loading sequence consisting of 4 states:
  * - Transition In
  * - Loading
  * - Transition Out
@@ -15,7 +15,7 @@ import kotlin.system.measureTimeMillis
  *
  *
  */
-abstract class LoadingScreen2 {
+abstract class LoadingScreen {
 
     private val log = KotlinLogging.logger { }
 

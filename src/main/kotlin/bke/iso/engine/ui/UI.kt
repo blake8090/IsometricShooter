@@ -3,7 +3,6 @@ package bke.iso.engine.ui
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.input.Input
-import bke.iso.engine.ui.loading.LoadingScreen
 import com.badlogic.gdx.utils.Array
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -17,18 +16,7 @@ class UI(private val input: Input) : EngineModule() {
 
     private val screens = Array<UIScreen>()
 
-    lateinit var loadingScreen: LoadingScreen
-        private set
-
-    val isLoadingScreenActive: Boolean
-        get() = loadingScreen.active
-
     override fun update(deltaTime: Float) {
-        if (loadingScreen.active) {
-            loadingScreen.draw(deltaTime)
-            return
-        }
-
         for (screen in screens) {
             screen.draw(deltaTime)
         }
@@ -73,15 +61,6 @@ class UI(private val input: Input) : EngineModule() {
         if (input.isUsingController()) {
             screen.controllerNavigation.start()
         }
-    }
-
-    fun setLoadingScreen(screen: LoadingScreen) {
-        log.debug { "Setting loading screen to '${screen::class.simpleName}'" }
-
-        screen.create()
-        this.loadingScreen = screen
-
-        log.debug { "Set loading screen to '${screen::class.simpleName}'" }
     }
 
     fun dispose() {
