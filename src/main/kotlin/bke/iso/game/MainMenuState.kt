@@ -30,7 +30,7 @@ class MainMenuState(override val engine: Engine) : State() {
     }
 
     private fun startGame() {
-        engine.loadingScreens.start(SimpleLoadingScreen2()) {
+        engine.loadingScreens.start(SimpleLoadingScreen2(engine.assets)) {
             loadGameAssets()
             engine.states.setState<GameState>()
             engine.events.fire(GameState.LoadSceneEvent("mission-01-start.scene", false))
