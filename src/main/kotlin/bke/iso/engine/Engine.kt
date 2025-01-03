@@ -15,6 +15,7 @@ import bke.iso.engine.core.EngineModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Game
+import bke.iso.engine.loading.LoadActionCompleteEvent
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.os.SystemInfo
@@ -29,6 +30,7 @@ import bke.iso.engine.state.States
 import bke.iso.engine.ui.UI
 import bke.iso.engine.ui.loading.EmptyLoadingScreen
 import bke.iso.engine.world.World
+import com.badlogic.gdx.Gdx
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 
@@ -57,7 +59,7 @@ class Engine(val game: Game) {
     val physics: Physics = Physics(world, collisions)
     val scenes = Scenes(assets, serializer, world, renderer)
 
-    val loadingScreens = LoadingScreens()
+    val loadingScreens = LoadingScreens(events)
 
     private val modules = listOf(
         collisions,
@@ -104,7 +106,7 @@ class Engine(val game: Game) {
         updateModule(physics, deltaTime)
         updateModule(input, deltaTime)
 
-        if (!ui.isLoadingScreenActive) {
+        if (!loadingScreens.isLoading()) {
             renderer.pointer.update(deltaTime)
         }
 
@@ -112,16 +114,20 @@ class Engine(val game: Game) {
         updateModule(world, deltaTime)
         updateModule(rendererManager, deltaTime)
         updateModule(ui, deltaTime)
-        updateModule(loadingScreens, deltaTime)
-
         profiler.update(deltaTime)
 
-        renderer.pointer.draw()
+        if (!loadingScreens.isLoading()) {
+            renderer.pointer.draw()
+        }
+
+        updateModule(loadingScreens, deltaTime)
     }
 
-    private fun updateModule(module: EngineModule, deltaTime: Float) {
+    private fun updateModule(module: EngineModule, deltaTime: Float, override: Boolean = false) {
         if (loadingScreens.isLoading() && !module.updateWhileLoading) {
-            return
+            if (!override) {
+                return
+            }
         }
 
         if (module.profilingEnabled) {
@@ -152,6 +158,14 @@ class Engine(val game: Game) {
     private fun handleEvent(event: Event) {
         for (module in modules) {
             module.handleEvent(event)
+        }
+
+        // we run the states module for one frame to make sure the camera is updated to the player's position.
+        // this fixes an issue where the camera is in the wrong location when the loading screen is transitioning out.
+        if (event is LoadActionCompleteEvent) {
+            log.debug { "--- Running state for 1 frame --- " }
+            updateModule(states, Gdx.graphics.deltaTime, true)
+            log.debug { "--- End state --- " }
         }
     }
 }

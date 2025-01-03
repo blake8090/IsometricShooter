@@ -3,7 +3,8 @@ package bke.iso.game.actor.door
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
-import bke.iso.engine.ui.UI
+import bke.iso.engine.loading.SimpleLoadingScreen2
+import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
@@ -15,7 +16,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 class DoorModule(
     private val world: World,
-    private val ui: UI,
+    private val loadingScreens: LoadingScreens,
     private val events: Events
 ) : Module {
 
@@ -65,7 +66,7 @@ class DoorModule(
     fun openDoor(actor: Actor, doorActor: Actor) {
         val changeSceneAction = doorActor.get<DoorChangeSceneAction>()
         if (changeSceneAction != null && actor.has<Player>()) {
-            ui.loadingScreen.start {
+            loadingScreens.start(SimpleLoadingScreen2()) {
                 events.fire(GameState.LoadSceneEvent(changeSceneAction.sceneName, true))
             }
         } else if (doorActor.has<DoorOpenAction>()) {

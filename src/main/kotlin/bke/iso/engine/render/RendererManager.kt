@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx
 class RendererManager(private val mainRenderer: Renderer) : EngineModule() {
 
     override val moduleName = "renderer"
-    override val updateWhileLoading = false
+    override val updateWhileLoading = true
     override val profilingEnabled = true
 
     private var activeRenderer: Renderer = mainRenderer

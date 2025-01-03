@@ -34,7 +34,11 @@ abstract class LoadingScreen2 {
 
     private var action: suspend () -> Unit = {}
     private var actionStarted = false
-    private var actionCompleted = false
+    var actionCompleted = false
+        private set
+
+    var onActionComplete: () -> Unit = {}
+    private var onActionCompleteFired = false
 
     /**
      * Starts the loading screen...
@@ -50,7 +54,7 @@ abstract class LoadingScreen2 {
     /**
      * Stops the loading screen.
      */
-    fun stop() {
+    open fun stop() {
         currentState = idleState
         active = false
     }
@@ -81,6 +85,10 @@ abstract class LoadingScreen2 {
             val time = measureTimeMillis { action.invoke() }
             log.debug { "Load action completed in $time ms" }
             actionCompleted = true
+
+            if (!onActionCompleteFired) {
+                onActionComplete.invoke()
+            }
         }
 
         log.debug { "Launched load action" }

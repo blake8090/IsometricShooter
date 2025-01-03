@@ -49,7 +49,7 @@ class GameState(override val engine: Engine) : State() {
     )
     private val doorModule = DoorModule(
         engine.world,
-        engine.ui,
+        engine.loadingScreens,
         engine.events
     )
     private val hudModule = HudModule(

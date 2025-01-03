@@ -1,13 +1,17 @@
 package bke.iso.engine.loading
 
 import bke.iso.engine.core.EngineModule
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class LoadingScreens : EngineModule() {
+class LoadActionCompleteEvent : Event
 
-    override val moduleName: String = "loadingScreens"
-    override val updateWhileLoading: Boolean = true
-    override val profilingEnabled: Boolean = false
+class LoadingScreens(private val events: Events) : EngineModule() {
+
+    override val moduleName = "loadingScreens"
+    override val updateWhileLoading = true
+    override val profilingEnabled = false
 
     private val log = KotlinLogging.logger { }
 
@@ -16,6 +20,9 @@ class LoadingScreens : EngineModule() {
     fun start(loadingScreen: LoadingScreen2, action: suspend () -> Unit) {
         log.debug { "Starting loading sequence with ${loadingScreen::class.simpleName}" }
         loadingScreen.start(action)
+        loadingScreen.onActionComplete = {
+            events.fire(LoadActionCompleteEvent())
+        }
         currentScreen = loadingScreen
     }
 
