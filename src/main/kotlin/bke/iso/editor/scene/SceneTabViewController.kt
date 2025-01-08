@@ -103,6 +103,8 @@ class SceneTabViewController(
         buildingsModule
     )
 
+    private var drawGridForeground = false
+
     fun init() {
         with(engine.input.keyMouse) {
             // todo: only bind inputs specific to scene tab
@@ -212,6 +214,14 @@ class SceneTabViewController(
                     action = {
                         engine.events.fire(ToggleHighlightLayerEvent())
                     }
+                ),
+
+                CheckableContextMenuSelection(
+                    text = "Show Grid in Foreground",
+                    isChecked = { drawGridForeground },
+                    action = {
+                        drawGridForeground = !drawGridForeground
+                    }
                 )
             )
         )
@@ -249,22 +259,42 @@ class SceneTabViewController(
     }
 
     private fun drawGrid() {
-        for (x in 0..gridWidth) {
-            engine.renderer.bgShapes.addLine(
-                Vector3(x.toFloat(), 0f, layerModule.selectedLayer.toFloat()),
-                Vector3(x.toFloat(), gridLength.toFloat(), layerModule.selectedLayer.toFloat()),
-                0.5f,
-                Color.WHITE
-            )
-        }
+        if (drawGridForeground) {
+            for (x in 0..gridWidth) {
+                engine.renderer.fgShapes.addLine(
+                    Vector3(x.toFloat(), 0f, layerModule.selectedLayer.toFloat()),
+                    Vector3(x.toFloat(), gridLength.toFloat(), layerModule.selectedLayer.toFloat()),
+                    0.5f,
+                    Color.WHITE
+                )
+            }
 
-        for (y in 0..gridLength) {
-            engine.renderer.bgShapes.addLine(
-                Vector3(0f, y.toFloat(), layerModule.selectedLayer.toFloat()),
-                Vector3(gridWidth.toFloat(), y.toFloat(), layerModule.selectedLayer.toFloat()),
-                0.5f,
-                Color.WHITE
-            )
+            for (y in 0..gridLength) {
+                engine.renderer.fgShapes.addLine(
+                    Vector3(0f, y.toFloat(), layerModule.selectedLayer.toFloat()),
+                    Vector3(gridWidth.toFloat(), y.toFloat(), layerModule.selectedLayer.toFloat()),
+                    0.5f,
+                    Color.WHITE
+                )
+            }
+        } else {
+            for (x in 0..gridWidth) {
+                engine.renderer.bgShapes.addLine(
+                    Vector3(x.toFloat(), 0f, layerModule.selectedLayer.toFloat()),
+                    Vector3(x.toFloat(), gridLength.toFloat(), layerModule.selectedLayer.toFloat()),
+                    0.5f,
+                    Color.WHITE
+                )
+            }
+
+            for (y in 0..gridLength) {
+                engine.renderer.bgShapes.addLine(
+                    Vector3(0f, y.toFloat(), layerModule.selectedLayer.toFloat()),
+                    Vector3(gridWidth.toFloat(), y.toFloat(), layerModule.selectedLayer.toFloat()),
+                    0.5f,
+                    Color.WHITE
+                )
+            }
         }
     }
 
