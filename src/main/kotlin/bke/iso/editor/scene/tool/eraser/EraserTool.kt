@@ -19,7 +19,7 @@ class EraserTool(
     private var highlighted: PickedActor? = null
 
     override fun update() {
-        val picked = pickActor(pointerPos)
+        val picked = pickActor()
 
         highlighted = picked
     }
@@ -27,7 +27,7 @@ class EraserTool(
     override fun draw() {
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
-        val picked = pickActor(pointerPos)
+        val picked = pickActor()
         if (picked != null) {
             renderer.fgShapes.addBox(picked.box, 1f, Color.RED)
         }

@@ -48,12 +48,11 @@ abstract class SceneTabTool {
      */
     open fun disable() {}
 
-    // TODO: use the field instead of passing the point?
-    protected fun pickActor(point: Vector3): PickedActor? {
+    protected fun pickActor(): PickedActor? {
         val collision = collisions
-            .checkCollisions(point)
-            .filter { collision -> collision.box.min.z == point.z }
-            .minByOrNull { collision -> getDistance(point, collision.box) }
+            .checkCollisions(pointerPos)
+            .filter { collision -> collision.box.min.z == pointerPos.z }
+            .minByOrNull { collision -> getDistance(pointerPos, collision.box) }
             ?: return null
 
         return if (collision.obj is Actor) {

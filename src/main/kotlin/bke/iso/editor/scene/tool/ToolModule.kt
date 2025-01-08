@@ -7,14 +7,12 @@ import bke.iso.editor.scene.tool.brush.BrushTool
 import bke.iso.editor.scene.tool.eraser.EraserTool
 import bke.iso.editor.scene.tool.fill.FillTool
 import bke.iso.editor.scene.tool.room.RoomTool
-import bke.iso.editor.scene.ui.SceneTabView
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Module
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ToolModule(
@@ -23,7 +21,6 @@ class ToolModule(
     referenceActorModule: ReferenceActorModule,
     private val renderer: Renderer,
     private val layerModule: LayerModule,
-    private val sceneTabView: SceneTabView,
     events: Events
 ) : Module {
 
@@ -95,12 +92,5 @@ class ToolModule(
         tool.enable()
         selectedTool = tool
         log.debug { "Selected tool: ${tool::class.simpleName}" }
-    }
-
-    fun getSelectedActor(): Actor? {
-        if (selectedTool is PointerTool) {
-            return (selectedTool as PointerTool).getSelectedActor()
-        }
-        return null
     }
 }

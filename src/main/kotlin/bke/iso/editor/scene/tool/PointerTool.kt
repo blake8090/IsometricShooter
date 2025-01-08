@@ -4,7 +4,6 @@ import bke.iso.editor.EditorCommand
 import bke.iso.engine.core.Events
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 
 class PointerTool(
@@ -17,7 +16,7 @@ class PointerTool(
     private var selected: PickedActor? = null
 
     override fun update() {
-        highlighted = pickActor(pointerPos)
+        highlighted = pickActor()
     }
 
     override fun draw() {
@@ -55,7 +54,4 @@ class PointerTool(
         selected = null
         events.fire(PointerDeselectActorEvent())
     }
-
-    fun getSelectedActor(): Actor? =
-        selected?.actor
 }

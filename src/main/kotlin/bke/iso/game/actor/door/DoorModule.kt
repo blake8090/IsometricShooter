@@ -72,7 +72,6 @@ class DoorModule(
                 events.fire(GameState.LoadSceneEvent(changeSceneAction.sceneName, true))
             }
         } else if (doorActor.has<DoorOpenAction>()) {
-            println("opening door")
             world.delete(doorActor)
         }
     }

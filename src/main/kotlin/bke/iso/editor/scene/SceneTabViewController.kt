@@ -71,7 +71,6 @@ class SceneTabViewController(
         referenceActorModule,
         engine.renderer,
         layerModule,
-        sceneTabView,
         engine.events
     )
 
