@@ -8,6 +8,7 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module
+import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
@@ -46,6 +47,10 @@ class CameraModule(
     override fun start() {
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
+
+        input.keyMouse.bindKey("sceneTabCameraResetZoom", com.badlogic.gdx.Input.Keys.Q, ButtonState.PRESSED)
+        input.keyMouse.bindKey("sceneTabCameraMoveCamera", com.badlogic.gdx.Input.Keys.C, ButtonState.PRESSED)
+
         initCamera()
     }
 
@@ -69,11 +74,11 @@ class CameraModule(
 
             panCamera()
 
-            input.onAction("moveCamera") {
+            input.onAction("sceneTabCameraMoveCamera") {
                 moveCameraActor()
             }
 
-            input.onAction("resetZoom") {
+            input.onAction("sceneTabCameraResetZoom") {
                 renderer.resetCameraZoom()
             }
 

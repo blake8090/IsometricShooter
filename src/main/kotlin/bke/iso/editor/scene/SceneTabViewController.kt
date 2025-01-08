@@ -39,9 +39,6 @@ class SceneTabViewController(
 
     private val log = KotlinLogging.logger { }
 
-    private var gridWidth = 20
-    private var gridLength = 20
-
     private val referenceActorModule = ReferenceActorModule(engine.world)
 
     private val sceneModule = SceneModule(
@@ -93,6 +90,11 @@ class SceneTabViewController(
         engine.events
     )
 
+    private var gridWidth = 20
+    private var gridLength = 20
+
+    private var drawGridForeground = false
+
     fun getModules(): Set<Module> = setOf(
         referenceActorModule,
         sceneModule,
@@ -103,32 +105,23 @@ class SceneTabViewController(
         buildingsModule
     )
 
-    private var drawGridForeground = false
-
     fun init() {
         with(engine.input.keyMouse) {
-            // todo: only bind inputs specific to scene tab
-            bindMouse("toolDown", Input.Buttons.LEFT, ButtonState.DOWN)
-            bindMouse("toolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
-            bindMouse("toolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
-            bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
-
-            bindKey("resetZoom", Input.Keys.Q, ButtonState.PRESSED)
-            bindKey("moveCamera", Input.Keys.C, ButtonState.PRESSED)
+            bindMouse("sceneTabToolDown", Input.Buttons.LEFT, ButtonState.DOWN)
+            bindMouse("sceneTabToolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
+            bindMouse("sceneTabToolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
         }
     }
 
     fun update() {
         if (sceneTabView.hitTouchableArea()) {
-            engine.input.onAction("toolPress") {
-                println("tool press")
+            engine.input.onAction("sceneTabToolPress") {
                 toolModule.performAction()?.let { command ->
                     engine.events.fire(PerformCommandEvent(command))
                 }
             }
 
-            engine.input.onAction("toolRelease") {
-                println("tool release")
+            engine.input.onAction("sceneTabToolRelease") {
                 toolModule.performReleaseAction()?.let { command ->
                     engine.events.fire(PerformCommandEvent(command))
                 }
@@ -148,9 +141,8 @@ class SceneTabViewController(
     }
 
     private fun performMultiAction() {
-        engine.input.onAction("toolDown") {
+        engine.input.onAction("sceneTabToolDown") {
             toolModule.performMultiAction()?.let { command ->
-                println("fire event!")
                 engine.events.fire(PerformCommandEvent(command))
             }
         }

@@ -7,8 +7,10 @@ import bke.iso.editor.ui.Tab
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
+import bke.iso.engine.input.ButtonState
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
+import com.badlogic.gdx.Input
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class PerformActionEvent : Event
@@ -38,6 +40,8 @@ class EditorState(override val engine: Engine) : State() {
     override suspend fun load() {
         log.info { "Starting editor" }
         engine.ui.setScreen(editorScreen)
+
+        engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
 
         sceneTabController.init()
         actorTabViewController.init()
