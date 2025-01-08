@@ -4,6 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
+import bke.iso.engine.ui.util.AssetAwareSkin
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -12,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -22,17 +22,19 @@ class SimpleLoadingScreen(private val assets: Assets) : LoadingScreen() {
 
     private val log = KotlinLogging.logger { }
 
+    private val fadeDuration = 0.25f
+
     private val texture = makePixelTexture(Color.WHITE)
     private val batch = SpriteBatch()
 
-    private val duration = 0.25f
-
     private val stage = Stage(ScreenViewport())
-    private val skin = Skin()
+    private val skin = AssetAwareSkin(assets)
 
     override fun stop() {
         super.stop()
         texture.dispose()
+        stage.dispose()
+        skin.dispose()
     }
 
     override val transitionInState: TransitionInState = object : TransitionInState() {
@@ -43,16 +45,16 @@ class SimpleLoadingScreen(private val assets: Assets) : LoadingScreen() {
 
         override fun update(deltaTime: Float) {
             elapsedTime += deltaTime
-            if (elapsedTime >= duration) {
+            if (elapsedTime >= fadeDuration) {
                 log.debug { "Fade in complete" }
                 nextState()
             }
 
-            val p = min(1f, elapsedTime / duration)
-            val f = fade.apply(p)
+            val percent = min(1f, elapsedTime / fadeDuration)
+            val alpha = fade.apply(percent)
 
             batch.begin()
-            batch.withColor(Color(0f, 0f, 0f, f)) {
+            batch.withColor(Color(0f, 0f, 0f, alpha)) {
                 batch.draw(texture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
             }
             batch.end()
@@ -109,24 +111,16 @@ class SimpleLoadingScreen(private val assets: Assets) : LoadingScreen() {
 
         override fun update(deltaTime: Float) {
             elapsedTime += deltaTime
-            if (elapsedTime >= duration) {
+            if (elapsedTime >= fadeDuration) {
                 log.debug { "Fade out complete" }
                 nextState()
             }
 
-            val p = min(1f, elapsedTime / duration)
-            val f = 1 - fade.apply(p)
-
-            stage.act(deltaTime)
-            stage.viewport.apply()
-            stage.actors.forEach { actor ->
-                val c = actor.color
-                actor.setColor(c.r, c.g, c.b, f)
-            }
-            stage.draw()
+            val percent = min(1f, elapsedTime / fadeDuration)
+            val alpha = 1 - fade.apply(percent)
 
             batch.begin()
-            batch.withColor(Color(0f, 0f, 0f, f)) {
+            batch.withColor(Color(0f, 0f, 0f, alpha)) {
                 batch.draw(texture, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
             }
             batch.end()

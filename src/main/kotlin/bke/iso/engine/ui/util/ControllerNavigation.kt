@@ -41,8 +41,7 @@ class ControllerNavigation : ControllerAdapter() {
     private fun fireEvent(actor: Actor, type: InputEvent.Type, code: Int? = null): Boolean {
         val event = Pools.obtain(InputEvent::class.java)
         event.type = type
-        // -1 is always used on desktop
-        event.pointer = -1
+        event.pointer = -1 // -1 is always used on desktop
         if (code != null) {
             event.button = code
         }
