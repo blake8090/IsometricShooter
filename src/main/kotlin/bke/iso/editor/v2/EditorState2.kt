@@ -1,11 +1,13 @@
 package bke.iso.editor.v2
 
 import bke.iso.editor.v2.actor.ActorTabViewController
+import bke.iso.editor.v2.core.EditorEvent
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
+import com.badlogic.gdx.scenes.scene2d.EventListener
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 //class PerformActionEvent : Event
@@ -29,7 +31,14 @@ class EditorState(override val engine: Engine) : State() {
 
     private val editorScreen2 = EditorScreen2(engine.assets)
     private val actorTabViewController =
-        ActorTabViewController(editorScreen2.skin, engine.assets, engine.events, engine.input)
+        ActorTabViewController(
+            editorScreen2.skin,
+            engine.assets,
+            engine.events,
+            engine.input,
+            engine.dialogs,
+            engine.serializer
+        )
 
     override val modules: Set<Module> = mutableSetOf<Module>().apply {
         add(actorTabViewController)
@@ -41,11 +50,18 @@ class EditorState(override val engine: Engine) : State() {
 
     init {
         editorScreen2.actorTabView = actorTabViewController.view
+
+        editorScreen2.editorEventListener = EventListener { event ->
+            if (event is EditorEvent) {
+                handleEditorEvent(event)
+            }
+            false
+        }
     }
 //    private val commands = ArrayDeque<EditorCommand>()
 
     override suspend fun load() {
-        log.info { "Starting editor" }
+        log.info { "Loading editor" }
         engine.ui.setScreen(editorScreen2)
         actorTabViewController.enableRenderer(engine.rendererManager)
 //
@@ -73,17 +89,17 @@ class EditorState(override val engine: Engine) : State() {
 //        }
 //    }
 //
-//    fun handleEditorEvent(event: EditorEvent) {
-//        log.debug { "Fired event ${event::class.simpleName}" }
-//
-//        when (editorScreen.activeTab) {
-//            Tab.SCENE -> sceneTabController.handleEditorEvent(event)
-//            Tab.ACTOR -> actorTabViewController.handleEditorEvent(event)
-//            Tab.NONE -> error("No tab selected")
-//        }
-//
-//        engine.events.fire(event)
-//    }
+    private fun handleEditorEvent(event: EditorEvent) {
+        log.debug { "Fired event ${event::class.simpleName}" }
+
+        when (editorScreen2.activeTab) {
+            Tab.SCENE -> TODO()
+
+            Tab.ACTOR -> actorTabViewController.handleEditorEvent(event)
+
+            Tab.NONE -> TODO()
+        }
+    }
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)

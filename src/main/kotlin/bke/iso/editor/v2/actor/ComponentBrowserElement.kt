@@ -66,7 +66,7 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
             }
         }
 
-    fun updateComponents(components: List<Component>) {
+    fun update(components: List<Component>) {
         componentList.clearChildren()
         buttonGroup.clear()
         buttonGroup

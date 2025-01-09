@@ -2,14 +2,19 @@ package bke.iso.editor.v2.actor
 
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
+import bke.iso.editor.v2.core.EditorEvent
 import bke.iso.editor.v2.core.EditorViewController
+import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
 import bke.iso.engine.input.Input
+import bke.iso.engine.os.Dialogs
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.RendererManager
+import bke.iso.engine.render.Sprite
+import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
@@ -24,6 +29,8 @@ class ActorTabViewController(
     assets: Assets,
     events: Events,
     private val input: Input,
+    private val dialogs: Dialogs,
+    private val serializer: Serializer
 ) : EditorViewController<ActorTabView>() {
 
     private val log = KotlinLogging.logger { }
@@ -49,7 +56,9 @@ class ActorTabViewController(
         log.debug { "Starting ActorTabViewController" }
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
+
         createReferenceActor()
+        loadPrefab(ActorPrefab("", mutableListOf()))
     }
 
     private fun createReferenceActor() {
@@ -104,8 +113,29 @@ class ActorTabViewController(
         renderer.moveCamera(cameraDelta)
     }
 
+    override fun handleEditorEvent(event: EditorEvent) {
+        if (event is OpenPrefabEvent) {
+            val file = dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
+            val prefab = serializer.read<ActorPrefab>(file.readText())
+            loadPrefab(prefab)
+            log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
+        }
+    }
+
+    private fun loadPrefab(prefab: ActorPrefab) {
+        selectedPrefab = prefab
+
+        referenceActor.components.clear()
+        selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
+            referenceActor.add(sprite)
+        }
+
+        view.updateComponentBrowser(selectedPrefab.components)
+    }
+
     fun enableRenderer(rendererManager: RendererManager) {
         rendererManager.setActiveRenderer(renderer)
     }
 
+    class OpenPrefabEvent : EditorEvent()
 }

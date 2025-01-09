@@ -1,10 +1,5 @@
 package bke.iso.editor.v2
 
-import bke.iso.editor.ContextMenuSelection
-import bke.iso.editor.EditorEvent
-import bke.iso.editor.EditorEventListener
-import bke.iso.editor.EditorState
-import bke.iso.editor.SelectTabEvent
 import bke.iso.editor.ui.color
 import bke.iso.editor.v2.actor.ActorTabView
 import bke.iso.engine.asset.Assets
@@ -14,9 +9,7 @@ import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.List
@@ -37,11 +30,10 @@ enum class Tab {
 
 class EditorScreen2(assets: Assets) : UIScreen(assets) {
 
-    lateinit var actorTabView: ActorTabView
-
     private val log = KotlinLogging.logger { }
 
     private val root = Table().top()
+    lateinit var actorTabView: ActorTabView
 
 //    val sceneTabView = SceneTabView(skin, assets, stage)
 //    val actorTabView = ActorTabView(skin, stage, assets)
@@ -51,6 +43,8 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
 
     var activeTab: Tab = Tab.ACTOR
         private set
+
+    var editorEventListener: EventListener? = null
 
     override fun create() {
         setup()
@@ -80,12 +74,7 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         mainViewStack.add(actorTabView.mainView)
         root.add(mainViewStack).grow()
 
-        root.addListener(object : EditorEventListener {
-            override fun handle(event: EditorEvent) {
-                // TODO: just use lambda to break dependency on engine code
-//                editorState.handleEditorEvent(event)
-            }
-        })
+        editorEventListener?.let(root::addListener)
 
         stage.addActor(root)
     }

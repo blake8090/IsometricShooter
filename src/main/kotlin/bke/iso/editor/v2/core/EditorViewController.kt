@@ -1,6 +1,5 @@
 package bke.iso.editor.v2.core
 
-import bke.iso.editor.EditorEvent
 import bke.iso.engine.core.Module
 import bke.iso.engine.ui.UIElement
 

@@ -1,12 +1,11 @@
 package bke.iso.editor.v2.actor
 
-import bke.iso.editor.actor.OpenActorPrefabEvent
-import bke.iso.editor.actor.SaveActorPrefabEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.UIElement
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
+import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -26,12 +25,13 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         menuBar.add(createMenuButton("New"))
         menuBar.add(createMenuButton("Open").apply {
             onChanged {
-                fire(OpenActorPrefabEvent())
+                println("asd")
+                fire(ActorTabViewController.OpenPrefabEvent())
             }
         })
         menuBar.add(createMenuButton("Save").apply {
             onChanged {
-                fire(SaveActorPrefabEvent())
+//                fire(SaveActorPrefabEvent())
             }
         })
         menuBar.add(createMenuButton("Save As"))
@@ -55,6 +55,10 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         return TextButton(text, skin).apply {
             pad(5f)
         }
+    }
+
+    fun updateComponentBrowser(components: List<Component>) {
+        componentBrowserElement.update(components)
     }
 
 //    fun openAddComponentDialog(componentTypes: List<KClass<out Component>>, action: (KClass<out Component>) -> Unit) {
