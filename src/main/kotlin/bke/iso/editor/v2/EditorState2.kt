@@ -28,7 +28,8 @@ class EditorState(override val engine: Engine) : State() {
 //        sceneTabController.getModules() + contextMenuModule + actorTabViewController.getModules()
 
     private val editorScreen2 = EditorScreen2(engine.assets)
-    private val actorTabViewController = ActorTabViewController(editorScreen2.skin, engine.assets, engine.events)
+    private val actorTabViewController =
+        ActorTabViewController(editorScreen2.skin, engine.assets, engine.events, engine.input)
 
     override val modules: Set<Module> = mutableSetOf<Module>().apply {
         add(actorTabViewController)
@@ -46,6 +47,7 @@ class EditorState(override val engine: Engine) : State() {
     override suspend fun load() {
         log.info { "Starting editor" }
         engine.ui.setScreen(editorScreen2)
+        actorTabViewController.enableRenderer(engine.rendererManager)
 //
 //        engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
 //
