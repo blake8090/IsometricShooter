@@ -1,7 +1,7 @@
 package bke.iso.editor.v2.actor
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.ui.UIComponent
+import bke.iso.engine.ui.UIElement
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Texture
@@ -24,9 +24,9 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.typeOf
 
 class ComponentInspectorElement(
-    private val skin: Skin,
+    skin: Skin,
     private val assets: Assets
-) : UIComponent(skin) {
+) : UIElement(skin) {
 
     private val log = KotlinLogging.logger { }
 
@@ -64,7 +64,7 @@ class ComponentInspectorElement(
         })
     }
 
-    fun updateComponent(component: Component) {
+    fun update(component: Component) {
         editorTable.clearChildren()
         generateControls(component)
     }

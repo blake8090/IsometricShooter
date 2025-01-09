@@ -3,7 +3,7 @@ package bke.iso.editor.v2.actor
 import bke.iso.editor.actor.DeleteComponentEvent
 import bke.iso.editor.actor.OpenAddComponentDialogEvent
 import bke.iso.editor.actor.SelectComponentEvent
-import bke.iso.engine.ui.UIComponent
+import bke.iso.engine.ui.UIElement
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.world.actor.Component
@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.Align
 
-class ComponentBrowserElement(private val skin: Skin) : UIComponent(skin) {
+class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
 
     private val root = Table().apply {
         top()

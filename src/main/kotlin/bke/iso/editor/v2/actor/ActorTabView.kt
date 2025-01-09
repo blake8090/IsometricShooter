@@ -4,21 +4,16 @@ import bke.iso.editor.actor.OpenActorPrefabEvent
 import bke.iso.editor.actor.SaveActorPrefabEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.ui.UIComponent
+import bke.iso.engine.ui.UIElement
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
-import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Value
-import kotlin.reflect.KClass
 
-class ActorTabView(
-    private val skin: Skin,
-    assets: Assets
-) : UIComponent(skin) {
+class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
 
     val menuBar: Table = Table().left()
     val mainView: Table = BorderedTable(color(43, 103, 161))

@@ -28,7 +28,7 @@ class EditorState(override val engine: Engine) : State() {
 //        sceneTabController.getModules() + contextMenuModule + actorTabViewController.getModules()
 
     private val editorScreen2 = EditorScreen2(engine.assets)
-    private val actorTabViewController = ActorTabViewController(editorScreen2.skin, engine.assets)
+    private val actorTabViewController = ActorTabViewController(editorScreen2.skin, engine.assets, engine.events)
 
     override val modules: Set<Module> = mutableSetOf<Module>().apply {
         add(actorTabViewController)
