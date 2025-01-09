@@ -13,7 +13,7 @@ abstract class UIScreen(protected val assets: Assets) {
     val stage: Stage = Stage(ScreenViewport())
     val controllerNavigation: ControllerNavigation = ControllerNavigation()
 
-    protected val skin: Skin = AssetAwareSkin(assets)
+    val skin: Skin = AssetAwareSkin(assets)
 
     abstract fun create()
 

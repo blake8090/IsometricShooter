@@ -39,7 +39,7 @@ class MainMenuState(override val engine: Engine) : State() {
     private fun startEditor() {
         engine.loadingScreens.start(EmptyLoadingScreen()) {
             loadGameAssets()
-            engine.states.setState<EditorState>()
+            engine.states.setState<bke.iso.editor.v2.EditorState>()
         }
     }
 
