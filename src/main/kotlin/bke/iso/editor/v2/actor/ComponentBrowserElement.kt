@@ -1,8 +1,5 @@
 package bke.iso.editor.v2.actor
 
-import bke.iso.editor.actor.DeleteComponentEvent
-import bke.iso.editor.actor.OpenAddComponentDialogEvent
-import bke.iso.editor.actor.SelectComponentEvent
 import bke.iso.engine.ui.UIElement
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
@@ -52,7 +49,7 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
     private fun createAddComponentButton(skin: Skin): TextButton =
         TextButton("Add", skin).apply {
             onChanged {
-                fire(OpenAddComponentDialogEvent())
+//                fire(OpenAddComponentDialogEvent())
             }
         }
 
@@ -61,7 +58,7 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
             onChanged {
                 val checkedButton = this@ComponentBrowserElement.buttonGroup.checked
                 if (checkedButton != null) {
-                    fire(DeleteComponentEvent(checkedButton.text.toString()))
+//                    fire(DeleteComponentEvent(checkedButton.text.toString()))
                 }
             }
         }
@@ -92,7 +89,8 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
             label.setAlignment(Align.left)
             onChanged {
                 if (isChecked) {
-                    fire(SelectComponentEvent(component))
+                    fire(ActorTabViewController.SelectComponentEvent(component))
+//                    fire(SelectComponentEvent(component))
                 }
             }
         }

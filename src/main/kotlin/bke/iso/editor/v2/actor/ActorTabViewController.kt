@@ -17,6 +17,7 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -119,6 +120,8 @@ class ActorTabViewController(
             val prefab = serializer.read<ActorPrefab>(file.readText())
             loadPrefab(prefab)
             log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
+        } else if (event is SelectComponentEvent) {
+            view.updateComponentInspector(event.component)
         }
     }
 
@@ -138,4 +141,6 @@ class ActorTabViewController(
     }
 
     class OpenPrefabEvent : EditorEvent()
+
+    data class SelectComponentEvent(val component: Component) : EditorEvent()
 }

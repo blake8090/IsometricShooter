@@ -84,6 +84,7 @@ class ComponentInspectorElement(
         }
     }
 
+    // TODO: use EditorCommands for all controls
     private fun generateFloatControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
@@ -92,6 +93,7 @@ class ComponentInspectorElement(
         editorTable.add(
             TextField(memberProperty.getter.call(component).toString(), skin).apply {
                 onChanged {
+                    // TODO: fire(PerformCommandEvent(new UpdateComponentPropertyCommand(component, property, text))
                     if (memberProperty is KMutableProperty<*>) {
                         memberProperty.setter.call(component, text.toFloatOrNull() ?: 0f)
                     }
