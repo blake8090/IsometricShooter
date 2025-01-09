@@ -25,7 +25,6 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         menuBar.add(createMenuButton("New"))
         menuBar.add(createMenuButton("Open").apply {
             onChanged {
-                println("asd")
                 fire(ActorTabViewController.OpenPrefabEvent())
             }
         })

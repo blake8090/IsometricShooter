@@ -1,6 +1,7 @@
 package bke.iso.editor.v2
 
 import bke.iso.editor.v2.actor.ActorTabViewController
+import bke.iso.editor.v2.core.EditorCommand
 import bke.iso.editor.v2.core.EditorEvent
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
@@ -48,6 +49,8 @@ class EditorState(override val engine: Engine) : State() {
     override val systems: LinkedHashSet<System> =
         linkedSetOf()
 
+    private val commands = ArrayDeque<EditorCommand>()
+
     init {
         editorScreen2.actorTabView = actorTabViewController.view
 
@@ -58,7 +61,6 @@ class EditorState(override val engine: Engine) : State() {
             false
         }
     }
-//    private val commands = ArrayDeque<EditorCommand>()
 
     override suspend fun load() {
         log.info { "Loading editor" }
@@ -74,14 +76,15 @@ class EditorState(override val engine: Engine) : State() {
     override fun handleEvent(event: Event) {
         super.handleEvent(event)
 
-//        if (event is PerformCommandEvent) {
-//            execute(event.editorCommand)
+        if (event is ExecuteCommandEvent) {
+            execute(event.editorCommand)
+        }
 //        } else if (event is SelectTabEvent) {
 //            onSelectTab(event.tab)
 //        }
     }
 
-//    private fun onSelectTab(tab: Tab) {
+    //    private fun onSelectTab(tab: Tab) {
 //        if (tab == Tab.SCENE) {
 //            engine.rendererManager.reset()
 //        } else if (tab == Tab.ACTOR) {
@@ -90,7 +93,11 @@ class EditorState(override val engine: Engine) : State() {
 //    }
 //
     private fun handleEditorEvent(event: EditorEvent) {
-        log.debug { "Fired event ${event::class.simpleName}" }
+        log.debug { "Handling editor event ${event::class.simpleName}" }
+
+        if (event is ExecuteCommandEvent) {
+            execute(event.editorCommand)
+        }
 
         when (editorScreen2.activeTab) {
             Tab.SCENE -> TODO()
@@ -115,12 +122,12 @@ class EditorState(override val engine: Engine) : State() {
 //        }
     }
 
-//    private fun execute(command: EditorCommand) {
-//        log.debug { "Executing ${command::class.simpleName}" }
-//        command.execute()
-//        commands.addFirst(command)
+    private fun execute(command: EditorCommand) {
+        log.debug { "Executing command: ${command.name}" }
+        command.execute()
+        commands.addFirst(command)
 //        handleEvent(PerformActionEvent())
-//    }
+    }
 //
 //    private fun openContextMenu() {
 //        when (editorScreen.activeTab) {
@@ -138,4 +145,6 @@ class EditorState(override val engine: Engine) : State() {
 //            }
 //        }
 //    }
+
+    data class ExecuteCommandEvent(val editorCommand: EditorCommand) : EditorEvent()
 }

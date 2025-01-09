@@ -1,5 +1,7 @@
 package bke.iso.editor.v2.actor
 
+import bke.iso.editor.v2.EditorState
+import bke.iso.editor.v2.core.EditorCommand
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.UIElement
 import bke.iso.engine.ui.util.newTintedDrawable
@@ -18,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
 import kotlin.reflect.cast
 import kotlin.reflect.full.memberProperties
@@ -90,16 +93,25 @@ class ComponentInspectorElement(
             .left()
             .padRight(Value.percentWidth(0.05f, editorTable))
 
+        val currentValue = memberProperty.getter.call(component).toString()
         editorTable.add(
-            TextField(memberProperty.getter.call(component).toString(), skin).apply {
+            TextField(currentValue, skin).apply {
                 onChanged {
-                    // TODO: fire(PerformCommandEvent(new UpdateComponentPropertyCommand(component, property, text))
-                    if (memberProperty is KMutableProperty<*>) {
-                        memberProperty.setter.call(component, text.toFloatOrNull() ?: 0f)
-                    }
+                    updateComponentProperty(this, component, memberProperty, text.toFloatOrNull() ?: 0f)
                 }
             })
             .growX()
+    }
+
+    private fun updateComponentProperty(
+        actor: Actor,
+        component: Component,
+        memberProperty: KProperty1<out Component, *>,
+        value: Any
+    ) {
+        if (memberProperty is KMutableProperty<*>) {
+            fireCommand(actor, UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value))
+        }
     }
 
     private fun generateIntControls(component: Component, memberProperty: KProperty1<out Component, *>) {
@@ -201,6 +213,10 @@ class ComponentInspectorElement(
                 }
             })
             .growX()
+    }
+
+    private fun fireCommand(actor: Actor, command: EditorCommand) {
+        actor.fire(EditorState.ExecuteCommandEvent(command))
     }
 }
 
