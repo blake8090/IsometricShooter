@@ -94,6 +94,7 @@ class ComponentInspectorElement(
             .padRight(Value.percentWidth(0.05f, editorTable))
 
         val currentValue = memberProperty.getter.call(component).toString()
+
         editorTable.add(
             TextField(currentValue, skin).apply {
                 onChanged {
@@ -103,28 +104,17 @@ class ComponentInspectorElement(
             .growX()
     }
 
-    private fun updateComponentProperty(
-        actor: Actor,
-        component: Component,
-        memberProperty: KProperty1<out Component, *>,
-        value: Any
-    ) {
-        if (memberProperty is KMutableProperty<*>) {
-            fireCommand(actor, UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value))
-        }
-    }
-
     private fun generateIntControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
             .padRight(Value.percentWidth(0.05f, editorTable))
 
+        val currentValue = memberProperty.getter.call(component).toString()
+
         editorTable.add(
-            TextField(memberProperty.getter.call(component).toString(), skin).apply {
+            TextField(currentValue, skin).apply {
                 onChanged {
-                    if (memberProperty is KMutableProperty<*>) {
-                        memberProperty.setter.call(component, text.toIntOrNull() ?: 0)
-                    }
+                    updateComponentProperty(this, component, memberProperty, text.toIntOrNull() ?: 0f)
                 }
             })
             .growX()
@@ -138,9 +128,7 @@ class ComponentInspectorElement(
             ImageButton(skin, "actorInspectorView").apply {
                 isChecked = memberProperty.getter.call(component) as Boolean == true
                 onChanged {
-                    if (memberProperty is KMutableProperty<*>) {
-                        memberProperty.setter.call(component, isChecked)
-                    }
+                    updateComponentProperty(this, component, memberProperty, isChecked)
                 }
             })
             .expandX()
@@ -152,18 +140,16 @@ class ComponentInspectorElement(
             .left()
             .padRight(Value.percentWidth(0.05f, editorTable))
 
+        val currentValue = memberProperty.getter.call(component).toString()
+
         editorTable.add(
-            TextField(memberProperty.getter.call(component).toString(), skin).apply {
+            TextField(currentValue, skin).apply {
                 if (memberProperty !is KMutableProperty<*>) {
                     isDisabled = true
                 }
 
                 onChanged {
-                    if (memberProperty is KMutableProperty<*>) {
-                        if (memberProperty.name != "texture" || assets.contains(text, Texture::class)) {
-                            memberProperty.setter.call(component, text)
-                        }
-                    }
+                    updateComponentProperty(this, component, memberProperty, text)
                 }
             })
             .growX()
@@ -213,6 +199,17 @@ class ComponentInspectorElement(
                 }
             })
             .growX()
+    }
+
+    private fun updateComponentProperty(
+        actor: Actor,
+        component: Component,
+        memberProperty: KProperty1<out Component, *>,
+        value: Any
+    ) {
+        if (memberProperty is KMutableProperty<*>) {
+            fireCommand(actor, UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value))
+        }
     }
 
     private fun fireCommand(actor: Actor, command: EditorCommand) {
