@@ -10,6 +10,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Module
+import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.render.Renderer
@@ -26,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.Serializable
 import org.reflections.Reflections
+import kotlin.math.sign
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.hasAnnotation
@@ -61,8 +63,13 @@ class ActorTabViewController(
 
     override fun start() {
         log.debug { "Starting ActorTabViewController" }
+
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
+        with(input.keyMouse) {
+            bindKey("actorTabResetZoom", GdxInput.Keys.Q, ButtonState.PRESSED)
+            bindKey("actorTabResetCamera", GdxInput.Keys.R, ButtonState.PRESSED)
+        }
 
         createReferenceActor()
         loadPrefab(ActorPrefab("", mutableListOf()))
@@ -78,6 +85,18 @@ class ActorTabViewController(
     }
 
     override fun update(deltaTime: Float) {
+        input.onAction("actorTabResetZoom") {
+            renderer.resetCameraZoom()
+        }
+
+        input.onAction("actorTabResetCamera") {
+            renderer.setCameraPos(Vector3())
+        }
+
+        mouseScrollAdapter.onScroll { _, y ->
+            renderer.zoomCamera(cameraZoomIncrements * y.sign)
+        }
+
         panCamera()
         drawGrid()
         drawReferenceActorPos()
