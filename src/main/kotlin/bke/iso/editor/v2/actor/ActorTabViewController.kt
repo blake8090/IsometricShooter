@@ -2,6 +2,7 @@ package bke.iso.editor.v2.actor
 
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
+import bke.iso.editor.v2.EditorState
 import bke.iso.editor.v2.core.EditorEvent
 import bke.iso.editor.v2.core.EditorViewController
 import bke.iso.editor.withFirstInstance
@@ -23,12 +24,17 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.Serializable
+import org.reflections.Reflections
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.hasAnnotation
 import com.badlogic.gdx.Input as GdxInput
 
 class ActorTabViewController(
-    skin: Skin,
+    private val skin: Skin,
     assets: Assets,
-    events: Events,
+    private val events: Events,
     private val input: Input,
     private val dialogs: Dialogs,
     private val serializer: Serializer
@@ -115,13 +121,21 @@ class ActorTabViewController(
     }
 
     override fun handleEditorEvent(event: EditorEvent) {
-        if (event is OpenPrefabEvent) {
-            val file = dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
-            val prefab = serializer.read<ActorPrefab>(file.readText())
-            loadPrefab(prefab)
-            log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
-        } else if (event is SelectComponentEvent) {
-            view.updateComponentInspector(event.component)
+        when (event) {
+            is OpenPrefabEvent -> {
+                val file = dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
+                val prefab = serializer.read<ActorPrefab>(file.readText())
+                loadPrefab(prefab)
+                log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
+            }
+
+            is SelectComponentEvent -> {
+                view.updateComponentInspector(event.component)
+            }
+
+            is OpenSelectNewComponentDialogEvent -> {
+                openSelectNewComponentDialog()
+            }
         }
     }
 
@@ -136,11 +150,52 @@ class ActorTabViewController(
         view.updateComponentBrowser(selectedPrefab.components)
     }
 
+    private fun openSelectNewComponentDialog() {
+
+        val componentTypes = Reflections("bke.iso")
+            .getSubTypesOf(Component::class.java)
+            .map(Class<out Component>::kotlin)
+            .filter { kClass -> kClass.hasAnnotation<Serializable>() }
+
+        val dialog = SelectNewComponentDialog(skin, componentTypes) { selectedComponentType ->
+            log.debug { "User selected component type ${selectedComponentType.simpleName}" }
+            addNewComponent(selectedComponentType)
+        }
+        events.fire(EditorState.ShowDialogEvent(dialog))
+    }
+
+    private fun <T : KClass<out Component>> addNewComponent(type: T) {
+        val component = type.createInstance()
+        selectedPrefab.components.add(component)
+        updateComponentsView()
+        log.debug { "Added component type '${type.simpleName}' to prefab" }
+    }
+
+    private fun updateComponentsView() {
+        referenceActor.components.clear()
+
+        selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
+            referenceActor.add(sprite)
+        }
+        view.updateComponentBrowser(selectedPrefab.components)
+    }
+
     fun enableRenderer(rendererManager: RendererManager) {
         rendererManager.setActiveRenderer(renderer)
     }
 
+    /**
+     * Called when the user opens an Actor Prefab file.
+     */
     class OpenPrefabEvent : EditorEvent()
 
+    /**
+     * Called when the user selects a component in the Component Browser.
+     */
     data class SelectComponentEvent(val component: Component) : EditorEvent()
+
+    /**
+     * Called when the user clicks the "Add" button in the Component Browser.
+     */
+    class OpenSelectNewComponentDialogEvent : EditorEvent()
 }

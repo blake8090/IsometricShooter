@@ -49,7 +49,7 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
     private fun createAddComponentButton(skin: Skin): TextButton =
         TextButton("Add", skin).apply {
             onChanged {
-//                fire(OpenAddComponentDialogEvent())
+                fire(ActorTabViewController.OpenSelectNewComponentDialogEvent())
             }
         }
 
@@ -90,7 +90,6 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
             onChanged {
                 if (isChecked) {
                     fire(ActorTabViewController.SelectComponentEvent(component))
-//                    fire(SelectComponentEvent(component))
                 }
             }
         }

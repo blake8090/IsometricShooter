@@ -9,6 +9,7 @@ import bke.iso.engine.core.Module
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
 import com.badlogic.gdx.scenes.scene2d.EventListener
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 //class PerformActionEvent : Event
@@ -75,6 +76,8 @@ class EditorState(override val engine: Engine) : State() {
 
         if (event is ExecuteCommandEvent) {
             execute(event.command)
+        } else if (event is ShowDialogEvent) {
+            event.dialog.show(editorScreen2.stage)
         }
 //        } else if (event is SelectTabEvent) {
 //            onSelectTab(event.tab)
@@ -143,4 +146,6 @@ class EditorState(override val engine: Engine) : State() {
 //    }
 
     data class ExecuteCommandEvent(val command: EditorCommand) : EditorEvent()
+
+    class ShowDialogEvent(val dialog: Dialog) : Event
 }
