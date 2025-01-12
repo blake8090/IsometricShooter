@@ -1,5 +1,6 @@
 package bke.iso.editor.v2.actor
 
+import bke.iso.editor.actor.ui.onChanged
 import bke.iso.editor.v2.EditorState
 import bke.iso.editor.v2.core.EditorCommand
 import bke.iso.engine.asset.Assets
@@ -148,11 +149,20 @@ class ComponentInspectorElement(
                 }
 
                 onChanged {
-                    updateComponentProperty(this, component, memberProperty, text)
+                    if (memberProperty is KMutableProperty<*> && validateNewValue(memberProperty, text)) {
+                        updateComponentProperty(this, component, memberProperty, text)
+                    }
                 }
             })
             .growX()
     }
+
+    private fun validateNewValue(memberProperty: KProperty1<out Component, *>, value: String) =
+        if (memberProperty.name != "texture") {
+            true
+        } else {
+            assets.contains(value, Texture::class)
+        }
 
     private fun generateVector3Controls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
