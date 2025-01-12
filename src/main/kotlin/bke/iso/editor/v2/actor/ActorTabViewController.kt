@@ -136,6 +136,11 @@ class ActorTabViewController(
             is OpenSelectNewComponentDialogEvent -> {
                 openSelectNewComponentDialog()
             }
+
+            is DeleteComponentEvent -> {
+                selectedPrefab.components.removeAt(event.index)
+                updateView()
+            }
         }
     }
 
@@ -151,7 +156,6 @@ class ActorTabViewController(
     }
 
     private fun openSelectNewComponentDialog() {
-
         val componentTypes = Reflections("bke.iso")
             .getSubTypesOf(Component::class.java)
             .map(Class<out Component>::kotlin)
@@ -167,11 +171,11 @@ class ActorTabViewController(
     private fun <T : KClass<out Component>> addNewComponent(type: T) {
         val component = type.createInstance()
         selectedPrefab.components.add(component)
-        updateComponentsView()
+        updateView()
         log.debug { "Added component type '${type.simpleName}' to prefab" }
     }
 
-    private fun updateComponentsView() {
+    private fun updateView() {
         referenceActor.components.clear()
 
         selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
@@ -184,18 +188,11 @@ class ActorTabViewController(
         rendererManager.setActiveRenderer(renderer)
     }
 
-    /**
-     * Called when the user opens an Actor Prefab file.
-     */
     class OpenPrefabEvent : EditorEvent()
 
-    /**
-     * Called when the user selects a component in the Component Browser.
-     */
     data class SelectComponentEvent(val component: Component) : EditorEvent()
 
-    /**
-     * Called when the user clicks the "Add" button in the Component Browser.
-     */
     class OpenSelectNewComponentDialogEvent : EditorEvent()
+
+    data class DeleteComponentEvent(val index: Int) : EditorEvent()
 }

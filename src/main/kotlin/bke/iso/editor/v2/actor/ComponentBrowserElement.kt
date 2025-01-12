@@ -58,7 +58,8 @@ class ComponentBrowserElement(skin: Skin) : UIElement(skin) {
             onChanged {
                 val checkedButton = this@ComponentBrowserElement.buttonGroup.checked
                 if (checkedButton != null) {
-//                    fire(DeleteComponentEvent(checkedButton.text.toString()))
+                    val index = this@ComponentBrowserElement.buttonGroup.checkedIndex
+                    fire(ActorTabViewController.DeleteComponentEvent(index))
                 }
             }
         }
