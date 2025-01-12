@@ -87,7 +87,6 @@ class ComponentInspectorElement(
         }
     }
 
-    // TODO: use EditorCommands for all controls
     private fun generateFloatControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         editorTable.add(Label(memberProperty.name, skin))
             .left()
@@ -169,7 +168,7 @@ class ComponentInspectorElement(
         editorTable.add(
             TextField(vector.x.toString(), skin).apply {
                 onChanged {
-                    vector.x = text.toFloatOrNull() ?: 0f
+                    fireCommand(this, UpdateVectorXCommand(vector, text.toFloatOrNull() ?: 0f))
                 }
             })
             .growX()
@@ -182,7 +181,7 @@ class ComponentInspectorElement(
         editorTable.add(
             TextField(vector.y.toString(), skin).apply {
                 onChanged {
-                    vector.y = text.toFloatOrNull() ?: 0f
+                    fireCommand(this, UpdateVectorYCommand(vector, text.toFloatOrNull() ?: 0f))
                 }
             })
             .growX()
@@ -195,7 +194,7 @@ class ComponentInspectorElement(
         editorTable.add(
             TextField(vector.z.toString(), skin).apply {
                 onChanged {
-                    vector.z = text.toFloatOrNull() ?: 0f
+                    fireCommand(this, UpdateVectorZCommand(vector, text.toFloatOrNull() ?: 0f))
                 }
             })
             .growX()

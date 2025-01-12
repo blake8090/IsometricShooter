@@ -68,16 +68,13 @@ class EditorState(override val engine: Engine) : State() {
         actorTabViewController.enableRenderer(engine.rendererManager)
 //
 //        engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
-//
-//        sceneTabController.init()
-//        actorTabViewController.init()
     }
 
     override fun handleEvent(event: Event) {
         super.handleEvent(event)
 
         if (event is ExecuteCommandEvent) {
-            execute(event.editorCommand)
+            execute(event.command)
         }
 //        } else if (event is SelectTabEvent) {
 //            onSelectTab(event.tab)
@@ -96,7 +93,7 @@ class EditorState(override val engine: Engine) : State() {
         log.debug { "Handling editor event ${event::class.simpleName}" }
 
         if (event is ExecuteCommandEvent) {
-            execute(event.editorCommand)
+            execute(event.command)
         }
 
         when (editorScreen2.activeTab) {
@@ -126,7 +123,6 @@ class EditorState(override val engine: Engine) : State() {
         log.debug { "Executing command: ${command.name}" }
         command.execute()
         commands.addFirst(command)
-//        handleEvent(PerformActionEvent())
     }
 //
 //    private fun openContextMenu() {
@@ -146,5 +142,5 @@ class EditorState(override val engine: Engine) : State() {
 //        }
 //    }
 
-    data class ExecuteCommandEvent(val editorCommand: EditorCommand) : EditorEvent()
+    data class ExecuteCommandEvent(val command: EditorCommand) : EditorEvent()
 }
