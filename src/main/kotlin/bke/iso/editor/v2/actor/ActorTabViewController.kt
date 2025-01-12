@@ -153,10 +153,12 @@ class ActorTabViewController(
             }
 
             is OpenSelectNewComponentDialogEvent -> {
+                // TODO: this needs to be a command!
                 openSelectNewComponentDialog()
             }
 
             is DeleteComponentEvent -> {
+                // TODO: this needs to be a command!
                 selectedPrefab.components.removeAt(event.index)
                 updateView()
             }
