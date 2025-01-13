@@ -1,15 +1,5 @@
 package bke.iso.editor.v2.scene
 
-import bke.iso.editor.scene.camera.ToggleHideWallsEvent
-import bke.iso.editor.scene.layer.DecreaseLayerEvent
-import bke.iso.editor.scene.layer.IncreaseLayerEvent
-import bke.iso.editor.scene.layer.ToggleHighlightLayerEvent
-import bke.iso.editor.scene.layer.ToggleUpperLayersHiddenEvent
-import bke.iso.editor.scene.tool.SelectBrushToolEvent
-import bke.iso.editor.scene.tool.SelectEraserToolEvent
-import bke.iso.editor.scene.tool.SelectFillToolEvent
-import bke.iso.editor.scene.tool.SelectPointerToolEvent
-import bke.iso.editor.scene.tool.SelectRoomToolEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.UIElement
@@ -46,16 +36,15 @@ class ToolbarElement(skin: Skin, private val assets: Assets) : UIElement(skin) {
         val pointerButton = createButton("pointer.png")
         pointerButton.onChanged {
             if (isChecked) {
-                fire(SelectPointerToolEvent())
+//                fire(SelectPointerToolEvent())
             }
         }
         content.add(pointerButton)
-            .padLeft(5f)
 
         val brushButton = createButton("brush.png")
         brushButton.onChanged {
             if (isChecked) {
-                fire(SelectBrushToolEvent())
+//                fire(SelectBrushToolEvent())
             }
         }
         content.add(brushButton)
@@ -63,7 +52,7 @@ class ToolbarElement(skin: Skin, private val assets: Assets) : UIElement(skin) {
         val eraserButton = createButton("eraser.png")
         eraserButton.onChanged {
             if (isChecked) {
-                fire(SelectEraserToolEvent())
+//                fire(SelectEraserToolEvent())
             }
         }
         content.add(eraserButton)
@@ -71,7 +60,7 @@ class ToolbarElement(skin: Skin, private val assets: Assets) : UIElement(skin) {
         val roomButton = createButton("icon-room.png")
         roomButton.onChanged {
             if (isChecked) {
-                fire(SelectRoomToolEvent())
+//                fire(SelectRoomToolEvent())
             }
         }
         content.add(roomButton)
@@ -79,7 +68,7 @@ class ToolbarElement(skin: Skin, private val assets: Assets) : UIElement(skin) {
         val fillButton = createButton("fill.png")
         fillButton.onChanged {
             if (isChecked) {
-                fire(SelectFillToolEvent())
+//                fire(SelectFillToolEvent())
             }
         }
         content.add(fillButton)
@@ -98,7 +87,7 @@ class ToolbarElement(skin: Skin, private val assets: Assets) : UIElement(skin) {
             style.checked = null
 
             onChanged {
-                fire(DecreaseLayerEvent())
+//                fire(DecreaseLayerEvent())
             }
         }
         content.add(decreaseLayerButton).space(10f)
@@ -108,26 +97,26 @@ class ToolbarElement(skin: Skin, private val assets: Assets) : UIElement(skin) {
             style.checked = null
 
             onChanged {
-                fire(IncreaseLayerEvent())
+//                fire(IncreaseLayerEvent())
             }
         }
         content.add(increaseLayerButton).space(10f)
 
         val hideUpperLayersButton = createButton("hide-layers.png")
         hideUpperLayersButton.onChanged {
-            fire(ToggleUpperLayersHiddenEvent())
+//            fire(ToggleUpperLayersHiddenEvent())
         }
         content.add(hideUpperLayersButton).space(10f)
 
         val hideWallsButton = createButton("hide-walls.png")
         hideWallsButton.onChanged {
-            fire(ToggleHideWallsEvent())
+//            fire(ToggleHideWallsEvent())
         }
         content.add(hideWallsButton).space(10f)
 
         val highlightLayerButton = createButton("highlight-layer.png")
         highlightLayerButton.onChanged {
-            fire(ToggleHighlightLayerEvent())
+//            fire(ToggleHighlightLayerEvent())
         }
         content.add(highlightLayerButton)
 
