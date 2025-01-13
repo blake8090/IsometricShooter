@@ -15,7 +15,7 @@ class SceneTabView(skin: Skin, assets: Assets) : UIElement(skin) {
     val mainView: Table = Table()
 
     private val assetBrowserElement = AssetBrowserElement(skin, assets)
-    private val toolbarElement = ToolbarElement(skin)
+    private val toolbarElement = ToolbarElement(skin, assets)
     private val sceneInspectorElement = SceneInspectorElement(skin)
 
     override fun create(): Actor {
