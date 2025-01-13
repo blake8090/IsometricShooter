@@ -2,6 +2,7 @@ package bke.iso.editor.v2
 
 import bke.iso.editor.ui.color
 import bke.iso.editor.v2.actor.ActorTabView
+import bke.iso.editor.v2.scene.SceneTabView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
@@ -34,10 +35,8 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
 
     private val root = Table().top()
     lateinit var actorTabView: ActorTabView
+    lateinit var sceneTabView: SceneTabView
 
-//    val sceneTabView = SceneTabView(skin, assets, stage)
-//    val actorTabView = ActorTabView(skin, stage, assets)
-//
 //    private val contextMenuView = ContextMenuView(skin, assets)
 //    private var contextMenuActor: Actor? = null
 
@@ -49,13 +48,13 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
     override fun create() {
         setup()
 
-//        sceneTabView.create()
+        sceneTabView.create()
         actorTabView.create()
 
         root.setFillParent(true)
 
         val menuBarStack = Stack()
-//        menuBarStack.add(sceneTabView.menuBar)
+        menuBarStack.add(sceneTabView.menuBar)
         menuBarStack.add(actorTabView.menuBar)
         root.add(menuBarStack)
             .growX()
@@ -70,7 +69,7 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         root.row()
 
         val mainViewStack = Stack()
-//        mainViewStack.add(sceneTabView.mainView)
+        mainViewStack.add(sceneTabView.mainView)
         mainViewStack.add(actorTabView.mainView)
         root.add(mainViewStack).grow()
 
@@ -157,14 +156,14 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         val sceneButton = createButton("Scene")
         sceneButton.onChanged {
             if (sceneButton.isChecked) {
-//                selectTab(Tab.SCENE)
+                selectTab(Tab.SCENE)
             }
         }
 
         val actorButton = createButton("Actor")
         actorButton.onChanged {
             if (actorButton.isChecked) {
-//                selectTab(Tab.ACTOR)
+                selectTab(Tab.ACTOR)
             }
         }
 
@@ -187,29 +186,29 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         }
     }
 
-//    private fun selectTab(tab: Tab) {
-//        log.info { "Selected tab $tab" }
-//        activeTab = tab
-//
-//        if (tab == Tab.SCENE) {
-////            sceneTabView.menuBar.isVisible = true
-////            sceneTabView.mainView.isVisible = true
-//
-//            actorTabView.menuBar.isVisible = false
-//            actorTabView.mainView.isVisible = false
-//
-//            root.fire(SelectTabEvent(Tab.SCENE))
-//        } else if (tab == Tab.ACTOR) {
-////            sceneTabView.menuBar.isVisible = false
-////            sceneTabView.mainView.isVisible = false
-//
-//            actorTabView.menuBar.isVisible = true
-//            actorTabView.mainView.isVisible = true
-//
-//            root.fire(SelectTabEvent(Tab.ACTOR))
-//        }
-//    }
-//
+    private fun selectTab(tab: Tab) {
+        log.info { "Selected tab $tab" }
+        activeTab = tab
+
+        if (tab == Tab.SCENE) {
+            sceneTabView.menuBar.isVisible = true
+            sceneTabView.mainView.isVisible = true
+
+            actorTabView.menuBar.isVisible = false
+            actorTabView.mainView.isVisible = false
+
+            root.fire(EditorState.SelectTabEvent(Tab.SCENE))
+        } else if (tab == Tab.ACTOR) {
+            sceneTabView.menuBar.isVisible = false
+            sceneTabView.mainView.isVisible = false
+
+            actorTabView.menuBar.isVisible = true
+            actorTabView.mainView.isVisible = true
+
+            root.fire(EditorState.SelectTabEvent(Tab.ACTOR))
+        }
+    }
+
 //    fun openContextMenu(pos: Vector2, selections: Set<ContextMenuSelection>) {
 //        closeContextMenu()
 //

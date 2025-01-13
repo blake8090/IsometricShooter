@@ -30,6 +30,7 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         })
         menuBar.add(createMenuButton("Save").apply {
             onChanged {
+                // TODO: reimplement
 //                fire(SaveActorPrefabEvent())
             }
         })
@@ -63,9 +64,4 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
     fun updateComponentInspector(component: Component) {
         componentInspectorElement.update(component)
     }
-
-//    fun openAddComponentDialog(componentTypes: List<KClass<out Component>>, action: (KClass<out Component>) -> Unit) {
-//        SelectComponentTypeDialog2(skin)
-//            .create(stage, componentTypes, action)
-//    }
 }

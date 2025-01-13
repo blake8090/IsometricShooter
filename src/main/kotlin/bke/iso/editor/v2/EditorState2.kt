@@ -3,6 +3,7 @@ package bke.iso.editor.v2
 import bke.iso.editor.v2.actor.ActorTabViewController
 import bke.iso.editor.v2.core.EditorCommand
 import bke.iso.editor.v2.core.EditorEvent
+import bke.iso.editor.v2.scene.SceneTabViewController
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
@@ -12,24 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-//class PerformActionEvent : Event
-//
-//data class PerformCommandEvent(val editorCommand: EditorCommand) : EditorEvent()
-//
-//data class SelectTabEvent(val tab: Tab) : EditorEvent()
-
 class EditorState(override val engine: Engine) : State() {
 
     private val log = KotlinLogging.logger {}
-
-//    private val editorScreen = EditorScreen(this, engine.assets)
-//    private val sceneTabController = SceneTabViewController(engine, editorScreen.sceneTabView)
-//    private val actorTabViewController = ActorTabViewController(engine, editorScreen.actorTabView)
-//
-//    private val contextMenuModule = ContextMenuModule(editorScreen)
-
-//    override val modules: Set<Module> =
-//        sceneTabController.getModules() + contextMenuModule + actorTabViewController.getModules()
 
     private val editorScreen2 = EditorScreen2(engine.assets)
     private val actorTabViewController =
@@ -41,10 +27,13 @@ class EditorState(override val engine: Engine) : State() {
             engine.dialogs,
             engine.serializer
         )
+    private val sceneTabViewController = SceneTabViewController(editorScreen2.skin)
 
     override val modules: Set<Module> = mutableSetOf<Module>().apply {
         add(actorTabViewController)
         addAll(actorTabViewController.modules)
+        add(sceneTabViewController)
+        addAll(sceneTabViewController.modules)
     }
 
     override val systems: LinkedHashSet<System> =
@@ -54,6 +43,7 @@ class EditorState(override val engine: Engine) : State() {
 
     init {
         editorScreen2.actorTabView = actorTabViewController.view
+        editorScreen2.sceneTabView = sceneTabViewController.view
 
         editorScreen2.editorEventListener = EventListener { event ->
             if (event is EditorEvent) {
@@ -66,41 +56,43 @@ class EditorState(override val engine: Engine) : State() {
     override suspend fun load() {
         log.info { "Loading editor" }
         engine.ui.setScreen(editorScreen2)
-        actorTabViewController.enableRenderer(engine.rendererManager)
-//
+
 //        engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
     }
 
     override fun handleEvent(event: Event) {
         super.handleEvent(event)
 
-        if (event is ExecuteCommandEvent) {
-            execute(event.command)
-        } else if (event is ShowDialogEvent) {
-            event.dialog.show(editorScreen2.stage)
+        when (event) {
+            is ExecuteCommandEvent -> {
+                execute(event.command)
+            }
+
+            is ShowDialogEvent -> {
+                event.dialog.show(editorScreen2.stage)
+            }
         }
-//        } else if (event is SelectTabEvent) {
-//            onSelectTab(event.tab)
-//        }
     }
 
-    //    private fun onSelectTab(tab: Tab) {
-//        if (tab == Tab.SCENE) {
-//            engine.rendererManager.reset()
-//        } else if (tab == Tab.ACTOR) {
-//            actorTabViewController.enable()
-//        }
-//    }
-//
+    private fun onSelectTab(tab: Tab) {
+        if (tab == Tab.SCENE) {
+            engine.rendererManager.reset()
+        } else if (tab == Tab.ACTOR) {
+            actorTabViewController.enableRenderer(engine.rendererManager)
+        }
+    }
+
     private fun handleEditorEvent(event: EditorEvent) {
         log.debug { "Handling editor event ${event::class.simpleName}" }
 
         if (event is ExecuteCommandEvent) {
             execute(event.command)
+        } else if (event is SelectTabEvent) {
+            onSelectTab(event.tab)
         }
 
         when (editorScreen2.activeTab) {
-            Tab.SCENE -> TODO()
+            Tab.SCENE -> sceneTabViewController.handleEditorEvent(event)
 
             Tab.ACTOR -> actorTabViewController.handleEditorEvent(event)
 
@@ -111,11 +103,11 @@ class EditorState(override val engine: Engine) : State() {
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
 
-//        when (editorScreen.activeTab) {
-//            Tab.SCENE -> sceneTabController.update()
-//            Tab.ACTOR -> actorTabViewController.update()
-//            Tab.NONE -> error("No tab selected")
-//        }
+        when (editorScreen2.activeTab) {
+            Tab.SCENE -> sceneTabViewController.update(deltaTime)
+            Tab.ACTOR -> actorTabViewController.update(deltaTime)
+            Tab.NONE -> error("No tab selected")
+        }
 //
 //        engine.input.onAction("openContextMenu") {
 //            openContextMenu()
@@ -148,4 +140,6 @@ class EditorState(override val engine: Engine) : State() {
     data class ExecuteCommandEvent(val command: EditorCommand) : EditorEvent()
 
     class ShowDialogEvent(val dialog: Dialog) : Event
+
+    data class SelectTabEvent(val tab: Tab) : EditorEvent()
 }
