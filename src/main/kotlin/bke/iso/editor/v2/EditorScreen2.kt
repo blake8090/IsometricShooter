@@ -81,6 +81,7 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
     private fun setup() {
         skin.add("pixel", makePixelTexture())
         skin.add("bg", makePixelTexture(color(10, 23, 36)))
+        skin.add("bg-light", makePixelTexture(color(43, 103, 161)))
         skin.add("table-border", color(77, 100, 130))
 
         skin.add("default", assets.fonts[FontOptions("roboto.ttf", 14f, Color.WHITE)])
@@ -88,6 +89,11 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")
             background = skin.getDrawable("bg")
+        })
+
+        skin.add("light", Label.LabelStyle().apply {
+            font = skin.getFont("default")
+            background = skin.getDrawable("bg-light")
         })
 
         skin.add("default", TextField.TextFieldStyle().apply {
