@@ -15,6 +15,8 @@ class SceneTabView(skin: Skin, assets: Assets) : UIElement(skin) {
     val mainView: Table = Table()
 
     private val assetBrowserElement = AssetBrowserElement(skin, assets)
+    private val toolbarElement = ToolbarElement(skin)
+    private val sceneInspectorElement = SceneInspectorElement(skin)
 
     override fun create(): Actor {
         menuBar.background = skin.getDrawable("bg")
@@ -29,9 +31,19 @@ class SceneTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         mainView.add(assetBrowserElement.create())
             .top()
             .left()
-            .expandX()
             .growY()
             .minWidth(Value.percentWidth(0.1f, mainView))
+
+        mainView.add(toolbarElement.create())
+            .top()
+            .left()
+            .growX()
+
+        mainView.add(sceneInspectorElement.create())
+            .top()
+            .left()
+            .growY()
+            .minWidth(Value.percentWidth(0.15f, mainView))
 
         return mainView
     }
