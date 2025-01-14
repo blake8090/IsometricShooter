@@ -22,19 +22,13 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
 
     override fun create(): Actor {
         menuBar.background = skin.getDrawable("bg")
-        menuBar.add(createMenuButton("New"))
-        menuBar.add(createMenuButton("Open").apply {
-            onChanged {
-                fire(ActorTabViewController.OpenPrefabEvent())
-            }
+
+        menuBar.add(createMenuButton("New") {})
+        menuBar.add(createMenuButton("Open") { button ->
+            button.fire(ActorTabViewController.OpenPrefabEvent())
         })
-        menuBar.add(createMenuButton("Save").apply {
-            onChanged {
-                // TODO: reimplement
-//                fire(SaveActorPrefabEvent())
-            }
-        })
-        menuBar.add(createMenuButton("Save As"))
+        menuBar.add(createMenuButton("Save") {})
+        menuBar.add(createMenuButton("Save As") {})
 
         mainView.add(componentBrowserElement.create())
             .top()
@@ -51,9 +45,12 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         return mainView
     }
 
-    private fun createMenuButton(text: String): TextButton {
+    private fun createMenuButton(text: String, action: (TextButton) -> Unit): TextButton {
         return TextButton(text, skin).apply {
             pad(5f)
+            onChanged {
+                action.invoke(this)
+            }
         }
     }
 

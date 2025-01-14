@@ -20,7 +20,7 @@ class SceneTabView(skin: Skin, assets: Assets) : UIElement(skin) {
 
     override fun create(): Actor {
         menuBar.background = skin.getDrawable("bg")
-        // TODO: use same pattern in ActorTabView
+
         menuBar.add(createMenuButton("New") {})
         menuBar.add(createMenuButton("Open") {})
         menuBar.add(createMenuButton("Save") {})
@@ -48,11 +48,11 @@ class SceneTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         return mainView
     }
 
-    private fun createMenuButton(text: String, action: () -> Unit): TextButton {
+    private fun createMenuButton(text: String, action: (TextButton) -> Unit): TextButton {
         return TextButton(text, skin).apply {
             pad(5f)
             onChanged {
-                action.invoke()
+                action.invoke(this)
             }
         }
     }
