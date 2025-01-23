@@ -58,7 +58,7 @@ class ActorTabView(skin: Skin, assets: Assets) : UIElement(skin) {
         componentBrowserElement.update(components)
     }
 
-    fun updateComponentInspector(component: Component) {
-        componentInspectorElement.update(component)
+    fun updateComponentInspector(selectedComponent: Component) {
+        componentInspectorElement.update(selectedComponent)
     }
 }

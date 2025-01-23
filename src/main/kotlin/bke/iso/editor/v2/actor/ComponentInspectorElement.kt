@@ -68,9 +68,9 @@ class ComponentInspectorElement(
         })
     }
 
-    fun update(component: Component) {
+    fun update(selectedComponent: Component) {
         editorTable.clearChildren()
-        generateControls(component)
+        generateControls(selectedComponent)
     }
 
     private fun generateControls(component: Component) {
