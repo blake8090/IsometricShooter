@@ -25,13 +25,14 @@ class EditorState(override val engine: Engine) : State() {
             engine.events,
             engine.input,
             engine.dialogs,
-            engine.serializer
+            engine.serializer,
+            editorScreen2.actorTabView
         )
     private val sceneTabViewController =
         SceneTabViewController(
-            editorScreen2.skin,
             engine.assets,
-            engine.renderer
+            engine.renderer,
+            editorScreen2.sceneTabView
         )
 
     override val modules: Set<Module> = mutableSetOf<Module>().apply {
@@ -47,9 +48,6 @@ class EditorState(override val engine: Engine) : State() {
     private val commands = ArrayDeque<EditorCommand>()
 
     init {
-        editorScreen2.actorTabView = actorTabViewController.view
-        editorScreen2.sceneTabView = sceneTabViewController.view
-
         editorScreen2.editorEventListener = EventListener { event ->
             if (event is EditorEvent) {
                 handleEditorEvent(event)

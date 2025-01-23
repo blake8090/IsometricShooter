@@ -39,13 +39,13 @@ class ActorTabViewController(
     private val events: Events,
     private val input: Input,
     private val dialogs: Dialogs,
-    private val serializer: Serializer
-) : EditorViewController<ActorTabView>() {
+    private val serializer: Serializer,
+    view: ActorTabView
+) : EditorViewController<ActorTabView>(view) {
 
     private val log = KotlinLogging.logger { }
 
     override val modules: Set<Module> = emptySet()
-    override val view: ActorTabView = ActorTabView(skin, assets)
 
     private val world = World(events)
     private val renderer = Renderer(world, assets, events)

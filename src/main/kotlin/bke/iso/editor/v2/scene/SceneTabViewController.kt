@@ -8,19 +8,17 @@ import bke.iso.engine.core.Module
 import bke.iso.engine.render.Renderer
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class SceneTabViewController(
-    skin: Skin,
     private val assets: Assets,
     private val renderer: Renderer,
-) : EditorViewController<SceneTabView>() {
+    view: SceneTabView,
+) : EditorViewController<SceneTabView>(view) {
 
     private val log = KotlinLogging.logger { }
 
     override val modules: Set<Module> = emptySet()
-    override val view: SceneTabView = SceneTabView(skin, assets)
 
     private var gridWidth = 20
     private var gridLength = 20

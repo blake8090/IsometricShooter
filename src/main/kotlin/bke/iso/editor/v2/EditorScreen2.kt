@@ -34,8 +34,8 @@ class EditorScreen2(assets: Assets) : UIScreen(assets) {
     private val log = KotlinLogging.logger { }
 
     private val root = Table().top()
-    lateinit var actorTabView: ActorTabView
-    lateinit var sceneTabView: SceneTabView
+    val actorTabView = ActorTabView(skin, assets)
+    val sceneTabView = SceneTabView(skin, assets)
 
 //    private val contextMenuView = ContextMenuView(skin, assets)
 //    private var contextMenuActor: Actor? = null
