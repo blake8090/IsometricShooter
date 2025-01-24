@@ -1,5 +1,6 @@
 package bke.iso.editor.v3.scene
 
+import bke.iso.editor.v3.scene.tool.ToolLogic
 import bke.iso.editor.v3.scene.world.WorldLogic
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -43,10 +44,20 @@ class SceneTabViewController(
             engine.serializer
         )
 
+    private val toolLogic =
+        ToolLogic(
+            this,
+            engine.input,
+            engine.collisions,
+            engine.renderer,
+            engine.events
+        )
+
     override fun start() {
         log.debug { "Starting SceneTabViewController" }
 
         cameraLogic.start()
+        toolLogic.start()
 
         val assetList = mutableListOf<Any>()
         assetList.addAll(engine.assets.getAll<TilePrefab>())
@@ -67,6 +78,7 @@ class SceneTabViewController(
 
     override fun update(deltaTime: Float) {
         cameraLogic.update()
+        toolLogic.update()
         drawGrid()
     }
 
@@ -114,5 +126,7 @@ class SceneTabViewController(
                 worldLogic.loadScene()
             }
         }
+
+        toolLogic.handleEvent(event)
     }
 }
