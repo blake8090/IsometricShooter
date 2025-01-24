@@ -10,6 +10,7 @@ import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.v2.UIView
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.List
@@ -36,11 +37,11 @@ class EditorView(
 
     private val log = KotlinLogging.logger { }
 
-    var activeTab: Tab = Tab.ACTOR
+    var activeTab: Tab = Tab.NONE
         private set
 
-    private val sceneTabView = SceneTabView(skin, assets)
-    private val actorTabView = ActorTabView(skin, assets)
+    val sceneTabView = SceneTabView(skin, assets)
+    val actorTabView = ActorTabView(skin, assets)
 
     override fun create() {
         setup()
@@ -69,6 +70,8 @@ class EditorView(
         mainViewStack.add(sceneTabView.mainView)
         mainViewStack.add(actorTabView.mainView)
         root.add(mainViewStack).grow()
+
+        selectTab(Tab.SCENE)
 
 //        editorEventListener?.let(root::addListener)
 
@@ -200,7 +203,7 @@ class EditorView(
             actorTabView.menuBar.isVisible = false
             actorTabView.mainView.isVisible = false
 
-//            root.fire(EditorState.SelectTabEvent(Tab.SCENE))
+            root.fire(OnSelectTab(Tab.SCENE))
         } else if (tab == Tab.ACTOR) {
             sceneTabView.menuBar.isVisible = false
             sceneTabView.mainView.isVisible = false
@@ -208,7 +211,9 @@ class EditorView(
             actorTabView.menuBar.isVisible = true
             actorTabView.mainView.isVisible = true
 
-//            root.fire(EditorState.SelectTabEvent(Tab.ACTOR))
+            root.fire(OnSelectTab(Tab.ACTOR))
         }
     }
+
+    data class OnSelectTab(val tab: Tab) : Event()
 }

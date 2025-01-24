@@ -32,6 +32,7 @@ class UI(private val input: Input) : EngineModule() {
 
         input.addInputProcessor(layer.stage)
         input.addControllerListener(layer.controllerNavigation)
+        layer.start()
         layer.create()
 
         if (input.isUsingController()) {

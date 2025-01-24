@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Event as GdxEvent
 
 abstract class UIViewController<T : UIView>(val view: T) {
 
+    var enabled = true
+
     open fun start() {}
 
     open fun stop() {}

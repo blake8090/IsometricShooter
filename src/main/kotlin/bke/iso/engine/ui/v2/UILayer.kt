@@ -20,7 +20,17 @@ abstract class UILayer(protected val engine: Engine) {
 
     abstract fun create()
 
+    fun start() {
+        for (controller in controllers) {
+            controller.start()
+        }
+    }
+
     fun draw(deltaTime: Float) {
+        controllers
+            .filter(UIViewController<*>::enabled)
+            .forEach { controller -> controller.update(deltaTime) }
+
         stage.act(deltaTime)
         stage.viewport.apply()
         stage.draw()
@@ -31,6 +41,10 @@ abstract class UILayer(protected val engine: Engine) {
     }
 
     fun dispose() {
+        for (controller in controllers) {
+            controller.stop()
+        }
+
         stage.dispose()
         skin.dispose()
     }
@@ -50,6 +64,7 @@ abstract class UILayer(protected val engine: Engine) {
 
     private fun handleEvent(event: GdxEvent) {
         for (controller in controllers) {
+            // TODO: Use intermediary class to filter these events!
             controller.handleEvent(event)
         }
     }
