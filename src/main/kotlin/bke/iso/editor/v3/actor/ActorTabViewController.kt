@@ -3,6 +3,9 @@ package bke.iso.editor.v3.actor
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
 import bke.iso.editor.v3.EditorLayer
+import bke.iso.editor.v3.EditorState3
+import bke.iso.editor.v3.actor.command.UpdateComponentPropertyCommand
+import bke.iso.editor.v3.actor.command.UpdateVector3Command
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -161,6 +164,27 @@ class ActorTabViewController(
             is ActorTabView.OnOpenClicked -> {
                 openPrefab()
             }
+
+            is ComponentInspectorView.OnVector3Changed -> {
+                events.fire(
+                    EditorState3.OnExecuteCommand(
+                        UpdateVector3Command(
+                            event.vector3,
+                            event.x,
+                            event.y,
+                            event.z
+                        )
+                    )
+                )
+            }
+
+            is ComponentInspectorView.OnComponentPropertyChanged -> {
+                events.fire(
+                    EditorState3.OnExecuteCommand(
+                        UpdateComponentPropertyCommand(event.component, event.memberProperty, event.value)
+                    )
+                )
+            }
         }
     }
 
@@ -172,17 +196,6 @@ class ActorTabViewController(
         refresh()
 
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
-    }
-
-    private fun loadPrefab(prefab: ActorPrefab) {
-        selectedPrefab = prefab
-
-        referenceActor.components.clear()
-        selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
-            referenceActor.add(sprite)
-        }
-
-        view.updateComponentBrowser(selectedPrefab.components)
     }
 
     private fun deleteComponent(index: Int) {

@@ -1,11 +1,6 @@
 package bke.iso.editor.v3.actor
 
 import bke.iso.editor.actor.ui.onChanged
-import bke.iso.editor.v2.actor.UpdateComponentPropertyCommand
-import bke.iso.editor.v2.actor.UpdateVectorXCommand
-import bke.iso.editor.v2.actor.UpdateVectorYCommand
-import bke.iso.editor.v2.actor.UpdateVectorZCommand
-import bke.iso.editor.v2.core.EditorCommand
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.newTintedDrawable
 import bke.iso.engine.ui.v2.UIView
@@ -14,13 +9,13 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Value
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.reflect.KMutableProperty
@@ -94,7 +89,12 @@ class ComponentInspectorView(
         editorTable.add(
             TextField(currentValue, skin).apply {
                 onChanged {
-                    updateComponentProperty(this, component, memberProperty, text.toFloatOrNull() ?: 0f)
+                    updateComponentProperty(
+                        actor = this,
+                        component = component,
+                        memberProperty = memberProperty,
+                        value = text.toFloatOrNull() ?: 0f
+                    )
                 }
             })
             .growX()
@@ -110,7 +110,12 @@ class ComponentInspectorView(
         editorTable.add(
             TextField(currentValue, skin).apply {
                 onChanged {
-                    updateComponentProperty(this, component, memberProperty, text.toIntOrNull() ?: 0f)
+                    updateComponentProperty(
+                        actor = this,
+                        component = component,
+                        memberProperty = memberProperty,
+                        value = text.toIntOrNull() ?: 0f
+                    )
                 }
             })
             .growX()
@@ -124,7 +129,12 @@ class ComponentInspectorView(
             ImageButton(skin, "actorInspectorView").apply {
                 isChecked = memberProperty.getter.call(component) as Boolean == true
                 onChanged {
-                    updateComponentProperty(this, component, memberProperty, isChecked)
+                    updateComponentProperty(
+                        actor = this,
+                        component = component,
+                        memberProperty = memberProperty,
+                        value = isChecked
+                    )
                 }
             })
             .expandX()
@@ -146,7 +156,12 @@ class ComponentInspectorView(
 
                 onChanged {
                     if (memberProperty is KMutableProperty<*> && validateNewValue(memberProperty, text)) {
-                        updateComponentProperty(this, component, memberProperty, text)
+                        updateComponentProperty(
+                            actor = this,
+                            component = component,
+                            memberProperty = memberProperty,
+                            value = text
+                        )
                     }
                 }
             })
@@ -174,7 +189,7 @@ class ComponentInspectorView(
         editorTable.add(
             TextField(vector.x.toString(), skin).apply {
                 onChanged {
-                    fireCommand(this, UpdateVectorXCommand(vector, text.toFloatOrNull() ?: 0f))
+                    fire(OnVector3Changed(vector, x = text.toFloatOrNull() ?: 0f))
                 }
             })
             .growX()
@@ -187,7 +202,7 @@ class ComponentInspectorView(
         editorTable.add(
             TextField(vector.y.toString(), skin).apply {
                 onChanged {
-                    fireCommand(this, UpdateVectorYCommand(vector, text.toFloatOrNull() ?: 0f))
+                    fire(OnVector3Changed(vector, y = text.toFloatOrNull() ?: 0f))
                 }
             })
             .growX()
@@ -200,7 +215,7 @@ class ComponentInspectorView(
         editorTable.add(
             TextField(vector.z.toString(), skin).apply {
                 onChanged {
-                    fireCommand(this, UpdateVectorZCommand(vector, text.toFloatOrNull() ?: 0f))
+                    fire(OnVector3Changed(vector, z = text.toFloatOrNull() ?: 0f))
                 }
             })
             .growX()
@@ -213,20 +228,20 @@ class ComponentInspectorView(
         value: Any
     ) {
         if (memberProperty is KMutableProperty<*>) {
-            fireCommand(actor, UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value))
+            actor.fire(OnComponentPropertyChanged(component, memberProperty as KMutableProperty1, value))
         }
     }
 
-    private fun fireCommand(actor: Actor, command: EditorCommand) {
-//        actor.fire(EditorState.ExecuteCommandEvent(command))
-    }
-}
+    data class OnVector3Changed(
+        val vector3: Vector3,
+        val x: Float = vector3.x,
+        val y: Float = vector3.y,
+        val z: Float = vector3.z
+    ) : Event()
 
-// TODO: Move to util
-private fun <T : Actor> T.onChanged(action: T.() -> Unit) {
-    addListener(object : ChangeListener() {
-        override fun changed(event: ChangeEvent, actor: Actor) {
-            action.invoke(this@onChanged)
-        }
-    })
+    data class OnComponentPropertyChanged(
+        val component: Component,
+        val memberProperty: KMutableProperty1<out Component, *>,
+        val value: Any
+    ) : Event()
 }
