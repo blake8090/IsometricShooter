@@ -13,7 +13,7 @@ class SceneTabView(private val skin: Skin, assets: Assets) : UIView() {
     val menuBar: Table = Table().left()
     val mainView: Table = Table()
 
-    private val assetBrowserElement = AssetBrowserView(skin, assets)
+    val assetBrowserView = AssetBrowserView(skin, assets)
     private val toolbarView = ToolbarView(skin, assets)
     private val sceneInspectorView = SceneInspectorView(skin)
 
@@ -27,12 +27,12 @@ class SceneTabView(private val skin: Skin, assets: Assets) : UIView() {
         menuBar.add(createMenuButton("View") {})
         menuBar.add(createMenuButton("Buildings") {})
 
-        assetBrowserElement.create()
-        mainView.add(assetBrowserElement.root)
+        assetBrowserView.create()
+        mainView.add(assetBrowserView.root)
             .top()
             .left()
             .growY()
-            .minWidth(Value.percentWidth(0.1f, mainView))
+            .minWidth(Value.percentWidth(0.125f, mainView))
 
         toolbarView.create()
         mainView.add(toolbarView.root)

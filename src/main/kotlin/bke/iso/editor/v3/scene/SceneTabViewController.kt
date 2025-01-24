@@ -51,7 +51,7 @@ class SceneTabViewController(
         val assetList = mutableListOf<Any>()
         assetList.addAll(assets.getAll<TilePrefab>())
         assetList.addAll(assets.getAll<ActorPrefab>())
-//        view.updateAssetBrowser(assetList)
+        view.assetBrowserView.refresh(assetList)
     }
 
     override fun stop() {

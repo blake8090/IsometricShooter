@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
@@ -36,10 +37,15 @@ class AssetBrowserView(
             .left()
 
         root.row()
-        root.add(content).grow()
+
+        val scrollPane = ScrollPane(content, skin)
+        scrollPane.setScrollbarsVisible(true)
+        scrollPane.fadeScrollBars = false
+
+        root.add(scrollPane).grow()
     }
 
-    fun update(assetList: List<Any>) {
+    fun refresh(assetList: List<Any>) {
         content.clearChildren()
         for (asset in assetList) {
             if (asset is TilePrefab) {

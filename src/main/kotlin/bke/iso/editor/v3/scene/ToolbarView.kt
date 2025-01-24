@@ -8,6 +8,7 @@ import bke.iso.engine.ui.v2.UIView
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -35,41 +36,41 @@ class ToolbarView(
 
         val pointerButton = createButton("pointer.png")
         pointerButton.onChanged {
-//            if (isChecked) {
-//                fire(SelectPointerToolEvent())
-//            }
+            if (isChecked) {
+                fire(OnPointerToolSelected())
+            }
         }
         content.add(pointerButton)
 
         val brushButton = createButton("brush.png")
         brushButton.onChanged {
-//            if (isChecked) {
-//                fire(SelectBrushToolEvent())
-//            }
+            if (isChecked) {
+                fire(OnBrushToolSelected())
+            }
         }
         content.add(brushButton)
 
         val eraserButton = createButton("eraser.png")
         eraserButton.onChanged {
-//            if (isChecked) {
-//                fire(SelectEraserToolEvent())
-//            }
+            if (isChecked) {
+                fire(OnEraserToolSelected())
+            }
         }
         content.add(eraserButton)
 
         val roomButton = createButton("icon-room.png")
         roomButton.onChanged {
-//            if (isChecked) {
-//                fire(SelectRoomToolEvent())
-//            }
+            if (isChecked) {
+                fire(OnRoomToolSelected())
+            }
         }
         content.add(roomButton)
 
         val fillButton = createButton("fill.png")
         fillButton.onChanged {
-//            if (isChecked) {
-//                fire(SelectFillToolEvent())
-//            }
+            if (isChecked) {
+                fire(OnFillToolSelected())
+            }
         }
         content.add(fillButton)
 
@@ -87,7 +88,7 @@ class ToolbarView(
             style.checked = null
 
             onChanged {
-//                fire(DecreaseLayerEvent())
+                fire(OnDecreaseLayerButtonClicked())
             }
         }
         content.add(decreaseLayerButton).space(10f)
@@ -97,26 +98,26 @@ class ToolbarView(
             style.checked = null
 
             onChanged {
-//                fire(IncreaseLayerEvent())
+                fire(OnIncreaseLayerButtonClicked())
             }
         }
         content.add(increaseLayerButton).space(10f)
 
         val hideUpperLayersButton = createButton("hide-layers.png")
         hideUpperLayersButton.onChanged {
-//            fire(ToggleUpperLayersHiddenEvent())
+            fire(OnToggleHideUpperLayersButtonClicked())
         }
         content.add(hideUpperLayersButton).space(10f)
 
         val hideWallsButton = createButton("hide-walls.png")
         hideWallsButton.onChanged {
-//            fire(ToggleHideWallsEvent())
+            fire(OnToggleHideWallsButtonClicked())
         }
         content.add(hideWallsButton).space(10f)
 
         val highlightLayerButton = createButton("highlight-layer.png")
         highlightLayerButton.onChanged {
-//            fire(ToggleHighlightLayerEvent())
+            fire(OnToggleHighlightLayersButtonClicked())
         }
         content.add(highlightLayerButton)
 
@@ -156,4 +157,24 @@ class ToolbarView(
         val texture = assets.get<Texture>(textureName)
         return TextureRegionDrawable(TextureRegion(texture))
     }
+
+    class OnPointerToolSelected : Event()
+
+    class OnBrushToolSelected : Event()
+
+    class OnEraserToolSelected : Event()
+
+    class OnRoomToolSelected : Event()
+
+    class OnFillToolSelected : Event()
+
+    class OnDecreaseLayerButtonClicked : Event()
+
+    class OnIncreaseLayerButtonClicked : Event()
+
+    class OnToggleHideUpperLayersButtonClicked : Event()
+
+    class OnToggleHideWallsButtonClicked : Event()
+
+    class OnToggleHighlightLayersButtonClicked : Event()
 }

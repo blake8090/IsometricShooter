@@ -32,8 +32,8 @@ class UI(private val input: Input) : EngineModule() {
 
         input.addInputProcessor(layer.stage)
         input.addControllerListener(layer.controllerNavigation)
+        layer.create() // create() is called before start() to ensure everything is set up first, especially skins
         layer.start()
-        layer.create()
 
         if (input.isUsingController()) {
             layer.controllerNavigation.start()
