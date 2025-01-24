@@ -3,6 +3,7 @@ package bke.iso.editor.v3.scene
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.v2.UIView
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -21,7 +22,9 @@ class SceneTabView(private val skin: Skin, assets: Assets) : UIView() {
         menuBar.background = skin.getDrawable("bg")
 
         menuBar.add(createMenuButton("New") {})
-        menuBar.add(createMenuButton("Open") {})
+        menuBar.add(createMenuButton("Open") { button ->
+            button.fire(OnOpenMenuButtonClicked())
+        })
         menuBar.add(createMenuButton("Save") {})
         menuBar.add(createMenuButton("Save As") {})
         menuBar.add(createMenuButton("View") {})
@@ -56,4 +59,6 @@ class SceneTabView(private val skin: Skin, assets: Assets) : UIView() {
             }
         }
     }
+
+    class OnOpenMenuButtonClicked : Event()
 }
