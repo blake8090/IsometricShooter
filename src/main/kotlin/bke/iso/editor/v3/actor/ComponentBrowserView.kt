@@ -80,7 +80,7 @@ class ComponentBrowserView(private val skin: Skin) : UIView() {
             label.setAlignment(Align.left)
             onChanged {
                 if (isChecked) {
-                    fire(OnSelectComponent(component))
+                    fire(OnComponentSelected(component))
                 }
             }
         }
@@ -92,5 +92,5 @@ class ComponentBrowserView(private val skin: Skin) : UIView() {
 
     class OnDeleteButtonClicked : Event()
 
-    class OnSelectComponent(val component: Component) : Event()
+    class OnComponentSelected(val component: Component) : Event()
 }

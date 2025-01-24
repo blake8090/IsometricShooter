@@ -49,7 +49,7 @@ abstract class UILayer(protected val engine: Engine) {
         skin.dispose()
     }
 
-    fun handleEvent(event: Event) {
+    open fun handleEvent(event: Event) {
         for (controller in controllers) {
             controller.handleEvent(event)
         }

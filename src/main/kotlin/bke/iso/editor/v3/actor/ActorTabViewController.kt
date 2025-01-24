@@ -2,6 +2,7 @@ package bke.iso.editor.v3.actor
 
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
+import bke.iso.editor.v3.EditorLayer
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -18,18 +19,24 @@ import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.ui.v2.UIViewController
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.Serializable
+import org.reflections.Reflections
 import kotlin.math.sign
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.hasAnnotation
 import com.badlogic.gdx.Input as GdxInput
 import com.badlogic.gdx.scenes.scene2d.Event as GdxEvent
 
 class ActorTabViewController(
     view: ActorTabView,
     assets: Assets,
-    events: Events,
+    private val events: Events,
     private val input: Input,
     private val rendererManager: RendererManager,
     private val dialogs: Dialogs,
@@ -139,14 +146,14 @@ class ActorTabViewController(
     override fun handleEvent(event: GdxEvent) {
         when (event) {
             is ComponentBrowserView.OnAddButtonClicked -> {
-                log.debug { "adding component" }
+                openSelectNewComponentDialog()
             }
 
             is ComponentBrowserView.OnDeleteButtonClicked -> {
                 deleteComponent(view.componentBrowserView.getCheckedIndex())
             }
 
-            is ComponentBrowserView.OnSelectComponent -> {
+            is ComponentBrowserView.OnComponentSelected -> {
                 log.debug { "selected component ${event.component::class.simpleName}" }
                 view.updateComponentInspector(event.component)
             }
@@ -159,8 +166,11 @@ class ActorTabViewController(
 
     private fun openPrefab() {
         val file = dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
+
         val prefab = serializer.read<ActorPrefab>(file.readText())
-        loadPrefab(prefab)
+        selectedPrefab = prefab
+        refresh()
+
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
     }
 
@@ -183,7 +193,39 @@ class ActorTabViewController(
 
         val component = selectedPrefab.components[index]
         selectedPrefab.components.removeAt(index)
+
+        refresh()
         log.debug { "Deleted component ${component::class.simpleName}" }
+    }
+
+    private fun openSelectNewComponentDialog() {
+        val componentTypes = Reflections("bke.iso")
+            .getSubTypesOf(Component::class.java)
+            .map(Class<out Component>::kotlin)
+            .filter { kClass -> kClass.hasAnnotation<Serializable>() }
+
+        events.fire(
+            EditorLayer.OnOpenSelectNewComponentDialog(componentTypes) { selectedType ->
+                log.debug { "User selected component type ${selectedType.simpleName}" }
+                // TODO: this should be a command
+                addNewComponent(selectedType)
+            }
+        )
+    }
+
+    private fun <T : KClass<out Component>> addNewComponent(type: T) {
+        val component = type.createInstance()
+        selectedPrefab.components.add(component)
+        refresh()
+        log.debug { "Added component type '${type.simpleName}' to prefab" }
+    }
+
+    private fun refresh() {
+        referenceActor.components.clear()
+
+        selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
+            referenceActor.add(sprite)
+        }
         view.updateComponentBrowser(selectedPrefab.components)
     }
 
