@@ -8,6 +8,7 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.render.RendererManager
 import bke.iso.engine.ui.v2.UIViewController
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -23,7 +24,8 @@ class ActorTabViewController(
     view: ActorTabView,
     assets: Assets,
     events: Events,
-    private val input: bke.iso.engine.input.Input
+    private val input: bke.iso.engine.input.Input,
+    private val rendererManager: RendererManager
 ) : UIViewController<ActorTabView>(view) {
 
     private val log = KotlinLogging.logger { }
@@ -120,5 +122,9 @@ class ActorTabViewController(
 
     override fun handleEvent(event: GdxEvent) {
 //        log.debug { "handling event ${event::class.simpleName}" }
+    }
+
+    override fun enabled() {
+        rendererManager.setActiveRenderer(renderer)
     }
 }

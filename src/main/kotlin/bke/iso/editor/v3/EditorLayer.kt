@@ -15,10 +15,23 @@ class EditorLayer(engine: Engine) : UILayer(engine) {
             editorView.actorTabView,
             engine.assets,
             engine.events,
+            engine.input,
+            engine.rendererManager
+        )
+    private val sceneTabViewController =
+        SceneTabViewController(
+            editorView.sceneTabView,
+            engine.assets,
+            engine.renderer,
+            engine.rendererManager,
             engine.input
         )
-    private val sceneTabViewController = SceneTabViewController(editorView.sceneTabView)
-    private val editorViewController = EditorViewController(editorView, sceneTabViewController, actorTabViewController)
+    private val editorViewController =
+        EditorViewController(
+            editorView,
+            sceneTabViewController,
+            actorTabViewController
+        )
 
     override val controllers: Set<UIViewController<*>> =
         setOf(actorTabViewController, sceneTabViewController, editorViewController)
