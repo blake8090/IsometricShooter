@@ -1,5 +1,6 @@
 package bke.iso.editor.v3.scene
 
+import bke.iso.editor.v3.scene.world.WorldLogic
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
@@ -31,6 +32,15 @@ class SceneTabViewController(
             engine.input,
             engine.world,
             engine.renderer
+        )
+
+    private val worldLogic =
+        WorldLogic(
+            engine.world,
+            engine.assets,
+            engine.events,
+            engine.dialogs,
+            engine.serializer
         )
 
     override fun start() {
@@ -100,6 +110,9 @@ class SceneTabViewController(
                 view.toolbarView.refreshLayerLabel(selectedLayer)
             }
 
+            is SceneTabView.OnOpenMenuButtonClicked -> {
+                worldLogic.loadScene()
+            }
         }
     }
 }
