@@ -9,7 +9,7 @@ class UI(private val input: Input) : EngineModule() {
 
     private val log = KotlinLogging.logger {}
 
-    override val moduleName = "ui"
+    override val moduleName = "ui2"
     override val updateWhileLoading = true
     override val profilingEnabled = true
 

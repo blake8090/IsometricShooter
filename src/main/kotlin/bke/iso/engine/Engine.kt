@@ -45,6 +45,7 @@ class Engine(val game: Game) {
     val events: Events = Events(::handleEvent)
     val input: Input = Input(events)
     val ui: UI = UI(input)
+    val ui2: bke.iso.engine.ui.v2.UI = bke.iso.engine.ui.v2.UI(input)
 
     val serializer = Serializer()
     val assets: Assets = Assets(files, systemInfo)
@@ -68,6 +69,7 @@ class Engine(val game: Game) {
         world,
         rendererManager,
         ui,
+        ui2,
         loadingScreens
     )
 
@@ -111,6 +113,7 @@ class Engine(val game: Game) {
         updateModule(world, deltaTime)
         updateModule(rendererManager, deltaTime)
         updateModule(ui, deltaTime)
+        updateModule(ui2, deltaTime)
         profiler.update(deltaTime)
 
         if (!loadingScreens.isLoading()) {
@@ -140,6 +143,7 @@ class Engine(val game: Game) {
         log.info { "Resizing to ${width}x$height" }
         rendererManager.resize(width, height)
         ui.resize(width, height)
+        ui2.resize(width, height)
     }
 
     fun stop() {

@@ -1,13 +1,13 @@
 package bke.iso.game.ui
 
-import bke.iso.engine.core.Events
-import bke.iso.engine.asset.Assets
+import bke.iso.engine.Engine
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
-import bke.iso.engine.ui.UIScreen
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.util.onEnter
 import bke.iso.engine.ui.util.onExit
+import bke.iso.engine.ui.v2.UILayer
+import bke.iso.engine.ui.v2.UIViewController
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -16,10 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 
-class MainMenuScreen(
-    assets: Assets,
-    private val events: Events
-) : UIScreen(assets) {
+class MainMenuLayer(engine: Engine) : UILayer(engine) {
+    override val controllers: Set<UIViewController<*>> = emptySet()
 
     override fun create() {
         setup()
@@ -38,7 +36,7 @@ class MainMenuScreen(
         stackTable.row()
         val startButton = TextButton("START", skin).apply {
             onChanged {
-                events.fire(MainMenuState.OnStartGame())
+                engine.events.fire(MainMenuState.OnStartGame())
             }
 
             onEnter { button ->
@@ -56,7 +54,7 @@ class MainMenuScreen(
         stackTable.row()
         val editorButton = TextButton("EDITOR", skin).apply {
             onChanged {
-                events.fire(MainMenuState.OnStartEditor())
+                engine.events.fire(MainMenuState.OnStartEditor())
             }
 
             onEnter { button ->
@@ -94,8 +92,8 @@ class MainMenuScreen(
     private fun setup() {
         skin.add("pixel", makePixelTexture())
 
-        skin.add("title", assets.fonts[FontOptions("TitilliumWeb-SemiBold.ttf", 30f, Color.WHITE)])
-        skin.add("button", assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)])
+        skin.add("title", engine.assets.fonts[FontOptions("TitilliumWeb-SemiBold.ttf", 30f, Color.WHITE)])
+        skin.add("button", engine.assets.fonts[FontOptions("roboto.ttf", 20f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("title")
