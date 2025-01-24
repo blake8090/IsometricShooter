@@ -5,11 +5,16 @@ import bke.iso.editor.scene.camera.MouseScrollAdapter
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.collision.Collider
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
+import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.RendererManager
+import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.v2.UIViewController
+import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -22,7 +27,8 @@ class SceneTabViewController(
     private val assets: Assets,
     private val renderer: Renderer,
     private val rendererManager: RendererManager,
-    private val input: Input
+    private val input: Input,
+    world: World
 ) : UIViewController<SceneTabView>(view) {
 
     private val log = KotlinLogging.logger { }
@@ -38,15 +44,29 @@ class SceneTabViewController(
     private val mouseDragAdapter = MouseDragAdapter(GdxInput.Buttons.MIDDLE)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
+    private val cameraActor =
+        world.actors.create(
+            Vector3(),
+            Sprite(
+                texture = "camera.png",
+                offsetX = 12f,
+                offsetY = 8f
+            ),
+            Collider(
+                size = Vector3(0.5f, 0.5f, 1f),
+                offset = Vector3(-0.25f, -0.25f, 0f),
+            )
+        )
+
     override fun start() {
         log.debug { "Starting SceneTabViewController" }
 
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
-        with(input.keyMouse) {
-            bindKey("sceneTabResetZoom", GdxInput.Keys.Q, ButtonState.PRESSED)
-            bindKey("sceneTabResetCamera", GdxInput.Keys.R, ButtonState.PRESSED)
-        }
+
+        input.keyMouse.bindKey("sceneTabResetZoom", GdxInput.Keys.Q, ButtonState.PRESSED)
+        input.keyMouse.bindKey("sceneTabResetCamera", GdxInput.Keys.R, ButtonState.PRESSED)
+        input.keyMouse.bindKey("sceneTabCameraMoveCamera", GdxInput.Keys.C, ButtonState.PRESSED)
 
         val assetList = mutableListOf<Any>()
         assetList.addAll(assets.getAll<TilePrefab>())
@@ -67,8 +87,16 @@ class SceneTabViewController(
             renderer.setCameraPos(Vector3())
         }
 
+        input.onAction("sceneTabCameraMoveCamera") {
+            moveCameraActor()
+        }
+
         mouseScrollAdapter.onScroll { _, y ->
             renderer.zoomCamera(cameraZoomIncrements * y.sign)
+        }
+
+        cameraActor.getCollisionBox()?.let { box ->
+            renderer.fgShapes.addBox(box, 1f, Color.CYAN)
         }
 
         panCamera()
@@ -114,6 +142,17 @@ class SceneTabViewController(
             delta.y * cameraPanScale.y
         )
         renderer.moveCamera(cameraDelta)
+    }
+
+    private fun moveCameraActor() {
+        var z = selectedLayer
+        // apply a small offset so that the camera always appears above actors on the same z level
+        if (z >= 0f) {
+            z += 0.01f
+        }
+
+        val pos = toWorld(renderer.pointer.pos, z)
+        cameraActor.moveTo(pos.x, pos.y, pos.z)
     }
 
     override fun enabled() {

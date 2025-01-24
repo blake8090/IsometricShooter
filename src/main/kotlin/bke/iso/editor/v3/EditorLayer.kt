@@ -30,7 +30,8 @@ class EditorLayer(engine: Engine) : UILayer(engine) {
             engine.assets,
             engine.renderer,
             engine.rendererManager,
-            engine.input
+            engine.input,
+            engine.world
         )
     private val editorViewController =
         EditorViewController(
