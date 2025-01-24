@@ -2,10 +2,12 @@ package bke.iso.editor.v3
 
 import bke.iso.editor.ui.color
 import bke.iso.editor.v3.actor.ActorTabView
+import bke.iso.editor.v3.scene.SceneTabView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.util.newTintedDrawable
+import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.v2.UIView
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -19,24 +21,37 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import com.badlogic.gdx.scenes.scene2d.ui.Window
+import io.github.oshai.kotlinlogging.KotlinLogging
+
+enum class Tab {
+    SCENE,
+    ACTOR,
+    NONE
+}
 
 class EditorView(
     private val skin: Skin,
     private val assets: Assets
 ) : UIView() {
 
+    private val log = KotlinLogging.logger { }
+
+    var activeTab: Tab = Tab.ACTOR
+        private set
+
+    private val sceneTabView = SceneTabView(skin, assets)
     private val actorTabView = ActorTabView(skin, assets)
 
     override fun create() {
         setup()
 
-//        sceneTabView.create()
+        sceneTabView.create()
         actorTabView.create()
 
         root.setFillParent(true)
 
         val menuBarStack = Stack()
-//        menuBarStack.add(sceneTabView.menuBar)
+        menuBarStack.add(sceneTabView.menuBar)
         menuBarStack.add(actorTabView.menuBar)
         root.add(menuBarStack)
             .growX()
@@ -51,7 +66,7 @@ class EditorView(
         root.row()
 
         val mainViewStack = Stack()
-//        mainViewStack.add(sceneTabView.mainView)
+        mainViewStack.add(sceneTabView.mainView)
         mainViewStack.add(actorTabView.mainView)
         root.add(mainViewStack).grow()
 
@@ -142,18 +157,18 @@ class EditorView(
         tabs.background = skin.getDrawable("bg")
 
         val sceneButton = createButton("Scene")
-//        sceneButton.onChanged {
-//            if (sceneButton.isChecked) {
-//                selectTab(Tab.SCENE)
-//            }
-//        }
+        sceneButton.onChanged {
+            if (sceneButton.isChecked) {
+                selectTab(Tab.SCENE)
+            }
+        }
 
         val actorButton = createButton("Actor")
-//        actorButton.onChanged {
-//            if (actorButton.isChecked) {
-//                selectTab(Tab.ACTOR)
-//            }
-//        }
+        actorButton.onChanged {
+            if (actorButton.isChecked) {
+                selectTab(Tab.ACTOR)
+            }
+        }
 
         tabs.add(sceneButton)
         tabs.add(actorButton)
@@ -171,6 +186,29 @@ class EditorView(
             padBottom(vPad)
             padLeft(hPad)
             padRight(hPad)
+        }
+    }
+
+    private fun selectTab(tab: Tab) {
+        log.info { "Selected tab $tab" }
+        activeTab = tab
+
+        if (tab == Tab.SCENE) {
+            sceneTabView.menuBar.isVisible = true
+            sceneTabView.mainView.isVisible = true
+
+            actorTabView.menuBar.isVisible = false
+            actorTabView.mainView.isVisible = false
+
+//            root.fire(EditorState.SelectTabEvent(Tab.SCENE))
+        } else if (tab == Tab.ACTOR) {
+            sceneTabView.menuBar.isVisible = false
+            sceneTabView.mainView.isVisible = false
+
+            actorTabView.menuBar.isVisible = true
+            actorTabView.mainView.isVisible = true
+
+//            root.fire(EditorState.SelectTabEvent(Tab.ACTOR))
         }
     }
 }
