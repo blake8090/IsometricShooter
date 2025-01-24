@@ -14,7 +14,7 @@ class SceneTabView(private val skin: Skin, assets: Assets) : UIView() {
     val mainView: Table = Table()
 
     val assetBrowserView = AssetBrowserView(skin, assets)
-    private val toolbarView = ToolbarView(skin, assets)
+    val toolbarView = ToolbarView(skin, assets)
     private val sceneInspectorView = SceneInspectorView(skin)
 
     override fun create() {

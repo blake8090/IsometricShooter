@@ -158,6 +158,10 @@ class ToolbarView(
         return TextureRegionDrawable(TextureRegion(texture))
     }
 
+    fun refreshLayerLabel(layer: Float) {
+        layerLabel.setText("Layer: $layer")
+    }
+
     class OnPointerToolSelected : Event()
 
     class OnBrushToolSelected : Event()

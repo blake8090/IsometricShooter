@@ -18,6 +18,7 @@ import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.Event
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.sign
 import com.badlogic.gdx.Input as GdxInput
@@ -38,6 +39,8 @@ class SceneTabViewController(
     private var drawGridForeground = false
 
     private var selectedLayer = 0f
+    private var hideUpperLayers = false
+    private var highlightLayer = false
 
     private val mouseScrollAdapter = MouseScrollAdapter()
     private val cameraZoomIncrements = 0.25f
@@ -72,10 +75,18 @@ class SceneTabViewController(
         assetList.addAll(assets.getAll<TilePrefab>())
         assetList.addAll(assets.getAll<ActorPrefab>())
         view.assetBrowserView.refresh(assetList)
+
+        view.toolbarView.refreshLayerLabel(selectedLayer)
     }
 
     override fun stop() {
         log.debug { "Stopping SceneTabViewController" }
+        input.removeInputProcessor(mouseDragAdapter)
+        input.removeInputProcessor(mouseScrollAdapter)
+    }
+
+    override fun enabled() {
+        rendererManager.reset()
     }
 
     override fun update(deltaTime: Float) {
@@ -155,7 +166,17 @@ class SceneTabViewController(
         cameraActor.moveTo(pos.x, pos.y, pos.z)
     }
 
-    override fun enabled() {
-        rendererManager.reset()
+    override fun handleEvent(event: Event) {
+        when (event) {
+            is ToolbarView.OnDecreaseLayerButtonClicked -> {
+                selectedLayer--
+                view.toolbarView.refreshLayerLabel(selectedLayer)
+            }
+
+            is ToolbarView.OnIncreaseLayerButtonClicked -> {
+                selectedLayer++
+                view.toolbarView.refreshLayerLabel(selectedLayer)
+            }
+        }
     }
 }
