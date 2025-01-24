@@ -5,24 +5,24 @@ import bke.iso.editor.scene.camera.MouseScrollAdapter
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
-import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.input.Input
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.RendererManager
 import bke.iso.engine.ui.v2.UIViewController
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.sign
+import com.badlogic.gdx.Input as GdxInput
 
 class SceneTabViewController(
     view: SceneTabView,
     private val assets: Assets,
     private val renderer: Renderer,
     private val rendererManager: RendererManager,
-    private val input: bke.iso.engine.input.Input
+    private val input: Input
 ) : UIViewController<SceneTabView>(view) {
 
     private val log = KotlinLogging.logger { }
@@ -35,7 +35,7 @@ class SceneTabViewController(
 
     private val mouseScrollAdapter = MouseScrollAdapter()
     private val cameraZoomIncrements = 0.25f
-    private val mouseDragAdapter = MouseDragAdapter(Input.Buttons.MIDDLE)
+    private val mouseDragAdapter = MouseDragAdapter(GdxInput.Buttons.MIDDLE)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
     override fun start() {
@@ -44,8 +44,8 @@ class SceneTabViewController(
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
         with(input.keyMouse) {
-            bindKey("sceneTabResetZoom", Input.Keys.Q, ButtonState.PRESSED)
-            bindKey("sceneTabResetCamera", Input.Keys.R, ButtonState.PRESSED)
+            bindKey("sceneTabResetZoom", GdxInput.Keys.Q, ButtonState.PRESSED)
+            bindKey("sceneTabResetCamera", GdxInput.Keys.R, ButtonState.PRESSED)
         }
 
         val assetList = mutableListOf<Any>()
@@ -114,14 +114,6 @@ class SceneTabViewController(
             delta.y * cameraPanScale.y
         )
         renderer.moveCamera(cameraDelta)
-    }
-
-    override fun handleEvent(event: Event) {
-        log.debug { "handling event ${event::class.simpleName}" }
-    }
-
-    override fun handleEvent(event: com.badlogic.gdx.scenes.scene2d.Event) {
-//        log.debug { "handling event ${event::class.simpleName}" }
     }
 
     override fun enabled() {

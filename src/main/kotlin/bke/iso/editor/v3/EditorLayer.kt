@@ -16,7 +16,9 @@ class EditorLayer(engine: Engine) : UILayer(engine) {
             engine.assets,
             engine.events,
             engine.input,
-            engine.rendererManager
+            engine.rendererManager,
+            engine.dialogs,
+            engine.serializer
         )
     private val sceneTabViewController =
         SceneTabViewController(

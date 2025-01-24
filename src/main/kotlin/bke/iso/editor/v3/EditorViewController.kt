@@ -2,7 +2,6 @@ package bke.iso.editor.v3
 
 import bke.iso.editor.v3.actor.ActorTabViewController
 import bke.iso.editor.v3.scene.SceneTabViewController
-import bke.iso.engine.core.Event
 import bke.iso.engine.ui.v2.UIViewController
 import io.github.oshai.kotlinlogging.KotlinLogging
 import com.badlogic.gdx.scenes.scene2d.Event as GdxEvent
@@ -21,13 +20,6 @@ class EditorViewController(
 
     override fun stop() {
         log.debug { "stop" }
-    }
-
-    override fun update(deltaTime: Float) {
-    }
-
-    override fun handleEvent(event: Event) {
-        log.debug { "handling event ${event::class.simpleName}" }
     }
 
     override fun handleEvent(event: GdxEvent) {

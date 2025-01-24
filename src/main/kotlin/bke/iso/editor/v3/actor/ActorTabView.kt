@@ -1,12 +1,12 @@
 package bke.iso.editor.v3.actor
 
 import bke.iso.editor.ui.color
-import bke.iso.editor.v2.actor.ActorTabViewController
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.v2.UIView
 import bke.iso.engine.world.actor.Component
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -18,14 +18,14 @@ class ActorTabView(private val skin: Skin, assets: Assets) : UIView() {
     val mainView: Table = BorderedTable(color(43, 103, 161))
 
     private val componentInspectorView = ComponentInspectorView(skin, assets)
-    private val componentBrowserView = ComponentBrowserView(skin)
+    val componentBrowserView = ComponentBrowserView(skin)
 
     override fun create() {
         menuBar.background = skin.getDrawable("bg")
 
         menuBar.add(createMenuButton("New") {})
         menuBar.add(createMenuButton("Open") { button ->
-            button.fire(ActorTabViewController.OpenPrefabEvent())
+            button.fire(OnOpenClicked())
         })
         menuBar.add(createMenuButton("Save") {})
         menuBar.add(createMenuButton("Save As") {})
@@ -62,4 +62,6 @@ class ActorTabView(private val skin: Skin, assets: Assets) : UIView() {
     fun updateComponentInspector(selectedComponent: Component) {
         componentInspectorView.update(selectedComponent)
     }
+
+    class OnOpenClicked : Event()
 }

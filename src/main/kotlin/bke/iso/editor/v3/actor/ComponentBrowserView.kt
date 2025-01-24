@@ -4,6 +4,7 @@ import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.v2.UIView
 import bke.iso.engine.world.actor.Component
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -42,18 +43,14 @@ class ComponentBrowserView(private val skin: Skin) : UIView() {
     private fun createAddComponentButton(skin: Skin): TextButton =
         TextButton("Add", skin).apply {
             onChanged {
-//                fire(ActorTabViewController.OpenSelectNewComponentDialogEvent())
+                fire(OnAddButtonClicked())
             }
         }
 
     private fun createDeleteComponentButton(skin: Skin): TextButton =
         TextButton("Delete", skin).apply {
             onChanged {
-//                val checkedButton = this@ComponentBrowserElement.buttonGroup.checked
-//                if (checkedButton != null) {
-//                    val index = this@ComponentBrowserElement.buttonGroup.checkedIndex
-//                    fire(ActorTabViewController.DeleteComponentEvent(index))
-//                }
+                fire(OnDeleteButtonClicked())
             }
         }
 
@@ -82,9 +79,18 @@ class ComponentBrowserView(private val skin: Skin) : UIView() {
         TextButton(component::class.simpleName, skin, "checkable").apply {
             label.setAlignment(Align.left)
             onChanged {
-//                if (isChecked) {
-//                    fire(ActorTabViewController.SelectComponentEvent(component))
-//                }
+                if (isChecked) {
+                    fire(OnSelectComponent(component))
+                }
             }
         }
+
+    fun getCheckedIndex() =
+        buttonGroup.checkedIndex
+
+    class OnAddButtonClicked : Event()
+
+    class OnDeleteButtonClicked : Event()
+
+    class OnSelectComponent(val component: Component) : Event()
 }

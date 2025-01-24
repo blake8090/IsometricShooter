@@ -2,13 +2,19 @@ package bke.iso.editor.v3.actor
 
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
+import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
-import bke.iso.engine.core.Event
+import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Events
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.input.Input
+import bke.iso.engine.math.Box
+import bke.iso.engine.os.Dialogs
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.RendererManager
+import bke.iso.engine.render.Sprite
+import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.ui.v2.UIViewController
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -24,8 +30,10 @@ class ActorTabViewController(
     view: ActorTabView,
     assets: Assets,
     events: Events,
-    private val input: bke.iso.engine.input.Input,
-    private val rendererManager: RendererManager
+    private val input: Input,
+    private val rendererManager: RendererManager,
+    private val dialogs: Dialogs,
+    private val serializer: Serializer
 ) : UIViewController<ActorTabView>(view) {
 
     private val log = KotlinLogging.logger { }
@@ -54,6 +62,7 @@ class ActorTabViewController(
             bindKey("actorTabResetCamera", GdxInput.Keys.R, ButtonState.PRESSED)
         }
 
+        selectedPrefab = ActorPrefab("", mutableListOf())
         referenceActor = world.actors.create(Vector3())
     }
 
@@ -76,7 +85,18 @@ class ActorTabViewController(
 
         panCamera()
         drawGrid()
+        drawPrefab()
         drawReferenceActorPos()
+    }
+
+    private fun drawPrefab() {
+        selectedPrefab.components.withFirstInstance<Collider> { collider ->
+            val min = referenceActor.pos.add(collider.offset)
+            val max = Vector3(min).add(collider.size)
+            val box = Box.fromMinMax(min, max)
+            renderer.fgShapes.addBox(box, 0.75f, Color.CYAN)
+            renderer.fgShapes.addPoint(box.pos, 1.5f, Color.CYAN)
+        }
     }
 
     private fun drawReferenceActorPos() {
@@ -116,12 +136,55 @@ class ActorTabViewController(
         renderer.moveCamera(cameraDelta)
     }
 
-    override fun handleEvent(event: Event) {
-        log.debug { "handling event ${event::class.simpleName}" }
+    override fun handleEvent(event: GdxEvent) {
+        when (event) {
+            is ComponentBrowserView.OnAddButtonClicked -> {
+                log.debug { "adding component" }
+            }
+
+            is ComponentBrowserView.OnDeleteButtonClicked -> {
+                deleteComponent(view.componentBrowserView.getCheckedIndex())
+            }
+
+            is ComponentBrowserView.OnSelectComponent -> {
+                log.debug { "selected component ${event.component::class.simpleName}" }
+                view.updateComponentInspector(event.component)
+            }
+
+            is ActorTabView.OnOpenClicked -> {
+                openPrefab()
+            }
+        }
     }
 
-    override fun handleEvent(event: GdxEvent) {
-//        log.debug { "handling event ${event::class.simpleName}" }
+    private fun openPrefab() {
+        val file = dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
+        val prefab = serializer.read<ActorPrefab>(file.readText())
+        loadPrefab(prefab)
+        log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
+    }
+
+    private fun loadPrefab(prefab: ActorPrefab) {
+        selectedPrefab = prefab
+
+        referenceActor.components.clear()
+        selectedPrefab.components.withFirstInstance<Sprite> { sprite ->
+            referenceActor.add(sprite)
+        }
+
+        view.updateComponentBrowser(selectedPrefab.components)
+    }
+
+    private fun deleteComponent(index: Int) {
+        if (index < 0 || index >= selectedPrefab.components.size) {
+            log.debug { "invalid component index $index" }
+            return
+        }
+
+        val component = selectedPrefab.components[index]
+        selectedPrefab.components.removeAt(index)
+        log.debug { "Deleted component ${component::class.simpleName}" }
+        view.updateComponentBrowser(selectedPrefab.components)
     }
 
     override fun enabled() {
