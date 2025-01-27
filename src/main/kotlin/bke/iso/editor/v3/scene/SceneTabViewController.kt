@@ -50,7 +50,9 @@ class SceneTabViewController(
             engine.input,
             engine.collisions,
             engine.renderer,
-            engine.events
+            engine.events,
+            engine.world,
+            worldLogic
         )
 
     override fun start() {

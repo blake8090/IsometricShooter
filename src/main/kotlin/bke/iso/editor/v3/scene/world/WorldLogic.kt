@@ -78,7 +78,7 @@ class WorldLogic(
         }
     }
 
-    private fun createReferenceActor(prefab: ActorPrefab, pos: Vector3): Actor {
+    fun createReferenceActor(prefab: ActorPrefab, pos: Vector3): Actor {
         val components = mutableSetOf<Component>()
         components.add(ActorPrefabReference(prefab.name))
 
@@ -97,7 +97,7 @@ class WorldLogic(
         return world.actors.create(pos, *components.toTypedArray())
     }
 
-    private fun createReferenceActor(prefab: TilePrefab, location: Location): Actor {
+    fun createReferenceActor(prefab: TilePrefab, location: Location): Actor {
         if (tilesByLocation.containsKey(location)) {
             error("Duplicate tile at location $location")
         }
@@ -111,5 +111,25 @@ class WorldLogic(
         )
         tilesByLocation[location] = actor
         return actor
+    }
+
+    fun delete(actor: Actor) {
+        if (actor.has<TilePrefabReference>()) {
+            tilesByLocation.remove(Location(actor.pos))
+        }
+        world.delete(actor)
+    }
+
+    fun deleteTile(location: Location) {
+        val actor = tilesByLocation[location] ?: return
+        delete(actor)
+    }
+
+    fun getTilePrefabName(location: Location): String? {
+        val actor = tilesByLocation[location] ?: return null
+        val reference = checkNotNull(actor.get<TilePrefabReference>()) {
+            "Expected TilePrefabReference for actor $actor"
+        }
+        return reference.prefab
     }
 }

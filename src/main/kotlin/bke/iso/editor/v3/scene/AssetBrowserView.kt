@@ -1,7 +1,5 @@
 package bke.iso.editor.v3.scene
 
-import bke.iso.editor.scene.tool.SelectActorPrefabEvent
-import bke.iso.editor.scene.tool.SelectTilePrefabEvent
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -13,6 +11,7 @@ import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.v2.UIView
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
@@ -91,7 +90,7 @@ class AssetBrowserView(
             align(Align.left)
             onChanged {
                 if (isChecked) {
-                    fire(SelectTilePrefabEvent(prefab))
+                    fire(OnTilePrefabSelected(prefab))
                 }
             }
         }
@@ -111,9 +110,13 @@ class AssetBrowserView(
             align(Align.left)
             onChanged {
                 if (isChecked) {
-                    fire(SelectActorPrefabEvent(prefab))
+                    fire(OnActorPrefabSelected(prefab))
                 }
             }
         }
     }
+
+    data class OnActorPrefabSelected(val prefab: ActorPrefab) : Event()
+
+    data class OnTilePrefabSelected(val prefab: TilePrefab) : Event()
 }

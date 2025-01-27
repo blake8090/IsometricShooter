@@ -41,7 +41,7 @@ abstract class SceneTabTool {
     /**
      * Called when the tool has been selected.
      */
-    open fun enable() {}
+    open fun enable() {} // todo: rename these to start & stop
 
     /**
      * Called when another tool has been selected instead.
