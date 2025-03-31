@@ -1,6 +1,8 @@
 package bke.iso.editor.v3.scene
 
 import bke.iso.editor.v3.scene.tool.ToolLogic
+import bke.iso.editor.v3.scene.view.SceneTabView
+import bke.iso.editor.v3.scene.view.ToolbarView
 import bke.iso.editor.v3.scene.world.WorldLogic
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab

@@ -6,6 +6,9 @@ import bke.iso.editor.v3.EditorLayer
 import bke.iso.editor.v3.EditorState3
 import bke.iso.editor.v3.actor.command.UpdateComponentPropertyCommand
 import bke.iso.editor.v3.actor.command.UpdateVector3Command
+import bke.iso.editor.v3.actor.view.ActorTabView
+import bke.iso.editor.v3.actor.view.ComponentBrowserView
+import bke.iso.editor.v3.actor.view.ComponentInspectorView
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab

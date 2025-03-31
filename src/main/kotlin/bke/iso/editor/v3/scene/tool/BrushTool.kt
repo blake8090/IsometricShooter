@@ -1,8 +1,8 @@
 package bke.iso.editor.v3.scene.tool
 
 import bke.iso.editor.v3.EditorCommand
-import bke.iso.editor.v3.scene.tool.command.PaintActorCommand
-import bke.iso.editor.v3.scene.tool.command.PaintTileCommand
+import bke.iso.editor.v3.scene.command.PaintActorCommand
+import bke.iso.editor.v3.scene.command.PaintTileCommand
 import bke.iso.editor.v3.scene.world.WorldLogic
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.prefab.ActorPrefab

@@ -1,8 +1,8 @@
 package bke.iso.editor.v3.scene.tool
 
-import bke.iso.editor.v3.scene.AssetBrowserView
+import bke.iso.editor.v3.scene.view.AssetBrowserView
 import bke.iso.editor.v3.scene.SceneTabViewController
-import bke.iso.editor.v3.scene.ToolbarView
+import bke.iso.editor.v3.scene.view.ToolbarView
 import bke.iso.editor.v3.scene.world.WorldLogic
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Events

@@ -1,4 +1,4 @@
-package bke.iso.editor.v3.actor
+package bke.iso.editor.v3.actor.view
 
 import bke.iso.editor.ui.color
 import bke.iso.engine.asset.Assets

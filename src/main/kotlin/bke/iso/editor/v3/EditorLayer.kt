@@ -1,7 +1,7 @@
 package bke.iso.editor.v3
 
 import bke.iso.editor.v3.actor.ActorTabViewController
-import bke.iso.editor.v3.actor.SelectNewComponentDialog
+import bke.iso.editor.v3.actor.view.SelectNewComponentDialog
 import bke.iso.editor.v3.scene.SceneTabViewController
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event

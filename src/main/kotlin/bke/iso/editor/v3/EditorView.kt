@@ -1,8 +1,8 @@
 package bke.iso.editor.v3
 
 import bke.iso.editor.ui.color
-import bke.iso.editor.v3.actor.ActorTabView
-import bke.iso.editor.v3.scene.SceneTabView
+import bke.iso.editor.v3.actor.view.ActorTabView
+import bke.iso.editor.v3.scene.view.SceneTabView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.render.makePixelTexture

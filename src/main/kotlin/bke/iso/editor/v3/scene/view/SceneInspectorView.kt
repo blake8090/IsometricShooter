@@ -1,4 +1,4 @@
-package bke.iso.editor.v3.scene
+package bke.iso.editor.v3.scene.view
 
 import bke.iso.editor.ui.color
 import bke.iso.engine.ui.util.BorderedTable

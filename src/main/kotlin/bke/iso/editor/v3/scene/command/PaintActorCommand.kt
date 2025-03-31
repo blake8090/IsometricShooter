@@ -1,4 +1,4 @@
-package bke.iso.editor.v3.scene.tool.command
+package bke.iso.editor.v3.scene.command
 
 import bke.iso.editor.v3.EditorCommand
 import bke.iso.editor.v3.scene.world.WorldLogic

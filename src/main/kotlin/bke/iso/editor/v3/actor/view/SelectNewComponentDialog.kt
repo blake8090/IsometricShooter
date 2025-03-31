@@ -1,4 +1,4 @@
-package bke.iso.editor.v3.actor
+package bke.iso.editor.v3.actor.view
 
 import bke.iso.engine.ui.util.BorderedTable
 import bke.iso.engine.ui.util.onChanged

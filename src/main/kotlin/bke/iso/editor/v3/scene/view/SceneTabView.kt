@@ -1,4 +1,4 @@
-package bke.iso.editor.v3.scene
+package bke.iso.editor.v3.scene.view
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.onChanged
