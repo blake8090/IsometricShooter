@@ -2,8 +2,12 @@ package bke.iso.editor2.scene
 
 import bke.iso.editor2.EditorMode
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.core.Event
+import bke.iso.engine.core.Events
 import bke.iso.engine.input.Input
+import bke.iso.engine.os.Dialogs
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -13,7 +17,10 @@ class SceneMode(
     renderer: Renderer,
     world: World,
     assets: Assets,
-    input: Input
+    input: Input,
+    events: Events,
+    dialogs: Dialogs,
+    serializer: Serializer,
 ) : EditorMode(renderer, world) {
 
     private val log = KotlinLogging.logger { }
@@ -26,7 +33,8 @@ class SceneMode(
     private var drawGridForeground = false
 
     private val cameraLogic = CameraLogic(input, world, renderer, this)
-    private val view = SceneModeView(assets)
+    private val worldLogic = WorldLogic(world, assets, events, dialogs, serializer)
+    private val view = SceneModeView(assets, events)
 
     override fun start() {
         cameraLogic.start()
@@ -72,4 +80,22 @@ class SceneMode(
     override fun draw() {
         view.draw()
     }
+
+    override fun handleEvent(event: Event) {
+        when (event) {
+            is OpenSceneSelected -> openScene()
+            is SaveSceneSelected -> saveScene()
+        }
+    }
+
+    private fun openScene() {
+        worldLogic.loadScene()
+    }
+
+    private fun saveScene() {
+    }
+
+    class OpenSceneSelected : Event
+
+    class SaveSceneSelected : Event
 }

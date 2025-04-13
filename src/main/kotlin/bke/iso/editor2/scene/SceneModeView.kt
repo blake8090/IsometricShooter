@@ -4,6 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.beginImGuiFrame
+import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
 import bke.iso.engine.render.Sprite
 import com.badlogic.gdx.graphics.GLTexture
@@ -14,7 +15,10 @@ import imgui.type.ImFloat
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneModeView(private val assets: Assets) {
+class SceneModeView(
+    private val assets: Assets,
+    private val events: Events
+) {
 
     private val log = KotlinLogging.logger { }
 
@@ -23,17 +27,7 @@ class SceneModeView(private val assets: Assets) {
     fun draw() {
         beginImGuiFrame()
 
-        if (ImGui.beginMainMenuBar()) {
-            if (ImGui.beginMenu("File")) {
-                ImGui.menuItem("New")
-                ImGui.menuItem("Open", "Ctrl+O")
-                ImGui.menuItem("Save", "Ctrl+S")
-                ImGui.menuItem("Save as..")
-                ImGui.menuItem("Exit")
-                ImGui.endMenu()
-            }
-            ImGui.endMainMenuBar()
-        }
+        drawMainMenuBar()
 
         val assetBrowserWindowData = getAssetBrowserWindowData()
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
@@ -43,6 +37,27 @@ class SceneModeView(private val assets: Assets) {
         drawInspectorWindow(inspectorWindowData)
 
         endImGuiFrame()
+    }
+
+    private fun drawMainMenuBar() {
+        if (ImGui.beginMainMenuBar()) {
+            if (ImGui.beginMenu("File")) {
+                ImGui.menuItem("New")
+
+                if (ImGui.menuItem("Open", "Ctrl+O")) {
+                    events.fire(SceneMode.OpenSceneSelected())
+                }
+
+                if (ImGui.menuItem("Save", "Ctrl+S")) {
+                    events.fire(SceneMode.SaveSceneSelected())
+                }
+
+                ImGui.menuItem("Save as..")
+                ImGui.menuItem("Exit")
+                ImGui.endMenu()
+            }
+            ImGui.endMainMenuBar()
+        }
     }
 
     private fun drawAssetBrowser(windowData: WindowData) {

@@ -2,6 +2,7 @@ package bke.iso.editor2
 
 import bke.iso.editor2.scene.SceneMode
 import bke.iso.engine.Engine
+import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.state.State
@@ -18,7 +19,17 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     var selectedLayer = 0f
         private set
 
-    private val sceneMode = SceneMode(engine.renderer, engine.world, engine.assets, engine.input)
+    private val sceneMode =
+        SceneMode(
+            engine.renderer,
+            engine.world,
+            engine.assets,
+            engine.input,
+            engine.events,
+            engine.dialogs,
+            engine.serializer,
+        )
+
     private var selectedMode: EditorMode? = null
 
     override suspend fun load() {
@@ -44,5 +55,10 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     override fun onFrameEnd() {
         super.onFrameEnd()
         selectedMode?.draw()
+    }
+
+    override fun handleEvent(event: Event) {
+        super.handleEvent(event)
+        selectedMode?.handleEvent(event)
     }
 }
