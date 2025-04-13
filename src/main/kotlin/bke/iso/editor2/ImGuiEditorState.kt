@@ -1,6 +1,6 @@
 package bke.iso.editor2
 
-import bke.iso.editor2.scene.SceneEditorMode
+import bke.iso.editor2.scene.SceneMode
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Module
 import bke.iso.engine.input.ButtonState
@@ -18,8 +18,8 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     var selectedLayer = 0f
         private set
 
-    private val sceneEditorMode = SceneEditorMode(engine.renderer, engine.world, engine.assets)
-    private var selectedMode = sceneEditorMode
+    private val sceneMode = SceneMode(engine.renderer, engine.world, engine.assets)
+    private var selectedMode = sceneMode
 
     override suspend fun load() {
         log.info { "Starting editor" }

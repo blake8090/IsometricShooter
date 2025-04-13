@@ -12,7 +12,7 @@ import imgui.ImGui
 import imgui.ImVec2
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneEditorView(private val assets: Assets) {
+class SceneModeView(private val assets: Assets) {
 
     private val log = KotlinLogging.logger { }
 

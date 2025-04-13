@@ -6,7 +6,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneEditorMode(
+class SceneMode(
     renderer: Renderer,
     world: World,
     assets: Assets,
@@ -14,7 +14,7 @@ class SceneEditorMode(
 
     private val log = KotlinLogging.logger { }
 
-    private val view = SceneEditorView(assets)
+    private val view = SceneModeView(assets)
 
     override fun update() {
     }
