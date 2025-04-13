@@ -42,8 +42,6 @@ class SceneModeView(private val assets: Assets) {
         drawToolbar(toolbarWindowData)
         drawInspectorWindow(inspectorWindowData)
 
-        ImGui.showDemoWindow()
-
         endImGuiFrame()
     }
 
@@ -107,13 +105,13 @@ class SceneModeView(private val assets: Assets) {
         }
     }
 
-    private fun imageButton(texture: String): Boolean {
+    private fun imageButton(texture: String, scale: Float = 1f): Boolean {
         val tex = assets.get<Texture>(texture)
         val texId = (tex as GLTexture).textureObjectHandle
         return ImGui.imageButton(
             /* strId = */ texture,
             /* userTextureId = */ texId.toLong(),
-            /* size = */ ImVec2(tex.width.toFloat(), tex.height.toFloat())
+            /* size = */ ImVec2(tex.width.toFloat() * scale, tex.height.toFloat() * scale)
         )
     }
 
@@ -138,7 +136,6 @@ class SceneModeView(private val assets: Assets) {
 
         ImGui.separatorText("Buildings")
         ImGui.button("Apply")
-
         ImGui.endDisabled()
 
         ImGui.end()
@@ -148,6 +145,34 @@ class SceneModeView(private val assets: Assets) {
         ImGui.setNextWindowPos(windowData.pos)
         ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Toolbar")
+
+        imageButton("pointer.png")
+        ImGui.sameLine()
+        imageButton("brush.png")
+        ImGui.sameLine()
+        imageButton("eraser.png")
+        ImGui.sameLine()
+        imageButton("icon-room.png")
+        ImGui.sameLine()
+        imageButton("fill.png")
+        ImGui.sameLine()
+        imageButton("grid.png")
+        ImGui.sameLine()
+
+        ImGui.text("Layer: 01")
+        ImGui.sameLine()
+        ImGui.button("-")
+        ImGui.sameLine()
+        ImGui.button("+")
+        ImGui.sameLine()
+
+        imageButton("hide-layers.png")
+        ImGui.sameLine()
+        imageButton("hide-walls.png")
+        ImGui.sameLine()
+        imageButton("highlight-layer.png")
+        ImGui.sameLine()
+
         ImGui.end()
     }
 
@@ -163,7 +188,7 @@ class SceneModeView(private val assets: Assets) {
     private fun getToolbarWindowData(assetBrowserData: WindowData): WindowData {
         val size = ImVec2(viewport.workSize)
         size.x *= 1f - 0.15f - 0.16f
-        size.y *= 0.01f
+        size.y = 95f
 
         val pos = ImVec2(viewport.workPos)
         pos.x += assetBrowserData.size.x
