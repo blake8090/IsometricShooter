@@ -1,4 +1,4 @@
-package bke.iso.editor2
+package bke.iso.editor2.scene
 
 import bke.iso.editor.scene.camera.MouseDragAdapter
 import bke.iso.editor.scene.camera.MouseScrollAdapter
@@ -19,7 +19,7 @@ class CameraLogic(
     private val input: Input,
     world: World,
     private val renderer: Renderer,
-    private val imGuiEditorState: ImGuiEditorState
+    private val sceneMode: SceneMode,
 ) {
 
     private val mouseScrollAdapter = MouseScrollAdapter()
@@ -80,7 +80,7 @@ class CameraLogic(
     }
 
     private fun moveCameraActor() {
-        var z = imGuiEditorState.selectedLayer
+        var z = sceneMode.selectedLayer
         // apply a small offset so that the camera always appears above actors on the same z level
         if (z >= 0f) {
             z += 0.01f

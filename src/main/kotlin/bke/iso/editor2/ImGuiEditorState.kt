@@ -18,18 +18,31 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     var selectedLayer = 0f
         private set
 
-    private val sceneMode = SceneMode(engine.renderer, engine.world, engine.assets)
-    private var selectedMode = sceneMode
+    private val sceneMode = SceneMode(engine.renderer, engine.world, engine.assets, engine.input)
+    private var selectedMode: EditorMode? = null
 
     override suspend fun load() {
         log.info { "Starting editor" }
 
         engine.ui2.stop()
         engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
+
+        selectMode(sceneMode)
+    }
+
+    private fun selectMode(editorMode: EditorMode) {
+        selectedMode?.stop()
+        editorMode.start()
+        selectedMode = editorMode
+    }
+
+    override fun update(deltaTime: Float) {
+        super.update(deltaTime)
+        selectedMode?.update()
     }
 
     override fun onFrameEnd() {
         super.onFrameEnd()
-        selectedMode.draw()
+        selectedMode?.draw()
     }
 }
