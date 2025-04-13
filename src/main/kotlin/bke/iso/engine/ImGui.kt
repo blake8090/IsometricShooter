@@ -27,7 +27,7 @@ fun initImGui() {
     imGuiGl3.init("#version 150")
 }
 
-fun beginImGui() {
+fun beginImGuiFrame() {
     if (tmpProcessor != null) { // Restore the input processor after ImGui caught all inputs, see #end()
         Gdx.input.inputProcessor = tmpProcessor
         tmpProcessor = null
@@ -38,7 +38,7 @@ fun beginImGui() {
     ImGui.newFrame()
 }
 
-fun endImGui() {
+fun endImGuiFrame() {
     ImGui.render()
     imGuiGl3.renderDrawData(ImGui.getDrawData())
 

@@ -37,6 +37,7 @@ class MainMenuLayer(engine: Engine) : UILayer(engine) {
         val startButton = TextButton("START", skin).apply {
             onChanged {
                 engine.events.fire(MainMenuState.OnStartGame())
+                engine.ui2.stop()
             }
 
             onEnter { button ->

@@ -19,7 +19,7 @@ class CameraLogic(
     private val input: Input,
     world: World,
     private val renderer: Renderer,
-    private val editorImGuiState: EditorImGuiState
+    private val imGuiEditorState: ImGuiEditorState
 ) {
 
     private val mouseScrollAdapter = MouseScrollAdapter()
@@ -80,7 +80,7 @@ class CameraLogic(
     }
 
     private fun moveCameraActor() {
-        var z = editorImGuiState.selectedLayer
+        var z = imGuiEditorState.selectedLayer
         // apply a small offset so that the camera always appears above actors on the same z level
         if (z >= 0f) {
             z += 0.01f
