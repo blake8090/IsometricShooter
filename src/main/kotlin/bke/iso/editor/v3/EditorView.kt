@@ -84,7 +84,7 @@ class EditorView(
         skin.add("bg-light", makePixelTexture(color(43, 103, 161)))
         skin.add("table-border", color(77, 100, 130))
 
-        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 14f, Color.WHITE)])
+        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)])
 
         skin.add("default", Label.LabelStyle().apply {
             font = skin.getFont("default")

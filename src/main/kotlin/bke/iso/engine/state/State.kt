@@ -36,4 +36,6 @@ abstract class State {
             module.handleEvent(event)
         }
     }
+
+    open fun onFrameEnd() {}
 }

@@ -40,6 +40,12 @@ dependencies {
     implementation("org.lwjgl:lwjgl-nfd:3.3.2")
     runtimeOnly("org.lwjgl:lwjgl-nfd:3.3.2:natives-windows")
 
+    api("io.github.spair:imgui-java-binding:1.89.0")
+    api("io.github.spair:imgui-java-lwjgl3:1.89.0")
+    api("io.github.spair:imgui-java-natives-linux:1.89.0")
+    api("io.github.spair:imgui-java-natives-macos:1.89.0")
+    api("io.github.spair:imgui-java-natives-windows:1.89.0")
+
     implementation("ch.qos.logback:logback-classic:1.5.12")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")

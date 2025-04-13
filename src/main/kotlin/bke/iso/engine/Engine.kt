@@ -121,6 +121,10 @@ class Engine(val game: Game) {
         }
 
         updateModule(loadingScreens, deltaTime)
+
+        for (module in modules) {
+            module.onFrameEnd()
+        }
     }
 
     private fun updateModule(module: EngineModule, deltaTime: Float, override: Boolean = false) {

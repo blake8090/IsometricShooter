@@ -26,6 +26,10 @@ class States(private val engine: Engine) : EngineModule() {
         currentState.handleEvent(event)
     }
 
+    override fun onFrameEnd() {
+        currentState.onFrameEnd()
+    }
+
     fun <T : State> setState(type: KClass<T>) {
         log.debug { "Switching to state ${type.simpleName}" }
         // TODO: call state.stop()

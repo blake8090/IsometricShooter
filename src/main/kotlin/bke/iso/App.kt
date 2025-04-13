@@ -2,6 +2,7 @@ package bke.iso
 
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Game
+import bke.iso.engine.initImGui
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
@@ -27,6 +28,7 @@ class App(private val game: Game) : ApplicationAdapter() {
     private lateinit var engine: Engine
 
     override fun create() {
+        initImGui()
         KtxAsync.initiate()
         engine = Engine(game)
         engine.start()
