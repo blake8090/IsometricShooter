@@ -18,7 +18,8 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     var selectedLayer = 0f
         private set
 
-    var selectedMode = SceneEditorMode(engine.renderer, engine.world, engine.assets)
+    private val sceneEditorMode = SceneEditorMode(engine.renderer, engine.world, engine.assets)
+    private var selectedMode = sceneEditorMode
 
     override suspend fun load() {
         log.info { "Starting editor" }
