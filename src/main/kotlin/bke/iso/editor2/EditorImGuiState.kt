@@ -26,16 +26,26 @@ class EditorImGuiState(override val engine: Engine) : State() {
     var selectedLayer = 0f
         private set
 
+    private val cameraLogic =
+        CameraLogic(
+            engine.input,
+            engine.world,
+            engine.renderer,
+            this
+        )
+
     override suspend fun load() {
         log.info { "Starting editor" }
 
         engine.ui2.stop()
         engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
+
+        cameraLogic.start()
     }
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
-
+        cameraLogic.update()
         drawGrid()
     }
 
