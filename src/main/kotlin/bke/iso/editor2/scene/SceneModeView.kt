@@ -23,7 +23,6 @@ class SceneModeView(private val assets: Assets) {
     fun draw() {
         beginImGuiFrame()
 
-        var menuBarHeight = 0f
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("File")) {
                 ImGui.menuItem("New")
@@ -33,24 +32,24 @@ class SceneModeView(private val assets: Assets) {
                 ImGui.menuItem("Exit")
                 ImGui.endMenu()
             }
-            menuBarHeight = ImGui.getFrameHeight()
             ImGui.endMainMenuBar()
         }
 
-        drawAssetBrowser(menuBarHeight)
-        drawInspectorWindow(menuBarHeight)
+        val assetBrowserWindowData = getAssetBrowserWindowData()
+        val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
+        val inspectorWindowData = getInspectorWindowData(assetBrowserWindowData, toolbarWindowData)
+        drawAssetBrowser(assetBrowserWindowData)
+        drawToolbar(toolbarWindowData)
+        drawInspectorWindow(inspectorWindowData)
+
         ImGui.showDemoWindow()
+
         endImGuiFrame()
     }
 
-    private fun drawAssetBrowser(posY: Float) {
-        val pos = ImVec2(0f, posY)
-
-        val size = ImVec2(viewport.size)
-        size.x *= 0.25f
-        size.y *= 0.5f
-
-        ImGui.setNextWindowPos(pos)
+    private fun drawAssetBrowser(windowData: WindowData) {
+        ImGui.setNextWindowPos(windowData.pos)
+        ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Asset Browser")
 
         if (ImGui.beginTabBar("assetTypes")) {
@@ -118,15 +117,9 @@ class SceneModeView(private val assets: Assets) {
         )
     }
 
-    private fun drawInspectorWindow(posY: Float) {
-        val viewport = ImGui.getMainViewport()
-
-        val size = ImVec2(viewport.size)
-        size.x *= 0.2f
-        size.y *= 0.5f
-
-        ImGui.setNextWindowPos(ImVec2(viewport.sizeX - size.x, posY))
-        ImGui.setNextWindowSize(size)
+    private fun drawInspectorWindow(windowData: WindowData) {
+        ImGui.setNextWindowPos(windowData.pos)
+        ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Inspector")
 
         ImGui.beginDisabled()
@@ -150,4 +143,46 @@ class SceneModeView(private val assets: Assets) {
 
         ImGui.end()
     }
+
+    private fun drawToolbar(windowData: WindowData) {
+        ImGui.setNextWindowPos(windowData.pos)
+        ImGui.setNextWindowSize(windowData.size)
+        ImGui.begin("Toolbar")
+        ImGui.end()
+    }
+
+    private fun getAssetBrowserWindowData(): WindowData {
+        val size = ImVec2(viewport.workSize)
+        size.x *= 0.15f
+
+        val pos = ImVec2(viewport.workPos)
+
+        return WindowData(pos, size)
+    }
+
+    private fun getToolbarWindowData(assetBrowserData: WindowData): WindowData {
+        val size = ImVec2(viewport.workSize)
+        size.x *= 1f - 0.15f - 0.16f
+        size.y *= 0.01f
+
+        val pos = ImVec2(viewport.workPos)
+        pos.x += assetBrowserData.size.x
+
+        return WindowData(pos, size)
+    }
+
+    private fun getInspectorWindowData(assetBrowserData: WindowData, toolbarWindowData: WindowData): WindowData {
+        val size = ImVec2(viewport.workSize)
+        size.x *= 0.16f
+
+        val pos = ImVec2(viewport.workPos)
+        pos.x += assetBrowserData.size.x + toolbarWindowData.size.x
+
+        return WindowData(pos, size)
+    }
+
+    private data class WindowData(
+        val pos: ImVec2,
+        val size: ImVec2,
+    )
 }
