@@ -10,11 +10,15 @@ import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
 import imgui.ImGui
 import imgui.ImVec2
+import imgui.type.ImFloat
+import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class SceneModeView(private val assets: Assets) {
 
     private val log = KotlinLogging.logger { }
+
+    private val viewport = ImGui.getMainViewport()
 
     fun draw() {
         beginImGuiFrame()
@@ -34,16 +38,13 @@ class SceneModeView(private val assets: Assets) {
         }
 
         drawAssetBrowser(menuBarHeight)
+        drawInspectorWindow(menuBarHeight)
+        ImGui.showDemoWindow()
         endImGuiFrame()
     }
 
-    private fun drawAssetBrowser(height: Float) {
-        val viewport = ImGui.getMainViewport()
-
-        // draw this just under the main menu bar!
-        val pos = ImVec2(viewport.pos)
-        pos.x = 0f
-        pos.y = height
+    private fun drawAssetBrowser(posY: Float) {
+        val pos = ImVec2(0f, posY)
 
         val size = ImVec2(viewport.size)
         size.x *= 0.25f
@@ -54,13 +55,11 @@ class SceneModeView(private val assets: Assets) {
 
         if (ImGui.beginTabBar("assetTypes")) {
             if (ImGui.beginTabItem("Actors")) {
-                ImGui.text("All actor assets here")
                 drawActorAssets()
                 ImGui.endTabItem()
             }
 
             if (ImGui.beginTabItem("Tiles")) {
-                ImGui.text("All tile assets here")
                 drawTileAssets()
                 ImGui.endTabItem()
             }
@@ -117,5 +116,38 @@ class SceneModeView(private val assets: Assets) {
             /* userTextureId = */ texId.toLong(),
             /* size = */ ImVec2(tex.width.toFloat(), tex.height.toFloat())
         )
+    }
+
+    private fun drawInspectorWindow(posY: Float) {
+        val viewport = ImGui.getMainViewport()
+
+        val size = ImVec2(viewport.size)
+        size.x *= 0.2f
+        size.y *= 0.5f
+
+        ImGui.setNextWindowPos(ImVec2(viewport.sizeX - size.x, posY))
+        ImGui.setNextWindowSize(size)
+        ImGui.begin("Inspector")
+
+        ImGui.beginDisabled()
+        ImGui.inputText("id", ImString())
+        ImGui.inputText("description", ImString())
+
+        ImGui.separatorText("Position")
+        ImGui.inputFloat("x", ImFloat())
+        ImGui.inputFloat("y", ImFloat())
+        ImGui.inputFloat("z", ImFloat())
+
+        ImGui.separatorText("Tags")
+        ImGui.inputText("name", ImString())
+        ImGui.sameLine()
+        ImGui.button("Add")
+
+        ImGui.separatorText("Buildings")
+        ImGui.button("Apply")
+
+        ImGui.endDisabled()
+
+        ImGui.end()
     }
 }

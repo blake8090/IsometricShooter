@@ -69,7 +69,6 @@ class SceneMode(
             renderer.bgShapes
         }
 
-
     override fun draw() {
         view.draw()
     }
