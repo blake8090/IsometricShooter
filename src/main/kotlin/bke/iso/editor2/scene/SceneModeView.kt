@@ -56,6 +56,49 @@ class SceneModeView(
                 ImGui.menuItem("Exit")
                 ImGui.endMenu()
             }
+
+            if (ImGui.beginMenu("View")) {
+                if (ImGui.menuItem("Show Grid", false)) {
+
+                }
+                if (ImGui.menuItem("Show Collision", false)) {
+
+                }
+                if (ImGui.menuItem("Hide Walls", false)) {
+
+                }
+                if (ImGui.menuItem("Hide Upper Layers", false)) {
+
+                }
+                if (ImGui.menuItem("Highlight Selected Layer", false)) {
+
+                }
+                if (ImGui.menuItem("Show Grid in Foreground", false)) {
+
+                }
+                ImGui.endMenu()
+            }
+
+            if (ImGui.beginMenu("Buildings")) {
+                if (ImGui.menuItem("New Building", false)) {
+
+                }
+                if (ImGui.menuItem("Edit Building", false)) {
+
+                }
+                ImGui.beginDisabled()
+                if (ImGui.menuItem("Close Building", false)) {
+
+                }
+
+                if (ImGui.menuItem("Delete Building", false)) {
+
+                }
+                ImGui.endDisabled()
+                ImGui.endMenu()
+            }
+
+            ImGui.showDemoWindow()
             ImGui.endMainMenuBar()
         }
     }
