@@ -222,7 +222,9 @@ class SceneModeView(
         ImGui.sameLine()
         toolbarImageButton("icon-room.png")
         ImGui.sameLine()
-        toolbarImageButton("fill.png")
+        toolbarImageButton("fill.png", selectedTool == ToolSelection.FILL) {
+            events.fire(SceneMode.ToolSelected(ToolSelection.FILL))
+        }
         ImGui.sameLine()
         toolbarImageButton("grid.png")
         ImGui.sameLine()

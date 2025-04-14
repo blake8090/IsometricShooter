@@ -142,4 +142,42 @@ class WorldLogic(
             components = actor.components.values.toTypedArray()
         )
     }
+
+    fun create(prefab: ActorPrefab, pos: Vector3): Actor {
+        val components = mutableSetOf<Component>()
+        components.add(ActorPrefabReference(prefab.name))
+
+        prefab.components.withFirstInstance<Sprite> { sprite ->
+            components.add(sprite.copy())
+        }
+
+        prefab.components.withFirstInstance<Collider> { collider ->
+            components.add(collider.copy())
+        }
+
+        if (prefab.components.any { component -> component is Occlude }) {
+            components.add(Occlude())
+        }
+
+        return world.actors.create(pos, *components.toTypedArray())
+    }
+
+    fun create(prefab: TilePrefab, location: Location): Actor {
+        if (tileExists(location)) {
+            error("Duplicate tile at location $location")
+        }
+
+        val actor = world.actors.create(
+            location,
+            prefab.sprite.copy(),
+            TilePrefabReference(prefab.name),
+            Collider(Vector3(1f, 1f, 0f)),
+            Occlude() // manually ensure that the reference actor is included in the occlusion system
+        )
+        tilesByLocation[location] = actor
+        return actor
+    }
+
+    fun tileExists(location: Location) =
+        tilesByLocation.containsKey(location)
 }
