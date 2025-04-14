@@ -1,6 +1,6 @@
 package bke.iso.editor2.scene.command
 
-import bke.iso.editor.v3.EditorCommand
+import bke.iso.editor2.EditorCommand
 import bke.iso.editor2.scene.WorldLogic
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.world.actor.Actor

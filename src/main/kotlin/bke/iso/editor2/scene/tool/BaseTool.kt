@@ -1,6 +1,6 @@
 package bke.iso.editor2.scene.tool
 
-import bke.iso.editor.v3.EditorCommand
+import bke.iso.editor2.EditorCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld

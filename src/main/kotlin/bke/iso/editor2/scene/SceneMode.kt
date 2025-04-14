@@ -7,11 +7,13 @@ import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.core.Event
+import bke.iso.engine.input.ButtonState
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneMode(engine: Engine) : EditorMode(engine.renderer, engine.world) {
+class SceneMode(private val engine: Engine) : EditorMode(engine.renderer, engine.world) {
 
     private val log = KotlinLogging.logger { }
 
@@ -31,6 +33,12 @@ class SceneMode(engine: Engine) : EditorMode(engine.renderer, engine.world) {
     override fun start() {
         cameraLogic.start()
         toolLogic.start()
+
+        with(engine.input.keyMouse) {
+            bindMouse("sceneTabToolDown", Input.Buttons.LEFT, ButtonState.DOWN)
+            bindMouse("sceneTabToolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
+            bindMouse("sceneTabToolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
+        }
     }
 
     override fun stop() {
@@ -41,6 +49,18 @@ class SceneMode(engine: Engine) : EditorMode(engine.renderer, engine.world) {
         cameraLogic.update()
         toolLogic.update()
         drawGrid()
+
+        engine.input.onAction("sceneTabToolPress") {
+            toolLogic.performAction()?.execute()
+        }
+
+        engine.input.onAction("sceneTabToolDown") {
+            toolLogic.performMultiAction()?.execute()
+        }
+
+        engine.input.onAction("sceneTabToolRelease") {
+            toolLogic.performReleaseAction()?.execute()
+        }
     }
 
     private fun drawGrid() {

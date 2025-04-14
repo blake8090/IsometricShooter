@@ -1,5 +1,6 @@
 package bke.iso.editor2.scene.tool
 
+import bke.iso.editor2.EditorCommand
 import bke.iso.editor2.scene.SceneMode
 import bke.iso.editor2.scene.WorldLogic
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -78,4 +79,13 @@ class ToolLogic(
     fun onActorPrefabSelected(prefab: ActorPrefab) {
         brushTool.selectPrefab(prefab)
     }
+
+    fun performAction(): EditorCommand? =
+        currentTool?.performAction()
+
+    fun performMultiAction(): EditorCommand? =
+        currentTool?.performMultiAction()
+
+    fun performReleaseAction(): EditorCommand? =
+        currentTool?.performReleaseAction()
 }
