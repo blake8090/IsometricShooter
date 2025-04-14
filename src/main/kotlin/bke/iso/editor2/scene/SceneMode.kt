@@ -11,11 +11,11 @@ import bke.iso.engine.input.ButtonState
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
-import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneMode(private val engine: Engine) : EditorMode(engine.renderer, engine.world) {
+class SceneMode(private val engine: Engine) : EditorMode() {
 
-    private val log = KotlinLogging.logger { }
+    override val world = engine.world
+    override val renderer = engine.renderer
 
     var selectedLayer = 0f
         private set

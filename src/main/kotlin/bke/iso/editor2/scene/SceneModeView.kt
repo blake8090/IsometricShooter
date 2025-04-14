@@ -1,5 +1,6 @@
 package bke.iso.editor2.scene
 
+import bke.iso.editor2.ImGuiEditorState
 import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -96,6 +97,19 @@ class SceneModeView(
                 if (ImGui.menuItem("Delete Building", false)) {
 
                 }
+                ImGui.endDisabled()
+                ImGui.endMenu()
+            }
+
+            if (ImGui.beginMenu("Mode")) {
+                ImGui.menuItem("Scene Editor", true)
+                if (ImGui.menuItem("Actor Editor", false)) {
+                    events.fire(ImGuiEditorState.ActorPrefabModeSelected())
+                }
+                ImGui.beginDisabled()
+                ImGui.menuItem("Particle Editor", false)
+                ImGui.menuItem("Animation Editor", false)
+                ImGui.menuItem("Weapon Editor", false)
                 ImGui.endDisabled()
                 ImGui.endMenu()
             }

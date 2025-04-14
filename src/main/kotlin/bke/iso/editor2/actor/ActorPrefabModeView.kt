@@ -1,0 +1,57 @@
+package bke.iso.editor2.actor
+
+import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.scene.SceneMode
+import bke.iso.engine.asset.Assets
+import bke.iso.engine.beginImGuiFrame
+import bke.iso.engine.core.Events
+import bke.iso.engine.endImGuiFrame
+import imgui.ImGui
+
+class ActorPrefabModeView(
+    private val assets: Assets,
+    private val events: Events
+) {
+
+    fun draw() {
+        beginImGuiFrame()
+        drawMainMenuBar()
+        endImGuiFrame()
+    }
+
+    private fun drawMainMenuBar() {
+        if (ImGui.beginMainMenuBar()) {
+            if (ImGui.beginMenu("File")) {
+                ImGui.menuItem("New")
+
+                if (ImGui.menuItem("Open", "Ctrl+O")) {
+                    events.fire(SceneMode.OpenSceneClicked())
+                }
+
+                if (ImGui.menuItem("Save", "Ctrl+S")) {
+                    events.fire(SceneMode.SaveSceneClicked())
+                }
+
+                ImGui.menuItem("Save as..")
+                ImGui.menuItem("Exit")
+                ImGui.endMenu()
+            }
+
+            if (ImGui.beginMenu("Mode")) {
+                if (ImGui.menuItem("Scene Editor", false)) {
+                    events.fire(ImGuiEditorState.SceneModeSelected())
+                }
+                ImGui.menuItem("Actor Editor", true)
+                ImGui.beginDisabled()
+                ImGui.menuItem("Particle Editor", false)
+                ImGui.menuItem("Animation Editor", false)
+                ImGui.menuItem("Weapon Editor", false)
+                ImGui.endDisabled()
+                ImGui.endMenu()
+            }
+
+            ImGui.showDemoWindow()
+            ImGui.endMainMenuBar()
+        }
+    }
+}
