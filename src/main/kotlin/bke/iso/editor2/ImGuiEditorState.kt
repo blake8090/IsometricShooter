@@ -26,7 +26,7 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     override suspend fun load() {
         log.info { "Starting editor" }
 
-        engine.ui2.stop()
+        engine.ui2.clear()
         engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
 
         selectMode(sceneMode)

@@ -16,7 +16,7 @@ class UI(private val input: Input) : EngineModule() {
     private var layer: UILayer? = null
 
     override fun stop() {
-        layer?.dispose()
+        clear()
     }
 
     override fun update(deltaTime: Float) {
@@ -25,6 +25,11 @@ class UI(private val input: Input) : EngineModule() {
 
     override fun handleEvent(event: Event) {
         layer?.handleEvent(event)
+    }
+
+    fun clear() {
+        layer?.dispose()
+        layer = null
     }
 
     fun setLayer(layer: UILayer) {
