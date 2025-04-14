@@ -4,12 +4,14 @@ import bke.iso.editor2.EditorMode
 import bke.iso.editor2.scene.tool.ToolLogic
 import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.Engine
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.core.Event
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneMode(private val engine: Engine) : EditorMode(engine.renderer, engine.world) {
+class SceneMode(engine: Engine) : EditorMode(engine.renderer, engine.world) {
 
     private val log = KotlinLogging.logger { }
 
@@ -78,6 +80,8 @@ class SceneMode(private val engine: Engine) : EditorMode(engine.renderer, engine
             is OpenSceneClicked -> openScene()
             is SaveSceneClicked -> saveScene()
             is ToolSelected -> toolLogic.selectTool(event.selection)
+            is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
+            is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
         }
     }
 
@@ -93,4 +97,8 @@ class SceneMode(private val engine: Engine) : EditorMode(engine.renderer, engine
     class SaveSceneClicked : Event
 
     data class ToolSelected(val selection: ToolSelection) : Event
+
+    data class TilePrefabSelected(val prefab: TilePrefab) : Event
+
+    data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
 }

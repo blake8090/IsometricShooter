@@ -2,6 +2,8 @@ package bke.iso.editor2.scene.tool
 
 import bke.iso.editor2.scene.SceneMode
 import bke.iso.editor2.scene.WorldLogic
+import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Events
 import bke.iso.engine.input.ButtonState
@@ -68,4 +70,12 @@ class ToolLogic(
             ToolSelection.POINTER -> pointerTool
             ToolSelection.NONE -> null
         }
+
+    fun onTilePrefabSelected(prefab: TilePrefab) {
+        brushTool.selectPrefab(prefab)
+    }
+
+    fun onActorPrefabSelected(prefab: ActorPrefab) {
+        brushTool.selectPrefab(prefab)
+    }
 }

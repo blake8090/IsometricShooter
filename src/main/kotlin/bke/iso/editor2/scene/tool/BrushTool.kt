@@ -12,9 +12,12 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
+import bke.iso.engine.math.floor
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -37,6 +40,25 @@ class BrushTool(
 
     override fun draw() {
         renderer.fgShapes.addBox(getBox(), 1f, Color.GREEN)
+
+        val pos = Vector3(pointerPos)
+
+        if (selection is TileSelection || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+            pos.floor()
+
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                brushActor.with<Collider> { collider ->
+                    pos.y -= collider.size.y
+                }
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
+                brushActor.with<Collider> { collider ->
+                    pos.x -= collider.size.x
+                }
+            }
+        }
+        brushActor.moveTo(pos.x, pos.y, pos.z)
     }
 
     private fun getBox() =

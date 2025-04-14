@@ -136,6 +136,7 @@ class SceneModeView(
 
             if (imageButton(sprite.texture)) {
                 log.debug { "Selected actor prefab ${prefab.name}" }
+                events.fire(SceneMode.ActorPrefabSelected(prefab))
             }
             ImGui.setItemTooltip(prefab.name)
 
@@ -153,6 +154,7 @@ class SceneModeView(
         for (prefab in assets.getAll<TilePrefab>()) {
             if (imageButton(prefab.sprite.texture)) {
                 log.debug { "Selected tile prefab ${prefab.name}" }
+                events.fire(SceneMode.TilePrefabSelected(prefab))
             }
             ImGui.setItemTooltip(prefab.name)
 
