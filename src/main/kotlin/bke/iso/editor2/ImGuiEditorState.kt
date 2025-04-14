@@ -19,16 +19,7 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     var selectedLayer = 0f
         private set
 
-    private val sceneMode =
-        SceneMode(
-            engine.renderer,
-            engine.world,
-            engine.assets,
-            engine.input,
-            engine.events,
-            engine.dialogs,
-            engine.serializer,
-        )
+    private val sceneMode = SceneMode(engine)
 
     private var selectedMode: EditorMode? = null
 

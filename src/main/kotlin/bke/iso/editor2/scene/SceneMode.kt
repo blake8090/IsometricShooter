@@ -1,27 +1,15 @@
 package bke.iso.editor2.scene
 
 import bke.iso.editor2.EditorMode
-import bke.iso.engine.asset.Assets
+import bke.iso.editor2.scene.tool.ToolLogic
+import bke.iso.editor2.scene.tool.ToolSelection
+import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
-import bke.iso.engine.core.Events
-import bke.iso.engine.input.Input
-import bke.iso.engine.os.Dialogs
-import bke.iso.engine.render.Renderer
-import bke.iso.engine.serialization.Serializer
-import bke.iso.engine.world.World
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneMode(
-    renderer: Renderer,
-    world: World,
-    assets: Assets,
-    input: Input,
-    events: Events,
-    dialogs: Dialogs,
-    serializer: Serializer,
-) : EditorMode(renderer, world) {
+class SceneMode(private val engine: Engine) : EditorMode(engine.renderer, engine.world) {
 
     private val log = KotlinLogging.logger { }
 
@@ -32,12 +20,15 @@ class SceneMode(
     private var gridLength = 20
     private var drawGridForeground = false
 
-    private val cameraLogic = CameraLogic(input, world, renderer, this)
-    private val worldLogic = WorldLogic(world, assets, events, dialogs, serializer)
-    private val view = SceneModeView(assets, events)
+    private val cameraLogic = CameraLogic(engine.input, world, renderer, this)
+    private val worldLogic = WorldLogic(world, engine.assets, engine.events, engine.dialogs, engine.serializer)
+    private val toolLogic =
+        ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
+    private val view = SceneModeView(engine.assets, engine.events)
 
     override fun start() {
         cameraLogic.start()
+        toolLogic.start()
     }
 
     override fun stop() {
@@ -46,6 +37,7 @@ class SceneMode(
 
     override fun update() {
         cameraLogic.update()
+        toolLogic.update()
         drawGrid()
     }
 
@@ -78,13 +70,14 @@ class SceneMode(
         }
 
     override fun draw() {
-        view.draw()
+        view.draw(toolLogic.selection)
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is OpenSceneSelected -> openScene()
-            is SaveSceneSelected -> saveScene()
+            is OpenSceneClicked -> openScene()
+            is SaveSceneClicked -> saveScene()
+            is ToolSelected -> toolLogic.selectTool(event.selection)
         }
     }
 
@@ -95,7 +88,9 @@ class SceneMode(
     private fun saveScene() {
     }
 
-    class OpenSceneSelected : Event
+    class OpenSceneClicked : Event
 
-    class SaveSceneSelected : Event
+    class SaveSceneClicked : Event
+
+    data class ToolSelected(val selection: ToolSelection) : Event
 }

@@ -1,5 +1,6 @@
 package bke.iso.editor2.scene
 
+import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
 import imgui.ImGui
 import imgui.ImVec2
+import imgui.flag.ImGuiCol
 import imgui.type.ImFloat
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -24,7 +26,7 @@ class SceneModeView(
 
     private val viewport = ImGui.getMainViewport()
 
-    fun draw() {
+    fun draw(selectedTool: ToolSelection) {
         beginImGuiFrame()
 
         drawMainMenuBar()
@@ -33,7 +35,7 @@ class SceneModeView(
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
         val inspectorWindowData = getInspectorWindowData(assetBrowserWindowData, toolbarWindowData)
         drawAssetBrowser(assetBrowserWindowData)
-        drawToolbar(toolbarWindowData)
+        drawToolbar(toolbarWindowData, selectedTool)
         drawInspectorWindow(inspectorWindowData)
 
         endImGuiFrame()
@@ -45,11 +47,11 @@ class SceneModeView(
                 ImGui.menuItem("New")
 
                 if (ImGui.menuItem("Open", "Ctrl+O")) {
-                    events.fire(SceneMode.OpenSceneSelected())
+                    events.fire(SceneMode.OpenSceneClicked())
                 }
 
                 if (ImGui.menuItem("Save", "Ctrl+S")) {
-                    events.fire(SceneMode.SaveSceneSelected())
+                    events.fire(SceneMode.SaveSceneClicked())
                 }
 
                 ImGui.menuItem("Save as..")
@@ -163,13 +165,13 @@ class SceneModeView(
         }
     }
 
-    private fun imageButton(texture: String, scale: Float = 1f): Boolean {
+    private fun imageButton(texture: String): Boolean {
         val tex = assets.get<Texture>(texture)
         val texId = (tex as GLTexture).textureObjectHandle
         return ImGui.imageButton(
             /* strId = */ texture,
             /* userTextureId = */ texId.toLong(),
-            /* size = */ ImVec2(tex.width.toFloat() * scale, tex.height.toFloat() * scale)
+            /* size = */ ImVec2(tex.width.toFloat(), tex.height.toFloat())
         )
     }
 
@@ -199,22 +201,26 @@ class SceneModeView(
         ImGui.end()
     }
 
-    private fun drawToolbar(windowData: WindowData) {
+    private fun drawToolbar(windowData: WindowData, selectedTool: ToolSelection) {
         ImGui.setNextWindowPos(windowData.pos)
         ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Toolbar")
 
-        imageButton("pointer.png")
+        toolbarImageButton("pointer.png", selectedTool == ToolSelection.POINTER) {
+            events.fire(SceneMode.ToolSelected(ToolSelection.POINTER))
+        }
         ImGui.sameLine()
-        imageButton("brush.png")
+        toolbarImageButton("brush.png", selectedTool == ToolSelection.BRUSH) {
+            events.fire(SceneMode.ToolSelected(ToolSelection.BRUSH))
+        }
         ImGui.sameLine()
-        imageButton("eraser.png")
+        toolbarImageButton("eraser.png")
         ImGui.sameLine()
-        imageButton("icon-room.png")
+        toolbarImageButton("icon-room.png")
         ImGui.sameLine()
-        imageButton("fill.png")
+        toolbarImageButton("fill.png")
         ImGui.sameLine()
-        imageButton("grid.png")
+        toolbarImageButton("grid.png")
         ImGui.sameLine()
 
         ImGui.text("Layer: 01")
@@ -232,6 +238,20 @@ class SceneModeView(
         ImGui.sameLine()
 
         ImGui.end()
+    }
+
+    private fun toolbarImageButton(texture: String, selected: Boolean = false, action: () -> Unit = {}) {
+        if (selected) {
+            ImGui.pushStyleColor(ImGuiCol.Button, ImGui.getStyleColorVec4(ImGuiCol.ButtonHovered))
+        }
+
+        if (imageButton(texture)) {
+            action.invoke()
+        }
+
+        if (selected) {
+            ImGui.popStyleColor()
+        }
     }
 
     private fun getAssetBrowserWindowData(): WindowData {
