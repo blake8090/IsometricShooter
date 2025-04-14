@@ -132,4 +132,14 @@ class WorldLogic(
         }
         return reference.prefab
     }
+
+    fun add(actor: Actor) {
+        world.actors.create(
+            id = actor.id,
+            x = actor.x,
+            y = actor.y,
+            z = actor.z,
+            components = actor.components.values.toTypedArray()
+        )
+    }
 }

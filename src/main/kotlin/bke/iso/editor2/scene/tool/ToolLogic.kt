@@ -17,6 +17,7 @@ import com.badlogic.gdx.Input as GdxInput
 enum class ToolSelection {
     BRUSH,
     POINTER,
+    ERASER,
     NONE
 }
 
@@ -34,6 +35,7 @@ class ToolLogic(
 
     private val pointerTool = PointerTool(collisions, renderer, events)
     private val brushTool = BrushTool(collisions, world, worldLogic, renderer)
+    private val eraserTool = EraserTool(collisions, worldLogic, renderer)
 
     var selection = ToolSelection.NONE
         private set
@@ -69,6 +71,7 @@ class ToolLogic(
         when (selection) {
             ToolSelection.BRUSH -> brushTool
             ToolSelection.POINTER -> pointerTool
+            ToolSelection.ERASER -> eraserTool
             ToolSelection.NONE -> null
         }
 
