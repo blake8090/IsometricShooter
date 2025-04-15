@@ -19,6 +19,7 @@ enum class ToolSelection {
     POINTER,
     ERASER,
     FILL,
+    ROOM,
     NONE
 }
 
@@ -38,6 +39,7 @@ class ToolLogic(
     private val brushTool = BrushTool(collisions, world, worldLogic, renderer)
     private val eraserTool = EraserTool(collisions, worldLogic, renderer)
     private val fillTool = FillTool(collisions, renderer, worldLogic)
+    private val roomTool = RoomTool(collisions, renderer, worldLogic)
 
     var selection = ToolSelection.NONE
         private set
@@ -75,6 +77,7 @@ class ToolLogic(
             ToolSelection.POINTER -> pointerTool
             ToolSelection.ERASER -> eraserTool
             ToolSelection.FILL -> fillTool
+            ToolSelection.ROOM -> roomTool
             ToolSelection.NONE -> null
         }
 
@@ -86,6 +89,7 @@ class ToolLogic(
     fun onActorPrefabSelected(prefab: ActorPrefab) {
         brushTool.selectPrefab(prefab)
         fillTool.selectPrefab(prefab)
+        roomTool.selectedPrefab = prefab
     }
 
     fun performAction(): EditorCommand? =

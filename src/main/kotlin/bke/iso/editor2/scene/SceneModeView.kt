@@ -234,7 +234,9 @@ class SceneModeView(
             events.fire(SceneMode.ToolSelected(ToolSelection.ERASER))
         }
         ImGui.sameLine()
-        toolbarImageButton("icon-room.png")
+        toolbarImageButton("icon-room.png", selectedTool == ToolSelection.ROOM) {
+            events.fire(SceneMode.ToolSelected(ToolSelection.ROOM))
+        }
         ImGui.sameLine()
         toolbarImageButton("fill.png", selectedTool == ToolSelection.FILL) {
             events.fire(SceneMode.ToolSelected(ToolSelection.FILL))
