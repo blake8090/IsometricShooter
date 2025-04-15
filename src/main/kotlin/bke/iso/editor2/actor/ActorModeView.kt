@@ -2,16 +2,12 @@ package bke.iso.editor2.actor
 
 import bke.iso.editor2.ImGuiEditorState
 import bke.iso.editor2.scene.SceneMode
-import bke.iso.engine.asset.Assets
 import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
 import imgui.ImGui
 
-class ActorPrefabModeView(
-    private val assets: Assets,
-    private val events: Events
-) {
+class ActorModeView(private val events: Events) {
 
     fun draw() {
         beginImGuiFrame()
@@ -50,7 +46,6 @@ class ActorPrefabModeView(
                 ImGui.endMenu()
             }
 
-            ImGui.showDemoWindow()
             ImGui.endMainMenuBar()
         }
     }

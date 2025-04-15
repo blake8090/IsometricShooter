@@ -1,6 +1,6 @@
 package bke.iso.editor2
 
-import bke.iso.editor2.actor.ActorPrefabMode
+import bke.iso.editor2.actor.ActorMode
 import bke.iso.editor2.scene.SceneMode
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
@@ -21,7 +21,7 @@ class ImGuiEditorState(override val engine: Engine) : State() {
         private set
 
     private val sceneMode = SceneMode(engine)
-    private val actorPrefabMode = ActorPrefabMode(engine.events, engine.assets)
+    private val actorMode = ActorMode(engine)
 
     private var selectedMode: EditorMode? = null
 
@@ -54,7 +54,7 @@ class ImGuiEditorState(override val engine: Engine) : State() {
         super.handleEvent(event)
 
         when (event) {
-            is ActorPrefabModeSelected -> selectMode(actorPrefabMode)
+            is ActorPrefabModeSelected -> selectMode(actorMode)
             is SceneModeSelected -> selectMode(sceneMode)
             else -> selectedMode?.handleEvent(event)
         }
