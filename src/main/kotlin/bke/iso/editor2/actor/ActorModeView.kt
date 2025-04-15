@@ -6,6 +6,7 @@ import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
 import imgui.ImGui
+import imgui.ImVec2
 
 class ActorModeView(private val events: Events) {
 
@@ -48,5 +49,28 @@ class ActorModeView(private val events: Events) {
 
             ImGui.endMainMenuBar()
         }
+        ImGui.showDemoWindow()
+
+        drawComponentList()
+    }
+
+    private fun drawComponentList() {
+        val size = ImVec2(ImGui.getMainViewport().workSize)
+        size.x *= 0.15f
+        val pos = ImVec2(ImGui.getMainViewport().workPos)
+
+        ImGui.setNextWindowPos(pos)
+        ImGui.setNextWindowSize(size)
+        ImGui.begin("Components")
+
+        ImGui.button("Add")
+        ImGui.sameLine()
+        ImGui.button("Delete")
+
+        if (ImGui.beginListBox("##components", size.x, 5 * ImGui.getTextLineHeightWithSpacing())) {
+            ImGui.endListBox()
+        }
+
+        ImGui.end()
     }
 }
