@@ -19,6 +19,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     private var gridWidth = 5
     private var gridLength = 5
 
+    private val referenceActor = world.actors.create(Vector3())
+
     override fun start() {
         engine.rendererManager.setActiveRenderer(renderer)
         cameraLogic.start()
@@ -31,6 +33,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
 
     override fun update() {
         cameraLogic.update()
+
+        renderer.fgShapes.addPoint(referenceActor.pos, 1.25f, Color.RED)
         drawGrid()
     }
 
