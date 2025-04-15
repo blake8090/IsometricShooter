@@ -1,18 +1,25 @@
 package bke.iso.editor2.actor
 
 import bke.iso.editor2.ImGuiEditorState
-import bke.iso.editor2.scene.SceneMode
 import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
+import bke.iso.engine.world.actor.Component
 import imgui.ImGui
 import imgui.ImVec2
 
 class ActorModeView(private val events: Events) {
 
-    fun draw() {
+    private var selectedIndex = -1
+
+    fun reset() {
+        selectedIndex = -1
+    }
+
+    fun draw(components: List<Component>) {
         beginImGuiFrame()
         drawMainMenuBar()
+        drawComponentList(components)
         endImGuiFrame()
     }
 
@@ -22,11 +29,10 @@ class ActorModeView(private val events: Events) {
                 ImGui.menuItem("New")
 
                 if (ImGui.menuItem("Open", "Ctrl+O")) {
-                    events.fire(SceneMode.OpenSceneClicked())
+                    events.fire(ActorMode.OpenClicked())
                 }
 
                 if (ImGui.menuItem("Save", "Ctrl+S")) {
-                    events.fire(SceneMode.SaveSceneClicked())
                 }
 
                 ImGui.menuItem("Save as..")
@@ -49,12 +55,9 @@ class ActorModeView(private val events: Events) {
 
             ImGui.endMainMenuBar()
         }
-        ImGui.showDemoWindow()
-
-        drawComponentList()
     }
 
-    private fun drawComponentList() {
+    private fun drawComponentList(components: List<Component>) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
         size.x *= 0.15f
         val pos = ImVec2(ImGui.getMainViewport().workPos)
@@ -68,6 +71,13 @@ class ActorModeView(private val events: Events) {
         ImGui.button("Delete")
 
         if (ImGui.beginListBox("##components", size.x, 5 * ImGui.getTextLineHeightWithSpacing())) {
+            for ((index, component) in components.withIndex()) {
+                val selected = selectedIndex == index
+                if (ImGui.selectable("${component::class.simpleName}", selected)) {
+                    selectedIndex = index
+                }
+            }
+
             ImGui.endListBox()
         }
 
