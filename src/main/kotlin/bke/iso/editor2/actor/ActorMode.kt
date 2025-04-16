@@ -22,7 +22,7 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     private val log = KotlinLogging.logger { }
 
     private val cameraLogic = CameraLogic(engine.input, renderer)
-    private val view = ActorModeView(engine.events)
+    private val view = ActorModeView(engine.events, engine.assets)
 
     private var gridWidth = 5
     private var gridLength = 5

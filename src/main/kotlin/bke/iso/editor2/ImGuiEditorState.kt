@@ -56,6 +56,7 @@ class ImGuiEditorState(override val engine: Engine) : State() {
         when (event) {
             is ActorPrefabModeSelected -> selectMode(actorMode)
             is SceneModeSelected -> selectMode(sceneMode)
+            is ExecuteCommand -> selectedMode?.executeCommand(event.command)
             else -> selectedMode?.handleEvent(event)
         }
     }
@@ -63,4 +64,6 @@ class ImGuiEditorState(override val engine: Engine) : State() {
     class ActorPrefabModeSelected : Event
 
     class SceneModeSelected : Event
+
+    data class ExecuteCommand(val command: EditorCommand) : Event
 }

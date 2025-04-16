@@ -6,12 +6,16 @@ import bke.iso.engine.world.World
 
 abstract class EditorMode() {
 
-    abstract protected val renderer: Renderer
-    abstract protected val world: World
+    protected abstract val renderer: Renderer
+    protected abstract val world: World
 
     abstract fun start()
     abstract fun stop()
     abstract fun update()
     abstract fun draw()
     abstract fun handleEvent(event: Event)
+
+    fun executeCommand(command: EditorCommand) {
+        command.execute()
+    }
 }

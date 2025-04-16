@@ -1,11 +1,15 @@
 package bke.iso.editor2.actor
 
 import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.actor.command.UpdateComponentPropertyCommand
+import bke.iso.editor2.actor.command.UpdateVector3Command
+import bke.iso.engine.asset.Assets
 import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
 import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector3
 import imgui.ImGui
 import imgui.ImVec2
@@ -15,12 +19,17 @@ import imgui.type.ImFloat
 import imgui.type.ImInt
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
 import kotlin.reflect.cast
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.typeOf
 
-class ActorModeView(private val events: Events) {
+class ActorModeView(
+    private val events: Events,
+    private val assets: Assets,
+) {
 
     private val inputTextLength = 50
 
@@ -146,27 +155,80 @@ class ActorModeView(private val events: Events) {
     }
 
     private fun drawStringControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        ImGui.inputText(memberProperty.name, ImString(memberProperty.getter.call(component).toString(), inputTextLength))
+        val isMutable = memberProperty is KMutableProperty<*>
+
+        if (!isMutable) {
+            ImGui.beginDisabled()
+        }
+
+        val value = ImString(memberProperty.getter.call(component).toString(), inputTextLength)
+        if (ImGui.inputText(memberProperty.name, value)) {
+            if (memberProperty is KMutableProperty<*>) {
+                if (memberProperty.name != "texture" || assets.contains(value.toString(), Texture::class)) {
+                    events.fire(
+                        ImGuiEditorState.ExecuteCommand(
+                            UpdateComponentPropertyCommand(
+                                component = component,
+                                property = memberProperty as KMutableProperty1,
+                                newValue = value.toString()
+                            )
+                        )
+                    )
+                }
+            }
+        }
+
+        if (!isMutable) {
+            ImGui.endDisabled()
+        }
     }
 
     private fun drawFloatControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        ImGui.inputFloat(memberProperty.name, ImFloat(memberProperty.getter.call(component) as Float))
+        val value = ImFloat(memberProperty.getter.call(component) as Float)
+        if (ImGui.inputFloat(memberProperty.name, value)) {
+            val command =
+                UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
+            events.fire(ImGuiEditorState.ExecuteCommand(command))
+        }
     }
 
     private fun drawBooleanControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        ImGui.checkbox(memberProperty.name, ImBoolean(memberProperty.getter.call(component) as Boolean))
+        val value = ImBoolean(memberProperty.getter.call(component) as Boolean)
+        if (ImGui.checkbox(memberProperty.name, value)) {
+            val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
+            events.fire(ImGuiEditorState.ExecuteCommand(command))
+        }
     }
 
     private fun drawIntControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        ImGui.inputInt(memberProperty.name, ImInt(memberProperty.getter.call(component) as Int))
+        val value = ImInt(memberProperty.getter.call(component) as Int)
+        if (ImGui.inputInt(memberProperty.name, value)) {
+            val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
+            events.fire(ImGuiEditorState.ExecuteCommand(command))
+        }
     }
 
     private fun drawVector3Controls(component: Component, memberProperty: KProperty1<out Component, *>) {
         if (ImGui.collapsingHeader(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
             val vector = Vector3::class.cast(memberProperty.getter.call(component))
-            ImGui.inputFloat("x##${memberProperty.name}", ImFloat(vector.x))
-            ImGui.inputFloat("y##${memberProperty.name}", ImFloat(vector.y))
-            ImGui.inputFloat("z##${memberProperty.name}", ImFloat(vector.z))
+
+            val xValue = ImFloat(vector.x)
+            if (ImGui.inputFloat("x##${memberProperty.name}", xValue)) {
+                val command = UpdateVector3Command(vector, xValue.get(), vector.y, vector.z)
+                events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
+
+            val yValue = ImFloat(vector.z)
+            if (ImGui.inputFloat("y##${memberProperty.name}", yValue)) {
+                val command = UpdateVector3Command(vector, vector.x, yValue.get(), vector.z)
+                events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
+
+            val zValue = ImFloat(vector.z)
+            if (ImGui.inputFloat("z##${memberProperty.name}", zValue)) {
+                val command = UpdateVector3Command(vector, xValue.get(), vector.y, zValue.get())
+                events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
         }
     }
 
