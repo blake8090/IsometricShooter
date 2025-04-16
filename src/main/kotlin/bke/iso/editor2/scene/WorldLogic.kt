@@ -1,7 +1,6 @@
 package bke.iso.editor2.scene
 
 import bke.iso.editor.scene.ActorPrefabReference
-import bke.iso.editor.scene.SceneLoadedEvent
 import bke.iso.editor.scene.TilePrefabReference
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
@@ -50,7 +49,7 @@ class WorldLogic(
             load(record)
         }
 
-        events.fire(SceneLoadedEvent())
+        events.fire(SceneMode.SceneLoaded())
         log.info { "Loaded scene: '${file.canonicalPath}'" }
     }
 

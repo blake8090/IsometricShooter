@@ -39,6 +39,10 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             bindMouse("sceneTabToolDown", Input.Buttons.LEFT, ButtonState.DOWN)
             bindMouse("sceneTabToolPress", Input.Buttons.LEFT, ButtonState.PRESSED)
             bindMouse("sceneTabToolRelease", Input.Buttons.LEFT, ButtonState.RELEASED)
+
+            bindKey("sceneModeModifier", Input.Keys.CONTROL_LEFT, ButtonState.DOWN)
+            bindKey("sceneModeUndo", Input.Keys.Z, ButtonState.PRESSED)
+            bindKey("sceneModeRedo", Input.Keys.Y, ButtonState.PRESSED)
         }
     }
 
@@ -66,6 +70,15 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         engine.input.onAction("sceneTabToolRelease") {
             toolLogic.performReleaseAction()?.let { command ->
                 engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
+        }
+
+        engine.input.onAction("sceneModeModifier") {
+            engine.input.onAction("sceneModeUndo") {
+                undo()
+            }
+            engine.input.onAction("sceneModeRedo") {
+                redo()
             }
         }
     }
@@ -109,6 +122,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
             is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
+            is SceneLoaded -> reset()
         }
     }
 
@@ -128,4 +142,6 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     data class TilePrefabSelected(val prefab: TilePrefab) : Event
 
     data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
+
+    class SceneLoaded : Event
 }
