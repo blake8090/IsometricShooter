@@ -1,6 +1,7 @@
 package bke.iso.editor2.scene
 
 import bke.iso.editor2.EditorMode
+import bke.iso.editor2.ImGuiEditorState
 import bke.iso.editor2.scene.tool.ToolLogic
 import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.Engine
@@ -51,15 +52,21 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         drawGrid()
 
         engine.input.onAction("sceneTabToolPress") {
-            toolLogic.performAction()?.execute()
+            toolLogic.performAction()?.let { command ->
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
         }
 
         engine.input.onAction("sceneTabToolDown") {
-            toolLogic.performMultiAction()?.execute()
+            toolLogic.performMultiAction()?.let { command ->
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
         }
 
         engine.input.onAction("sceneTabToolRelease") {
-            toolLogic.performReleaseAction()?.execute()
+            toolLogic.performReleaseAction()?.let { command ->
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
         }
     }
 
