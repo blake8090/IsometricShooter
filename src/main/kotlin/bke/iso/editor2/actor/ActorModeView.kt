@@ -68,6 +68,7 @@ class ActorModeView(
                 }
 
                 if (ImGui.menuItem("Save", "Ctrl+S")) {
+                    events.fire(ActorMode.SaveClicked())
                 }
 
                 ImGui.menuItem("Save as..")

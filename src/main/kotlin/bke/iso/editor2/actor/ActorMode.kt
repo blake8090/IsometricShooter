@@ -100,12 +100,13 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     }
 
     override fun handleEvent(event: Event) {
-        if (event is OpenClicked) {
-            loadActorPrefab()
+        when (event) {
+            is OpenClicked -> loadPrefab()
+            is SaveClicked -> savePrefab()
         }
     }
 
-    private fun loadActorPrefab() {
+    private fun loadPrefab() {
         val file = engine.dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
         val prefab = engine.serializer.read<ActorPrefab>(file.readText())
         selectedPrefab = prefab
@@ -120,5 +121,17 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
     }
 
+    private fun savePrefab() {
+        val prefab = selectedPrefab ?: return
+
+        val file = engine.dialogs.showSaveFileDialog("Actor Prefab", "actor") ?: return
+        val content = engine.serializer.write(ActorPrefab(file.nameWithoutExtension, prefab.components))
+        file.writeText(content)
+
+        log.info { "Saved actor prefab: '${file.canonicalPath}'" }
+    }
+
     class OpenClicked : Event
+
+    class SaveClicked : Event
 }
