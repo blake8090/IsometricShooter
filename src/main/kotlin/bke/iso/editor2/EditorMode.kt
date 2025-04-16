@@ -45,7 +45,7 @@ abstract class EditorMode {
         commands[pointer].execute()
     }
 
-    protected fun reset() {
+    protected fun resetCommands() {
         commands.clear()
         pointer = -1
     }

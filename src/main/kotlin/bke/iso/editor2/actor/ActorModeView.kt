@@ -214,20 +214,26 @@ class ActorModeView(
 
             val xValue = ImFloat(vector.x)
             if (ImGui.inputFloat("x##${memberProperty.name}", xValue)) {
-                val command = UpdateVector3Command(vector, xValue.get(), vector.y, vector.z)
-                events.fire(ImGuiEditorState.ExecuteCommand(command))
+                if (xValue.get() != vector.x) {
+                    val command = UpdateVector3Command(vector, xValue.get(), vector.y, vector.z)
+                    events.fire(ImGuiEditorState.ExecuteCommand(command))
+                }
             }
 
-            val yValue = ImFloat(vector.z)
+            val yValue = ImFloat(vector.y)
             if (ImGui.inputFloat("y##${memberProperty.name}", yValue)) {
-                val command = UpdateVector3Command(vector, vector.x, yValue.get(), vector.z)
-                events.fire(ImGuiEditorState.ExecuteCommand(command))
+                if (yValue.get() != vector.y) {
+                    val command = UpdateVector3Command(vector, vector.x, yValue.get(), vector.z)
+                    events.fire(ImGuiEditorState.ExecuteCommand(command))
+                }
             }
 
             val zValue = ImFloat(vector.z)
             if (ImGui.inputFloat("z##${memberProperty.name}", zValue)) {
-                val command = UpdateVector3Command(vector, xValue.get(), vector.y, zValue.get())
-                events.fire(ImGuiEditorState.ExecuteCommand(command))
+                if (zValue.get() != vector.z) {
+                    val command = UpdateVector3Command(vector, xValue.get(), vector.y, zValue.get())
+                    events.fire(ImGuiEditorState.ExecuteCommand(command))
+                }
             }
         }
     }

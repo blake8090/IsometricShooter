@@ -20,6 +20,6 @@ class UpdateComponentPropertyCommand(
     }
 
     override fun undo() {
-        property.setter.call(previousValue)
+        property.setter.call(component, previousValue)
     }
 }

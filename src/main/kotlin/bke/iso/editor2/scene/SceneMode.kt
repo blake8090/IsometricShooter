@@ -122,7 +122,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
             is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
-            is SceneLoaded -> reset()
+            is SceneLoaded -> resetCommands()
         }
     }
 

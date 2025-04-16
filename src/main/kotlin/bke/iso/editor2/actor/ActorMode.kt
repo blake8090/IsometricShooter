@@ -6,10 +6,12 @@ import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Event
+import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -33,6 +35,12 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     override fun start() {
         engine.rendererManager.setActiveRenderer(renderer)
         cameraLogic.start()
+
+        with(engine.input.keyMouse) {
+            bindKey("actorModeModifier", Input.Keys.CONTROL_LEFT, ButtonState.DOWN)
+            bindKey("actorModeUndo", Input.Keys.Z, ButtonState.PRESSED)
+            bindKey("actorModeRedo", Input.Keys.Y, ButtonState.PRESSED)
+        }
     }
 
     override fun stop() {
@@ -42,6 +50,15 @@ class ActorMode(private val engine: Engine) : EditorMode() {
 
     override fun update() {
         cameraLogic.update()
+
+        engine.input.onAction("sceneModeModifier") {
+            engine.input.onAction("sceneModeUndo") {
+                undo()
+            }
+            engine.input.onAction("sceneModeRedo") {
+                redo()
+            }
+        }
 
         renderer.fgShapes.addPoint(referenceActor.pos, 1.25f, Color.RED)
         drawGrid()
@@ -98,8 +115,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
             referenceActor.add(sprite)
         }
 
+        resetCommands()
         view.reset()
-
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
     }
 
