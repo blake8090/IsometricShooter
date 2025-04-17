@@ -20,7 +20,7 @@ fun initImGui() {
 
     val io: ImGuiIO = ImGui.getIO()
     io.iniFilename = null
-    io.fonts.addFontDefault()
+    io.fonts.addFontFromFileTTF("assets/ui/roboto.ttf", 20f)
     io.fonts.build()
 
     imGuiGlfw.init(windowHandle, true)

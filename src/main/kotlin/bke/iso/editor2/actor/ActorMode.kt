@@ -5,9 +5,9 @@ import bke.iso.editor2.EditorMode
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.math.Box
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
@@ -61,8 +61,12 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         }
 
         renderer.fgShapes.addPoint(referenceActor.pos, 1.25f, Color.RED)
+        referenceActor.getCollisionBox()?.let { box ->
+            renderer.fgShapes.addBox(box, 1f, Color.CYAN)
+            renderer.fgShapes.addPoint(box.pos, 1.5f, Color.CYAN)
+        }
+
         drawGrid()
-        drawPrefab()
     }
 
     private fun drawGrid() {
@@ -85,18 +89,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         }
     }
 
-    private fun drawPrefab() {
-        selectedPrefab?.components?.withFirstInstance<Collider> { collider ->
-            val min = referenceActor.pos.add(collider.offset)
-            val max = Vector3(min).add(collider.size)
-            val box = Box.fromMinMax(min, max)
-            renderer.fgShapes.addBox(box, 0.75f, Color.CYAN)
-            renderer.fgShapes.addPoint(box.pos, 1.5f, Color.CYAN)
-        }
-    }
-
     override fun draw() {
-        view.draw(selectedPrefab?.components ?: emptyList())
+        view.draw(referenceActor.components.values.toList())
     }
 
     override fun handleEvent(event: Event) {
@@ -112,9 +106,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         selectedPrefab = prefab
 
         referenceActor.components.clear()
-        prefab.components.withFirstInstance<Sprite> { sprite ->
-            referenceActor.add(sprite)
-        }
+        prefab.components.withFirstInstance<Sprite>(referenceActor::add)
+        prefab.components.withFirstInstance<Collider>(referenceActor::add)
 
         resetCommands()
         view.reset()
