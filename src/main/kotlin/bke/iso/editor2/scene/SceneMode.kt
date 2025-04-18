@@ -9,6 +9,7 @@ import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -18,7 +19,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     override val world = engine.world
     override val renderer = engine.renderer
 
-    var selectedLayer = 0f
+    var selectedLayer = 0
         private set
 
     private var gridWidth = 20
@@ -88,16 +89,16 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
         for (x in 0..gridWidth) {
             shapes.addLine(
-                Vector3(x.toFloat(), 0f, selectedLayer),
-                Vector3(x.toFloat(), gridLength.toFloat(), selectedLayer),
+                Vector3(x.toFloat(), 0f, selectedLayer.toFloat()),
+                Vector3(x.toFloat(), gridLength.toFloat(), selectedLayer.toFloat()),
                 0.5f,
                 Color.WHITE
             )
         }
         for (y in 0..gridLength) {
             shapes.addLine(
-                Vector3(0f, y.toFloat(), selectedLayer),
-                Vector3(gridWidth.toFloat(), y.toFloat(), selectedLayer),
+                Vector3(0f, y.toFloat(), selectedLayer.toFloat()),
+                Vector3(gridWidth.toFloat(), y.toFloat(), selectedLayer.toFloat()),
                 0.5f,
                 Color.WHITE
             )
@@ -112,7 +113,13 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         }
 
     override fun draw() {
-        view.draw(toolLogic.selection)
+        view.draw(
+            ViewData(
+                selectedActor = null,
+                selectedTool = toolLogic.selection,
+                selectedLayer = selectedLayer
+            )
+        )
     }
 
     override fun handleEvent(event: Event) {
@@ -123,6 +130,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
             is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
             is SceneLoaded -> resetCommands()
+            is LayerIncreased -> selectedLayer++
+            is LayerDecreased -> selectedLayer--
         }
     }
 
@@ -144,4 +153,14 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
 
     class SceneLoaded : Event
+
+    class LayerIncreased : Event
+
+    class LayerDecreased : Event
+
+    data class ViewData(
+        val selectedActor: Actor? = null,
+        val selectedLayer: Int,
+        val selectedTool: ToolSelection
+    )
 }

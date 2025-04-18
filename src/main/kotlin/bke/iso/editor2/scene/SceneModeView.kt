@@ -27,7 +27,7 @@ class SceneModeView(
 
     private val viewport = ImGui.getMainViewport()
 
-    fun draw(selectedTool: ToolSelection) {
+    fun draw(viewData: SceneMode.ViewData) {
         beginImGuiFrame()
 
         drawMainMenuBar()
@@ -36,7 +36,7 @@ class SceneModeView(
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
         val inspectorWindowData = getInspectorWindowData(assetBrowserWindowData, toolbarWindowData)
         drawAssetBrowser(assetBrowserWindowData)
-        drawToolbar(toolbarWindowData, selectedTool)
+        drawToolbar(toolbarWindowData, viewData)
         drawInspectorWindow(inspectorWindowData)
 
         endImGuiFrame()
@@ -216,7 +216,9 @@ class SceneModeView(
         ImGui.end()
     }
 
-    private fun drawToolbar(windowData: WindowData, selectedTool: ToolSelection) {
+    private fun drawToolbar(windowData: WindowData, viewData: SceneMode.ViewData) {
+        val selectedTool = viewData.selectedTool
+
         ImGui.setNextWindowPos(windowData.pos)
         ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Toolbar")
@@ -244,11 +246,15 @@ class SceneModeView(
         toolbarImageButton("grid.png")
         ImGui.sameLine()
 
-        ImGui.text("Layer: 01")
+        ImGui.text("Layer: ${viewData.selectedLayer}")
         ImGui.sameLine()
-        ImGui.button("-")
+        if (ImGui.button("-")) {
+            events.fire(SceneMode.LayerDecreased())
+        }
         ImGui.sameLine()
-        ImGui.button("+")
+        if (ImGui.button("+")) {
+            events.fire(SceneMode.LayerIncreased())
+        }
         ImGui.sameLine()
 
         imageButton("hide-layers.png")

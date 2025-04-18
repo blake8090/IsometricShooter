@@ -80,7 +80,7 @@ class CameraLogic(
     }
 
     private fun moveCameraActor() {
-        var z = sceneMode.selectedLayer
+        var z = sceneMode.selectedLayer.toFloat()
         // apply a small offset so that the camera always appears above actors on the same z level
         if (z >= 0f) {
             z += 0.01f

@@ -54,7 +54,7 @@ class ToolLogic(
     fun update() {
         val tool = currentTool ?: return
         // TODO: scale cursor position when screen size changes
-        tool.update(sceneMode.selectedLayer, renderer.pointer.pos)
+        tool.update(sceneMode.selectedLayer.toFloat(), renderer.pointer.pos)
         tool.draw()
     }
 
