@@ -31,25 +31,18 @@ class ActorModeView(
     private val assets: Assets,
 ) {
 
-    private val inputTextLength = 50
-
     private val log = KotlinLogging.logger { }
 
-    private var selectedIndex = -1
-    private var selectedComponent: Component? = null
+    private val inputTextLength = 50
 
+    private var selectedIndex = -1
     private var showDemoWindow = false
 
-    fun reset() {
-        selectedIndex = -1
-        selectedComponent = null
-    }
-
-    fun draw(components: List<Component>) {
+    fun draw(viewData: ActorMode.ViewData) {
         beginImGuiFrame()
         drawMainMenuBar()
-        drawComponentList(components)
-        drawComponentEditor()
+        drawComponentList(viewData)
+        drawComponentEditor(viewData)
 
         if (showDemoWindow) {
             ImGui.showDemoWindow()
@@ -100,7 +93,7 @@ class ActorModeView(
         }
     }
 
-    private fun drawComponentList(components: List<Component>) {
+    private fun drawComponentList(viewData: ActorMode.ViewData) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
         size.x *= 0.15f
         val pos = ImVec2(ImGui.getMainViewport().workPos)
@@ -111,14 +104,21 @@ class ActorModeView(
 
         ImGui.button("Add")
         ImGui.sameLine()
-        ImGui.button("Delete")
+        if (ImGui.button("Delete")) {
+            events.fire(ActorMode.SelectedComponentDeleted())
+            selectedIndex = -1
+        }
 
-        if (ImGui.beginListBox("##components", size.x, 5 * ImGui.getTextLineHeightWithSpacing())) {
-            for ((index, component) in components.withIndex()) {
-                val selected = selectedIndex == index
-                if (ImGui.selectable("${component::class.simpleName}", selected)) {
+        if (ImGui.beginListBox("##components", size.x, 10 * ImGui.getTextLineHeightWithSpacing())) {
+            for ((index, component) in viewData.components.withIndex()) {
+                var selected = false
+                if (viewData.selectedComponent == component) {
                     selectedIndex = index
-                    selectedComponent = component
+                    selected = true
+                }
+
+                if (ImGui.selectable("${component::class.simpleName}", selected)) {
+                    events.fire(ActorMode.ComponentSelected(component))
                 }
             }
             ImGui.endListBox()
@@ -127,7 +127,7 @@ class ActorModeView(
         ImGui.end()
     }
 
-    private fun drawComponentEditor() {
+    private fun drawComponentEditor(viewData: ActorMode.ViewData) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
         size.x *= 0.15f
         val pos = ImVec2(ImGui.getMainViewport().workPos)
@@ -136,7 +136,7 @@ class ActorModeView(
         ImGui.setNextWindowPos(pos)
         ImGui.setNextWindowSize(size)
         ImGui.begin("Component Editor")
-        selectedComponent?.let(::drawControls)
+        viewData.selectedComponent?.let(::drawControls)
         ImGui.end()
     }
 

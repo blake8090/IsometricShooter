@@ -2,6 +2,8 @@ package bke.iso.editor2.actor
 
 import bke.iso.editor.withFirstInstance
 import bke.iso.editor2.EditorMode
+import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.actor.command.DeleteComponentCommand
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.collision.Collider
@@ -11,10 +13,12 @@ import bke.iso.engine.input.ButtonState
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
+import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.reflect.KClass
 
 class ActorMode(private val engine: Engine) : EditorMode() {
 
@@ -30,7 +34,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     private var gridLength = 5
 
     private val referenceActor = world.actors.create(Vector3())
-    private var selectedPrefab: ActorPrefab? = null
+    private val components = mutableListOf<Component>()
+    private var selectedComponent: Component? = null
 
     override fun start() {
         engine.rendererManager.setActiveRenderer(renderer)
@@ -90,41 +95,65 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     }
 
     override fun draw() {
-        view.draw(referenceActor.components.values.toList())
+        view.draw(ViewData(components, selectedComponent))
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
             is OpenClicked -> loadPrefab()
             is SaveClicked -> savePrefab()
+
+            is ComponentSelected -> {
+                selectedComponent = event.component
+            }
+
+            is SelectedComponentDeleted -> {
+                val component = selectedComponent ?: return
+                val command = DeleteComponentCommand(components, component)
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
         }
     }
 
     private fun loadPrefab() {
         val file = engine.dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
         val prefab = engine.serializer.read<ActorPrefab>(file.readText())
-        selectedPrefab = prefab
+
+        components.clear()
+        components.addAll(prefab.components)
 
         referenceActor.components.clear()
-        prefab.components.withFirstInstance<Sprite>(referenceActor::add)
-        prefab.components.withFirstInstance<Collider>(referenceActor::add)
+        components.withFirstInstance<Sprite>(referenceActor::add)
+        components.withFirstInstance<Collider>(referenceActor::add)
 
         resetCommands()
-        view.reset()
         log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
     }
 
     private fun savePrefab() {
-        val prefab = selectedPrefab ?: return
-
         val file = engine.dialogs.showSaveFileDialog("Actor Prefab", "actor") ?: return
-        val content = engine.serializer.write(ActorPrefab(file.nameWithoutExtension, prefab.components))
+        val name = file.nameWithoutExtension
+
+        val content = engine.serializer.write(ActorPrefab(file.nameWithoutExtension, components))
         file.writeText(content)
 
-        log.info { "Saved actor prefab: '${file.canonicalPath}'" }
+        log.info { "Saved actor prefab: '$name'" }
+    }
+
+    private fun <T : Component> deleteComponent(componentType: KClass<T>) {
+        referenceActor.components.remove(componentType)
     }
 
     class OpenClicked : Event
 
     class SaveClicked : Event
+
+    data class ComponentSelected(val component: Component) : Event
+
+    class SelectedComponentDeleted : Event
+
+    data class ViewData(
+        val components: List<Component>,
+        val selectedComponent: Component? = null
+    )
 }
