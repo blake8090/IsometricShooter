@@ -73,7 +73,11 @@ class Actor(
         components.contains(T::class)
 
     inline fun <reified T : Component> remove() {
-        components.remove(T::class)
+        remove(T::class)
+    }
+
+    fun <T : Component> remove(componentType: KClass<T>) {
+        components.remove(componentType)
     }
 
     /**

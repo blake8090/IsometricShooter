@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3
 import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiTreeNodeFlags
+import imgui.flag.ImGuiWindowFlags
 import imgui.type.ImBoolean
 import imgui.type.ImFloat
 import imgui.type.ImInt
@@ -38,11 +39,14 @@ class ActorModeView(
     private var selectedIndex = -1
     private var showDemoWindow = false
 
+    private var openSelectComponentPopup = false
+
     fun draw(viewData: ActorMode.ViewData) {
         beginImGuiFrame()
         drawMainMenuBar()
         drawComponentList(viewData)
         drawComponentEditor(viewData)
+        drawSelectComponentPopup(viewData)
 
         if (showDemoWindow) {
             ImGui.showDemoWindow()
@@ -102,7 +106,9 @@ class ActorModeView(
         ImGui.setNextWindowSize(size)
         ImGui.begin("Components")
 
-        ImGui.button("Add")
+        if (ImGui.button("Add")) {
+            openSelectComponentPopup = true
+        }
         ImGui.sameLine()
         if (ImGui.button("Delete")) {
             events.fire(ActorMode.SelectedComponentDeleted())
@@ -125,6 +131,32 @@ class ActorModeView(
         }
 
         ImGui.end()
+    }
+
+    private fun drawSelectComponentPopup(viewData: ActorMode.ViewData) {
+        if (openSelectComponentPopup) {
+            ImGui.openPopup("Component Types##selectComponentPopup")
+            openSelectComponentPopup = false
+        }
+
+        if (ImGui.beginPopupModal("Component Types##selectComponentPopup", null, ImGuiWindowFlags.AlwaysAutoResize)) {
+            ImGui.text("Select a component type to add.")
+            if (ImGui.beginListBox("##components")) {
+                for (componentType in viewData.componentTypes.sortedBy { type -> type.simpleName }) {
+                    if (ImGui.selectable("${componentType.simpleName}", false)) {
+                        events.fire(ActorMode.NewComponentTypeAdded(componentType))
+                        ImGui.closeCurrentPopup()
+                    }
+                }
+                ImGui.endListBox()
+            }
+
+            if (ImGui.button("Cancel")) {
+                ImGui.closeCurrentPopup()
+            }
+
+            ImGui.endPopup()
+        }
     }
 
     private fun drawComponentEditor(viewData: ActorMode.ViewData) {

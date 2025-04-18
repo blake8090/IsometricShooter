@@ -3,6 +3,7 @@ package bke.iso.editor2.actor
 import bke.iso.editor.withFirstInstance
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.actor.command.AddComponentCommand
 import bke.iso.editor2.actor.command.DeleteComponentCommand
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
@@ -18,7 +19,10 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.Serializable
+import org.reflections.Reflections
 import kotlin.reflect.KClass
+import kotlin.reflect.full.hasAnnotation
 
 class ActorMode(private val engine: Engine) : EditorMode() {
 
@@ -36,6 +40,11 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     private val referenceActor = world.actors.create(Vector3())
     private val components = mutableListOf<Component>()
     private var selectedComponent: Component? = null
+
+    private val componentTypes = Reflections("bke.iso")
+        .getSubTypesOf(Component::class.java)
+        .map(Class<out Component>::kotlin)
+        .filter { kClass -> kClass.hasAnnotation<Serializable>() }
 
     override fun start() {
         engine.rendererManager.setActiveRenderer(renderer)
@@ -95,7 +104,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     }
 
     override fun draw() {
-        view.draw(ViewData(components, selectedComponent))
+
+        view.draw(ViewData(components, selectedComponent, componentTypes))
     }
 
     override fun handleEvent(event: Event) {
@@ -110,6 +120,11 @@ class ActorMode(private val engine: Engine) : EditorMode() {
             is SelectedComponentDeleted -> {
                 val component = selectedComponent ?: return
                 val command = DeleteComponentCommand(components, component)
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
+
+            is NewComponentTypeAdded -> {
+                val command = AddComponentCommand(components, referenceActor, event.componentType)
                 engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
             }
         }
@@ -140,10 +155,6 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         log.info { "Saved actor prefab: '$name'" }
     }
 
-    private fun <T : Component> deleteComponent(componentType: KClass<T>) {
-        referenceActor.components.remove(componentType)
-    }
-
     class OpenClicked : Event
 
     class SaveClicked : Event
@@ -152,8 +163,11 @@ class ActorMode(private val engine: Engine) : EditorMode() {
 
     class SelectedComponentDeleted : Event
 
+    data class NewComponentTypeAdded(val componentType: KClass<out Component>) : Event
+
     data class ViewData(
         val components: List<Component>,
-        val selectedComponent: Component? = null
+        val selectedComponent: Component? = null,
+        val componentTypes: List<KClass<out Component>>
     )
 }
