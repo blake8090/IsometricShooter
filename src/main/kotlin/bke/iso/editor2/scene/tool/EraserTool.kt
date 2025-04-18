@@ -5,6 +5,7 @@ import bke.iso.editor2.EditorCommand
 import bke.iso.editor2.scene.WorldLogic
 import bke.iso.editor2.scene.command.DeleteActorCommand
 import bke.iso.engine.collision.Collisions
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
@@ -16,26 +17,21 @@ class EraserTool(
 ) : BaseTool() {
 
     private var previousType: Type? = null
-    private var highlighted: PickedActor? = null
+    private var highlightedActor: Actor? = null
 
     override fun update() {
-        val picked = pickActor()
-
-        highlighted = picked
+        highlightedActor = pickActor()
     }
 
     override fun draw() {
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
-        val picked = pickActor()
-        if (picked != null) {
-            renderer.fgShapes.addBox(picked.box, 1f, Color.RED)
-        }
+        val collisionBox = highlightedActor?.getCollisionBox()
+        collisionBox?.let { renderer.fgShapes.addBox(it, 1f, Color.RED) }
     }
 
     override fun performAction(): EditorCommand? {
-        val actor = highlighted
-            ?.actor
+        val actor = highlightedActor
             ?: return null
 
         previousType = getType(actor)
@@ -43,8 +39,7 @@ class EraserTool(
     }
 
     override fun performMultiAction(): EditorCommand? {
-        val actor = highlighted
-            ?.actor
+        val actor = highlightedActor
             ?: return null
 
         val type = getType(actor)

@@ -9,8 +9,10 @@ import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.scene.Scene
@@ -44,11 +46,12 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
     private val view = SceneModeView(engine.assets, engine.events)
 
-    var hideWalls = false
-        private set
+    private var hideWalls = false
     var hideUpperLayers = false
         private set
     private var highlightSelectedLayer = false
+
+    private var selectedActor: Actor? = null
 
     override fun start() {
         cameraLogic.start()
@@ -65,6 +68,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         }
 
         renderer.occlusion.resetStrategies()
+        // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
     }
 
@@ -76,6 +80,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         cameraLogic.update()
         toolLogic.update()
         drawGrid()
+        drawSelectedActor()
 
         engine.input.onAction("sceneTabToolPress") {
             toolLogic.performAction()?.let { command ->
@@ -133,6 +138,12 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             renderer.bgShapes
         }
 
+    private fun drawSelectedActor() {
+        val actor = selectedActor ?: return
+        val collisionBox = actor.getCollisionBox() ?: Box(actor.pos, Vector3(1f, 1f, 1f))
+        renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
+    }
+
     override fun draw() {
         view.draw(
             ViewData(
@@ -155,6 +166,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
             is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
+            is ActorSelected -> selectedActor = event.actor
 
             is LayerIncreased -> selectedLayer++
             is LayerDecreased -> selectedLayer--
@@ -164,7 +176,6 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
         }
     }
-
 
     private fun openScene() {
         worldLogic.loadScene()
@@ -225,6 +236,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     data class ToolSelected(val selection: ToolSelection) : Event
     data class TilePrefabSelected(val prefab: TilePrefab) : Event
     data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
+    data class ActorSelected(val actor: Actor) : Event
 
     class LayerIncreased : Event
     class LayerDecreased : Event

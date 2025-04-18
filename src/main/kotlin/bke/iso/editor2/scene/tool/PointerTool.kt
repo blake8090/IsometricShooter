@@ -1,10 +1,15 @@
 package bke.iso.editor2.scene.tool
 
 import bke.iso.editor2.EditorCommand
+import bke.iso.editor2.scene.SceneMode
 import bke.iso.engine.collision.Collisions
+import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Events
+import bke.iso.engine.math.Box
 import bke.iso.engine.render.Renderer
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 
 class PointerTool(
     override val collisions: Collisions,
@@ -12,8 +17,7 @@ class PointerTool(
     private val events: Events
 ) : BaseTool() {
 
-    private var highlighted: PickedActor? = null
-    private var selected: PickedActor? = null
+    private var highlighted: Actor? = null
 
     override fun update() {
         highlighted = pickActor()
@@ -21,27 +25,18 @@ class PointerTool(
 
     override fun draw() {
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
-        drawSelectionBox(highlighted, Color.WHITE)
-        drawSelectionBox(selected, Color.RED)
-    }
 
-    private fun drawSelectionBox(selection: PickedActor?, color: Color) {
-        if (selection == null) {
-            return
+        highlighted?.let { actor ->
+            val collisionBox = actor.getCollisionBox() ?: Box(actor.pos, Vector3(1f, 1f, 1f))
+            renderer.fgShapes.addBox(collisionBox, 1f, Color.WHITE)
         }
-        renderer.fgShapes.addBox(selection.box, 1f, color)
     }
 
     override fun performAction(): EditorCommand? {
-        val currentlyHighlighted = highlighted
-
-        if (currentlyHighlighted != null) {
-            selected = currentlyHighlighted
-//            events.fire(PointerSelectActorEvent(currentlyHighlighted.actor))
-        } else {
-//            events.fire(PointerDeselectActorEvent())
+        highlighted?.let { actor ->
+            events.fire(SceneMode.ActorSelected(actor))
         }
-
+        // we don't need to undo or redo selecting an actor, so no commands necessary
         return null
     }
 
@@ -51,7 +46,5 @@ class PointerTool(
 
     override fun disable() {
         highlighted = null
-        selected = null
-//        events.fire(PointerDeselectActorEvent())
     }
 }

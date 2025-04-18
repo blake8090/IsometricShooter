@@ -48,7 +48,7 @@ abstract class BaseTool {
      */
     open fun disable() {}
 
-    protected fun pickActor(): PickedActor? {
+    protected fun pickActor(): Actor? {
         val collision = collisions
             .checkCollisions(pointerPos)
             .filter { collision -> collision.box.min.z == pointerPos.z }
@@ -56,7 +56,7 @@ abstract class BaseTool {
             ?: return null
 
         return if (collision.obj is Actor) {
-            PickedActor(collision.obj, collision.box)
+            collision.obj
         } else {
             null
         }
@@ -70,9 +70,4 @@ abstract class BaseTool {
         )
         return point.dst(bottomCenter)
     }
-
-    protected data class PickedActor(
-        val actor: Actor,
-        val box: Box
-    )
 }
