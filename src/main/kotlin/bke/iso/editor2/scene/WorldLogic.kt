@@ -19,6 +19,7 @@ import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.actor.Description
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -77,41 +78,6 @@ class WorldLogic(
         }
     }
 
-    fun createReferenceActor(prefab: ActorPrefab, pos: Vector3): Actor {
-        val components = mutableSetOf<Component>()
-        components.add(ActorPrefabReference(prefab.name))
-
-        prefab.components.withFirstInstance<Sprite> { sprite ->
-            components.add(sprite.copy())
-        }
-
-        prefab.components.withFirstInstance<Collider> { collider ->
-            components.add(collider.copy())
-        }
-
-        if (prefab.components.any { component -> component is Occlude }) {
-            components.add(Occlude())
-        }
-
-        return world.actors.create(pos, *components.toTypedArray())
-    }
-
-    fun createReferenceActor(prefab: TilePrefab, location: Location): Actor {
-        if (tilesByLocation.containsKey(location)) {
-            error("Duplicate tile at location $location")
-        }
-
-        val actor = world.actors.create(
-            location,
-            prefab.sprite.copy(),
-            TilePrefabReference(prefab.name),
-            Collider(Vector3(1f, 1f, 0f)),
-            Occlude() // manually ensure that the reference actor is included in the occlusion system
-        )
-        tilesByLocation[location] = actor
-        return actor
-    }
-
     fun delete(actor: Actor) {
         if (actor.has<TilePrefabReference>()) {
             tilesByLocation.remove(Location(actor.pos))
@@ -142,7 +108,7 @@ class WorldLogic(
         )
     }
 
-    fun create(prefab: ActorPrefab, pos: Vector3): Actor {
+    fun createReferenceActor(prefab: ActorPrefab, pos: Vector3): Actor {
         val components = mutableSetOf<Component>()
         components.add(ActorPrefabReference(prefab.name))
 
@@ -154,6 +120,10 @@ class WorldLogic(
             components.add(collider.copy())
         }
 
+        prefab.components.withFirstInstance<Description> { description ->
+            components.add(description.copy())
+        }
+
         if (prefab.components.any { component -> component is Occlude }) {
             components.add(Occlude())
         }
@@ -161,7 +131,7 @@ class WorldLogic(
         return world.actors.create(pos, *components.toTypedArray())
     }
 
-    fun create(prefab: TilePrefab, location: Location): Actor {
+    fun createReferenceActor(prefab: TilePrefab, location: Location): Actor {
         if (tileExists(location)) {
             error("Duplicate tile at location $location")
         }

@@ -33,7 +33,7 @@ class FillTileCommand(
             for (y in yMin..yMax) {
                 val location = Location(x, y, box.min.z.toInt())
                 if (!worldLogic.tileExists(location)) {
-                    actors.add(worldLogic.create(prefab, location))
+                    actors.add(worldLogic.createReferenceActor(prefab, location))
                 }
             }
         }

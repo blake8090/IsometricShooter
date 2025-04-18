@@ -82,7 +82,7 @@ class PaintRoomCommand(
 
     private fun create(prefab: ActorPrefab, x: Float, y: Float, z: Float) {
         val pos = Vector3(x, y, z)
-        actors.add(worldLogic.create(prefab, pos))
+        actors.add(worldLogic.createReferenceActor(prefab, pos))
     }
 
     override fun undo() {

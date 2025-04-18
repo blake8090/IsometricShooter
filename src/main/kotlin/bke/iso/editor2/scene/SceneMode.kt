@@ -147,7 +147,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     override fun draw() {
         view.draw(
             ViewData(
-                selectedActor = null,
+                selectedActor = selectedActor,
                 selectedTool = toolLogic.selection,
                 selectedLayer = selectedLayer,
                 hideWalls = hideWalls,

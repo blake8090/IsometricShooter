@@ -9,11 +9,13 @@ import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.actor.Description
 import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
 import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiCol
+import imgui.flag.ImGuiInputTextFlags
 import imgui.type.ImFloat
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -37,7 +39,7 @@ class SceneModeView(
         val inspectorWindowData = getInspectorWindowData(assetBrowserWindowData, toolbarWindowData)
         drawAssetBrowser(assetBrowserWindowData)
         drawToolbar(toolbarWindowData, viewData)
-        drawInspectorWindow(inspectorWindowData)
+        drawInspectorWindow(inspectorWindowData, viewData)
 
         endImGuiFrame()
     }
@@ -190,27 +192,34 @@ class SceneModeView(
         )
     }
 
-    private fun drawInspectorWindow(windowData: WindowData) {
+    private fun drawInspectorWindow(windowData: WindowData, viewData: SceneMode.ViewData) {
         ImGui.setNextWindowPos(windowData.pos)
         ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Inspector")
 
-        ImGui.beginDisabled()
-        ImGui.inputText("id", ImString())
-        ImGui.inputText("description", ImString())
+        ImGui.beginDisabled(viewData.selectedActor == null)
+        if (viewData.selectedActor != null) {
+            val actor = viewData.selectedActor
+            ImGui.inputText("id", ImString(actor.id), ImGuiInputTextFlags.ReadOnly)
 
-        ImGui.separatorText("Position")
-        ImGui.inputFloat("x", ImFloat())
-        ImGui.inputFloat("y", ImFloat())
-        ImGui.inputFloat("z", ImFloat())
+            val description = actor.get<Description>()
+                ?.text
+                ?: ""
+            ImGui.inputText("description", ImString(description), ImGuiInputTextFlags.ReadOnly)
 
-        ImGui.separatorText("Tags")
-        ImGui.inputText("name", ImString())
-        ImGui.sameLine()
-        ImGui.button("Add")
+            ImGui.separatorText("Position")
+            ImGui.inputFloat("x", ImFloat(actor.x))
+            ImGui.inputFloat("y", ImFloat(actor.y))
+            ImGui.inputFloat("z", ImFloat(actor.z))
 
-        ImGui.separatorText("Buildings")
-        ImGui.button("Apply")
+            ImGui.separatorText("Tags")
+            ImGui.inputText("name", ImString())
+            ImGui.sameLine()
+            ImGui.button("Add")
+
+            ImGui.separatorText("Buildings")
+            ImGui.button("Apply")
+        }
         ImGui.endDisabled()
 
         ImGui.end()
