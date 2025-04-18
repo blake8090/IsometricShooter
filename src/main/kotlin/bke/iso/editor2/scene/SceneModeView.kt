@@ -30,7 +30,7 @@ class SceneModeView(
     fun draw(viewData: SceneMode.ViewData) {
         beginImGuiFrame()
 
-        drawMainMenuBar()
+        drawMainMenuBar(viewData)
 
         val assetBrowserWindowData = getAssetBrowserWindowData()
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
@@ -42,7 +42,7 @@ class SceneModeView(
         endImGuiFrame()
     }
 
-    private fun drawMainMenuBar() {
+    private fun drawMainMenuBar(viewData: SceneMode.ViewData) {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("File")) {
                 ImGui.menuItem("New")
@@ -61,24 +61,24 @@ class SceneModeView(
             }
 
             if (ImGui.beginMenu("View")) {
-                if (ImGui.menuItem("Show Grid", false)) {
+//                if (ImGui.menuItem("Show Grid", viewData.showGrid)) {
 
-                }
-                if (ImGui.menuItem("Show Collision", false)) {
+//                }
+//                if (ImGui.menuItem("Show Collision", false)) {
 
+//                }
+                if (ImGui.menuItem("Hide Walls", viewData.hideWalls)) {
+                    events.fire(SceneMode.HideWallsToggled())
                 }
-                if (ImGui.menuItem("Hide Walls", false)) {
-
+                if (ImGui.menuItem("Hide Upper Layers", viewData.hideUpperLayers)) {
+                    events.fire(SceneMode.HideUpperLayersToggled())
                 }
-                if (ImGui.menuItem("Hide Upper Layers", false)) {
-
+                if (ImGui.menuItem("Highlight Selected Layer", viewData.highlightSelectedLayer)) {
+                    events.fire(SceneMode.HighlightSelectedLayerToggled())
                 }
-                if (ImGui.menuItem("Highlight Selected Layer", false)) {
-
-                }
-                if (ImGui.menuItem("Show Grid in Foreground", false)) {
-
-                }
+//                if (ImGui.menuItem("Show Grid in Foreground", false)) {
+//
+//                }
                 ImGui.endMenu()
             }
 

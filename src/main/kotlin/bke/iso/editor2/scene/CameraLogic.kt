@@ -102,4 +102,8 @@ class CameraLogic(
         )
         renderer.moveCamera(cameraDelta)
     }
+
+    fun setCameraAsOcclusionTarget() {
+        renderer.occlusion.target = cameraActor
+    }
 }

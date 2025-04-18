@@ -44,6 +44,12 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
     private val view = SceneModeView(engine.assets, engine.events)
 
+    var hideWalls = false
+        private set
+    var hideUpperLayers = false
+        private set
+    private var highlightSelectedLayer = false
+
     override fun start() {
         cameraLogic.start()
         toolLogic.start()
@@ -57,6 +63,9 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             bindKey("sceneModeUndo", Input.Keys.Z, ButtonState.PRESSED)
             bindKey("sceneModeRedo", Input.Keys.Y, ButtonState.PRESSED)
         }
+
+        renderer.occlusion.resetStrategies()
+        renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
     }
 
     override fun stop() {
@@ -129,7 +138,10 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             ViewData(
                 selectedActor = null,
                 selectedTool = toolLogic.selection,
-                selectedLayer = selectedLayer
+                selectedLayer = selectedLayer,
+                hideWalls = hideWalls,
+                hideUpperLayers = hideUpperLayers,
+                highlightSelectedLayer = highlightSelectedLayer
             )
         )
     }
@@ -138,14 +150,21 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         when (event) {
             is OpenSceneClicked -> openScene()
             is SaveSceneClicked -> saveScene()
+            is SceneLoaded -> resetCommands()
+
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
             is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
-            is SceneLoaded -> resetCommands()
+
             is LayerIncreased -> selectedLayer++
             is LayerDecreased -> selectedLayer--
+
+            is HideWallsToggled -> toggleHideWalls()
+            is HideUpperLayersToggled -> hideUpperLayers = !hideUpperLayers
+            is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
         }
     }
+
 
     private fun openScene() {
         worldLogic.loadScene()
@@ -188,25 +207,38 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         )
     }
 
+    private fun toggleHideWalls() {
+        hideWalls = !hideWalls
+        if (hideWalls) {
+            log.debug { "Hiding walls" }
+            cameraLogic.setCameraAsOcclusionTarget()
+        } else {
+            log.debug { "Showing walls" }
+            renderer.occlusion.target = null
+        }
+    }
+
     class OpenSceneClicked : Event
-
     class SaveSceneClicked : Event
-
-    data class ToolSelected(val selection: ToolSelection) : Event
-
-    data class TilePrefabSelected(val prefab: TilePrefab) : Event
-
-    data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
-
     class SceneLoaded : Event
 
-    class LayerIncreased : Event
+    data class ToolSelected(val selection: ToolSelection) : Event
+    data class TilePrefabSelected(val prefab: TilePrefab) : Event
+    data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
 
+    class LayerIncreased : Event
     class LayerDecreased : Event
+
+    class HideWallsToggled : Event
+    class HideUpperLayersToggled : Event
+    class HighlightSelectedLayerToggled : Event
 
     data class ViewData(
         val selectedActor: Actor? = null,
         val selectedLayer: Int,
-        val selectedTool: ToolSelection
+        val selectedTool: ToolSelection,
+        val hideWalls: Boolean,
+        val hideUpperLayers: Boolean,
+        val highlightSelectedLayer: Boolean
     )
 }

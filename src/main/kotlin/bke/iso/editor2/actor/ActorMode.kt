@@ -104,7 +104,6 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     }
 
     override fun draw() {
-
         view.draw(ViewData(components, selectedComponent, componentTypes))
     }
 
