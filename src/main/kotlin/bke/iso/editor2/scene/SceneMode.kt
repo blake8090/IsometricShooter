@@ -1,5 +1,7 @@
 package bke.iso.editor2.scene
 
+import bke.iso.editor.scene.ActorPrefabReference
+import bke.iso.editor.scene.TilePrefabReference
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
 import bke.iso.editor2.scene.tool.ToolLogic
@@ -9,15 +11,25 @@ import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.math.Location
+import bke.iso.engine.scene.ActorRecord
+import bke.iso.engine.scene.Scene
+import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
+import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.encodeToString
 
 class SceneMode(private val engine: Engine) : EditorMode() {
 
     override val world = engine.world
     override val renderer = engine.renderer
+
+    private val log = KotlinLogging.logger { }
 
     var selectedLayer = 0
         private set
@@ -140,6 +152,40 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     }
 
     private fun saveScene() {
+        val file = engine.dialogs.showSaveFileDialog("Scene", "scene") ?: return
+
+        val actors = mutableListOf<ActorRecord>()
+        world.actors.each<ActorPrefabReference> { actor, reference ->
+            actors.add(createActorRecord(actor, reference))
+        }
+
+        val tiles = mutableListOf<TileRecord>()
+        world.actors.each { actor: Actor, reference: TilePrefabReference ->
+            tiles.add(
+                TileRecord(
+                    Location(actor.pos),
+                    reference.prefab,
+                    world.buildings.getBuilding(actor)
+                )
+            )
+        }
+
+        val scene = Scene("1", actors, tiles)
+        val content = engine.serializer.format.encodeToString(scene)
+        file.writeText(content)
+        log.info { "Saved scene: '${file.canonicalPath}'" }
+    }
+
+    private fun createActorRecord(actor: Actor, reference: ActorPrefabReference): ActorRecord {
+        val componentOverrides = mutableListOf<Component>()
+        actor.with<Tags>(componentOverrides::add)
+
+        return ActorRecord(
+            actor.pos,
+            reference.prefab,
+            world.buildings.getBuilding(actor),
+            componentOverrides
+        )
     }
 
     class OpenSceneClicked : Event
