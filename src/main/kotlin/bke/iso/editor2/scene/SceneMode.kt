@@ -2,8 +2,10 @@ package bke.iso.editor2.scene
 
 import bke.iso.editor.scene.ActorPrefabReference
 import bke.iso.editor.scene.TilePrefabReference
+import bke.iso.editor.ui.color
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.scene.command.DeleteTagCommand
 import bke.iso.editor2.scene.tool.ToolLogic
 import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.Engine
@@ -78,9 +80,12 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
     override fun update() {
         cameraLogic.update()
-        toolLogic.update()
+
         drawGrid()
         drawSelectedActor()
+        engine.world.actors.each<Tags>(::drawActorTags)
+
+        toolLogic.update()
 
         engine.input.onAction("sceneTabToolPress") {
             toolLogic.performAction()?.let { command ->
@@ -144,6 +149,15 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
     }
 
+    private fun drawActorTags(actor: Actor, tags: Tags) {
+        if (tags.tags.isEmpty() || selectedActor == actor) {
+            return
+        }
+        actor.getCollisionBox()?.let { box ->
+            engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
+        }
+    }
+
     override fun draw() {
         view.draw(
             ViewData(
@@ -174,6 +188,11 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is HideWallsToggled -> toggleHideWalls()
             is HideUpperLayersToggled -> hideUpperLayers = !hideUpperLayers
             is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
+
+            is TagDeleted -> {
+                val command = DeleteTagCommand(event.actor, event.tag)
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
         }
     }
 
@@ -244,6 +263,9 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     class HideWallsToggled : Event
     class HideUpperLayersToggled : Event
     class HighlightSelectedLayerToggled : Event
+
+    class TagAdded(val actor: Actor, val tag: String) : Event
+    data class TagDeleted(val actor: Actor, val tag: String) : Event
 
     data class ViewData(
         val selectedActor: Actor? = null,

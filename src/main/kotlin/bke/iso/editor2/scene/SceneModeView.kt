@@ -9,7 +9,9 @@ import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.core.Events
 import bke.iso.engine.endImGuiFrame
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
+import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
 import imgui.ImGui
@@ -199,7 +201,8 @@ class SceneModeView(
 
         ImGui.beginDisabled(viewData.selectedActor == null)
         if (viewData.selectedActor != null) {
-            val actor = viewData.selectedActor
+            val actor: Actor = viewData.selectedActor
+
             ImGui.inputText("id", ImString(actor.id), ImGuiInputTextFlags.ReadOnly)
 
             val description = actor.get<Description>()
@@ -213,9 +216,18 @@ class SceneModeView(
             ImGui.inputFloat("z", ImFloat(actor.z))
 
             ImGui.separatorText("Tags")
-            ImGui.inputText("name", ImString())
-            ImGui.sameLine()
-            ImGui.button("Add")
+            if (ImGui.button("Add")) {
+//                events.fire(SceneMode.TagAdded(actor))
+            }
+            actor.with<Tags> { component ->
+                for (tag in component.tags) {
+                    ImGui.inputText("##$tag", ImString(tag))
+                    ImGui.sameLine()
+                    if (ImGui.button("Delete")) {
+                        events.fire(SceneMode.TagDeleted(actor, tag))
+                    }
+                }
+            }
 
             ImGui.separatorText("Buildings")
             ImGui.button("Apply")
@@ -301,7 +313,7 @@ class SceneModeView(
 
     private fun getToolbarWindowData(assetBrowserData: WindowData): WindowData {
         val size = ImVec2(viewport.workSize)
-        size.x *= 1f - 0.15f - 0.16f
+        size.x *= 1f - 0.15f - 0.2f
         size.y = 95f
 
         val pos = ImVec2(viewport.workPos)
@@ -312,7 +324,7 @@ class SceneModeView(
 
     private fun getInspectorWindowData(assetBrowserData: WindowData, toolbarWindowData: WindowData): WindowData {
         val size = ImVec2(viewport.workSize)
-        size.x *= 0.16f
+        size.x *= 0.2f
 
         val pos = ImVec2(viewport.workPos)
         pos.x += assetBrowserData.size.x + toolbarWindowData.size.x
