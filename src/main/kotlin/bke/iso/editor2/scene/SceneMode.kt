@@ -10,6 +10,7 @@ import bke.iso.editor2.scene.command.DeleteTagCommand
 import bke.iso.editor2.scene.tool.ToolLogic
 import bke.iso.editor2.scene.tool.ToolSelection
 import bke.iso.engine.Engine
+import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.getCollisionBox
@@ -56,6 +57,9 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private var highlightSelectedLayer = false
 
     private var selectedActor: Actor? = null
+    private var selectedBuilding: String? = null
+
+    private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
     override fun start() {
         cameraLogic.start()
@@ -85,6 +89,11 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
         drawGrid()
         drawSelectedActor()
+
+        for (buildingName in world.buildings.getAll()) {
+            drawBuilding(buildingName)
+        }
+
         engine.world.actors.each<Tags>(::drawActorTags)
 
         toolLogic.update()
@@ -160,6 +169,24 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         actor.getCollisionBox()?.let { box ->
             engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
         }
+    }
+
+    private fun drawBuilding(name: String) {
+        val box = world.buildings.getBounds(name) ?: return
+
+        if (box.min.z > selectedLayer && hideUpperLayers) {
+            return
+        }
+
+        val color =
+            if (selectedBuilding == name) {
+                Color.WHITE
+            } else {
+                Color.BLUE
+            }
+
+        renderer.fgShapes.addBox(box, 1.25f, color)
+        renderer.drawText(name, buildingFont, box.pos)
     }
 
     override fun draw() {
