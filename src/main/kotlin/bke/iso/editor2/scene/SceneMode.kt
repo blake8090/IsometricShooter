@@ -5,6 +5,7 @@ import bke.iso.editor.scene.TilePrefabReference
 import bke.iso.editor.ui.color
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.scene.command.AddTagCommand
 import bke.iso.editor2.scene.command.DeleteTagCommand
 import bke.iso.editor2.scene.tool.ToolLogic
 import bke.iso.editor2.scene.tool.ToolSelection
@@ -13,6 +14,7 @@ import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
+import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
@@ -87,21 +89,23 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
         toolLogic.update()
 
-        engine.input.onAction("sceneTabToolPress") {
-            toolLogic.performAction()?.let { command ->
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+        if (!imGuiWantsToCaptureInput()) {
+            engine.input.onAction("sceneTabToolPress") {
+                toolLogic.performAction()?.let { command ->
+                    engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                }
             }
-        }
 
-        engine.input.onAction("sceneTabToolDown") {
-            toolLogic.performMultiAction()?.let { command ->
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            engine.input.onAction("sceneTabToolDown") {
+                toolLogic.performMultiAction()?.let { command ->
+                    engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                }
             }
-        }
 
-        engine.input.onAction("sceneTabToolRelease") {
-            toolLogic.performReleaseAction()?.let { command ->
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            engine.input.onAction("sceneTabToolRelease") {
+                toolLogic.performReleaseAction()?.let { command ->
+                    engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                }
             }
         }
 
@@ -188,6 +192,11 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is HideWallsToggled -> toggleHideWalls()
             is HideUpperLayersToggled -> hideUpperLayers = !hideUpperLayers
             is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
+
+            is TagAdded -> {
+                val command = AddTagCommand(event.actor, event.tag)
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
 
             is TagDeleted -> {
                 val command = DeleteTagCommand(event.actor, event.tag)

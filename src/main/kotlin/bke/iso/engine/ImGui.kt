@@ -43,8 +43,11 @@ fun endImGuiFrame() {
     imGuiGl3.renderDrawData(ImGui.getDrawData())
 
     // If ImGui wants to capture the input, disable libGDX's input processor
-    if (ImGui.getIO().wantCaptureKeyboard || ImGui.getIO().wantCaptureMouse) {
+    if (imGuiWantsToCaptureInput()) {
         tmpProcessor = Gdx.input.inputProcessor
         Gdx.input.inputProcessor = null
     }
 }
+
+fun imGuiWantsToCaptureInput() =
+    ImGui.getIO().wantCaptureKeyboard || ImGui.getIO().wantCaptureMouse

@@ -31,6 +31,8 @@ class SceneModeView(
 
     private val viewport = ImGui.getMainViewport()
 
+    private var newTagText = ""
+
     fun draw(viewData: SceneMode.ViewData) {
         beginImGuiFrame()
 
@@ -216,14 +218,20 @@ class SceneModeView(
             ImGui.inputFloat("z", ImFloat(actor.z))
 
             ImGui.separatorText("Tags")
-            if (ImGui.button("Add")) {
-//                events.fire(SceneMode.TagAdded(actor))
+            val imString = ImString("", 25)
+            if (ImGui.inputText("##tag", imString)) {
+                newTagText = imString.get()
             }
+            ImGui.sameLine()
+            if (ImGui.button("Add")) {
+                events.fire(SceneMode.TagAdded(actor, newTagText))
+            }
+
             actor.with<Tags> { component ->
-                for (tag in component.tags) {
-                    ImGui.inputText("##$tag", ImString(tag))
+                component.tags.forEachIndexed { index, tag ->
+                    ImGui.inputText("##tagText$index", ImString(tag))
                     ImGui.sameLine()
-                    if (ImGui.button("Delete")) {
+                    if (ImGui.button("Delete##deleteTag$index")) {
                         events.fire(SceneMode.TagDeleted(actor, tag))
                     }
                 }
