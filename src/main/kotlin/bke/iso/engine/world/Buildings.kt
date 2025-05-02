@@ -21,11 +21,17 @@ class Buildings {
             .add(gameObject)
         buildingByObject[gameObject] = buildingName
 
-        regenerateBounds(buildingName)
+        regenerateBounds()
     }
 
     fun getBounds(buildingName: String): Box? =
         boundsByBuilding[buildingName]
+
+    private fun regenerateBounds() {
+        for (building in objectsByBuilding.keys) {
+            regenerateBounds(building)
+        }
+    }
 
     private fun regenerateBounds(buildingName: String) {
         val boxes = objectsByBuilding[buildingName]
@@ -58,10 +64,10 @@ class Buildings {
 
     fun remove(actor: Actor) {
         buildingByObject.remove(actor)
-        for ((buildingName, objects) in objectsByBuilding) {
+        for ((_, objects) in objectsByBuilding) {
             objects.remove(actor)
-            regenerateBounds(buildingName)
         }
+        regenerateBounds()
     }
 
     fun clear() {

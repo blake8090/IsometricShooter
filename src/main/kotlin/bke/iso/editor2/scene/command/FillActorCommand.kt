@@ -9,7 +9,7 @@ import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class FillActorCommand(
+data class FillActorCommand(
     private val worldLogic: WorldLogic,
     private val prefab: ActorPrefab,
     private val box: Box

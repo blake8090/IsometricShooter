@@ -6,6 +6,7 @@ import bke.iso.editor.ui.color
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
 import bke.iso.editor2.scene.command.AddTagCommand
+import bke.iso.editor2.scene.command.AssignBuildingCommand
 import bke.iso.editor2.scene.command.DeleteTagCommand
 import bke.iso.editor2.scene.tool.ToolLogic
 import bke.iso.editor2.scene.tool.ToolSelection
@@ -197,9 +198,16 @@ class SceneMode(private val engine: Engine) : EditorMode() {
                 selectedLayer = selectedLayer,
                 hideWalls = hideWalls,
                 hideUpperLayers = hideUpperLayers,
-                highlightSelectedLayer = highlightSelectedLayer
+                highlightSelectedLayer = highlightSelectedLayer,
+                buildings = engine.world.buildings.getAll(),
+                selectedBuilding = getSelectedBuilding()
             )
         )
+    }
+
+    private fun getSelectedBuilding(): String? {
+        val actor = selectedActor ?: return null
+        return engine.world.buildings.getBuilding(actor)
     }
 
     override fun handleEvent(event: Event) {
@@ -227,6 +235,11 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
             is TagDeleted -> {
                 val command = DeleteTagCommand(event.actor, event.tag)
+                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
+
+            is BuildingAssigned -> {
+                val command = AssignBuildingCommand(event.actor, event.building, worldLogic)
                 engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
             }
         }
@@ -303,12 +316,16 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     class TagAdded(val actor: Actor, val tag: String) : Event
     data class TagDeleted(val actor: Actor, val tag: String) : Event
 
+    data class BuildingAssigned(val actor: Actor, val building: String?) : Event
+
     data class ViewData(
         val selectedActor: Actor? = null,
         val selectedLayer: Int,
         val selectedTool: ToolSelection,
         val hideWalls: Boolean,
         val hideUpperLayers: Boolean,
-        val highlightSelectedLayer: Boolean
+        val highlightSelectedLayer: Boolean,
+        val buildings: Set<String>,
+        val selectedBuilding: String?
     )
 }

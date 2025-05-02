@@ -6,7 +6,7 @@ import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.math.Vector3
 
-class PaintActorCommand(
+data class PaintActorCommand(
     private val worldLogic: WorldLogic,
     private val prefab: ActorPrefab,
     private val pos: Vector3,

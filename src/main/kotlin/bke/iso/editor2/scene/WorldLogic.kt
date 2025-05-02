@@ -149,4 +149,14 @@ class WorldLogic(
 
     fun tileExists(location: Location) =
         tilesByLocation.containsKey(location)
+
+    fun setBuilding(actor: Actor, building: String?) {
+        world.buildings.remove(actor)
+        if (!building.isNullOrBlank()) {
+            world.buildings.add(actor, building)
+        }
+    }
+
+    fun getBuilding(actor: Actor): String? =
+        world.buildings.getBuilding(actor)
 }

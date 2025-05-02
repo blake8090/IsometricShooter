@@ -6,7 +6,7 @@ import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.actor.Actor
 
-class PaintTileCommand(
+data class PaintTileCommand(
     private val worldLogic: WorldLogic,
     private val prefab: TilePrefab,
     private val location: Location

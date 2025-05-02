@@ -4,7 +4,7 @@ import bke.iso.editor2.EditorCommand
 import bke.iso.editor2.scene.WorldLogic
 import bke.iso.engine.world.actor.Actor
 
-class DeleteActorCommand(
+data class DeleteActorCommand(
     private val worldLogic: WorldLogic,
     private val actor: Actor
 ) : EditorCommand() {

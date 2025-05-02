@@ -8,7 +8,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.world.actor.Actor
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class FillTileCommand(
+data class FillTileCommand(
     private val worldLogic: WorldLogic,
     private val prefab: TilePrefab,
     private val box: Box

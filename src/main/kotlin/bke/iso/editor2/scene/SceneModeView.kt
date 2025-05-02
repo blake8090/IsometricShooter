@@ -238,7 +238,20 @@ class SceneModeView(
             }
 
             ImGui.separatorText("Buildings")
-            ImGui.button("Apply")
+            val selectedBuilding = viewData.selectedBuilding
+            if (ImGui.beginCombo("Assigned", selectedBuilding)) {
+                if (ImGui.selectable("None", selectedBuilding == null)) {
+                    events.fire(SceneMode.BuildingAssigned(viewData.selectedActor, null))
+                }
+
+                for (building in viewData.buildings) {
+                    if (ImGui.selectable(building, building == selectedBuilding)) {
+                        events.fire(SceneMode.BuildingAssigned(viewData.selectedActor, building))
+                    }
+                }
+
+                ImGui.endCombo()
+            }
         }
         ImGui.endDisabled()
 
