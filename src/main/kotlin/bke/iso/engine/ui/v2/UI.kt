@@ -28,8 +28,14 @@ class UI(private val input: Input) : EngineModule() {
     }
 
     fun clear() {
-        layer?.dispose()
+        layer?.let(::disposeLayer)
         layer = null
+    }
+
+    private fun disposeLayer(layer: UILayer) {
+        input.removeInputProcessor(layer.stage)
+        input.removeControllerListener(layer.controllerNavigation)
+        layer.dispose()
     }
 
     fun setLayer(layer: UILayer) {
