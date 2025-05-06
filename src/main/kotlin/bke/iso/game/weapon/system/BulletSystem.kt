@@ -10,6 +10,7 @@ import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -44,28 +45,29 @@ class BulletSystem(
         val firstCollision = collisions
             .getCollisions(bulletActor)
             .sortedBy(Collision::distance)
-            .firstOrNull { collision -> canShoot(bullet, collision) }
+            .firstOrNull { collision -> canCollide(bullet, collision.obj) }
 
         if (firstCollision != null) {
             handleCollision(bulletActor, bullet, firstCollision)
         }
     }
 
-    private fun canShoot(bullet: Bullet, collision: Collision): Boolean {
-        val target = collision.obj
+    private fun canCollide(bullet: Bullet, obj: GameObject): Boolean =
+        when (obj) {
+            is Tile -> {
+                true
+            }
 
-        if (target is Tile) {
-            return true
+            is Actor -> {
+                obj.id != bullet.shooterId
+                        && !obj.has<Bullet>()
+                        && !obj.has<Explosion>()
+            }
+
+            else -> {
+                false
+            }
         }
-
-        if (target is Actor) {
-            return target.id != bullet.shooterId
-                    && !target.has<Bullet>()
-                    && !target.has<Explosion>()
-        }
-
-        return false
-    }
 
     private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
         val target = collision.obj
