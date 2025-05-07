@@ -24,6 +24,7 @@ import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.actor.Actors
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.actor.Tags
 import com.badlogic.gdx.Input
@@ -47,7 +48,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private var drawGridForeground = false
 
     private val cameraLogic = CameraLogic(engine.input, world, renderer, this)
-    private val worldLogic = WorldLogic(world, engine.assets, engine.events, engine.dialogs, engine.serializer)
+    private val worldLogic = WorldLogic(world, engine.assets, engine.events)
     private val toolLogic =
         ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
     private val view = SceneModeView(engine.assets, engine.events)
@@ -200,15 +201,10 @@ class SceneMode(private val engine: Engine) : EditorMode() {
                 hideUpperLayers = hideUpperLayers,
                 highlightSelectedLayer = highlightSelectedLayer,
                 buildings = engine.world.buildings.getAll(),
-                selectedBuilding = getSelectedBuilding(),
+                selectedBuilding = selectedBuilding,
                 messageBarText = getMessageBarText()
             )
         )
-    }
-
-    private fun getSelectedBuilding(): String? {
-        val actor = selectedActor ?: return null
-        return engine.world.buildings.getBuilding(actor)
     }
 
     private fun getMessageBarText(): String =
@@ -254,11 +250,38 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is BuildingSelected -> {
                 selectedBuilding = event.building
             }
+
+            is BuildingClosed -> {
+                selectedBuilding = null
+            }
+
+            is BuildingDeleted -> {
+                log.debug { "deleting ${event.building}" }
+            }
+
+            is BuildingCreated -> {
+                log.debug { "creating new building ${event.building}" }
+                selectedBuilding = event.building
+            }
+
+            is Actors.CreatedEvent -> {
+                worldLogic.setBuilding(event.actor, selectedBuilding)
+            }
         }
     }
 
     private fun openScene() {
-        worldLogic.loadScene()
+        val file = engine.dialogs.showOpenFileDialog("Scene", "scene") ?: return
+        val scene = engine.serializer.read<Scene>(file.readText())
+
+        // very important to clear the state before loading a new scene.
+        // otherwise, events fired in the load process will use the old state, leading to weird bugs
+        selectedLayer = 0
+        selectedActor = null
+        selectedBuilding = null
+
+        worldLogic.loadScene(scene)
+        log.info { "Loaded scene: '${file.canonicalPath}'" }
     }
 
     private fun saveScene() {
@@ -329,7 +352,10 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     data class TagDeleted(val actor: Actor, val tag: String) : Event
 
     data class BuildingAssigned(val actor: Actor, val building: String?) : Event
-    data class BuildingSelected(val building: String?) : Event
+    data class BuildingSelected(val building: String) : Event
+    class BuildingClosed : Event
+    data class BuildingDeleted(val building: String) : Event
+    data class BuildingCreated(val building: String) : Event
 
     data class ViewData(
         val selectedActor: Actor? = null,

@@ -9,36 +9,26 @@ import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Location
-import bke.iso.engine.os.Dialogs
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
-import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.actor.Description
 import com.badlogic.gdx.math.Vector3
-import io.github.oshai.kotlinlogging.KotlinLogging
 
 class WorldLogic(
     private val world: World,
     private val assets: Assets,
     private val events: Events,
-    private val dialogs: Dialogs,
-    private val serializer: Serializer,
 ) {
-
-    private val log = KotlinLogging.logger {}
 
     private val tilesByLocation = mutableMapOf<Location, Actor>()
 
-    fun loadScene() {
-        val file = dialogs.showOpenFileDialog("Scene", "scene") ?: return
-        val scene = serializer.read<Scene>(file.readText())
-
+    fun loadScene(scene: Scene) {
         tilesByLocation.clear()
         world.clear()
 
@@ -51,7 +41,6 @@ class WorldLogic(
         }
 
         events.fire(SceneMode.SceneLoaded())
-        log.info { "Loaded scene: '${file.canonicalPath}'" }
     }
 
     private fun load(record: ActorRecord) {
@@ -98,6 +87,9 @@ class WorldLogic(
         return reference.prefab
     }
 
+    /**
+     * Re-adds an existing actor into the world again.
+     */
     fun add(actor: Actor) {
         world.actors.create(
             id = actor.id,

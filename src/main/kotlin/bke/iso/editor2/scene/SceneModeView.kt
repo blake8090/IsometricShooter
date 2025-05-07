@@ -34,12 +34,16 @@ class SceneModeView(
 
     private var newTagText = ""
     private var openSelectBuildingPopup = false
+    private var selectBuildingPopupAction: (String) -> Unit = {}
+    private var openNewBuildingPopup = false
+    private var newBuildingText = ""
 
     fun draw(viewData: SceneMode.ViewData) {
         beginImGuiFrame()
 
         drawMainMenuBar(viewData)
         drawSelectBuildingPopup(viewData)
+        drawNewBuildingPopup()
 
         val assetBrowserWindowData = getAssetBrowserWindowData()
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
@@ -48,7 +52,6 @@ class SceneModeView(
         drawToolbar(toolbarWindowData, viewData)
         drawMessageWindow(toolbarWindowData, viewData)
         drawInspectorWindow(inspectorWindowData, viewData)
-
 
         endImGuiFrame()
     }
@@ -95,20 +98,25 @@ class SceneModeView(
 
             if (ImGui.beginMenu("Buildings")) {
                 if (ImGui.menuItem("New Building", false)) {
-
+                    openNewBuildingPopup()
                 }
                 if (ImGui.menuItem("Edit Building", false)) {
-                    openSelectBuildingPopup = true
+                    openSelectBuildingPopup { building ->
+                        events.fire(SceneMode.BuildingSelected(building))
+                    }
                 }
-                ImGui.beginDisabled()
+
+                ImGui.beginDisabled(viewData.selectedBuilding.isNullOrBlank())
                 if (ImGui.menuItem("Close Building", false)) {
-
-                }
-
-                if (ImGui.menuItem("Delete Building", false)) {
-
+                    events.fire(SceneMode.BuildingClosed())
                 }
                 ImGui.endDisabled()
+
+                if (ImGui.menuItem("Delete Building", false)) {
+                    openSelectBuildingPopup { building ->
+                        events.fire(SceneMode.BuildingDeleted(building))
+                    }
+                }
                 ImGui.endMenu()
             }
 
@@ -382,7 +390,12 @@ class SceneModeView(
         return WindowData(pos, size)
     }
 
-    fun drawSelectBuildingPopup(viewData: SceneMode.ViewData) {
+    private fun openSelectBuildingPopup(action: (String) -> Unit) {
+        openSelectBuildingPopup = true
+        selectBuildingPopupAction = action
+    }
+
+    private fun drawSelectBuildingPopup(viewData: SceneMode.ViewData) {
         if (openSelectBuildingPopup) {
             ImGui.openPopup("Select Building##selectBuildingPopup")
         }
@@ -391,7 +404,7 @@ class SceneModeView(
             if (ImGui.beginListBox("##buildings")) {
                 for (building in viewData.buildings) {
                     if (ImGui.selectable(building, false)) {
-                        events.fire(SceneMode.BuildingSelected(building))
+                        selectBuildingPopupAction.invoke(building)
                         openSelectBuildingPopup = false
                         ImGui.closeCurrentPopup()
                     }
@@ -401,6 +414,37 @@ class SceneModeView(
 
             if (ImGui.button("Cancel")) {
                 openSelectBuildingPopup = false
+                ImGui.closeCurrentPopup()
+            }
+
+            ImGui.endPopup()
+        }
+    }
+
+    private fun openNewBuildingPopup() {
+        openNewBuildingPopup = true
+        newBuildingText = ""
+    }
+
+    private fun drawNewBuildingPopup() {
+        if (openNewBuildingPopup) {
+            ImGui.openPopup("New Building##newBuildingPopup")
+        }
+
+        if (ImGui.beginPopupModal("New Building##newBuildingPopup", null, ImGuiWindowFlags.AlwaysAutoResize)) {
+            val text = ImString(newBuildingText, 50)
+            if (ImGui.inputText("Name", text)) {
+                newBuildingText = text.get()
+            }
+
+            if (ImGui.button("Ok")) {
+                events.fire(SceneMode.BuildingCreated(newBuildingText))
+                openNewBuildingPopup = false
+                ImGui.closeCurrentPopup()
+            }
+            ImGui.sameLine()
+            if (ImGui.button("Cancel")) {
+                openNewBuildingPopup = false
                 ImGui.closeCurrentPopup()
             }
 
