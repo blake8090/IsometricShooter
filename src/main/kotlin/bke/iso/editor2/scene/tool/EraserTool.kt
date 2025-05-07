@@ -1,7 +1,7 @@
 package bke.iso.editor2.scene.tool
 
-import bke.iso.editor.scene.TilePrefabReference
 import bke.iso.editor2.EditorCommand
+import bke.iso.editor2.scene.TilePrefabReference
 import bke.iso.editor2.scene.WorldLogic
 import bke.iso.editor2.scene.command.DeleteActorCommand
 import bke.iso.engine.collision.Collisions

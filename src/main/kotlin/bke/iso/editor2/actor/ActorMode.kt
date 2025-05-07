@@ -1,10 +1,10 @@
 package bke.iso.editor2.actor
 
-import bke.iso.editor.withFirstInstance
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
 import bke.iso.editor2.actor.command.AddComponentCommand
 import bke.iso.editor2.actor.command.DeleteComponentCommand
+import bke.iso.editor2.withFirstInstance
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.collision.Collider

@@ -2,9 +2,9 @@ package bke.iso.editor2.scene.tool
 
 import bke.iso.editor2.scene.command.PaintActorCommand
 import bke.iso.editor2.scene.command.PaintTileCommand
-import bke.iso.editor.withFirstInstance
 import bke.iso.editor2.EditorCommand
 import bke.iso.editor2.scene.WorldLogic
+import bke.iso.editor2.withFirstInstance
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider

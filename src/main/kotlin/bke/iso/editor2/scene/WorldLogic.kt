@@ -1,8 +1,6 @@
 package bke.iso.editor2.scene
 
-import bke.iso.editor.scene.ActorPrefabReference
-import bke.iso.editor.scene.TilePrefabReference
-import bke.iso.editor.withFirstInstance
+import bke.iso.editor2.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab

@@ -1,10 +1,8 @@
 package bke.iso.editor2.scene
 
-import bke.iso.editor.scene.ActorPrefabReference
-import bke.iso.editor.scene.TilePrefabReference
-import bke.iso.editor.ui.color
 import bke.iso.editor2.EditorMode
 import bke.iso.editor2.ImGuiEditorState
+import bke.iso.editor2.color
 import bke.iso.editor2.scene.command.AddTagCommand
 import bke.iso.editor2.scene.command.AssignBuildingCommand
 import bke.iso.editor2.scene.command.DeleteTagCommand

@@ -1,7 +1,7 @@
 package bke.iso.editor2.actor
 
-import bke.iso.editor.scene.camera.MouseDragAdapter
-import bke.iso.editor.scene.camera.MouseScrollAdapter
+import bke.iso.editor2.input.MouseDragAdapter
+import bke.iso.editor2.input.MouseScrollAdapter
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.render.Renderer
