@@ -200,7 +200,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
                 hideUpperLayers = hideUpperLayers,
                 highlightSelectedLayer = highlightSelectedLayer,
                 buildings = engine.world.buildings.getAll(),
-                selectedBuilding = getSelectedBuilding()
+                selectedBuilding = getSelectedBuilding(),
+                messageBarText = getMessageBarText()
             )
         )
     }
@@ -209,6 +210,13 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         val actor = selectedActor ?: return null
         return engine.world.buildings.getBuilding(actor)
     }
+
+    private fun getMessageBarText(): String =
+        if (selectedBuilding.isNullOrBlank()) {
+            "No building selected"
+        } else {
+            "Editing building $selectedBuilding"
+        }
 
     override fun handleEvent(event: Event) {
         when (event) {
@@ -241,6 +249,10 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is BuildingAssigned -> {
                 val command = AssignBuildingCommand(event.actor, event.building, worldLogic)
                 engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+            }
+
+            is BuildingSelected -> {
+                selectedBuilding = event.building
             }
         }
     }
@@ -317,6 +329,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     data class TagDeleted(val actor: Actor, val tag: String) : Event
 
     data class BuildingAssigned(val actor: Actor, val building: String?) : Event
+    data class BuildingSelected(val building: String?) : Event
 
     data class ViewData(
         val selectedActor: Actor? = null,
@@ -326,6 +339,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         val hideUpperLayers: Boolean,
         val highlightSelectedLayer: Boolean,
         val buildings: Set<String>,
-        val selectedBuilding: String?
+        val selectedBuilding: String?,
+        val messageBarText: String,
     )
 }

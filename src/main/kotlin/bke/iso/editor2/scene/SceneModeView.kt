@@ -18,6 +18,7 @@ import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiCol
 import imgui.flag.ImGuiInputTextFlags
+import imgui.flag.ImGuiWindowFlags
 import imgui.type.ImFloat
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -32,18 +33,22 @@ class SceneModeView(
     private val viewport = ImGui.getMainViewport()
 
     private var newTagText = ""
+    private var openSelectBuildingPopup = false
 
     fun draw(viewData: SceneMode.ViewData) {
         beginImGuiFrame()
 
         drawMainMenuBar(viewData)
+        drawSelectBuildingPopup(viewData)
 
         val assetBrowserWindowData = getAssetBrowserWindowData()
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
         val inspectorWindowData = getInspectorWindowData(assetBrowserWindowData, toolbarWindowData)
         drawAssetBrowser(assetBrowserWindowData)
         drawToolbar(toolbarWindowData, viewData)
+        drawMessageWindow(toolbarWindowData, viewData)
         drawInspectorWindow(inspectorWindowData, viewData)
+
 
         endImGuiFrame()
     }
@@ -93,7 +98,7 @@ class SceneModeView(
 
                 }
                 if (ImGui.menuItem("Edit Building", false)) {
-
+                    openSelectBuildingPopup = true
                 }
                 ImGui.beginDisabled()
                 if (ImGui.menuItem("Close Building", false)) {
@@ -323,6 +328,30 @@ class SceneModeView(
         }
     }
 
+    private fun drawMessageWindow(windowData: WindowData, viewData: SceneMode.ViewData) {
+        val pos = ImVec2(windowData.pos)
+        pos.y += windowData.size.y
+
+        val size = ImVec2(windowData.size)
+        size.y = ImGui.getTextLineHeightWithSpacing()
+
+        ImGui.getTextLineHeight()
+        ImGui.setNextWindowPos(pos)
+        ImGui.setNextWindowSize(size)
+
+        val flags = or(
+            ImGuiWindowFlags.NoMove,
+            ImGuiWindowFlags.NoResize,
+            ImGuiWindowFlags.NoTitleBar,
+            ImGuiWindowFlags.NoScrollbar
+        )
+        ImGui.begin("MessageWindow", flags)
+
+        ImGui.text(viewData.messageBarText)
+
+        ImGui.end()
+    }
+
     private fun getAssetBrowserWindowData(): WindowData {
         val size = ImVec2(viewport.workSize)
         size.x *= 0.15f
@@ -353,8 +382,42 @@ class SceneModeView(
         return WindowData(pos, size)
     }
 
+    fun drawSelectBuildingPopup(viewData: SceneMode.ViewData) {
+        if (openSelectBuildingPopup) {
+            ImGui.openPopup("Select Building##selectBuildingPopup")
+        }
+
+        if (ImGui.beginPopupModal("Select Building##selectBuildingPopup", null, ImGuiWindowFlags.AlwaysAutoResize)) {
+            if (ImGui.beginListBox("##buildings")) {
+                for (building in viewData.buildings) {
+                    if (ImGui.selectable(building, false)) {
+                        events.fire(SceneMode.BuildingSelected(building))
+                        openSelectBuildingPopup = false
+                        ImGui.closeCurrentPopup()
+                    }
+                }
+                ImGui.endListBox()
+            }
+
+            if (ImGui.button("Cancel")) {
+                openSelectBuildingPopup = false
+                ImGui.closeCurrentPopup()
+            }
+
+            ImGui.endPopup()
+        }
+    }
+
     private data class WindowData(
         val pos: ImVec2,
         val size: ImVec2,
     )
+}
+
+private fun or(vararg integers: Int): Int {
+    var result = 0
+    integers.forEach { integer ->
+        result = result or integer
+    }
+    return result
 }
