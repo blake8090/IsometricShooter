@@ -1,6 +1,5 @@
 package bke.iso.engine.profiler
 
-import bke.iso.engine.asset.Assets
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.ui.UI
@@ -12,7 +11,6 @@ import com.badlogic.gdx.Input as GdxInput
 private const val UPDATE_FREQUENCY_SECONDS = 0.25f
 
 class Profiler(
-    assets: Assets,
     private val ui: UI,
     private val input: Input
 ) {
@@ -22,8 +20,9 @@ class Profiler(
     private val stringBuilder = StringBuilder()
     private var timer = 0f
     private var data: String = ""
+    private var isVisible = false
 
-    private val view = ProfilerView(assets)
+    private val view = ProfilerView()
 
     fun start() {
         input.keyMouse.bindKey("profiler-modifier", GdxInput.Keys.SHIFT_LEFT, ButtonState.DOWN)
@@ -43,10 +42,17 @@ class Profiler(
         }
 
         if (input.poll("profiler-modifier") != 0f && input.poll("profiler-enable") != 0f) {
-            ui.pushView(view)
+            isVisible = !isVisible
+            if (isVisible) {
+                ui.pushView(view)
+            } else {
+                ui.removeImGuiView(view)
+            }
         }
 
-        view.setText("${Gdx.graphics.framesPerSecond} FPS\n$data")
+        if (isVisible) {
+            view.setText("${Gdx.graphics.framesPerSecond} FPS\n$data")
+        }
     }
 
     private fun getData(): String {

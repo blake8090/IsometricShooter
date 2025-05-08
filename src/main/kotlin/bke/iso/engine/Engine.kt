@@ -71,7 +71,7 @@ class Engine(val game: Game) {
         loadingScreens
     )
 
-    private val profiler = Profiler(assets, ui, input)
+    private val profiler = Profiler(ui, input)
 
     fun start() {
         systemInfo.logInfo()
@@ -120,7 +120,7 @@ class Engine(val game: Game) {
         updateModule(loadingScreens, deltaTime)
 
         for (module in modules) {
-            module.onFrameEnd()
+            module.onFrameEnd(deltaTime)
         }
     }
 

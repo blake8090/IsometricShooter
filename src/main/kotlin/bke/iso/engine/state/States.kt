@@ -26,7 +26,7 @@ class States(private val engine: Engine) : EngineModule() {
         currentState.handleEvent(event)
     }
 
-    override fun onFrameEnd() {
+    override fun onFrameEnd(deltaTime: Float) {
         currentState.onFrameEnd()
     }
 

@@ -5,7 +5,7 @@ interface Module {
     fun stop() {}
     fun update(deltaTime: Float) {}
     fun handleEvent(event: Event) {}
-    fun onFrameEnd() {}
+    fun onFrameEnd(deltaTime: Float) {}
 }
 
 abstract class EngineModule : Module {

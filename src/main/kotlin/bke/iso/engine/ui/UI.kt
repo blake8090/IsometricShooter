@@ -52,9 +52,9 @@ class UI(private val input: Input) : EngineModule() {
         imGuiViews.clear()
     }
 
-    override fun onFrameEnd() {
+    override fun onFrameEnd(deltaTime: Float) {
         for (view in imGuiViews) {
-            view.drawImGui()
+            view.draw(deltaTime)
         }
     }
 
@@ -82,5 +82,10 @@ class UI(private val input: Input) : EngineModule() {
         log.debug { "Pushing ImGui View '${view::class.simpleName}'" }
         view.create()
         imGuiViews.add(view)
+    }
+
+    fun removeImGuiView(view: ImGuiView) {
+        log.debug { "Removing ImGui View '${view::class.simpleName}'" }
+        imGuiViews.remove(view)
     }
 }

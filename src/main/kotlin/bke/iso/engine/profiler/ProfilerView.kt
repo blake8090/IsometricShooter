@@ -1,51 +1,32 @@
 package bke.iso.engine.profiler
 
-import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.core.Event
-import bke.iso.engine.render.makePixelTexture
-import bke.iso.engine.ui.scene2d.Scene2dView
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.Event as Scene2dEvent
+import bke.iso.engine.ui.imgui.ImGuiView
+import imgui.ImGui
+import imgui.flag.ImGuiWindowFlags
 
-class ProfilerView(assets: Assets) : Scene2dView(assets) {
+class ProfilerView : ImGuiView() {
+    private var text: String = ""
 
-    private lateinit var label: Label
+    override fun create() {}
 
+    override fun handleEvent(event: Event) {}
 
-    override fun create() {
-        setup()
+    override fun drawImGui() {
+        // TODO: use or helper function
+        val flags = ImGuiWindowFlags.NoMove or
+                ImGuiWindowFlags.NoResize or
+                ImGuiWindowFlags.NoCollapse or
+                ImGuiWindowFlags.NoTitleBar or
+                ImGuiWindowFlags.AlwaysAutoResize
 
-        val table = Table().top().left()
-        table.setFillParent(true)
-        stage.addActor(table)
-
-        label = Label("", skin)
-
-        table.add(label)
-            .padLeft(5f)
-            .padTop(5f)
-    }
-
-    override fun handleScene2dEvent(event: Scene2dEvent) {
-    }
-
-    override fun handleEvent(event: Event) {
-    }
-
-    private fun setup() {
-        skin.add("pixel", makePixelTexture())
-        skin.add("default", assets.fonts[FontOptions("roboto.ttf", 16f, Color.WHITE)])
-        skin.add("default", Label.LabelStyle().apply {
-            font = skin.getFont("default")
-        })
+        ImGui.setNextWindowPos(10f, 10f)
+        ImGui.begin("Profiler", flags)
+        ImGui.text(text)
+        ImGui.end()
     }
 
     fun setText(text: String) {
-        if (this::label.isInitialized) {
-            label.setText(text)
-        }
+        this.text = text
     }
 }
