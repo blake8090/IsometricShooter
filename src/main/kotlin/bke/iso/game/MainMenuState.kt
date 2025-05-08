@@ -7,7 +7,7 @@ import bke.iso.engine.loading.EmptyLoadingScreen
 import bke.iso.engine.loading.SimpleLoadingScreen
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
-import bke.iso.game.ui.v3.MainMenuView
+import bke.iso.game.ui.MainMenuView
 
 class MainMenuState(override val engine: Engine) : State() {
 
@@ -15,8 +15,8 @@ class MainMenuState(override val engine: Engine) : State() {
     override val modules = emptySet<Module>()
 
     override suspend fun load() {
-        engine.ui3.clearScene2dViews()
-        engine.ui3.pushView(MainMenuView(engine.assets, engine.events))
+        engine.ui.clearScene2dViews()
+        engine.ui.pushView(MainMenuView(engine.assets, engine.events))
     }
 
     override fun handleEvent(event: Event) {

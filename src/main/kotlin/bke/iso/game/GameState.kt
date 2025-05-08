@@ -153,8 +153,8 @@ class GameState(override val engine: Engine) : State() {
     )
 
     override suspend fun load() {
-        engine.ui3.clearScene2dViews()
-        hudModule.init(engine.ui3)
+        engine.ui.clearScene2dViews()
+        hudModule.init(engine.ui)
         engine.renderer.pointer.set(crosshair)
 
         engine.renderer.debug.enableCategories(

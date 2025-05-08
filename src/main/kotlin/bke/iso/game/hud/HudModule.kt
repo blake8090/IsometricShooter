@@ -7,7 +7,7 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.gameobject.OptimizedGameObjectRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
-import bke.iso.engine.ui.v3.UI
+import bke.iso.engine.ui.UI
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory

@@ -23,7 +23,7 @@ class Profiler(
     private var timer = 0f
     private var data: String = ""
 
-    private val profilerScreen = ProfilerScreen(assets)
+    private val view = ProfilerView(assets)
 
     fun start() {
         input.keyMouse.bindKey("profiler-modifier", GdxInput.Keys.SHIFT_LEFT, ButtonState.DOWN)
@@ -43,10 +43,10 @@ class Profiler(
         }
 
         if (input.poll("profiler-modifier") != 0f && input.poll("profiler-enable") != 0f) {
-            ui.addScreen(profilerScreen)
+            ui.pushView(view)
         }
 
-        profilerScreen.setText("${Gdx.graphics.framesPerSecond} FPS\n$data")
+        view.setText("${Gdx.graphics.framesPerSecond} FPS\n$data")
     }
 
     private fun getData(): String {

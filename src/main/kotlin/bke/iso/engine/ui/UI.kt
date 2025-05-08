@@ -1,79 +1,86 @@
 package bke.iso.engine.ui
 
-import bke.iso.engine.core.Event
 import bke.iso.engine.core.EngineModule
+import bke.iso.engine.core.Event
 import bke.iso.engine.input.Input
-import com.badlogic.gdx.utils.Array
+import bke.iso.engine.ui.imgui.ImGuiView
+import bke.iso.engine.ui.scene2d.Scene2dView
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class UI(private val input: Input) : EngineModule() {
 
     private val log = KotlinLogging.logger {}
 
-    override val moduleName = "ui"
+    override val moduleName = "UIv3"
     override val updateWhileLoading = true
     override val profilingEnabled = true
 
-    private val screens = Array<UIScreen>()
+    private val scene2dViews = LinkedHashSet<Scene2dView>()
+    private val imGuiViews = LinkedHashSet<ImGuiView>()
 
     override fun update(deltaTime: Float) {
-        for (screen in screens) {
-            screen.draw(deltaTime)
+        for (view in scene2dViews) {
+            view.draw(deltaTime)
         }
     }
 
     override fun handleEvent(event: Event) {
-        for (screen in screens) {
-            screen.handleEvent(event)
+        for (view in scene2dViews) {
+            view.handleEvent(event)
+        }
+        for (view in imGuiViews) {
+            view.handleEvent(event)
         }
     }
 
     override fun stop() {
-        for (screen in screens) {
-            log.debug { "Disposing screen ${screen::class.simpleName}" }
-            input.removeInputProcessor(screen.stage)
-            input.removeControllerListener(screen.controllerNavigation)
-            screen.dispose()
+        clearScene2dViews()
+        clearImGuiViews()
+    }
+
+    fun clearScene2dViews() {
+        for (view in scene2dViews) {
+            log.debug { "Disposing Scene2d view ${view::class.simpleName}" }
+            input.removeInputProcessor(view.stage)
+            input.removeControllerListener(view.controllerNavigation)
+            view.dispose()
         }
-        screens.clear()
+        scene2dViews.clear()
+    }
+
+    fun clearImGuiViews() {
+        imGuiViews.clear()
+    }
+
+    override fun onFrameEnd() {
+        for (view in imGuiViews) {
+            view.drawImGui()
+        }
     }
 
     fun resize(width: Int, height: Int) {
-        for (screen in screens) {
-            screen.resize(width, height)
+        for (view in scene2dViews) {
+            view.resize(width, height)
         }
     }
 
-    fun setScreen(screen: UIScreen) {
-        clear()
-        log.debug { "Setting screen to ${screen::class.simpleName}" }
-        addScreen(screen)
-    }
+    fun pushView(view: Scene2dView) {
+        log.debug { "Pushing Scene2D View '${view::class.simpleName}'" }
 
-    fun addScreen(screen: UIScreen) {
-        log.debug { "Adding screen ${screen::class.simpleName}" }
-
-        screens.add(screen)
-        input.addInputProcessor(screen.stage)
-        input.addControllerListener(screen.controllerNavigation)
-        screen.create()
+        input.addInputProcessor(view.stage)
+        input.addControllerListener(view.controllerNavigation)
+        view.create()
 
         if (input.isUsingController()) {
-            screen.controllerNavigation.start()
+            view.controllerNavigation.start()
         }
+
+        scene2dViews.add(view)
     }
 
-    fun dispose() {
-        clear()
-    }
-
-    private fun clear() {
-        for (screen in screens) {
-            log.debug { "Disposing screen ${screen::class.simpleName}" }
-            input.removeInputProcessor(screen.stage)
-            input.removeControllerListener(screen.controllerNavigation)
-            screen.dispose()
-        }
-        screens.clear()
+    fun pushView(view: ImGuiView) {
+        log.debug { "Pushing ImGui View '${view::class.simpleName}'" }
+        view.create()
+        imGuiViews.add(view)
     }
 }

@@ -1,4 +1,4 @@
-package bke.iso.engine.ui.v3
+package bke.iso.engine.ui
 
 import bke.iso.engine.core.Event
 

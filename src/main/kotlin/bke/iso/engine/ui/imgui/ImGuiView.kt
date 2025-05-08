@@ -1,8 +1,8 @@
-package bke.iso.engine.ui.v3.imgui
+package bke.iso.engine.ui.imgui
 
 import bke.iso.engine.beginImGuiFrame
 import bke.iso.engine.endImGuiFrame
-import bke.iso.engine.ui.v3.UIView
+import bke.iso.engine.ui.UIView
 
 abstract class ImGuiView : UIView() {
 

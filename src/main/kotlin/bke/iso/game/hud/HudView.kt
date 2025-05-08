@@ -5,7 +5,7 @@ import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.core.Event
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.util.get
-import bke.iso.engine.ui.v3.scene2d.Scene2dView
+import bke.iso.engine.ui.scene2d.Scene2dView
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor

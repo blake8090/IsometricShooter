@@ -1,4 +1,4 @@
-package bke.iso.game.ui.v3
+package bke.iso.game.ui
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.font.FontOptions
@@ -8,7 +8,7 @@ import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.ui.util.onChanged
 import bke.iso.engine.ui.util.onEnter
 import bke.iso.engine.ui.util.onExit
-import bke.iso.engine.ui.v3.scene2d.Scene2dView
+import bke.iso.engine.ui.scene2d.Scene2dView
 import bke.iso.game.MainMenuState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color

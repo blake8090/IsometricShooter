@@ -1,9 +1,9 @@
-package bke.iso.engine.ui.v3.scene2d
+package bke.iso.engine.ui.scene2d
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.ui.util.AssetAwareSkin
 import bke.iso.engine.ui.util.ControllerNavigation
-import bke.iso.engine.ui.v3.UIView
+import bke.iso.engine.ui.UIView
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.ScreenViewport
