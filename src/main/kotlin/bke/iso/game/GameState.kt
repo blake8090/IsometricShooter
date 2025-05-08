@@ -56,7 +56,7 @@ class GameState(override val engine: Engine) : State() {
     private val hudModule = HudModule(
         engine.world,
         engine.assets,
-        weaponsModule
+        weaponsModule,
     )
     private val shadowModule = ShadowModule(engine.world)
     private val playerDataModule = PlayerDataModule(engine.world)
@@ -153,7 +153,8 @@ class GameState(override val engine: Engine) : State() {
     )
 
     override suspend fun load() {
-        hudModule.init(engine.ui)
+        engine.ui3.clearScene2dViews()
+        hudModule.init(engine.ui3)
         engine.renderer.pointer.set(crosshair)
 
         engine.renderer.debug.enableCategories(

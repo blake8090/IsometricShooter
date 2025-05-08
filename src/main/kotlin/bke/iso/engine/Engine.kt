@@ -46,6 +46,7 @@ class Engine(val game: Game) {
     val input: Input = Input(events)
     val ui: UI = UI(input)
     val ui2: bke.iso.engine.ui.v2.UI = bke.iso.engine.ui.v2.UI(input)
+    val ui3: bke.iso.engine.ui.v3.UI = bke.iso.engine.ui.v3.UI(input)
 
     val serializer = Serializer()
     val assets: Assets = Assets(files, systemInfo)
@@ -70,6 +71,7 @@ class Engine(val game: Game) {
         rendererManager,
         ui,
         ui2,
+        ui3,
         loadingScreens
     )
 
@@ -114,6 +116,7 @@ class Engine(val game: Game) {
         updateModule(rendererManager, deltaTime)
         updateModule(ui, deltaTime)
         updateModule(ui2, deltaTime)
+        updateModule(ui3, deltaTime)
         profiler.update(deltaTime)
 
         if (!loadingScreens.isLoading()) {

@@ -7,7 +7,7 @@ import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.gameobject.OptimizedGameObjectRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
-import bke.iso.engine.ui.UI
+import bke.iso.engine.ui.v3.UI
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
@@ -26,27 +26,26 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 class HudModule(
     private val world: World,
     private val assets: Assets,
-    private val weaponsModule: WeaponsModule
+    private val weaponsModule: WeaponsModule,
 ) : Module {
 
-    private lateinit var hudScreen: HudScreen
+    private val view = HudView(assets)
 
     fun init(ui: UI) {
-        hudScreen = HudScreen(assets)
-        ui.setScreen(hudScreen)
+        ui.pushView(view)
     }
 
     fun updateHealthBar(health: Float, maxHealth: Float) {
-        hudScreen.setHealth(health)
-        hudScreen.setMaxHealth(maxHealth)
+        view.setHealth(health)
+        view.setMaxHealth(maxHealth)
     }
 
     fun hideInteractionText() {
-        hudScreen.hideInteractionText()
+        view.hideInteractionText()
     }
 
     fun setInteractionText(text: String) {
-        hudScreen.setInteractionText(text)
+        view.setInteractionText(text)
     }
 
     override fun update(deltaTime: Float) {
@@ -56,7 +55,7 @@ class HudModule(
                 is RangedWeapon -> getRangedWeaponText(weapon)
                 else -> weapon.name
             }
-        hudScreen.setWeaponText(text)
+        view.setWeaponText(text)
 
         updateMedkitText()
     }
@@ -88,12 +87,12 @@ class HudModule(
             ?.get<Inventory>()
             ?: return
 
-        hudScreen.setMedkitsText(inventory.numMedkits)
+        view.setMedkitsText(inventory.numMedkits)
     }
 
     override fun handleEvent(event: Event) {
         if (event is CombatModule.PlayerHealthChangeEvent) {
-            hudScreen.setHealth(event.health)
+            view.setHealth(event.health)
         } else if (event is OptimizedGameObjectRenderer.DrawActorEvent) {
             drawHealthBar(event.actor, event.batch)
         }
