@@ -17,9 +17,6 @@ class ImGuiEditorState(override val engine: Engine) : State() {
 
     private val log = KotlinLogging.logger {}
 
-    var selectedLayer = 0f
-        private set
-
     private val sceneMode = SceneMode(engine)
     private val actorMode = ActorMode(engine)
 
