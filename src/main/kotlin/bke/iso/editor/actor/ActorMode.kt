@@ -1,7 +1,7 @@
 package bke.iso.editor.actor
 
 import bke.iso.editor.EditorMode
-import bke.iso.editor.ImGuiEditorState
+import bke.iso.editor.EditorModule
 import bke.iso.editor.actor.command.AddComponentCommand
 import bke.iso.editor.actor.command.DeleteComponentCommand
 import bke.iso.editor.withFirstInstance
@@ -47,6 +47,7 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         .filter { kClass -> kClass.hasAnnotation<Serializable>() }
 
     override fun start() {
+        engine.ui.pushView(view)
         engine.rendererManager.setActiveRenderer(renderer)
         cameraLogic.start()
 
@@ -58,6 +59,7 @@ class ActorMode(private val engine: Engine) : EditorMode() {
     }
 
     override fun stop() {
+        engine.ui.removeImGuiView(view)
         engine.rendererManager.reset()
         cameraLogic.stop()
     }
@@ -81,6 +83,8 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         }
 
         drawGrid()
+
+        view.viewData = ViewData(components, selectedComponent, componentTypes)
     }
 
     private fun drawGrid() {
@@ -103,10 +107,6 @@ class ActorMode(private val engine: Engine) : EditorMode() {
         }
     }
 
-    override fun draw() {
-        view.draw(ViewData(components, selectedComponent, componentTypes))
-    }
-
     override fun handleEvent(event: Event) {
         when (event) {
             is OpenClicked -> loadPrefab()
@@ -119,12 +119,12 @@ class ActorMode(private val engine: Engine) : EditorMode() {
             is SelectedComponentDeleted -> {
                 val component = selectedComponent ?: return
                 val command = DeleteComponentCommand(components, component)
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
             is NewComponentTypeAdded -> {
                 val command = AddComponentCommand(components, referenceActor, event.componentType)
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                engine.events.fire(EditorModule.ExecuteCommand(command))
             }
         }
     }

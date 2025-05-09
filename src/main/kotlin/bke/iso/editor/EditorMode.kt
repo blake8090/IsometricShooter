@@ -15,7 +15,6 @@ abstract class EditorMode {
     abstract fun start()
     abstract fun stop()
     abstract fun update()
-    abstract fun draw()
     abstract fun handleEvent(event: Event)
 
     fun execute(command: EditorCommand) {

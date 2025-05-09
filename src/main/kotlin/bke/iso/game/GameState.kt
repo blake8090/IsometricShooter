@@ -1,5 +1,6 @@
 package bke.iso.game
 
+import bke.iso.editor.EditorModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.Engine
 import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
@@ -32,6 +33,8 @@ import bke.iso.game.weapon.system.BulletSystem
 import bke.iso.game.weapon.system.WeaponSystem
 import bke.iso.game.weapon.WeaponsModule
 import bke.iso.game.weapon.system.ExplosionSystem
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class GameState(override val engine: Engine) : State() {
@@ -61,6 +64,9 @@ class GameState(override val engine: Engine) : State() {
     private val shadowModule = ShadowModule(engine.world)
     private val playerDataModule = PlayerDataModule(engine.world)
     private val elevatorModule = ElevatorModule(engine.collisions)
+    private val editorModule = EditorModule(engine)
+
+    private var editorEnabled = false
 
     override val modules = setOf(
         hudModule,
@@ -68,7 +74,8 @@ class GameState(override val engine: Engine) : State() {
         combatModule,
         shadowModule,
         doorModule,
-        elevatorModule
+        elevatorModule,
+        editorModule
     )
 
     override val systems = linkedSetOf(
@@ -163,6 +170,22 @@ class GameState(override val engine: Engine) : State() {
             "collisions", // TODO: use constants instead
             "weapon"
         )
+    }
+
+    override fun update(deltaTime: Float) {
+        super.update(deltaTime)
+
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            if (editorEnabled) {
+                log.info { "Closing editor" }
+                engine.events.fire(EditorModule.EditorClosed())
+                editorEnabled = false
+            } else {
+                log.info { "Opening editor" }
+                engine.events.fire(EditorModule.SceneModeSelected())
+                editorEnabled = true
+            }
+        }
     }
 
     override fun handleEvent(event: Event) {

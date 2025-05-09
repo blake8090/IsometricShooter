@@ -1,14 +1,14 @@
 package bke.iso.editor.scene
 
-import bke.iso.editor.ImGuiEditorState
+import bke.iso.editor.EditorModule
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
-import bke.iso.engine.beginImGuiFrame
+import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
-import bke.iso.engine.endImGuiFrame
 import bke.iso.engine.render.Sprite
+import bke.iso.engine.ui.imgui.ImGuiView
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
 import bke.iso.engine.world.actor.Tags
@@ -26,7 +26,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 class SceneModeView(
     private val assets: Assets,
     private val events: Events
-) {
+) : ImGuiView() {
 
     private val log = KotlinLogging.logger { }
 
@@ -38,9 +38,16 @@ class SceneModeView(
     private var openNewBuildingPopup = false
     private var newBuildingText = ""
 
-    fun draw(viewData: SceneMode.ViewData) {
-        beginImGuiFrame()
+    lateinit var viewData: SceneMode.ViewData
 
+    override fun create() {}
+
+    override fun handleEvent(event: Event) {}
+
+    override fun drawImGui() {
+        if (!this::viewData.isInitialized) {
+            return
+        }
         drawMainMenuBar(viewData)
         drawSelectBuildingPopup(viewData)
         drawNewBuildingPopup()
@@ -52,8 +59,6 @@ class SceneModeView(
         drawToolbar(toolbarWindowData, viewData)
         drawMessageWindow(toolbarWindowData, viewData)
         drawInspectorWindow(inspectorWindowData, viewData)
-
-        endImGuiFrame()
     }
 
     private fun drawMainMenuBar(viewData: SceneMode.ViewData) {
@@ -123,7 +128,7 @@ class SceneModeView(
             if (ImGui.beginMenu("Mode")) {
                 ImGui.menuItem("Scene Editor", true)
                 if (ImGui.menuItem("Actor Editor", false)) {
-                    events.fire(ImGuiEditorState.ActorPrefabModeSelected())
+                    events.fire(EditorModule.ActorModeSelected())
                 }
                 ImGui.beginDisabled()
                 ImGui.menuItem("Particle Editor", false)

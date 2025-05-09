@@ -1,7 +1,7 @@
 package bke.iso.editor.scene
 
 import bke.iso.editor.EditorMode
-import bke.iso.editor.ImGuiEditorState
+import bke.iso.editor.EditorModule
 import bke.iso.editor.color
 import bke.iso.editor.scene.command.AddTagCommand
 import bke.iso.editor.scene.command.AssignBuildingCommand
@@ -49,6 +49,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private val worldLogic = WorldLogic(world, engine.assets, engine.events)
     private val toolLogic =
         ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
+
     private val view = SceneModeView(engine.assets, engine.events)
 
     private var hideWalls = false
@@ -62,6 +63,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
     override fun start() {
+        engine.ui.pushView(view)
         cameraLogic.start()
         toolLogic.start()
 
@@ -81,6 +83,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     }
 
     override fun stop() {
+        engine.ui.removeImGuiView(view)
         cameraLogic.stop()
     }
 
@@ -101,19 +104,19 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         if (!imGuiWantsToCaptureInput()) {
             engine.input.onAction("sceneTabToolPress") {
                 toolLogic.performAction()?.let { command ->
-                    engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                    engine.events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
 
             engine.input.onAction("sceneTabToolDown") {
                 toolLogic.performMultiAction()?.let { command ->
-                    engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                    engine.events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
 
             engine.input.onAction("sceneTabToolRelease") {
                 toolLogic.performReleaseAction()?.let { command ->
-                    engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                    engine.events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
         }
@@ -126,6 +129,19 @@ class SceneMode(private val engine: Engine) : EditorMode() {
                 redo()
             }
         }
+
+        view.viewData =
+            ViewData(
+                selectedActor = selectedActor,
+                selectedTool = toolLogic.selection,
+                selectedLayer = selectedLayer,
+                hideWalls = hideWalls,
+                hideUpperLayers = hideUpperLayers,
+                highlightSelectedLayer = highlightSelectedLayer,
+                buildings = engine.world.buildings.getAll(),
+                selectedBuilding = selectedBuilding,
+                messageBarText = getMessageBarText()
+            )
     }
 
     private fun drawGrid() {
@@ -189,22 +205,6 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         renderer.drawText(name, buildingFont, box.pos)
     }
 
-    override fun draw() {
-        view.draw(
-            ViewData(
-                selectedActor = selectedActor,
-                selectedTool = toolLogic.selection,
-                selectedLayer = selectedLayer,
-                hideWalls = hideWalls,
-                hideUpperLayers = hideUpperLayers,
-                highlightSelectedLayer = highlightSelectedLayer,
-                buildings = engine.world.buildings.getAll(),
-                selectedBuilding = selectedBuilding,
-                messageBarText = getMessageBarText()
-            )
-        )
-    }
-
     private fun getMessageBarText(): String =
         if (selectedBuilding.isNullOrBlank()) {
             "No building selected"
@@ -232,17 +232,17 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
             is TagAdded -> {
                 val command = AddTagCommand(event.actor, event.tag)
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
             is TagDeleted -> {
                 val command = DeleteTagCommand(event.actor, event.tag)
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
             is BuildingAssigned -> {
                 val command = AssignBuildingCommand(event.actor, event.building, worldLogic)
-                engine.events.fire(ImGuiEditorState.ExecuteCommand(command))
+                engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
             is BuildingSelected -> {

@@ -1,12 +1,12 @@
 package bke.iso.editor.actor
 
-import bke.iso.editor.ImGuiEditorState
+import bke.iso.editor.EditorModule
 import bke.iso.editor.actor.command.UpdateComponentPropertyCommand
 import bke.iso.editor.actor.command.UpdateVector3Command
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.beginImGuiFrame
+import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
-import bke.iso.engine.endImGuiFrame
+import bke.iso.engine.ui.imgui.ImGuiView
 import bke.iso.engine.world.actor.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -30,7 +30,7 @@ import kotlin.reflect.typeOf
 class ActorModeView(
     private val events: Events,
     private val assets: Assets,
-) {
+) : ImGuiView() {
 
     private val log = KotlinLogging.logger { }
 
@@ -41,8 +41,13 @@ class ActorModeView(
 
     private var openSelectComponentPopup = false
 
-    fun draw(viewData: ActorMode.ViewData) {
-        beginImGuiFrame()
+    lateinit var viewData: ActorMode.ViewData
+
+    override fun create() {}
+
+    override fun handleEvent(event: Event) {}
+
+    override fun drawImGui() {
         drawMainMenuBar()
         drawComponentList(viewData)
         drawComponentEditor(viewData)
@@ -51,8 +56,6 @@ class ActorModeView(
         if (showDemoWindow) {
             ImGui.showDemoWindow()
         }
-
-        endImGuiFrame()
     }
 
     private fun drawMainMenuBar() {
@@ -75,7 +78,7 @@ class ActorModeView(
 
             if (ImGui.beginMenu("Mode")) {
                 if (ImGui.menuItem("Scene Editor", false)) {
-                    events.fire(ImGuiEditorState.SceneModeSelected())
+                    events.fire(EditorModule.SceneModeSelected())
                 }
                 ImGui.menuItem("Actor Editor", true)
                 ImGui.beginDisabled()
@@ -199,7 +202,7 @@ class ActorModeView(
             if (memberProperty is KMutableProperty<*>) {
                 if (memberProperty.name != "texture" || assets.contains(value.toString(), Texture::class)) {
                     events.fire(
-                        ImGuiEditorState.ExecuteCommand(
+                        EditorModule.ExecuteCommand(
                             UpdateComponentPropertyCommand(
                                 component = component,
                                 property = memberProperty as KMutableProperty1,
@@ -221,7 +224,7 @@ class ActorModeView(
         if (ImGui.inputFloat(memberProperty.name, value)) {
             val command =
                 UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
-            events.fire(ImGuiEditorState.ExecuteCommand(command))
+            events.fire(EditorModule.ExecuteCommand(command))
         }
     }
 
@@ -229,7 +232,7 @@ class ActorModeView(
         val value = ImBoolean(memberProperty.getter.call(component) as Boolean)
         if (ImGui.checkbox(memberProperty.name, value)) {
             val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
-            events.fire(ImGuiEditorState.ExecuteCommand(command))
+            events.fire(EditorModule.ExecuteCommand(command))
         }
     }
 
@@ -237,7 +240,7 @@ class ActorModeView(
         val value = ImInt(memberProperty.getter.call(component) as Int)
         if (ImGui.inputInt(memberProperty.name, value)) {
             val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
-            events.fire(ImGuiEditorState.ExecuteCommand(command))
+            events.fire(EditorModule.ExecuteCommand(command))
         }
     }
 
@@ -249,7 +252,7 @@ class ActorModeView(
             if (ImGui.inputFloat("x##${memberProperty.name}", xValue)) {
                 if (xValue.get() != vector.x) {
                     val command = UpdateVector3Command(vector, xValue.get(), vector.y, vector.z)
-                    events.fire(ImGuiEditorState.ExecuteCommand(command))
+                    events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
 
@@ -257,7 +260,7 @@ class ActorModeView(
             if (ImGui.inputFloat("y##${memberProperty.name}", yValue)) {
                 if (yValue.get() != vector.y) {
                     val command = UpdateVector3Command(vector, vector.x, yValue.get(), vector.z)
-                    events.fire(ImGuiEditorState.ExecuteCommand(command))
+                    events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
 
@@ -265,7 +268,7 @@ class ActorModeView(
             if (ImGui.inputFloat("z##${memberProperty.name}", zValue)) {
                 if (zValue.get() != vector.z) {
                     val command = UpdateVector3Command(vector, xValue.get(), vector.y, zValue.get())
-                    events.fire(ImGuiEditorState.ExecuteCommand(command))
+                    events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
         }
