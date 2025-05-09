@@ -5,10 +5,8 @@ import bke.iso.editor.scene.SceneMode
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
-import bke.iso.engine.input.ButtonState
 import bke.iso.engine.state.State
 import bke.iso.engine.state.System
-import com.badlogic.gdx.Input
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ImGuiEditorState(override val engine: Engine) : State() {
@@ -27,7 +25,6 @@ class ImGuiEditorState(override val engine: Engine) : State() {
 
         engine.ui.clearScene2dViews()
         engine.ui.clearImGuiViews()
-        engine.input.keyMouse.bindMouse("openContextMenu", Input.Buttons.RIGHT, ButtonState.RELEASED)
 
         selectMode(sceneMode)
     }
