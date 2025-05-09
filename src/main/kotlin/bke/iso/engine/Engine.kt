@@ -73,6 +73,9 @@ class Engine(val game: Game) {
 
     private val profiler = Profiler(ui, input)
 
+    var gamePaused = false
+        private set
+
     fun start() {
         systemInfo.logInfo()
 
@@ -125,6 +128,10 @@ class Engine(val game: Game) {
     }
 
     private fun updateModule(module: EngineModule, deltaTime: Float, override: Boolean = false) {
+        if (gamePaused && !module.alwaysActive) {
+            return
+        }
+
         if (loadingScreens.isLoading() && !module.updateWhileLoading) {
             if (!override) {
                 return
@@ -161,6 +168,14 @@ class Engine(val game: Game) {
             module.handleEvent(event)
         }
 
+        if (event is GamePaused) {
+            gamePaused = true
+            return
+        } else if (event is GameResumed) {
+            gamePaused = false
+            return
+        }
+
         // we run the states module for one frame to make sure the camera is updated to the player's position.
         // this fixes an issue where the camera is in the wrong location when the loading screen is transitioning out.
         if (event is LoadActionCompleteEvent) {
@@ -169,4 +184,7 @@ class Engine(val game: Game) {
             log.debug { "--- End state --- " }
         }
     }
+
+    class GamePaused : Event
+    class GameResumed : Event
 }

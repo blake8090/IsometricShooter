@@ -17,6 +17,8 @@ const val SHADOW_Z_OFFSET = 0.0001f
 
 class ShadowModule(private val world: World) : Module {
 
+    override val alwaysActive: Boolean = false
+
     override fun handleEvent(event: Event) {
         if (event is Actors.CreatedEvent && event.actor.has<CastShadow>()) {
             createShadow(event.actor)

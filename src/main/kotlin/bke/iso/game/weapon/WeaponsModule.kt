@@ -30,6 +30,7 @@ class WeaponsModule(
 ) : Module {
 
     private val log = KotlinLogging.logger {}
+    override val alwaysActive: Boolean = false
 
     override fun handleEvent(event: Event) {
         if (event is ShootEvent) {

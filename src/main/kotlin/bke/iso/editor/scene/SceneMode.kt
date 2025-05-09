@@ -77,7 +77,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             bindKey("sceneModeRedo", Input.Keys.Y, ButtonState.PRESSED)
         }
 
-        renderer.occlusion.resetStrategies()
+//        renderer.occlusion.resetStrategies()
         // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
     }

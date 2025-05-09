@@ -180,10 +180,12 @@ class GameState(override val engine: Engine) : State() {
                 log.info { "Closing editor" }
                 engine.events.fire(EditorModule.EditorClosed())
                 editorEnabled = false
+                engine.events.fire(Engine.GameResumed())
             } else {
                 log.info { "Opening editor" }
                 engine.events.fire(EditorModule.SceneModeSelected())
                 editorEnabled = true
+                engine.events.fire(Engine.GamePaused())
             }
         }
     }

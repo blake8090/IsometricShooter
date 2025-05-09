@@ -10,6 +10,7 @@ class EditorModule(engine: Engine) : Module {
 
     private val sceneMode = SceneMode(engine)
     private val actorMode = ActorMode(engine)
+    override val alwaysActive: Boolean = true
 
     private var selectedMode: EditorMode? = null
 

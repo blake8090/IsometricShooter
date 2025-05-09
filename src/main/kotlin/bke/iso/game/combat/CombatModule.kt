@@ -25,6 +25,8 @@ class CombatModule(
 
     private val log = KotlinLogging.logger {}
 
+    override val alwaysActive: Boolean = false
+
     fun applyDamage(actor: Actor, damage: Float) {
         val health = actor.get<Health>() ?: return
         health.value = max(health.value - damage, 0f)

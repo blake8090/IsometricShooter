@@ -13,6 +13,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 class PlayerDataModule(private val world: World) : Module {
 
     private val log = KotlinLogging.logger {}
+    override val alwaysActive: Boolean = false
 
     private var savedData: PlayerData? = null
 

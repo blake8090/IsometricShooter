@@ -15,7 +15,7 @@ class States(private val engine: Engine) : EngineModule() {
     override val moduleName: String = "states"
     override val updateWhileLoading = false
     override val profilingEnabled = true
-
+    override val alwaysActive: Boolean = true
     private var currentState: State = EmptyState(engine)
 
     override fun update(deltaTime: Float) {

@@ -23,11 +23,16 @@ abstract class State {
     open suspend fun load() {}
 
     open fun update(deltaTime: Float) {
-        for (system in systems) {
-            system.update(deltaTime)
+        if (!engine.gamePaused) {
+            for (system in systems) {
+                system.update(deltaTime)
+            }
         }
+
         for (module in modules) {
-            module.update(deltaTime)
+            if (module.alwaysActive || !engine.gamePaused) {
+                module.update(deltaTime)
+            }
         }
     }
 

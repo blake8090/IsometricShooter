@@ -30,6 +30,7 @@ class HudModule(
 ) : Module {
 
     private val view = HudView(assets)
+    override val alwaysActive: Boolean = false
 
     fun init(ui: UI) {
         ui.pushView(view)

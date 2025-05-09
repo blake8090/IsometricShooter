@@ -16,7 +16,7 @@ class Input(events: Events) : EngineModule() {
     override val moduleName = "input"
     override val updateWhileLoading = false
     override val profilingEnabled = true
-
+    override val alwaysActive: Boolean = true
     private val inputMultiplexer = InputMultiplexer()
     private val inputState = InputState(events)
 

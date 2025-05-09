@@ -8,7 +8,7 @@ class RendererManager(private val mainRenderer: Renderer) : EngineModule() {
     override val moduleName = "renderer"
     override val updateWhileLoading = true
     override val profilingEnabled = true
-
+    override val alwaysActive: Boolean = true
     private var activeRenderer: Renderer = mainRenderer
 
     override fun stop() {
