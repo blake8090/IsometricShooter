@@ -29,8 +29,9 @@ class HudModule(
     private val weaponsModule: WeaponsModule,
 ) : Module {
 
-    private val view = HudView(assets)
     override val alwaysActive: Boolean = false
+
+    private val view = HudView(assets)
 
     fun init(ui: UI) {
         ui.pushView(view)

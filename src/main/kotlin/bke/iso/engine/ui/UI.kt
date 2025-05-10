@@ -15,6 +15,7 @@ class UI(private val input: Input) : EngineModule() {
     override val updateWhileLoading = true
     override val profilingEnabled = true
     override val alwaysActive: Boolean = true
+
     private val scene2dViews = LinkedHashSet<Scene2dView>()
     private val imGuiViews = LinkedHashSet<ImGuiView>()
 

@@ -12,8 +12,9 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ElevatorModule(private val collisions: Collisions) : Module {
 
-    private val log = KotlinLogging.logger { }
     override val alwaysActive: Boolean = false
+
+    private val log = KotlinLogging.logger { }
 
     override fun handleEvent(event: Event) {
         if (event is Actors.CreatedEvent && event.actor.has<Elevator>()) {

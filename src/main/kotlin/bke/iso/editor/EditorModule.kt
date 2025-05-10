@@ -8,9 +8,10 @@ import bke.iso.engine.core.Module
 
 class EditorModule(engine: Engine) : Module {
 
+    override val alwaysActive: Boolean = true
+
     private val sceneMode = SceneMode(engine)
     private val actorMode = ActorMode(engine)
-    override val alwaysActive: Boolean = true
 
     private var selectedMode: EditorMode? = null
 

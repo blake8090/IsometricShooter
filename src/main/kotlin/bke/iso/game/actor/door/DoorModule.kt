@@ -22,8 +22,9 @@ class DoorModule(
     private val assets: Assets
 ) : Module {
 
-    private val log = KotlinLogging.logger { }
     override val alwaysActive: Boolean = false
+
+    private val log = KotlinLogging.logger { }
 
     override fun handleEvent(event: Event) {
         if (event is OpenDoorEvent) {

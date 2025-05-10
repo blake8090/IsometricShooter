@@ -127,15 +127,13 @@ class Engine(val game: Game) {
         }
     }
 
-    private fun updateModule(module: EngineModule, deltaTime: Float, override: Boolean = false) {
-        if (gamePaused && !module.alwaysActive) {
+    private fun updateModule(
+        module: EngineModule,
+        deltaTime: Float,
+        overrideLoadingScreen: Boolean = false
+    ) {
+        if (!canUpdate(module, overrideLoadingScreen)) {
             return
-        }
-
-        if (loadingScreens.isLoading() && !module.updateWhileLoading) {
-            if (!override) {
-                return
-            }
         }
 
         if (module.profilingEnabled) {
@@ -146,6 +144,15 @@ class Engine(val game: Game) {
             module.update(deltaTime)
         }
     }
+
+    private fun canUpdate(module: EngineModule, overrideLoadingScreen: Boolean = false): Boolean =
+        if (gamePaused && !module.alwaysActive) {
+            false
+        } else if (loadingScreens.isLoading() && !module.updateWhileLoading && !overrideLoadingScreen) {
+            false
+        } else {
+            true
+        }
 
     fun resize(width: Int, height: Int) {
         log.info { "Resizing to ${width}x$height" }
@@ -168,20 +175,22 @@ class Engine(val game: Game) {
             module.handleEvent(event)
         }
 
-        if (event is GamePaused) {
-            gamePaused = true
-            return
-        } else if (event is GameResumed) {
-            gamePaused = false
-            return
-        }
+        when (event) {
+            is GamePaused -> {
+                gamePaused = true
+            }
 
-        // we run the states module for one frame to make sure the camera is updated to the player's position.
-        // this fixes an issue where the camera is in the wrong location when the loading screen is transitioning out.
-        if (event is LoadActionCompleteEvent) {
-            log.debug { "--- Running state for 1 frame --- " }
-            updateModule(states, Gdx.graphics.deltaTime, true)
-            log.debug { "--- End state --- " }
+            is GameResumed -> {
+                gamePaused = false
+            }
+
+            // we run the states module for one frame to make sure the camera is updated to the player's position.
+            // this fixes an issue where the camera is in the wrong location when the loading screen is transitioning out.
+            is LoadActionCompleteEvent -> {
+                log.debug { "--- Running state for 1 frame --- " }
+                updateModule(states, Gdx.graphics.deltaTime, true)
+                log.debug { "--- End state --- " }
+            }
         }
     }
 
