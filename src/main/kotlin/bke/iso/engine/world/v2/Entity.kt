@@ -14,6 +14,8 @@ import kotlin.reflect.safeCast
 
 private const val Z_CLAMP_THRESHOLD = 0.00001f
 
+class Tile : Component
+
 @Serializable
 class Entity(
     val id: String,
