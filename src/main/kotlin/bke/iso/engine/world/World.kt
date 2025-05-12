@@ -19,11 +19,11 @@ class World(events: Events) : EngineModule() {
     private val deletedActors = mutableSetOf<Actor>()
 
     // TODO: property?
-    fun getObjects() = grid.getObjects()
+    fun getObjects() = grid.actors
 
     override fun update(deltaTime: Float) {
         for (actor in deletedActors) {
-            grid.remove(actor)
+            grid.delete(actor)
             buildings.remove(actor)
         }
         deletedActors.clear()

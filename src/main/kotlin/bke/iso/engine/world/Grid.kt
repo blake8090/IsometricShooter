@@ -6,115 +6,65 @@ import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.OrderedSet
-import com.badlogic.gdx.utils.Pool
-import com.badlogic.gdx.utils.Pool.Poolable
 
 class Grid {
 
-    private val objectMap = OrderedMap<Location, GridData>()
-    private val objects = OrderedSet<Actor>()
-    private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
+    val actors = OrderedSet<Actor>()
 
-    private val pool = object : Pool<GridData>() {
-        override fun newObject() = GridData()
-    }
+    private val actorsByLocation = OrderedMap<Location, ObjectSet<Actor>>()
+    private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
 
     init {
         // improves performance when removing objects
-        objects.orderedItems().ordered = false
+        actors.orderedItems().ordered = false
     }
 
-    // TODO: property
-    fun getObjects() = objects
+    operator fun get(location: Location): ObjectSet<Actor> =
+        actorsByLocation[location] ?: ObjectSet()
 
     fun update(actor: Actor) {
-        if (!objects.contains(actor)) {
-            objects.add(actor)
+        if (!actors.contains(actor)) {
+            actors.add(actor)
         }
 
         removeLocations(actor)
+
         for (location in actor.getLocations()) {
-            val data = getOrPutData(location)
-            data.actors.add(actor)
+            // TODO: add some verification here, like that there can't be more than one tile entity in a location
             getOrPutLocations(actor).add(location)
+            getOrPutActors(location).add(actor)
         }
+    }
+
+    private fun getOrPutActors(location: Location): ObjectSet<Actor> {
+        if (!actorsByLocation.containsKey(location)) {
+            actorsByLocation.put(location, ObjectSet())
+        }
+        return actorsByLocation[location]
     }
 
     private fun getOrPutLocations(actor: Actor): ObjectSet<Location> {
         if (!locationsByActor.containsKey(actor)) {
             locationsByActor.put(actor, ObjectSet())
         }
-        return locationsByActor.get(actor)
+        return locationsByActor[actor]
     }
 
-    fun remove(actor: Actor) {
+    fun delete(actor: Actor) {
         removeLocations(actor)
-        objects.remove(actor)
+        actors.remove(actor)
     }
 
     private fun removeLocations(actor: Actor) {
-        val locations = locationsByActor[actor] ?: return
+        val locations = locationsByActor.remove(actor) ?: return
         for (location in locations) {
-            val data = checkNotNull(objectMap.get(location)) {
-                "Expected GridData for $location from $actor"
-            }
-            data.actors.remove(actor)
-
-            if (data.actors.isEmpty) {
-                pool.free(data)
-                objectMap.remove(location)
-            }
+            actorsByLocation[location]?.remove(actor)
         }
-        locationsByActor.remove(actor)
-    }
-
-    fun objectsAt(location: Location): Set<Actor> {
-        val objects = mutableSetOf<Actor>()
-        objectMap[location]?.let { data ->
-            objects.addAll(data.actors)
-//            data.tile?.let(objects::add)
-        }
-        return objects
-    }
-
-    // TODO: unit test and investigate using this to optimize sorting objects for rendering
-//    fun objectsByLocation(): Map<Location, Set<GameObject>> {
-//        val map = mutableMapOf<Location, MutableSet<GameObject>>()
-//        for (entry in objectMap) {
-//            val set = map.getOrPut(entry.key) { mutableSetOf() }
-//            entry.value.tile?.let(set::add)
-//            set.addAll(entry.value.actors)
-//        }
-//        return map
-//    }
-
-//    fun setTile(tile: Tile) {
-//        val data = getOrPutData(tile.location)
-//        data.tile = tile
-//        objects.add(tile)
-//    }
-
-    private fun getOrPutData(location: Location): GridData {
-        if (!objectMap.containsKey(location)) {
-            objectMap.put(location, pool.obtain())
-        }
-        return objectMap.get(location)
     }
 
     fun clear() {
-        objectMap.clear()
-        objects.clear()
-        locationsByActor.clear()
-    }
-}
-
-data class GridData(
-    val actors: ObjectSet<Actor> = ObjectSet(),
-//    var tile: Tile? = null
-) : Poolable {
-
-    override fun reset() {
         actors.clear()
-//        tile = null
+        actorsByLocation.clear()
+        locationsByActor.clear()
     }
 }

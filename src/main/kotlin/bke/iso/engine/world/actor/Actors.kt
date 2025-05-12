@@ -54,13 +54,13 @@ class Actors(
     }
 
     fun get(id: String): Actor =
-        grid.getObjects()
+        grid.actors
             .toList()
             .find { actor -> actor.id == id }
             ?: throw IllegalArgumentException("No actor found with id $id")
 
     fun <T : Component> each(type: KClass<out T>, action: (Actor, T) -> Unit) {
-        val actors = grid.getObjects().toList()
+        val actors = grid.actors.toList()
         for (actor in actors) {
             val component = actor.get(type) ?: continue
             action.invoke(actor, component)
@@ -71,7 +71,7 @@ class Actors(
         each(T::class, action)
 
     fun <T : Component> find(type: KClass<out T>): Actor? =
-        grid.getObjects()
+        grid.actors
             .toList()
             .find { actor ->
                 actor.components.containsKey(type)
@@ -81,12 +81,12 @@ class Actors(
         find(T::class)
 
     fun find(id: String): Actor? =
-        grid.getObjects()
+        grid.actors
             .toList()
             .find { actor -> actor.id == id }
 
     fun <T : Component> findAll(type: KClass<out T>): List<Actor> =
-        grid.getObjects()
+        grid.actors
             .toList()
             .filter { actor -> actor.components.containsKey(type) }
 
@@ -94,7 +94,7 @@ class Actors(
         findAll(T::class)
 
     fun findAllAt(point: Vector3): Set<Actor> =
-        grid.objectsAt(Location(point))
+        grid[Location(point)].toSet()
 
     fun findAllIn(box: Box): Set<Actor> {
         val minX = floor(box.min.x).toInt()
@@ -109,7 +109,7 @@ class Actors(
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ..maxZ) {
-                    objects.addAll(grid.objectsAt(Location(x, y, z)))
+                    objects.addAll(grid[Location(x, y, z)])
                 }
             }
         }
