@@ -49,7 +49,7 @@ class OptimizedActorRenderer(
     private val renderablesByRow = mutableMapOf<Float, Array<ActorRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch, world: World) {
-        for (actor in world.getObjects()) {
+        for (actor in world.actors) {
             addRenderable(actor)
         }
 

@@ -11,19 +11,14 @@ class World(events: Events) : EngineModule() {
     override val updateWhileLoading = false
     override val profilingEnabled = true
 
-    private val grid = Grid()
-
-    val actors = Actors(grid, events)
+    val actors = Actors(events)
     val buildings = Buildings()
 
     private val deletedActors = mutableSetOf<Actor>()
 
-    // TODO: property?
-    fun getObjects() = grid.actors
-
     override fun update(deltaTime: Float) {
         for (actor in deletedActors) {
-            grid.delete(actor)
+            actors.delete(actor)
             buildings.remove(actor)
         }
         deletedActors.clear()
@@ -34,7 +29,7 @@ class World(events: Events) : EngineModule() {
     }
 
     fun clear() {
-        grid.clear()
+        actors.clear()
         buildings.clear()
     }
 }
