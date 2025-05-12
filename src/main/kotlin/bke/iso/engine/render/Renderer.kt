@@ -10,6 +10,7 @@ import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
 import bke.iso.engine.render.shape.ShapeRenderer
 import bke.iso.engine.render.text.TextRenderer
+import bke.iso.engine.render.v2.entity.EntityRenderer
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -33,6 +34,7 @@ const val VIRTUAL_HEIGHT = 540f
 
 class Renderer(
     private val world: World,
+    private val world2: bke.iso.engine.world.v2.World,
     private val assets: Assets,
     events: Events
 ) {
@@ -66,6 +68,7 @@ class Renderer(
     var bgColor: Color = Color.GRAY
 
     val occlusion = Occlusion(world)
+    val occlusion2 = bke.iso.engine.render.v2.occlusion.Occlusion(world2)
 
     private val gameObjectRenderer = OptimizedGameObjectRenderer(
         assets,
@@ -74,6 +77,14 @@ class Renderer(
         occlusion,
         camera
     )
+    private val entityRenderer =
+        EntityRenderer(
+            assets,
+            events,
+            debug,
+            occlusion2,
+            camera
+        )
 
     private val textRenderer = TextRenderer()
 
@@ -114,7 +125,8 @@ class Renderer(
         batch.projectionMatrix = camera.combined
 
         fboBegin()
-        gameObjectRenderer.draw(batch, world)
+//        gameObjectRenderer.draw(batch, world)
+        entityRenderer.draw(batch, world2)
         fboEnd()
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a)

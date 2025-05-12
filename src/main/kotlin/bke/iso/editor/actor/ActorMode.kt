@@ -27,7 +27,7 @@ import kotlin.reflect.full.hasAnnotation
 class ActorMode(private val engine: Engine) : EditorMode() {
 
     override val world = World(engine.events)
-    override val renderer = Renderer(world, engine.assets, engine.events)
+    override val renderer = Renderer(world, engine.world2, engine.assets, engine.events)
 
     private val log = KotlinLogging.logger { }
 

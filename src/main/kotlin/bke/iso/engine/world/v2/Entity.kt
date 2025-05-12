@@ -126,10 +126,14 @@ class Entity(
     }
 
     fun getCollisionBox(): Box? {
-        val collider = get<Collider>() ?: return null
-        val min = pos.add(collider.offset)
-        val max = Vector3(min).add(collider.size)
-        return Box.fromMinMax(min, max)
+        if (has<Tile>()) {
+            return Box.fromMinMax(pos, pos.add(1f, 1f, 0f))
+        } else {
+            val collider = get<Collider>() ?: return null
+            val min = pos.add(collider.offset)
+            val max = Vector3(min).add(collider.size)
+            return Box.fromMinMax(min, max)
+        }
     }
 
     override fun equals(other: Any?): Boolean =

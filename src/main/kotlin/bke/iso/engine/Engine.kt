@@ -25,6 +25,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.RendererManager
 import bke.iso.engine.scene.SceneAssetCache
 import bke.iso.engine.scene.Scenes
+import bke.iso.engine.scene.ScenesV2
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.state.States
 import bke.iso.engine.ui.UI
@@ -50,13 +51,15 @@ class Engine(val game: Game) {
     val assets: Assets = Assets(files, systemInfo)
 
     val world: World = World(events)
+    val world2: bke.iso.engine.world.v2.World = bke.iso.engine.world.v2.World(events)
 
-    val renderer: Renderer = Renderer(world, assets, events)
+    val renderer: Renderer = Renderer(world, world2, assets, events)
     val rendererManager = RendererManager(renderer)
 
     val collisions: Collisions = Collisions(renderer, world)
     val physics: Physics = Physics(world, collisions)
     val scenes = Scenes(assets, serializer, world, renderer)
+    val scenesV2 = ScenesV2(assets, serializer, world2, renderer)
 
     val loadingScreens = LoadingScreens(events)
 

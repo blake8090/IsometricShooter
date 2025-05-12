@@ -81,6 +81,10 @@ class World(private val events: Events) : EngineModule() {
         List(entityIdLength) { entityIdSymbols.random() }.joinToString("")
 
     private fun update(entity: Entity) {
+        if (!entities.contains(entity)) {
+            entities.add(entity)
+        }
+
         removeLocations(entity)
         val newLocations = getOrPutLocations(entity)
         for (location in entity.getLocations()) {
@@ -102,7 +106,7 @@ class World(private val events: Events) : EngineModule() {
     }
 
     private fun removeLocations(entity: Entity) {
-        val locations = locationsByEntity.remove(entity)
+        val locations = locationsByEntity.remove(entity) ?: return
         for (location in locations) {
             entitiesByLocation[location]?.remove(entity)
         }
