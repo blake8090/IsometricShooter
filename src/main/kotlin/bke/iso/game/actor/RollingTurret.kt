@@ -12,7 +12,6 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
-import bke.iso.engine.world.actor.has
 import bke.iso.engine.world.v2.Tile
 import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
@@ -127,7 +126,7 @@ class RollingTurretSystem(
     }
 
     private fun validCollision(collision: Collision): Boolean {
-        if (collision.obj.has<Tile>()) {
+        if (collision.actor.has<Tile>()) {
             return false
         }
 
@@ -160,7 +159,7 @@ class RollingTurretSystem(
 
         val firstCollision = collisions
             .checkLineCollisions(start, end)
-            .filter { collision -> collision.obj != actor }
+            .filter { collision -> collision.actor != actor }
             .minByOrNull { collision -> collision.distanceStart }
             ?: return false
 
@@ -169,7 +168,7 @@ class RollingTurretSystem(
             .minBy { point -> start.dst(point) }
         renderer.debug.category("vision").addPoint(firstPoint, 3f, Color.RED)
 
-        return if (firstCollision.obj == target) {
+        return if (firstCollision.actor == target) {
             renderer.debug.category("vision").addLine(start, end, 1f, Color.RED)
             true
         } else {

@@ -112,18 +112,18 @@ class PlayerSystem(
     }
 
     private fun handleCollision(playerActor: Actor, collision: Collision) {
-        val obj = collision.obj
+        val otherActor = collision.actor
 
-        if (obj is Actor && obj.has<Medkit>()) {
+        if (otherActor.has<Medkit>()) {
             val inventory = playerActor.getOrAdd(Inventory())
             inventory.numMedkits++
             log.debug { "Picked up medkit. Player now has ${inventory.numMedkits} medkits" }
-            world.delete(obj)
-        } else if (obj is Actor && obj.has<WeaponPickup>()) {
+            world.delete(otherActor)
+        } else if (otherActor.has<WeaponPickup>()) {
             log.debug { "Picking up weapon" }
-            val weaponName = obj.get<WeaponPickup>()!!.name
+            val weaponName = otherActor.get<WeaponPickup>()!!.name
             weaponsModule.equip(playerActor, weaponName)
-            world.delete(obj)
+            world.delete(otherActor)
         }
     }
 

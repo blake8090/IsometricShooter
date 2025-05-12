@@ -7,19 +7,19 @@ import com.badlogic.gdx.math.Vector3
 
 class Buildings {
 
-    private val objectsByBuilding = mutableMapOf<String, MutableSet<GameObject>>()
-    private val buildingByObject = mutableMapOf<GameObject, String>()
+    private val objectsByBuilding = mutableMapOf<String, MutableSet<Actor>>()
+    private val buildingByObject = mutableMapOf<Actor, String>()
     private val boundsByBuilding = mutableMapOf<String, Box>()
 
-    fun add(gameObject: GameObject, buildingName: String) {
+    fun add(actor: Actor, buildingName: String) {
         require(buildingName.isNotBlank()) {
             "Building name cannot be blank"
         }
 
         objectsByBuilding
             .getOrPut(buildingName) { mutableSetOf() }
-            .add(gameObject)
-        buildingByObject[gameObject] = buildingName
+            .add(actor)
+        buildingByObject[actor] = buildingName
 
         regenerateBounds()
     }
@@ -35,7 +35,7 @@ class Buildings {
 
     private fun regenerateBounds(buildingName: String) {
         val boxes = objectsByBuilding[buildingName]
-            ?.mapNotNull(GameObject::getCollisionBox)
+            ?.mapNotNull(Actor::getCollisionBox)
             ?: emptyList()
 
         if (boxes.isEmpty()) {
@@ -56,8 +56,8 @@ class Buildings {
         boundsByBuilding[buildingName] = Box.fromMinMax(min, max)
     }
 
-    fun getBuilding(gameObject: GameObject): String? =
-        buildingByObject[gameObject]
+    fun getBuilding(actor: Actor): String? =
+        buildingByObject[actor]
 
     fun getAll(): Set<String> =
         objectsByBuilding.keys

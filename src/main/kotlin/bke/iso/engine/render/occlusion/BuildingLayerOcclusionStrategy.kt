@@ -13,8 +13,8 @@ class BuildingLayerOcclusionStrategy(private val world: World) : OcclusionStrate
             return
         }
 
-        val gameObject = checkNotNull(renderable.gameObject)
-        val building = world.buildings.getBuilding(gameObject) ?: return
+        val actor = checkNotNull(renderable.actor)
+        val building = world.buildings.getBuilding(actor) ?: return
         val bounds = checkNotNull(renderable.bounds)
 
         val layer = floor(bounds.min.z)
@@ -25,8 +25,8 @@ class BuildingLayerOcclusionStrategy(private val world: World) : OcclusionStrate
     }
 
     override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
-        val gameObject = checkNotNull(renderable.gameObject)
-        val building = world.buildings.getBuilding(gameObject) ?: return
+        val actor = checkNotNull(renderable.actor)
+        val building = world.buildings.getBuilding(actor) ?: return
         val bounds = checkNotNull(renderable.bounds)
 
         val minimumLayer = minimumLayerByBuilding[building] ?: return

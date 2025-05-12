@@ -63,7 +63,7 @@ class TurretSystem(
 
         val firstCollision = collisions
             .checkLineCollisions(start, end)
-            .filter { collision -> collision.obj != actor }
+            .filter { collision -> collision.actor != actor }
             .minByOrNull { collision -> collision.distanceStart }
             ?: return false
 
@@ -72,7 +72,7 @@ class TurretSystem(
             .minBy { point -> start.dst(point) }
         debugRenderer.category("vision").addPoint(firstPoint, 3f, Color.RED)
 
-        return if (firstCollision.obj == target) {
+        return if (firstCollision.actor == target) {
             debugRenderer.category("vision").addLine(start, end, 1f, Color.RED)
             true
         } else {

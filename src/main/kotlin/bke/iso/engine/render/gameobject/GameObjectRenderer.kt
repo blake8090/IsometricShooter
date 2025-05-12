@@ -12,7 +12,6 @@ import bke.iso.engine.render.SpriteTintColor
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.withColor
-import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
@@ -40,8 +39,8 @@ class GameObjectRenderer(
     private val renderables = Array<GameObjectRenderable>()
 
     fun draw(batch: PolygonSpriteBatch) {
-        for (gameObject in world.getObjects()) {
-            addRenderable(gameObject)
+        for (actor in world.getObjects()) {
+            addRenderable(actor)
         }
 
         for (i in 0..<renderables.size) {
@@ -62,19 +61,15 @@ class GameObjectRenderer(
         occlusion.endFrame()
     }
 
-    private fun addRenderable(gameObject: GameObject) {
-        val renderable = getRenderable(gameObject)
+    private fun addRenderable(actor: Actor) {
+        val renderable = getRenderable(actor)
         if (renderable == null || !inFrustum(renderable)) {
             return
         }
-
         renderables.add(renderable)
-
         occlusion.prepare(renderable)
 
-        when (gameObject) {
-            is Actor -> debug.category("actors").add(gameObject)
-        }
+        debug.category("actors").add(actor)
     }
 
     private fun inFrustum(renderable: GameObjectRenderable): Boolean =
@@ -156,19 +151,18 @@ class GameObjectRenderer(
             batch.shader = null
         }
 
-        val obj = renderable.gameObject
-        if (obj is Actor) {
-            events.fire(DrawActorEvent(obj, batch))
+        renderable.actor?.let { actor ->
+            events.fire(DrawActorEvent(actor, batch))
         }
     }
 
-    private fun getRenderable(gameObject: GameObject): GameObjectRenderable? {
-        val sprite = getSprite(gameObject)
+    private fun getRenderable(actor: Actor): GameObjectRenderable? {
+        val sprite = actor.get<Sprite>()
         if (sprite == null || sprite.texture.isBlank()) {
             return null
         }
 
-        val worldPos = getPos(gameObject)
+        val worldPos = actor.pos
         val offset = Vector2(sprite.offsetX, sprite.offsetY)
         val pos = toScreen(worldPos).sub(offset)
 
@@ -183,10 +177,10 @@ class GameObjectRenderer(
             pos.add(diffX / 2f, diffY / 2f)
         }
 
-        val bounds = gameObject.getCollisionBox() ?: Box.fromMinMax(worldPos, worldPos)
+        val bounds = actor.getCollisionBox() ?: Box.fromMinMax(worldPos, worldPos)
 
         val renderable = pool.obtain()
-        renderable.gameObject = gameObject
+        renderable.actor = actor
         renderable.texture = texture
         renderable.bounds = bounds
         renderable.x = pos.x
@@ -198,29 +192,15 @@ class GameObjectRenderer(
         renderable.alpha = sprite.alpha
         renderable.rotation = sprite.rotation
 
-        if (gameObject is Actor) {
-            gameObject.with<SpriteFillColor> { spriteFillColor ->
-                renderable.fillColor = Color(spriteFillColor.r, spriteFillColor.g, spriteFillColor.b, 1f)
-            }
-            gameObject.with<SpriteTintColor> { spriteTintColor ->
-                renderable.tintColor = Color(spriteTintColor.r, spriteTintColor.g, spriteTintColor.b, 1f)
-            }
+        actor.with<SpriteFillColor> { spriteFillColor ->
+            renderable.fillColor = Color(spriteFillColor.r, spriteFillColor.g, spriteFillColor.b, 1f)
+        }
+        actor.with<SpriteTintColor> { spriteTintColor ->
+            renderable.tintColor = Color(spriteTintColor.r, spriteTintColor.g, spriteTintColor.b, 1f)
         }
 
         return renderable
     }
-
-    private fun getSprite(gameObject: GameObject): Sprite? =
-        when (gameObject) {
-            is Actor -> gameObject.get<Sprite>()
-            else -> null
-        }
-
-    private fun getPos(gameObject: GameObject) =
-        when (gameObject) {
-            is Actor -> gameObject.pos
-            else -> error("unexpected GameObject ${gameObject::class.simpleName}")
-        }
 
     private fun inFront(a: Box, b: Box): Boolean {
         if (a.max.z <= b.min.z) {

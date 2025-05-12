@@ -85,7 +85,6 @@ class ElevatorModule(private val collisions: Collisions) : Module {
     fun findElevatorUnderneath(actor: Actor): Actor? =
         collisions
             .getCollisions(actor)
-            .map { collision -> collision.obj }
-            .filterIsInstance<Actor>()
+            .map { collision -> collision.actor }
             .firstOrNull { a -> a.has<Elevator>() }
 }

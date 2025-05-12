@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Pool.Poolable
 class Grid {
 
     private val objectMap = OrderedMap<Location, GridData>()
-    private val objects = OrderedSet<GameObject>()
+    private val objects = OrderedSet<Actor>()
     private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
 
     private val pool = object : Pool<GridData>() {
@@ -68,8 +68,8 @@ class Grid {
         locationsByActor.remove(actor)
     }
 
-    fun objectsAt(location: Location): Set<GameObject> {
-        val objects = mutableSetOf<GameObject>()
+    fun objectsAt(location: Location): Set<Actor> {
+        val objects = mutableSetOf<Actor>()
         objectMap[location]?.let { data ->
             objects.addAll(data.actors)
 //            data.tile?.let(objects::add)

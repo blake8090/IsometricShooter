@@ -49,17 +49,12 @@ abstract class BaseTool {
     open fun disable() {}
 
     protected fun pickActor(): Actor? {
-        val collision = collisions
+        return collisions
             .checkCollisions(pointerPos)
             .filter { collision -> collision.box.min.z == pointerPos.z }
             .minByOrNull { collision -> getDistance(pointerPos, collision.box) }
+            ?.actor
             ?: return null
-
-        return if (collision.obj is Actor) {
-            collision.obj
-        } else {
-            null
-        }
     }
 
     private fun getDistance(point: Vector3, box: Box): Float {

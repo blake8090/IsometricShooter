@@ -1,14 +1,14 @@
 package bke.iso.engine.render.gameobject
 
 import bke.iso.engine.math.Box
-import bke.iso.engine.world.GameObject
+import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool.Poolable
 
 open class GameObjectRenderable(
-    var gameObject: GameObject? = null,
+    var actor: Actor? = null,
     var texture: Texture? = null,
     var bounds: Box? = null,
     var x: Float = 0f,
@@ -28,7 +28,7 @@ open class GameObjectRenderable(
     var visited = false
 
     override fun reset() {
-        gameObject = null
+        actor = null
         texture = null
         bounds = null
         x = 0f

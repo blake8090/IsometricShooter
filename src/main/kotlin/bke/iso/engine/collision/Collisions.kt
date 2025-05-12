@@ -5,7 +5,6 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.engine.world.v2.Tile
 import com.badlogic.gdx.graphics.Color
@@ -45,36 +44,35 @@ class Collisions(
     fun checkCollisions(point: Vector3): Set<PointCollision> =
         world
             .getObjectsAt(point)
-            .mapNotNullTo(mutableSetOf()) { obj -> checkCollision(point, obj) }
+            .mapNotNullTo(mutableSetOf()) { actor -> checkCollision(point, actor) }
 
-    private fun checkCollision(point: Vector3, obj: GameObject): PointCollision? {
-        val objBox = obj.getCollisionBox()
-        return if (objBox == null || !objBox.contains(point)) {
+    private fun checkCollision(point: Vector3, actor: Actor): PointCollision? {
+        val box = actor.getCollisionBox()
+        return if (box == null || !box.contains(point)) {
             null
         } else {
-            PointCollision(obj, objBox)
+            PointCollision(actor, box)
         }
     }
 
     fun checkCollisions(box: Box): Set<Collision> {
         renderer.debug.category("collisions").addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
-        val objects = world.getObjectsInArea(box)
-        for (obj in objects) {
-            checkCollision(box, obj)?.let(collisions::add)
+        for (actor in world.getObjectsInArea(box)) {
+            checkCollision(box, actor)?.let(collisions::add)
         }
         return collisions
     }
 
-    private fun checkCollision(box: Box, obj: GameObject): Collision? {
-        val objBox = obj.getCollisionBox()
-        return if (objBox == null || !objBox.intersects(box)) {
+    private fun checkCollision(box: Box, actor: Actor): Collision? {
+        val actorBox = actor.getCollisionBox()
+        return if (actorBox == null || !actorBox.intersects(box)) {
             null
         } else {
             Collision(
-                obj = obj,
-                box = objBox,
-                distance = box.dst(objBox),
+                actor = actor,
+                box = actorBox,
+                distance = box.dst(actorBox),
                 // TODO: find collision side
                 side = CollisionSide.CORNER
             )
@@ -92,12 +90,12 @@ class Collisions(
 
         return world
             .getObjectsInArea(area)
-            .mapNotNull { obj -> checkLineCollision(start, end, ray, obj) }
+            .mapNotNull { actor -> checkLineCollision(start, end, ray, actor) }
             .toSet()
     }
 
-    private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, gameObject: GameObject): SegmentCollision? {
-        val box = gameObject.getCollisionBox() ?: return null
+    private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, actor: Actor): SegmentCollision? {
+        val box = actor.getCollisionBox() ?: return null
 
         val points = box
             .getFaces()
@@ -109,7 +107,7 @@ class Collisions(
         }
 
         return SegmentCollision(
-            obj = gameObject,
+            actor = actor,
             distanceStart = start.dst(box.pos),
             distanceEnd = end.dst(box.pos),
             points = points
@@ -142,16 +140,14 @@ class Collisions(
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()
-        for (obj in world.getObjectsInArea(projectedBox)) {
-            if (actor == obj) {
+        for (otherActor in world.getObjectsInArea(projectedBox)) {
+            if (actor == otherActor) {
                 continue
             }
 
-            if (obj is Actor) {
-                obj.get<DebugSettings>()?.collisionBoxSelected = true
-            }
+            otherActor.get<DebugSettings>()?.collisionBoxSelected = true
 
-            val collision = predictCollision(box, delta, obj)
+            val collision = predictCollision(box, delta, otherActor)
             if (collision != null) {
                 recordCollision(actor, collision)
                 collisions.add(collision)
@@ -161,14 +157,14 @@ class Collisions(
         return collisions
     }
 
-    private fun predictCollision(box: Box, delta: Vector3, obj: GameObject): PredictedCollision? {
-        val objBox = obj.getCollisionBox() ?: return null
-        val sweptCollision = sweepTest(box, objBox, delta) ?: return null
+    private fun predictCollision(box: Box, delta: Vector3, actor: Actor): PredictedCollision? {
+        val actorBox = actor.getCollisionBox() ?: return null
+        val sweptCollision = sweepTest(box, actorBox, delta) ?: return null
 
         return PredictedCollision(
-            obj = obj,
-            box = objBox,
-            distance = box.dst(objBox),
+            actor = actor,
+            box = actorBox,
+            distance = box.dst(actorBox),
             collisionTime = sweptCollision.collisionTime,
             hitNormal = sweptCollision.hitNormal,
             side = getCollisionSide(sweptCollision.hitNormal)
@@ -176,13 +172,13 @@ class Collisions(
     }
 
     private fun recordCollision(actor: Actor, predictedCollision: PredictedCollision) {
-        if (actor == predictedCollision.obj) {
+        if (actor == predictedCollision.actor) {
             return
         }
         // PredictedCollision is intended only for use with Physics,
         // so the normal Collision object should be stored instead.
         val collision = Collision(
-            obj = predictedCollision.obj,
+            actor = predictedCollision.actor,
             box = predictedCollision.box,
             distance = predictedCollision.distance,
             side = predictedCollision.side
@@ -206,12 +202,6 @@ class Collisions(
 }
 
 // TODO: clean this up!
-fun GameObject.getCollisionBox(): Box? =
-    when (this) {
-        is Actor -> getCollisionBox()
-        else -> null
-    }
-
 fun Actor.getCollisionBox(): Box? {
     return if (has<Tile>()) {
         Box.fromMinMax(

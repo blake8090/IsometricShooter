@@ -2,7 +2,6 @@ package bke.iso.engine.world.actor
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.collision.getCollisionBox
-import bke.iso.engine.world.GameObject
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
@@ -16,7 +15,7 @@ private const val Z_CLAMP_THRESHOLD = 0.00001f
 class Actor(
     val id: String,
     private val onMove: (Actor) -> Unit = {}
-) : GameObject {
+) {
 
     var x: Float = 0f
         private set

@@ -10,8 +10,6 @@ import com.badlogic.gdx.math.Vector3
 import kotlin.math.ceil
 import kotlin.math.floor
 
-interface GameObject
-
 class World(events: Events) : EngineModule() {
 
     override val moduleName = "world"
@@ -42,10 +40,10 @@ class World(events: Events) : EngineModule() {
 //        return tile
 //    }
 
-    fun getObjectsAt(point: Vector3): Set<GameObject> =
+    fun getObjectsAt(point: Vector3): Set<Actor> =
         grid.objectsAt(Location(point))
 
-    fun getObjectsInArea(box: Box): Set<GameObject> {
+    fun getObjectsInArea(box: Box): Set<Actor> {
         val minX = floor(box.min.x).toInt()
         val minY = floor(box.min.y).toInt()
         val minZ = floor(box.min.z).toInt()
@@ -54,7 +52,7 @@ class World(events: Events) : EngineModule() {
         val maxY = ceil(box.max.y).toInt()
         val maxZ = ceil(box.max.z).toInt()
 
-        val objects = mutableSetOf<GameObject>()
+        val objects = mutableSetOf<Actor>()
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ..maxZ) {

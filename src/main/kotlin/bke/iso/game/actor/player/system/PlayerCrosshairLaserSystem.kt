@@ -68,10 +68,9 @@ class PlayerCrosshairLaserSystem(
     }
 
     private fun filterCollision(playerActor: Actor, collision: SegmentCollision): Boolean =
-        collision.obj is Actor
-                && collision.obj != playerActor
-                && !collision.obj.has<Bullet>()
-                && !collision.obj.has<Explosion>()
+        collision.actor != playerActor
+                && !collision.actor.has<Bullet>()
+                && !collision.actor.has<Explosion>()
 
     private fun extend(start: Vector3, end: Vector3, distance: Float): Vector3 {
         val direction = Vector3(end)

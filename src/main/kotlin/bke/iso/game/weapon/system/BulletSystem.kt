@@ -10,7 +10,6 @@ import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
@@ -45,36 +44,26 @@ class BulletSystem(
         val firstCollision = collisions
             .getCollisions(bulletActor)
             .sortedBy(Collision::distance)
-            .firstOrNull { collision -> canCollide(bullet, collision.obj) }
+            .firstOrNull { collision -> canCollide(bullet, collision.actor) }
 
         if (firstCollision != null) {
             handleCollision(bulletActor, bullet, firstCollision)
         }
     }
 
-    private fun canCollide(bullet: Bullet, obj: GameObject): Boolean =
-        when (obj) {
-            is Actor -> {
-                if (obj.has<Tile>()) {
-                    true
-                } else {
-                    obj.id != bullet.shooterId
-                            && !obj.has<Bullet>()
-                            && !obj.has<Explosion>()
-                }
-            }
-
-            else -> {
-                false
-            }
+    private fun canCollide(bullet: Bullet, actor: Actor): Boolean =
+        if (actor.has<Tile>()) {
+            true
+        } else {
+            actor.id != bullet.shooterId
+                    && !actor.has<Bullet>()
+                    && !actor.has<Explosion>()
         }
 
     private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
-        val target = collision.obj
-        if (target is Actor) {
-            val damage = calculateDamage(bulletActor, bullet)
-            combatModule.applyDamage(target, damage)
-        }
+        val target = collision.actor
+        val damage = calculateDamage(bulletActor, bullet)
+        combatModule.applyDamage(target, damage)
 
         createExplosion(bulletActor.pos, collision)
         world.delete(bulletActor)
@@ -118,8 +107,8 @@ class BulletSystem(
         val box = checkNotNull(actor.getCollisionBox()) {
             "Expected collision box for $actor"
         }
-        val otherBox = checkNotNull(collision.obj.getCollisionBox()) {
-            "Expected collision box for $collision.obj"
+        val otherBox = checkNotNull(collision.actor.getCollisionBox()) {
+            "Expected collision box for ${collision.actor}"
         }
 
         var x = actor.x

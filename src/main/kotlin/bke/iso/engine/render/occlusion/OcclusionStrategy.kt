@@ -3,8 +3,6 @@ package bke.iso.engine.render.occlusion
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.gameobject.GameObjectRenderable
-import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.actor.has
 import com.badlogic.gdx.math.Rectangle
 
 abstract class OcclusionStrategy {
@@ -16,9 +14,9 @@ abstract class OcclusionStrategy {
     abstract fun endFrame()
 
     protected fun occludes(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable): Boolean {
-        val gameObject = checkNotNull(renderable.gameObject)
+        val actor = checkNotNull(renderable.actor)
 
-        if (gameObject == targetRenderable.gameObject || !canOcclude(gameObject)) {
+        if (actor == targetRenderable.actor || !actor.has<Occlude>()) {
             return false
         }
 
@@ -29,10 +27,6 @@ abstract class OcclusionStrategy {
         val targetOcclusionRect = getTargetOcclusionRectangle(targetRenderable)
 
         return inFront(bounds, targetBounds) && targetOcclusionRect.overlaps(occlusionRect)
-    }
-
-    private fun canOcclude(gameObject: GameObject): Boolean {
-        return gameObject.has<Occlude>()
     }
 
     private fun inFront(a: Box, b: Box): Boolean {

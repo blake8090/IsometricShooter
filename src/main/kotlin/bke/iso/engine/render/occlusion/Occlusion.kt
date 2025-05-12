@@ -21,7 +21,7 @@ class Occlusion(private val world: World) {
     }
 
     fun prepare(renderable: GameObjectRenderable) {
-        if (renderable.gameObject == target) {
+        if (renderable.actor == target) {
             targetRenderable = renderable
         }
     }

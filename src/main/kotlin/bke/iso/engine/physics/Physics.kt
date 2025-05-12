@@ -6,7 +6,6 @@ import bke.iso.engine.collision.PredictedCollision
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.GameObject
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -56,7 +55,7 @@ class Physics(
         // TODO: how to resolve multiple collisions to avoid objects falling out of the world?
         val collision = predictCollisions
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
-            .firstOrNull { collision -> getPhysicsMode(collision.obj) != PhysicsMode.GHOST }
+            .firstOrNull { collision -> getPhysicsMode(collision.actor) != PhysicsMode.GHOST }
 
         if (collision == null) {
             actor.move(delta)
@@ -84,10 +83,10 @@ class Physics(
         body.velocity.z -= (body.velocity.z * abs(collision.hitNormal.z))
 
         // set velocity when landing on top of a moving kinematic (i.e. a moving platform)
-        if (collision.side == CollisionSide.TOP && getPhysicsMode(collision.obj) == PhysicsMode.KINEMATIC) {
-            val obj = collision.obj as Actor
-            val objBody = obj.get<PhysicsBody>()!!
-            body.velocity.z = objBody.velocity.z
+        if (collision.side == CollisionSide.TOP && getPhysicsMode(collision.actor) == PhysicsMode.KINEMATIC) {
+            val other = collision.actor
+            val otherBody = other.get<PhysicsBody>()!!
+            body.velocity.z = otherBody.velocity.z
         }
 
         // erase delta towards collision normal to get remaining movement for this frame
@@ -106,28 +105,28 @@ class Physics(
         // the dynamic actor handles pushing down on the kinematic,
         // while the kinematic pushes the dynamic actor upwards.
         // TODO: find a way to make this logic more generalized
-        val obj = collision.obj as? Actor ?: return
-        val objBody = obj.get<PhysicsBody>() ?: return
-        if (objBody.mode != PhysicsMode.DYNAMIC) {
+        val other = collision.actor
+        val otherBody = other.get<PhysicsBody>() ?: return
+        if (otherBody.mode != PhysicsMode.DYNAMIC) {
             return
         }
 
-        objBody.velocity.z = body.velocity.z
-        objBody.forces.add(Vector3(0f, 0f, body.velocity.z))
+        otherBody.velocity.z = body.velocity.z
+        otherBody.forces.add(Vector3(0f, 0f, body.velocity.z))
 
         val box = checkNotNull(actor.getCollisionBox()) {
             "Expected collision box for $actor"
         }
         // make sure object doesn't clip through the platform next frame
-        obj.moveTo(obj.x, obj.y, box.max.z)
+        other.moveTo(other.x, other.y, box.max.z)
     }
 
     private fun clampPosToCollisionSide(actor: Actor, collision: PredictedCollision) {
         val box = checkNotNull(actor.getCollisionBox()) {
             "Expected collision box for $actor"
         }
-        val otherBox = checkNotNull(collision.obj.getCollisionBox()) {
-            "Expected collision box for $collision.obj"
+        val otherBox = checkNotNull(collision.actor.getCollisionBox()) {
+            "Expected collision box for ${collision.actor}"
         }
 
         var x = actor.x
@@ -166,7 +165,8 @@ class Physics(
     }
 }
 
-fun getPhysicsMode(obj: GameObject) = (obj as? Actor)
-    ?.get<PhysicsBody>()
-    ?.mode
-    ?: PhysicsMode.SOLID
+fun getPhysicsMode(actor: Actor) =
+    actor
+        .get<PhysicsBody>()
+        ?.mode
+        ?: PhysicsMode.SOLID

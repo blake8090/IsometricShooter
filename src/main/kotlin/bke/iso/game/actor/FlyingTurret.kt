@@ -111,9 +111,7 @@ class FlyingTurretSystem(
 
         val collision = collisions
             .getCollisions(actor)
-            .firstOrNull { collision ->
-                collision.obj !is Actor || !collision.obj.has<Bullet>()
-            }
+            .firstOrNull { collision -> !collision.actor.has<Bullet>() }
 
         if (collision != null) {
             bounce(body, collision)
@@ -190,7 +188,7 @@ class FlyingTurretSystem(
 
         val firstCollision = collisions
             .checkLineCollisions(start, end)
-            .filter { collision -> collision.obj != actor }
+            .filter { collision -> collision.actor != actor }
             .minByOrNull { collision -> collision.distanceStart }
             ?: return false
 
@@ -199,7 +197,7 @@ class FlyingTurretSystem(
             .minBy { point -> start.dst(point) }
         renderer.debug.category("vision").addPoint(firstPoint, 3f, Color.RED)
 
-        return if (firstCollision.obj == target) {
+        return if (firstCollision.actor == target) {
             renderer.debug.category("vision").addLine(start, end, 1f, Color.RED)
             true
         } else {
