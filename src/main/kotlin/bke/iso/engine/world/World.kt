@@ -4,7 +4,6 @@ import bke.iso.engine.core.Events
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.Box
-import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
 import com.badlogic.gdx.math.Vector3
@@ -37,11 +36,11 @@ class World(events: Events) : EngineModule() {
         deletedActors.clear()
     }
 
-    fun setTile(location: Location, sprite: Sprite): Tile {
-        val tile = Tile(sprite, location)
-        grid.setTile(tile)
-        return tile
-    }
+//    fun setTile(location: Location, sprite: Sprite): Tile {
+//        val tile = Tile(sprite, location)
+//        grid.setTile(tile)
+//        return tile
+//    }
 
     fun getObjectsAt(point: Vector3): Set<GameObject> =
         grid.objectsAt(Location(point))

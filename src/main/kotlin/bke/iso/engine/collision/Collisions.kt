@@ -6,8 +6,8 @@ import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
+import bke.iso.engine.world.v2.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
@@ -147,9 +147,7 @@ class Collisions(
                 continue
             }
 
-            if (obj is Tile) {
-                obj.selected = true
-            } else if (obj is Actor) {
+            if (obj is Actor) {
                 obj.get<DebugSettings>()?.collisionBoxSelected = true
             }
 
@@ -207,22 +205,23 @@ class Collisions(
 
 }
 
+// TODO: clean this up!
 fun GameObject.getCollisionBox(): Box? =
     when (this) {
-        is Tile -> getCollisionBox()
         is Actor -> getCollisionBox()
         else -> null
     }
 
 fun Actor.getCollisionBox(): Box? {
-    val collider = get<Collider>() ?: return null
-    val min = pos.add(collider.offset)
-    val max = Vector3(min).add(collider.size)
-    return Box.fromMinMax(min, max)
+    return if (has<Tile>()) {
+        Box.fromMinMax(
+            pos,
+            pos.add(1f, 1f, 0f)
+        )
+    } else {
+        val collider = get<Collider>() ?: return null
+        val min = pos.add(collider.offset)
+        val max = Vector3(min).add(collider.size)
+        Box.fromMinMax(min, max)
+    }
 }
-
-fun Tile.getCollisionBox(): Box =
-    Box.fromMinMax(
-        location.toVector3(),
-        location.toVector3().add(1f, 1f, 0f)
-    )

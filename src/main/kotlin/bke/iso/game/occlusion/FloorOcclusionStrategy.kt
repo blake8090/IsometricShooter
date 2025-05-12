@@ -2,8 +2,8 @@ package bke.iso.game.occlusion
 
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.actor.has
+import bke.iso.engine.world.v2.Tile
 import bke.iso.game.actor.elevator.Elevator
 import kotlin.math.floor
 
@@ -27,7 +27,7 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
         val gameObject = checkNotNull(renderable.gameObject)
         val bounds = checkNotNull(renderable.bounds)
 
-        return if (renderable.gameObject is Tile) {
+        return if (renderable.gameObject!!.has<Tile>()) {
             floor(bounds.min.z / floorHeight)
         } else if (gameObject.has<Elevator>()) {
             // elevators are always positioned so that the top of the collision box is flush with the ground

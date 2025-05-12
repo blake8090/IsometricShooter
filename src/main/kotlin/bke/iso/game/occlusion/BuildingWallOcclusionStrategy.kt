@@ -5,9 +5,9 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.has
+import bke.iso.engine.world.v2.Tile
 import bke.iso.game.actor.door.Door
 
 class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {
@@ -29,7 +29,7 @@ class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrateg
     }
 
     private fun isSouthOrEastWall(gameObject: GameObject, buildingBounds: Box): Boolean {
-        if (gameObject is Tile || gameObject.has<Door>()) {
+        if (gameObject.has<Tile>() || gameObject.has<Door>()) {
             return false
         }
 

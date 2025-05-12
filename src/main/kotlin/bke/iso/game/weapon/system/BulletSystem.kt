@@ -11,10 +11,10 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
+import bke.iso.engine.world.v2.Tile
 import bke.iso.game.combat.CombatModule
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -54,14 +54,14 @@ class BulletSystem(
 
     private fun canCollide(bullet: Bullet, obj: GameObject): Boolean =
         when (obj) {
-            is Tile -> {
-                true
-            }
-
             is Actor -> {
-                obj.id != bullet.shooterId
-                        && !obj.has<Bullet>()
-                        && !obj.has<Explosion>()
+                if (obj.has<Tile>()) {
+                    true
+                } else {
+                    obj.id != bullet.shooterId
+                            && !obj.has<Bullet>()
+                            && !obj.has<Explosion>()
+                }
             }
 
             else -> {

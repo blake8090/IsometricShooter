@@ -60,7 +60,7 @@ class Grid {
             }
             data.actors.remove(actor)
 
-            if (data.tile == null && data.actors.isEmpty) {
+            if (data.actors.isEmpty) {
                 pool.free(data)
                 objectMap.remove(location)
             }
@@ -72,27 +72,27 @@ class Grid {
         val objects = mutableSetOf<GameObject>()
         objectMap[location]?.let { data ->
             objects.addAll(data.actors)
-            data.tile?.let(objects::add)
+//            data.tile?.let(objects::add)
         }
         return objects
     }
 
     // TODO: unit test and investigate using this to optimize sorting objects for rendering
-    fun objectsByLocation(): Map<Location, Set<GameObject>> {
-        val map = mutableMapOf<Location, MutableSet<GameObject>>()
-        for (entry in objectMap) {
-            val set = map.getOrPut(entry.key) { mutableSetOf() }
-            entry.value.tile?.let(set::add)
-            set.addAll(entry.value.actors)
-        }
-        return map
-    }
+//    fun objectsByLocation(): Map<Location, Set<GameObject>> {
+//        val map = mutableMapOf<Location, MutableSet<GameObject>>()
+//        for (entry in objectMap) {
+//            val set = map.getOrPut(entry.key) { mutableSetOf() }
+//            entry.value.tile?.let(set::add)
+//            set.addAll(entry.value.actors)
+//        }
+//        return map
+//    }
 
-    fun setTile(tile: Tile) {
-        val data = getOrPutData(tile.location)
-        data.tile = tile
-        objects.add(tile)
-    }
+//    fun setTile(tile: Tile) {
+//        val data = getOrPutData(tile.location)
+//        data.tile = tile
+//        objects.add(tile)
+//    }
 
     private fun getOrPutData(location: Location): GridData {
         if (!objectMap.containsKey(location)) {
@@ -110,11 +110,11 @@ class Grid {
 
 data class GridData(
     val actors: ObjectSet<Actor> = ObjectSet(),
-    var tile: Tile? = null
+//    var tile: Tile? = null
 ) : Poolable {
 
     override fun reset() {
         actors.clear()
-        tile = null
+//        tile = null
     }
 }

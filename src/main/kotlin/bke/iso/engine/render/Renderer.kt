@@ -125,8 +125,8 @@ class Renderer(
         batch.projectionMatrix = camera.combined
 
         fboBegin()
-//        gameObjectRenderer.draw(batch, world)
-        entityRenderer.draw(batch, world2)
+        gameObjectRenderer.draw(batch, world)
+//        entityRenderer.draw(batch, world2)
         fboEnd()
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a)

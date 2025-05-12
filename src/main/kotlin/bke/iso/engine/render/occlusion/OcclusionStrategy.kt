@@ -4,7 +4,6 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.gameobject.GameObjectRenderable
 import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.actor.has
 import com.badlogic.gdx.math.Rectangle
 
@@ -33,11 +32,7 @@ abstract class OcclusionStrategy {
     }
 
     private fun canOcclude(gameObject: GameObject): Boolean {
-        return if (gameObject is Tile) {
-            true
-        } else {
-            gameObject.has<Occlude>()
-        }
+        return gameObject.has<Occlude>()
     }
 
     private fun inFront(a: Box, b: Box): Boolean {

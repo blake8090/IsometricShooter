@@ -203,7 +203,7 @@ class GameState(override val engine: Engine) : State() {
             playerDataModule.saveData()
         }
 
-        engine.scenesV2.load(name)
+        engine.scenes.load(name)
 
         if (savePlayerData) {
             playerDataModule.loadData()

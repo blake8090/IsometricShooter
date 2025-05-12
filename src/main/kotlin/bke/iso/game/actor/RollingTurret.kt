@@ -9,10 +9,11 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.actor.has
+import bke.iso.engine.world.v2.Tile
 import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.RangedWeaponOffset
@@ -126,7 +127,7 @@ class RollingTurretSystem(
     }
 
     private fun validCollision(collision: Collision): Boolean {
-        if (collision.obj is Tile) {
+        if (collision.obj.has<Tile>()) {
             return false
         }
 

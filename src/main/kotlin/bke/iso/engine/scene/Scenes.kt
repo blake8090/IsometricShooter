@@ -7,6 +7,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.actor.Component
 import bke.iso.engine.world.World
+import bke.iso.engine.world.v2.Tile
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.system.measureTimeMillis
 
@@ -65,11 +66,12 @@ class Scenes(
 
     private fun load(record: TileRecord) {
         val prefab = assets.get<TilePrefab>(record.prefab)
-        val tile = world.setTile(record.location, prefab.sprite.copy())
+        val components = setOf(prefab.sprite, Tile())
+        val actor = world.actors.create(record.location, *components.toTypedArray())
 
         val building = record.building
         if (!building.isNullOrBlank()) {
-            world.buildings.add(tile, building)
+            world.buildings.add(actor, building)
         }
     }
 }

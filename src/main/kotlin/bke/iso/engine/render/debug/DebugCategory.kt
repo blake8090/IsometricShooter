@@ -4,7 +4,6 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.shape.ShapeArray
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
@@ -64,14 +63,14 @@ class DebugCategory {
         }
     }
 
-    fun add(tile: Tile) {
-        if (!enabled) {
-            return
-        }
-        val color = if (tile.selected) Color.PURPLE else Color.WHITE
-        addBox(tile.getCollisionBox(), 1f, color)
-        tile.selected = false
-    }
+//    fun add(tile: Tile) {
+//        if (!enabled) {
+//            return
+//        }
+//        val color = if (tile.selected) Color.PURPLE else Color.WHITE
+//        addBox(tile.getCollisionBox(), 1f, color)
+//        tile.selected = false
+//    }
 
     fun addRectangle(rectangle: Rectangle, lineWidth: Float, color: Color) {
         if (enabled) {

@@ -13,7 +13,6 @@ import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.GameObject
-import bke.iso.engine.world.Tile
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import com.badlogic.gdx.graphics.Color
@@ -75,7 +74,6 @@ class GameObjectRenderer(
 
         when (gameObject) {
             is Actor -> debug.category("actors").add(gameObject)
-            is Tile -> debug.category("actors").add(gameObject)
         }
     }
 
@@ -214,7 +212,6 @@ class GameObjectRenderer(
 
     private fun getSprite(gameObject: GameObject): Sprite? =
         when (gameObject) {
-            is Tile -> gameObject.sprite
             is Actor -> gameObject.get<Sprite>()
             else -> null
         }
@@ -222,7 +219,6 @@ class GameObjectRenderer(
     private fun getPos(gameObject: GameObject) =
         when (gameObject) {
             is Actor -> gameObject.pos
-            is Tile -> gameObject.location.toVector3()
             else -> error("unexpected GameObject ${gameObject::class.simpleName}")
         }
 
