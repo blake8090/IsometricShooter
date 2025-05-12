@@ -1,6 +1,6 @@
 package bke.iso.engine.render.occlusion
 
-import bke.iso.engine.render.gameobject.GameObjectRenderable
+import bke.iso.engine.render.actor.ActorRenderable
 import bke.iso.engine.world.World
 import kotlin.math.floor
 
@@ -8,7 +8,7 @@ class BuildingLayerOcclusionStrategy(private val world: World) : OcclusionStrate
 
     private val minimumLayerByBuilding = mutableMapOf<String, Float>()
 
-    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
+    override fun firstPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {
         if (targetRenderable == null || !occludes(renderable, targetRenderable)) {
             return
         }
@@ -24,7 +24,7 @@ class BuildingLayerOcclusionStrategy(private val world: World) : OcclusionStrate
         }
     }
 
-    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
+    override fun secondPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {
         val actor = checkNotNull(renderable.actor)
         val building = world.buildings.getBuilding(actor) ?: return
         val bounds = checkNotNull(renderable.bounds)

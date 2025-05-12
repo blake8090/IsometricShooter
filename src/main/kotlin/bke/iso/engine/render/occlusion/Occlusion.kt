@@ -1,6 +1,6 @@
 package bke.iso.engine.render.occlusion
 
-import bke.iso.engine.render.gameobject.GameObjectRenderable
+import bke.iso.engine.render.actor.ActorRenderable
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import kotlin.reflect.KClass
@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 class Occlusion(private val world: World) {
 
     var target: Actor? = null
-    private var targetRenderable: GameObjectRenderable? = null
+    private var targetRenderable: ActorRenderable? = null
 
     private val strategies = mutableListOf<OcclusionStrategy>()
 
@@ -20,19 +20,19 @@ class Occlusion(private val world: World) {
         strategies.add(occlusionStrategy)
     }
 
-    fun prepare(renderable: GameObjectRenderable) {
+    fun prepare(renderable: ActorRenderable) {
         if (renderable.actor == target) {
             targetRenderable = renderable
         }
     }
 
-    fun firstPass(renderable: GameObjectRenderable) {
+    fun firstPass(renderable: ActorRenderable) {
         for (strategy in strategies) {
             strategy.firstPass(renderable, targetRenderable)
         }
     }
 
-    fun secondPass(renderable: GameObjectRenderable) {
+    fun secondPass(renderable: ActorRenderable) {
         for (strategy in strategies) {
             strategy.secondPass(renderable, targetRenderable)
         }

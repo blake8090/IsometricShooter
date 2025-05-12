@@ -1,6 +1,6 @@
 package bke.iso.game.occlusion
 
-import bke.iso.engine.render.gameobject.GameObjectRenderable
+import bke.iso.engine.render.actor.ActorRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.v2.Tile
 import bke.iso.game.actor.elevator.Elevator
@@ -10,7 +10,7 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
 
     private var minimumLayer: Float? = null
 
-    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
+    override fun firstPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {
         if (targetRenderable == null) {
             return
         }
@@ -22,7 +22,7 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
         }
     }
 
-    private fun getFloor(renderable: GameObjectRenderable): Float {
+    private fun getFloor(renderable: ActorRenderable): Float {
         val actor = checkNotNull(renderable.actor)
         val bounds = checkNotNull(renderable.bounds)
 
@@ -36,7 +36,7 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
         }
     }
 
-    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {}
+    override fun secondPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {}
 
     override fun endFrame() {
         minimumLayer = null

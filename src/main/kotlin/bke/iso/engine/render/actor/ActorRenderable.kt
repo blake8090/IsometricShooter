@@ -1,4 +1,4 @@
-package bke.iso.engine.render.gameobject
+package bke.iso.engine.render.actor
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.actor.Actor
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool.Poolable
 
-open class GameObjectRenderable(
+open class ActorRenderable(
     var actor: Actor? = null,
     var texture: Texture? = null,
     var bounds: Box? = null,
@@ -24,7 +24,7 @@ open class GameObjectRenderable(
     var drawn: Boolean = false
 ) : Poolable {
 
-    val behind = Array<GameObjectRenderable>()
+    val behind = Array<ActorRenderable>()
     var visited = false
 
     override fun reset() {

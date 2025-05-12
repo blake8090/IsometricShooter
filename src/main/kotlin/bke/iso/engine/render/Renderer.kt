@@ -4,7 +4,7 @@ import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.debug.DebugRenderer
-import bke.iso.engine.render.gameobject.OptimizedGameObjectRenderer
+import bke.iso.engine.render.actor.OptimizedActorRenderer
 import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.pointer.PointerRenderer
 import bke.iso.engine.render.shape.ShapeArray
@@ -70,7 +70,7 @@ class Renderer(
     val occlusion = Occlusion(world)
     val occlusion2 = bke.iso.engine.render.v2.occlusion.Occlusion(world2)
 
-    private val gameObjectRenderer = OptimizedGameObjectRenderer(
+    private val gameObjectRenderer = OptimizedActorRenderer(
         assets,
         events,
         debug,

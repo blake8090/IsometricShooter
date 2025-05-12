@@ -2,7 +2,7 @@ package bke.iso.game.occlusion
 
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
-import bke.iso.engine.render.gameobject.GameObjectRenderable
+import bke.iso.engine.render.actor.ActorRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
@@ -12,7 +12,7 @@ import bke.iso.game.actor.door.Door
 class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {
 
 
-    override fun firstPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {
+    override fun firstPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {
         if (targetRenderable == null) {
             return
         }
@@ -36,7 +36,7 @@ class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrateg
         return box.max.x >= buildingBounds.max.x || box.min.y <= buildingBounds.min.y
     }
 
-    override fun secondPass(renderable: GameObjectRenderable, targetRenderable: GameObjectRenderable?) {}
+    override fun secondPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {}
 
     override fun endFrame() {
     }

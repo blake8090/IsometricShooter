@@ -1,4 +1,4 @@
-package bke.iso.engine.render.gameobject
+package bke.iso.engine.render.actor
 
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
@@ -28,13 +28,13 @@ import kotlin.math.floor
  * This renderer has massive performance gains due to grouping renderables by rows (y-axis)
  * instead of grouping by layer (z-axis).
  *
- * Consider that [OptimizedGameObjectRenderer.sortRenderables] is of quadratic time complexity.
+ * Consider that [OptimizedActorRenderer.sortRenderables] is of quadratic time complexity.
  * When renderables are grouped by layer, there are fewer but larger lists, as many objects share the same layer.
  * When grouped by rows, there are numerous but much smaller lists, since most objects do not share the same row.
  *
  * Since quadratic algorithms perform best on very small lists, grouping by rows will net significant performance gains.
  */
-class OptimizedGameObjectRenderer(
+class OptimizedActorRenderer(
     private val assets: Assets,
     private val events: Events,
     private val debug: DebugRenderer,
@@ -42,11 +42,11 @@ class OptimizedGameObjectRenderer(
     private val camera: OrthographicCamera
 ) {
 
-    private val pool = object : Pool<GameObjectRenderable>() {
-        override fun newObject() = GameObjectRenderable()
+    private val pool = object : Pool<ActorRenderable>() {
+        override fun newObject() = ActorRenderable()
     }
 
-    private val renderablesByRow = mutableMapOf<Float, Array<GameObjectRenderable>>()
+    private val renderablesByRow = mutableMapOf<Float, Array<ActorRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch, world: World) {
         for (actor in world.getObjects()) {
@@ -95,7 +95,7 @@ class OptimizedGameObjectRenderer(
         debug.category("actors").add(actor)
     }
 
-    private fun inFrustum(renderable: GameObjectRenderable): Boolean =
+    private fun inFrustum(renderable: ActorRenderable): Boolean =
         camera.frustum.boundsInFrustum(
             /* x = */ renderable.x,
             /* y = */ renderable.y,
@@ -105,7 +105,7 @@ class OptimizedGameObjectRenderer(
             /* halfDepth = */ 0f
         )
 
-    private fun sortRenderables(renderables: Array<GameObjectRenderable>, start: Int) {
+    private fun sortRenderables(renderables: Array<ActorRenderable>, start: Int) {
         val a = renderables[start]
         val aBounds = checkNotNull(a.bounds) { "Expected bounds to not be null" }
 
@@ -121,7 +121,7 @@ class OptimizedGameObjectRenderer(
         }
     }
 
-    private fun draw(renderable: GameObjectRenderable, batch: PolygonSpriteBatch) {
+    private fun draw(renderable: ActorRenderable, batch: PolygonSpriteBatch) {
         if (renderable.visited) {
             return
         }
@@ -179,7 +179,7 @@ class OptimizedGameObjectRenderer(
         }
     }
 
-    private fun getRenderable(actor: Actor): GameObjectRenderable? {
+    private fun getRenderable(actor: Actor): ActorRenderable? {
         val sprite = actor.get<Sprite>()
         if (sprite == null || sprite.texture.isBlank()) {
             return null
