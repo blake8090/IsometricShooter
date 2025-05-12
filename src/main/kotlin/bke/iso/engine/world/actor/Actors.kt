@@ -2,9 +2,12 @@ package bke.iso.engine.world.actor
 
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
+import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.Grid
 import com.badlogic.gdx.math.Vector3
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.reflect.KClass
 
 private const val ID_LENGTH = 6
@@ -52,12 +55,12 @@ class Actors(
 
     fun get(id: String): Actor =
         grid.getObjects()
-            .filterIsInstance<Actor>()
+            .toList()
             .find { actor -> actor.id == id }
             ?: throw IllegalArgumentException("No actor found with id $id")
 
     fun <T : Component> each(type: KClass<out T>, action: (Actor, T) -> Unit) {
-        val actors = grid.getObjects().filterIsInstance<Actor>()
+        val actors = grid.getObjects().toList()
         for (actor in actors) {
             val component = actor.get(type) ?: continue
             action.invoke(actor, component)
@@ -69,7 +72,7 @@ class Actors(
 
     fun <T : Component> find(type: KClass<out T>): Actor? =
         grid.getObjects()
-            .filterIsInstance<Actor>()
+            .toList()
             .find { actor ->
                 actor.components.containsKey(type)
             }
@@ -79,16 +82,39 @@ class Actors(
 
     fun find(id: String): Actor? =
         grid.getObjects()
-            .filterIsInstance<Actor>()
+            .toList()
             .find { actor -> actor.id == id }
 
     fun <T : Component> findAll(type: KClass<out T>): List<Actor> =
         grid.getObjects()
-            .filterIsInstance<Actor>()
+            .toList()
             .filter { actor -> actor.components.containsKey(type) }
 
     inline fun <reified T : Component> findAll(): List<Actor> =
         findAll(T::class)
+
+    fun findAllAt(point: Vector3): Set<Actor> =
+        grid.objectsAt(Location(point))
+
+    fun findAllIn(box: Box): Set<Actor> {
+        val minX = floor(box.min.x).toInt()
+        val minY = floor(box.min.y).toInt()
+        val minZ = floor(box.min.z).toInt()
+
+        val maxX = ceil(box.max.x).toInt()
+        val maxY = ceil(box.max.y).toInt()
+        val maxZ = ceil(box.max.z).toInt()
+
+        val objects = mutableSetOf<Actor>()
+        for (x in minX..maxX) {
+            for (y in minY..maxY) {
+                for (z in minZ..maxZ) {
+                    objects.addAll(grid.objectsAt(Location(x, y, z)))
+                }
+            }
+        }
+        return objects
+    }
 
     private fun onMove(actor: Actor) =
         grid.update(actor)

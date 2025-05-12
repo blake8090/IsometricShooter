@@ -24,7 +24,7 @@ class WorldTest : StringSpec({
             size = Vector3(1f, 1f, 1f)
         )
 
-        world.getObjectsInArea(area).shouldContainExactlyInAnyOrder(actor, actor2)
+        world.actors.findAllIn(area).shouldContainExactlyInAnyOrder(actor, actor2)
     }
 
     "should return all objects in area with negative positions" {
@@ -38,6 +38,6 @@ class WorldTest : StringSpec({
             size = Vector3(0.5f, 0.5f, 0.5f)
         )
 
-        world.getObjectsInArea(area).shouldContainExactlyInAnyOrder(actor, actor2)
+        world.actors.findAllIn(area).shouldContainExactlyInAnyOrder(actor, actor2)
     }
 })

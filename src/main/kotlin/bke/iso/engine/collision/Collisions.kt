@@ -43,7 +43,8 @@ class Collisions(
 
     fun checkCollisions(point: Vector3): Set<PointCollision> =
         world
-            .getObjectsAt(point)
+            .actors
+            .findAllAt(point)
             .mapNotNullTo(mutableSetOf()) { actor -> checkCollision(point, actor) }
 
     private fun checkCollision(point: Vector3, actor: Actor): PointCollision? {
@@ -58,7 +59,7 @@ class Collisions(
     fun checkCollisions(box: Box): Set<Collision> {
         renderer.debug.category("collisions").addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
-        for (actor in world.getObjectsInArea(box)) {
+        for (actor in world.actors.findAllIn(box)) {
             checkCollision(box, actor)?.let(collisions::add)
         }
         return collisions
@@ -89,7 +90,8 @@ class Collisions(
         val ray = Ray(start, direction)
 
         return world
-            .getObjectsInArea(area)
+            .actors
+            .findAllIn(area)
             .mapNotNull { actor -> checkLineCollision(start, end, ray, actor) }
             .toSet()
     }
@@ -140,7 +142,7 @@ class Collisions(
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()
-        for (otherActor in world.getObjectsInArea(projectedBox)) {
+        for (otherActor in world.actors.findAllIn(projectedBox)) {
             if (actor == otherActor) {
                 continue
             }

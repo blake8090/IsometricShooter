@@ -2,13 +2,8 @@ package bke.iso.engine.world
 
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.EngineModule
-import bke.iso.engine.math.Location
-import bke.iso.engine.math.Box
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Actors
-import com.badlogic.gdx.math.Vector3
-import kotlin.math.ceil
-import kotlin.math.floor
 
 class World(events: Events) : EngineModule() {
 
@@ -32,35 +27,6 @@ class World(events: Events) : EngineModule() {
             buildings.remove(actor)
         }
         deletedActors.clear()
-    }
-
-//    fun setTile(location: Location, sprite: Sprite): Tile {
-//        val tile = Tile(sprite, location)
-//        grid.setTile(tile)
-//        return tile
-//    }
-
-    fun getObjectsAt(point: Vector3): Set<Actor> =
-        grid.objectsAt(Location(point))
-
-    fun getObjectsInArea(box: Box): Set<Actor> {
-        val minX = floor(box.min.x).toInt()
-        val minY = floor(box.min.y).toInt()
-        val minZ = floor(box.min.z).toInt()
-
-        val maxX = ceil(box.max.x).toInt()
-        val maxY = ceil(box.max.y).toInt()
-        val maxZ = ceil(box.max.z).toInt()
-
-        val objects = mutableSetOf<Actor>()
-        for (x in minX..maxX) {
-            for (y in minY..maxY) {
-                for (z in minZ..maxZ) {
-                    objects.addAll(grid.objectsAt(Location(x, y, z)))
-                }
-            }
-        }
-        return objects
     }
 
     fun delete(actor: Actor) {
