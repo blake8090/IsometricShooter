@@ -4,8 +4,8 @@ import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.FillEntityCommand
 import bke.iso.editor.scene.command.FillTileCommand
-import bke.iso.engine.asset.prefab.EntityPrefab
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.floor
@@ -50,14 +50,14 @@ class FillTool(
         }
     }
 
-    fun selectPrefab(prefab: TilePrefab) {
-        log.debug { "tile prefab '${prefab.name}' selected" }
-        selection = TileSelection(prefab)
+    fun selectTemplate(template: TileTemplate) {
+        log.debug { "tile template '${template.name}' selected" }
+        selection = TileSelection(template)
     }
 
-    fun selectPrefab(prefab: EntityPrefab) {
-        log.debug { "entity prefab '${prefab.name}' selected" }
-        selection = EntitySelection(prefab)
+    fun selectTemplate(template: EntityTemplate) {
+        log.debug { "entity template '${template.name}' selected" }
+        selection = EntitySelection(template)
     }
 
     private fun startDragging(pointerPos: Vector3) {
@@ -79,11 +79,11 @@ class FillTool(
 
         return when (val selected = selection) {
             is EntitySelection -> {
-                FillEntityCommand(worldLogic, selected.prefab, box)
+                FillEntityCommand(worldLogic, selected.template, box)
             }
 
             is TileSelection -> {
-                FillTileCommand(worldLogic, selected.prefab, box)
+                FillTileCommand(worldLogic, selected.template, box)
             }
 
             else -> null
@@ -92,7 +92,7 @@ class FillTool(
 
     private sealed class Selection
 
-    private class TileSelection(val prefab: TilePrefab) : Selection()
+    private class TileSelection(val template: TileTemplate) : Selection()
 
-    private class EntitySelection(val prefab: EntityPrefab) : Selection()
+    private class EntitySelection(val template: EntityTemplate) : Selection()
 }

@@ -7,7 +7,7 @@
                 "y": 5.0,
                 "z": 0.0
             },
-            "prefab": "basic-side",
+            "template": "basic-side",
             "building": "shed"
         },
         {
@@ -16,7 +16,7 @@
                 "y": 6.0,
                 "z": 0.0
             },
-            "prefab": "basic-side",
+            "template": "basic-side",
             "building": "shed"
         },
         {
@@ -25,7 +25,7 @@
                 "y": 7.0,
                 "z": 0.0
             },
-            "prefab": "basic-side",
+            "template": "basic-side",
             "building": "shed"
         },
         {
@@ -34,7 +34,7 @@
                 "y": 5.0,
                 "z": 0.0
             },
-            "prefab": "basic-side",
+            "template": "basic-side",
             "building": "shed"
         },
         {
@@ -43,7 +43,7 @@
                 "y": 6.0,
                 "z": 0.0
             },
-            "prefab": "basic-side",
+            "template": "basic-side",
             "building": "shed"
         },
         {
@@ -52,7 +52,7 @@
                 "y": 7.0,
                 "z": 0.0
             },
-            "prefab": "basic-side",
+            "template": "basic-side",
             "building": "shed"
         },
         {
@@ -61,7 +61,7 @@
                 "y": 5.0,
                 "z": 0.0
             },
-            "prefab": "basic-front",
+            "template": "basic-front",
             "building": "shed"
         },
         {
@@ -70,7 +70,7 @@
                 "y": 5.0,
                 "z": 0.0
             },
-            "prefab": "basic-front",
+            "template": "basic-front",
             "building": "shed"
         },
         {
@@ -79,7 +79,7 @@
                 "y": 7.75,
                 "z": 0.0
             },
-            "prefab": "basic-front",
+            "template": "basic-front",
             "building": "shed"
         },
         {
@@ -88,7 +88,7 @@
                 "y": 7.75,
                 "z": 0.0
             },
-            "prefab": "basic-front",
+            "template": "basic-front",
             "building": "shed"
         },
         {
@@ -97,7 +97,7 @@
                 "y": 7.75,
                 "z": 0.0
             },
-            "prefab": "basic-front",
+            "template": "basic-front",
             "building": "shed"
         },
         {
@@ -106,7 +106,7 @@
                 "y": 5.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -115,7 +115,7 @@
                 "y": 6.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -124,7 +124,7 @@
                 "y": 7.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -133,7 +133,7 @@
                 "y": 7.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -142,7 +142,7 @@
                 "y": 7.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -151,7 +151,7 @@
                 "y": 6.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -160,7 +160,7 @@
                 "y": 5.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner",
+            "template": "basic-corner",
             "building": "shed"
         },
         {
@@ -169,7 +169,7 @@
                 "y": 3.484375,
                 "z": 0.0
             },
-            "prefab": "player"
+            "template": "player"
         },
         {
             "pos": {
@@ -177,7 +177,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -185,7 +185,7 @@
                 "y": 12.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -193,7 +193,7 @@
                 "y": 13.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -201,7 +201,7 @@
                 "y": 14.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -209,7 +209,7 @@
                 "y": 15.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -217,7 +217,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -225,7 +225,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -233,7 +233,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -241,7 +241,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -249,7 +249,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -257,7 +257,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -265,7 +265,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -273,7 +273,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -281,7 +281,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -289,7 +289,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -297,7 +297,7 @@
                 "y": 12.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -305,7 +305,7 @@
                 "y": 13.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -313,7 +313,7 @@
                 "y": 14.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -321,7 +321,7 @@
                 "y": 15.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -329,7 +329,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -337,7 +337,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -345,7 +345,7 @@
                 "y": 18.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -353,7 +353,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -361,7 +361,7 @@
                 "y": 11.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -369,7 +369,7 @@
                 "y": 12.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -377,7 +377,7 @@
                 "y": 13.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -385,7 +385,7 @@
                 "y": 14.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -393,7 +393,7 @@
                 "y": 15.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -401,7 +401,7 @@
                 "y": 16.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -409,7 +409,7 @@
                 "y": 17.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -417,7 +417,7 @@
                 "y": 18.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -425,7 +425,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -433,7 +433,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -441,7 +441,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -449,7 +449,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -457,7 +457,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -465,7 +465,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -473,7 +473,7 @@
                 "y": 11.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -481,7 +481,7 @@
                 "y": 12.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -489,7 +489,7 @@
                 "y": 13.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -497,7 +497,7 @@
                 "y": 14.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -505,7 +505,7 @@
                 "y": 15.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -513,7 +513,7 @@
                 "y": 16.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -521,7 +521,7 @@
                 "y": 17.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -529,7 +529,7 @@
                 "y": 18.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -537,7 +537,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -545,7 +545,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -553,7 +553,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-window-front"
+            "template": "basic-window-front"
         },
         {
             "pos": {
@@ -561,7 +561,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-window-front"
+            "template": "basic-window-front"
         },
         {
             "pos": {
@@ -569,7 +569,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -577,7 +577,7 @@
                 "y": 11.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -585,7 +585,7 @@
                 "y": 10.625001,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -593,7 +593,7 @@
                 "y": 11.125001,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -601,7 +601,7 @@
                 "y": 11.554688,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -609,7 +609,7 @@
                 "y": 14.59375,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -617,7 +617,7 @@
                 "y": 14.5546875,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -625,7 +625,7 @@
                 "y": 15.140625,
                 "z": 0.0
             },
-            "prefab": "barrel"
+            "template": "barrel"
         },
         {
             "pos": {
@@ -633,7 +633,7 @@
                 "y": 13.8984375,
                 "z": 0.0
             },
-            "prefab": "barrel"
+            "template": "barrel"
         },
         {
             "pos": {
@@ -641,7 +641,7 @@
                 "y": 17.351562,
                 "z": 0.0
             },
-            "prefab": "barrel"
+            "template": "barrel"
         },
         {
             "pos": {
@@ -649,7 +649,7 @@
                 "y": 16.585938,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -657,7 +657,7 @@
                 "y": 16.5625,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -665,7 +665,7 @@
                 "y": 17.992188,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -673,7 +673,7 @@
                 "y": 12.9375,
                 "z": 0.0
             },
-            "prefab": "box"
+            "template": "box"
         },
         {
             "pos": {
@@ -681,7 +681,7 @@
                 "y": 17.242188,
                 "z": 0.0
             },
-            "prefab": "rolling-turret"
+            "template": "rolling-turret"
         },
         {
             "pos": {
@@ -689,7 +689,7 @@
                 "y": 15.4453125,
                 "z": 0.0
             },
-            "prefab": "rolling-turret"
+            "template": "rolling-turret"
         },
         {
             "pos": {
@@ -697,7 +697,7 @@
                 "y": 19.390625,
                 "z": 0.0
             },
-            "prefab": "turret"
+            "template": "turret"
         },
         {
             "pos": {
@@ -705,7 +705,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -713,7 +713,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -721,7 +721,7 @@
                 "y": 19.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -729,7 +729,7 @@
                 "y": 18.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -737,7 +737,7 @@
                 "y": 17.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -745,7 +745,7 @@
                 "y": 19.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -753,7 +753,7 @@
                 "y": 18.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -761,7 +761,7 @@
                 "y": 17.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -769,7 +769,7 @@
                 "y": 19.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -777,7 +777,7 @@
                 "y": 18.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -785,7 +785,7 @@
                 "y": 17.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -793,7 +793,7 @@
                 "y": 19.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -801,7 +801,7 @@
                 "y": 18.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -809,7 +809,7 @@
                 "y": 17.0,
                 "z": 1.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -817,7 +817,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -825,7 +825,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -833,7 +833,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -841,7 +841,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -849,7 +849,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -857,7 +857,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "cube"
+            "template": "cube"
         },
         {
             "pos": {
@@ -865,7 +865,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -873,7 +873,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -881,7 +881,7 @@
                 "y": 20.0,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -889,7 +889,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -897,7 +897,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -905,7 +905,7 @@
                 "y": 16.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -913,7 +913,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -921,7 +921,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -929,7 +929,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -937,7 +937,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -945,7 +945,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -953,7 +953,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -961,7 +961,7 @@
                 "y": 16.25,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -969,7 +969,7 @@
                 "y": 17.25,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -977,7 +977,7 @@
                 "y": 18.25,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -985,7 +985,7 @@
                 "y": 19.25,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -993,7 +993,7 @@
                 "y": 20.25,
                 "z": 0.0
             },
-            "prefab": "basic-side"
+            "template": "basic-side"
         },
         {
             "pos": {
@@ -1001,7 +1001,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -1009,7 +1009,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -1017,7 +1017,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -1025,7 +1025,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -1033,7 +1033,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-front"
+            "template": "basic-front"
         },
         {
             "pos": {
@@ -1041,7 +1041,7 @@
                 "y": 17.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1049,7 +1049,7 @@
                 "y": 18.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1057,7 +1057,7 @@
                 "y": 19.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1065,7 +1065,7 @@
                 "y": 20.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1073,7 +1073,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1081,7 +1081,7 @@
                 "y": 19.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1089,7 +1089,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1097,7 +1097,7 @@
                 "y": 20.75,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1105,7 +1105,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1113,7 +1113,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1121,7 +1121,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1129,7 +1129,7 @@
                 "y": 16.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1137,7 +1137,7 @@
                 "y": 18.0,
                 "z": 0.0
             },
-            "prefab": "basic-corner"
+            "template": "basic-corner"
         },
         {
             "pos": {
@@ -1145,7 +1145,7 @@
                 "y": 20.359375,
                 "z": 0.0
             },
-            "prefab": "barrel"
+            "template": "barrel"
         },
         {
             "pos": {
@@ -1153,7 +1153,7 @@
                 "y": 20.09375,
                 "z": 1.0
             },
-            "prefab": "barrel"
+            "template": "barrel"
         },
         {
             "pos": {
@@ -1161,7 +1161,7 @@
                 "y": 20.351562,
                 "z": 0.0
             },
-            "prefab": "barrel"
+            "template": "barrel"
         }
     ],
     "tiles": [
@@ -1170,35 +1170,35 @@
                 "x": 3,
                 "y": 2
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 3
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 4
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 5
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 5
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1206,7 +1206,7 @@
                 "x": 4,
                 "y": 6
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1214,7 +1214,7 @@
                 "x": 5,
                 "y": 6
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1222,7 +1222,7 @@
                 "x": 6,
                 "y": 6
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1230,7 +1230,7 @@
                 "x": 6,
                 "y": 5
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1238,84 +1238,84 @@
                 "x": 7,
                 "y": 5
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 4
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 4
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 3
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 2
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 2
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 6,
                 "y": 2
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 5,
                 "y": 2
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 2
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 3
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 4
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 5,
                 "y": 5
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1323,70 +1323,70 @@
                 "x": 5,
                 "y": 4
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 6,
                 "y": 4
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 6,
                 "y": 3
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 5,
                 "y": 3
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 3
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 5
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 6
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 6
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 7
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 7
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1394,7 +1394,7 @@
                 "x": 5,
                 "y": 7
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1402,7 +1402,7 @@
                 "x": 6,
                 "y": 7
             },
-            "prefab": "floor2",
+            "template": "floor2",
             "building": "shed"
         },
         {
@@ -1410,21 +1410,21 @@
                 "x": 7,
                 "y": 7
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 7
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 6
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
@@ -1432,7 +1432,7 @@
                 "y": 5,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1441,7 +1441,7 @@
                 "y": 6,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1450,7 +1450,7 @@
                 "y": 7,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1459,7 +1459,7 @@
                 "y": 7,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1468,7 +1468,7 @@
                 "y": 7,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1477,7 +1477,7 @@
                 "y": 6,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1486,7 +1486,7 @@
                 "y": 5,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1495,7 +1495,7 @@
                 "y": 5,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1504,7 +1504,7 @@
                 "y": 6,
                 "z": 2
             },
-            "prefab": "floor",
+            "template": "floor",
             "building": "shed"
         },
         {
@@ -1512,706 +1512,706 @@
                 "x": 3,
                 "y": 8
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 9
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 9
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 5,
                 "y": 9
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 5,
                 "y": 8
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 8
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 6,
                 "y": 9
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 6,
                 "y": 8
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 8
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 9
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 9
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 8
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 3,
                 "y": 10
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 10
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 5,
                 "y": 10
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 6,
                 "y": 10
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 7,
                 "y": 10
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 8,
                 "y": 10
             },
-            "prefab": "grass"
+            "template": "grass"
         },
         {
             "location": {
                 "x": 4,
                 "y": 11
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 11
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 12
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 13
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 14
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 15
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 15
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 15
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 14
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 13
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 12
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 12
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 11
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 11
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 11
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 11
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 12
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 12
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 13
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 14
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 14
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 14
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 13
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 12
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 13
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 3,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 15
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 14
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 8,
                 "y": 13
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 15
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 7,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 6,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 4,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": 5,
                 "y": 15
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "y": 18
             },
-            "prefab": "floor2"
+            "template": "floor2"
         },
         {
             "location": {
                 "x": 1,
                 "y": 18
             },
-            "prefab": "floor2"
+            "template": "floor2"
         },
         {
             "location": {
                 "x": 2,
                 "y": 18
             },
-            "prefab": "floor2"
+            "template": "floor2"
         },
         {
             "location": {
                 "x": -1,
                 "y": 18
             },
-            "prefab": "floor2"
+            "template": "floor2"
         },
         {
             "location": {
                 "x": -2,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -2,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -2,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -3,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -3,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -4,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -5,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -5,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -5,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -4,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -4,
                 "y": 20
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -3,
                 "y": 20
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -2,
                 "y": 20
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -2,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -3,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -3,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -4,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -4,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -5,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -6,
                 "y": 17
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -6,
                 "y": 18
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -6,
                 "y": 19
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -5,
                 "y": 20
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -6,
                 "y": 16
             },
-            "prefab": "floor3"
+            "template": "floor3"
         },
         {
             "location": {
                 "x": -6,
                 "y": 20
             },
-            "prefab": "floor3"
+            "template": "floor3"
         }
     ]
 }

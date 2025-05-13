@@ -3,7 +3,7 @@ package bke.iso.editor.scene.tool
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.PaintRoomCommand
-import bke.iso.engine.asset.prefab.EntityPrefab
+import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.floor
@@ -24,7 +24,7 @@ class RoomTool(
     private val start = Vector3()
     private val end = Vector3()
 
-    var selectedPrefab: EntityPrefab? = null
+    var selectedTemplate: EntityTemplate? = null
 
     override fun update() {
         val pos = Vector3(pointerPos).floor()
@@ -62,8 +62,8 @@ class RoomTool(
     override fun performMultiAction(): EditorCommand? = null
 
     override fun performReleaseAction(): EditorCommand? {
-        val prefab = selectedPrefab ?: return null
+        val template = selectedTemplate ?: return null
         val box = Box.fromMinMax(Segment(start, end))
-        return PaintRoomCommand(worldLogic, prefab, box)
+        return PaintRoomCommand(worldLogic, template, box)
     }
 }

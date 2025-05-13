@@ -2,7 +2,7 @@ package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.EntityPrefab
+import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.entity.Entity
@@ -11,7 +11,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 data class PaintRoomCommand(
     private val worldLogic: WorldLogic,
-    private val prefab: EntityPrefab,
+    private val template: EntityTemplate,
     private val box: Box
 ) : EditorCommand() {
 
@@ -22,11 +22,11 @@ data class PaintRoomCommand(
     private val entities = mutableListOf<Entity>()
 
     override fun execute() {
-        log.debug { "Drawing room in box: $box with prefab: '${prefab.name}'" }
+        log.debug { "Drawing room in box: $box with template: '${template.name}'" }
 
-        val collider = getCollider(prefab)
+        val collider = getCollider(template)
         if (collider == null) {
-            log.info { "Prefab '${prefab.name}' doesn't have a collider - skipping room creation" }
+            log.info { "Template '${template.name}' doesn't have a collider - skipping room creation" }
             return
         }
 
@@ -34,7 +34,7 @@ data class PaintRoomCommand(
         while (y < box.max.y) {
             // draw left side
             create(
-                prefab,
+                template,
                 x = box.min.x,
                 y = y,
                 z = box.min.z
@@ -42,7 +42,7 @@ data class PaintRoomCommand(
 
             // draw right side
             create(
-                prefab,
+                template,
                 x = box.max.x - collider.size.x,
                 y = y,
                 z = box.min.z
@@ -58,7 +58,7 @@ data class PaintRoomCommand(
         while (x < xMax) {
             // draw front side
             create(
-                prefab,
+                template,
                 x = x,
                 y = box.min.y,
                 z = box.min.z
@@ -66,7 +66,7 @@ data class PaintRoomCommand(
 
             // draw back side
             create(
-                prefab,
+                template,
                 x = x,
                 y = box.max.y - collider.size.y,
                 z = box.min.z
@@ -76,13 +76,13 @@ data class PaintRoomCommand(
         }
     }
 
-    private fun getCollider(prefab: EntityPrefab): Collider? =
-        prefab.components.find { component -> component is Collider }
+    private fun getCollider(template: EntityTemplate): Collider? =
+        template.components.find { component -> component is Collider }
                 as? Collider
 
-    private fun create(prefab: EntityPrefab, x: Float, y: Float, z: Float) {
+    private fun create(template: EntityTemplate, x: Float, y: Float, z: Float) {
         val pos = Vector3(x, y, z)
-        entities.add(worldLogic.createReferenceEntity(prefab, pos))
+        entities.add(worldLogic.createReferenceEntity(template, pos))
     }
 
     override fun undo() {

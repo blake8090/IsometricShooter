@@ -1,8 +1,8 @@
 package bke.iso.engine.scene
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.EntityPrefab
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.entity.Component
@@ -43,9 +43,9 @@ class Scenes(
     }
 
     private fun load(record: EntityRecord) {
-        val prefab = assets.get<EntityPrefab>(record.prefab)
+        val template = assets.get<EntityTemplate>(record.template)
 
-        val components = copyComponents(prefab).toMutableList()
+        val components = copyComponents(template).toMutableList()
         for (component in record.componentOverrides) {
             components.add(component)
         }
@@ -58,15 +58,15 @@ class Scenes(
         }
     }
 
-    private fun copyComponents(prefab: EntityPrefab): Array<Component> {
+    private fun copyComponents(template: EntityTemplate): Array<Component> {
         // on deserialization, we'll get completely new references
-        val serialized = serializer.write(prefab.components)
+        val serialized = serializer.write(template.components)
         return serializer.read(serialized)
     }
 
     private fun load(record: TileRecord) {
-        val prefab = assets.get<TilePrefab>(record.prefab)
-        val components = setOf(prefab.sprite, Tile())
+        val template = assets.get<TileTemplate>(record.template)
+        val components = setOf(template.sprite, Tile())
         val entity = world.entities.create(record.location, *components.toTypedArray())
 
         val building = record.building

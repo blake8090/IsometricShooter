@@ -3,8 +3,8 @@ package bke.iso.editor.scene.tool
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.SceneMode
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.EntityPrefab
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Events
 import bke.iso.engine.input.ButtonState
@@ -81,15 +81,15 @@ class ToolLogic(
             ToolSelection.NONE -> null
         }
 
-    fun onTilePrefabSelected(prefab: TilePrefab) {
-        brushTool.selectPrefab(prefab)
-        fillTool.selectPrefab(prefab)
+    fun onTileTemplateSelected(template: TileTemplate) {
+        brushTool.selectTemplate(template)
+        fillTool.selectTemplate(template)
     }
 
-    fun onEntityPrefabSelected(prefab: EntityPrefab) {
-        brushTool.selectPrefab(prefab)
-        fillTool.selectPrefab(prefab)
-        roomTool.selectedPrefab = prefab
+    fun onEntityTemplateSelected(template: EntityTemplate) {
+        brushTool.selectTemplate(template)
+        fillTool.selectTemplate(template)
+        roomTool.selectedTemplate = template
     }
 
     fun performAction(): EditorCommand? =

@@ -5,8 +5,8 @@ import bke.iso.editor.scene.command.PaintTileCommand
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.withFirstInstance
-import bke.iso.engine.asset.prefab.EntityPrefab
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
@@ -78,20 +78,20 @@ class BrushTool(
 
     override fun performAction(): EditorCommand? =
         when (val s = selection) {
-            is TileSelection -> paintTile(s.prefab, Location(brushEntity.pos))
-            is EntitySelection -> PaintEntityCommand(worldLogic, s.prefab, brushEntity.pos)
+            is TileSelection -> paintTile(s.template, Location(brushEntity.pos))
+            is EntitySelection -> PaintEntityCommand(worldLogic, s.template, brushEntity.pos)
             else -> null
         }
 
     override fun performMultiAction(): EditorCommand? =
         when (val s = selection) {
-            is TileSelection -> paintTile(s.prefab, Location(brushEntity.pos))
+            is TileSelection -> paintTile(s.template, Location(brushEntity.pos))
             else -> null
         }
 
-    private fun paintTile(prefab: TilePrefab, location: Location): PaintTileCommand? =
-        if (prefab.name != worldLogic.getTilePrefabName(location)) {
-            PaintTileCommand(worldLogic, prefab, location)
+    private fun paintTile(template: TileTemplate, location: Location): PaintTileCommand? =
+        if (template.name != worldLogic.getTileTemplateName(location)) {
+            PaintTileCommand(worldLogic, template, location)
         } else {
             null
         }
@@ -108,37 +108,37 @@ class BrushTool(
         selection = null
     }
 
-    fun selectPrefab(prefab: TilePrefab) {
-        log.debug { "tile prefab '${prefab.name}' selected" }
-        selection = TileSelection(prefab)
+    fun selectTemplate(template: TileTemplate) {
+        log.debug { "tile template '${template.name}' selected" }
+        selection = TileSelection(template)
 
-        brushSprite.texture = prefab.sprite.texture
-        brushSprite.offsetX = prefab.sprite.offsetX
-        brushSprite.offsetY = prefab.sprite.offsetY
-        brushSprite.scale = prefab.sprite.scale
+        brushSprite.texture = template.sprite.texture
+        brushSprite.offsetX = template.sprite.offsetX
+        brushSprite.offsetY = template.sprite.offsetY
+        brushSprite.scale = template.sprite.scale
         // only need colliders when placing entities
         brushEntity.remove<Collider>()
     }
 
-    fun selectPrefab(prefab: EntityPrefab) {
-        log.debug { "entity prefab '${prefab.name}' selected" }
-        selection = EntitySelection(prefab)
+    fun selectTemplate(template: EntityTemplate) {
+        log.debug { "entity template '${template.name}' selected" }
+        selection = EntitySelection(template)
 
-        prefab.components.withFirstInstance<Sprite> { sprite ->
+        template.components.withFirstInstance<Sprite> { sprite ->
             brushSprite.texture = sprite.texture
             brushSprite.offsetX = sprite.offsetX
             brushSprite.offsetY = sprite.offsetY
             brushSprite.scale = sprite.scale
         }
 
-        prefab.components.withFirstInstance<Collider> { collider ->
+        template.components.withFirstInstance<Collider> { collider ->
             brushEntity.add(collider.copy())
         }
     }
 
     private sealed class Selection
 
-    private class TileSelection(val prefab: TilePrefab) : Selection()
+    private class TileSelection(val template: TileTemplate) : Selection()
 
-    private class EntitySelection(val prefab: EntityPrefab) : Selection()
+    private class EntitySelection(val template: EntityTemplate) : Selection()
 }

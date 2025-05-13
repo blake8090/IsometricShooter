@@ -8,7 +8,7 @@ class UpperLayerOcclusionStrategy(private val sceneMode: SceneMode) : OcclusionS
         val entity = checkNotNull(renderable.entity)
 
         if (entity.z > sceneMode.selectedLayer && sceneMode.hideUpperLayers) {
-            if (entity.has<EntityPrefabReference>() || entity.has<TilePrefabReference>()) {
+            if (entity.has<EntityTemplateReference>() || entity.has<TileTemplateReference>()) {
                 renderable.alpha = 0f
             }
         }

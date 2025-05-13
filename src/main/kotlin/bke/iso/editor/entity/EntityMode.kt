@@ -6,7 +6,7 @@ import bke.iso.editor.entity.command.AddComponentCommand
 import bke.iso.editor.entity.command.DeleteComponentCommand
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.Engine
-import bke.iso.engine.asset.prefab.EntityPrefab
+import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
@@ -109,8 +109,8 @@ class EntityMode(private val engine: Engine) : EditorMode() {
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is OpenClicked -> loadPrefab()
-            is SaveClicked -> savePrefab()
+            is OpenClicked -> loadTemplate()
+            is SaveClicked -> saveTemplate()
 
             is ComponentSelected -> {
                 selectedComponent = event.component
@@ -129,29 +129,29 @@ class EntityMode(private val engine: Engine) : EditorMode() {
         }
     }
 
-    private fun loadPrefab() {
-        val file = engine.dialogs.showOpenFileDialog("Entity Prefab", "actor") ?: return
-        val prefab = engine.serializer.read<EntityPrefab>(file.readText())
+    private fun loadTemplate() {
+        val file = engine.dialogs.showOpenFileDialog("Entity Template", "entity") ?: return
+        val template = engine.serializer.read<EntityTemplate>(file.readText())
 
         components.clear()
-        components.addAll(prefab.components)
+        components.addAll(template.components)
 
         referenceEntity.components.clear()
         components.withFirstInstance<Sprite>(referenceEntity::add)
         components.withFirstInstance<Collider>(referenceEntity::add)
 
         resetCommands()
-        log.info { "Loaded entity prefab: '${file.canonicalPath}'" }
+        log.info { "Loaded entity template: '${file.canonicalPath}'" }
     }
 
-    private fun savePrefab() {
-        val file = engine.dialogs.showSaveFileDialog("Entity Prefab", "actor") ?: return
+    private fun saveTemplate() {
+        val file = engine.dialogs.showSaveFileDialog("Entity Template", "entity") ?: return
         val name = file.nameWithoutExtension
 
-        val content = engine.serializer.write(EntityPrefab(file.nameWithoutExtension, components))
+        val content = engine.serializer.write(EntityTemplate(file.nameWithoutExtension, components))
         file.writeText(content)
 
-        log.info { "Saved entity prefab: '$name'" }
+        log.info { "Saved entity template: '$name'" }
     }
 
     class OpenClicked : Event

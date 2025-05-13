@@ -10,8 +10,8 @@ import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.font.FontOptions
-import bke.iso.engine.asset.prefab.EntityPrefab
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.imGuiWantsToCaptureInput
@@ -219,8 +219,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is SceneLoaded -> resetCommands()
 
             is ToolSelected -> toolLogic.selectTool(event.selection)
-            is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
-            is EntityPrefabSelected -> toolLogic.onEntityPrefabSelected(event.prefab)
+            is TileTemplateSelected -> toolLogic.onTileTemplateSelected(event.template)
+            is EntityTemplateSelected -> toolLogic.onEntityTemplateSelected(event.template)
             is EntitySelected -> selectedEntity = event.entity
 
             is LayerIncreased -> selectedLayer++
@@ -286,16 +286,16 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         val file = engine.dialogs.showSaveFileDialog("Scene", "scene") ?: return
 
         val entities = mutableListOf<EntityRecord>()
-        world.entities.each<EntityPrefabReference> { entity, reference ->
+        world.entities.each<EntityTemplateReference> { entity, reference ->
             entities.add(createEntityRecord(entity, reference))
         }
 
         val tiles = mutableListOf<TileRecord>()
-        world.entities.each { entity: Entity, reference: TilePrefabReference ->
+        world.entities.each { entity: Entity, reference: TileTemplateReference ->
             tiles.add(
                 TileRecord(
                     Location(entity.pos),
-                    reference.prefab,
+                    reference.template,
                     world.buildings.getBuilding(entity)
                 )
             )
@@ -307,13 +307,13 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         log.info { "Saved scene: '${file.canonicalPath}'" }
     }
 
-    private fun createEntityRecord(entity: Entity, reference: EntityPrefabReference): EntityRecord {
+    private fun createEntityRecord(entity: Entity, reference: EntityTemplateReference): EntityRecord {
         val componentOverrides = mutableListOf<Component>()
         entity.with<Tags>(componentOverrides::add)
 
         return EntityRecord(
             entity.pos,
-            reference.prefab,
+            reference.template,
             world.buildings.getBuilding(entity),
             componentOverrides
         )
@@ -335,8 +335,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     class SceneLoaded : Event
 
     data class ToolSelected(val selection: ToolSelection) : Event
-    data class TilePrefabSelected(val prefab: TilePrefab) : Event
-    data class EntityPrefabSelected(val prefab: EntityPrefab) : Event
+    data class TileTemplateSelected(val template: TileTemplate) : Event
+    data class EntityTemplateSelected(val template: EntityTemplate) : Event
     data class EntitySelected(val entity: Entity) : Event
 
     class LayerIncreased : Event

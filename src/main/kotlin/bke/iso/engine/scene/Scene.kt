@@ -20,7 +20,7 @@ data class Scene(
 data class EntityRecord(
     @Contextual
     val pos: Vector3,
-    val prefab: String,
+    val template: String,
     val building: String? = null,
     val componentOverrides: List<Component> = mutableListOf()
 )
@@ -28,6 +28,6 @@ data class EntityRecord(
 @Serializable
 data class TileRecord(
     val location: Location,
-    val prefab: String,
+    val template: String,
     val building: String? = null
 )

@@ -1,4 +1,4 @@
-package bke.iso.engine.asset.prefab
+package bke.iso.engine.asset.entity
 
 import bke.iso.engine.asset.AssetCache
 import bke.iso.engine.serialization.Serializer
@@ -9,17 +9,17 @@ import kotlinx.serialization.Serializable
 import java.io.File
 
 @Serializable
-data class EntityPrefab(
+data class EntityTemplate(
     val name: String,
     val components: MutableList<Component>
 )
 
-class EntityPrefabAssetCache(private val serializer: Serializer) : AssetCache<EntityPrefab>() {
-    override val extensions: Set<String> = setOf("actor")
+class EntityTemplateAssetCache(private val serializer: Serializer) : AssetCache<EntityTemplate>() {
+    override val extensions: Set<String> = setOf("entity")
 
     override suspend fun load(file: File) =
         withContext(Dispatchers.IO) {
-            val prefab = serializer.read<EntityPrefab>(file.readText())
-            store(file, prefab.name, prefab)
+            val template = serializer.read<EntityTemplate>(file.readText())
+            store(file, template.name, template)
         }
 }

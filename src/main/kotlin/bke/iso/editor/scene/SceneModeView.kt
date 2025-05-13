@@ -3,8 +3,8 @@ package bke.iso.editor.scene
 import bke.iso.editor.EditorModule
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.EntityPrefab
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.render.Sprite
@@ -165,17 +165,17 @@ class SceneModeView(
 
     private fun drawEntityAssets() {
         var column = 0
-        for (prefab in assets.getAll<EntityPrefab>()) {
-            val sprite = prefab
+        for (template in assets.getAll<EntityTemplate>()) {
+            val sprite = template
                 .components
                 .firstNotNullOfOrNull { component -> component as? Sprite }
                 ?: continue
 
             if (imageButton(sprite.texture)) {
-                log.debug { "Selected entity prefab ${prefab.name}" }
-                events.fire(SceneMode.EntityPrefabSelected(prefab))
+                log.debug { "Selected entity template ${template.name}" }
+                events.fire(SceneMode.EntityTemplateSelected(template))
             }
-            ImGui.setItemTooltip(prefab.name)
+            ImGui.setItemTooltip(template.name)
 
             if (column < 2) {
                 ImGui.sameLine()
@@ -188,12 +188,12 @@ class SceneModeView(
 
     private fun drawTileAssets() {
         var column = 0
-        for (prefab in assets.getAll<TilePrefab>()) {
-            if (imageButton(prefab.sprite.texture)) {
-                log.debug { "Selected tile prefab ${prefab.name}" }
-                events.fire(SceneMode.TilePrefabSelected(prefab))
+        for (template in assets.getAll<TileTemplate>()) {
+            if (imageButton(template.sprite.texture)) {
+                log.debug { "Selected tile template ${template.name}" }
+                events.fire(SceneMode.TileTemplateSelected(template))
             }
-            ImGui.setItemTooltip(prefab.name)
+            ImGui.setItemTooltip(template.name)
 
             if (column < 2) {
                 ImGui.sameLine()

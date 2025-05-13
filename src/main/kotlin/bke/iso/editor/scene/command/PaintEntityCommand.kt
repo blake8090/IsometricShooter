@@ -2,13 +2,13 @@ package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.EntityPrefab
+import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 
 data class PaintEntityCommand(
     private val worldLogic: WorldLogic,
-    private val prefab: EntityPrefab,
+    private val template: EntityTemplate,
     private val pos: Vector3,
 ) : EditorCommand() {
 
@@ -17,7 +17,7 @@ data class PaintEntityCommand(
     private lateinit var entity: Entity
 
     override fun execute() {
-        entity = worldLogic.createReferenceEntity(prefab, pos)
+        entity = worldLogic.createReferenceEntity(template, pos)
     }
 
     override fun undo() {

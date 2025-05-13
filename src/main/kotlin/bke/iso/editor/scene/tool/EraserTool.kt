@@ -1,7 +1,7 @@
 package bke.iso.editor.scene.tool
 
 import bke.iso.editor.EditorCommand
-import bke.iso.editor.scene.TilePrefabReference
+import bke.iso.editor.scene.TileTemplateReference
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.DeleteEntityCommand
 import bke.iso.engine.collision.Collisions
@@ -55,7 +55,7 @@ class EraserTool(
     override fun performReleaseAction(): EditorCommand? = null
 
     private fun getType(entity: Entity) =
-        if (entity.has<TilePrefabReference>()) {
+        if (entity.has<TileTemplateReference>()) {
             Type.TILE
         } else {
             Type.ENTITY

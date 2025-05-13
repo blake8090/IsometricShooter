@@ -2,7 +2,7 @@ package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.entity.Entity
@@ -10,7 +10,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 data class FillTileCommand(
     private val worldLogic: WorldLogic,
-    private val prefab: TilePrefab,
+    private val template: TileTemplate,
     private val box: Box
 ) : EditorCommand() {
 
@@ -21,7 +21,7 @@ data class FillTileCommand(
     private val entities = mutableListOf<Entity>()
 
     override fun execute() {
-        log.debug { "Filling in box: $box with prefab: '${prefab.name}'" }
+        log.debug { "Filling in box: $box with template: '${template.name}'" }
 
         val xMin = box.min.x.toInt()
         val xMax = box.max.x.toInt()
@@ -33,7 +33,7 @@ data class FillTileCommand(
             for (y in yMin..yMax) {
                 val location = Location(x, y, box.min.z.toInt())
                 if (!worldLogic.tileExists(location)) {
-                    entities.add(worldLogic.createReferenceEntity(prefab, location))
+                    entities.add(worldLogic.createReferenceEntity(template, location))
                 }
             }
         }

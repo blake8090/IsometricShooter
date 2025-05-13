@@ -1,0 +1,154 @@
+{
+    "version": "1",
+    "entities": [
+        {
+            "pos": {
+                "x": 1.9765624,
+                "y": 1.8203119,
+                "z": 0.0
+            },
+            "template": "lamppost"
+        },
+        {
+            "pos": {
+                "x": -15.359375,
+                "y": 0.921875,
+                "z": 0.0
+            },
+            "template": "lamppost"
+        },
+        {
+            "pos": {
+                "x": -14.0078125,
+                "y": -0.35156202,
+                "z": 0.0
+            },
+            "template": "lamppost"
+        }
+    ],
+    "tiles": [
+        {
+            "location": {},
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "y": 1
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "y": 2
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "y": 3
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 3
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 3
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 3
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 2
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 3,
+                "y": 1
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 3
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 2
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 1
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": -13,
+                "y": -1
+            },
+            "template": "floor3"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 1
+            },
+            "template": "grass"
+        },
+        {
+            "location": {
+                "x": 1,
+                "y": 2
+            },
+            "template": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 2
+            },
+            "template": "grass"
+        },
+        {
+            "location": {
+                "x": 2,
+                "y": 1
+            },
+            "template": "grass"
+        },
+        {
+            "location": {
+                "x": -15
+            },
+            "template": "grass"
+        },
+        {
+            "location": {
+                "x": -12,
+                "y": -2
+            },
+            "template": "grass"
+        }
+    ]
+}

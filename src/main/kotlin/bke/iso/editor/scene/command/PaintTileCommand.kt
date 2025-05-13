@@ -2,13 +2,13 @@ package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.TilePrefab
+import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.entity.Entity
 
 data class PaintTileCommand(
     private val worldLogic: WorldLogic,
-    private val prefab: TilePrefab,
+    private val template: TileTemplate,
     private val location: Location
 ) : EditorCommand() {
 
@@ -18,7 +18,7 @@ data class PaintTileCommand(
 
     override fun execute() {
         worldLogic.deleteTile(location)
-        entity = worldLogic.createReferenceEntity(prefab, location)
+        entity = worldLogic.createReferenceEntity(template, location)
     }
 
     override fun undo() {
