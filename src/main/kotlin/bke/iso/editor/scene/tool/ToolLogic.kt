@@ -3,7 +3,7 @@ package bke.iso.editor.scene.tool
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.SceneMode
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Events
@@ -86,7 +86,7 @@ class ToolLogic(
         fillTool.selectPrefab(prefab)
     }
 
-    fun onActorPrefabSelected(prefab: ActorPrefab) {
+    fun onActorPrefabSelected(prefab: EntityPrefab) {
         brushTool.selectPrefab(prefab)
         fillTool.selectPrefab(prefab)
         roomTool.selectedPrefab = prefab

@@ -1,6 +1,6 @@
 package bke.iso.editor
 
-import bke.iso.editor.actor.ActorMode
+import bke.iso.editor.entity.EntityMode
 import bke.iso.editor.scene.SceneMode
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
@@ -11,7 +11,7 @@ class EditorModule(engine: Engine) : Module {
     override val alwaysActive: Boolean = true
 
     private val sceneMode = SceneMode(engine)
-    private val actorMode = ActorMode(engine)
+    private val entityMode = EntityMode(engine)
 
     private var selectedMode: EditorMode? = null
 
@@ -26,7 +26,7 @@ class EditorModule(engine: Engine) : Module {
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is ActorModeSelected -> selectMode(actorMode)
+            is EntityModeSelected -> selectMode(entityMode)
             is SceneModeSelected -> selectMode(sceneMode)
             is ExecuteCommand -> selectedMode?.execute(event.command)
             is EditorClosed -> stop()
@@ -40,7 +40,7 @@ class EditorModule(engine: Engine) : Module {
         selectedMode = editorMode
     }
 
-    class ActorModeSelected : Event
+    class EntityModeSelected : Event
     class SceneModeSelected : Event
     data class ExecuteCommand(val command: EditorCommand) : Event
     class EditorClosed : Event

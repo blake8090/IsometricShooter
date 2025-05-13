@@ -5,7 +5,7 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.PredictedCollision
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.EngineModule
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -25,12 +25,12 @@ class Physics(
     override val profilingEnabled = true
 
     override fun update(deltaTime: Float) {
-        world.actors.each { actor, body: PhysicsBody ->
+        world.entities.each { actor, body: PhysicsBody ->
             update(actor, body, deltaTime)
         }
     }
 
-    private fun update(actor: Actor, body: PhysicsBody, deltaTime: Float) {
+    private fun update(entity: Entity, body: PhysicsBody, deltaTime: Float) {
         val delta = Vector3()
 
         if (body.mode == PhysicsMode.DYNAMIC) {
@@ -47,35 +47,35 @@ class Physics(
             body.velocity.y * deltaTime,
             body.velocity.z * deltaTime
         )
-        move(actor, body, delta)
+        move(entity, body, delta)
     }
 
-    private fun move(actor: Actor, body: PhysicsBody, delta: Vector3) {
-        val predictCollisions = collisions.predictCollisions(actor, delta)
+    private fun move(entity: Entity, body: PhysicsBody, delta: Vector3) {
+        val predictCollisions = collisions.predictCollisions(entity, delta)
         // TODO: how to resolve multiple collisions to avoid objects falling out of the world?
         val collision = predictCollisions
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
-            .firstOrNull { collision -> getPhysicsMode(collision.actor) != PhysicsMode.GHOST }
+            .firstOrNull { collision -> getPhysicsMode(collision.entity) != PhysicsMode.GHOST }
 
         if (collision == null) {
-            actor.move(delta)
+            entity.move(delta)
             return
         }
 
         when (body.mode) {
-            PhysicsMode.DYNAMIC -> solveDynamicContact(actor, body, delta, collision)
-            PhysicsMode.KINEMATIC -> solveKinematicContact(actor, body, delta, collision)
-            else -> actor.move(delta)
+            PhysicsMode.DYNAMIC -> solveDynamicContact(entity, body, delta, collision)
+            PhysicsMode.KINEMATIC -> solveKinematicContact(entity, body, delta, collision)
+            else -> entity.move(delta)
         }
     }
 
-    private fun solveDynamicContact(actor: Actor, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
+    private fun solveDynamicContact(entity: Entity, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
         // move to the position where the collision occurred
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
-        actor.move(collisionDelta)
+        entity.move(collisionDelta)
 
         // make sure actor doesn't overlap the collision side
-        clampPosToCollisionSide(actor, collision)
+        clampPosToCollisionSide(entity, collision)
 
         // erase velocity towards collision normal
         body.velocity.x -= (body.velocity.x * abs(collision.hitNormal.x))
@@ -83,8 +83,8 @@ class Physics(
         body.velocity.z -= (body.velocity.z * abs(collision.hitNormal.z))
 
         // set velocity when landing on top of a moving kinematic (i.e. a moving platform)
-        if (collision.side == CollisionSide.TOP && getPhysicsMode(collision.actor) == PhysicsMode.KINEMATIC) {
-            val other = collision.actor
+        if (collision.side == CollisionSide.TOP && getPhysicsMode(collision.entity) == PhysicsMode.KINEMATIC) {
+            val other = collision.entity
             val otherBody = other.get<PhysicsBody>()!!
             body.velocity.z = otherBody.velocity.z
         }
@@ -95,17 +95,17 @@ class Physics(
             delta.y - (delta.y * abs(collision.hitNormal.y)),
             delta.z - (delta.z * abs(collision.hitNormal.z))
         )
-        move(actor, body, newDelta)
+        move(entity, body, newDelta)
     }
 
-    private fun solveKinematicContact(actor: Actor, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
-        actor.move(delta)
+    private fun solveKinematicContact(entity: Entity, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
+        entity.move(delta)
 
         // bit of a hack to make vertical moving platforms work.
         // the dynamic actor handles pushing down on the kinematic,
         // while the kinematic pushes the dynamic actor upwards.
         // TODO: find a way to make this logic more generalized
-        val other = collision.actor
+        val other = collision.entity
         val otherBody = other.get<PhysicsBody>() ?: return
         if (otherBody.mode != PhysicsMode.DYNAMIC) {
             return
@@ -114,24 +114,24 @@ class Physics(
         otherBody.velocity.z = body.velocity.z
         otherBody.forces.add(Vector3(0f, 0f, body.velocity.z))
 
-        val box = checkNotNull(actor.getCollisionBox()) {
-            "Expected collision box for $actor"
+        val box = checkNotNull(entity.getCollisionBox()) {
+            "Expected collision box for $entity"
         }
         // make sure object doesn't clip through the platform next frame
         other.moveTo(other.x, other.y, box.max.z)
     }
 
-    private fun clampPosToCollisionSide(actor: Actor, collision: PredictedCollision) {
-        val box = checkNotNull(actor.getCollisionBox()) {
-            "Expected collision box for $actor"
+    private fun clampPosToCollisionSide(entity: Entity, collision: PredictedCollision) {
+        val box = checkNotNull(entity.getCollisionBox()) {
+            "Expected collision box for $entity"
         }
-        val otherBox = checkNotNull(collision.actor.getCollisionBox()) {
-            "Expected collision box for ${collision.actor}"
+        val otherBox = checkNotNull(collision.entity.getCollisionBox()) {
+            "Expected collision box for ${collision.entity}"
         }
 
-        var x = actor.x
-        var y = actor.y
-        var z = actor.z
+        var x = entity.x
+        var y = entity.y
+        var z = entity.z
         when (collision.side) {
             CollisionSide.LEFT -> {
                 x = otherBox.min.x - (box.size.x / 2f)
@@ -161,12 +161,12 @@ class Physics(
                 log.warn { "Could not resolve corner collision" }
             }
         }
-        actor.moveTo(x, y, z)
+        entity.moveTo(x, y, z)
     }
 }
 
-fun getPhysicsMode(actor: Actor) =
-    actor
+fun getPhysicsMode(entity: Entity) =
+    entity
         .get<PhysicsBody>()
         ?.mode
         ?: PhysicsMode.SOLID

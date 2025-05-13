@@ -3,8 +3,8 @@ package bke.iso.game
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Game
 import bke.iso.engine.input.ButtonState
-import bke.iso.game.actor.player.system.RELOAD_ACTION
-import bke.iso.game.actor.player.system.SHOOT_ACTION
+import bke.iso.game.entity.player.system.RELOAD_ACTION
+import bke.iso.game.entity.player.system.SHOOT_ACTION
 import bke.iso.game.weapon.WeaponPropertiesAssetCache
 import com.badlogic.gdx.Input
 import com.studiohartman.jamepad.ControllerAxis

@@ -4,7 +4,7 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.shape.ShapeArray
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
@@ -38,26 +38,26 @@ class DebugCategory {
         }
     }
 
-    fun add(actor: Actor) {
+    fun add(entity: Entity) {
         if (!enabled) {
             return
         }
-        val settings = actor.get<DebugSettings>() ?: return
+        val settings = entity.get<DebugSettings>() ?: return
         if (settings.collisionBox) {
             val color = if (settings.collisionBoxSelected) Color.PURPLE else settings.collisionBoxColor
-            actor.getCollisionBox()?.let { box ->
+            entity.getCollisionBox()?.let { box ->
                 addBox(box, 1f, color)
             }
             settings.collisionBoxSelected = false
         }
 
         if (settings.position) {
-            addPoint(actor.pos, 2f, settings.positionColor)
+            addPoint(entity.pos, 2f, settings.positionColor)
         }
 
-        if (settings.zAxis && actor.z > 0f) {
-            val start = Vector3(actor.x, actor.y, 0f)
-            val end = actor.pos
+        if (settings.zAxis && entity.z > 0f) {
+            val start = Vector3(entity.x, entity.y, 0f)
+            val end = entity.pos
             addPoint(start, 2f, settings.zAxisColor)
             addLine(start, end, 1f, settings.zAxisColor)
         }

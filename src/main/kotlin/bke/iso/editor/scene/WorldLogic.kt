@@ -2,18 +2,18 @@ package bke.iso.editor.scene
 
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.scene.ActorRecord
+import bke.iso.engine.scene.EntityRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Description
 import com.badlogic.gdx.math.Vector3
@@ -24,7 +24,7 @@ class WorldLogic(
     private val events: Events,
 ) {
 
-    private val tilesByLocation = mutableMapOf<Location, Actor>()
+    private val tilesByLocation = mutableMapOf<Location, Entity>()
 
     fun loadScene(scene: Scene) {
         tilesByLocation.clear()
@@ -41,8 +41,8 @@ class WorldLogic(
         events.fire(SceneMode.SceneLoaded())
     }
 
-    private fun load(record: ActorRecord) {
-        val prefab = assets.get<ActorPrefab>(record.prefab)
+    private fun load(record: EntityRecord) {
+        val prefab = assets.get<EntityPrefab>(record.prefab)
         val actor = createReferenceActor(prefab, record.pos)
 
         for (component in record.componentOverrides) {
@@ -65,11 +65,11 @@ class WorldLogic(
         }
     }
 
-    fun delete(actor: Actor) {
-        if (actor.has<TilePrefabReference>()) {
-            tilesByLocation.remove(Location(actor.pos))
+    fun delete(entity: Entity) {
+        if (entity.has<TilePrefabReference>()) {
+            tilesByLocation.remove(Location(entity.pos))
         }
-        world.delete(actor)
+        world.delete(entity)
     }
 
     fun deleteTile(location: Location) {
@@ -88,19 +88,19 @@ class WorldLogic(
     /**
      * Re-adds an existing actor into the world again.
      */
-    fun add(actor: Actor) {
-        world.actors.create(
-            id = actor.id,
-            x = actor.x,
-            y = actor.y,
-            z = actor.z,
-            components = actor.components.values.toTypedArray()
+    fun add(entity: Entity) {
+        world.entities.create(
+            id = entity.id,
+            x = entity.x,
+            y = entity.y,
+            z = entity.z,
+            components = entity.components.values.toTypedArray()
         )
     }
 
-    fun createReferenceActor(prefab: ActorPrefab, pos: Vector3): Actor {
+    fun createReferenceActor(prefab: EntityPrefab, pos: Vector3): Entity {
         val components = mutableSetOf<Component>()
-        components.add(ActorPrefabReference(prefab.name))
+        components.add(EntityPrefabReference(prefab.name))
 
         prefab.components.withFirstInstance<Sprite> { sprite ->
             components.add(sprite.copy())
@@ -118,15 +118,15 @@ class WorldLogic(
             components.add(Occlude())
         }
 
-        return world.actors.create(pos, *components.toTypedArray())
+        return world.entities.create(pos, *components.toTypedArray())
     }
 
-    fun createReferenceActor(prefab: TilePrefab, location: Location): Actor {
+    fun createReferenceActor(prefab: TilePrefab, location: Location): Entity {
         if (tileExists(location)) {
             error("Duplicate tile at location $location")
         }
 
-        val actor = world.actors.create(
+        val actor = world.entities.create(
             location,
             prefab.sprite.copy(),
             TilePrefabReference(prefab.name),
@@ -140,13 +140,13 @@ class WorldLogic(
     fun tileExists(location: Location) =
         tilesByLocation.containsKey(location)
 
-    fun setBuilding(actor: Actor, building: String?) {
-        world.buildings.remove(actor)
+    fun setBuilding(entity: Entity, building: String?) {
+        world.buildings.remove(entity)
         if (!building.isNullOrBlank()) {
-            world.buildings.add(actor, building)
+            world.buildings.add(entity, building)
         }
     }
 
-    fun getBuilding(actor: Actor): String? =
-        world.buildings.getBuilding(actor)
+    fun getBuilding(entity: Entity): String? =
+        world.buildings.getBuilding(entity)
 }

@@ -1,37 +1,37 @@
 package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tags
 
 data class DeleteTagCommand(
-    val actor: Actor,
+    val entity: Entity,
     val tag: String
 ) : EditorCommand() {
 
     override val name: String = "DeleteTag"
 
     override fun execute() {
-        val tags = checkNotNull(actor.get<Tags>()) {
-            "Expected actor $actor to have a Tags component"
+        val tags = checkNotNull(entity.get<Tags>()) {
+            "Expected actor $entity to have a Tags component"
         }
 
         val tagsList = tags.tags.toMutableList()
         check(tagsList.remove(tag)) {
             "Expected tag $tag in tags component"
         }
-        actor.add(Tags(tagsList))
+        entity.add(Tags(tagsList))
     }
 
     override fun undo() {
-        val tags = checkNotNull(actor.get<Tags>()) {
-            "Expected actor $actor to have a Tags component"
+        val tags = checkNotNull(entity.get<Tags>()) {
+            "Expected actor $entity to have a Tags component"
         }
 
         val tagsList = tags.tags.toMutableList()
         check(tagsList.add(tag)) {
             "Tag $tag already added"
         }
-        actor.add(Tags(tagsList))
+        entity.add(Tags(tagsList))
     }
 }

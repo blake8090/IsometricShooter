@@ -4,9 +4,9 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.config.Configs
 import bke.iso.engine.core.Module
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
-import bke.iso.game.actor.player.Player
+import bke.iso.game.entity.player.Player
 import bke.iso.game.combat.system.HealEffect
 import bke.iso.game.combat.system.Health
 import bke.iso.game.combat.system.HitEffect
@@ -27,41 +27,41 @@ class CombatModule(
 
     override val alwaysActive: Boolean = false
 
-    fun applyDamage(actor: Actor, damage: Float) {
-        val health = actor.get<Health>() ?: return
+    fun applyDamage(entity: Entity, damage: Float) {
+        val health = entity.get<Health>() ?: return
         health.value = max(health.value - damage, 0f)
-        log.debug { "Actor $actor received damage: $damage Remaining health: ${health.value}" }
+        log.debug { "Actor $entity received damage: $damage Remaining health: ${health.value}" }
 
-        if (actor.has<Player>()) {
+        if (entity.has<Player>()) {
             events.fire(PlayerHealthChangeEvent(health.value))
         }
 
         val config = configs.get<CombatConfig>("combat.cfg")
-        actor.add(HitEffect(config.hitEffectDurationSeconds))
+        entity.add(HitEffect(config.hitEffectDurationSeconds))
 
         if (health.value == 0f) {
-            onDeath(actor)
+            onDeath(entity)
         }
     }
 
-    private fun onDeath(actor: Actor) {
-        if (actor.has<Player>()) {
+    private fun onDeath(entity: Entity) {
+        if (entity.has<Player>()) {
             return
         }
-        world.delete(actor)
-        log.debug { "Actor $actor has been destroyed" }
+        world.delete(entity)
+        log.debug { "Actor $entity has been destroyed" }
     }
 
-    fun heal(actor: Actor) {
-        val health = actor.get<Health>() ?: return
+    fun heal(entity: Entity) {
+        val health = entity.get<Health>() ?: return
 
-        if (actor.has<HealEffect>()) {
+        if (entity.has<HealEffect>()) {
             return
         }
 
         val config = configs.get<CombatConfig>("combat.cfg")
         val amountPerSecond = health.maxValue * config.medkitHealthPercentage
-        actor.add(HealEffect(amountPerSecond, config.medkitDurationSeconds))
+        entity.add(HealEffect(amountPerSecond, config.medkitDurationSeconds))
     }
 
     data class PlayerHealthChangeEvent(val health: Float) : Event

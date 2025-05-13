@@ -3,8 +3,8 @@ package bke.iso.game.combat.system
 import bke.iso.engine.core.Events
 import bke.iso.engine.state.System
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Actor
-import bke.iso.game.actor.player.Player
+import bke.iso.engine.world.entity.Entity
+import bke.iso.game.entity.player.Player
 import bke.iso.game.combat.CombatModule
 import kotlin.math.min
 
@@ -14,15 +14,15 @@ class HealSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.actors.each<HealEffect> { actor, healEffect ->
+        world.entities.each<HealEffect> { actor, healEffect ->
             update(actor, healEffect, deltaTime)
         }
     }
 
-    private fun update(actor: Actor, healEffect: HealEffect, deltaTime: Float) {
-        val health = actor.get<Health>()
+    private fun update(entity: Entity, healEffect: HealEffect, deltaTime: Float) {
+        val health = entity.get<Health>()
         if (health == null) {
-            actor.remove<HealEffect>()
+            entity.remove<HealEffect>()
             return
         }
 
@@ -30,13 +30,13 @@ class HealSystem(
         health.value = min(health.value + amount, health.maxValue)
         // TODO: should healing effect stop early when at full health?
 
-        if (actor.has<Player>()) {
+        if (entity.has<Player>()) {
             events.fire(CombatModule.PlayerHealthChangeEvent(health.value))
         }
 
         healEffect.elapsedTime += deltaTime
         if (healEffect.elapsedTime >= healEffect.durationSeconds) {
-            actor.remove<HealEffect>()
+            entity.remove<HealEffect>()
         }
     }
 }

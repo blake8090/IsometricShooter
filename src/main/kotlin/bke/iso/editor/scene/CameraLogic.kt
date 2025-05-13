@@ -28,7 +28,7 @@ class CameraLogic(
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
     private val cameraActor =
-        world.actors.create(
+        world.entities.create(
             Vector3(),
             Sprite(
                 texture = "camera.png",

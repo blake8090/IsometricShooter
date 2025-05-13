@@ -5,29 +5,29 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.Engine
 import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
 import bke.iso.engine.state.State
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tags
-import bke.iso.game.actor.FlyingTurretSystem
-import bke.iso.game.actor.RollingTurretSystem
-import bke.iso.game.actor.shadow.ShadowSystem
-import bke.iso.game.actor.player.Player
-import bke.iso.game.actor.player.system.PlayerSystem
-import bke.iso.game.actor.TurretSystem
+import bke.iso.game.entity.FlyingTurretSystem
+import bke.iso.game.entity.RollingTurretSystem
+import bke.iso.game.entity.shadow.ShadowSystem
+import bke.iso.game.entity.player.Player
+import bke.iso.game.entity.player.system.PlayerSystem
+import bke.iso.game.entity.TurretSystem
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.system.HealSystem
 import bke.iso.game.combat.system.Health
 import bke.iso.game.combat.system.HitEffectSystem
-import bke.iso.game.actor.door.DoorModule
-import bke.iso.game.actor.elevator.ElevatorModule
-import bke.iso.game.actor.elevator.ElevatorSystem
+import bke.iso.game.entity.door.DoorModule
+import bke.iso.game.entity.elevator.ElevatorModule
+import bke.iso.game.entity.elevator.ElevatorSystem
 import bke.iso.game.hud.HudModule
 import bke.iso.game.occlusion.BuildingWallOcclusionStrategy
 import bke.iso.game.occlusion.FloorOcclusionStrategy
-import bke.iso.game.actor.player.system.PlayerInteractionSystem
-import bke.iso.game.actor.player.PlayerDataModule
-import bke.iso.game.actor.player.system.PlayerCrosshairLaserSystem
-import bke.iso.game.actor.player.system.PlayerWeaponSystem
-import bke.iso.game.actor.shadow.ShadowModule
+import bke.iso.game.entity.player.system.PlayerInteractionSystem
+import bke.iso.game.entity.player.PlayerDataModule
+import bke.iso.game.entity.player.system.PlayerCrosshairLaserSystem
+import bke.iso.game.entity.player.system.PlayerWeaponSystem
+import bke.iso.game.entity.shadow.ShadowModule
 import bke.iso.game.ui.CrosshairPointer
 import bke.iso.game.weapon.system.BulletSystem
 import bke.iso.game.weapon.system.WeaponSystem
@@ -217,29 +217,29 @@ class GameState(override val engine: Engine) : State() {
             "mission-01-interior.scene" -> initMission1InteriorScene()
         }
 
-        engine.world.actors.each<Tags> { actor, tags ->
+        engine.world.entities.each<Tags> { actor, tags ->
             log.debug { "Actor $actor has tags ${tags.tags}" }
         }
     }
 
     private fun initPlayer() {
-        engine.world.actors.each { actor: Actor, _: Player ->
-            engine.renderer.occlusion.target = actor
+        engine.world.entities.each { entity: Entity, _: Player ->
+            engine.renderer.occlusion.target = entity
 
-            actor.with<Health> { health ->
+            entity.with<Health> { health ->
                 hudModule.updateHealthBar(health.value, health.maxValue)
             }
         }
     }
 
     private fun initMission1StartScene() {
-        engine.world.actors.each<Player> { actor, _ ->
+        engine.world.entities.each<Player> { actor, _ ->
             weaponsModule.equip(actor, "pistol")
         }
     }
 
     private fun initMission1RoofScene() {
-        engine.world.actors.each<Player> { actor, _ ->
+        engine.world.entities.each<Player> { actor, _ ->
             weaponsModule.equip(actor, "pistol")
         }
     }

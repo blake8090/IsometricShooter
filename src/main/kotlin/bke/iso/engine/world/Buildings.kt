@@ -2,24 +2,24 @@ package bke.iso.engine.world
 
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 
 class Buildings {
 
-    private val objectsByBuilding = mutableMapOf<String, MutableSet<Actor>>()
-    private val buildingByObject = mutableMapOf<Actor, String>()
+    private val objectsByBuilding = mutableMapOf<String, MutableSet<Entity>>()
+    private val buildingByObject = mutableMapOf<Entity, String>()
     private val boundsByBuilding = mutableMapOf<String, Box>()
 
-    fun add(actor: Actor, buildingName: String) {
+    fun add(entity: Entity, buildingName: String) {
         require(buildingName.isNotBlank()) {
             "Building name cannot be blank"
         }
 
         objectsByBuilding
             .getOrPut(buildingName) { mutableSetOf() }
-            .add(actor)
-        buildingByObject[actor] = buildingName
+            .add(entity)
+        buildingByObject[entity] = buildingName
 
         regenerateBounds()
     }
@@ -35,7 +35,7 @@ class Buildings {
 
     private fun regenerateBounds(buildingName: String) {
         val boxes = objectsByBuilding[buildingName]
-            ?.mapNotNull(Actor::getCollisionBox)
+            ?.mapNotNull(Entity::getCollisionBox)
             ?: emptyList()
 
         if (boxes.isEmpty()) {
@@ -56,16 +56,16 @@ class Buildings {
         boundsByBuilding[buildingName] = Box.fromMinMax(min, max)
     }
 
-    fun getBuilding(actor: Actor): String? =
-        buildingByObject[actor]
+    fun getBuilding(entity: Entity): String? =
+        buildingByObject[entity]
 
     fun getAll(): Set<String> =
         objectsByBuilding.keys
 
-    fun remove(actor: Actor) {
-        buildingByObject.remove(actor)
+    fun remove(entity: Entity) {
+        buildingByObject.remove(entity)
         for ((_, objects) in objectsByBuilding) {
-            objects.remove(actor)
+            objects.remove(entity)
         }
         regenerateBounds()
     }

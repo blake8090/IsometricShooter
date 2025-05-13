@@ -4,7 +4,7 @@ import bke.iso.editor.EditorCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
@@ -48,12 +48,12 @@ abstract class BaseTool {
      */
     open fun disable() {}
 
-    protected fun pickActor(): Actor? {
+    protected fun pickActor(): Entity? {
         return collisions
             .checkCollisions(pointerPos)
             .filter { collision -> collision.box.min.z == pointerPos.z }
             .minByOrNull { collision -> getDistance(pointerPos, collision.box) }
-            ?.actor
+            ?.entity
             ?: return null
     }
 

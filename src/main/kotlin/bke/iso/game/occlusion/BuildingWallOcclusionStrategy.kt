@@ -2,22 +2,22 @@ package bke.iso.game.occlusion
 
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
-import bke.iso.engine.render.actor.ActorRenderable
+import bke.iso.engine.render.entity.EntityRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tile
-import bke.iso.game.actor.door.Door
+import bke.iso.game.entity.door.Door
 
 class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {
 
 
-    override fun firstPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {
+    override fun firstPass(renderable: EntityRenderable, targetRenderable: EntityRenderable?) {
         if (targetRenderable == null) {
             return
         }
 
-        val actor = checkNotNull(renderable.actor)
+        val actor = checkNotNull(renderable.entity)
         val building = world.buildings.getBuilding(actor) ?: return
         val buildingBounds = world.buildings.getBounds(building) ?: return
 
@@ -27,16 +27,16 @@ class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrateg
         }
     }
 
-    private fun isSouthOrEastWall(actor: Actor, buildingBounds: Box): Boolean {
-        if (actor.has<Tile>() || actor.has<Door>()) {
+    private fun isSouthOrEastWall(entity: Entity, buildingBounds: Box): Boolean {
+        if (entity.has<Tile>() || entity.has<Door>()) {
             return false
         }
 
-        val box = actor.getCollisionBox() ?: return false
+        val box = entity.getCollisionBox() ?: return false
         return box.max.x >= buildingBounds.max.x || box.min.y <= buildingBounds.min.y
     }
 
-    override fun secondPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?) {}
+    override fun secondPass(renderable: EntityRenderable, targetRenderable: EntityRenderable?) {}
 
     override fun endFrame() {
     }

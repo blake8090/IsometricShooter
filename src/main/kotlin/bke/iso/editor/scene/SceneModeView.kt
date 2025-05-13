@@ -3,13 +3,13 @@ package bke.iso.editor.scene
 import bke.iso.editor.EditorModule
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.imgui.ImGuiView
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Description
 import bke.iso.engine.world.entity.Tags
 import com.badlogic.gdx.graphics.GLTexture
@@ -128,7 +128,7 @@ class SceneModeView(
             if (ImGui.beginMenu("Mode")) {
                 ImGui.menuItem("Scene Editor", true)
                 if (ImGui.menuItem("Actor Editor", false)) {
-                    events.fire(EditorModule.ActorModeSelected())
+                    events.fire(EditorModule.EntityModeSelected())
                 }
                 ImGui.beginDisabled()
                 ImGui.menuItem("Particle Editor", false)
@@ -165,7 +165,7 @@ class SceneModeView(
 
     private fun drawActorAssets() {
         var column = 0
-        for (prefab in assets.getAll<ActorPrefab>()) {
+        for (prefab in assets.getAll<EntityPrefab>()) {
             val sprite = prefab
                 .components
                 .firstNotNullOfOrNull { component -> component as? Sprite }
@@ -173,7 +173,7 @@ class SceneModeView(
 
             if (imageButton(sprite.texture)) {
                 log.debug { "Selected actor prefab ${prefab.name}" }
-                events.fire(SceneMode.ActorPrefabSelected(prefab))
+                events.fire(SceneMode.EntityPrefabSelected(prefab))
             }
             ImGui.setItemTooltip(prefab.name)
 
@@ -219,21 +219,21 @@ class SceneModeView(
         ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Inspector")
 
-        ImGui.beginDisabled(viewData.selectedActor == null)
-        if (viewData.selectedActor != null) {
-            val actor: Actor = viewData.selectedActor
+        ImGui.beginDisabled(viewData.selectedEntity == null)
+        if (viewData.selectedEntity != null) {
+            val entity: Entity = viewData.selectedEntity
 
-            ImGui.inputText("id", ImString(actor.id), ImGuiInputTextFlags.ReadOnly)
+            ImGui.inputText("id", ImString(entity.id), ImGuiInputTextFlags.ReadOnly)
 
-            val description = actor.get<Description>()
+            val description = entity.get<Description>()
                 ?.text
                 ?: ""
             ImGui.inputText("description", ImString(description), ImGuiInputTextFlags.ReadOnly)
 
             ImGui.separatorText("Position")
-            ImGui.inputFloat("x", ImFloat(actor.x))
-            ImGui.inputFloat("y", ImFloat(actor.y))
-            ImGui.inputFloat("z", ImFloat(actor.z))
+            ImGui.inputFloat("x", ImFloat(entity.x))
+            ImGui.inputFloat("y", ImFloat(entity.y))
+            ImGui.inputFloat("z", ImFloat(entity.z))
 
             ImGui.separatorText("Tags")
             val imString = ImString("", 25)
@@ -242,15 +242,15 @@ class SceneModeView(
             }
             ImGui.sameLine()
             if (ImGui.button("Add")) {
-                events.fire(SceneMode.TagAdded(actor, newTagText))
+                events.fire(SceneMode.TagAdded(entity, newTagText))
             }
 
-            actor.with<Tags> { component ->
+            entity.with<Tags> { component ->
                 component.tags.forEachIndexed { index, tag ->
                     ImGui.inputText("##tagText$index", ImString(tag))
                     ImGui.sameLine()
                     if (ImGui.button("Delete##deleteTag$index")) {
-                        events.fire(SceneMode.TagDeleted(actor, tag))
+                        events.fire(SceneMode.TagDeleted(entity, tag))
                     }
                 }
             }
@@ -259,12 +259,12 @@ class SceneModeView(
             val selectedBuilding = viewData.selectedBuilding
             if (ImGui.beginCombo("Assigned", selectedBuilding)) {
                 if (ImGui.selectable("None", selectedBuilding == null)) {
-                    events.fire(SceneMode.BuildingAssigned(viewData.selectedActor, null))
+                    events.fire(SceneMode.BuildingAssigned(viewData.selectedEntity, null))
                 }
 
                 for (building in viewData.buildings) {
                     if (ImGui.selectable(building, building == selectedBuilding)) {
-                        events.fire(SceneMode.BuildingAssigned(viewData.selectedActor, building))
+                        events.fire(SceneMode.BuildingAssigned(viewData.selectedEntity, building))
                     }
                 }
 

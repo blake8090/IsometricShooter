@@ -2,21 +2,21 @@ package bke.iso.engine.render.occlusion
 
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Occlude
-import bke.iso.engine.render.actor.ActorRenderable
+import bke.iso.engine.render.entity.EntityRenderable
 import com.badlogic.gdx.math.Rectangle
 
 abstract class OcclusionStrategy {
 
-    abstract fun firstPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?)
+    abstract fun firstPass(renderable: EntityRenderable, targetRenderable: EntityRenderable?)
 
-    abstract fun secondPass(renderable: ActorRenderable, targetRenderable: ActorRenderable?)
+    abstract fun secondPass(renderable: EntityRenderable, targetRenderable: EntityRenderable?)
 
     abstract fun endFrame()
 
-    protected fun occludes(renderable: ActorRenderable, targetRenderable: ActorRenderable): Boolean {
-        val actor = checkNotNull(renderable.actor)
+    protected fun occludes(renderable: EntityRenderable, targetRenderable: EntityRenderable): Boolean {
+        val actor = checkNotNull(renderable.entity)
 
-        if (actor == targetRenderable.actor || !actor.has<Occlude>()) {
+        if (actor == targetRenderable.entity || !actor.has<Occlude>()) {
             return false
         }
 
@@ -45,7 +45,7 @@ abstract class OcclusionStrategy {
         return true
     }
 
-    private fun getTargetOcclusionRectangle(targetRenderable: ActorRenderable): Rectangle {
+    private fun getTargetOcclusionRectangle(targetRenderable: EntityRenderable): Rectangle {
         val w = 75f
         val h = 75f
         val x = targetRenderable.x - (w / 2f) + (targetRenderable.width / 2f)

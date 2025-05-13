@@ -5,7 +5,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.render.pointer.Pointer
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
-import bke.iso.game.actor.player.Player
+import bke.iso.game.entity.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.Gdx
@@ -75,7 +75,7 @@ class CrosshairPointer(
     }
 
     private fun getWeaponRecoil(): Float {
-        val playerActor = world.actors.find<Player>() ?: return 0f
+        val playerActor = world.entities.find<Player>() ?: return 0f
         val weapon = weaponsModule.getSelectedWeapon(playerActor)
         return if (weapon is RangedWeapon) {
             weapon.recoil

@@ -2,16 +2,16 @@ package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.math.Box
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 data class PaintRoomCommand(
     private val worldLogic: WorldLogic,
-    private val prefab: ActorPrefab,
+    private val prefab: EntityPrefab,
     private val box: Box
 ) : EditorCommand() {
 
@@ -19,7 +19,7 @@ data class PaintRoomCommand(
 
     private val log = KotlinLogging.logger {}
 
-    private val actors = mutableListOf<Actor>()
+    private val entities = mutableListOf<Entity>()
 
     override fun execute() {
         log.debug { "Drawing room in box: $box with prefab: '${prefab.name}'" }
@@ -76,17 +76,17 @@ data class PaintRoomCommand(
         }
     }
 
-    private fun getCollider(prefab: ActorPrefab): Collider? =
+    private fun getCollider(prefab: EntityPrefab): Collider? =
         prefab.components.find { component -> component is Collider }
                 as? Collider
 
-    private fun create(prefab: ActorPrefab, x: Float, y: Float, z: Float) {
+    private fun create(prefab: EntityPrefab, x: Float, y: Float, z: Float) {
         val pos = Vector3(x, y, z)
-        actors.add(worldLogic.createReferenceActor(prefab, pos))
+        entities.add(worldLogic.createReferenceActor(prefab, pos))
     }
 
     override fun undo() {
-        for (actor in actors) {
+        for (actor in entities) {
             worldLogic.delete(actor)
         }
     }

@@ -3,11 +3,11 @@ package bke.iso.editor.scene.tool
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.TilePrefabReference
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.editor.scene.command.DeleteActorCommand
+import bke.iso.editor.scene.command.DeleteEntityCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
 
 class EraserTool(
@@ -17,36 +17,36 @@ class EraserTool(
 ) : BaseTool() {
 
     private var previousType: Type? = null
-    private var highlightedActor: Actor? = null
+    private var highlightedEntity: Entity? = null
 
     override fun update() {
-        highlightedActor = pickActor()
+        highlightedEntity = pickActor()
     }
 
     override fun draw() {
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
-        val collisionBox = highlightedActor?.getCollisionBox()
+        val collisionBox = highlightedEntity?.getCollisionBox()
         collisionBox?.let { renderer.fgShapes.addBox(it, 1f, Color.RED) }
     }
 
     override fun performAction(): EditorCommand? {
-        val actor = highlightedActor
+        val actor = highlightedEntity
             ?: return null
 
         previousType = getType(actor)
-        return DeleteActorCommand(worldLogic, actor)
+        return DeleteEntityCommand(worldLogic, actor)
     }
 
     override fun performMultiAction(): EditorCommand? {
-        val actor = highlightedActor
+        val actor = highlightedEntity
             ?: return null
 
         val type = getType(actor)
         // avoids accidentally deleting tiles underneath an actor
         return if (type == Type.TILE && previousType == Type.TILE) {
             previousType = type
-            DeleteActorCommand(worldLogic, actor)
+            DeleteEntityCommand(worldLogic, actor)
         } else {
             null
         }
@@ -54,15 +54,15 @@ class EraserTool(
 
     override fun performReleaseAction(): EditorCommand? = null
 
-    private fun getType(actor: Actor) =
-        if (actor.has<TilePrefabReference>()) {
+    private fun getType(entity: Entity) =
+        if (entity.has<TilePrefabReference>()) {
             Type.TILE
         } else {
-            Type.ACTOR
+            Type.ENTITY
         }
 
     private enum class Type {
-        ACTOR,
+        ENTITY,
         TILE
     }
 }

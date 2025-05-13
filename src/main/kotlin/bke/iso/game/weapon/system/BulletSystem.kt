@@ -11,7 +11,7 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Description
 import bke.iso.engine.world.entity.Tile
 import bke.iso.game.combat.CombatModule
@@ -29,48 +29,48 @@ class BulletSystem(
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
-        world.actors.each<Bullet> { bulletActor, bullet ->
+        world.entities.each<Bullet> { bulletActor, bullet ->
             update(bulletActor, bullet)
         }
     }
 
-    private fun update(bulletActor: Actor, bullet: Bullet) {
-        val distance = bullet.start.dst(bulletActor.pos)
+    private fun update(bulletEntity: Entity, bullet: Bullet) {
+        val distance = bullet.start.dst(bulletEntity.pos)
         if (distance > MAX_BULLET_DISTANCE) {
-            world.delete(bulletActor)
+            world.delete(bulletEntity)
             return
         }
 
         val firstCollision = collisions
-            .getCollisions(bulletActor)
+            .getCollisions(bulletEntity)
             .sortedBy(Collision::distance)
-            .firstOrNull { collision -> canCollide(bullet, collision.actor) }
+            .firstOrNull { collision -> canCollide(bullet, collision.entity) }
 
         if (firstCollision != null) {
-            handleCollision(bulletActor, bullet, firstCollision)
+            handleCollision(bulletEntity, bullet, firstCollision)
         }
     }
 
-    private fun canCollide(bullet: Bullet, actor: Actor): Boolean =
-        if (actor.has<Tile>()) {
+    private fun canCollide(bullet: Bullet, entity: Entity): Boolean =
+        if (entity.has<Tile>()) {
             true
         } else {
-            actor.id != bullet.shooterId
-                    && !actor.has<Bullet>()
-                    && !actor.has<Explosion>()
+            entity.id != bullet.shooterId
+                    && !entity.has<Bullet>()
+                    && !entity.has<Explosion>()
         }
 
-    private fun handleCollision(bulletActor: Actor, bullet: Bullet, collision: Collision) {
-        val target = collision.actor
-        val damage = calculateDamage(bulletActor, bullet)
+    private fun handleCollision(bulletEntity: Entity, bullet: Bullet, collision: Collision) {
+        val target = collision.entity
+        val damage = calculateDamage(bulletEntity, bullet)
         combatModule.applyDamage(target, damage)
 
-        createExplosion(bulletActor.pos, collision)
-        world.delete(bulletActor)
+        createExplosion(bulletEntity.pos, collision)
+        world.delete(bulletEntity)
     }
 
-    private fun calculateDamage(bulletActor: Actor, bullet: Bullet): Float {
-        val distance = bulletActor.pos.dst(bullet.start)
+    private fun calculateDamage(bulletEntity: Entity, bullet: Bullet): Float {
+        val distance = bulletEntity.pos.dst(bullet.start)
         if (distance <= bullet.range) {
             return bullet.damage
         }
@@ -83,7 +83,7 @@ class BulletSystem(
     }
 
     private fun createExplosion(pos: Vector3, collision: Collision) {
-        val explosion = world.actors.create(
+        val explosion = world.entities.create(
             pos,
             Explosion(0.25f),
             Collider(
@@ -103,17 +103,17 @@ class BulletSystem(
     }
 
     // TODO: make this a util
-    private fun clampPosToCollisionSide(actor: Actor, collision: Collision) {
-        val box = checkNotNull(actor.getCollisionBox()) {
-            "Expected collision box for $actor"
+    private fun clampPosToCollisionSide(entity: Entity, collision: Collision) {
+        val box = checkNotNull(entity.getCollisionBox()) {
+            "Expected collision box for $entity"
         }
-        val otherBox = checkNotNull(collision.actor.getCollisionBox()) {
-            "Expected collision box for ${collision.actor}"
+        val otherBox = checkNotNull(collision.entity.getCollisionBox()) {
+            "Expected collision box for ${collision.entity}"
         }
 
-        var x = actor.x
-        var y = actor.y
-        var z = actor.z
+        var x = entity.x
+        var y = entity.y
+        var z = entity.z
         when (collision.side) {
             CollisionSide.LEFT -> {
                 x = otherBox.min.x - (box.size.x / 2f)
@@ -143,6 +143,6 @@ class BulletSystem(
                 // log.warn { "Could not resolve corner collision" }
             }
         }
-        actor.moveTo(x, y, z)
+        entity.moveTo(x, y, z)
     }
 }

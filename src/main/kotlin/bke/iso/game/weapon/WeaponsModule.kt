@@ -10,9 +10,9 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
-import bke.iso.game.actor.Inventory
+import bke.iso.game.entity.Inventory
 import bke.iso.game.weapon.system.Bullet
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.RangedWeaponOffset
@@ -35,24 +35,24 @@ class WeaponsModule(
 
     override fun handleEvent(event: Event) {
         if (event is ShootEvent) {
-            shoot(event.actor, event.target)
+            shoot(event.entity, event.target)
         } else if (event is ReloadEvent) {
-            reload(event.actor)
+            reload(event.entity)
         }
     }
 
-    fun equip(actor: Actor, name: String) {
+    fun equip(entity: Entity, name: String) {
         val properties = assets.get<WeaponProperties>(name)
 
         if (properties is RangedWeaponProperties) {
-            val inventory = actor.getOrAdd(Inventory())
+            val inventory = entity.getOrAdd(Inventory())
             inventory.selectedWeapon = RangedWeapon(name, properties.magSize)
-            log.debug { "Actor $actor equipped weapon '$name'" }
+            log.debug { "Actor $entity equipped weapon '$name'" }
         }
     }
 
-    private fun shoot(actor: Actor, target: Vector3) {
-        val weapon = getSelectedWeapon(actor)
+    private fun shoot(entity: Entity, target: Vector3) {
+        val weapon = getSelectedWeapon(entity)
         if (weapon !is RangedWeapon || !canShoot(weapon)) {
             return
         }
@@ -60,7 +60,7 @@ class WeaponsModule(
         val properties = getProperties(weapon)
         applySpread(target, properties)
         applyRecoil(target, weapon)
-        createBullet(actor, target, properties)
+        createBullet(entity, target, properties)
 
         weapon.ammo--
         weapon.coolDown = calculateCoolDown(properties)
@@ -71,13 +71,13 @@ class WeaponsModule(
         weapon.ammo > 0f && weapon.coolDown == 0f && weapon.reloadCoolDown == 0f
 
 
-    private fun reload(actor: Actor) {
-        val weapon = getSelectedWeapon(actor) ?: return
+    private fun reload(entity: Entity) {
+        val weapon = getSelectedWeapon(entity) ?: return
         if (weapon !is RangedWeapon || weapon.reloadCoolDown > 0f) {
             return
         }
 
-        log.debug { "Actor '$actor' is reloading weapon '${weapon.name}'" }
+        log.debug { "Actor '$entity' is reloading weapon '${weapon.name}'" }
         val properties = getProperties(weapon)
         weapon.reloadCoolDown = properties.reloadTime
     }
@@ -88,8 +88,8 @@ class WeaponsModule(
         return 1 / roundsPerSecond
     }
 
-    fun getSelectedWeapon(actor: Actor) =
-        actor.get<Inventory>()
+    fun getSelectedWeapon(entity: Entity) =
+        entity.get<Inventory>()
             ?.selectedWeapon
 
     fun getProperties(weapon: RangedWeapon): RangedWeaponProperties {
@@ -100,7 +100,7 @@ class WeaponsModule(
         return properties
     }
 
-    private fun createBullet(shooter: Actor, target: Vector3, properties: RangedWeaponProperties) {
+    private fun createBullet(shooter: Entity, target: Vector3, properties: RangedWeaponProperties) {
         // TODO: should the shootPos be included on the event object instead?
         val start = shooter.pos
         applyRangedWeaponOffset(shooter, start)
@@ -117,7 +117,7 @@ class WeaponsModule(
                 0f
             }
 
-        world.actors.create(
+        world.entities.create(
             start,
             Bullet(shooter.id, properties.damage, properties.range, start),
             Sprite(
@@ -156,15 +156,15 @@ class WeaponsModule(
     }
 
     data class ShootEvent(
-        val actor: Actor,
+        val entity: Entity,
         val target: Vector3
     ) : Event
 
-    data class ReloadEvent(val actor: Actor) : Event
+    data class ReloadEvent(val entity: Entity) : Event
 }
 
-fun applyRangedWeaponOffset(actor: Actor, pos: Vector3) {
-    actor.with { offset: RangedWeaponOffset ->
+fun applyRangedWeaponOffset(entity: Entity, pos: Vector3) {
+    entity.with { offset: RangedWeaponOffset ->
         pos.add(offset.x, offset.y, offset.z)
     }
 }

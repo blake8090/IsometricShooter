@@ -3,8 +3,8 @@ package bke.iso.game.weapon.system
 import bke.iso.engine.state.System
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Actor
-import bke.iso.game.actor.Inventory
+import bke.iso.engine.world.entity.Entity
+import bke.iso.game.entity.Inventory
 import bke.iso.game.weapon.RangedWeaponProperties
 import bke.iso.game.weapon.WeaponProperties
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -18,7 +18,7 @@ class WeaponSystem(
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
-        world.actors.each { _: Actor, inventory: Inventory ->
+        world.entities.each { _: Entity, inventory: Inventory ->
             update(inventory, deltaTime)
         }
     }

@@ -1,11 +1,11 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.scene.command.PaintActorCommand
+import bke.iso.editor.scene.command.PaintEntityCommand
 import bke.iso.editor.scene.command.PaintTileCommand
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.withFirstInstance
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
@@ -32,7 +32,7 @@ class BrushTool(
     private val log = KotlinLogging.logger { }
 
     private val brushSprite = Sprite(alpha = 0f)
-    private val brushActor = world.actors.create(Vector3(), brushSprite)
+    private val brushActor = world.entities.create(Vector3(), brushSprite)
     private var selection: Selection? = null
 
     override fun update() {
@@ -79,7 +79,7 @@ class BrushTool(
     override fun performAction(): EditorCommand? =
         when (val s = selection) {
             is TileSelection -> paintTile(s.prefab, Location(brushActor.pos))
-            is ActorSelection -> PaintActorCommand(worldLogic, s.prefab, brushActor.pos)
+            is EntitySelection -> PaintEntityCommand(worldLogic, s.prefab, brushActor.pos)
             else -> null
         }
 
@@ -120,9 +120,9 @@ class BrushTool(
         brushActor.remove<Collider>()
     }
 
-    fun selectPrefab(prefab: ActorPrefab) {
+    fun selectPrefab(prefab: EntityPrefab) {
         log.debug { "actor prefab '${prefab.name}' selected" }
-        selection = ActorSelection(prefab)
+        selection = EntitySelection(prefab)
 
         prefab.components.withFirstInstance<Sprite> { sprite ->
             brushSprite.texture = sprite.texture
@@ -140,5 +140,5 @@ class BrushTool(
 
     private class TileSelection(val prefab: TilePrefab) : Selection()
 
-    private class ActorSelection(val prefab: ActorPrefab) : Selection()
+    private class EntitySelection(val prefab: EntityPrefab) : Selection()
 }

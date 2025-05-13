@@ -4,17 +4,17 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.core.Module
 import bke.iso.engine.math.toScreen
-import bke.iso.engine.render.actor.OptimizedActorRenderer
+import bke.iso.engine.render.entity.OptimizedEntityRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
-import bke.iso.game.actor.Inventory
+import bke.iso.game.entity.Inventory
 import bke.iso.game.combat.CombatModule
 import bke.iso.game.combat.system.Health
 import bke.iso.game.combat.system.HealthBar
-import bke.iso.game.actor.player.Player
+import bke.iso.game.entity.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.RangedWeaponProperties
 import bke.iso.game.weapon.system.Weapon
@@ -63,7 +63,7 @@ class HudModule(
     }
 
     private fun findPlayerWeapon(): Weapon? {
-        val playerActor = world.actors.find<Player>() ?: return null
+        val playerActor = world.entities.find<Player>() ?: return null
         return weaponsModule.getSelectedWeapon(playerActor)
     }
 
@@ -84,7 +84,7 @@ class HudModule(
 
     private fun updateMedkitText() {
         val inventory = world
-            .actors
+            .entities
             .find<Player>()
             ?.get<Inventory>()
             ?: return
@@ -95,25 +95,25 @@ class HudModule(
     override fun handleEvent(event: Event) {
         if (event is CombatModule.PlayerHealthChangeEvent) {
             view.setHealth(event.health)
-        } else if (event is OptimizedActorRenderer.DrawActorEvent) {
-            drawHealthBar(event.actor, event.batch)
+        } else if (event is OptimizedEntityRenderer.DrawEntityEvent) {
+            drawHealthBar(event.entity, event.batch)
         }
     }
 
-    private fun drawHealthBar(actor: Actor, batch: PolygonSpriteBatch) {
+    private fun drawHealthBar(entity: Entity, batch: PolygonSpriteBatch) {
         // we already display the player's health in the HUD!
-        if (actor.has<Player>()) {
+        if (entity.has<Player>()) {
             return
         }
 
         val healthBarWidth = 32f
         val healthBarHeight = 8f
 
-        val health = actor.get<Health>() ?: return
-        val healthBar = actor.get<HealthBar>() ?: return
+        val health = entity.get<Health>() ?: return
+        val healthBar = entity.get<HealthBar>() ?: return
 
         val pixel = makePixelTexture()
-        val pos = toScreen(actor.pos)
+        val pos = toScreen(entity.pos)
             .sub(healthBar.offsetX, healthBar.offsetY)
 
         batch.withColor(Color.RED) {

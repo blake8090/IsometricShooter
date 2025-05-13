@@ -1,7 +1,7 @@
 package bke.iso.engine
 
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.prefab.ActorPrefabAssetCache
+import bke.iso.engine.asset.prefab.EntityPrefabAssetCache
 import bke.iso.engine.asset.font.FontGeneratorAssetCache
 import bke.iso.engine.asset.shader.ShaderFileAssetCache
 import bke.iso.engine.asset.TextureAssetCache
@@ -87,7 +87,7 @@ class Engine(val game: Game) {
 
         assets.addCache(TextureAssetCache())
         assets.addCache(FontGeneratorAssetCache())
-        assets.addCache(ActorPrefabAssetCache(serializer))
+        assets.addCache(EntityPrefabAssetCache(serializer))
         assets.addCache(TilePrefabAssetCache(serializer))
         assets.addCache(SceneAssetCache(serializer))
         assets.addCache(ShaderFileAssetCache())

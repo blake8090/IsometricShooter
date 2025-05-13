@@ -4,7 +4,7 @@ import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.graphics.Color
@@ -26,8 +26,8 @@ class Collisions(
     override val updateWhileLoading = false
     override val profilingEnabled = true
 
-    private val previousCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
-    private val currentCollisions = mutableMapOf<Actor, MutableSet<Collision>>()
+    private val previousCollisions = mutableMapOf<Entity, MutableSet<Collision>>()
+    private val currentCollisions = mutableMapOf<Entity, MutableSet<Collision>>()
 
     override fun update(deltaTime: Float) {
         previousCollisions.clear()
@@ -35,43 +35,43 @@ class Collisions(
         currentCollisions.clear()
     }
 
-    fun getCollisions(actor: Actor): Set<Collision> =
-        currentCollisions[actor].orEmpty()
+    fun getCollisions(entity: Entity): Set<Collision> =
+        currentCollisions[entity].orEmpty()
 
-    fun getPreviousCollisions(actor: Actor): Set<Collision> =
-        previousCollisions[actor].orEmpty()
+    fun getPreviousCollisions(entity: Entity): Set<Collision> =
+        previousCollisions[entity].orEmpty()
 
     fun checkCollisions(point: Vector3): Set<PointCollision> =
         world
-            .actors
+            .entities
             .findAllAt(point)
             .mapNotNullTo(mutableSetOf()) { actor -> checkCollision(point, actor) }
 
-    private fun checkCollision(point: Vector3, actor: Actor): PointCollision? {
-        val box = actor.getCollisionBox()
+    private fun checkCollision(point: Vector3, entity: Entity): PointCollision? {
+        val box = entity.getCollisionBox()
         return if (box == null || !box.contains(point)) {
             null
         } else {
-            PointCollision(actor, box)
+            PointCollision(entity, box)
         }
     }
 
     fun checkCollisions(box: Box): Set<Collision> {
         renderer.debug.category("collisions").addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
-        for (actor in world.actors.findAllIn(box)) {
+        for (actor in world.entities.findAllIn(box)) {
             checkCollision(box, actor)?.let(collisions::add)
         }
         return collisions
     }
 
-    private fun checkCollision(box: Box, actor: Actor): Collision? {
-        val actorBox = actor.getCollisionBox()
+    private fun checkCollision(box: Box, entity: Entity): Collision? {
+        val actorBox = entity.getCollisionBox()
         return if (actorBox == null || !actorBox.intersects(box)) {
             null
         } else {
             Collision(
-                actor = actor,
+                entity = entity,
                 box = actorBox,
                 distance = box.dst(actorBox),
                 // TODO: find collision side
@@ -90,14 +90,14 @@ class Collisions(
         val ray = Ray(start, direction)
 
         return world
-            .actors
+            .entities
             .findAllIn(area)
             .mapNotNull { actor -> checkLineCollision(start, end, ray, actor) }
             .toSet()
     }
 
-    private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, actor: Actor): SegmentCollision? {
-        val box = actor.getCollisionBox() ?: return null
+    private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, entity: Entity): SegmentCollision? {
+        val box = entity.getCollisionBox() ?: return null
 
         val points = box
             .getFaces()
@@ -109,7 +109,7 @@ class Collisions(
         }
 
         return SegmentCollision(
-            actor = actor,
+            entity = entity,
             distanceStart = start.dst(box.pos),
             distanceEnd = end.dst(box.pos),
             points = points
@@ -125,8 +125,8 @@ class Collisions(
         }
     }
 
-    fun predictCollisions(actor: Actor, delta: Vector3): Set<PredictedCollision> {
-        val box = actor.getCollisionBox() ?: return emptySet()
+    fun predictCollisions(entity: Entity, delta: Vector3): Set<PredictedCollision> {
+        val box = entity.getCollisionBox() ?: return emptySet()
 
         // broad-phase: instead of iterating through every object, only check entities within general area of movement
         val px = ceil(abs(delta.x))
@@ -142,8 +142,8 @@ class Collisions(
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()
-        for (otherActor in world.actors.findAllIn(projectedBox)) {
-            if (actor == otherActor) {
+        for (otherActor in world.entities.findAllIn(projectedBox)) {
+            if (entity == otherActor) {
                 continue
             }
 
@@ -151,7 +151,7 @@ class Collisions(
 
             val collision = predictCollision(box, delta, otherActor)
             if (collision != null) {
-                recordCollision(actor, collision)
+                recordCollision(entity, collision)
                 collisions.add(collision)
             }
         }
@@ -159,12 +159,12 @@ class Collisions(
         return collisions
     }
 
-    private fun predictCollision(box: Box, delta: Vector3, actor: Actor): PredictedCollision? {
-        val actorBox = actor.getCollisionBox() ?: return null
+    private fun predictCollision(box: Box, delta: Vector3, entity: Entity): PredictedCollision? {
+        val actorBox = entity.getCollisionBox() ?: return null
         val sweptCollision = sweepTest(box, actorBox, delta) ?: return null
 
         return PredictedCollision(
-            actor = actor,
+            entity = entity,
             box = actorBox,
             distance = box.dst(actorBox),
             collisionTime = sweptCollision.collisionTime,
@@ -173,20 +173,20 @@ class Collisions(
         )
     }
 
-    private fun recordCollision(actor: Actor, predictedCollision: PredictedCollision) {
-        if (actor == predictedCollision.actor) {
+    private fun recordCollision(entity: Entity, predictedCollision: PredictedCollision) {
+        if (entity == predictedCollision.entity) {
             return
         }
         // PredictedCollision is intended only for use with Physics,
         // so the normal Collision object should be stored instead.
         val collision = Collision(
-            actor = predictedCollision.actor,
+            entity = predictedCollision.entity,
             box = predictedCollision.box,
             distance = predictedCollision.distance,
             side = predictedCollision.side
         )
         currentCollisions
-            .getOrPut(actor) { mutableSetOf() }
+            .getOrPut(entity) { mutableSetOf() }
             .add(collision)
     }
 
@@ -204,7 +204,7 @@ class Collisions(
 }
 
 // TODO: clean this up!
-fun Actor.getCollisionBox(): Box? {
+fun Entity.getCollisionBox(): Box? {
     return if (has<Tile>()) {
         Box.fromMinMax(
             pos,

@@ -10,7 +10,7 @@ import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.font.FontOptions
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
@@ -18,11 +18,11 @@ import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
-import bke.iso.engine.scene.ActorRecord
+import bke.iso.engine.scene.EntityRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
-import bke.iso.engine.world.entity.Actor
-import bke.iso.engine.world.entity.Actors
+import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Tags
 import com.badlogic.gdx.Input
@@ -57,7 +57,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         private set
     private var highlightSelectedLayer = false
 
-    private var selectedActor: Actor? = null
+    private var selectedEntity: Entity? = null
     private var selectedBuilding: String? = null
 
     private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
@@ -97,7 +97,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             drawBuilding(buildingName)
         }
 
-        engine.world.actors.each<Tags>(::drawActorTags)
+        engine.world.entities.each<Tags>(::drawActorTags)
 
         toolLogic.update()
 
@@ -132,7 +132,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
         view.viewData =
             ViewData(
-                selectedActor = selectedActor,
+                selectedEntity = selectedEntity,
                 selectedTool = toolLogic.selection,
                 selectedLayer = selectedLayer,
                 hideWalls = hideWalls,
@@ -173,16 +173,16 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         }
 
     private fun drawSelectedActor() {
-        val actor = selectedActor ?: return
+        val actor = selectedEntity ?: return
         val collisionBox = actor.getCollisionBox() ?: Box(actor.pos, Vector3(1f, 1f, 1f))
         renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
     }
 
-    private fun drawActorTags(actor: Actor, tags: Tags) {
-        if (tags.tags.isEmpty() || selectedActor == actor) {
+    private fun drawActorTags(entity: Entity, tags: Tags) {
+        if (tags.tags.isEmpty() || selectedEntity == entity) {
             return
         }
-        actor.getCollisionBox()?.let { box ->
+        entity.getCollisionBox()?.let { box ->
             engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
         }
     }
@@ -220,8 +220,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
-            is ActorPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
-            is ActorSelected -> selectedActor = event.actor
+            is EntityPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
+            is EntitySelected -> selectedEntity = event.entity
 
             is LayerIncreased -> selectedLayer++
             is LayerDecreased -> selectedLayer--
@@ -231,17 +231,17 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
 
             is TagAdded -> {
-                val command = AddTagCommand(event.actor, event.tag)
+                val command = AddTagCommand(event.entity, event.tag)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
             is TagDeleted -> {
-                val command = DeleteTagCommand(event.actor, event.tag)
+                val command = DeleteTagCommand(event.entity, event.tag)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
             is BuildingAssigned -> {
-                val command = AssignBuildingCommand(event.actor, event.building, worldLogic)
+                val command = AssignBuildingCommand(event.entity, event.building, worldLogic)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
@@ -262,8 +262,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
                 selectedBuilding = event.building
             }
 
-            is Actors.CreatedEvent -> {
-                worldLogic.setBuilding(event.actor, selectedBuilding)
+            is Entities.CreatedEvent -> {
+                worldLogic.setBuilding(event.entity, selectedBuilding)
             }
         }
     }
@@ -275,7 +275,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         // very important to clear the state before loading a new scene.
         // otherwise, events fired in the load process will use the old state, leading to weird bugs
         selectedLayer = 0
-        selectedActor = null
+        selectedEntity = null
         selectedBuilding = null
 
         worldLogic.loadScene(scene)
@@ -285,18 +285,18 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private fun saveScene() {
         val file = engine.dialogs.showSaveFileDialog("Scene", "scene") ?: return
 
-        val actors = mutableListOf<ActorRecord>()
-        world.actors.each<ActorPrefabReference> { actor, reference ->
+        val actors = mutableListOf<EntityRecord>()
+        world.entities.each<EntityPrefabReference> { actor, reference ->
             actors.add(createActorRecord(actor, reference))
         }
 
         val tiles = mutableListOf<TileRecord>()
-        world.actors.each { actor: Actor, reference: TilePrefabReference ->
+        world.entities.each { entity: Entity, reference: TilePrefabReference ->
             tiles.add(
                 TileRecord(
-                    Location(actor.pos),
+                    Location(entity.pos),
                     reference.prefab,
-                    world.buildings.getBuilding(actor)
+                    world.buildings.getBuilding(entity)
                 )
             )
         }
@@ -307,14 +307,14 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         log.info { "Saved scene: '${file.canonicalPath}'" }
     }
 
-    private fun createActorRecord(actor: Actor, reference: ActorPrefabReference): ActorRecord {
+    private fun createActorRecord(entity: Entity, reference: EntityPrefabReference): EntityRecord {
         val componentOverrides = mutableListOf<Component>()
-        actor.with<Tags>(componentOverrides::add)
+        entity.with<Tags>(componentOverrides::add)
 
-        return ActorRecord(
-            actor.pos,
+        return EntityRecord(
+            entity.pos,
             reference.prefab,
-            world.buildings.getBuilding(actor),
+            world.buildings.getBuilding(entity),
             componentOverrides
         )
     }
@@ -336,8 +336,8 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
     data class ToolSelected(val selection: ToolSelection) : Event
     data class TilePrefabSelected(val prefab: TilePrefab) : Event
-    data class ActorPrefabSelected(val prefab: ActorPrefab) : Event
-    data class ActorSelected(val actor: Actor) : Event
+    data class EntityPrefabSelected(val prefab: EntityPrefab) : Event
+    data class EntitySelected(val entity: Entity) : Event
 
     class LayerIncreased : Event
     class LayerDecreased : Event
@@ -346,17 +346,17 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     class HideUpperLayersToggled : Event
     class HighlightSelectedLayerToggled : Event
 
-    class TagAdded(val actor: Actor, val tag: String) : Event
-    data class TagDeleted(val actor: Actor, val tag: String) : Event
+    class TagAdded(val entity: Entity, val tag: String) : Event
+    data class TagDeleted(val entity: Entity, val tag: String) : Event
 
-    data class BuildingAssigned(val actor: Actor, val building: String?) : Event
+    data class BuildingAssigned(val entity: Entity, val building: String?) : Event
     data class BuildingSelected(val building: String) : Event
     class BuildingClosed : Event
     data class BuildingDeleted(val building: String) : Event
     data class BuildingCreated(val building: String) : Event
 
     data class ViewData(
-        val selectedActor: Actor? = null,
+        val selectedEntity: Entity? = null,
         val selectedLayer: Int,
         val selectedTool: ToolSelection,
         val hideWalls: Boolean,

@@ -1,35 +1,35 @@
 package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tags
 
 data class AddTagCommand(
-    val actor: Actor,
+    val entity: Entity,
     val tag: String
 ) : EditorCommand() {
 
     override val name: String = "AddTag"
 
     override fun execute() {
-        val tags = actor.getOrAdd(Tags())
+        val tags = entity.getOrAdd(Tags())
 
         val tagsList = tags.tags.toMutableList()
         check(tagsList.add(tag)) {
             "Duplicate tag $tag in tags component"
         }
-        actor.add(Tags(tagsList))
+        entity.add(Tags(tagsList))
     }
 
     override fun undo() {
-        val tags = checkNotNull(actor.get<Tags>()) {
-            "Expected actor $actor to have a Tags component"
+        val tags = checkNotNull(entity.get<Tags>()) {
+            "Expected actor $entity to have a Tags component"
         }
 
         val tagsList = tags.tags.toMutableList()
         check(tagsList.remove(tag)) {
             "Could not remove tag $tag"
         }
-        actor.add(Tags(tagsList))
+        entity.add(Tags(tagsList))
     }
 }

@@ -5,7 +5,7 @@ import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 data class FillTileCommand(
@@ -18,7 +18,7 @@ data class FillTileCommand(
 
     override val name: String = "FillActor"
 
-    private val actors = mutableListOf<Actor>()
+    private val entities = mutableListOf<Entity>()
 
     override fun execute() {
         log.debug { "Filling in box: $box with prefab: '${prefab.name}'" }
@@ -33,14 +33,14 @@ data class FillTileCommand(
             for (y in yMin..yMax) {
                 val location = Location(x, y, box.min.z.toInt())
                 if (!worldLogic.tileExists(location)) {
-                    actors.add(worldLogic.createReferenceActor(prefab, location))
+                    entities.add(worldLogic.createReferenceActor(prefab, location))
                 }
             }
         }
     }
 
     override fun undo() {
-        for (actor in actors) {
+        for (actor in entities) {
             worldLogic.delete(actor)
         }
     }

@@ -8,62 +8,62 @@ import com.badlogic.gdx.utils.OrderedSet
 
 class Grid {
 
-    val actors = OrderedSet<Actor>()
+    val actors = OrderedSet<Entity>()
 
-    private val actorsByLocation = OrderedMap<Location, ObjectSet<Actor>>()
-    private val locationsByActor = ObjectMap<Actor, ObjectSet<Location>>()
+    private val actorsByLocation = OrderedMap<Location, ObjectSet<Entity>>()
+    private val locationsByEntity = ObjectMap<Entity, ObjectSet<Location>>()
 
     init {
         // improves performance when removing objects
         actors.orderedItems().ordered = false
     }
 
-    operator fun get(location: Location): ObjectSet<Actor> =
+    operator fun get(location: Location): ObjectSet<Entity> =
         actorsByLocation[location] ?: ObjectSet()
 
-    fun update(actor: Actor) {
-        if (!actors.contains(actor)) {
-            actors.add(actor)
+    fun update(entity: Entity) {
+        if (!actors.contains(entity)) {
+            actors.add(entity)
         }
 
-        removeLocations(actor)
+        removeLocations(entity)
 
-        for (location in actor.getLocations()) {
+        for (location in entity.getLocations()) {
             // TODO: add some verification here, like that there can't be more than one tile entity in a location
-            getOrPutLocations(actor).add(location)
-            getOrPutActors(location).add(actor)
+            getOrPutLocations(entity).add(location)
+            getOrPutActors(location).add(entity)
         }
     }
 
-    private fun getOrPutActors(location: Location): ObjectSet<Actor> {
+    private fun getOrPutActors(location: Location): ObjectSet<Entity> {
         if (!actorsByLocation.containsKey(location)) {
             actorsByLocation.put(location, ObjectSet())
         }
         return actorsByLocation[location]
     }
 
-    private fun getOrPutLocations(actor: Actor): ObjectSet<Location> {
-        if (!locationsByActor.containsKey(actor)) {
-            locationsByActor.put(actor, ObjectSet())
+    private fun getOrPutLocations(entity: Entity): ObjectSet<Location> {
+        if (!locationsByEntity.containsKey(entity)) {
+            locationsByEntity.put(entity, ObjectSet())
         }
-        return locationsByActor[actor]
+        return locationsByEntity[entity]
     }
 
-    fun delete(actor: Actor) {
-        removeLocations(actor)
-        actors.remove(actor)
+    fun delete(entity: Entity) {
+        removeLocations(entity)
+        actors.remove(entity)
     }
 
-    private fun removeLocations(actor: Actor) {
-        val locations = locationsByActor.remove(actor) ?: return
+    private fun removeLocations(entity: Entity) {
+        val locations = locationsByEntity.remove(entity) ?: return
         for (location in locations) {
-            actorsByLocation[location]?.remove(actor)
+            actorsByLocation[location]?.remove(entity)
         }
     }
 
     fun clear() {
         actors.clear()
         actorsByLocation.clear()
-        locationsByActor.clear()
+        locationsByEntity.clear()
     }
 }

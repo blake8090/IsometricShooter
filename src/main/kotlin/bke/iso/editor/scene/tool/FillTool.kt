@@ -2,9 +2,9 @@ package bke.iso.editor.scene.tool
 
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
-import bke.iso.editor.scene.command.FillActorCommand
+import bke.iso.editor.scene.command.FillEntityCommand
 import bke.iso.editor.scene.command.FillTileCommand
-import bke.iso.engine.asset.prefab.ActorPrefab
+import bke.iso.engine.asset.prefab.EntityPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
@@ -55,9 +55,9 @@ class FillTool(
         selection = TileSelection(prefab)
     }
 
-    fun selectPrefab(prefab: ActorPrefab) {
+    fun selectPrefab(prefab: EntityPrefab) {
         log.debug { "actor prefab '${prefab.name}' selected" }
-        selection = ActorSelection(prefab)
+        selection = EntitySelection(prefab)
     }
 
     private fun startDragging(pointerPos: Vector3) {
@@ -78,8 +78,8 @@ class FillTool(
         val box = Box.fromMinMax(Segment(start, end))
 
         return when (val selected = selection) {
-            is ActorSelection -> {
-                FillActorCommand(worldLogic, selected.prefab, box)
+            is EntitySelection -> {
+                FillEntityCommand(worldLogic, selected.prefab, box)
             }
 
             is TileSelection -> {
@@ -94,5 +94,5 @@ class FillTool(
 
     private class TileSelection(val prefab: TilePrefab) : Selection()
 
-    private class ActorSelection(val prefab: ActorPrefab) : Selection()
+    private class EntitySelection(val prefab: EntityPrefab) : Selection()
 }

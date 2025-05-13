@@ -7,7 +7,7 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 
@@ -17,7 +17,7 @@ class PointerTool(
     private val events: Events
 ) : BaseTool() {
 
-    private var highlighted: Actor? = null
+    private var highlighted: Entity? = null
 
     override fun update() {
         highlighted = pickActor()
@@ -34,7 +34,7 @@ class PointerTool(
 
     override fun performAction(): EditorCommand? {
         highlighted?.let { actor ->
-            events.fire(SceneMode.ActorSelected(actor))
+            events.fire(SceneMode.EntitySelected(actor))
         }
         // we don't need to undo or redo selecting an actor, so no commands necessary
         return null
