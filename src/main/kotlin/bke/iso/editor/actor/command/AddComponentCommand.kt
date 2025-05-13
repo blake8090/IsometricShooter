@@ -3,8 +3,8 @@ package bke.iso.editor.actor.command
 import bke.iso.editor.EditorCommand
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Component
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 

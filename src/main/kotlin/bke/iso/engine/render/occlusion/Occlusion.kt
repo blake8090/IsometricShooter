@@ -2,7 +2,7 @@ package bke.iso.engine.render.occlusion
 
 import bke.iso.engine.render.actor.ActorRenderable
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import kotlin.reflect.KClass
 
 class Occlusion(private val world: World) {

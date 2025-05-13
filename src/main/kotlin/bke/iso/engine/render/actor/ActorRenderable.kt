@@ -1,7 +1,7 @@
 package bke.iso.engine.render.actor
 
 import bke.iso.engine.math.Box
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.utils.Array

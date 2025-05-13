@@ -3,7 +3,7 @@ package bke.iso.game.actor.elevator
 import bke.iso.engine.state.System
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 
 class ElevatorSystem(private val world: World) : System {
 

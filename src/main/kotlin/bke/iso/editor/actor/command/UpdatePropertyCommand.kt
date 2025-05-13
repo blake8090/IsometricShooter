@@ -1,7 +1,7 @@
 package bke.iso.editor.actor.command
 
 import bke.iso.editor.EditorCommand
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import kotlin.reflect.KMutableProperty1
 
 class UpdateComponentPropertyCommand(

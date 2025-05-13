@@ -9,7 +9,7 @@ import bke.iso.engine.input.Input
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.actor.Medkit

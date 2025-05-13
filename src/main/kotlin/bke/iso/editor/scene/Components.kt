@@ -1,6 +1,6 @@
 package bke.iso.editor.scene
 
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 
 data class ActorPrefabReference(val prefab: String = "") : Component
 

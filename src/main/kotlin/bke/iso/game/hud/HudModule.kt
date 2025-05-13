@@ -8,7 +8,7 @@ import bke.iso.engine.render.actor.OptimizedActorRenderer
 import bke.iso.engine.render.makePixelTexture
 import bke.iso.engine.render.withColor
 import bke.iso.engine.ui.UI
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.Inventory
 import bke.iso.game.combat.CombatModule

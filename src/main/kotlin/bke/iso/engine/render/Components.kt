@@ -1,6 +1,6 @@
 package bke.iso.engine.render
 
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.graphics.Color
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName

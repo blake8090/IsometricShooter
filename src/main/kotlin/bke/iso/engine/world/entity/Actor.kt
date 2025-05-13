@@ -1,4 +1,4 @@
-package bke.iso.engine.world.actor
+package bke.iso.engine.world.entity
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.collision.getCollisionBox

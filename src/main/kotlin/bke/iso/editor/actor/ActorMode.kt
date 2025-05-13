@@ -14,7 +14,7 @@ import bke.iso.engine.input.ButtonState
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3

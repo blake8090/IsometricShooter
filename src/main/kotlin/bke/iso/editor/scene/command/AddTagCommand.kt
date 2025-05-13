@@ -1,8 +1,8 @@
 package bke.iso.editor.scene.command
 
 import bke.iso.editor.EditorCommand
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Tags
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Tags
 
 data class AddTagCommand(
     val actor: Actor,

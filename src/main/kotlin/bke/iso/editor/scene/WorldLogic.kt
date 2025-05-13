@@ -13,9 +13,9 @@ import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Component
-import bke.iso.engine.world.actor.Description
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Component
+import bke.iso.engine.world.entity.Description
 import com.badlogic.gdx.math.Vector3
 
 class WorldLogic(

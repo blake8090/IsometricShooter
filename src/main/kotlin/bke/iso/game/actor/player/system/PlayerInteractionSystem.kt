@@ -3,7 +3,7 @@ package bke.iso.game.actor.player.system
 import bke.iso.engine.state.System
 import bke.iso.engine.input.Input
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import bke.iso.game.actor.door.DoorChangeSceneAction
 import bke.iso.game.actor.door.DoorModule
 import bke.iso.game.actor.door.DoorOpenAction

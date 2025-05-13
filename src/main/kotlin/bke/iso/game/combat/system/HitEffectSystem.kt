@@ -3,7 +3,7 @@ package bke.iso.game.combat.system
 import bke.iso.engine.state.System
 import bke.iso.engine.render.SpriteFillColor
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 
 class HitEffectSystem(private val world: World) : System {
 

@@ -21,10 +21,10 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.scene.ActorRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.scene.TileRecord
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Actors
-import bke.iso.engine.world.actor.Component
-import bke.iso.engine.world.actor.Tags
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Actors
+import bke.iso.engine.world.entity.Component
+import bke.iso.engine.world.entity.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3

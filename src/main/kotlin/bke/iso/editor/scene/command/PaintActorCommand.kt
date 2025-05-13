@@ -3,7 +3,7 @@ package bke.iso.editor.scene.command
 import bke.iso.editor.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.asset.prefab.ActorPrefab
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import com.badlogic.gdx.math.Vector3
 
 data class PaintActorCommand(

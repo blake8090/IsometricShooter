@@ -5,9 +5,9 @@ import bke.iso.engine.asset.prefab.ActorPrefab
 import bke.iso.engine.asset.prefab.TilePrefab
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Tile
+import bke.iso.engine.world.entity.Tile
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.system.measureTimeMillis
 

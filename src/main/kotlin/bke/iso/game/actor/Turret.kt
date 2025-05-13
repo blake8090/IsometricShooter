@@ -5,8 +5,8 @@ import bke.iso.engine.state.System
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.debug.DebugRenderer
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.World
 import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.system.RangedWeapon

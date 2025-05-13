@@ -2,8 +2,8 @@ package bke.iso.engine.world
 
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.EngineModule
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Actors
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Actors
 
 class World(events: Events) : EngineModule() {
 

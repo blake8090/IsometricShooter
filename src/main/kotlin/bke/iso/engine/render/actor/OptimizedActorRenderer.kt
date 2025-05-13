@@ -13,7 +13,7 @@ import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture

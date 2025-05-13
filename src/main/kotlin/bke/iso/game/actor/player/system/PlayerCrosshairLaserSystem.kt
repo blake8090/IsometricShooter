@@ -6,7 +6,7 @@ import bke.iso.engine.math.toWorld
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.state.System
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.WeaponsModule
 import bke.iso.game.weapon.applyRangedWeaponOffset

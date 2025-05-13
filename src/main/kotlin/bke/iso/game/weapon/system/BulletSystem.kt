@@ -11,9 +11,9 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Description
-import bke.iso.engine.world.actor.Tile
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Description
+import bke.iso.engine.world.entity.Tile
 import bke.iso.game.combat.CombatModule
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging

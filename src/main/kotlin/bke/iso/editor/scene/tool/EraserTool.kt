@@ -7,7 +7,7 @@ import bke.iso.editor.scene.command.DeleteActorCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import com.badlogic.gdx.graphics.Color
 
 class EraserTool(

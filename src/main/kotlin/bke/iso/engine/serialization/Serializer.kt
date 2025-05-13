@@ -1,7 +1,7 @@
 package bke.iso.engine.serialization
 
 import bke.iso.engine.asset.config.Config
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.Weapon
 import kotlinx.serialization.ExperimentalSerializationApi

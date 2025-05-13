@@ -7,9 +7,9 @@ import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Actors
-import bke.iso.engine.world.actor.Description
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Actors
+import bke.iso.engine.world.entity.Description
 import com.badlogic.gdx.math.Vector3
 
 const val SHADOW_SPRITE_ALPHA = 0.5f

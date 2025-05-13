@@ -1,7 +1,7 @@
 package bke.iso.engine.scene
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Contextual

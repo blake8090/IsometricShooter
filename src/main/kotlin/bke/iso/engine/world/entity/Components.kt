@@ -1,4 +1,4 @@
-package bke.iso.engine.world.actor
+package bke.iso.engine.world.entity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

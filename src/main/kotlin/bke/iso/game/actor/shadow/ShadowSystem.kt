@@ -5,7 +5,7 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import bke.iso.engine.world.World
 import com.badlogic.gdx.math.Vector3
 import kotlin.math.max

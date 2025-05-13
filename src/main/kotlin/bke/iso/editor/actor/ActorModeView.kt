@@ -7,7 +7,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.ui.imgui.ImGuiView
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector3

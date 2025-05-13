@@ -3,7 +3,7 @@ package bke.iso.game.weapon.system
 import bke.iso.engine.state.System
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import kotlin.math.max
 
 class ExplosionSystem(private val world: World) : System {

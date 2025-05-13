@@ -5,8 +5,8 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.render.actor.ActorRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Tile
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Tile
 import bke.iso.game.actor.door.Door
 
 class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {

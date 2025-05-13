@@ -5,8 +5,8 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.Engine
 import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
 import bke.iso.engine.state.State
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Tags
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Tags
 import bke.iso.game.actor.FlyingTurretSystem
 import bke.iso.game.actor.RollingTurretSystem
 import bke.iso.game.actor.shadow.ShadowSystem

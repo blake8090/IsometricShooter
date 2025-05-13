@@ -4,7 +4,7 @@ import bke.iso.editor.EditorCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 

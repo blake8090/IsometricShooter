@@ -10,9 +10,9 @@ import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Component
-import bke.iso.engine.world.actor.Tile
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Component
+import bke.iso.engine.world.entity.Tile
 import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.RangedWeaponOffset

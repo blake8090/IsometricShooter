@@ -5,9 +5,9 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module
 import bke.iso.engine.physics.PhysicsBody
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Actors
-import bke.iso.engine.world.actor.Tags
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Actors
+import bke.iso.engine.world.entity.Tags
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ElevatorModule(private val collisions: Collisions) : Module {

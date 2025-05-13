@@ -1,4 +1,4 @@
-package bke.iso.engine.world.actor
+package bke.iso.engine.world.entity
 
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events

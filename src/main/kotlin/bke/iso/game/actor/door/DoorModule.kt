@@ -7,9 +7,9 @@ import bke.iso.engine.core.Module
 import bke.iso.engine.loading.SimpleLoadingScreen
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.world.World
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Actors
-import bke.iso.engine.world.actor.Tags
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Actors
+import bke.iso.engine.world.entity.Tags
 import bke.iso.game.GameState
 import bke.iso.game.actor.player.Player
 import com.badlogic.gdx.math.Vector3

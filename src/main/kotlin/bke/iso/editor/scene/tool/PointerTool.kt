@@ -7,7 +7,7 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 

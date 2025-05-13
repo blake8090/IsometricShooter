@@ -1,6 +1,6 @@
 package bke.iso.engine.collision
 
-import bke.iso.engine.world.actor.Component
+import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName

@@ -4,7 +4,7 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.config.Configs
 import bke.iso.engine.core.Module
-import bke.iso.engine.world.actor.Actor
+import bke.iso.engine.world.entity.Actor
 import bke.iso.engine.world.World
 import bke.iso.game.actor.player.Player
 import bke.iso.game.combat.system.HealEffect

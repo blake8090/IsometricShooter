@@ -9,9 +9,9 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.imgui.ImGuiView
-import bke.iso.engine.world.actor.Actor
-import bke.iso.engine.world.actor.Description
-import bke.iso.engine.world.actor.Tags
+import bke.iso.engine.world.entity.Actor
+import bke.iso.engine.world.entity.Description
+import bke.iso.engine.world.entity.Tags
 import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
 import imgui.ImGui
