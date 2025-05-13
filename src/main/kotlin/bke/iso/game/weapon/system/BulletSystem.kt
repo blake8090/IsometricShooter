@@ -13,7 +13,7 @@ import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Description
-import bke.iso.engine.world.v2.Tile
+import bke.iso.engine.world.actor.Tile
 import bke.iso.game.combat.CombatModule
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging

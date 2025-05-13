@@ -6,7 +6,7 @@ import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.World
-import bke.iso.engine.world.v2.Tile
+import bke.iso.engine.world.actor.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3

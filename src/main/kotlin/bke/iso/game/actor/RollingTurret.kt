@@ -12,7 +12,7 @@ import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World
 import bke.iso.engine.world.actor.Actor
 import bke.iso.engine.world.actor.Component
-import bke.iso.engine.world.v2.Tile
+import bke.iso.engine.world.actor.Tile
 import bke.iso.game.actor.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.system.RangedWeaponOffset
