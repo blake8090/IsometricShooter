@@ -17,12 +17,12 @@ class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrateg
             return
         }
 
-        val actor = checkNotNull(renderable.entity)
-        val building = world.buildings.getBuilding(actor) ?: return
+        val entity = checkNotNull(renderable.entity)
+        val building = world.buildings.getBuilding(entity) ?: return
         val buildingBounds = world.buildings.getBounds(building) ?: return
 
         val targetBounds = checkNotNull(targetRenderable.bounds)
-        if (targetBounds.intersects(buildingBounds) && isSouthOrEastWall(actor, buildingBounds)) {
+        if (targetBounds.intersects(buildingBounds) && isSouthOrEastWall(entity, buildingBounds)) {
             renderable.alpha = 0.1f
         }
     }

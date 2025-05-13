@@ -80,7 +80,7 @@ class EntityModeView(
                 if (ImGui.menuItem("Scene Editor", false)) {
                     events.fire(EditorModule.SceneModeSelected())
                 }
-                ImGui.menuItem("Actor Editor", true)
+                ImGui.menuItem("Entity Editor", true)
                 ImGui.beginDisabled()
                 ImGui.menuItem("Particle Editor", false)
                 ImGui.menuItem("Animation Editor", false)

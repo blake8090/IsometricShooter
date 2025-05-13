@@ -15,29 +15,29 @@ class WorldTest : StringSpec({
 
     "should return all objects in area" {
         val world = World(events)
-        val actor = world.entities.create("actor", 0f, 0f, 0f)
-        val actor2 = world.entities.create("actor2", 1f, 0f, 0f)
-        world.entities.create("actor3", 2f, 0f, 0f)
+        val entity = world.entities.create("entity", 0f, 0f, 0f)
+        val entity2 = world.entities.create("entity2", 1f, 0f, 0f)
+        world.entities.create("entity3", 2f, 0f, 0f)
 
         val area = Box(
             pos = Vector3(0.5f, 0.5f, 0f),
             size = Vector3(1f, 1f, 1f)
         )
 
-        world.entities.findAllIn(area).shouldContainExactlyInAnyOrder(actor, actor2)
+        world.entities.findAllIn(area).shouldContainExactlyInAnyOrder(entity, entity2)
     }
 
     "should return all objects in area with negative positions" {
         val world = World(events)
-        val actor = world.entities.create("actor", 0f, 0f, 0f)
-        val actor2 = world.entities.create("actor2", 0f, -1f, 0f)
-        world.entities.create("actor3", -0.5f, -0.5f, 0f)
+        val entity = world.entities.create("entity", 0f, 0f, 0f)
+        val entity2 = world.entities.create("entity2", 0f, -1f, 0f)
+        world.entities.create("entity3", -0.5f, -0.5f, 0f)
 
         val area = Box(
             pos = Vector3(0.5f, -0.5f, 0f),
             size = Vector3(0.5f, 0.5f, 0.5f)
         )
 
-        world.entities.findAllIn(area).shouldContainExactlyInAnyOrder(actor, actor2)
+        world.entities.findAllIn(area).shouldContainExactlyInAnyOrder(entity, entity2)
     }
 })

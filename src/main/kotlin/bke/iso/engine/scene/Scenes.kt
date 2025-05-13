@@ -26,7 +26,7 @@ class Scenes(
         val time = measureTimeMillis {
             world.clear()
 
-            for (record in scene.actors) {
+            for (record in scene.entities) {
                 load(record)
             }
 
@@ -50,11 +50,11 @@ class Scenes(
             components.add(component)
         }
 
-        val actor = world.entities.create(record.pos, *components.toTypedArray())
+        val entity = world.entities.create(record.pos, *components.toTypedArray())
 
         val building = record.building
         if (!building.isNullOrBlank()) {
-            world.buildings.add(actor, building)
+            world.buildings.add(entity, building)
         }
     }
 
@@ -67,11 +67,11 @@ class Scenes(
     private fun load(record: TileRecord) {
         val prefab = assets.get<TilePrefab>(record.prefab)
         val components = setOf(prefab.sprite, Tile())
-        val actor = world.entities.create(record.location, *components.toTypedArray())
+        val entity = world.entities.create(record.location, *components.toTypedArray())
 
         val building = record.building
         if (!building.isNullOrBlank()) {
-            world.buildings.add(actor, building)
+            world.buildings.add(entity, building)
         }
     }
 }

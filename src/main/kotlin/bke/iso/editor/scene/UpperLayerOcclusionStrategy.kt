@@ -5,10 +5,10 @@ import bke.iso.engine.render.occlusion.OcclusionStrategy
 
 class UpperLayerOcclusionStrategy(private val sceneMode: SceneMode) : OcclusionStrategy() {
     override fun firstPass(renderable: EntityRenderable, targetRenderable: EntityRenderable?) {
-        val actor = checkNotNull(renderable.entity)
+        val entity = checkNotNull(renderable.entity)
 
-        if (actor.z > sceneMode.selectedLayer && sceneMode.hideUpperLayers) {
-            if (actor.has<EntityPrefabReference>() || actor.has<TilePrefabReference>()) {
+        if (entity.z > sceneMode.selectedLayer && sceneMode.hideUpperLayers) {
+            if (entity.has<EntityPrefabReference>() || entity.has<TilePrefabReference>()) {
                 renderable.alpha = 0f
             }
         }

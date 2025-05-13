@@ -217,8 +217,8 @@ class GameState(override val engine: Engine) : State() {
             "mission-01-interior.scene" -> initMission1InteriorScene()
         }
 
-        engine.world.entities.each<Tags> { actor, tags ->
-            log.debug { "Actor $actor has tags ${tags.tags}" }
+        engine.world.entities.each<Tags> { entity, tags ->
+            log.debug { "Entity $entity has tags ${tags.tags}" }
         }
     }
 
@@ -233,14 +233,14 @@ class GameState(override val engine: Engine) : State() {
     }
 
     private fun initMission1StartScene() {
-        engine.world.entities.each<Player> { actor, _ ->
-            weaponsModule.equip(actor, "pistol")
+        engine.world.entities.each<Player> { entity, _ ->
+            weaponsModule.equip(entity, "pistol")
         }
     }
 
     private fun initMission1RoofScene() {
-        engine.world.entities.each<Player> { actor, _ ->
-            weaponsModule.equip(actor, "pistol")
+        engine.world.entities.each<Player> { entity, _ ->
+            weaponsModule.equip(entity, "pistol")
         }
     }
 

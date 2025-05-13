@@ -138,9 +138,9 @@ class RollingTurretSystem(
     }
 
     private fun runShootState(turretEntity: Entity) {
-        val playerActor = world.entities.find<Player>() ?: return
-        if (withinRange(turretEntity, playerActor) && canSee(turretEntity, playerActor)) {
-            events.fire(WeaponsModule.ShootEvent(turretEntity, getTargetPos(playerActor)))
+        val playerEntity = world.entities.find<Player>() ?: return
+        if (withinRange(turretEntity, playerEntity) && canSee(turretEntity, playerEntity)) {
+            events.fire(WeaponsModule.ShootEvent(turretEntity, getTargetPos(playerEntity)))
         }
 
         val weapon = weaponsModule.getSelectedWeapon(turretEntity)

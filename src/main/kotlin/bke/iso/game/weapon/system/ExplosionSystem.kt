@@ -16,7 +16,7 @@ class ExplosionSystem(private val world: World) : System {
                 world.delete(entity)
             } else {
                 val sprite = checkNotNull(entity.get<Sprite>()) {
-                    "Expected sprite for (Explosion) actor $entity"
+                    "Expected sprite for (Explosion) entity $entity"
                 }
                 sprite.alpha = (explosion.timer / explosion.timeSeconds)
             }

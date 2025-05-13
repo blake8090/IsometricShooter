@@ -48,7 +48,7 @@ abstract class BaseTool {
      */
     open fun disable() {}
 
-    protected fun pickActor(): Entity? {
+    protected fun pickEntity(): Entity? {
         return collisions
             .checkCollisions(pointerPos)
             .filter { collision -> collision.box.min.z == pointerPos.z }

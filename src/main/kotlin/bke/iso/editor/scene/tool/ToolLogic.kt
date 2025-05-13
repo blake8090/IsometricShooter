@@ -86,7 +86,7 @@ class ToolLogic(
         fillTool.selectPrefab(prefab)
     }
 
-    fun onActorPrefabSelected(prefab: EntityPrefab) {
+    fun onEntityPrefabSelected(prefab: EntityPrefab) {
         brushTool.selectPrefab(prefab)
         fillTool.selectPrefab(prefab)
         roomTool.selectedPrefab = prefab

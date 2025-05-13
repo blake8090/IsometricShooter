@@ -21,21 +21,21 @@ class PlayerInteractionSystem(
     private val elevatorModule: ElevatorModule
 ) : System {
     override fun update(deltaTime: Float) {
-        world.entities.each<Player> { actor, _ ->
-            update(actor)
+        world.entities.each<Player> { entity, _ ->
+            update(entity)
         }
     }
 
     private fun update(entity: Entity) {
         hudModule.hideInteractionText()
 
-        val doorActor = doorModule.getNearestDoor(entity.pos, PLAYER_DOOR_ACTION_RADIUS)
-        val elevatorActor = elevatorModule.findElevatorUnderneath(entity)
+        val doorEntity = doorModule.getNearestDoor(entity.pos, PLAYER_DOOR_ACTION_RADIUS)
+        val elevatorEntity = elevatorModule.findElevatorUnderneath(entity)
 
-        if (doorActor != null) {
-            handleDoor(entity, doorActor)
-        } else if (elevatorActor != null) {
-            handleElevator(elevatorActor)
+        if (doorEntity != null) {
+            handleDoor(entity, doorEntity)
+        } else if (elevatorEntity != null) {
+            handleElevator(elevatorEntity)
         }
     }
 

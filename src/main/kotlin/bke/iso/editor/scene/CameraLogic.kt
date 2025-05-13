@@ -27,7 +27,7 @@ class CameraLogic(
     private val mouseDragAdapter = MouseDragAdapter(com.badlogic.gdx.Input.Buttons.MIDDLE)
     private val cameraPanScale = Vector2(0.5f, 0.5f)
 
-    private val cameraActor =
+    private val cameraEntity =
         world.entities.create(
             Vector3(),
             Sprite(
@@ -65,29 +65,29 @@ class CameraLogic(
         }
 
         input.onAction("sceneTabCameraMoveCamera") {
-            moveCameraActor()
+            moveCameraEntity()
         }
 
         mouseScrollAdapter.onScroll { _, y ->
             renderer.zoomCamera(cameraZoomIncrements * y.sign)
         }
 
-        cameraActor.getCollisionBox()?.let { box ->
+        cameraEntity.getCollisionBox()?.let { box ->
             renderer.fgShapes.addBox(box, 1f, Color.CYAN)
         }
 
         panCamera()
     }
 
-    private fun moveCameraActor() {
+    private fun moveCameraEntity() {
         var z = sceneMode.selectedLayer.toFloat()
-        // apply a small offset so that the camera always appears above actors on the same z level
+        // apply a small offset so that the camera always appears above entities on the same z level
         if (z >= 0f) {
             z += 0.01f
         }
 
         val pos = toWorld(renderer.pointer.pos, z)
-        cameraActor.moveTo(pos.x, pos.y, pos.z)
+        cameraEntity.moveTo(pos.x, pos.y, pos.z)
     }
 
     private fun panCamera() {
@@ -104,6 +104,6 @@ class CameraLogic(
     }
 
     fun setCameraAsOcclusionTarget() {
-        renderer.occlusion.target = cameraActor
+        renderer.occlusion.target = cameraEntity
     }
 }

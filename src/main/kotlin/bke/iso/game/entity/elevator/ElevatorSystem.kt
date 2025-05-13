@@ -8,8 +8,8 @@ import bke.iso.engine.world.entity.Entity
 class ElevatorSystem(private val world: World) : System {
 
     override fun update(deltaTime: Float) {
-        world.entities.each<ElevatorTask> { actor, elevatorTask ->
-            update(actor, elevatorTask)
+        world.entities.each<ElevatorTask> { entity, elevatorTask ->
+            update(entity, elevatorTask)
         }
     }
 

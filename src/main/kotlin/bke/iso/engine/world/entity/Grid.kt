@@ -8,22 +8,22 @@ import com.badlogic.gdx.utils.OrderedSet
 
 class Grid {
 
-    val actors = OrderedSet<Entity>()
+    val entities = OrderedSet<Entity>()
 
-    private val actorsByLocation = OrderedMap<Location, ObjectSet<Entity>>()
+    private val entitiesByLocation = OrderedMap<Location, ObjectSet<Entity>>()
     private val locationsByEntity = ObjectMap<Entity, ObjectSet<Location>>()
 
     init {
         // improves performance when removing objects
-        actors.orderedItems().ordered = false
+        entities.orderedItems().ordered = false
     }
 
     operator fun get(location: Location): ObjectSet<Entity> =
-        actorsByLocation[location] ?: ObjectSet()
+        entitiesByLocation[location] ?: ObjectSet()
 
     fun update(entity: Entity) {
-        if (!actors.contains(entity)) {
-            actors.add(entity)
+        if (!entities.contains(entity)) {
+            entities.add(entity)
         }
 
         removeLocations(entity)
@@ -31,15 +31,15 @@ class Grid {
         for (location in entity.getLocations()) {
             // TODO: add some verification here, like that there can't be more than one tile entity in a location
             getOrPutLocations(entity).add(location)
-            getOrPutActors(location).add(entity)
+            getOrPutEntities(location).add(entity)
         }
     }
 
-    private fun getOrPutActors(location: Location): ObjectSet<Entity> {
-        if (!actorsByLocation.containsKey(location)) {
-            actorsByLocation.put(location, ObjectSet())
+    private fun getOrPutEntities(location: Location): ObjectSet<Entity> {
+        if (!entitiesByLocation.containsKey(location)) {
+            entitiesByLocation.put(location, ObjectSet())
         }
-        return actorsByLocation[location]
+        return entitiesByLocation[location]
     }
 
     private fun getOrPutLocations(entity: Entity): ObjectSet<Location> {
@@ -51,19 +51,19 @@ class Grid {
 
     fun delete(entity: Entity) {
         removeLocations(entity)
-        actors.remove(entity)
+        entities.remove(entity)
     }
 
     private fun removeLocations(entity: Entity) {
         val locations = locationsByEntity.remove(entity) ?: return
         for (location in locations) {
-            actorsByLocation[location]?.remove(entity)
+            entitiesByLocation[location]?.remove(entity)
         }
     }
 
     fun clear() {
-        actors.clear()
-        actorsByLocation.clear()
+        entities.clear()
+        entitiesByLocation.clear()
         locationsByEntity.clear()
     }
 }

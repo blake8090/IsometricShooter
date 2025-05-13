@@ -30,7 +30,7 @@ class CombatModule(
     fun applyDamage(entity: Entity, damage: Float) {
         val health = entity.get<Health>() ?: return
         health.value = max(health.value - damage, 0f)
-        log.debug { "Actor $entity received damage: $damage Remaining health: ${health.value}" }
+        log.debug { "Entity $entity received damage: $damage Remaining health: ${health.value}" }
 
         if (entity.has<Player>()) {
             events.fire(PlayerHealthChangeEvent(health.value))
@@ -49,7 +49,7 @@ class CombatModule(
             return
         }
         world.delete(entity)
-        log.debug { "Actor $entity has been destroyed" }
+        log.debug { "Entity $entity has been destroyed" }
     }
 
     fun heal(entity: Entity) {

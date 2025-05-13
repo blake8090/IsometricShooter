@@ -14,9 +14,9 @@ abstract class OcclusionStrategy {
     abstract fun endFrame()
 
     protected fun occludes(renderable: EntityRenderable, targetRenderable: EntityRenderable): Boolean {
-        val actor = checkNotNull(renderable.entity)
+        val entity = checkNotNull(renderable.entity)
 
-        if (actor == targetRenderable.entity || !actor.has<Occlude>()) {
+        if (entity == targetRenderable.entity || !entity.has<Occlude>()) {
             return false
         }
 

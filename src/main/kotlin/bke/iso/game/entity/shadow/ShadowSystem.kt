@@ -28,7 +28,7 @@ class ShadowSystem(
         val sprite = entity.get<Sprite>() ?: return
 
         val parent = world.entities.find(shadow.parentId)
-        // if the parent is gone, clean up the leftover shadow actor
+        // if the parent is gone, clean up the leftover shadow entity
         if (parent == null) {
             world.delete(entity)
             return

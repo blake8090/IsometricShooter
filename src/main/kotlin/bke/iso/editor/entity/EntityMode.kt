@@ -37,7 +37,7 @@ class EntityMode(private val engine: Engine) : EditorMode() {
     private var gridWidth = 5
     private var gridLength = 5
 
-    private val referenceActor = world.entities.create(Vector3())
+    private val referenceEntity = world.entities.create(Vector3())
     private val components = mutableListOf<Component>()
     private var selectedComponent: Component? = null
 
@@ -52,9 +52,9 @@ class EntityMode(private val engine: Engine) : EditorMode() {
         cameraLogic.start()
 
         with(engine.input.keyMouse) {
-            bindKey("actorModeModifier", Input.Keys.CONTROL_LEFT, ButtonState.DOWN)
-            bindKey("actorModeUndo", Input.Keys.Z, ButtonState.PRESSED)
-            bindKey("actorModeRedo", Input.Keys.Y, ButtonState.PRESSED)
+            bindKey("entityModeModifier", Input.Keys.CONTROL_LEFT, ButtonState.DOWN)
+            bindKey("entityModeUndo", Input.Keys.Z, ButtonState.PRESSED)
+            bindKey("entityModeRedo", Input.Keys.Y, ButtonState.PRESSED)
         }
     }
 
@@ -76,8 +76,8 @@ class EntityMode(private val engine: Engine) : EditorMode() {
             }
         }
 
-        renderer.fgShapes.addPoint(referenceActor.pos, 1.25f, Color.RED)
-        referenceActor.getCollisionBox()?.let { box ->
+        renderer.fgShapes.addPoint(referenceEntity.pos, 1.25f, Color.RED)
+        referenceEntity.getCollisionBox()?.let { box ->
             renderer.fgShapes.addBox(box, 1f, Color.CYAN)
             renderer.fgShapes.addPoint(box.pos, 1.5f, Color.CYAN)
         }
@@ -123,35 +123,35 @@ class EntityMode(private val engine: Engine) : EditorMode() {
             }
 
             is NewComponentTypeAdded -> {
-                val command = AddComponentCommand(components, referenceActor, event.componentType)
+                val command = AddComponentCommand(components, referenceEntity, event.componentType)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
         }
     }
 
     private fun loadPrefab() {
-        val file = engine.dialogs.showOpenFileDialog("Actor Prefab", "actor") ?: return
+        val file = engine.dialogs.showOpenFileDialog("Entity Prefab", "actor") ?: return
         val prefab = engine.serializer.read<EntityPrefab>(file.readText())
 
         components.clear()
         components.addAll(prefab.components)
 
-        referenceActor.components.clear()
-        components.withFirstInstance<Sprite>(referenceActor::add)
-        components.withFirstInstance<Collider>(referenceActor::add)
+        referenceEntity.components.clear()
+        components.withFirstInstance<Sprite>(referenceEntity::add)
+        components.withFirstInstance<Collider>(referenceEntity::add)
 
         resetCommands()
-        log.info { "Loaded actor prefab: '${file.canonicalPath}'" }
+        log.info { "Loaded entity prefab: '${file.canonicalPath}'" }
     }
 
     private fun savePrefab() {
-        val file = engine.dialogs.showSaveFileDialog("Actor Prefab", "actor") ?: return
+        val file = engine.dialogs.showSaveFileDialog("Entity Prefab", "actor") ?: return
         val name = file.nameWithoutExtension
 
         val content = engine.serializer.write(EntityPrefab(file.nameWithoutExtension, components))
         file.writeText(content)
 
-        log.info { "Saved actor prefab: '$name'" }
+        log.info { "Saved entity prefab: '$name'" }
     }
 
     class OpenClicked : Event

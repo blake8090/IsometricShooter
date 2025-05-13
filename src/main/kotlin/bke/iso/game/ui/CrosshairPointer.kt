@@ -75,8 +75,8 @@ class CrosshairPointer(
     }
 
     private fun getWeaponRecoil(): Float {
-        val playerActor = world.entities.find<Player>() ?: return 0f
-        val weapon = weaponsModule.getSelectedWeapon(playerActor)
+        val playerEntity = world.entities.find<Player>() ?: return 0f
+        val weapon = weaponsModule.getSelectedWeapon(playerEntity)
         return if (weapon is RangedWeapon) {
             weapon.recoil
         } else {

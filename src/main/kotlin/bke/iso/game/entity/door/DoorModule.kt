@@ -59,9 +59,9 @@ class DoorModule(
     }
 
     fun getNearestDoor(pos: Vector3, range: Float): Entity? {
-        for (actor in world.entities.findAll<Door>()) {
-            if (actor.pos.dst(pos) <= range) {
-                return actor
+        for (entity in world.entities.findAll<Door>()) {
+            if (entity.pos.dst(pos) <= range) {
+                return entity
             }
         }
         return null

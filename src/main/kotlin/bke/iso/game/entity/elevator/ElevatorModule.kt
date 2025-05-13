@@ -27,7 +27,7 @@ class ElevatorModule(private val collisions: Collisions) : Module {
             "Expected collision box for $entity"
         }
 
-        // push actor down to make sure it's completely flush with the ground
+        // push entity down to make sure it's completely flush with the ground
         entity.move(0f, 0f, box.size.z * -1f)
 
         log.debug { "Setup elevator $entity" }

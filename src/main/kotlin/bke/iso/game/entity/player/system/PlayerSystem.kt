@@ -39,8 +39,8 @@ class PlayerSystem(
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
-        world.entities.each<Player> { actor, player ->
-            updatePlayer(actor, player)
+        world.entities.each<Player> { entity, player ->
+            updatePlayer(entity, player)
 
             input.onAction("toggleDebug") {
                 renderer.debug.toggle()
@@ -112,18 +112,18 @@ class PlayerSystem(
     }
 
     private fun handleCollision(playerEntity: Entity, collision: Collision) {
-        val otherActor = collision.entity
+        val otherEntity = collision.entity
 
-        if (otherActor.has<Medkit>()) {
+        if (otherEntity.has<Medkit>()) {
             val inventory = playerEntity.getOrAdd(Inventory())
             inventory.numMedkits++
             log.debug { "Picked up medkit. Player now has ${inventory.numMedkits} medkits" }
-            world.delete(otherActor)
-        } else if (otherActor.has<WeaponPickup>()) {
+            world.delete(otherEntity)
+        } else if (otherEntity.has<WeaponPickup>()) {
             log.debug { "Picking up weapon" }
-            val weaponName = otherActor.get<WeaponPickup>()!!.name
+            val weaponName = otherEntity.get<WeaponPickup>()!!.name
             weaponsModule.equip(playerEntity, weaponName)
-            world.delete(otherActor)
+            world.delete(otherEntity)
         }
     }
 

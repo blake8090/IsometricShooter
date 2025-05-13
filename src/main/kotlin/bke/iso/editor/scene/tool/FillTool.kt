@@ -56,7 +56,7 @@ class FillTool(
     }
 
     fun selectPrefab(prefab: EntityPrefab) {
-        log.debug { "actor prefab '${prefab.name}' selected" }
+        log.debug { "entity prefab '${prefab.name}' selected" }
         selection = EntitySelection(prefab)
     }
 

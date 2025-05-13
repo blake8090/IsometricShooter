@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Scene(
     val version: String,
-    val actors: List<EntityRecord>,
+    val entities: List<EntityRecord>,
     val tiles: List<TileRecord>,
     @Contextual
     val backgroundColor: Color? = null

@@ -55,8 +55,8 @@ class FlyingTurretSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.entities.each<FlyingTurret> { actor, flyingTurret ->
-            update(actor, flyingTurret, deltaTime)
+        world.entities.each<FlyingTurret> { entity, flyingTurret ->
+            update(entity, flyingTurret, deltaTime)
         }
     }
 
@@ -164,9 +164,9 @@ class FlyingTurretSystem(
     }
 
     private fun findAndShootPlayer(entity: Entity) {
-        val playerActor = world.entities.find<Player>() ?: return
-        if (canSee(entity, playerActor)) {
-            events.fire(WeaponsModule.ShootEvent(entity, getTargetPos(playerActor)))
+        val playerEntity = world.entities.find<Player>() ?: return
+        if (canSee(entity, playerEntity)) {
+            events.fire(WeaponsModule.ShootEvent(entity, getTargetPos(playerEntity)))
         }
 
         val weapon = weaponsModule.getSelectedWeapon(entity)

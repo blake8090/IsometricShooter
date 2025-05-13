@@ -91,13 +91,13 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         cameraLogic.update()
 
         drawGrid()
-        drawSelectedActor()
+        drawSelectedEntity()
 
         for (buildingName in world.buildings.getAll()) {
             drawBuilding(buildingName)
         }
 
-        engine.world.entities.each<Tags>(::drawActorTags)
+        engine.world.entities.each<Tags>(::drawEntityTags)
 
         toolLogic.update()
 
@@ -172,13 +172,13 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             renderer.bgShapes
         }
 
-    private fun drawSelectedActor() {
-        val actor = selectedEntity ?: return
-        val collisionBox = actor.getCollisionBox() ?: Box(actor.pos, Vector3(1f, 1f, 1f))
+    private fun drawSelectedEntity() {
+        val entity = selectedEntity ?: return
+        val collisionBox = entity.getCollisionBox() ?: Box(entity.pos, Vector3(1f, 1f, 1f))
         renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
     }
 
-    private fun drawActorTags(entity: Entity, tags: Tags) {
+    private fun drawEntityTags(entity: Entity, tags: Tags) {
         if (tags.tags.isEmpty() || selectedEntity == entity) {
             return
         }
@@ -220,7 +220,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TilePrefabSelected -> toolLogic.onTilePrefabSelected(event.prefab)
-            is EntityPrefabSelected -> toolLogic.onActorPrefabSelected(event.prefab)
+            is EntityPrefabSelected -> toolLogic.onEntityPrefabSelected(event.prefab)
             is EntitySelected -> selectedEntity = event.entity
 
             is LayerIncreased -> selectedLayer++
@@ -285,9 +285,9 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private fun saveScene() {
         val file = engine.dialogs.showSaveFileDialog("Scene", "scene") ?: return
 
-        val actors = mutableListOf<EntityRecord>()
-        world.entities.each<EntityPrefabReference> { actor, reference ->
-            actors.add(createActorRecord(actor, reference))
+        val entities = mutableListOf<EntityRecord>()
+        world.entities.each<EntityPrefabReference> { entity, reference ->
+            entities.add(createEntityRecord(entity, reference))
         }
 
         val tiles = mutableListOf<TileRecord>()
@@ -301,13 +301,13 @@ class SceneMode(private val engine: Engine) : EditorMode() {
             )
         }
 
-        val scene = Scene("1", actors, tiles)
+        val scene = Scene("1", entities, tiles)
         val content = engine.serializer.format.encodeToString(scene)
         file.writeText(content)
         log.info { "Saved scene: '${file.canonicalPath}'" }
     }
 
-    private fun createActorRecord(entity: Entity, reference: EntityPrefabReference): EntityRecord {
+    private fun createEntityRecord(entity: Entity, reference: EntityPrefabReference): EntityRecord {
         val componentOverrides = mutableListOf<Component>()
         entity.with<Tags>(componentOverrides::add)
 

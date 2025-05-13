@@ -49,8 +49,8 @@ class OptimizedEntityRenderer(
     private val renderablesByRow = mutableMapOf<Float, Array<EntityRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch, world: World) {
-        for (actor in world.entities) {
-            addRenderable(actor)
+        for (entity in world.entities) {
+            addRenderable(entity)
         }
 
         for ((_, renderables) in renderablesByRow) {
@@ -92,7 +92,7 @@ class OptimizedEntityRenderer(
 
         occlusion.prepare(renderable)
 
-        debug.category("actors").add(entity)
+        debug.category("entities").add(entity)
     }
 
     private fun inFrustum(renderable: EntityRenderable): Boolean =
@@ -174,8 +174,8 @@ class OptimizedEntityRenderer(
             batch.shader = null
         }
 
-        renderable.entity?.let { actor ->
-            events.fire(DrawEntityEvent(actor, batch))
+        renderable.entity?.let { entity ->
+            events.fire(DrawEntityEvent(entity, batch))
         }
     }
 

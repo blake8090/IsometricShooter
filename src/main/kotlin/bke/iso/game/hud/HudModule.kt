@@ -63,8 +63,8 @@ class HudModule(
     }
 
     private fun findPlayerWeapon(): Weapon? {
-        val playerActor = world.entities.find<Player>() ?: return null
-        return weaponsModule.getSelectedWeapon(playerActor)
+        val playerEntity = world.entities.find<Player>() ?: return null
+        return weaponsModule.getSelectedWeapon(playerEntity)
     }
 
     private fun getRangedWeaponText(weapon: RangedWeapon): String {

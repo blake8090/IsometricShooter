@@ -13,7 +13,7 @@ data class DeleteTagCommand(
 
     override fun execute() {
         val tags = checkNotNull(entity.get<Tags>()) {
-            "Expected actor $entity to have a Tags component"
+            "Expected entity $entity to have a Tags component"
         }
 
         val tagsList = tags.tags.toMutableList()
@@ -25,7 +25,7 @@ data class DeleteTagCommand(
 
     override fun undo() {
         val tags = checkNotNull(entity.get<Tags>()) {
-            "Expected actor $entity to have a Tags component"
+            "Expected entity $entity to have a Tags component"
         }
 
         val tagsList = tags.tags.toMutableList()

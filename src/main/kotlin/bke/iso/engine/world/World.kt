@@ -17,9 +17,9 @@ class World(events: Events) : EngineModule() {
     private val deletedEntities = mutableSetOf<Entity>()
 
     override fun update(deltaTime: Float) {
-        for (actor in deletedEntities) {
-            entities.delete(actor)
-            buildings.remove(actor)
+        for (entity in deletedEntities) {
+            entities.delete(entity)
+            buildings.remove(entity)
         }
         deletedEntities.clear()
     }

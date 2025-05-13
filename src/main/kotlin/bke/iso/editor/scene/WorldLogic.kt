@@ -30,7 +30,7 @@ class WorldLogic(
         tilesByLocation.clear()
         world.clear()
 
-        for (record in scene.actors) {
+        for (record in scene.entities) {
             load(record)
         }
 
@@ -43,25 +43,25 @@ class WorldLogic(
 
     private fun load(record: EntityRecord) {
         val prefab = assets.get<EntityPrefab>(record.prefab)
-        val actor = createReferenceActor(prefab, record.pos)
+        val entity = createReferenceEntity(prefab, record.pos)
 
         for (component in record.componentOverrides) {
-            actor.add(component)
+            entity.add(component)
         }
 
         val building = record.building
         if (!building.isNullOrBlank()) {
-            world.buildings.add(actor, building)
+            world.buildings.add(entity, building)
         }
     }
 
     private fun load(record: TileRecord) {
         val prefab = assets.get<TilePrefab>(record.prefab)
-        val actor = createReferenceActor(prefab, record.location)
+        val entity = createReferenceEntity(prefab, record.location)
 
         val building = record.building
         if (!building.isNullOrBlank()) {
-            world.buildings.add(actor, building)
+            world.buildings.add(entity, building)
         }
     }
 
@@ -73,20 +73,20 @@ class WorldLogic(
     }
 
     fun deleteTile(location: Location) {
-        val actor = tilesByLocation[location] ?: return
-        delete(actor)
+        val entity = tilesByLocation[location] ?: return
+        delete(entity)
     }
 
     fun getTilePrefabName(location: Location): String? {
-        val actor = tilesByLocation[location] ?: return null
-        val reference = checkNotNull(actor.get<TilePrefabReference>()) {
-            "Expected TilePrefabReference for actor $actor"
+        val entity = tilesByLocation[location] ?: return null
+        val reference = checkNotNull(entity.get<TilePrefabReference>()) {
+            "Expected TilePrefabReference for entity $entity"
         }
         return reference.prefab
     }
 
     /**
-     * Re-adds an existing actor into the world again.
+     * Re-adds an existing entity into the world again.
      */
     fun add(entity: Entity) {
         world.entities.create(
@@ -98,7 +98,7 @@ class WorldLogic(
         )
     }
 
-    fun createReferenceActor(prefab: EntityPrefab, pos: Vector3): Entity {
+    fun createReferenceEntity(prefab: EntityPrefab, pos: Vector3): Entity {
         val components = mutableSetOf<Component>()
         components.add(EntityPrefabReference(prefab.name))
 
@@ -121,20 +121,20 @@ class WorldLogic(
         return world.entities.create(pos, *components.toTypedArray())
     }
 
-    fun createReferenceActor(prefab: TilePrefab, location: Location): Entity {
+    fun createReferenceEntity(prefab: TilePrefab, location: Location): Entity {
         if (tileExists(location)) {
             error("Duplicate tile at location $location")
         }
 
-        val actor = world.entities.create(
+        val entity = world.entities.create(
             location,
             prefab.sprite.copy(),
             TilePrefabReference(prefab.name),
             Collider(Vector3(1f, 1f, 0f)),
-            Occlude() // manually ensure that the reference actor is included in the occlusion system
+            Occlude() // manually ensure that the reference entity is included in the occlusion system
         )
-        tilesByLocation[location] = actor
-        return actor
+        tilesByLocation[location] = entity
+        return entity
     }
 
     fun tileExists(location: Location) =

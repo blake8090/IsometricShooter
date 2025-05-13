@@ -23,12 +23,12 @@ class FloorOcclusionStrategy(private val floorHeight: Float) : OcclusionStrategy
     }
 
     private fun getFloor(renderable: EntityRenderable): Float {
-        val actor = checkNotNull(renderable.entity)
+        val entity = checkNotNull(renderable.entity)
         val bounds = checkNotNull(renderable.bounds)
 
         return if (renderable.entity!!.has<Tile>()) {
             floor(bounds.min.z / floorHeight)
-        } else if (actor.has<Elevator>()) {
+        } else if (entity.has<Elevator>()) {
             // elevators are always positioned so that the top of the collision box is flush with the ground
             floor(bounds.max.z / floorHeight)
         } else {

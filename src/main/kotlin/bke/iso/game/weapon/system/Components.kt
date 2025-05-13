@@ -17,7 +17,7 @@ data class Bullet(
 ) : Component
 
 /**
- * Provides an offset for projectiles when shooting a ranged weapon, relative to an actor's position.
+ * Provides an offset for projectiles when shooting a ranged weapon, relative to an entity's position.
  */
 @Serializable
 @SerialName("rangedWeaponOffset")

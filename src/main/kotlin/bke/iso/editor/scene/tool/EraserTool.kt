@@ -20,7 +20,7 @@ class EraserTool(
     private var highlightedEntity: Entity? = null
 
     override fun update() {
-        highlightedEntity = pickActor()
+        highlightedEntity = pickEntity()
     }
 
     override fun draw() {
@@ -31,22 +31,22 @@ class EraserTool(
     }
 
     override fun performAction(): EditorCommand? {
-        val actor = highlightedEntity
+        val entity = highlightedEntity
             ?: return null
 
-        previousType = getType(actor)
-        return DeleteEntityCommand(worldLogic, actor)
+        previousType = getType(entity)
+        return DeleteEntityCommand(worldLogic, entity)
     }
 
     override fun performMultiAction(): EditorCommand? {
-        val actor = highlightedEntity
+        val entity = highlightedEntity
             ?: return null
 
-        val type = getType(actor)
-        // avoids accidentally deleting tiles underneath an actor
+        val type = getType(entity)
+        // avoids accidentally deleting tiles underneath an entity
         return if (type == Type.TILE && previousType == Type.TILE) {
             previousType = type
-            DeleteEntityCommand(worldLogic, actor)
+            DeleteEntityCommand(worldLogic, entity)
         } else {
             null
         }

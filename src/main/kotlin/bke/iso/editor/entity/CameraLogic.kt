@@ -23,8 +23,8 @@ class CameraLogic(
         input.addInputProcessor(mouseDragAdapter)
         input.addInputProcessor(mouseScrollAdapter)
 
-        input.keyMouse.bindKey("actorModeResetZoom", com.badlogic.gdx.Input.Keys.Q, ButtonState.PRESSED)
-        input.keyMouse.bindKey("actorModeResetCamera", com.badlogic.gdx.Input.Keys.R, ButtonState.PRESSED)
+        input.keyMouse.bindKey("entityModeResetZoom", com.badlogic.gdx.Input.Keys.Q, ButtonState.PRESSED)
+        input.keyMouse.bindKey("entityModeResetCamera", com.badlogic.gdx.Input.Keys.R, ButtonState.PRESSED)
     }
 
     fun stop() {
@@ -33,11 +33,11 @@ class CameraLogic(
     }
 
     fun update() {
-        input.onAction("actorModeResetZoom") {
+        input.onAction("entityModeResetZoom") {
             renderer.resetCameraZoom()
         }
 
-        input.onAction("actorModeResetCamera") {
+        input.onAction("entityModeResetCamera") {
             renderer.setCameraPos(Vector3())
         }
 

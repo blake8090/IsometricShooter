@@ -7,12 +7,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Defines an actor's movement behavior as well as interactions with Colliders.
+ * Defines an entity's movement behavior as well as interactions with Colliders.
  *
  * @property DYNAMIC Responds to both gravity and impulses.
  * @property KINEMATIC Does not respond to gravity or impulses.
  * When colliding with a dynamic object, the object will always be pushed away using an impulse.
- * @property SOLID Does not move. Default body type for tiles and actors without a [PhysicsBody].
+ * @property SOLID Does not move. Default body type for tiles and entities without a [PhysicsBody].
  * @property GHOST Does not respond to gravity or impulses, and collisions are ignored.
  */
 enum class PhysicsMode {

@@ -80,9 +80,9 @@ class Entity(
     }
 
     /**
-     * Returns a list of locations that the actor spans, including its bounding box (if present).
+     * Returns a list of locations that the entity spans, including its bounding box (if present).
      *
-     * For example: An actor is positioned at (0, 0, 0) with a bounding box of size 1.
+     * For example: An entity is positioned at (0, 0, 0) with a bounding box of size 1.
      * The box's minimum is therefore (0, 0, 0) and the maximum is (1, 1, 1).
      *
      * The returned locations would be the following:
@@ -132,7 +132,7 @@ class Entity(
         return if (description != null) {
             "(${description.text} id:$id)"
         } else {
-            "(actor id:$id)"
+            "(entity id:$id)"
         }
     }
 }

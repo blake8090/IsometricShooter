@@ -18,7 +18,7 @@ data class PaintTileCommand(
 
     override fun execute() {
         worldLogic.deleteTile(location)
-        entity = worldLogic.createReferenceActor(prefab, location)
+        entity = worldLogic.createReferenceEntity(prefab, location)
     }
 
     override fun undo() {

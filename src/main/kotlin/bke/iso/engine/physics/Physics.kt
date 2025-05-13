@@ -25,8 +25,8 @@ class Physics(
     override val profilingEnabled = true
 
     override fun update(deltaTime: Float) {
-        world.entities.each { actor, body: PhysicsBody ->
-            update(actor, body, deltaTime)
+        world.entities.each { entity, body: PhysicsBody ->
+            update(entity, body, deltaTime)
         }
     }
 
@@ -74,7 +74,7 @@ class Physics(
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
         entity.move(collisionDelta)
 
-        // make sure actor doesn't overlap the collision side
+        // make sure entity doesn't overlap the collision side
         clampPosToCollisionSide(entity, collision)
 
         // erase velocity towards collision normal
@@ -102,8 +102,8 @@ class Physics(
         entity.move(delta)
 
         // bit of a hack to make vertical moving platforms work.
-        // the dynamic actor handles pushing down on the kinematic,
-        // while the kinematic pushes the dynamic actor upwards.
+        // the dynamic entity handles pushing down on the kinematic,
+        // while the kinematic pushes the dynamic entity upwards.
         // TODO: find a way to make this logic more generalized
         val other = collision.entity
         val otherBody = other.get<PhysicsBody>() ?: return
@@ -150,11 +150,11 @@ class Physics(
             }
 
             CollisionSide.TOP -> {
-                z = otherBox.max.z // actor origins are at the bottom of the collision box, not the center
+                z = otherBox.max.z // entity origins are at the bottom of the collision box, not the center
             }
 
             CollisionSide.BOTTOM -> {
-                z = otherBox.min.z - box.size.z // actor origins are at the bottom of the collision box, not the center
+                z = otherBox.min.z - box.size.z // entity origins are at the bottom of the collision box, not the center
             }
 
             CollisionSide.CORNER -> {

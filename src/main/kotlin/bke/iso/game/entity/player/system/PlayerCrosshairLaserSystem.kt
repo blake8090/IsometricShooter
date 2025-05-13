@@ -29,8 +29,8 @@ class PlayerCrosshairLaserSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.entities.each<Player> { actor, _ ->
-            update(actor)
+        world.entities.each<Player> { entity, _ ->
+            update(entity)
         }
     }
 

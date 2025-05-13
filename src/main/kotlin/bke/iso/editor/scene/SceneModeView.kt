@@ -127,7 +127,7 @@ class SceneModeView(
 
             if (ImGui.beginMenu("Mode")) {
                 ImGui.menuItem("Scene Editor", true)
-                if (ImGui.menuItem("Actor Editor", false)) {
+                if (ImGui.menuItem("Entity Editor", false)) {
                     events.fire(EditorModule.EntityModeSelected())
                 }
                 ImGui.beginDisabled()
@@ -148,8 +148,8 @@ class SceneModeView(
         ImGui.begin("Asset Browser")
 
         if (ImGui.beginTabBar("assetTypes")) {
-            if (ImGui.beginTabItem("Actors")) {
-                drawActorAssets()
+            if (ImGui.beginTabItem("Entities")) {
+                drawEntityAssets()
                 ImGui.endTabItem()
             }
 
@@ -163,7 +163,7 @@ class SceneModeView(
         ImGui.end()
     }
 
-    private fun drawActorAssets() {
+    private fun drawEntityAssets() {
         var column = 0
         for (prefab in assets.getAll<EntityPrefab>()) {
             val sprite = prefab
@@ -172,7 +172,7 @@ class SceneModeView(
                 ?: continue
 
             if (imageButton(sprite.texture)) {
-                log.debug { "Selected actor prefab ${prefab.name}" }
+                log.debug { "Selected entity prefab ${prefab.name}" }
                 events.fire(SceneMode.EntityPrefabSelected(prefab))
             }
             ImGui.setItemTooltip(prefab.name)

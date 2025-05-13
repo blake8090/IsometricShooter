@@ -16,7 +16,7 @@ data class FillTileCommand(
 
     private val log = KotlinLogging.logger {}
 
-    override val name: String = "FillActor"
+    override val name: String = "FillTile"
 
     private val entities = mutableListOf<Entity>()
 
@@ -33,15 +33,15 @@ data class FillTileCommand(
             for (y in yMin..yMax) {
                 val location = Location(x, y, box.min.z.toInt())
                 if (!worldLogic.tileExists(location)) {
-                    entities.add(worldLogic.createReferenceActor(prefab, location))
+                    entities.add(worldLogic.createReferenceEntity(prefab, location))
                 }
             }
         }
     }
 
     override fun undo() {
-        for (actor in entities) {
-            worldLogic.delete(actor)
+        for (entity in entities) {
+            worldLogic.delete(entity)
         }
     }
 }

@@ -12,12 +12,12 @@ data class PaintEntityCommand(
     private val pos: Vector3,
 ) : EditorCommand() {
 
-    override val name: String = "PaintActor"
+    override val name: String = "PaintEntity"
 
     private lateinit var entity: Entity
 
     override fun execute() {
-        entity = worldLogic.createReferenceActor(prefab, pos)
+        entity = worldLogic.createReferenceEntity(prefab, pos)
     }
 
     override fun undo() {

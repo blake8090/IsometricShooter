@@ -1,6 +1,6 @@
 {
     "version": "1",
-    "actors": [
+    "entities": [
         {
             "pos": {
                 "x": 20.0,

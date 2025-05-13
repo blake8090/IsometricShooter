@@ -32,7 +32,7 @@ class BrushTool(
     private val log = KotlinLogging.logger { }
 
     private val brushSprite = Sprite(alpha = 0f)
-    private val brushActor = world.entities.create(Vector3(), brushSprite)
+    private val brushEntity = world.entities.create(Vector3(), brushSprite)
     private var selection: Selection? = null
 
     override fun update() {
@@ -47,45 +47,45 @@ class BrushTool(
             pos.floor()
 
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                brushActor.with<Collider> { collider ->
+                brushEntity.with<Collider> { collider ->
                     pos.y -= collider.size.y
                 }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-                brushActor.with<Collider> { collider ->
+                brushEntity.with<Collider> { collider ->
                     pos.x -= collider.size.x
                 }
             }
         }
-        brushActor.moveTo(pos.x, pos.y, pos.z)
+        brushEntity.moveTo(pos.x, pos.y, pos.z)
     }
 
     private fun getBox() =
         if (selection is TileSelection) {
             Box.fromMinMax(
-                brushActor.pos,
-                brushActor.pos.add(1f, 1f, 0f)
+                brushEntity.pos,
+                brushEntity.pos.add(1f, 1f, 0f)
             )
         } else {
-            brushActor
+            brushEntity
                 .getCollisionBox()
                 ?: Box.fromMinMax(
-                    brushActor.pos,
-                    brushActor.pos.add(1f, 1f, 1f)
+                    brushEntity.pos,
+                    brushEntity.pos.add(1f, 1f, 1f)
                 )
         }
 
     override fun performAction(): EditorCommand? =
         when (val s = selection) {
-            is TileSelection -> paintTile(s.prefab, Location(brushActor.pos))
-            is EntitySelection -> PaintEntityCommand(worldLogic, s.prefab, brushActor.pos)
+            is TileSelection -> paintTile(s.prefab, Location(brushEntity.pos))
+            is EntitySelection -> PaintEntityCommand(worldLogic, s.prefab, brushEntity.pos)
             else -> null
         }
 
     override fun performMultiAction(): EditorCommand? =
         when (val s = selection) {
-            is TileSelection -> paintTile(s.prefab, Location(brushActor.pos))
+            is TileSelection -> paintTile(s.prefab, Location(brushEntity.pos))
             else -> null
         }
 
@@ -116,12 +116,12 @@ class BrushTool(
         brushSprite.offsetX = prefab.sprite.offsetX
         brushSprite.offsetY = prefab.sprite.offsetY
         brushSprite.scale = prefab.sprite.scale
-        // only need colliders when placing actors
-        brushActor.remove<Collider>()
+        // only need colliders when placing entities
+        brushEntity.remove<Collider>()
     }
 
     fun selectPrefab(prefab: EntityPrefab) {
-        log.debug { "actor prefab '${prefab.name}' selected" }
+        log.debug { "entity prefab '${prefab.name}' selected" }
         selection = EntitySelection(prefab)
 
         prefab.components.withFirstInstance<Sprite> { sprite ->
@@ -132,7 +132,7 @@ class BrushTool(
         }
 
         prefab.components.withFirstInstance<Collider> { collider ->
-            brushActor.add(collider.copy())
+            brushEntity.add(collider.copy())
         }
     }
 

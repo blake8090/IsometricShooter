@@ -19,18 +19,18 @@ class PlayerDataModule(private val world: World) : Module {
     private var savedData: PlayerData? = null
 
     fun saveData() {
-        val actor = world.entities.find<Player>() ?: return
+        val entity = world.entities.find<Player>() ?: return
 
-        val health = checkNotNull(actor.get<Health>()) {
-            "Expected Health for actor $actor"
+        val health = checkNotNull(entity.get<Health>()) {
+            "Expected Health for entity $entity"
         }
 
-        val numMedkits = actor
+        val numMedkits = entity
             .get<Inventory>()
             ?.numMedkits
             ?: 0
 
-        val weapon = actor
+        val weapon = entity
             .get<Inventory>()
             ?.selectedWeapon
 
@@ -40,10 +40,10 @@ class PlayerDataModule(private val world: World) : Module {
 
     fun loadData() {
         val data = savedData ?: return
-        val actor = world.entities.find<Player>() ?: return
+        val entity = world.entities.find<Player>() ?: return
 
-        actor.add(Health(data.maxHealth, data.health))
-        actor.add(Inventory(data.selectedWeapon, data.numMedkits))
+        entity.add(Health(data.maxHealth, data.health))
+        entity.add(Inventory(data.selectedWeapon, data.numMedkits))
 
         log.debug { "Loaded player data" }
     }

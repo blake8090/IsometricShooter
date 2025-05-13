@@ -12,15 +12,15 @@ import kotlin.reflect.KClass
 class Entities(private val events: Events) {
 
     private val grid = Grid()
-    private val actorIdLength = 12
-    private val actorIdSymbols: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    private val entityIdLength = 12
+    private val entityIdSymbols: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
     operator fun iterator() =
-        grid.actors.iterator()
+        grid.entities.iterator()
 
     fun create(location: Location, vararg components: Component): Entity =
         create(
-            generateActorId(),
+            generateEntityId(),
             location.x.toFloat(),
             location.y.toFloat(),
             location.z.toFloat(),
@@ -29,7 +29,7 @@ class Entities(private val events: Events) {
 
     fun create(pos: Vector3, vararg components: Component): Entity =
         create(
-            generateActorId(),
+            generateEntityId(),
             pos.x,
             pos.y,
             pos.z,
@@ -54,8 +54,8 @@ class Entities(private val events: Events) {
         return entity
     }
 
-    private fun generateActorId() =
-        List(actorIdLength) { actorIdSymbols.random() }.joinToString("")
+    private fun generateEntityId() =
+        List(entityIdLength) { entityIdSymbols.random() }.joinToString("")
 
     fun delete(entity: Entity) {
         grid.delete(entity)
@@ -66,14 +66,14 @@ class Entities(private val events: Events) {
     }
 
     fun get(id: String): Entity =
-        grid.actors
-            .find { actor -> actor.id == id }
-            ?: throw IllegalArgumentException("No actor found with id $id")
+        grid.entities
+            .find { entity -> entity.id == id }
+            ?: throw IllegalArgumentException("No entity found with id $id")
 
     fun <T : Component> each(type: KClass<out T>, action: (Entity, T) -> Unit) {
-        for (actor in grid.actors.toList()) {
-            val component = actor.get(type) ?: continue
-            action.invoke(actor, component)
+        for (entity in grid.entities.toList()) {
+            val component = entity.get(type) ?: continue
+            action.invoke(entity, component)
         }
     }
 
@@ -81,21 +81,21 @@ class Entities(private val events: Events) {
         each(T::class, action)
 
     fun <T : Component> find(type: KClass<out T>): Entity? =
-        grid.actors
-            .find { actor ->
-                actor.components.containsKey(type)
+        grid.entities
+            .find { entity ->
+                entity.components.containsKey(type)
             }
 
     inline fun <reified T : Component> find(): Entity? =
         find(T::class)
 
     fun find(id: String): Entity? =
-        grid.actors
-            .find { actor -> actor.id == id }
+        grid.entities
+            .find { entity -> entity.id == id }
 
     fun <T : Component> findAll(type: KClass<out T>): List<Entity> =
-        grid.actors
-            .filter { actor -> actor.components.containsKey(type) }
+        grid.entities
+            .filter { entity -> entity.components.containsKey(type) }
 
     inline fun <reified T : Component> findAll(): List<Entity> =
         findAll(T::class)

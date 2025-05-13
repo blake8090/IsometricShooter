@@ -20,23 +20,23 @@ class PointerTool(
     private var highlighted: Entity? = null
 
     override fun update() {
-        highlighted = pickActor()
+        highlighted = pickEntity()
     }
 
     override fun draw() {
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
-        highlighted?.let { actor ->
-            val collisionBox = actor.getCollisionBox() ?: Box(actor.pos, Vector3(1f, 1f, 1f))
+        highlighted?.let { entity ->
+            val collisionBox = entity.getCollisionBox() ?: Box(entity.pos, Vector3(1f, 1f, 1f))
             renderer.fgShapes.addBox(collisionBox, 1f, Color.WHITE)
         }
     }
 
     override fun performAction(): EditorCommand? {
-        highlighted?.let { actor ->
-            events.fire(SceneMode.EntitySelected(actor))
+        highlighted?.let { entity ->
+            events.fire(SceneMode.EntitySelected(entity))
         }
-        // we don't need to undo or redo selecting an actor, so no commands necessary
+        // we don't need to undo or redo selecting an entity, so no commands necessary
         return null
     }
 

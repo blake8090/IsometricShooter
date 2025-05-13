@@ -29,8 +29,8 @@ class BulletSystem(
     private val log = KotlinLogging.logger {}
 
     override fun update(deltaTime: Float) {
-        world.entities.each<Bullet> { bulletActor, bullet ->
-            update(bulletActor, bullet)
+        world.entities.each<Bullet> { entity, bullet ->
+            update(entity, bullet)
         }
     }
 
@@ -132,11 +132,11 @@ class BulletSystem(
             }
 
             CollisionSide.TOP -> {
-                z = otherBox.max.z // actor origins are at the bottom of the collision box, not the center
+                z = otherBox.max.z // entity origins are at the bottom of the collision box, not the center
             }
 
             CollisionSide.BOTTOM -> {
-                z = otherBox.min.z - box.size.z // actor origins are at the bottom of the collision box, not the center
+                z = otherBox.min.z - box.size.z // entity origins are at the bottom of the collision box, not the center
             }
 
             CollisionSide.CORNER -> {

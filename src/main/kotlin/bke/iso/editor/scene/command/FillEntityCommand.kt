@@ -17,7 +17,7 @@ data class FillEntityCommand(
 
     private val log = KotlinLogging.logger {}
 
-    override val name: String = "FillActor"
+    override val name: String = "FillEntity"
 
     private val entities = mutableListOf<Entity>()
 
@@ -47,12 +47,12 @@ data class FillEntityCommand(
 
     private fun create(prefab: EntityPrefab, x: Float, y: Float, z: Float) {
         val pos = Vector3(x, y, z)
-        entities.add(worldLogic.createReferenceActor(prefab, pos))
+        entities.add(worldLogic.createReferenceEntity(prefab, pos))
     }
 
     override fun undo() {
-        for (actor in entities) {
-            worldLogic.delete(actor)
+        for (entity in entities) {
+            worldLogic.delete(entity)
         }
     }
 }

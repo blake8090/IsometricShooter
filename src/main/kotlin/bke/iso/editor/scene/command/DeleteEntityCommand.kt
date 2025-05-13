@@ -9,7 +9,7 @@ data class DeleteEntityCommand(
     private val entity: Entity
 ) : EditorCommand() {
 
-    override val name: String = "DeleteActor"
+    override val name: String = "DeleteEntity"
 
     override fun execute() {
         worldLogic.delete(entity)

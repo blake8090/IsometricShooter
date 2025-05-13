@@ -14,8 +14,8 @@ class HealSystem(
 ) : System {
 
     override fun update(deltaTime: Float) {
-        world.entities.each<HealEffect> { actor, healEffect ->
-            update(actor, healEffect, deltaTime)
+        world.entities.each<HealEffect> { entity, healEffect ->
+            update(entity, healEffect, deltaTime)
         }
     }
 

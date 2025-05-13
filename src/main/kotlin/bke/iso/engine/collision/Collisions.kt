@@ -45,7 +45,7 @@ class Collisions(
         world
             .entities
             .findAllAt(point)
-            .mapNotNullTo(mutableSetOf()) { actor -> checkCollision(point, actor) }
+            .mapNotNullTo(mutableSetOf()) { entity -> checkCollision(point, entity) }
 
     private fun checkCollision(point: Vector3, entity: Entity): PointCollision? {
         val box = entity.getCollisionBox()
@@ -59,21 +59,21 @@ class Collisions(
     fun checkCollisions(box: Box): Set<Collision> {
         renderer.debug.category("collisions").addBox(box, 1f, Color.SKY)
         val collisions = mutableSetOf<Collision>()
-        for (actor in world.entities.findAllIn(box)) {
-            checkCollision(box, actor)?.let(collisions::add)
+        for (entity in world.entities.findAllIn(box)) {
+            checkCollision(box, entity)?.let(collisions::add)
         }
         return collisions
     }
 
-    private fun checkCollision(box: Box, entity: Entity): Collision? {
-        val actorBox = entity.getCollisionBox()
-        return if (actorBox == null || !actorBox.intersects(box)) {
+    private fun checkCollision(box: Box, other: Entity): Collision? {
+        val otherBox = other.getCollisionBox()
+        return if (otherBox == null || !otherBox.intersects(box)) {
             null
         } else {
             Collision(
-                entity = entity,
-                box = actorBox,
-                distance = box.dst(actorBox),
+                entity = other,
+                box = otherBox,
+                distance = box.dst(otherBox),
                 // TODO: find collision side
                 side = CollisionSide.CORNER
             )
@@ -92,7 +92,7 @@ class Collisions(
         return world
             .entities
             .findAllIn(area)
-            .mapNotNull { actor -> checkLineCollision(start, end, ray, actor) }
+            .mapNotNull { entity -> checkLineCollision(start, end, ray, entity) }
             .toSet()
     }
 
@@ -142,14 +142,14 @@ class Collisions(
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()
-        for (otherActor in world.entities.findAllIn(projectedBox)) {
-            if (entity == otherActor) {
+        for (otherEntity in world.entities.findAllIn(projectedBox)) {
+            if (entity == otherEntity) {
                 continue
             }
 
-            otherActor.get<DebugSettings>()?.collisionBoxSelected = true
+            otherEntity.get<DebugSettings>()?.collisionBoxSelected = true
 
-            val collision = predictCollision(box, delta, otherActor)
+            val collision = predictCollision(box, delta, otherEntity)
             if (collision != null) {
                 recordCollision(entity, collision)
                 collisions.add(collision)
@@ -160,13 +160,13 @@ class Collisions(
     }
 
     private fun predictCollision(box: Box, delta: Vector3, entity: Entity): PredictedCollision? {
-        val actorBox = entity.getCollisionBox() ?: return null
-        val sweptCollision = sweepTest(box, actorBox, delta) ?: return null
+        val collisionBox = entity.getCollisionBox() ?: return null
+        val sweptCollision = sweepTest(box, collisionBox, delta) ?: return null
 
         return PredictedCollision(
             entity = entity,
-            box = actorBox,
-            distance = box.dst(actorBox),
+            box = collisionBox,
+            distance = box.dst(collisionBox),
             collisionTime = sweptCollision.collisionTime,
             hitNormal = sweptCollision.hitNormal,
             side = getCollisionSide(sweptCollision.hitNormal)

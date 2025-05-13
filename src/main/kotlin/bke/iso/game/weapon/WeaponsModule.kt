@@ -47,7 +47,7 @@ class WeaponsModule(
         if (properties is RangedWeaponProperties) {
             val inventory = entity.getOrAdd(Inventory())
             inventory.selectedWeapon = RangedWeapon(name, properties.magSize)
-            log.debug { "Actor $entity equipped weapon '$name'" }
+            log.debug { "Entity $entity equipped weapon '$name'" }
         }
     }
 
@@ -77,7 +77,7 @@ class WeaponsModule(
             return
         }
 
-        log.debug { "Actor '$entity' is reloading weapon '${weapon.name}'" }
+        log.debug { "Entity '$entity' is reloading weapon '${weapon.name}'" }
         val properties = getProperties(weapon)
         weapon.reloadCoolDown = properties.reloadTime
     }
