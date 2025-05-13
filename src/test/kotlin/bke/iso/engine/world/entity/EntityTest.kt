@@ -1,8 +1,7 @@
-package bke.iso.engine.world
+package bke.iso.engine.world.entity
 
 import bke.iso.engine.math.Location
 import bke.iso.engine.collision.Collider
-import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -43,7 +42,7 @@ class EntityTest : StringSpec({
         entity.add(
             Collider(
                 Vector3(1f, 1f, 1f),
-                // center box on actor's position
+                // center box on entity's position
                 Vector3(-0.5f, -0.5f, -0.5f)
             )
         )
