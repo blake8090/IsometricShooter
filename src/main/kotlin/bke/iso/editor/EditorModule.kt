@@ -1,7 +1,9 @@
 package bke.iso.editor
 
-import bke.iso.editor.entity.EntityMode
-import bke.iso.editor.scene.SceneMode
+import bke.iso.editor.core.BaseEditor
+import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.entity.EntityEditor
+import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
@@ -10,38 +12,38 @@ class EditorModule(engine: Engine) : Module {
 
     override val alwaysActive: Boolean = true
 
-    private val sceneMode = SceneMode(engine)
-    private val entityMode = EntityMode(engine)
+    private val sceneEditor = SceneEditor(engine)
+    private val entityEditor = EntityEditor(engine)
 
-    private var selectedMode: EditorMode? = null
+    private var selectedEditor: BaseEditor? = null
 
     override fun stop() {
-        selectedMode?.stop()
-        selectedMode = null
+        selectedEditor?.stop()
+        selectedEditor = null
     }
 
     override fun update(deltaTime: Float) {
-        selectedMode?.update()
+        selectedEditor?.update()
     }
 
     override fun handleEvent(event: Event) {
         when (event) {
-            is EntityModeSelected -> selectMode(entityMode)
-            is SceneModeSelected -> selectMode(sceneMode)
-            is ExecuteCommand -> selectedMode?.execute(event.command)
+            is EntityEditorSelected -> startEditor(entityEditor)
+            is SceneEditorSelected -> startEditor(sceneEditor)
+            is ExecuteCommand -> selectedEditor?.executeCommand(event.command)
             is EditorClosed -> stop()
-            else -> selectedMode?.handleEvent(event)
+            else -> selectedEditor?.handleEvent(event)
         }
     }
 
-    private fun selectMode(editorMode: EditorMode) {
-        selectedMode?.stop()
-        editorMode.start()
-        selectedMode = editorMode
+    private fun startEditor(editor: BaseEditor) {
+        selectedEditor?.stop()
+        editor.start()
+        selectedEditor = editor
     }
 
-    class EntityModeSelected : Event
-    class SceneModeSelected : Event
+    class EntityEditorSelected : Event
+    class SceneEditorSelected : Event
     data class ExecuteCommand(val command: EditorCommand) : Event
     class EditorClosed : Event
 }

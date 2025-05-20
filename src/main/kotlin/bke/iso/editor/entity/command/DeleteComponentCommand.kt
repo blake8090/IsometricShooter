@@ -1,6 +1,6 @@
 package bke.iso.editor.entity.command
 
-import bke.iso.editor.EditorCommand
+import bke.iso.editor.core.EditorCommand
 import bke.iso.engine.world.entity.Component
 
 data class DeleteComponentCommand(

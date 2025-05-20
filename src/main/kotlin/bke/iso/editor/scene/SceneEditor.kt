@@ -1,8 +1,8 @@
 package bke.iso.editor.scene
 
-import bke.iso.editor.EditorMode
 import bke.iso.editor.EditorModule
 import bke.iso.editor.color
+import bke.iso.editor.core.BaseEditor
 import bke.iso.editor.scene.command.AddTagCommand
 import bke.iso.editor.scene.command.AssignBuildingCommand
 import bke.iso.editor.scene.command.DeleteTagCommand
@@ -31,7 +31,7 @@ import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.encodeToString
 
-class SceneMode(private val engine: Engine) : EditorMode() {
+class SceneEditor(private val engine: Engine) : BaseEditor() {
 
     override val world = engine.world
     override val renderer = engine.renderer
@@ -50,7 +50,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
     private val toolLogic =
         ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
 
-    private val view = SceneModeView(engine.assets, engine.events)
+    private val view = SceneEditorView(engine.assets, engine.events)
 
     private var hideWalls = false
     var hideUpperLayers = false
@@ -123,10 +123,10 @@ class SceneMode(private val engine: Engine) : EditorMode() {
 
         engine.input.onAction("sceneModeModifier") {
             engine.input.onAction("sceneModeUndo") {
-                undo()
+                commands.undo()
             }
             engine.input.onAction("sceneModeRedo") {
-                redo()
+                commands.redo()
             }
         }
 
@@ -216,7 +216,7 @@ class SceneMode(private val engine: Engine) : EditorMode() {
         when (event) {
             is OpenSceneClicked -> openScene()
             is SaveSceneClicked -> saveScene()
-            is SceneLoaded -> resetCommands()
+            is SceneLoaded -> commands.reset()
 
             is ToolSelected -> toolLogic.selectTool(event.selection)
             is TileTemplateSelected -> toolLogic.onTileTemplateSelected(event.template)

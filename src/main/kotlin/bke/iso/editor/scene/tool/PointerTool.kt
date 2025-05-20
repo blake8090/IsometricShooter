@@ -1,7 +1,7 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.EditorCommand
-import bke.iso.editor.scene.SceneMode
+import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Events
@@ -34,7 +34,7 @@ class PointerTool(
 
     override fun performAction(): EditorCommand? {
         highlighted?.let { entity ->
-            events.fire(SceneMode.EntitySelected(entity))
+            events.fire(SceneEditor.EntitySelected(entity))
         }
         // we don't need to undo or redo selecting an entity, so no commands necessary
         return null

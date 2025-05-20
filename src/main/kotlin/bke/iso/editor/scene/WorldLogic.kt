@@ -38,7 +38,7 @@ class WorldLogic(
             load(record)
         }
 
-        events.fire(SceneMode.SceneLoaded())
+        events.fire(SceneEditor.SceneLoaded())
     }
 
     private fun load(record: EntityRecord) {

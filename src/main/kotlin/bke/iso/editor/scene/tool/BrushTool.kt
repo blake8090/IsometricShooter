@@ -2,7 +2,7 @@ package bke.iso.editor.scene.tool
 
 import bke.iso.editor.scene.command.PaintEntityCommand
 import bke.iso.editor.scene.command.PaintTileCommand
-import bke.iso.editor.EditorCommand
+import bke.iso.editor.core.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.entity.EntityTemplate

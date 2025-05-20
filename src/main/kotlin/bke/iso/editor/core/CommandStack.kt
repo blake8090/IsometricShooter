@@ -1,21 +1,9 @@
-package bke.iso.editor
+package bke.iso.editor.core
 
-import bke.iso.engine.core.Event
-import bke.iso.engine.render.Renderer
-import bke.iso.engine.world.World
-
-abstract class EditorMode {
-
-    protected abstract val renderer: Renderer
-    protected abstract val world: World
+class CommandStack {
 
     private var commands = mutableListOf<EditorCommand>()
     private var pointer = -1
-
-    abstract fun start()
-    abstract fun stop()
-    abstract fun update()
-    abstract fun handleEvent(event: Event)
 
     fun execute(command: EditorCommand) {
         command.execute()
@@ -28,7 +16,7 @@ abstract class EditorMode {
         }
     }
 
-    protected fun undo() {
+    fun undo() {
         if (pointer < 0) {
             return
         }
@@ -36,7 +24,7 @@ abstract class EditorMode {
         pointer--
     }
 
-    protected fun redo() {
+    fun redo() {
         if (pointer >= commands.size - 1) {
             return
         }
@@ -44,7 +32,7 @@ abstract class EditorMode {
         commands[pointer].execute()
     }
 
-    protected fun resetCommands() {
+    fun reset() {
         commands.clear()
         pointer = -1
     }

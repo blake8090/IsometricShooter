@@ -41,7 +41,7 @@ class EntityModeView(
 
     private var openSelectComponentPopup = false
 
-    lateinit var viewData: EntityMode.ViewData
+    lateinit var viewData: EntityEditor.ViewData
 
     override fun create() {}
 
@@ -64,11 +64,11 @@ class EntityModeView(
                 ImGui.menuItem("New")
 
                 if (ImGui.menuItem("Open", "Ctrl+O")) {
-                    events.fire(EntityMode.OpenClicked())
+                    events.fire(EntityEditor.OpenClicked())
                 }
 
                 if (ImGui.menuItem("Save", "Ctrl+S")) {
-                    events.fire(EntityMode.SaveClicked())
+                    events.fire(EntityEditor.SaveClicked())
                 }
 
                 ImGui.menuItem("Save as..")
@@ -78,7 +78,7 @@ class EntityModeView(
 
             if (ImGui.beginMenu("Mode")) {
                 if (ImGui.menuItem("Scene Editor", false)) {
-                    events.fire(EditorModule.SceneModeSelected())
+                    events.fire(EditorModule.SceneEditorSelected())
                 }
                 ImGui.menuItem("Entity Editor", true)
                 ImGui.beginDisabled()
@@ -100,7 +100,7 @@ class EntityModeView(
         }
     }
 
-    private fun drawComponentList(viewData: EntityMode.ViewData) {
+    private fun drawComponentList(viewData: EntityEditor.ViewData) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
         size.x *= 0.15f
         val pos = ImVec2(ImGui.getMainViewport().workPos)
@@ -114,7 +114,7 @@ class EntityModeView(
         }
         ImGui.sameLine()
         if (ImGui.button("Delete")) {
-            events.fire(EntityMode.SelectedComponentDeleted())
+            events.fire(EntityEditor.SelectedComponentDeleted())
             selectedIndex = -1
         }
 
@@ -127,7 +127,7 @@ class EntityModeView(
                 }
 
                 if (ImGui.selectable("${component::class.simpleName}", selected)) {
-                    events.fire(EntityMode.ComponentSelected(component))
+                    events.fire(EntityEditor.ComponentSelected(component))
                 }
             }
             ImGui.endListBox()
@@ -136,7 +136,7 @@ class EntityModeView(
         ImGui.end()
     }
 
-    private fun drawSelectComponentPopup(viewData: EntityMode.ViewData) {
+    private fun drawSelectComponentPopup(viewData: EntityEditor.ViewData) {
         if (openSelectComponentPopup) {
             ImGui.openPopup("Component Types##selectComponentPopup")
             openSelectComponentPopup = false
@@ -147,7 +147,7 @@ class EntityModeView(
             if (ImGui.beginListBox("##components")) {
                 for (componentType in viewData.componentTypes.sortedBy { type -> type.simpleName }) {
                     if (ImGui.selectable("${componentType.simpleName}", false)) {
-                        events.fire(EntityMode.NewComponentTypeAdded(componentType))
+                        events.fire(EntityEditor.NewComponentTypeAdded(componentType))
                         ImGui.closeCurrentPopup()
                     }
                 }
@@ -162,7 +162,7 @@ class EntityModeView(
         }
     }
 
-    private fun drawComponentEditor(viewData: EntityMode.ViewData) {
+    private fun drawComponentEditor(viewData: EntityEditor.ViewData) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
         size.x *= 0.15f
         val pos = ImVec2(ImGui.getMainViewport().workPos)

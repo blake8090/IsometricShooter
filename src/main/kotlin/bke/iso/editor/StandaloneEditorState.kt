@@ -18,6 +18,6 @@ class StandaloneEditorState(override val engine: Engine) : State() {
         log.info { "Starting editor" }
         engine.ui.clearScene2dViews()
         engine.ui.clearImGuiViews()
-        engine.events.fire(EditorModule.SceneModeSelected())
+        engine.events.fire(EditorModule.SceneEditorSelected())
     }
 }

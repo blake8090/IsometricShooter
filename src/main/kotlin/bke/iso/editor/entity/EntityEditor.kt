@@ -1,7 +1,7 @@
 package bke.iso.editor.entity
 
-import bke.iso.editor.EditorMode
 import bke.iso.editor.EditorModule
+import bke.iso.editor.core.BaseEditor
 import bke.iso.editor.entity.command.AddComponentCommand
 import bke.iso.editor.entity.command.DeleteComponentCommand
 import bke.iso.editor.withFirstInstance
@@ -24,7 +24,7 @@ import org.reflections.Reflections
 import kotlin.reflect.KClass
 import kotlin.reflect.full.hasAnnotation
 
-class EntityMode(private val engine: Engine) : EditorMode() {
+class EntityEditor(private val engine: Engine) : BaseEditor() {
 
     override val world = World(engine.events)
     override val renderer = Renderer(world, engine.assets, engine.events)
@@ -69,10 +69,10 @@ class EntityMode(private val engine: Engine) : EditorMode() {
 
         engine.input.onAction("sceneModeModifier") {
             engine.input.onAction("sceneModeUndo") {
-                undo()
+                commands.undo()
             }
             engine.input.onAction("sceneModeRedo") {
-                redo()
+                commands.redo()
             }
         }
 
@@ -140,7 +140,7 @@ class EntityMode(private val engine: Engine) : EditorMode() {
         components.withFirstInstance<Sprite>(referenceEntity::add)
         components.withFirstInstance<Collider>(referenceEntity::add)
 
-        resetCommands()
+        commands.reset()
         log.info { "Loaded entity template: '${file.canonicalPath}'" }
     }
 

@@ -1,7 +1,7 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.EditorCommand
-import bke.iso.editor.scene.SceneMode
+import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.scene.SceneEditor
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.asset.entity.TileTemplate
@@ -24,7 +24,7 @@ enum class ToolSelection {
 }
 
 class ToolLogic(
-    private val sceneMode: SceneMode,
+    private val sceneEditor: SceneEditor,
     private val input: Input,
     collisions: Collisions,
     private val renderer: Renderer,
@@ -54,7 +54,7 @@ class ToolLogic(
     fun update() {
         val tool = currentTool ?: return
         // TODO: scale cursor position when screen size changes
-        tool.update(sceneMode.selectedLayer.toFloat(), renderer.pointer.pos)
+        tool.update(sceneEditor.selectedLayer.toFloat(), renderer.pointer.pos)
         tool.draw()
     }
 

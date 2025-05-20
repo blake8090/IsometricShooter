@@ -1,6 +1,6 @@
 package bke.iso.editor.entity.command
 
-import bke.iso.editor.EditorCommand
+import bke.iso.editor.core.EditorCommand
 import com.badlogic.gdx.math.Vector3
 
 data class UpdateVector3Command(

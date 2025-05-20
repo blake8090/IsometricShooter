@@ -1,6 +1,6 @@
 package bke.iso.editor.entity.command
 
-import bke.iso.editor.EditorCommand
+import bke.iso.editor.core.EditorCommand
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.entity.Entity

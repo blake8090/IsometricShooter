@@ -23,7 +23,7 @@ import imgui.type.ImFloat
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class SceneModeView(
+class SceneEditorView(
     private val assets: Assets,
     private val events: Events
 ) : ImGuiView() {
@@ -38,7 +38,7 @@ class SceneModeView(
     private var openNewBuildingPopup = false
     private var newBuildingText = ""
 
-    lateinit var viewData: SceneMode.ViewData
+    lateinit var viewData: SceneEditor.ViewData
 
     override fun create() {}
 
@@ -61,17 +61,17 @@ class SceneModeView(
         drawInspectorWindow(inspectorWindowData, viewData)
     }
 
-    private fun drawMainMenuBar(viewData: SceneMode.ViewData) {
+    private fun drawMainMenuBar(viewData: SceneEditor.ViewData) {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("File")) {
                 ImGui.menuItem("New")
 
                 if (ImGui.menuItem("Open", "Ctrl+O")) {
-                    events.fire(SceneMode.OpenSceneClicked())
+                    events.fire(SceneEditor.OpenSceneClicked())
                 }
 
                 if (ImGui.menuItem("Save", "Ctrl+S")) {
-                    events.fire(SceneMode.SaveSceneClicked())
+                    events.fire(SceneEditor.SaveSceneClicked())
                 }
 
                 ImGui.menuItem("Save as..")
@@ -87,13 +87,13 @@ class SceneModeView(
 
 //                }
                 if (ImGui.menuItem("Hide Walls", viewData.hideWalls)) {
-                    events.fire(SceneMode.HideWallsToggled())
+                    events.fire(SceneEditor.HideWallsToggled())
                 }
                 if (ImGui.menuItem("Hide Upper Layers", viewData.hideUpperLayers)) {
-                    events.fire(SceneMode.HideUpperLayersToggled())
+                    events.fire(SceneEditor.HideUpperLayersToggled())
                 }
                 if (ImGui.menuItem("Highlight Selected Layer", viewData.highlightSelectedLayer)) {
-                    events.fire(SceneMode.HighlightSelectedLayerToggled())
+                    events.fire(SceneEditor.HighlightSelectedLayerToggled())
                 }
 //                if (ImGui.menuItem("Show Grid in Foreground", false)) {
 //
@@ -107,19 +107,19 @@ class SceneModeView(
                 }
                 if (ImGui.menuItem("Edit Building", false)) {
                     openSelectBuildingPopup { building ->
-                        events.fire(SceneMode.BuildingSelected(building))
+                        events.fire(SceneEditor.BuildingSelected(building))
                     }
                 }
 
                 ImGui.beginDisabled(viewData.selectedBuilding.isNullOrBlank())
                 if (ImGui.menuItem("Close Building", false)) {
-                    events.fire(SceneMode.BuildingClosed())
+                    events.fire(SceneEditor.BuildingClosed())
                 }
                 ImGui.endDisabled()
 
                 if (ImGui.menuItem("Delete Building", false)) {
                     openSelectBuildingPopup { building ->
-                        events.fire(SceneMode.BuildingDeleted(building))
+                        events.fire(SceneEditor.BuildingDeleted(building))
                     }
                 }
                 ImGui.endMenu()
@@ -128,7 +128,7 @@ class SceneModeView(
             if (ImGui.beginMenu("Mode")) {
                 ImGui.menuItem("Scene Editor", true)
                 if (ImGui.menuItem("Entity Editor", false)) {
-                    events.fire(EditorModule.EntityModeSelected())
+                    events.fire(EditorModule.EntityEditorSelected())
                 }
                 ImGui.beginDisabled()
                 ImGui.menuItem("Particle Editor", false)
@@ -173,7 +173,7 @@ class SceneModeView(
 
             if (imageButton(sprite.texture)) {
                 log.debug { "Selected entity template ${template.name}" }
-                events.fire(SceneMode.EntityTemplateSelected(template))
+                events.fire(SceneEditor.EntityTemplateSelected(template))
             }
             ImGui.setItemTooltip(template.name)
 
@@ -191,7 +191,7 @@ class SceneModeView(
         for (template in assets.getAll<TileTemplate>()) {
             if (imageButton(template.sprite.texture)) {
                 log.debug { "Selected tile template ${template.name}" }
-                events.fire(SceneMode.TileTemplateSelected(template))
+                events.fire(SceneEditor.TileTemplateSelected(template))
             }
             ImGui.setItemTooltip(template.name)
 
@@ -214,7 +214,7 @@ class SceneModeView(
         )
     }
 
-    private fun drawInspectorWindow(windowData: WindowData, viewData: SceneMode.ViewData) {
+    private fun drawInspectorWindow(windowData: WindowData, viewData: SceneEditor.ViewData) {
         ImGui.setNextWindowPos(windowData.pos)
         ImGui.setNextWindowSize(windowData.size)
         ImGui.begin("Inspector")
@@ -242,7 +242,7 @@ class SceneModeView(
             }
             ImGui.sameLine()
             if (ImGui.button("Add")) {
-                events.fire(SceneMode.TagAdded(entity, newTagText))
+                events.fire(SceneEditor.TagAdded(entity, newTagText))
             }
 
             entity.with<Tags> { component ->
@@ -250,7 +250,7 @@ class SceneModeView(
                     ImGui.inputText("##tagText$index", ImString(tag))
                     ImGui.sameLine()
                     if (ImGui.button("Delete##deleteTag$index")) {
-                        events.fire(SceneMode.TagDeleted(entity, tag))
+                        events.fire(SceneEditor.TagDeleted(entity, tag))
                     }
                 }
             }
@@ -259,12 +259,12 @@ class SceneModeView(
             val selectedBuilding = viewData.selectedBuilding
             if (ImGui.beginCombo("Assigned", selectedBuilding)) {
                 if (ImGui.selectable("None", selectedBuilding == null)) {
-                    events.fire(SceneMode.BuildingAssigned(viewData.selectedEntity, null))
+                    events.fire(SceneEditor.BuildingAssigned(viewData.selectedEntity, null))
                 }
 
                 for (building in viewData.buildings) {
                     if (ImGui.selectable(building, building == selectedBuilding)) {
-                        events.fire(SceneMode.BuildingAssigned(viewData.selectedEntity, building))
+                        events.fire(SceneEditor.BuildingAssigned(viewData.selectedEntity, building))
                     }
                 }
 
@@ -276,31 +276,37 @@ class SceneModeView(
         ImGui.end()
     }
 
-    private fun drawToolbar(windowData: WindowData, viewData: SceneMode.ViewData) {
+    private fun drawToolbar(windowData: WindowData, viewData: SceneEditor.ViewData) {
         val selectedTool = viewData.selectedTool
 
         ImGui.setNextWindowPos(windowData.pos)
         ImGui.setNextWindowSize(windowData.size)
-        ImGui.begin("Toolbar")
+        val flags = or(
+            ImGuiWindowFlags.NoMove,
+            ImGuiWindowFlags.NoResize,
+            ImGuiWindowFlags.NoTitleBar,
+            ImGuiWindowFlags.NoScrollbar
+        )
+        ImGui.begin("Toolbar", flags)
 
         toolbarImageButton("pointer.png", selectedTool == ToolSelection.POINTER) {
-            events.fire(SceneMode.ToolSelected(ToolSelection.POINTER))
+            events.fire(SceneEditor.ToolSelected(ToolSelection.POINTER))
         }
         ImGui.sameLine()
         toolbarImageButton("brush.png", selectedTool == ToolSelection.BRUSH) {
-            events.fire(SceneMode.ToolSelected(ToolSelection.BRUSH))
+            events.fire(SceneEditor.ToolSelected(ToolSelection.BRUSH))
         }
         ImGui.sameLine()
         toolbarImageButton("eraser.png", selectedTool == ToolSelection.ERASER) {
-            events.fire(SceneMode.ToolSelected(ToolSelection.ERASER))
+            events.fire(SceneEditor.ToolSelected(ToolSelection.ERASER))
         }
         ImGui.sameLine()
         toolbarImageButton("icon-room.png", selectedTool == ToolSelection.ROOM) {
-            events.fire(SceneMode.ToolSelected(ToolSelection.ROOM))
+            events.fire(SceneEditor.ToolSelected(ToolSelection.ROOM))
         }
         ImGui.sameLine()
         toolbarImageButton("fill.png", selectedTool == ToolSelection.FILL) {
-            events.fire(SceneMode.ToolSelected(ToolSelection.FILL))
+            events.fire(SceneEditor.ToolSelected(ToolSelection.FILL))
         }
         ImGui.sameLine()
         toolbarImageButton("grid.png")
@@ -309,11 +315,11 @@ class SceneModeView(
         ImGui.text("Layer: ${viewData.selectedLayer}")
         ImGui.sameLine()
         if (ImGui.button("-")) {
-            events.fire(SceneMode.LayerDecreased())
+            events.fire(SceneEditor.LayerDecreased())
         }
         ImGui.sameLine()
         if (ImGui.button("+")) {
-            events.fire(SceneMode.LayerIncreased())
+            events.fire(SceneEditor.LayerIncreased())
         }
         ImGui.sameLine()
 
@@ -341,7 +347,7 @@ class SceneModeView(
         }
     }
 
-    private fun drawMessageWindow(windowData: WindowData, viewData: SceneMode.ViewData) {
+    private fun drawMessageWindow(windowData: WindowData, viewData: SceneEditor.ViewData) {
         val pos = ImVec2(windowData.pos)
         pos.y += windowData.size.y
 
@@ -400,7 +406,7 @@ class SceneModeView(
         selectBuildingPopupAction = action
     }
 
-    private fun drawSelectBuildingPopup(viewData: SceneMode.ViewData) {
+    private fun drawSelectBuildingPopup(viewData: SceneEditor.ViewData) {
         if (openSelectBuildingPopup) {
             ImGui.openPopup("Select Building##selectBuildingPopup")
         }
@@ -443,7 +449,7 @@ class SceneModeView(
             }
 
             if (ImGui.button("Ok")) {
-                events.fire(SceneMode.BuildingCreated(newBuildingText))
+                events.fire(SceneEditor.BuildingCreated(newBuildingText))
                 openNewBuildingPopup = false
                 ImGui.closeCurrentPopup()
             }

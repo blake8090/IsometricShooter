@@ -19,7 +19,7 @@ class CameraLogic(
     private val input: Input,
     world: World,
     private val renderer: Renderer,
-    private val sceneMode: SceneMode,
+    private val sceneEditor: SceneEditor,
 ) {
 
     private val mouseScrollAdapter = MouseScrollAdapter()
@@ -80,7 +80,7 @@ class CameraLogic(
     }
 
     private fun moveCameraEntity() {
-        var z = sceneMode.selectedLayer.toFloat()
+        var z = sceneEditor.selectedLayer.toFloat()
         // apply a small offset so that the camera always appears above entities on the same z level
         if (z >= 0f) {
             z += 0.01f
