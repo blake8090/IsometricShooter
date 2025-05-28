@@ -5381,4304 +5381,4620 @@
                 "z": -2.0
             },
             "template": "rifle-pickup"
-        }
-    ],
-    "tiles": [
+        },
         {
-            "location": {
-                "x": 28
+            "pos": {
+                "x": 28.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 4
+            "pos": {
+                "x": 12.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 10
+            "pos": {
+                "x": 17.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 9
+            "pos": {
+                "x": 17.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 8
+            "pos": {
+                "x": 17.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 7
+            "pos": {
+                "x": 17.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 6
+            "pos": {
+                "x": 17.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 5
+            "pos": {
+                "x": 17.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 4
+            "pos": {
+                "x": 17.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 10
+            "pos": {
+                "x": 1.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 2
+            "pos": {
+                "x": 11.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 11
+            "pos": {
+                "x": 8.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 3
+            "pos": {
+                "x": 4.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 4
+            "pos": {
+                "x": 4.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 15
+            "pos": {
+                "x": 4.0,
+                "y": 15.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 15
+            "pos": {
+                "x": 5.0,
+                "y": 15.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 11
+            "pos": {
+                "x": 11.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 6
+            "pos": {
+                "x": 8.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 8
+            "pos": {
+                "x": 8.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 14
+            "pos": {
+                "x": 7.0,
+                "y": 14.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 4
+            "pos": {
+                "x": 8.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 14
+            "pos": {
+                "x": 6.0,
+                "y": 14.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 13
+            "pos": {
+                "x": 7.0,
+                "y": 13.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 13
+            "pos": {
+                "x": 6.0,
+                "y": 13.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 3
+            "pos": {
+                "x": 5.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 3
+            "pos": {
+                "x": 6.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 3
+            "pos": {
+                "x": 7.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 3
+            "pos": {
+                "x": 8.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 5
+            "pos": {
+                "x": 4.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 15
+            "pos": {
+                "x": 6.0,
+                "y": 15.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 15
+            "pos": {
+                "x": 7.0,
+                "y": 15.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 8
+            "pos": {
+                "x": 4.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 7
+            "pos": {
+                "x": 4.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 6
+            "pos": {
+                "x": 4.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 1
+            "pos": {
+                "x": 7.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 2
+            "pos": {
+                "x": 7.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 1
+            "pos": {
+                "x": 4.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 2
+            "pos": {
+                "x": 8.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 6
+            "pos": {
+                "x": 6.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 1
+            "pos": {
+                "x": 8.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 8
+            "pos": {
+                "x": 6.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 2
+            "pos": {
+                "x": 6.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 4
+            "pos": {
+                "x": 6.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8
+            "pos": {
+                "x": 8.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 5
+            "pos": {
+                "x": 6.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7
+            "pos": {
+                "x": 7.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 2
+            "pos": {
+                "x": 4.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 2
+            "pos": {
+                "x": 5.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 8
+            "pos": {
+                "x": 5.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5
+            "pos": {
+                "x": 5.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 5
+            "pos": {
+                "x": 8.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 1
+            "pos": {
+                "x": 6.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 9
+            "pos": {
+                "x": 4.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 1
+            "pos": {
+                "x": 5.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 10
+            "pos": {
+                "x": 4.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 5
+            "pos": {
+                "x": 7.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 14
+            "pos": {
+                "x": 5.0,
+                "y": 14.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 12
+            "pos": {
+                "x": 8.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 13
+            "pos": {
+                "x": 5.0,
+                "y": 13.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 4
+            "pos": {
+                "x": 7.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 11
+            "pos": {
+                "x": 6.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 7
+            "pos": {
+                "x": 5.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 10
+            "pos": {
+                "x": 6.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 6
+            "pos": {
+                "x": 5.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 9
+            "pos": {
+                "x": 6.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 6
+            "pos": {
+                "x": 7.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 12
+            "pos": {
+                "x": 6.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 7
+            "pos": {
+                "x": 7.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 12
+            "pos": {
+                "x": 5.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 8
+            "pos": {
+                "x": 7.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 11
+            "pos": {
+                "x": 5.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 5
+            "pos": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 11
+            "pos": {
+                "x": 4.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 9
+            "pos": {
+                "x": 7.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 10
+            "pos": {
+                "x": 5.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 10
+            "pos": {
+                "x": 7.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 9
+            "pos": {
+                "x": 5.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 4
+            "pos": {
+                "x": 5.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 7
+            "pos": {
+                "x": 6.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4
+            "pos": {
+                "x": 4.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 19
+            "pos": {
+                "x": 6.0,
+                "y": 19.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 9
+            "pos": {
+                "x": 9.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 2
+            "pos": {
+                "x": 9.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 12
+            "pos": {
+                "x": 7.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 10
+            "pos": {
+                "x": 10.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 18
+            "pos": {
+                "x": 4.0,
+                "y": 18.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "y": 12
+            "pos": {
+                "x": 0.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 3
+            "pos": {
+                "x": 10.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 2
+            "pos": {
+                "x": 10.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 3
+            "pos": {
+                "x": 9.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 12
-            },
-            "template": "graybox-tile",
-            "building": "storage"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 18
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 1
-            },
-            "template": "graybox-tile",
-            "building": "hallway2"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 11
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 19
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 19
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 19
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 12
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 19
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 4,
-                "y": 17
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "y": 10
+            "pos": {
+                "x": 1.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 1
+            "pos": {
+                "x": 7.0,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 17
+            "pos": {
+                "x": 7.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 18
+            "pos": {
+                "x": 4.0,
+                "y": 19.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 18
+            "pos": {
+                "x": 5.0,
+                "y": 19.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 12
+            "pos": {
+                "x": 7.0,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 12.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 19.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 17.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 0.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 18
+            "pos": {
+                "x": 9.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 17.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 11
+            "pos": {
+                "x": 8.0,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "y": 11
+            "pos": {
+                "x": 5.0,
+                "y": 18.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 3.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 12
+            "pos": {
+                "x": 0.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 11
+            "pos": {
+                "x": 2.0,
+                "y": 12.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 3
-            },
-            "template": "graybox-tile",
-            "building": "hallway2"
-        },
-        {
-            "location": {
-                "x": 3,
-                "y": 10
+            "pos": {
+                "x": 1.0,
+                "y": 11.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 17
+            "pos": {
+                "x": 11.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
-            "building": "hallway"
+            "building": "hallway2"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 10
-            },
-            "template": "graybox-tile",
-            "building": "storage"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 9
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 7,
-                "y": 17
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 8,
-                "y": 7
-            },
-            "template": "graybox-tile",
-            "building": "hallway"
-        },
-        {
-            "location": {
-                "x": 2,
-                "y": 11
+            "pos": {
+                "x": 3.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 1
-            },
-            "template": "graybox-tile",
-            "building": "hallway2"
-        },
-        {
-            "location": {
-                "x": 6
+            "pos": {
+                "x": 8.0,
+                "y": 17.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 10
+            "pos": {
+                "x": 2.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 17
+            "pos": {
+                "x": 7.0,
+                "y": 17.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 16
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 9,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 13
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 14
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 10,
-                "y": 15
-            },
-            "template": "graybox-tile",
-            "building": "entrance"
-        },
-        {
-            "location": {
-                "x": 5,
-                "y": 16
+            "pos": {
+                "x": 8.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 16
+            "pos": {
+                "x": 2.0,
+                "y": 11.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway2"
+        },
+        {
+            "pos": {
+                "x": 6.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 16
+            "pos": {
+                "x": 8.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 16
+            "pos": {
+                "x": 6.0,
+                "y": 17.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 16
+            "pos": {
+                "x": 11.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 11.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 16.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 9.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 10.0,
+                "y": 15.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "entrance"
+        },
+        {
+            "pos": {
+                "x": 5.0,
+                "y": 16.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 15
+            "pos": {
+                "x": 4.0,
+                "y": 16.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 14
+            "pos": {
+                "x": 6.0,
+                "y": 16.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 13
+            "pos": {
+                "x": 7.0,
+                "y": 16.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 13
+            "pos": {
+                "x": 8.0,
+                "y": 16.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 14
+            "pos": {
+                "x": 8.0,
+                "y": 15.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway"
         },
         {
-            "location": {
-                "x": 12
+            "pos": {
+                "x": 8.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 8.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 13.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 4.0,
+                "y": 14.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "hallway"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 1
+            "pos": {
+                "x": 12.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 2
+            "pos": {
+                "x": 12.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 2
+            "pos": {
+                "x": 13.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 3
+            "pos": {
+                "x": 13.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 3
+            "pos": {
+                "x": 12.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 1
+            "pos": {
+                "x": 13.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 13
+            "pos": {
+                "x": 13.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 14
+            "pos": {
+                "x": 14.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 15
+            "pos": {
+                "x": 15.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 16
+            "pos": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 17
+            "pos": {
+                "x": 17.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 18
+            "pos": {
+                "x": 18.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 19
+            "pos": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 1
+            "pos": {
+                "x": 19.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 2
+            "pos": {
+                "x": 19.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 3
+            "pos": {
+                "x": 19.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 3
+            "pos": {
+                "x": 18.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 3
+            "pos": {
+                "x": 17.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 3
+            "pos": {
+                "x": 16.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 3
+            "pos": {
+                "x": 15.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 3
+            "pos": {
+                "x": 14.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 2
+            "pos": {
+                "x": 14.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 1
+            "pos": {
+                "x": 14.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 1
+            "pos": {
+                "x": 15.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 1
+            "pos": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 2
+            "pos": {
+                "x": 16.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 2
+            "pos": {
+                "x": 17.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 2
+            "pos": {
+                "x": 18.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 1
+            "pos": {
+                "x": 18.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 1
+            "pos": {
+                "x": 17.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 2
+            "pos": {
+                "x": 15.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 4
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 5
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 6
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 7
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 11,
-                "y": 8
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 12,
-                "y": 8
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 13,
-                "y": 8
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 14,
-                "y": 8
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 15,
-                "y": 8
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 8
-            },
-            "template": "graybox-tile",
-            "building": "storage2"
-        },
-        {
-            "location": {
-                "x": 16,
-                "y": 7
+            "pos": {
+                "x": 11.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 6
+            "pos": {
+                "x": 11.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 5
+            "pos": {
+                "x": 11.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 4
+            "pos": {
+                "x": 11.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 4
+            "pos": {
+                "x": 11.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 4
+            "pos": {
+                "x": 12.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 4
+            "pos": {
+                "x": 13.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 5
+            "pos": {
+                "x": 14.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 5
+            "pos": {
+                "x": 15.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 6
+            "pos": {
+                "x": 16.0,
+                "y": 8.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 7
+            "pos": {
+                "x": 16.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 7
+            "pos": {
+                "x": 16.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 7
+            "pos": {
+                "x": 16.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 6
+            "pos": {
+                "x": 16.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 6
+            "pos": {
+                "x": 15.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 5
+            "pos": {
+                "x": 14.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 5
+            "pos": {
+                "x": 13.0,
+                "y": 4.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 6
+            "pos": {
+                "x": 13.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 7
+            "pos": {
+                "x": 12.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 9
+            "pos": {
+                "x": 12.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 10
+            "pos": {
+                "x": 12.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 10
+            "pos": {
+                "x": 13.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 10
+            "pos": {
+                "x": 14.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 10
+            "pos": {
+                "x": 14.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 10
+            "pos": {
+                "x": 15.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 9
+            "pos": {
+                "x": 15.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 9
+            "pos": {
+                "x": 14.0,
+                "y": 5.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 9
+            "pos": {
+                "x": 13.0,
+                "y": 6.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 9
+            "pos": {
+                "x": 15.0,
+                "y": 7.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 9
+            "pos": {
+                "x": 11.0,
+                "y": 9.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 10
+            "pos": {
+                "x": 11.0,
+                "y": 10.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "storage2"
         },
         {
-            "location": {
-                "x": 20
+            "pos": {
+                "x": 12.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 14.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 13.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 12.0,
+                "y": 9.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 16.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "template": "graybox-tile",
+            "building": "storage2"
+        },
+        {
+            "pos": {
+                "x": 20.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 20,
-                "y": 1
+            "pos": {
+                "x": 20.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 20,
-                "y": 2
+            "pos": {
+                "x": 20.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 20,
-                "y": 3
+            "pos": {
+                "x": 20.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 21,
-                "y": 3
+            "pos": {
+                "x": 21.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 22,
-                "y": 3
+            "pos": {
+                "x": 22.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 23,
-                "y": 3
+            "pos": {
+                "x": 23.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 24,
-                "y": 3
+            "pos": {
+                "x": 24.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 25,
-                "y": 3
+            "pos": {
+                "x": 25.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 25,
-                "y": 2
+            "pos": {
+                "x": 25.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 27,
-                "y": 1
+            "pos": {
+                "x": 27.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 26,
-                "y": 1
+            "pos": {
+                "x": 26.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 26
+            "pos": {
+                "x": 26.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 25
+            "pos": {
+                "x": 25.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 24
+            "pos": {
+                "x": 24.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 23
+            "pos": {
+                "x": 23.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 22
+            "pos": {
+                "x": 22.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 21
+            "pos": {
+                "x": 21.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 21,
-                "y": 2
+            "pos": {
+                "x": 21.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 22,
-                "y": 2
+            "pos": {
+                "x": 22.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 22,
-                "y": 1
+            "pos": {
+                "x": 22.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 21,
-                "y": 1
+            "pos": {
+                "x": 21.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 23,
-                "y": 2
+            "pos": {
+                "x": 23.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 24,
-                "y": 2
+            "pos": {
+                "x": 24.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 25,
-                "y": 1
+            "pos": {
+                "x": 25.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 24,
-                "y": 1
+            "pos": {
+                "x": 24.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 23,
-                "y": 1
+            "pos": {
+                "x": 23.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 27
+            "pos": {
+                "x": 27.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 26,
-                "y": 3
+            "pos": {
+                "x": 26.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 27,
-                "y": 3
+            "pos": {
+                "x": 27.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 28,
-                "y": 3
+            "pos": {
+                "x": 28.0,
+                "y": 3.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 28,
-                "y": 2
+            "pos": {
+                "x": 28.0,
+                "y": 2.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 28,
-                "y": 1
+            "pos": {
+                "x": 28.0,
+                "y": 1.0,
+                "z": 0.0
             },
             "template": "graybox-tile",
             "building": "hallway2"
         },
         {
-            "location": {
-                "x": 25,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 25.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 25,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 25.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 26,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 26.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 27,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 27.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 28,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 28.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 28,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 28.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 28,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 28.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 27,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 27.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 26,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 26.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 25,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 25.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 25,
-                "z": -2
+            "pos": {
+                "x": 25.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 26,
-                "z": -2
+            "pos": {
+                "x": 26.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 27,
-                "z": -2
+            "pos": {
+                "x": 27.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 28,
-                "z": -2
+            "pos": {
+                "x": 28.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 24,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 24.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 23,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 23.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 22,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 22.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 21,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 21.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 20,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 20.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 19,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 20,
-                "z": -2
+            "pos": {
+                "x": 20.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 21,
-                "z": -2
+            "pos": {
+                "x": 21.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 21,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 21.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 22,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 22.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 22,
-                "z": -2
+            "pos": {
+                "x": 22.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 23,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 23.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 23,
-                "z": -2
+            "pos": {
+                "x": 23.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 24,
-                "z": -2
+            "pos": {
+                "x": 24.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 24,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 24.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 24,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 24.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 23,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 23.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 22,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 22.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 21,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 21.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 20,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 20.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 20,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 20.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 18,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 17,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 16,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 15,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 14,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 0.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room1"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 13.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 12.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 7.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 7.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 7.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 12.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 13.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 13.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 12.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 7,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 7.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 12,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 12.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 13,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 13.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 14,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 14.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 15,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 15.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 16,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 16.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 17,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 17.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 18,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 18.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 19,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 19.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 0.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 0.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 11,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 11.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 0.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 0.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 14,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 14.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 13,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 13.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 12,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 12.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-hallway3"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 15,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 15.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 15,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 15.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 15,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 15.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 16,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 16.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 17,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 17.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 16,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 16.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 16,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 16.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 17,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 17.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 17,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 17.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 10,
-                "y": 18,
-                "z": -2
+            "pos": {
+                "x": 10.0,
+                "y": 18.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 9,
-                "y": 18,
-                "z": -2
+            "pos": {
+                "x": 9.0,
+                "y": 18.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 11,
-                "y": 18,
-                "z": -2
+            "pos": {
+                "x": 11.0,
+                "y": 18.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 15,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 15.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 16,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 16.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 17,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 17.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 8,
-                "y": 18,
-                "z": -2
+            "pos": {
+                "x": 8.0,
+                "y": 18.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room2"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 6,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 6.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 2,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 2.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 5,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 5.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 3,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 3.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 4,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 4.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 10,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 10.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 9,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 9.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 8,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 8.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 7,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 7.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 6,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 6.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 5,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 5.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 4,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 4.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 3,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 3.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 2,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 2.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"
         },
         {
-            "location": {
-                "x": 1,
-                "y": 1,
-                "z": -2
+            "pos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": -2.0
             },
             "template": "graybox-tile",
             "building": "floor1-room3"

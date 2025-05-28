@@ -301,7 +301,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             )
         }
 
-        val scene = Scene("1", entities, tiles)
+        val scene = Scene("1", entities)
         val content = engine.serializer.format.encodeToString(scene)
         file.writeText(content)
         log.info { "Saved scene: '${file.canonicalPath}'" }

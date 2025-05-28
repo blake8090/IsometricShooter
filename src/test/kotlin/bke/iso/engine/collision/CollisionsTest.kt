@@ -30,7 +30,8 @@ class CollisionsTest : StringSpec({
             .entities
             .create(
                 Vector3(0f, 0f, 4f),
-                Tile()
+                Tile(),
+                Collider(size = Vector3(1f, 1f, 0f))
             )
 
         val entity = world

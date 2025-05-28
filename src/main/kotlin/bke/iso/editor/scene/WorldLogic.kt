@@ -11,7 +11,6 @@ import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.scene.EntityRecord
 import bke.iso.engine.scene.Scene
-import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
@@ -34,10 +33,6 @@ class WorldLogic(
             load(record)
         }
 
-        for (record in scene.tiles) {
-            load(record)
-        }
-
         events.fire(SceneEditor.SceneLoaded())
     }
 
@@ -48,16 +43,6 @@ class WorldLogic(
         for (component in record.componentOverrides) {
             entity.add(component)
         }
-
-        val building = record.building
-        if (!building.isNullOrBlank()) {
-            world.buildings.add(entity, building)
-        }
-    }
-
-    private fun load(record: TileRecord) {
-        val template = assets.get<TileTemplate>(record.template)
-        val entity = createReferenceEntity(template, record.location)
 
         val building = record.building
         if (!building.isNullOrBlank()) {

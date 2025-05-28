@@ -1,0 +1,21 @@
+{
+    "name": "grass",
+    "components": [
+        {
+            "type": "sprite",
+            "texture": "grass.png",
+            "offsetY": 16.0
+        },
+        {
+            "type": "collider",
+            "size": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 0.0
+            }
+        },
+        {
+            "type": "tile"
+        }
+    ]
+}

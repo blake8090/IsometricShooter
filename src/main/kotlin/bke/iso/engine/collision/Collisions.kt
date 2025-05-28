@@ -6,7 +6,6 @@ import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
-import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector3
@@ -203,17 +202,9 @@ class Collisions(
 
 }
 
-// TODO: clean this up!
 fun Entity.getCollisionBox(): Box? {
-    return if (has<Tile>()) {
-        Box.fromMinMax(
-            pos,
-            pos.add(1f, 1f, 0f)
-        )
-    } else {
-        val collider = get<Collider>() ?: return null
-        val min = pos.add(collider.offset)
-        val max = Vector3(min).add(collider.size)
-        Box.fromMinMax(min, max)
-    }
+    val collider = get<Collider>() ?: return null
+    val min = pos.add(collider.offset)
+    val max = Vector3(min).add(collider.size)
+    return Box.fromMinMax(min, max)
 }

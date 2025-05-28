@@ -92,7 +92,7 @@ class OptimizedEntityRenderer(
 
         occlusion.prepare(renderable)
 
-        debug.category("entities").add(entity)
+        debug.category("render").addBox(bounds, 1f, Color.GREEN)
     }
 
     private fun inFrustum(renderable: EntityRenderable): Boolean =

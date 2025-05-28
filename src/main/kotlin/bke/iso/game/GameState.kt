@@ -168,6 +168,7 @@ class GameState(override val engine: Engine) : State() {
 //            "vision",
 //            "turret",
             "collisions", // TODO: use constants instead
+            "render",
             "weapon"
         )
     }
