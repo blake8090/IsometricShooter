@@ -4,7 +4,6 @@ import bke.iso.editor.EditorModule
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.render.Sprite
@@ -187,21 +186,24 @@ class SceneEditorView(
     }
 
     private fun drawTileAssets() {
-        var column = 0
-        for (template in assets.getAll<TileTemplate>()) {
-            if (imageButton(template.sprite.texture)) {
-                log.debug { "Selected tile template ${template.name}" }
-                events.fire(SceneEditor.TileTemplateSelected(template))
-            }
-            ImGui.setItemTooltip(template.name)
-
-            if (column < 2) {
-                ImGui.sameLine()
-                column++
-            } else {
-                column = 0
-            }
-        }
+//        var column = 0
+//
+//        val tiles = assets.getAll<EntityTemplate>()
+//            .filter { entityTemplate -> entityTemplate.components }
+//        for (template in assets.getAll<TileTemplate>()) {
+//            if (imageButton(template.sprite.texture)) {
+//                log.debug { "Selected tile template ${template.name}" }
+//                events.fire(SceneEditor.TileTemplateSelected(template))
+//            }
+//            ImGui.setItemTooltip(template.name)
+//
+//            if (column < 2) {
+//                ImGui.sameLine()
+//                column++
+//            } else {
+//                column = 0
+//            }
+//        }
     }
 
     private fun imageButton(texture: String): Boolean {

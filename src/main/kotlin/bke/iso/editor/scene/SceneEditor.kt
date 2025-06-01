@@ -11,16 +11,13 @@ import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
-import bke.iso.engine.math.Location
 import bke.iso.engine.scene.EntityRecord
 import bke.iso.engine.scene.Scene
-import bke.iso.engine.scene.TileRecord
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Component
@@ -219,7 +216,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             is SceneLoaded -> commands.reset()
 
             is ToolSelected -> toolLogic.selectTool(event.selection)
-            is TileTemplateSelected -> toolLogic.onTileTemplateSelected(event.template)
             is EntityTemplateSelected -> toolLogic.onEntityTemplateSelected(event.template)
             is EntitySelected -> selectedEntity = event.entity
 
@@ -290,17 +286,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             entities.add(createEntityRecord(entity, reference))
         }
 
-        val tiles = mutableListOf<TileRecord>()
-        world.entities.each { entity: Entity, reference: TileTemplateReference ->
-            tiles.add(
-                TileRecord(
-                    Location(entity.pos),
-                    reference.template,
-                    world.buildings.getBuilding(entity)
-                )
-            )
-        }
-
         val scene = Scene("1", entities)
         val content = engine.serializer.format.encodeToString(scene)
         file.writeText(content)
@@ -335,7 +320,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     class SceneLoaded : Event
 
     data class ToolSelected(val selection: ToolSelection) : Event
-    data class TileTemplateSelected(val template: TileTemplate) : Event
     data class EntityTemplateSelected(val template: EntityTemplate) : Event
     data class EntitySelected(val entity: Entity) : Event
 

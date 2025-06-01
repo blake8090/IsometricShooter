@@ -3,6 +3,7 @@ package bke.iso.editor.scene.command
 import bke.iso.editor.core.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.math.Location
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 
@@ -15,12 +16,24 @@ data class PaintEntityCommand(
     override val name: String = "PaintEntity"
 
     private lateinit var entity: Entity
+    private var replacedTile: Entity? = null
 
     override fun execute() {
         entity = worldLogic.createReferenceEntity(template, pos)
+        replaceTile(Location(pos))
+    }
+
+    private fun replaceTile(location: Location) {
+        val tileEntity = worldLogic.getTileEntity(location) ?: return
+        worldLogic.delete(tileEntity)
+        replacedTile = tileEntity
     }
 
     override fun undo() {
         worldLogic.delete(entity)
+        if (replacedTile != null) {
+            worldLogic.add(replacedTile!!)
+            replacedTile = null
+        }
     }
 }

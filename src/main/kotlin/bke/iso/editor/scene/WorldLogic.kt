@@ -3,7 +3,7 @@ package bke.iso.editor.scene
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.TileTemplate
+import bke.iso.engine.asset.entity.has
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Location
@@ -15,6 +15,7 @@ import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Description
+import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.math.Vector3
 
 class WorldLogic(
@@ -51,21 +52,22 @@ class WorldLogic(
     }
 
     fun delete(entity: Entity) {
-        if (entity.has<TileTemplateReference>()) {
+        if (entity.has<Tile>()) {
             tilesByLocation.remove(Location(entity.pos))
         }
         world.delete(entity)
     }
 
-    fun deleteTile(location: Location) {
-        val entity = tilesByLocation[location] ?: return
-        delete(entity)
-    }
+    fun getTileEntity(location: Location): Entity? =
+        tilesByLocation[location]
 
     fun getTileTemplateName(location: Location): String? {
         val entity = tilesByLocation[location] ?: return null
-        val reference = checkNotNull(entity.get<TileTemplateReference>()) {
-            "Expected TileTemplateReference for entity $entity"
+        if (!entity.has<Tile>()) {
+            return null
+        }
+        val reference = checkNotNull(entity.get<EntityTemplateReference>()) {
+            "Expected EntityTemplateReference for entity $entity"
         }
         return reference.template
     }
@@ -103,27 +105,13 @@ class WorldLogic(
             components.add(Occlude())
         }
 
-        return world.entities.create(pos, *components.toTypedArray())
-    }
-
-    fun createReferenceEntity(template: TileTemplate, location: Location): Entity {
-        if (tileExists(location)) {
-            error("Duplicate tile at location $location")
+        if (template.has<Tile>()) {
+            components.add(Tile())
+            tilesByLocation[Location(pos)]
         }
 
-        val entity = world.entities.create(
-            location,
-            template.sprite.copy(),
-            TileTemplateReference(template.name),
-            Collider(Vector3(1f, 1f, 0f)),
-            Occlude() // manually ensure that the reference entity is included in the occlusion system
-        )
-        tilesByLocation[location] = entity
-        return entity
+        return world.entities.create(pos, *components.toTypedArray())
     }
-
-    fun tileExists(location: Location) =
-        tilesByLocation.containsKey(location)
 
     fun setBuilding(entity: Entity, building: String?) {
         world.buildings.remove(entity)

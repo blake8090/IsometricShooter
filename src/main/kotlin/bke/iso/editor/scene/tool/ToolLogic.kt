@@ -4,7 +4,6 @@ import bke.iso.editor.core.EditorCommand
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Events
 import bke.iso.engine.input.ButtonState
@@ -80,11 +79,6 @@ class ToolLogic(
             ToolSelection.ROOM -> roomTool
             ToolSelection.NONE -> null
         }
-
-    fun onTileTemplateSelected(template: TileTemplate) {
-        brushTool.selectTemplate(template)
-        fillTool.selectTemplate(template)
-    }
 
     fun onEntityTemplateSelected(template: EntityTemplate) {
         brushTool.selectTemplate(template)

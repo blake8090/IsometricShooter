@@ -4,4 +4,3 @@ import bke.iso.engine.world.entity.Component
 
 data class EntityTemplateReference(val template: String = "") : Component
 
-data class TileTemplateReference(val template: String = "") : Component

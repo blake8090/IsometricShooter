@@ -3,9 +3,7 @@ package bke.iso.editor.scene.tool
 import bke.iso.editor.core.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.FillEntityCommand
-import bke.iso.editor.scene.command.FillTileCommand
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.TileTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.floor
@@ -29,7 +27,7 @@ class FillTool(
     private val start = Vector3()
     private val end = Vector3()
 
-    private var selection: Selection? = null
+    private var selectedTemplate: EntityTemplate? = null
 
     override fun update() {
         val pos = Vector3(pointerPos).floor()
@@ -50,14 +48,9 @@ class FillTool(
         }
     }
 
-    fun selectTemplate(template: TileTemplate) {
-        log.debug { "tile template '${template.name}' selected" }
-        selection = TileSelection(template)
-    }
-
     fun selectTemplate(template: EntityTemplate) {
+        selectedTemplate = template
         log.debug { "entity template '${template.name}' selected" }
-        selection = EntitySelection(template)
     }
 
     private fun startDragging(pointerPos: Vector3) {
@@ -74,25 +67,9 @@ class FillTool(
 
     override fun performMultiAction(): EditorCommand? = null
 
-    override fun performReleaseAction(): EditorCommand? {
-        val box = Box.fromMinMax(Segment(start, end))
-
-        return when (val selected = selection) {
-            is EntitySelection -> {
-                FillEntityCommand(worldLogic, selected.template, box)
-            }
-
-            is TileSelection -> {
-                FillTileCommand(worldLogic, selected.template, box)
-            }
-
-            else -> null
+    override fun performReleaseAction(): EditorCommand? =
+        selectedTemplate?.let { template ->
+            val box = Box.fromMinMax(Segment(start, end))
+            FillEntityCommand(worldLogic, template, box)
         }
-    }
-
-    private sealed class Selection
-
-    private class TileSelection(val template: TileTemplate) : Selection()
-
-    private class EntitySelection(val template: EntityTemplate) : Selection()
 }

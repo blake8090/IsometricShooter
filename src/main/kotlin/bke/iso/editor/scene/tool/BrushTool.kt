@@ -1,12 +1,11 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.scene.command.PaintEntityCommand
-import bke.iso.editor.scene.command.PaintTileCommand
 import bke.iso.editor.core.EditorCommand
 import bke.iso.editor.scene.WorldLogic
+import bke.iso.editor.scene.command.PaintEntityCommand
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.TileTemplate
+import bke.iso.engine.asset.entity.has
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
@@ -16,6 +15,7 @@ import bke.iso.engine.math.floor
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
+import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -33,7 +33,7 @@ class BrushTool(
 
     private val brushSprite = Sprite(alpha = 0f)
     private val brushEntity = world.entities.create(Vector3(), brushSprite)
-    private var selection: Selection? = null
+    private var selectedTemplate: EntityTemplate? = null
 
     override fun update() {
     }
@@ -43,7 +43,10 @@ class BrushTool(
 
         val pos = Vector3(pointerPos)
 
-        if (selection is TileSelection || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+        val isTileTemplate = selectedTemplate
+            ?.has<Tile>()
+            ?: false
+        if (isTileTemplate || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
             pos.floor()
 
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
@@ -62,39 +65,26 @@ class BrushTool(
     }
 
     private fun getBox() =
-        if (selection is TileSelection) {
-            Box.fromMinMax(
+        brushEntity
+            .getCollisionBox()
+            ?: Box.fromMinMax(
                 brushEntity.pos,
-                brushEntity.pos.add(1f, 1f, 0f)
+                brushEntity.pos.add(1f, 1f, 1f)
             )
-        } else {
-            brushEntity
-                .getCollisionBox()
-                ?: Box.fromMinMax(
-                    brushEntity.pos,
-                    brushEntity.pos.add(1f, 1f, 1f)
-                )
-        }
 
-    override fun performAction(): EditorCommand? =
-        when (val s = selection) {
-            is TileSelection -> paintTile(s.template, Location(brushEntity.pos))
-            is EntitySelection -> PaintEntityCommand(worldLogic, s.template, brushEntity.pos)
-            else -> null
-        }
-
-    override fun performMultiAction(): EditorCommand? =
-        when (val s = selection) {
-            is TileSelection -> paintTile(s.template, Location(brushEntity.pos))
-            else -> null
-        }
-
-    private fun paintTile(template: TileTemplate, location: Location): PaintTileCommand? =
-        if (template.name != worldLogic.getTileTemplateName(location)) {
-            PaintTileCommand(worldLogic, template, location)
-        } else {
+    override fun performAction(): EditorCommand? {
+        val template = selectedTemplate
+        return if (template == null) {
             null
+        } else if (worldLogic.getTileTemplateName(Location(brushEntity.pos)) == template.name) {
+            // avoid replacing tiles with the same template
+            null
+        } else {
+            PaintEntityCommand(worldLogic, template, brushEntity.pos)
         }
+    }
+
+    override fun performMultiAction(): EditorCommand? = null
 
     override fun performReleaseAction(): EditorCommand? = null
 
@@ -105,24 +95,12 @@ class BrushTool(
     override fun disable() {
         brushSprite.texture = ""
         brushSprite.alpha = 0f
-        selection = null
-    }
-
-    fun selectTemplate(template: TileTemplate) {
-        log.debug { "tile template '${template.name}' selected" }
-        selection = TileSelection(template)
-
-        brushSprite.texture = template.sprite.texture
-        brushSprite.offsetX = template.sprite.offsetX
-        brushSprite.offsetY = template.sprite.offsetY
-        brushSprite.scale = template.sprite.scale
-        // only need colliders when placing entities
-        brushEntity.remove<Collider>()
+        selectedTemplate = null
     }
 
     fun selectTemplate(template: EntityTemplate) {
         log.debug { "entity template '${template.name}' selected" }
-        selection = EntitySelection(template)
+        selectedTemplate = template
 
         template.components.withFirstInstance<Sprite> { sprite ->
             brushSprite.texture = sprite.texture
@@ -131,14 +109,9 @@ class BrushTool(
             brushSprite.scale = sprite.scale
         }
 
+        // visualization of entity's collision box
         template.components.withFirstInstance<Collider> { collider ->
             brushEntity.add(collider.copy())
         }
     }
-
-    private sealed class Selection
-
-    private class TileSelection(val template: TileTemplate) : Selection()
-
-    private class EntitySelection(val template: EntityTemplate) : Selection()
 }

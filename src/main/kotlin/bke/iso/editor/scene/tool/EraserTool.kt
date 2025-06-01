@@ -1,13 +1,13 @@
 package bke.iso.editor.scene.tool
 
 import bke.iso.editor.core.EditorCommand
-import bke.iso.editor.scene.TileTemplateReference
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.DeleteEntityCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.graphics.Color
 
 class EraserTool(
@@ -55,7 +55,7 @@ class EraserTool(
     override fun performReleaseAction(): EditorCommand? = null
 
     private fun getType(entity: Entity) =
-        if (entity.has<TileTemplateReference>()) {
+        if (entity.has<Tile>()) {
             Type.TILE
         } else {
             Type.ENTITY

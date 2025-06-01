@@ -8,7 +8,7 @@ class UpperLayerOcclusionStrategy(private val sceneEditor: SceneEditor) : Occlus
         val entity = checkNotNull(renderable.entity)
 
         if (entity.z > sceneEditor.selectedLayer && sceneEditor.hideUpperLayers) {
-            if (entity.has<EntityTemplateReference>() || entity.has<TileTemplateReference>()) {
+            if (entity.has<EntityTemplateReference>()) {
                 renderable.alpha = 0f
             }
         }

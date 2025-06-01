@@ -6,7 +6,6 @@ import bke.iso.engine.asset.font.FontGeneratorAssetCache
 import bke.iso.engine.asset.shader.ShaderFileAssetCache
 import bke.iso.engine.asset.TextureAssetCache
 import bke.iso.engine.asset.config.ConfigAssetCache
-import bke.iso.engine.asset.entity.TileTemplateAssetCache
 import bke.iso.engine.asset.shader.ShaderInfoAssetCache
 import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
@@ -88,7 +87,6 @@ class Engine(val game: Game) {
         assets.addCache(TextureAssetCache())
         assets.addCache(FontGeneratorAssetCache())
         assets.addCache(EntityTemplateAssetCache(serializer))
-        assets.addCache(TileTemplateAssetCache(serializer))
         assets.addCache(SceneAssetCache(serializer))
         assets.addCache(ShaderFileAssetCache())
         assets.addCache(ShaderInfoAssetCache(serializer))
