@@ -84,7 +84,19 @@ class BrushTool(
         }
     }
 
-    override fun performMultiAction(): EditorCommand? = null
+    override fun performMultiAction(): EditorCommand? {
+        val template = selectedTemplate
+        // only tiles are supported for multi actions
+        return if (template == null || !template.has<Tile>()) {
+            null
+        }
+        // avoid replacing tiles with the same template
+        else if (worldLogic.getTileTemplateName(Location(brushEntity.pos)) == template.name) {
+            null
+        } else {
+            PaintEntityCommand(worldLogic, template, brushEntity.pos)
+        }
+    }
 
     override fun performReleaseAction(): EditorCommand? = null
 

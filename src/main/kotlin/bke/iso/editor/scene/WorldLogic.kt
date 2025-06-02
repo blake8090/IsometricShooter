@@ -105,12 +105,16 @@ class WorldLogic(
             components.add(Occlude())
         }
 
-        if (template.has<Tile>()) {
+        val isTile = template.has<Tile>()
+        if (isTile) {
             components.add(Tile())
-            tilesByLocation[Location(pos)]
         }
 
-        return world.entities.create(pos, *components.toTypedArray())
+        val entity = world.entities.create(pos, *components.toTypedArray())
+        if (isTile) {
+            tilesByLocation[Location(pos)] = entity
+        }
+        return entity
     }
 
     fun setBuilding(entity: Entity, building: String?) {
