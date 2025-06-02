@@ -9,7 +9,7 @@ abstract class BaseEditor {
     protected abstract val renderer: Renderer
     protected abstract val world: World
 
-    protected val commands = CommandStack()
+    protected val commands = EditorCommandStack()
 
     abstract fun start()
     abstract fun stop()

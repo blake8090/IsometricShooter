@@ -1,6 +1,6 @@
 package bke.iso.editor.core
 
-class CommandStack {
+class EditorCommandStack {
 
     private var commands = mutableListOf<EditorCommand>()
     private var pointer = -1
