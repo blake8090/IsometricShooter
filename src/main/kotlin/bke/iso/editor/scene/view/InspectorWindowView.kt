@@ -41,38 +41,37 @@ class InspectorWindowView(
     fun draw(pos: ImVec2, size: ImVec2, data: SceneEditor.ViewData) {
         ImGui.setNextWindowPos(pos)
         ImGui.setNextWindowSize(size)
-        ImGui.begin("Inspector")
+        ImGui.begin("Inspector##inspector")
+
+        ImGui.beginDisabled(data.selectedEntity == null)
 
         val entity = data.selectedEntity
-        ImGui.beginDisabled(data.selectedEntity == null)
         if (entity != null) {
-            drawMainProperties(entity)
-            drawBuildingsSection(entity, data)
+            drawMainProperties(entity, data)
             drawTemplateSection(entity)
         }
+
         ImGui.endDisabled()
         ImGui.end()
     }
 
-    private fun drawMainProperties(entity: Entity) {
-        ImGui.inputText("Id", ImString(entity.id), ImGuiInputTextFlags.ReadOnly)
+    private fun drawMainProperties(entity: Entity, data: SceneEditor.ViewData) {
+        ImGui.inputText("Id##inspectorId", ImString(entity.id), ImGuiInputTextFlags.ReadOnly)
 
-        ImGui.separatorText("Position")
-        ImGui.inputFloat("x", ImFloat(entity.x))
-        ImGui.inputFloat("y", ImFloat(entity.y))
-        ImGui.inputFloat("z", ImFloat(entity.z))
-    }
+        if (ImGui.treeNodeEx("Position##inspectorPos", ImGuiTreeNodeFlags.DefaultOpen)) {
+            ImGui.inputFloat("x", ImFloat(entity.x))
+            ImGui.inputFloat("y", ImFloat(entity.y))
+            ImGui.inputFloat("z", ImFloat(entity.z))
+            ImGui.treePop()
+        }
 
-    private fun drawBuildingsSection(entity: Entity, data: SceneEditor.ViewData) {
-        ImGui.separatorText("Buildings")
-        val selectedBuilding = data.selectedBuilding
-        if (ImGui.beginCombo("Assigned", selectedBuilding)) {
-            if (ImGui.selectable("None", selectedBuilding == null)) {
+        if (ImGui.beginCombo("Building##inspectorBuilding", data.selectedBuilding)) {
+            if (ImGui.selectable("None", data.selectedBuilding == null)) {
                 events.fire(SceneEditor.BuildingAssigned(entity, null))
             }
 
             for (building in data.buildings) {
-                if (ImGui.selectable(building, building == selectedBuilding)) {
+                if (ImGui.selectable(building, building == data.selectedBuilding)) {
                     events.fire(SceneEditor.BuildingAssigned(entity, building))
                 }
             }
@@ -82,31 +81,34 @@ class InspectorWindowView(
     }
 
     private fun drawTemplateSection(entity: Entity) {
-        if (ImGui.collapsingHeader("Template", ImGuiTreeNodeFlags.DefaultOpen)) {
-            val selectedTemplate = entity
-                .get<EntityTemplateReference>()
-                ?.template
+        ImGui.separatorText("Template")
 
-            if (selectedTemplate != null) {
-                ImGui.inputText("Name", ImString(selectedTemplate), ImGuiInputTextFlags.ReadOnly)
+        val selectedTemplate = entity
+            .get<EntityTemplateReference>()
+            ?.template
 
-                ImGui.separatorText("Components")
-                val template = assets.get<EntityTemplate>(selectedTemplate)
-                for (component in template.components) {
+        if (selectedTemplate != null) {
+            ImGui.inputText(
+                /* label = */ "Name##inspectorTemplateName",
+                /* text = */ ImString(selectedTemplate),
+                /* imGuiInputTextFlags = */ ImGuiInputTextFlags.ReadOnly
+            )
 
-                    if (ImGui.treeNode(component::class.simpleName)) {
-                        ImGui.text("Override")
-                        ImGui.sameLine()
-                        ImGui.checkbox("##override", false)
-                        ImGui.sameLine()
-                        ImGui.button("Revert")
+            val template = assets.get<EntityTemplate>(selectedTemplate)
+            for (component in template.components) {
 
-                        ImGui.beginDisabled()
-                        drawControls(component)
-                        ImGui.endDisabled()
+                if (ImGui.treeNode(component::class.simpleName)) {
+                    ImGui.text("Override")
+                    ImGui.sameLine()
+                    ImGui.checkbox("##inspectorTemplateOverride", false)
+                    ImGui.sameLine()
+                    ImGui.button("Revert##inspectorTemplateRevert")
 
-                        ImGui.treePop()
-                    }
+                    ImGui.beginDisabled()
+                    drawControls(component)
+                    ImGui.endDisabled()
+
+                    ImGui.treePop()
                 }
             }
         }
