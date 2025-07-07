@@ -2,23 +2,19 @@ package bke.iso.editor.scene
 
 import bke.iso.editor.EditorModule
 import bke.iso.editor.scene.tool.ToolSelection
+import bke.iso.editor.scene.view.InspectorWindowView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.imgui.ImGuiView
-import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Description
-import bke.iso.engine.world.entity.Tags
 import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
 import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiCol
-import imgui.flag.ImGuiInputTextFlags
 import imgui.flag.ImGuiWindowFlags
-import imgui.type.ImFloat
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -31,11 +27,12 @@ class SceneEditorView(
 
     private val viewport = ImGui.getMainViewport()
 
-    private var newTagText = ""
     private var openSelectBuildingPopup = false
     private var selectBuildingPopupAction: (String) -> Unit = {}
     private var openNewBuildingPopup = false
     private var newBuildingText = ""
+
+    private val inspectorWindowView = InspectorWindowView(assets, events)
 
     lateinit var viewData: SceneEditor.ViewData
 
@@ -57,7 +54,8 @@ class SceneEditorView(
         drawAssetBrowser(assetBrowserWindowData)
         drawToolbar(toolbarWindowData, viewData)
         drawMessageWindow(toolbarWindowData, viewData)
-        drawInspectorWindow(inspectorWindowData, viewData)
+        inspectorWindowView.draw(inspectorWindowData.pos, inspectorWindowData.size, viewData)
+//        drawInspectorWindow(inspectorWindowData, viewData)
     }
 
     private fun drawMainMenuBar(viewData: SceneEditor.ViewData) {
@@ -214,68 +212,6 @@ class SceneEditorView(
             /* userTextureId = */ texId.toLong(),
             /* size = */ ImVec2(tex.width.toFloat(), tex.height.toFloat())
         )
-    }
-
-    private fun drawInspectorWindow(windowData: WindowData, viewData: SceneEditor.ViewData) {
-        ImGui.setNextWindowPos(windowData.pos)
-        ImGui.setNextWindowSize(windowData.size)
-        ImGui.begin("Inspector")
-
-        ImGui.beginDisabled(viewData.selectedEntity == null)
-        if (viewData.selectedEntity != null) {
-            val entity: Entity = viewData.selectedEntity
-
-            ImGui.inputText("id", ImString(entity.id), ImGuiInputTextFlags.ReadOnly)
-
-            val description = entity.get<Description>()
-                ?.text
-                ?: ""
-            ImGui.inputText("description", ImString(description), ImGuiInputTextFlags.ReadOnly)
-
-            ImGui.separatorText("Position")
-            ImGui.inputFloat("x", ImFloat(entity.x))
-            ImGui.inputFloat("y", ImFloat(entity.y))
-            ImGui.inputFloat("z", ImFloat(entity.z))
-
-            ImGui.separatorText("Tags")
-            val imString = ImString("", 25)
-            if (ImGui.inputText("##tag", imString)) {
-                newTagText = imString.get()
-            }
-            ImGui.sameLine()
-            if (ImGui.button("Add")) {
-                events.fire(SceneEditor.TagAdded(entity, newTagText))
-            }
-
-            entity.with<Tags> { component ->
-                component.tags.forEachIndexed { index, tag ->
-                    ImGui.inputText("##tagText$index", ImString(tag))
-                    ImGui.sameLine()
-                    if (ImGui.button("Delete##deleteTag$index")) {
-                        events.fire(SceneEditor.TagDeleted(entity, tag))
-                    }
-                }
-            }
-
-            ImGui.separatorText("Buildings")
-            val selectedBuilding = viewData.selectedBuilding
-            if (ImGui.beginCombo("Assigned", selectedBuilding)) {
-                if (ImGui.selectable("None", selectedBuilding == null)) {
-                    events.fire(SceneEditor.BuildingAssigned(viewData.selectedEntity, null))
-                }
-
-                for (building in viewData.buildings) {
-                    if (ImGui.selectable(building, building == selectedBuilding)) {
-                        events.fire(SceneEditor.BuildingAssigned(viewData.selectedEntity, building))
-                    }
-                }
-
-                ImGui.endCombo()
-            }
-        }
-        ImGui.endDisabled()
-
-        ImGui.end()
     }
 
     private fun drawToolbar(windowData: WindowData, viewData: SceneEditor.ViewData) {
