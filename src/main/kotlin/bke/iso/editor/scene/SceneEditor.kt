@@ -8,6 +8,7 @@ import bke.iso.editor.scene.command.AssignBuildingCommand
 import bke.iso.editor.scene.command.DeleteTagCommand
 import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
+import bke.iso.editor.scene.view.SceneEditorView
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.asset.entity.EntityTemplate

@@ -1,8 +1,8 @@
-package bke.iso.editor.scene
+package bke.iso.editor.scene.view
 
 import bke.iso.editor.EditorModule
+import bke.iso.editor.scene.SceneEditor
 import bke.iso.editor.scene.tool.ToolSelection
-import bke.iso.editor.scene.view.InspectorWindowView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Event
