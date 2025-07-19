@@ -4,10 +4,8 @@ import bke.iso.editor.EditorModule
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
-import bke.iso.engine.render.Sprite
 import bke.iso.engine.ui.imgui.ImGuiView
 import com.badlogic.gdx.graphics.GLTexture
 import com.badlogic.gdx.graphics.Texture
@@ -32,6 +30,7 @@ class SceneEditorView(
     private var openNewBuildingPopup = false
     private var newBuildingText = ""
 
+    private val contentBrowserView = ContentBrowserView(assets, events)
     private val inspectorWindowView = InspectorWindowView(assets, events)
 
     lateinit var viewData: SceneEditor.ViewData
@@ -51,11 +50,10 @@ class SceneEditorView(
         val assetBrowserWindowData = getAssetBrowserWindowData()
         val toolbarWindowData = getToolbarWindowData(assetBrowserWindowData)
         val inspectorWindowData = getInspectorWindowData(assetBrowserWindowData, toolbarWindowData)
-        drawAssetBrowser(assetBrowserWindowData)
+        contentBrowserView.draw(assetBrowserWindowData.pos, assetBrowserWindowData.size, viewData)
         drawToolbar(toolbarWindowData, viewData)
         drawMessageWindow(toolbarWindowData, viewData)
         inspectorWindowView.draw(inspectorWindowData.pos, inspectorWindowData.size, viewData)
-//        drawInspectorWindow(inspectorWindowData, viewData)
     }
 
     private fun drawMainMenuBar(viewData: SceneEditor.ViewData) {
@@ -137,71 +135,6 @@ class SceneEditorView(
 
             ImGui.endMainMenuBar()
         }
-    }
-
-    private fun drawAssetBrowser(windowData: WindowData) {
-        ImGui.setNextWindowPos(windowData.pos)
-        ImGui.setNextWindowSize(windowData.size)
-        ImGui.begin("Asset Browser")
-
-        if (ImGui.beginTabBar("assetTypes")) {
-            if (ImGui.beginTabItem("Entities")) {
-                drawEntityAssets()
-                ImGui.endTabItem()
-            }
-
-            if (ImGui.beginTabItem("Tiles")) {
-                drawTileAssets()
-                ImGui.endTabItem()
-            }
-            ImGui.endTabBar()
-        }
-
-        ImGui.end()
-    }
-
-    private fun drawEntityAssets() {
-        var column = 0
-        for (template in assets.getAll<EntityTemplate>()) {
-            val sprite = template
-                .components
-                .firstNotNullOfOrNull { component -> component as? Sprite }
-                ?: continue
-
-            if (imageButton(sprite.texture)) {
-                log.debug { "Selected entity template ${template.name}" }
-                events.fire(SceneEditor.EntityTemplateSelected(template))
-            }
-            ImGui.setItemTooltip(template.name)
-
-            if (column < 2) {
-                ImGui.sameLine()
-                column++
-            } else {
-                column = 0
-            }
-        }
-    }
-
-    private fun drawTileAssets() {
-//        var column = 0
-//
-//        val tiles = assets.getAll<EntityTemplate>()
-//            .filter { entityTemplate -> entityTemplate.components }
-//        for (template in assets.getAll<TileTemplate>()) {
-//            if (imageButton(template.sprite.texture)) {
-//                log.debug { "Selected tile template ${template.name}" }
-//                events.fire(SceneEditor.TileTemplateSelected(template))
-//            }
-//            ImGui.setItemTooltip(template.name)
-//
-//            if (column < 2) {
-//                ImGui.sameLine()
-//                column++
-//            } else {
-//                column = 0
-//            }
-//        }
     }
 
     private fun imageButton(texture: String): Boolean {
@@ -407,7 +340,7 @@ class SceneEditorView(
     )
 }
 
-private fun or(vararg integers: Int): Int {
+fun or(vararg integers: Int): Int {
     var result = 0
     integers.forEach { integer ->
         result = result or integer
