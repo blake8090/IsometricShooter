@@ -8,6 +8,7 @@ import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Events
+import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
@@ -58,12 +59,9 @@ class InspectorWindowView(
     private fun drawMainProperties(entity: Entity, data: SceneEditor.ViewData) {
         ImGui.inputText("Id##inspectorId", ImString(entity.id), ImGuiInputTextFlags.ReadOnly)
 
-        if (ImGui.treeNodeEx("Position##inspectorPos", ImGuiTreeNodeFlags.DefaultOpen)) {
-            ImGui.inputFloat("x", ImFloat(entity.x))
-            ImGui.inputFloat("y", ImFloat(entity.y))
-            ImGui.inputFloat("z", ImFloat(entity.z))
-            ImGui.treePop()
-        }
+        ImGui.inputFloat("x##inspectorPosX", ImFloat(entity.x))
+        ImGui.inputFloat("y##inspectorPosY", ImFloat(entity.y))
+        ImGui.inputFloat("z##inspectorPosZ", ImFloat(entity.z))
 
         if (ImGui.beginCombo("Building##inspectorBuilding", data.selectedBuilding)) {
             if (ImGui.selectable("None", data.selectedBuilding == null)) {
@@ -81,7 +79,7 @@ class InspectorWindowView(
     }
 
     private fun drawTemplateSection(entity: Entity) {
-        ImGui.separatorText("Template")
+        ImGui.separatorText("")
 
         val selectedTemplate = entity
             .get<EntityTemplateReference>()
@@ -89,26 +87,21 @@ class InspectorWindowView(
 
         if (selectedTemplate != null) {
             ImGui.inputText(
-                /* label = */ "Name##inspectorTemplateName",
+                /* label = */ "Template##inspectorTemplateName",
                 /* text = */ ImString(selectedTemplate),
                 /* imGuiInputTextFlags = */ ImGuiInputTextFlags.ReadOnly
             )
 
             val template = assets.get<EntityTemplate>(selectedTemplate)
             for (component in template.components) {
+                ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", false)
+                ImGui.setItemTooltip("Override Component")
+                ImGui.sameLine()
 
-                if (ImGui.treeNode(component::class.simpleName)) {
-                    ImGui.text("Override")
-                    ImGui.sameLine()
-                    ImGui.checkbox("##inspectorTemplateOverride", false)
-                    ImGui.sameLine()
-                    ImGui.button("Revert##inspectorTemplateRevert")
-
+                if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
                     ImGui.beginDisabled()
                     drawControls(component)
                     ImGui.endDisabled()
-
-                    ImGui.treePop()
                 }
             }
         }
@@ -124,7 +117,9 @@ class InspectorWindowView(
                 typeOf<String>() -> drawStringControls(component, memberProperty)
                 typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
                 typeOf<Color>() -> drawColorControls(component, memberProperty)
-                else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - KType ${memberProperty.returnType}" }
+                typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
+                typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
+                else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
             }
         }
     }
@@ -136,7 +131,7 @@ class InspectorWindowView(
             ImGui.beginDisabled()
         }
 
-        val value = ImString(memberProperty.getter.call(component).toString(), inputTextLength)
+        val value = ImString(get<String>(memberProperty, component), inputTextLength)
         if (ImGui.inputText(memberProperty.name, value)) {
             if (memberProperty is KMutableProperty<*>) {
                 if (memberProperty.name != "texture" || assets.contains(value.toString(), Texture::class)) {
@@ -159,7 +154,7 @@ class InspectorWindowView(
     }
 
     private fun drawFloatControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        val value = ImFloat(memberProperty.getter.call(component) as Float)
+        val value = ImFloat(get<Float>(memberProperty, component))
         if (ImGui.inputFloat(memberProperty.name, value)) {
             val command =
                 UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
@@ -168,7 +163,7 @@ class InspectorWindowView(
     }
 
     private fun drawBooleanControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        val value = ImBoolean(memberProperty.getter.call(component) as Boolean)
+        val value = ImBoolean(get<Boolean>(memberProperty, component))
         if (ImGui.checkbox(memberProperty.name, value)) {
             val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
             events.fire(EditorModule.ExecuteCommand(command))
@@ -176,7 +171,7 @@ class InspectorWindowView(
     }
 
     private fun drawIntControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        val value = ImInt(memberProperty.getter.call(component) as Int)
+        val value = ImInt(get<Int>(memberProperty, component))
         if (ImGui.inputInt(memberProperty.name, value)) {
             val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
             events.fire(EditorModule.ExecuteCommand(command))
@@ -184,8 +179,8 @@ class InspectorWindowView(
     }
 
     private fun drawVector3Controls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        if (ImGui.collapsingHeader(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
-            val vector = Vector3::class.cast(memberProperty.getter.call(component))
+        if (ImGui.treeNodeEx(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
+            val vector = get<Vector3>(memberProperty, component)
 
             val xValue = ImFloat(vector.x)
             if (ImGui.inputFloat("x##${memberProperty.name}", xValue)) {
@@ -210,16 +205,28 @@ class InspectorWindowView(
                     events.fire(EditorModule.ExecuteCommand(command))
                 }
             }
+
+            ImGui.treePop()
         }
     }
 
     private fun drawColorControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        if (ImGui.collapsingHeader(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
-            val color = Color::class.cast(memberProperty.getter.call(component))
+        if (ImGui.treeNodeEx(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
+            val color = get<Color>(memberProperty, component)
             ImGui.inputFloat("r##${memberProperty.name}", ImFloat(color.r))
             ImGui.inputFloat("g##${memberProperty.name}", ImFloat(color.g))
             ImGui.inputFloat("b##${memberProperty.name}", ImFloat(color.b))
             ImGui.inputFloat("a##${memberProperty.name}", ImFloat(color.a))
+            ImGui.treePop()
         }
+    }
+
+    private fun drawPhysicsModeControls(component: Component, memberProperty: KProperty1<out Component, *>) {
+        val value = get<PhysicsMode>(memberProperty, component)
+        ImGui.inputText(memberProperty.name, ImString(value.toString()))
+    }
+
+    private inline fun <reified T : Any> get(property: KProperty1<out Component, *>, instance: Component): T {
+        return T::class.cast(property.getter.call(instance))
     }
 }
