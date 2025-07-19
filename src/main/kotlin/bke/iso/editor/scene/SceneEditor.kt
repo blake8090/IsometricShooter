@@ -10,6 +10,7 @@ import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.editor.scene.view.SceneEditorView
 import bke.iso.engine.Engine
+import bke.iso.engine.asset.BASE_PATH
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.getCollisionBox
@@ -28,6 +29,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.encodeToString
+import java.io.File
 
 class SceneEditor(private val engine: Engine) : BaseEditor() {
 
@@ -60,6 +62,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
     private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
+    private var selectedAssetDirectory: File? = null
+
     override fun start() {
         engine.ui.pushView(view)
         cameraLogic.start()
@@ -78,6 +82,9 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 //        renderer.occlusion.resetStrategies()
         // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
+
+        // show all assets by default
+        selectedAssetDirectory = File(BASE_PATH)
     }
 
     override fun stop() {
@@ -138,7 +145,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 highlightSelectedLayer = highlightSelectedLayer,
                 buildings = engine.world.buildings.getAll(),
                 selectedBuilding = selectedBuilding,
-                messageBarText = getMessageBarText()
+                messageBarText = getMessageBarText(),
+                selectedAssetDirectory = selectedAssetDirectory
             )
     }
 
@@ -262,6 +270,11 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             is Entities.CreatedEvent -> {
                 worldLogic.setBuilding(event.entity, selectedBuilding)
             }
+
+            is AssetDirectorySelected -> {
+                log.debug { "Selected asset directory '${event.dir.path}'" }
+                selectedAssetDirectory = event.dir
+            }
         }
     }
 
@@ -340,6 +353,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     data class BuildingDeleted(val building: String) : Event
     data class BuildingCreated(val building: String) : Event
 
+    data class AssetDirectorySelected(val dir: File) : Event
+
     data class ViewData(
         val selectedEntity: Entity? = null,
         val selectedLayer: Int,
@@ -350,5 +365,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val buildings: Set<String>,
         val selectedBuilding: String?,
         val messageBarText: String,
+        val selectedAssetDirectory: File? = null
     )
 }

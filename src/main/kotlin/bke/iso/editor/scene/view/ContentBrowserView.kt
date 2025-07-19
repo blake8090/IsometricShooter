@@ -35,7 +35,7 @@ class ContentBrowserView(
                     /* size = */ ImVec2(size.x - 12f, size.y * 0.60f),
                     /* imGuiWindowFlags = */ ImGuiWindowFlags.HorizontalScrollbar
                 )
-                drawEntityAssets()
+                drawEntityAssets(data)
                 ImGui.endChild()
                 ImGui.endTabItem()
             }
@@ -49,7 +49,8 @@ class ContentBrowserView(
                     /* size = */ ImVec2(size.x - 12f, size.y * 0.30f),
                     /* imGuiWindowFlags = */ ImGuiWindowFlags.HorizontalScrollbar
                 )
-                drawDirectory(File(BASE_PATH), true)
+
+                drawDirectory(File(BASE_PATH), data.selectedAssetDirectory)
                 ImGui.endChild()
                 ImGui.endTabItem()
             }
@@ -59,17 +60,28 @@ class ContentBrowserView(
         ImGui.end()
     }
 
-    private fun drawDirectory(file: File, selected: Boolean = false) {
-        val flag =
-            if (selected) {
-                ImGuiTreeNodeFlags.Selected
-            } else {
-                0
-            }
+    private fun drawDirectory(dir: File, selectedDir: File?) {
+        val flags =
+            or(
+                ImGuiTreeNodeFlags.OpenOnArrow,
+                ImGuiTreeNodeFlags.OpenOnDoubleClick,
+                ImGuiTreeNodeFlags.SpanAvailWidth,
+                if (dir == selectedDir) {
+                    ImGuiTreeNodeFlags.Selected
+                } else {
+                    0
+                }
+            )
 
-        if (ImGui.treeNodeEx(file.name, flag)) {
-            for (dir in getSubDirectories(file)) {
-                drawDirectory(dir)
+        val open = ImGui.treeNodeEx(dir.name, flags)
+        if (ImGui.isItemClicked() && !ImGui.isItemToggledOpen()) {
+            log.debug { "selected ${dir.path}" }
+            events.fire(SceneEditor.AssetDirectorySelected(dir))
+        }
+
+        if (open) {
+            for (subDir in getSubDirectories(dir)) {
+                drawDirectory(subDir, selectedDir)
             }
             ImGui.treePop()
         }
@@ -80,9 +92,18 @@ class ContentBrowserView(
         return dirs.toList()
     }
 
-    private fun drawEntityAssets() {
+    private fun drawEntityAssets(data: SceneEditor.ViewData) {
         var column = 0
-        for (template in assets.getAll<EntityTemplate>()) {
+
+        val files = data.selectedAssetDirectory
+            ?.walk()
+            ?.filter(File::isFile)
+            ?.filter { file -> file.extension == "entity" }
+            ?.map { file -> assets.get<EntityTemplate>(file.nameWithoutExtension) }
+            ?.toList()
+            ?: emptyList()
+
+        for (template in files) {
             val sprite = template
                 .components
                 .firstNotNullOfOrNull { component -> component as? Sprite }
