@@ -28,23 +28,33 @@ class ContentBrowserView(
         ImGui.setNextWindowSize(size)
         ImGui.begin("Content Browser##content")
 
-        ImGui.beginChild(
-            /* strId = */ "##contentFileBrowser",
-            /* size = */ ImVec2(size.x - 12f, size.y * 0.20f),
-            /* imGuiWindowFlags = */ ImGuiWindowFlags.HorizontalScrollbar
-        )
-        drawDirectory(File(BASE_PATH), true)
-        ImGui.endChild()
+        if (ImGui.beginTabBar("contentBrowserEntities")) {
+            if (ImGui.beginTabItem("Entities")) {
+                ImGui.beginChild(
+                    /* strId = */ "##contentEntityBrowser",
+                    /* size = */ ImVec2(size.x - 12f, size.y * 0.60f),
+                    /* imGuiWindowFlags = */ ImGuiWindowFlags.HorizontalScrollbar
+                )
+                drawEntityAssets()
+                ImGui.endChild()
+                ImGui.endTabItem()
+            }
+            ImGui.endTabBar()
+        }
 
-        ImGui.separatorText("")
-
-        ImGui.beginChild(
-            /* strId = */ "##contentEntityBrowser",
-            /* size = */ ImVec2(size.x - 12f, size.y * 0.70f),
-            /* imGuiWindowFlags = */ ImGuiWindowFlags.HorizontalScrollbar
-        )
-        drawEntityAssets()
-        ImGui.endChild()
+        if (ImGui.beginTabBar("contentBrowserFilesystem")) {
+            if (ImGui.beginTabItem("Filesystem")) {
+                ImGui.beginChild(
+                    /* strId = */ "##contentFileBrowser",
+                    /* size = */ ImVec2(size.x - 12f, size.y * 0.30f),
+                    /* imGuiWindowFlags = */ ImGuiWindowFlags.HorizontalScrollbar
+                )
+                drawDirectory(File(BASE_PATH), true)
+                ImGui.endChild()
+                ImGui.endTabItem()
+            }
+            ImGui.endTabBar()
+        }
 
         ImGui.end()
     }
