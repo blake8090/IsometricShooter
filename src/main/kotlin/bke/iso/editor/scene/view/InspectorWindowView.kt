@@ -14,8 +14,10 @@ import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector3
+import imgui.ImColor
 import imgui.ImGui
 import imgui.ImVec2
+import imgui.flag.ImGuiCol
 import imgui.flag.ImGuiInputTextFlags
 import imgui.flag.ImGuiTreeNodeFlags
 import imgui.type.ImBoolean
@@ -38,6 +40,8 @@ class InspectorWindowView(
     private val log = KotlinLogging.logger { }
 
     private val inputTextLength = 50
+
+    private val componentOverrideColor = ImColor.rgb(50, 129, 168)
 
     fun draw(pos: ImVec2, size: ImVec2, data: SceneEditor.ViewData) {
         ImGui.setNextWindowPos(pos)
@@ -81,29 +85,57 @@ class InspectorWindowView(
     private fun drawTemplateSection(entity: Entity) {
         ImGui.separatorText("")
 
-        val selectedTemplate = entity
-            .get<EntityTemplateReference>()
-            ?.template
+        val templateReference = checkNotNull(entity.get<EntityTemplateReference>()) {
+            "Expected entity $entity to have an EntityTemplateReference"
+        }
 
-        if (selectedTemplate != null) {
-            ImGui.inputText(
-                /* label = */ "Template##inspectorTemplateName",
-                /* text = */ ImString(selectedTemplate),
-                /* imGuiInputTextFlags = */ ImGuiInputTextFlags.ReadOnly
-            )
+        ImGui.inputText(
+            /* label = */ "Template##inspectorTemplateName",
+            /* text = */ ImString(templateReference.template),
+            /* imGuiInputTextFlags = */ ImGuiInputTextFlags.ReadOnly
+        )
 
-            val template = assets.get<EntityTemplate>(selectedTemplate)
-            for (component in template.components) {
-                ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", false)
-                ImGui.setItemTooltip("Override Component")
-                ImGui.sameLine()
+        val template = assets.get<EntityTemplate>(templateReference.template)
+        for (templateComponent in template.components) {
+            val componentOverride = templateReference
+                .componentOverrides
+                .firstOrNull { c -> c::class == templateComponent::class }
 
-                if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
-                    ImGui.beginDisabled()
-                    drawControls(component)
-                    ImGui.endDisabled()
-                }
+            if (componentOverride == null) {
+                drawTemplateComponent(templateReference, templateComponent)
+            } else {
+                drawComponentOverride(templateReference, componentOverride)
             }
+        }
+    }
+
+    private fun drawTemplateComponent(templateReference: EntityTemplateReference, component: Component) {
+        if (ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", false)) {
+            events.fire(SceneEditor.ComponentOverrideEnabled(templateReference, component))
+        }
+        ImGui.setItemTooltip("Override Component")
+        ImGui.sameLine()
+
+        if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
+            ImGui.beginDisabled()
+            drawControls(component)
+            ImGui.endDisabled()
+        }
+    }
+
+    private fun drawComponentOverride(templateReference: EntityTemplateReference, component: Component) {
+        if (ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", true)) {
+            events.fire(SceneEditor.ComponentOverrideDisabled(templateReference, component))
+        }
+        ImGui.setItemTooltip("Override Component")
+        ImGui.sameLine()
+
+        ImGui.pushStyleColor(ImGuiCol.Header, componentOverrideColor)
+        val open = ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)
+        ImGui.popStyleColor()
+
+        if (open) {
+            drawControls(component)
         }
     }
 
@@ -213,6 +245,7 @@ class InspectorWindowView(
     private fun drawColorControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         if (ImGui.treeNodeEx(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
             val color = get<Color>(memberProperty, component)
+            // TODO: enable changes
             ImGui.inputFloat("r##${memberProperty.name}", ImFloat(color.r))
             ImGui.inputFloat("g##${memberProperty.name}", ImFloat(color.g))
             ImGui.inputFloat("b##${memberProperty.name}", ImFloat(color.b))

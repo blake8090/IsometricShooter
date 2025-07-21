@@ -39,11 +39,11 @@ class WorldLogic(
 
     private fun load(record: EntityRecord) {
         val template = assets.get<EntityTemplate>(record.template)
-        val entity = createReferenceEntity(template, record.pos)
-
-        for (component in record.componentOverrides) {
-            entity.add(component)
-        }
+        val entity = createReferenceEntity(
+            template = template,
+            pos = record.pos,
+            componentOverrides = record.componentOverrides.toMutableSet()
+        )
 
         val building = record.building
         if (!building.isNullOrBlank()) {
@@ -85,9 +85,13 @@ class WorldLogic(
         )
     }
 
-    fun createReferenceEntity(template: EntityTemplate, pos: Vector3): Entity {
+    fun createReferenceEntity(
+        template: EntityTemplate,
+        pos: Vector3,
+        componentOverrides: MutableSet<Component>
+    ): Entity {
         val components = mutableSetOf<Component>()
-        components.add(EntityTemplateReference(template.name))
+        components.add(EntityTemplateReference(template.name, componentOverrides))
 
         template.components.withFirstInstance<Sprite> { sprite ->
             components.add(sprite.copy())

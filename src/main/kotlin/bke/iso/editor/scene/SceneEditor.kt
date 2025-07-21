@@ -6,6 +6,8 @@ import bke.iso.editor.core.BaseEditor
 import bke.iso.editor.scene.command.AddTagCommand
 import bke.iso.editor.scene.command.AssignBuildingCommand
 import bke.iso.editor.scene.command.DeleteTagCommand
+import bke.iso.editor.scene.command.DisableComponentOverrideCommand
+import bke.iso.editor.scene.command.EnableComponentOverrideCommand
 import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.editor.scene.view.SceneEditorView
@@ -103,6 +105,14 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         }
 
         engine.world.entities.each<Tags>(::drawEntityTags)
+
+        engine.world.entities.each<EntityTemplateReference> { entity, templateReference ->
+            if (selectedEntity != entity && templateReference.componentOverrides.isNotEmpty()) {
+                entity.getCollisionBox()?.let { box ->
+                    engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
+                }
+            }
+        }
 
         toolLogic.update()
 
@@ -275,6 +285,23 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 log.debug { "Selected asset directory '${event.dir.path}'" }
                 selectedAssetDirectory = event.dir
             }
+
+            is ComponentOverrideEnabled -> {
+                val command = EnableComponentOverrideCommand(
+                    engine.serializer,
+                    event.templateReference,
+                    event.templateComponent
+                )
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
+
+            is ComponentOverrideDisabled -> {
+                val command = DisableComponentOverrideCommand(
+                    event.templateReference,
+                    event.componentOverride
+                )
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
         }
     }
 
@@ -307,7 +334,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     }
 
     private fun createEntityRecord(entity: Entity, reference: EntityTemplateReference): EntityRecord {
-        val componentOverrides = mutableListOf<Component>()
+        val componentOverrides = reference.componentOverrides.toMutableList()
         entity.with<Tags>(componentOverrides::add)
 
         return EntityRecord(
@@ -354,6 +381,16 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     data class BuildingCreated(val building: String) : Event
 
     data class AssetDirectorySelected(val dir: File) : Event
+
+    data class ComponentOverrideEnabled(
+        val templateReference: EntityTemplateReference,
+        val templateComponent: Component
+    ) : Event
+
+    data class ComponentOverrideDisabled(
+        val templateReference: EntityTemplateReference,
+        val componentOverride: Component
+    ) : Event
 
     data class ViewData(
         val selectedEntity: Entity? = null,

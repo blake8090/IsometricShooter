@@ -7,8 +7,11 @@ import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.Engine
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Module
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class EditorModule(engine: Engine) : Module {
+
+    private val log = KotlinLogging.logger { }
 
     override val alwaysActive: Boolean = true
 
@@ -30,7 +33,11 @@ class EditorModule(engine: Engine) : Module {
         when (event) {
             is EntityEditorSelected -> startEditor(entityEditor)
             is SceneEditorSelected -> startEditor(sceneEditor)
-            is ExecuteCommand -> selectedEditor?.executeCommand(event.command)
+            is ExecuteCommand -> {
+                log.debug { "executing command ${event.command.name}" }
+                selectedEditor?.executeCommand(event.command)
+            }
+
             is EditorClosed -> stop()
             else -> selectedEditor?.handleEvent(event)
         }
