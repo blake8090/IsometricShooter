@@ -155,14 +155,13 @@ class WorldLogic(
         tilesByLocation[location]
 
     fun getTileTemplateName(location: Location): String? {
-        val entity = tilesByLocation[location] ?: return null
-        if (!entity.has<Tile>()) {
-            return null
+        val referenceEntity = tilesByLocation[location] ?: return null
+
+        return if (referenceEntity.has<Tile>()) {
+            getData(referenceEntity).template.name
+        } else {
+            null
         }
-        val reference = checkNotNull(entity.get<EntityTemplateReference>()) {
-            "Expected EntityTemplateReference for entity $entity"
-        }
-        return reference.template
     }
 
     /**
