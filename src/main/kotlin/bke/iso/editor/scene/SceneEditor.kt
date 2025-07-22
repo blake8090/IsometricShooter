@@ -20,7 +20,6 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
-import bke.iso.engine.scene.EntityRecord
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Entities
@@ -106,13 +105,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
         engine.world.entities.each<Tags>(::drawEntityTags)
 
-        engine.world.entities.each<EntityTemplateReference> { entity, templateReference ->
-            if (selectedEntity != entity && templateReference.componentOverrides.isNotEmpty()) {
-                entity.getCollisionBox()?.let { box ->
-                    engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
-                }
-            }
-        }
+        drawComponentOverrideHints()
 
         toolLogic.update()
 
@@ -148,6 +141,13 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         view.viewData =
             ViewData(
                 selectedEntity = selectedEntity,
+                selectedEntityData =
+                    if (selectedEntity != null) {
+                        worldLogic.getData(selectedEntity!!)
+                    } else {
+                        null
+                    },
+
                 selectedTool = toolLogic.selection,
                 selectedLayer = selectedLayer,
                 hideWalls = hideWalls,
@@ -200,6 +200,18 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         }
         entity.getCollisionBox()?.let { box ->
             engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
+        }
+    }
+
+    private fun drawComponentOverrideHints() {
+        for (referenceEntity in worldLogic.getReferenceEntities()) {
+            val data = worldLogic.getData(referenceEntity)
+
+            if (selectedEntity != referenceEntity && data.componentOverrides.isNotEmpty()) {
+                referenceEntity.getCollisionBox()?.let { box ->
+                    engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
+                }
+            }
         }
     }
 
@@ -277,7 +289,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 selectedBuilding = event.building
             }
 
-            is Entities.CreatedEvent -> {
+            is Entities.CreatedEvent -> { // TODO: could we do this in the command instead?
                 worldLogic.setBuilding(event.entity, selectedBuilding)
             }
 
@@ -289,7 +301,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             is ComponentOverrideEnabled -> {
                 val command = EnableComponentOverrideCommand(
                     engine.serializer,
-                    event.templateReference,
+                    worldLogic,
+                    event.referenceEntity,
                     event.templateComponent
                 )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
@@ -297,7 +310,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
             is ComponentOverrideDisabled -> {
                 val command = DisableComponentOverrideCommand(
-                    event.templateReference,
+                    worldLogic,
+                    event.referenceEntity,
                     event.componentOverride
                 )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
@@ -322,27 +336,10 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     private fun saveScene() {
         val file = engine.dialogs.showSaveFileDialog("Scene", "scene") ?: return
 
-        val entities = mutableListOf<EntityRecord>()
-        world.entities.each<EntityTemplateReference> { entity, reference ->
-            entities.add(createEntityRecord(entity, reference))
-        }
-
-        val scene = Scene("1", entities)
+        val scene = worldLogic.createScene()
         val content = engine.serializer.format.encodeToString(scene)
         file.writeText(content)
         log.info { "Saved scene: '${file.canonicalPath}'" }
-    }
-
-    private fun createEntityRecord(entity: Entity, reference: EntityTemplateReference): EntityRecord {
-        val componentOverrides = reference.componentOverrides.toMutableList()
-        entity.with<Tags>(componentOverrides::add)
-
-        return EntityRecord(
-            entity.pos,
-            reference.template,
-            world.buildings.getBuilding(entity),
-            componentOverrides
-        )
     }
 
     private fun toggleHideWalls() {
@@ -383,17 +380,20 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     data class AssetDirectorySelected(val dir: File) : Event
 
     data class ComponentOverrideEnabled(
-        val templateReference: EntityTemplateReference,
+        val referenceEntity: Entity,
         val templateComponent: Component
     ) : Event
 
     data class ComponentOverrideDisabled(
-        val templateReference: EntityTemplateReference,
+        val referenceEntity: Entity,
+        val template: EntityTemplate,
         val componentOverride: Component
     ) : Event
 
     data class ViewData(
         val selectedEntity: Entity? = null,
+        val selectedEntityData: EntityData? = null,
+
         val selectedLayer: Int,
         val selectedTool: ToolSelection,
         val hideWalls: Boolean,

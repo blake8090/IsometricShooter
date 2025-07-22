@@ -82,13 +82,7 @@ data class PaintRoomCommand(
 
     private fun create(template: EntityTemplate, x: Float, y: Float, z: Float) {
         val pos = Vector3(x, y, z)
-        entities.add(
-            worldLogic.createReferenceEntity(
-                template = template,
-                pos = pos,
-                componentOverrides = mutableSetOf()
-            )
-        )
+        entities.add(worldLogic.createReferenceEntity(template, pos))
     }
 
     override fun undo() {

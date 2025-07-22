@@ -1,23 +1,28 @@
 package bke.iso.editor.scene.command
 
 import bke.iso.editor.core.EditorCommand
-import bke.iso.editor.scene.EntityTemplateReference
+import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.entity.Component
+import bke.iso.engine.world.entity.Entity
 
 data class EnableComponentOverrideCommand(
     val serializer: Serializer,
-    val templateReference: EntityTemplateReference,
+    val worldLogic: WorldLogic,
+    val referenceEntity: Entity,
     val templateComponent: Component
 ) : EditorCommand() {
 
     override val name: String = "EnableComponentOverride"
 
-    private lateinit var newComponent: Component
-
     override fun execute() {
-        newComponent = copy(templateComponent)
-        templateReference.componentOverrides.add(newComponent)
+        val data = worldLogic.getData(referenceEntity)
+        check(data.componentOverrides.none { c -> c::class == templateComponent::class }) {
+            "EntityData for reference entity $referenceEntity already has component override for ${templateComponent::class.simpleName}"
+        }
+        data.componentOverrides.add(copy(templateComponent))
+
+        worldLogic.refreshComponents(referenceEntity)
     }
 
     private inline fun <reified T : Component> copy(component: T): T {
@@ -26,6 +31,12 @@ data class EnableComponentOverrideCommand(
     }
 
     override fun undo() {
-        templateReference.componentOverrides.remove(newComponent)
+        val data = worldLogic.getData(referenceEntity)
+        check(data.componentOverrides.any { c -> c::class == templateComponent::class }) {
+            "Expected reference entity $referenceEntity to have a component override for ${templateComponent::class.simpleName}"
+        }
+        data.componentOverrides.removeIf { c -> c::class == templateComponent::class }
+
+        worldLogic.refreshComponents(referenceEntity)
     }
 }

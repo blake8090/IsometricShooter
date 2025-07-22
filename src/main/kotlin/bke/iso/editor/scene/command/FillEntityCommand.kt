@@ -56,13 +56,7 @@ data class FillEntityCommand(
             replaceTile(Location(pos))
         }
 
-        entities.add(
-            worldLogic.createReferenceEntity(
-                template = template,
-                pos = pos,
-                componentOverrides = mutableSetOf()
-            )
-        )
+        entities.add(worldLogic.createReferenceEntity(template, pos))
     }
 
     private fun replaceTile(location: Location) {

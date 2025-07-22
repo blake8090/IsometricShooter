@@ -2,9 +2,9 @@ package bke.iso.editor.scene.view
 
 import bke.iso.editor.EditorModule
 import bke.iso.editor.entity.command.UpdateComponentPropertyCommand
-import bke.iso.editor.entity.command.UpdateVector3Command
-import bke.iso.editor.scene.EntityTemplateReference
+import bke.iso.editor.scene.EntityData
 import bke.iso.editor.scene.SceneEditor
+import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Events
@@ -53,7 +53,11 @@ class InspectorWindowView(
         val entity = data.selectedEntity
         if (entity != null) {
             drawMainProperties(entity, data)
-            drawTemplateSection(entity)
+
+            val entityData = checkNotNull(data.selectedEntityData) {
+                "Expected EntityData for entity $entity"
+            }
+            drawTemplateSection(entity, entityData)
         }
 
         ImGui.endDisabled()
@@ -82,36 +86,31 @@ class InspectorWindowView(
         }
     }
 
-    private fun drawTemplateSection(entity: Entity) {
+    private fun drawTemplateSection(entity: Entity, data: EntityData) {
         ImGui.separatorText("")
-
-        val templateReference = checkNotNull(entity.get<EntityTemplateReference>()) {
-            "Expected entity $entity to have an EntityTemplateReference"
-        }
 
         ImGui.inputText(
             /* label = */ "Template##inspectorTemplateName",
-            /* text = */ ImString(templateReference.template),
+            /* text = */ ImString(data.template.name),
             /* imGuiInputTextFlags = */ ImGuiInputTextFlags.ReadOnly
         )
 
-        val template = assets.get<EntityTemplate>(templateReference.template)
-        for (templateComponent in template.components) {
-            val componentOverride = templateReference
+        for (templateComponent in data.template.components) {
+            val componentOverride = data
                 .componentOverrides
                 .firstOrNull { c -> c::class == templateComponent::class }
 
             if (componentOverride == null) {
-                drawTemplateComponent(templateReference, templateComponent)
+                drawTemplateComponent(entity, templateComponent)
             } else {
-                drawComponentOverride(templateReference, componentOverride)
+                drawComponentOverride(entity, data.template, componentOverride)
             }
         }
     }
 
-    private fun drawTemplateComponent(templateReference: EntityTemplateReference, component: Component) {
+    private fun drawTemplateComponent(entity: Entity, component: Component) {
         if (ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", false)) {
-            events.fire(SceneEditor.ComponentOverrideEnabled(templateReference, component))
+            events.fire(SceneEditor.ComponentOverrideEnabled(entity, component))
         }
         ImGui.setItemTooltip("Override Component")
         ImGui.sameLine()
@@ -123,9 +122,9 @@ class InspectorWindowView(
         }
     }
 
-    private fun drawComponentOverride(templateReference: EntityTemplateReference, component: Component) {
+    private fun drawComponentOverride(entity: Entity, template: EntityTemplate, component: Component) {
         if (ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", true)) {
-            events.fire(SceneEditor.ComponentOverrideDisabled(templateReference, component))
+            events.fire(SceneEditor.ComponentOverrideDisabled(entity, template, component))
         }
         ImGui.setItemTooltip("Override Component")
         ImGui.sameLine()
@@ -214,26 +213,11 @@ class InspectorWindowView(
         if (ImGui.treeNodeEx(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
             val vector = get<Vector3>(memberProperty, component)
 
-            val xValue = ImFloat(vector.x)
-            if (ImGui.inputFloat("x##${memberProperty.name}", xValue)) {
-                if (xValue.get() != vector.x) {
-                    val command = UpdateVector3Command(vector, xValue.get(), vector.y, vector.z)
-                    events.fire(EditorModule.ExecuteCommand(command))
-                }
-            }
-
-            val yValue = ImFloat(vector.y)
-            if (ImGui.inputFloat("y##${memberProperty.name}", yValue)) {
-                if (yValue.get() != vector.y) {
-                    val command = UpdateVector3Command(vector, vector.x, yValue.get(), vector.z)
-                    events.fire(EditorModule.ExecuteCommand(command))
-                }
-            }
-
-            val zValue = ImFloat(vector.z)
-            if (ImGui.inputFloat("z##${memberProperty.name}", zValue)) {
-                if (zValue.get() != vector.z) {
-                    val command = UpdateVector3Command(vector, xValue.get(), vector.y, zValue.get())
+            for (vectorProperty in Vector3::class.memberProperties) {
+                val float = ImFloat(vectorProperty.getter.call(vector) as Float)
+                if (ImGui.inputFloat("${vectorProperty.name}##vectorX", float)) {
+                    val command =
+                        UpdateInstancePropertyCommand(vector, vectorProperty as KMutableProperty1, float.get())
                     events.fire(EditorModule.ExecuteCommand(command))
                 }
             }

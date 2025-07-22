@@ -20,7 +20,7 @@ data class PaintEntityCommand(
 
     override fun execute() {
         replaceTile(Location(pos))
-        entity = worldLogic.createReferenceEntity(template, pos, mutableSetOf())
+        entity = worldLogic.createReferenceEntity(template, pos)
     }
 
     private fun replaceTile(location: Location) {

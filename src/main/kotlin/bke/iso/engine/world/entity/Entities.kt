@@ -123,6 +123,16 @@ class Entities(private val events: Events) {
         return objects
     }
 
+    /**
+     * Manually update an entity's location in the grid.
+     *
+     * This should be used in situations where an entity's [bke.iso.engine.collision.Collider] component was updated
+     * but the entity hasn't moved yet, for example when placing or editing reference entities in the editor.
+     */
+    fun updateGrid(entity: Entity) {
+        grid.update(entity)
+    }
+
     private fun onMove(entity: Entity) =
         grid.update(entity)
 

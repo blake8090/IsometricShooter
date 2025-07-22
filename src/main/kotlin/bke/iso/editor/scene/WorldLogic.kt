@@ -3,7 +3,6 @@ package bke.iso.editor.scene
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.asset.entity.has
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Location
@@ -18,6 +17,11 @@ import bke.iso.engine.world.entity.Description
 import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.math.Vector3
 
+data class EntityData(
+    val template: EntityTemplate,
+    val componentOverrides: MutableList<Component>
+)
+
 class WorldLogic(
     private val world: World,
     private val assets: Assets,
@@ -25,9 +29,13 @@ class WorldLogic(
 ) {
 
     private val tilesByLocation = mutableMapOf<Location, Entity>()
+    private val dataByReferenceEntity = mutableMapOf<Entity, EntityData>()
+    private val deletedReferenceEntities = mutableSetOf<Pair<Entity, EntityData>>()
 
     fun loadScene(scene: Scene) {
         tilesByLocation.clear()
+        dataByReferenceEntity.clear()
+        deletedReferenceEntities.clear()
         world.clear()
 
         for (record in scene.entities) {
@@ -39,23 +47,108 @@ class WorldLogic(
 
     private fun load(record: EntityRecord) {
         val template = assets.get<EntityTemplate>(record.template)
-        val entity = createReferenceEntity(
-            template = template,
-            pos = record.pos,
-            componentOverrides = record.componentOverrides.toMutableSet()
-        )
+        val referenceEntity = createReferenceEntity(template, record.pos, record.componentOverrides.toMutableList())
 
         val building = record.building
         if (!building.isNullOrBlank()) {
-            world.buildings.add(entity, building)
+            world.buildings.add(referenceEntity, building)
         }
     }
 
-    fun delete(entity: Entity) {
-        if (entity.has<Tile>()) {
-            tilesByLocation.remove(Location(entity.pos))
+    fun createReferenceEntity(
+        template: EntityTemplate,
+        pos: Vector3,
+        componentOverrides: MutableList<Component> = mutableListOf()
+    ): Entity {
+        // this is what will be used when viewing and editing components in the inspector window!
+        val entityData = EntityData(template, componentOverrides)
+
+        val referenceEntity = world.entities.create(pos)
+        dataByReferenceEntity[referenceEntity] = entityData
+
+        refreshComponents(referenceEntity)
+
+        if (referenceEntity.has<Tile>()) {
+            tilesByLocation[Location(pos)] = referenceEntity
         }
-        world.delete(entity)
+
+        return referenceEntity
+    }
+
+    fun createScene(): Scene {
+        val entities = dataByReferenceEntity
+            .map { (referenceEntity, data) ->
+                EntityRecord(
+                    referenceEntity.pos,
+                    data.template.name,
+                    getBuilding(referenceEntity),
+                    data.componentOverrides
+                )
+            }
+            .toList()
+
+        return Scene("1", entities)
+    }
+
+    fun getReferenceEntities() =
+        dataByReferenceEntity.keys
+
+    fun refreshComponents(referenceEntity: Entity) {
+        val data = getData(referenceEntity)
+
+        val components = mutableListOf<Component>()
+        add(components, data.template.components)
+        add(components, data.componentOverrides)
+        components.forEach(referenceEntity::add)
+
+        // in case the Collider component changed, force an update on the grid
+        // so things like collisions and entity picking still work
+        world.entities.updateGrid(referenceEntity)
+    }
+
+    private fun add(components: MutableList<Component>, sourceComponents: Collection<Component>) {
+        sourceComponents.withFirstInstance<Sprite> { sprite ->
+            components.removeIf { c -> c::class == Sprite::class }
+            components.add(sprite.copy())
+        }
+
+        sourceComponents.withFirstInstance<Collider> { collider ->
+            components.removeIf { c -> c::class == Collider::class }
+            components.add(collider.copy())
+        }
+
+        sourceComponents.withFirstInstance<Description> { description ->
+            components.removeIf { c -> c::class == Description::class }
+            components.add(description.copy())
+        }
+
+        sourceComponents.withFirstInstance<Tile> { tile ->
+            components.removeIf { c -> c::class == Tile::class }
+            components.add(Tile())
+        }
+
+        if (sourceComponents.any { component -> component is Occlude }) {
+            components.removeIf { c -> c::class == Occlude::class }
+            components.add(Occlude())
+        }
+    }
+
+    fun getData(referenceEntity: Entity): EntityData =
+        checkNotNull(dataByReferenceEntity[referenceEntity]) {
+            "Expected EntityData for reference entity $referenceEntity"
+        }
+
+    fun delete(referenceEntity: Entity) {
+        if (referenceEntity.has<Tile>()) {
+            tilesByLocation.remove(Location(referenceEntity.pos))
+        }
+        world.delete(referenceEntity)
+
+        val data = checkNotNull(dataByReferenceEntity[referenceEntity]) {
+            "Expected EntityData for reference entity $referenceEntity"
+        }
+        deletedReferenceEntities.add(referenceEntity to data)
+        dataByReferenceEntity.remove(referenceEntity)
     }
 
     fun getTileEntity(location: Location): Entity? =
@@ -85,49 +178,13 @@ class WorldLogic(
         )
     }
 
-    fun createReferenceEntity(
-        template: EntityTemplate,
-        pos: Vector3,
-        componentOverrides: MutableSet<Component>
-    ): Entity {
-        val components = mutableSetOf<Component>()
-        components.add(EntityTemplateReference(template.name, componentOverrides))
-
-        template.components.withFirstInstance<Sprite> { sprite ->
-            components.add(sprite.copy())
-        }
-
-        template.components.withFirstInstance<Collider> { collider ->
-            components.add(collider.copy())
-        }
-
-        template.components.withFirstInstance<Description> { description ->
-            components.add(description.copy())
-        }
-
-        if (template.components.any { component -> component is Occlude }) {
-            components.add(Occlude())
-        }
-
-        val isTile = template.has<Tile>()
-        if (isTile) {
-            components.add(Tile())
-        }
-
-        val entity = world.entities.create(pos, *components.toTypedArray())
-        if (isTile) {
-            tilesByLocation[Location(pos)] = entity
-        }
-        return entity
-    }
-
-    fun setBuilding(entity: Entity, building: String?) {
-        world.buildings.remove(entity)
+    fun setBuilding(referenceEntity: Entity, building: String?) {
+        world.buildings.remove(referenceEntity)
         if (!building.isNullOrBlank()) {
-            world.buildings.add(entity, building)
+            world.buildings.add(referenceEntity, building)
         }
     }
 
-    fun getBuilding(entity: Entity): String? =
-        world.buildings.getBuilding(entity)
+    fun getBuilding(referenceEntity: Entity): String? =
+        world.buildings.getBuilding(referenceEntity)
 }

@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 @Serializable
 data class EntityTemplate(
     val name: String,
-    val components: MutableList<Component>
+    val components: List<Component>
 )
 
 fun <T : Component> EntityTemplate.has(type: KClass<T>): Boolean =
