@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.Pool
 import kotlin.math.floor
 
@@ -46,7 +47,7 @@ class OptimizedEntityRenderer(
         override fun newObject() = EntityRenderable()
     }
 
-    private val renderablesByRow = mutableMapOf<Float, Array<EntityRenderable>>()
+    private val renderablesByRow = OrderedMap<Float, Array<EntityRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch, world: World) {
         for (entity in world.entities) {
@@ -54,8 +55,13 @@ class OptimizedEntityRenderer(
         }
 
         // we sort by descending here as isometric objects must be drawn from back-to-front, not front-to-back.
-        for (row in renderablesByRow.keys.sortedDescending()) {
-            val renderables = renderablesByRow[row] ?: continue
+        val keys = renderablesByRow.orderedKeys()
+        keys.sort()
+        keys.reverse()
+
+        for (i in 0..<keys.size) {
+            val row = keys[i]
+            val renderables = renderablesByRow.get(row) ?: continue
 
             for (i in 0..<renderables.size) {
                 val renderable = renderables[i]
@@ -68,7 +74,7 @@ class OptimizedEntityRenderer(
             }
         }
 
-        for (renderables in renderablesByRow.values) {
+        for (renderables in renderablesByRow.values()) {
             pool.freeAll(renderables)
         }
 
@@ -85,8 +91,11 @@ class OptimizedEntityRenderer(
         val bounds = checkNotNull(renderable.bounds) { "Expected bounds to not be null" }
         val row = floor(bounds.min.y)
 
+        if (!renderablesByRow.containsKey(row)) {
+            renderablesByRow.put(row, Array())
+        }
         renderablesByRow
-            .getOrPut(row) { Array() }
+            .get(row)
             .add(renderable)
 
         occlusion.prepare(renderable)
