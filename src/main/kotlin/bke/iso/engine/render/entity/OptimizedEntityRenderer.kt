@@ -53,17 +53,16 @@ class OptimizedEntityRenderer(
             addRenderable(entity)
         }
 
-        for ((_, renderables) in renderablesByRow) {
+        // we sort by descending here as isometric objects must be drawn from back-to-front, not front-to-back.
+        for (row in renderablesByRow.keys.sortedDescending()) {
+            val renderables = renderablesByRow[row] ?: continue
+
             for (i in 0..<renderables.size) {
                 val renderable = renderables[i]
                 sortRenderables(renderables, i)
                 occlusion.firstPass(renderable)
             }
-        }
 
-        // we sort by descending here as isometric objects must be drawn from back-to-front, not front-to-back.
-        for (row in renderablesByRow.keys.sortedDescending()) {
-            val renderables = renderablesByRow[row] ?: continue
             for (renderable in renderables) {
                 draw(renderable, batch)
             }
