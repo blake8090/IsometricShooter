@@ -6,4 +6,8 @@ abstract class EditorCommand {
     abstract fun execute()
 
     abstract fun undo()
+
+    open fun redo() {
+        execute()
+    }
 }

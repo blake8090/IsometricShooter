@@ -16,6 +16,7 @@ import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Description
 import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.math.Vector3
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 data class EntityData(
     val template: EntityTemplate,
@@ -27,6 +28,8 @@ class WorldLogic(
     private val assets: Assets,
     private val events: Events,
 ) {
+
+    private val log = KotlinLogging.logger { }
 
     private val tilesByLocation = mutableMapOf<Location, Entity>()
     private val dataByReferenceEntity = mutableMapOf<Entity, EntityData>()
@@ -139,6 +142,11 @@ class WorldLogic(
         }
 
     fun delete(referenceEntity: Entity) {
+        if (deletedReferenceEntities.any { (e, _) -> e == referenceEntity }) {
+            log.warn { "Reference entity $referenceEntity already deleted!" }
+            return
+        }
+
         if (referenceEntity.has<Tile>()) {
             tilesByLocation.remove(Location(referenceEntity.pos))
         }
@@ -150,6 +158,9 @@ class WorldLogic(
         deletedReferenceEntities.add(referenceEntity to data)
         dataByReferenceEntity.remove(referenceEntity)
     }
+
+    fun entityIsDeleted(referenceEntity: Entity): Boolean =
+        deletedReferenceEntities.any { (e, _) -> referenceEntity == e }
 
     fun getTileEntity(location: Location): Entity? =
         tilesByLocation[location]
@@ -167,14 +178,19 @@ class WorldLogic(
     /**
      * Re-adds an existing entity into the world again.
      */
-    fun add(entity: Entity) {
-        world.entities.create(
-            id = entity.id,
-            x = entity.x,
-            y = entity.y,
-            z = entity.z,
-            components = entity.components.values.toTypedArray()
-        )
+    fun add(referenceEntity: Entity) {
+        val (_, data) = checkNotNull(deletedReferenceEntities.firstOrNull { (entity, _) -> entity == referenceEntity }) {
+            "Expected $referenceEntity to be in deletedReferenceEntities"
+        }
+
+        dataByReferenceEntity[referenceEntity] = data
+        world.entities.updateGrid(referenceEntity)
+
+        deletedReferenceEntities.remove(referenceEntity to data)
+
+        if (referenceEntity.has<Tile>()) {
+            tilesByLocation[Location(referenceEntity.pos)] = referenceEntity
+        }
     }
 
     fun setBuilding(referenceEntity: Entity, building: String?) {

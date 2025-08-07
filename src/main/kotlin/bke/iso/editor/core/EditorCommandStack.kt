@@ -1,6 +1,10 @@
 package bke.iso.editor.core
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+
 class EditorCommandStack {
+
+    private val log = KotlinLogging.logger { }
 
     private var commands = mutableListOf<EditorCommand>()
     private var pointer = -1
@@ -20,7 +24,10 @@ class EditorCommandStack {
         if (pointer < 0) {
             return
         }
-        commands[pointer].undo()
+
+        val command = commands[pointer]
+        log.debug { "Undoing command ${command.name}" }
+        command.undo()
         pointer--
     }
 
@@ -29,7 +36,10 @@ class EditorCommandStack {
             return
         }
         pointer++
-        commands[pointer].execute()
+
+        val command = commands[pointer]
+        log.debug { "Redoing command ${command.name}" }
+        command.redo()
     }
 
     fun reset() {

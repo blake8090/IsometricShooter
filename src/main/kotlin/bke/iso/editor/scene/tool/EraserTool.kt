@@ -34,6 +34,10 @@ class EraserTool(
         val entity = highlightedEntity
             ?: return null
 
+        if (worldLogic.entityIsDeleted(entity)) {
+            return null
+        }
+
         previousType = getType(entity)
         return DeleteEntityCommand(worldLogic, entity)
     }
@@ -41,6 +45,10 @@ class EraserTool(
     override fun performMultiAction(): EditorCommand? {
         val entity = highlightedEntity
             ?: return null
+
+        if (worldLogic.entityIsDeleted(entity)) {
+            return null
+        }
 
         val type = getType(entity)
         // avoids accidentally deleting tiles underneath an entity
