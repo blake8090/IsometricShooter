@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
+import com.badlogic.gdx.utils.ObjectSet
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sign
@@ -98,12 +99,15 @@ class Collisions(
     private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, entity: Entity): SegmentCollision? {
         val box = entity.getCollisionBox() ?: return null
 
-        val points = box
-            .getFaces()
-            .mapNotNull { face -> findIntersection(ray, face) }
-            .toSet()
+        val points = ObjectSet<Vector3>()
+        for (face in box.getFaces()) {
+            val point = findIntersection(ray, face)
+            if (point != null) {
+                points.add(point)
+            }
+        }
 
-        if (points.isEmpty()) {
+        if (points.isEmpty) {
             return null
         }
 

@@ -3,6 +3,7 @@ package bke.iso.engine.collision
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.ObjectSet
 
 enum class CollisionSide {
     FRONT,
@@ -50,7 +51,7 @@ data class SegmentCollision(
     val entity: Entity,
     val distanceStart: Float,
     val distanceEnd: Float,
-    val points: Set<Vector3>
+    val points: ObjectSet<Vector3>
 )
 
 data class PointCollision(
