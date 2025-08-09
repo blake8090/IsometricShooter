@@ -3,6 +3,9 @@ package bke.iso.engine.math
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Segment
+import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.Pool
+import com.badlogic.gdx.utils.Pools
 import kotlin.math.max
 import kotlin.math.min
 
@@ -51,20 +54,36 @@ data class Box(
         Segment(Vector3(max.x, max.y, min.z), Vector3(max.x, max.y, max.z))
     )
 
-    fun getFaces(): List<BoundingBox> = listOf(
-        // top
-        BoundingBox(Vector3(min.x, min.y, max.z), Vector3(max.x, max.y, max.z)),
-        // bottom
-        BoundingBox(Vector3(min.x, min.y, min.z), Vector3(max.x, max.y, min.z)),
-        // left
-        BoundingBox(Vector3(min.x, min.y, min.z), Vector3(min.x, max.y, max.z)),
-        // right
-        BoundingBox(Vector3(max.x, min.y, min.z), Vector3(max.x, max.y, max.z)),
-        // front
-        BoundingBox(Vector3(min.x, min.y, min.z), Vector3(max.x, min.y, max.z)),
-        // back
-        BoundingBox(Vector3(min.x, max.y, min.z), Vector3(max.x, max.y, max.z))
-    )
+    fun getFaces(): Array<BoundingBoxP> {
+
+        val faces = Array<BoundingBoxP>()
+
+        val top = Pools.obtain(BoundingBoxP::class.java)
+        top.set(Vector3(min.x, min.y, max.z), Vector3(max.x, max.y, max.z))
+        faces.add(top)
+
+        val bottom = Pools.obtain(BoundingBoxP::class.java)
+        bottom.set(Vector3(min.x, min.y, min.z), Vector3(max.x, max.y, min.z))
+        faces.add(bottom)
+
+        val left = Pools.obtain(BoundingBoxP::class.java)
+        left.set(Vector3(min.x, min.y, min.z), Vector3(min.x, max.y, max.z))
+        faces.add(left)
+
+        val right = Pools.obtain(BoundingBoxP::class.java)
+        right.set(Vector3(max.x, min.y, min.z), Vector3(max.x, max.y, max.z))
+        faces.add(right)
+
+        val front = Pools.obtain(BoundingBoxP::class.java)
+        front.set(Vector3(min.x, min.y, min.z), Vector3(max.x, min.y, max.z))
+        faces.add(front)
+
+        val back = Pools.obtain(BoundingBoxP::class.java)
+        back.set(Vector3(min.x, max.y, min.z), Vector3(max.x, max.y, max.z))
+        faces.add(back)
+
+        return faces
+    }
 
     fun intersects(box: Box): Boolean {
         return min.x < box.max.x - PRECISION_ERROR_THRESHOLD &&
@@ -128,5 +147,14 @@ data class Box(
             )
             return fromMinMax(min, max)
         }
+    }
+}
+
+/**
+ * Hack to make [BoundingBox] poolable!
+ */
+class BoundingBoxP : BoundingBox(), Pool.Poolable {
+    override fun reset() {
+        clr()
     }
 }

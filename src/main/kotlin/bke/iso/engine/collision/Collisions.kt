@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectSet
+import com.badlogic.gdx.utils.Pools
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sign
@@ -80,7 +82,7 @@ class Collisions(
         }
     }
 
-    fun checkLineCollisions(start: Vector3, end: Vector3): Set<SegmentCollision> {
+    fun checkLineCollisions(start: Vector3, end: Vector3): Array<SegmentCollision> {
         val area = Box.fromMinMax(Segment(start, end))
         renderer.debug.category("collisions").addBox(area, 1f, Color.ORANGE)
 
@@ -89,11 +91,15 @@ class Collisions(
             .nor()
         val ray = Ray(start, direction)
 
-        return world
-            .entities
-            .findAllIn(area)
-            .mapNotNull { entity -> checkLineCollision(start, end, ray, entity) }
-            .toSet()
+        val collisions = Array<SegmentCollision>()
+        for (entity in world.entities.findAllIn(area)) {
+            val collision = checkLineCollision(start, end, ray, entity)
+            if (collision != null) {
+                collisions.add(collision)
+            }
+        }
+
+        return collisions
     }
 
     private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, entity: Entity): SegmentCollision? {
@@ -105,6 +111,7 @@ class Collisions(
             if (point != null) {
                 points.add(point)
             }
+            Pools.free(face)
         }
 
         if (points.isEmpty) {
