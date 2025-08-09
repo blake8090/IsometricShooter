@@ -48,6 +48,7 @@ class OptimizedEntityRenderer(
     }
 
     private val tempEvent = DrawEntityEvent(null)
+    private val tempPos = Vector2()
 
     private val renderablesByRow = OrderedMap<Float, Array<EntityRenderable>>()
 
@@ -204,8 +205,8 @@ class OptimizedEntityRenderer(
         }
 
         val worldPos = entity.pos
-        val offset = Vector2(sprite.offsetX, sprite.offsetY)
-        val pos = toScreen(worldPos).sub(offset)
+        toScreen(entity.x, entity.y, entity.z, tempPos)
+        tempPos.sub(sprite.offsetX, sprite.offsetY)
 
         val texture = assets.get<Texture>(sprite.texture)
         val width = texture.width * sprite.scale
@@ -215,7 +216,7 @@ class OptimizedEntityRenderer(
         if (sprite.scale != 1f) {
             val diffX = texture.width - width
             val diffY = texture.height - height
-            pos.add(diffX / 2f, diffY / 2f)
+            tempPos.add(diffX / 2f, diffY / 2f)
         }
 
         val bounds = entity.getCollisionBox() ?: Box.fromMinMax(worldPos, worldPos)
@@ -224,10 +225,10 @@ class OptimizedEntityRenderer(
         renderable.entity = entity
         renderable.texture = texture
         renderable.bounds = bounds
-        renderable.x = pos.x
-        renderable.y = pos.y
-        renderable.offsetX = offset.x
-        renderable.offsetY = offset.y
+        renderable.x = tempPos.x
+        renderable.y = tempPos.y
+        renderable.offsetX = sprite.offsetX
+        renderable.offsetY = sprite.offsetY
         renderable.width = width
         renderable.height = height
         renderable.alpha = sprite.alpha

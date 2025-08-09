@@ -37,6 +37,16 @@ fun toScreen(x: Float, y: Float, z: Float): Vector2 {
     )
 }
 
+fun toScreen(x: Float, y: Float, z: Float, out: Vector2) {
+    val scaleX = TILE_SIZE_X / 2
+    val scaleY = TILE_SIZE_Y / 2
+    val height = z * TILE_SIZE_Z
+    out.set(
+        (x + y) * scaleX,
+        (y - x) * scaleY + height
+    )
+}
+
 fun toScreen(worldPos: Vector3): Vector2 =
     toScreen(worldPos.x, worldPos.y, worldPos.z)
 
