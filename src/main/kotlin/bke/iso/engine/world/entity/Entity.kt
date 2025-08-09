@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.reflect.KClass
-import kotlin.reflect.safeCast
 
 private const val Z_CLAMP_THRESHOLD = 0.00001f
 
@@ -54,8 +53,15 @@ class Entity(
         components[component::class] = component
     }
 
-    fun <T : Component> get(type: KClass<T>): T? =
-        type.safeCast(components[type])
+    @Suppress("UNCHECKED_CAST")
+    fun <T : Component> get(type: KClass<T>): T? {
+        val component = components[type]
+        return if (component == null) {
+            null
+        } else {
+            component as T
+        }
+    }
 
     inline fun <reified T : Component> get(): T? =
         components[T::class] as T?
