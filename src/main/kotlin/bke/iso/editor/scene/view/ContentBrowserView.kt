@@ -3,7 +3,6 @@ package bke.iso.editor.scene.view
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.BASE_PATH
-import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Events
 import bke.iso.engine.render.Sprite
 import com.badlogic.gdx.graphics.GLTexture
@@ -95,15 +94,7 @@ class ContentBrowserView(
     private fun drawEntityAssets(data: SceneEditor.ViewData) {
         var column = 0
 
-        val files = data.selectedAssetDirectory
-            ?.walk()
-            ?.filter(File::isFile)
-            ?.filter { file -> file.extension == "entity" }
-            ?.map { file -> assets.get<EntityTemplate>(file.nameWithoutExtension) }
-            ?.toList()
-            ?: emptyList()
-
-        for (template in files) {
+        for (template in data.entityTemplatesInDirectory) {
             val sprite = template
                 .components
                 .firstNotNullOfOrNull { component -> component as? Sprite }

@@ -28,6 +28,7 @@ import bke.iso.engine.world.entity.Tags
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Array
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.encodeToString
 import java.io.File
@@ -64,6 +65,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
     private var selectedAssetDirectory: File? = null
+    private val entityTemplatesInDirectory: Array<EntityTemplate> = Array()
 
     override fun start() {
         engine.ui.pushView(view)
@@ -85,7 +87,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
 
         // show all assets by default
-        selectedAssetDirectory = File(BASE_PATH)
+        selectAssetDirectory(File(BASE_PATH))
     }
 
     override fun stop() {
@@ -156,7 +158,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 buildings = engine.world.buildings.getAll(),
                 selectedBuilding = selectedBuilding,
                 messageBarText = getMessageBarText(),
-                selectedAssetDirectory = selectedAssetDirectory
+                selectedAssetDirectory = selectedAssetDirectory,
+                entityTemplatesInDirectory = entityTemplatesInDirectory
             )
     }
 
@@ -295,7 +298,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
             is AssetDirectorySelected -> {
                 log.debug { "Selected asset directory '${event.dir.path}'" }
-                selectedAssetDirectory = event.dir
+                selectAssetDirectory(event.dir)
             }
 
             is ComponentOverrideEnabled -> {
@@ -353,6 +356,17 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         }
     }
 
+    private fun selectAssetDirectory(dir: File) {
+        selectedAssetDirectory = dir
+        entityTemplatesInDirectory.clear()
+        dir
+            .walk()
+            .filter(File::isFile)
+            .filter { file -> file.extension == "entity" }
+            .map { file -> engine.assets.get<EntityTemplate>(file.nameWithoutExtension) }
+            .forEach(entityTemplatesInDirectory::add)
+    }
+
     class OpenSceneClicked : Event
     class SaveSceneClicked : Event
     class SceneLoaded : Event
@@ -402,6 +416,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val buildings: Set<String>,
         val selectedBuilding: String?,
         val messageBarText: String,
-        val selectedAssetDirectory: File? = null
+        val selectedAssetDirectory: File? = null,
+        val entityTemplatesInDirectory: Array<EntityTemplate>
     )
 }
