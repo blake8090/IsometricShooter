@@ -151,6 +151,8 @@ class OptimizedEntityRenderer(
         val fillColor = renderable.fillColor
         val tintColor = renderable.tintColor
 
+        var shaderSet = false
+
         // fill should always override tint
         if (fillColor != null) {
             batch.shader = assets.shaders["color"]
@@ -161,6 +163,7 @@ class OptimizedEntityRenderer(
                 fillColor.b * 255,
                 255f
             )
+            shaderSet = true
         } else if (tintColor != null) {
             color.r = tintColor.r
             color.g = tintColor.g
@@ -181,7 +184,10 @@ class OptimizedEntityRenderer(
                 /* rotation = */ renderable.rotation
             )
 
-            batch.shader = null
+            // changing the shader even to null is expensive, so only do it for entities that actually switched shaders
+            if (shaderSet) {
+                batch.shader = null
+            }
         }
 
         renderable.entity?.let { entity ->
