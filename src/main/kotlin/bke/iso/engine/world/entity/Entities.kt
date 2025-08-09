@@ -5,6 +5,7 @@ import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Array
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.reflect.KClass
@@ -71,7 +72,8 @@ class Entities(private val events: Events) {
             ?: throw IllegalArgumentException("No entity found with id $id")
 
     fun <T : Component> each(type: KClass<out T>, action: (Entity, T) -> Unit) {
-        for (entity in grid.entities.toList()) {
+        for (i in 0..<grid.entities.orderedItems().size) {
+            val entity = grid.entities.orderedItems()[i]
             val component = entity.get(type) ?: continue
             action.invoke(entity, component)
         }
@@ -103,7 +105,7 @@ class Entities(private val events: Events) {
     fun findAllAt(point: Vector3): Set<Entity> =
         grid[Location(point)].toSet()
 
-    fun findAllIn(box: Box): Set<Entity> {
+    fun findAllIn(box: Box): Array<Entity> {
         val minX = floor(box.min.x).toInt()
         val minY = floor(box.min.y).toInt()
         val minZ = floor(box.min.z).toInt()
@@ -112,11 +114,13 @@ class Entities(private val events: Events) {
         val maxY = ceil(box.max.y).toInt()
         val maxZ = ceil(box.max.z).toInt()
 
-        val objects = mutableSetOf<Entity>()
+        val objects = Array<Entity>()
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ..maxZ) {
-                    objects.addAll(grid[Location(x, y, z)])
+                    for (location in grid[Location(x, y, z)]) {
+                        objects.add(location)
+                    }
                 }
             }
         }
