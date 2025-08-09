@@ -47,6 +47,8 @@ class OptimizedEntityRenderer(
         override fun newObject() = EntityRenderable()
     }
 
+    private val tempEvent = DrawEntityEvent(null)
+
     private val renderablesByRow = OrderedMap<Float, Array<EntityRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch, world: World) {
@@ -183,7 +185,9 @@ class OptimizedEntityRenderer(
         }
 
         renderable.entity?.let { entity ->
-            events.fire(DrawEntityEvent(entity, batch))
+            tempEvent.entity = entity
+            tempEvent.batch = batch
+            events.fire(tempEvent)
         }
     }
 
@@ -250,7 +254,7 @@ class OptimizedEntityRenderer(
     }
 
     data class DrawEntityEvent(
-        val entity: Entity,
-        val batch: PolygonSpriteBatch
+        var entity: Entity? = null,
+        var batch: PolygonSpriteBatch? = null
     ) : Event
 }

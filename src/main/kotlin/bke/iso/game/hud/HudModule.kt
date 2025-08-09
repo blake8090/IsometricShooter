@@ -33,6 +33,8 @@ class HudModule(
 
     private val view = HudView(assets)
 
+    private val pixel = makePixelTexture()
+
     fun init(ui: UI) {
         ui.pushView(view)
     }
@@ -96,7 +98,7 @@ class HudModule(
         if (event is CombatModule.PlayerHealthChangeEvent) {
             view.setHealth(event.health)
         } else if (event is OptimizedEntityRenderer.DrawEntityEvent) {
-            drawHealthBar(event.entity, event.batch)
+            drawHealthBar(event.entity!!, event.batch!!)
         }
     }
 
@@ -112,7 +114,6 @@ class HudModule(
         val health = entity.get<Health>() ?: return
         val healthBar = entity.get<HealthBar>() ?: return
 
-        val pixel = makePixelTexture()
         val pos = toScreen(entity.pos)
             .sub(healthBar.offsetX, healthBar.offsetY)
 
