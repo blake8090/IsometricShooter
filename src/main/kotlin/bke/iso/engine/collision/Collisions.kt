@@ -148,7 +148,8 @@ class Collisions(
             py * delta.y.sign,
             pz * delta.z.sign,
         )
-        renderer.debug.category("collisions").addBox(projectedBox, 1f, Color.ORANGE)
+        renderer.debug.category("collisions").addBox(projectedBox, 0.5f, Color.ORANGE)
+        renderer.debug.category("collisions").addBox(box, 1f, Color.ORANGE)
 
         // narrow-phase: check precise collisions for each object within area
         val collisions = mutableSetOf<PredictedCollision>()
