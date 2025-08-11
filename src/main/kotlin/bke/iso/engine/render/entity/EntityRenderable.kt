@@ -3,13 +3,13 @@ package bke.iso.engine.render.entity
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool.Poolable
 
 open class EntityRenderable(
     var entity: Entity? = null,
-    var texture: Texture? = null,
+    var texture: TextureRegion? = null,
     var bounds: Box? = null,
     var x: Float = 0f,
     var y: Float = 0f,

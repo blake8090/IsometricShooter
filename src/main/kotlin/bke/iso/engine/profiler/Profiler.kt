@@ -4,6 +4,7 @@ import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.ui.UI
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.profiling.GLProfiler
 import com.badlogic.gdx.utils.ObjectFloatMap
 import kotlin.time.measureTime
 import com.badlogic.gdx.Input as GdxInput
@@ -12,7 +13,8 @@ private const val UPDATE_FREQUENCY_SECONDS = 0.25f
 
 class Profiler(
     private val ui: UI,
-    private val input: Input
+    private val input: Input,
+    private val glProfiler: GLProfiler
 ) {
 
     val records = ObjectFloatMap<String>()
@@ -63,6 +65,7 @@ class Profiler(
             stringBuilder.append("$name - $value mcs")
             stringBuilder.append("\n")
         }
+        stringBuilder.append("Draw calls: ${glProfiler.drawCalls}")
         return stringBuilder.toString()
     }
 }

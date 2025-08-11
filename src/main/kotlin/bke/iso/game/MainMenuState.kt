@@ -46,6 +46,7 @@ class MainMenuState(override val engine: Engine) : State() {
     private suspend fun loadGameAssets() {
         engine.assets.loadAsync("game")
         engine.assets.shaders.compileAll()
+        engine.assets.textures.generateAtlas()
     }
 
     class OnStartGame : Event

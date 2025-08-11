@@ -22,6 +22,11 @@ abstract class AssetCache<T : Any> {
     fun getAll(): List<T> =
         assetsByName.values().toList()
 
+    fun getAllByName(): List<Pair<String, T>> =
+        assetsByName
+            .entries()
+            .map { entry -> entry.key to entry.value }
+
     abstract suspend fun load(file: File)
 
     protected fun store(file: File, name: String, asset: T) {

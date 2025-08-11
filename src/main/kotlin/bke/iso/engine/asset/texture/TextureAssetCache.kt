@@ -1,5 +1,6 @@
-package bke.iso.engine.asset
+package bke.iso.engine.asset.texture
 
+import bke.iso.engine.asset.AssetCache
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import java.io.File

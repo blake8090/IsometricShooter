@@ -173,25 +173,24 @@ class Renderer(
     }
 
     fun drawTexture(
-        name: String,
+        texture: TextureRegion,
         pos: Vector2,
         offset: Vector2,
         scale: Float = 1f,
         alpha: Float = 1f,
         rotation: Float = 0f
     ) {
-        val texture = assets.get<Texture>(name)
         val screenPos = Vector2(pos).sub(offset)
         val color = Color(batch.color.r, batch.color.g, batch.color.b, alpha)
         batch.withColor(color) {
             batch.draw(
-                /* region = */ TextureRegion(texture),
+                /* region = */ texture,
                 /* x = */ screenPos.x,
                 /* y = */ screenPos.y,
-                /* originX = */ texture.width / 2f,
-                /* originY = */ texture.height / 2f,
-                /* width = */ texture.width.toFloat(),
-                /* height = */ texture.height.toFloat(),
+                /* originX = */ texture.regionWidth / 2f,
+                /* originY = */ texture.regionHeight / 2f,
+                /* width = */ texture.regionWidth.toFloat(),
+                /* height = */ texture.regionHeight.toFloat(),
                 /* scaleX = */ scale,
                 /* scaleY = */ scale,
                 /* rotation = */ rotation

@@ -16,9 +16,7 @@ import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.OrderedMap
@@ -173,7 +171,7 @@ class OptimizedEntityRenderer(
 
         batch.withColor(color) {
             batch.draw(
-                /* region = */ TextureRegion(renderable.texture),
+                /* region = */ renderable.texture,
                 /* x = */ renderable.x,
                 /* y = */ renderable.y,
                 /* originX = */ renderable.width / 2f,
@@ -208,14 +206,14 @@ class OptimizedEntityRenderer(
         toScreen(entity.x, entity.y, entity.z, tempPos)
         tempPos.sub(sprite.offsetX, sprite.offsetY)
 
-        val texture = assets.get<Texture>(sprite.texture)
-        val width = texture.width * sprite.scale
-        val height = texture.height * sprite.scale
+        val textureRegion = assets.textures.findRegion(sprite.texture)
+        val width = textureRegion.regionWidth * sprite.scale
+        val height = textureRegion.regionHeight * sprite.scale
 
         // when scaling textures, make sure texture is still centered on origin point
         if (sprite.scale != 1f) {
-            val diffX = texture.width - width
-            val diffY = texture.height - height
+            val diffX = textureRegion.regionWidth - width
+            val diffY = textureRegion.regionHeight - height
             tempPos.add(diffX / 2f, diffY / 2f)
         }
 
@@ -223,7 +221,7 @@ class OptimizedEntityRenderer(
 
         val renderable = pool.obtain()
         renderable.entity = entity
-        renderable.texture = texture
+        renderable.texture = textureRegion
         renderable.bounds = bounds
         renderable.x = tempPos.x
         renderable.y = tempPos.y

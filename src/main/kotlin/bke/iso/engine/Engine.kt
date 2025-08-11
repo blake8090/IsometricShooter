@@ -4,7 +4,7 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplateAssetCache
 import bke.iso.engine.asset.font.FontGeneratorAssetCache
 import bke.iso.engine.asset.shader.ShaderFileAssetCache
-import bke.iso.engine.asset.TextureAssetCache
+import bke.iso.engine.asset.texture.TextureAssetCache
 import bke.iso.engine.asset.config.ConfigAssetCache
 import bke.iso.engine.asset.shader.ShaderInfoAssetCache
 import bke.iso.engine.os.Files
@@ -29,6 +29,7 @@ import bke.iso.engine.state.States
 import bke.iso.engine.ui.UI
 import bke.iso.engine.world.World
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.profiling.GLProfiler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 
@@ -69,13 +70,14 @@ class Engine(val game: Game) {
         ui,
         loadingScreens
     )
-
-    private val profiler = Profiler(ui, input)
+    private val glProfiler = GLProfiler(Gdx.graphics)
+    private val profiler = Profiler(ui, input, glProfiler)
 
     var gamePaused = false
         private set
 
     fun start() {
+        glProfiler.enable()
         systemInfo.logInfo()
 
         for (module in modules) {
@@ -100,6 +102,7 @@ class Engine(val game: Game) {
     }
 
     fun update(deltaTime: Float) {
+        glProfiler.reset()
         updateModule(collisions, deltaTime)
         updateModule(physics, deltaTime)
         updateModule(input, deltaTime)

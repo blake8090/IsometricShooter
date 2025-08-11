@@ -9,8 +9,8 @@ import bke.iso.game.entity.player.Player
 import bke.iso.game.weapon.system.RangedWeapon
 import bke.iso.game.weapon.WeaponsModule
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.min
 
@@ -25,12 +25,12 @@ class CrosshairPointer(
     private val weaponsModule: WeaponsModule
 ) : Pointer() {
 
-    private lateinit var texture: Texture
+    private lateinit var texture: TextureRegion
     private lateinit var offset: Vector2
 
     override fun create() {
-        texture = assets.get<Texture>("crosshair.png")
-        offset = Vector2(texture.width / 2f, 0f)
+        texture = assets.textures.findRegion("crosshair.png")
+        offset = Vector2(texture.regionWidth / 2f, 0f)
     }
 
     override fun show() {
@@ -70,7 +70,7 @@ class CrosshairPointer(
 
         val scale = min(1.5f + getWeaponRecoil(), 2.5f)
         batch.begin()
-        renderer.drawTexture("crosshair.png", screenPos, offset, scale, 1f)
+        renderer.drawTexture(texture, screenPos, offset, scale, 1f)
         batch.end()
     }
 

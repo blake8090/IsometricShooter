@@ -4,6 +4,7 @@ import bke.iso.engine.asset.config.Configs
 import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.asset.font.Fonts
 import bke.iso.engine.asset.shader.Shaders
+import bke.iso.engine.asset.texture.Textures
 import bke.iso.engine.os.Files
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.OrderedMap
@@ -22,6 +23,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     val fonts: Fonts = Fonts(this, systemInfo)
     val shaders: Shaders = Shaders(this)
     val configs = Configs(this)
+    val textures = Textures(this)
 
     private val cacheByExtension = OrderedMap<String, AssetCache<*>>()
     private val cacheByType = OrderedMap<KClass<*>, AssetCache<*>>()
@@ -53,7 +55,7 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
     inline fun <reified T : Any> get(name: String): T =
         get(name, T::class)
 
-    fun <T: Any> contains(name: String, type: KClass<T>): Boolean {
+    fun <T : Any> contains(name: String, type: KClass<T>): Boolean {
         return getCache(type).get(name) != null
     }
 
@@ -74,6 +76,12 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     inline fun <reified T : Any> getAll() =
         getAll(T::class)
+
+    fun <T : Any> getAllByName(type: KClass<T>): List<Pair<String, T>> =
+        getCache(type).getAllByName()
+
+    inline fun <reified T : Any> getAllByName(): List<Pair<String, T>> =
+        getAllByName(T::class)
 
     suspend fun loadAsync(path: String) {
         val assetsPath = files.combinePaths(BASE_PATH, path)
@@ -114,6 +122,8 @@ class Assets(private val files: Files, systemInfo: SystemInfo) {
 
     fun dispose() {
         fonts.dispose(assetDisposer)
+        textures.dispose()
+
         for (cache in cacheByType.values()) {
             cache.dispose(assetDisposer)
         }
