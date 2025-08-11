@@ -5,7 +5,7 @@ import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.OrderedSet
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.reflect.KClass
@@ -105,7 +105,7 @@ class Entities(private val events: Events) {
     fun findAllAt(point: Vector3): Set<Entity> =
         grid[Location(point)].toSet()
 
-    fun findAllIn(box: Box): Array<Entity> {
+    fun findAllIn(box: Box): OrderedSet<Entity> {
         val minX = floor(box.min.x).toInt()
         val minY = floor(box.min.y).toInt()
         val minZ = floor(box.min.z).toInt()
@@ -114,7 +114,7 @@ class Entities(private val events: Events) {
         val maxY = ceil(box.max.y).toInt()
         val maxZ = ceil(box.max.z).toInt()
 
-        val objects = Array<Entity>()
+        val objects = OrderedSet<Entity>()
         for (x in minX..maxX) {
             for (y in minY..maxY) {
                 for (z in minZ..maxZ) {
