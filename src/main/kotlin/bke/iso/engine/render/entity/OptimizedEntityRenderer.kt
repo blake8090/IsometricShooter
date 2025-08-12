@@ -1,5 +1,6 @@
 package bke.iso.engine.render.entity
 
+import bke.iso.engine.Lighting
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
@@ -14,6 +15,7 @@ import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
+import bke.iso.game.weapon.system.Bullet
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -38,7 +40,8 @@ class OptimizedEntityRenderer(
     private val events: Events,
     private val debug: DebugRenderer,
     private val occlusion: Occlusion,
-    private val camera: OrthographicCamera
+    private val camera: OrthographicCamera,
+    private val lighting: Lighting
 ) {
 
     private val pool = object : Pool<EntityRenderable>() {
@@ -167,6 +170,17 @@ class OptimizedEntityRenderer(
             color.r = tintColor.r
             color.g = tintColor.g
             color.b = tintColor.b
+        }
+
+        val (r, g, b) = lighting.getColor(renderable.entity!!)
+        color.r = r
+        color.g = g
+        color.b = b
+
+        if (renderable.entity!!.has<Bullet>()) {
+            color.r = 1f
+            color.g = 1f
+            color.b = 1f
         }
 
         batch.withColor(color) {

@@ -51,7 +51,8 @@ class Engine(val game: Game) {
 
     val world: World = World(events)
 
-    val renderer: Renderer = Renderer(world, assets, events)
+    val lighting = Lighting(world)
+    val renderer: Renderer = Renderer(world, assets, lighting, events)
     val rendererManager = RendererManager(renderer)
 
     val collisions: Collisions = Collisions(renderer, world)
@@ -59,6 +60,7 @@ class Engine(val game: Game) {
     val scenes = Scenes(assets, serializer, world, renderer)
 
     val loadingScreens = LoadingScreens(events)
+
 
     private val modules = listOf(
         collisions,
@@ -68,7 +70,8 @@ class Engine(val game: Game) {
         world,
         rendererManager,
         ui,
-        loadingScreens
+        loadingScreens,
+        lighting
     )
     private val glProfiler = GLProfiler(Gdx.graphics)
     private val profiler = Profiler(ui, input, glProfiler)
@@ -113,6 +116,7 @@ class Engine(val game: Game) {
 
         updateModule(states, deltaTime)
         updateModule(world, deltaTime)
+        updateModule(lighting, deltaTime)
         updateModule(rendererManager, deltaTime)
         updateModule(ui, deltaTime)
         profiler.update(deltaTime)

@@ -1,5 +1,6 @@
 package bke.iso.engine.render
 
+import bke.iso.engine.Lighting
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.math.toScreen
@@ -34,6 +35,7 @@ const val VIRTUAL_HEIGHT = 540f
 class Renderer(
     private val world: World,
     private val assets: Assets,
+    private val lighting: Lighting,
     events: Events
 ) {
 
@@ -63,7 +65,7 @@ class Renderer(
     val fgShapes: ShapeArray = ShapeArray()
     private val shapeRenderer = ShapeRenderer(batch)
 
-    var bgColor: Color = Color.GRAY
+    var bgColor: Color = Color.BLACK
 
     val occlusion = Occlusion(world)
 
@@ -72,7 +74,8 @@ class Renderer(
         events,
         debug,
         occlusion,
-        camera
+        camera,
+        lighting
     )
 
     private val textRenderer = TextRenderer()

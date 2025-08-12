@@ -27,7 +27,7 @@ import kotlin.reflect.full.hasAnnotation
 class EntityEditor(private val engine: Engine) : BaseEditor() {
 
     override val world = World(engine.events)
-    override val renderer = Renderer(world, engine.assets, engine.events)
+    override val renderer = Renderer(world, engine.assets, engine.lighting, engine.events)
 
     private val log = KotlinLogging.logger { }
 

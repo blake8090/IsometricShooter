@@ -18684,6 +18684,38 @@
             },
             "template": "graybox-tile",
             "building": "main"
+        },
+        {
+            "pos": {
+                "x": 6.5078125,
+                "y": 5.4140625,
+                "z": 0.0
+            },
+            "template": "lamppost"
+        },
+        {
+            "pos": {
+                "x": 9.5234375,
+                "y": 5.5234375,
+                "z": 0.0
+            },
+            "template": "lamppost"
+        },
+        {
+            "pos": {
+                "x": 6.4531255,
+                "y": -4.5156245,
+                "z": 0.0
+            },
+            "template": "lamppost"
+        },
+        {
+            "pos": {
+                "x": 9.5078125,
+                "y": -4.4921875,
+                "z": 0.0
+            },
+            "template": "lamppost"
         }
     ]
 }

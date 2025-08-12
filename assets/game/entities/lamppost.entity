@@ -27,6 +27,9 @@
     {
       "type": "description",
       "text": "lamppost"
+    },
+    {
+      "type": "lamp"
     }
   ]
 }
