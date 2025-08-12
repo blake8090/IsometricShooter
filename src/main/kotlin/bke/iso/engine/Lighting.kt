@@ -7,6 +7,7 @@ import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Entity
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectMap
 import kotlinx.serialization.SerialName
@@ -18,7 +19,7 @@ class Lamp : Component
 
 private data class LightSource(
     val location: Location,
-    val intensity: Float,
+    val color: Color,
     val falloff: Float
 )
 
@@ -28,7 +29,7 @@ class Lighting(private val world: World) : EngineModule() {
     override val profilingEnabled: Boolean = true
 
     private val lightSources = Array<LightSource>()
-    private val lightMap = ObjectMap<Location, Float>()
+    private val lightMap = ObjectMap<Location, Color>()
 
     private val ambientLight = 0.25f
 
@@ -37,8 +38,8 @@ class Lighting(private val world: World) : EngineModule() {
             if (event.entity.has<Lamp>()) {
                 lightSources.add(
                     LightSource(
-                        Location(pos = event.entity.pos),
-                        intensity = 0.5f,
+                        location = Location(pos = event.entity.pos),
+                        color = Color(0.631f, 1f, 0.988f, 1f),
                         falloff = 0.11f
                     )
                 )
@@ -56,33 +57,64 @@ class Lighting(private val world: World) : EngineModule() {
         lightMap.putAll(mergeLights(lightMaps))
     }
 
-    fun mergeLights(lightMaps: List<ObjectMap<Location, Float>>): ObjectMap<Location, Float> {
-        val merged = ObjectMap<Location, Float>()
+    fun mergeLights(lightMaps: List<ObjectMap<Location, Color>>): ObjectMap<Location, Color> {
+        val merged = ObjectMap<Location, Color>()
         for (map in lightMaps) {
             for (entry in map) {
                 val pos = entry.key
                 val light = entry.value
-                merged.put(pos, maxOf(merged[pos] ?: 0f, light))
+                val existing = merged[pos]
+                if (existing == null) {
+                    merged.put(pos, light.cpy())
+                } else {
+                    merged.put(
+                        pos,
+                        Color(
+                            maxOf(existing.r, light.r),
+                            maxOf(existing.g, light.g),
+                            maxOf(existing.b, light.b),
+                            maxOf(existing.a, light.a)
+                        )
+                    )
+                }
             }
         }
         return merged
     }
 
-    private fun floodFillLight(source: LightSource): ObjectMap<Location, Float> {
-        val lightMap = ObjectMap<Location, Float>()
-        val queue = ArrayDeque<Pair<Location, Float>>()
+    private fun floodFillLight(source: LightSource): ObjectMap<Location, Color> {
+        val lightMap = ObjectMap<Location, Color>()
+        val queue = ArrayDeque<Pair<Location, Color>>()
 
-        lightMap.put(source.location, source.intensity)
-        queue.add(source.location to source.intensity)
+        val initialColor = source.color.cpy()
+        lightMap.put(source.location, initialColor)
+        queue.add(source.location to initialColor)
 
         while (queue.isNotEmpty()) {
-            val (pos, currentLight) = queue.removeFirst()
+            val (pos, currentColor) = queue.removeFirst()
 
             for (neighbor in getNeighbors(pos)) {
-                val newLight = currentLight - source.falloff
-                if (newLight > 0f && lightMap.get(neighbor, 0f) < newLight) {
-                    lightMap.put(neighbor, newLight)
-                    queue.add(neighbor to newLight)
+                val newColor = Color(
+                    (currentColor.r - source.falloff).coerceAtLeast(0f),
+                    (currentColor.g - source.falloff).coerceAtLeast(0f),
+                    (currentColor.b - source.falloff).coerceAtLeast(0f),
+                    currentColor.a
+                )
+
+                val hasAnyLight = newColor.r > 0f || newColor.g > 0f || newColor.b > 0f
+                if (!hasAnyLight) {
+                    continue
+                }
+
+                val existing = lightMap[neighbor]
+                val improved = existing == null ||
+                        newColor.r > existing.r ||
+                        newColor.g > existing.g ||
+                        newColor.b > existing.b
+
+                if (improved) {
+                    lightMap.put(neighbor, newColor)
+                    queue.add(neighbor to newColor)
                 }
             }
         }
@@ -105,10 +137,16 @@ class Lighting(private val world: World) : EngineModule() {
         var r = ambientLight
         var g = ambientLight
         var b = ambientLight
-        val lightValue = lightMap.get(Location(entity.x, entity.y, entity.z), 0f)
-        r += lightValue
-        g += lightValue
-        b += lightValue
-        return Triple(r, g, b)
+        val color = lightMap[Location(entity.x, entity.y, entity.z)]
+        if (color != null) {
+            r += color.r
+            g += color.g
+            b += color.b
+        }
+        return Triple(
+            r.coerceAtMost(1f),
+            g.coerceAtMost(1f),
+            b.coerceAtMost(1f)
+        )
     }
 }
