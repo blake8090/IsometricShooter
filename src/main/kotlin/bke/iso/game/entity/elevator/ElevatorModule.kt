@@ -6,8 +6,8 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Tags
+import bke.iso.engine.world.event.EntityCreated
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class ElevatorModule(private val collisions: Collisions) : Module {
@@ -17,7 +17,7 @@ class ElevatorModule(private val collisions: Collisions) : Module {
     private val log = KotlinLogging.logger { }
 
     override fun handleEvent(event: Event) {
-        if (event is Entities.CreatedEvent && event.entity.has<Elevator>()) {
+        if (event is EntityCreated && event.entity.has<Elevator>()) {
             setupElevator(event.entity)
         }
     }

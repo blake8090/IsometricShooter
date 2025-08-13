@@ -21,18 +21,44 @@ class Grid {
     operator fun get(location: Location): ObjectSet<Entity> =
         entitiesByLocation[location] ?: ObjectSet()
 
-    fun update(entity: Entity) {
+    /**
+     * Updates the given [entity]'s position in the grid.
+     * @return false if the [entity]'s locations did not change, and true otherwise
+     */
+    fun update(entity: Entity): Boolean {
         if (!entities.contains(entity)) {
             entities.add(entity)
         }
 
+        val previousLocations = locationsByEntity[entity]
+        val newLocations = entity.getLocations()
+
+        if (!locationsChanged(previousLocations, newLocations)) {
+            return false
+        }
+
         removeLocations(entity)
 
-        for (location in entity.getLocations()) {
-            // TODO: add some verification here, like that there can't be more than one tile entity in a location
+        for (location in newLocations) {
             getOrPutLocations(entity).add(location)
             getOrPutEntities(location).add(entity)
         }
+
+        return true
+    }
+
+    private fun locationsChanged(previous: ObjectSet<Location>?, new: Set<Location>): Boolean {
+        if (previous == null) {
+            return true
+        }
+
+        for (location in new) {
+            if (!previous.contains(location)) {
+                return true
+            }
+        }
+
+        return false
     }
 
     private fun getOrPutEntities(location: Location): ObjectSet<Entity> {

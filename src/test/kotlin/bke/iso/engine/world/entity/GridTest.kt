@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
 
 class GridTest : StringSpec({
 
@@ -89,5 +90,29 @@ class GridTest : StringSpec({
 
         grid[Location(1, 1, 0)].shouldContainExactly(entity2)
         grid.entities.shouldContainExactly(entity2)
+    }
+
+    "should return false if no locations changed" {
+        val entity = Entity("1")
+
+        entity.moveTo(1f, 1f, 1f)
+
+        val grid = Grid()
+        grid.update(entity) shouldBe true
+
+        entity.moveTo(1f, 1f, 1f)
+        grid.update(entity) shouldBe false
+    }
+
+    "should return true if locations changed" {
+        val entity = Entity("1")
+
+        entity.moveTo(1f, 1f, 1f)
+
+        val grid = Grid()
+        grid.update(entity) shouldBe true
+
+        entity.moveTo(1f, 1f, 2f)
+        grid.update(entity) shouldBe true
     }
 })

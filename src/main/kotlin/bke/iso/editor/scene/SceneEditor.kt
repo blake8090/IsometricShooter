@@ -22,9 +22,9 @@ import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Tags
+import bke.iso.engine.world.event.EntityCreated
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
@@ -292,7 +292,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 selectedBuilding = event.building
             }
 
-            is Entities.CreatedEvent -> { // TODO: could we do this in the command instead?
+            is EntityCreated -> { // TODO: could we do this in the command instead?
                 worldLogic.setBuilding(event.entity, selectedBuilding)
             }
 

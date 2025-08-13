@@ -1,9 +1,11 @@
 package bke.iso.engine.world.entity
 
-import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
+import bke.iso.engine.world.event.EntityCreated
+import bke.iso.engine.world.event.EntityDeleted
+import bke.iso.engine.world.event.EntityGridLocationChanged
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.OrderedSet
 import kotlin.math.ceil
@@ -51,7 +53,7 @@ class Entities(private val events: Events) {
         }
 
         entity.moveTo(x, y, z)
-        events.fire(CreatedEvent(entity))
+        events.fire(EntityCreated(entity))
         return entity
     }
 
@@ -60,6 +62,7 @@ class Entities(private val events: Events) {
 
     fun delete(entity: Entity) {
         grid.delete(entity)
+        events.fire(EntityDeleted(entity))
     }
 
     fun clear() {
@@ -131,14 +134,16 @@ class Entities(private val events: Events) {
      * Manually update an entity's location in the grid.
      *
      * This should be used in situations where an entity's [bke.iso.engine.collision.Collider] component was updated
-     * but the entity hasn't moved yet, for example when placing or editing reference entities in the editor.
+     * but the entity hasn't moved yet; for example when placing or editing reference entities in the editor.
      */
     fun updateGrid(entity: Entity) {
-        grid.update(entity)
+        val locationsChanged = grid.update(entity)
+        if (locationsChanged) {
+            events.fire(EntityGridLocationChanged(entity))
+        }
     }
 
-    private fun onMove(entity: Entity) =
-        grid.update(entity)
-
-    data class CreatedEvent(val entity: Entity) : Event
+    private fun onMove(entity: Entity) {
+        updateGrid(entity)
+    }
 }

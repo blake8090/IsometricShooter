@@ -3,54 +3,92 @@ package bke.iso.engine
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.math.Location
-import bke.iso.engine.math.nextFloat
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Component
-import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.event.EntityCreated
+import bke.iso.engine.world.event.EntityDeleted
+import bke.iso.engine.world.event.EntityGridLocationChanged
+import bke.iso.game.entity.player.Player
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectMap
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// TODO: think of a better name for this, and add editor support
 @Serializable
 @SerialName("lamp")
 class Lamp : Component
-
-private data class LightSource(
-    val location: Location,
-    val color: Color,
-    val falloff: Float
-)
 
 class Lighting(private val world: World) : EngineModule() {
     override val moduleName: String = "lighting"
     override val updateWhileLoading: Boolean = false
     override val profilingEnabled: Boolean = true
 
+    private val log = KotlinLogging.logger { }
+
+    private var lightingDirty = false
+
     private val lightSources = Array<LightSource>()
     private val lightMap = ObjectMap<Location, Color>()
 
-    private val ambientLight = 0.1f
-
+    private val ambientLight = 0.06f
 
     override fun handleEvent(event: Event) {
-        if (event is Entities.CreatedEvent) {
-            if (event.entity.has<Lamp>()) {
-                lightSources.add(
-                    LightSource(
-                        location = Location(pos = event.entity.pos),
-                        color = Color(nextFloat(0f, 1f), nextFloat(0f, 1f), nextFloat(0f, 1f), 1f),
-                        falloff = 0.11f
-                    )
-                )
-                recalculateLightMap()
+        when (event) {
+            is EntityCreated -> {
+                if (event.entity.has<Lamp>()) {
+                    log.debug { "Entity ${event.entity} created - recalculating light map" }
+                    lightingDirty = true
+                }
+            }
+
+            is EntityDeleted -> {
+                if (event.entity.has<Lamp>()) {
+                    log.debug { "Entity ${event.entity} created - recalculating light map" }
+                    lightingDirty = true
+                }
+            }
+
+            is EntityGridLocationChanged -> {
+                if (event.entity.has<Lamp>()) {
+                    log.debug { "Entity ${event.entity} grid location changed - recalculating light map" }
+                    lightingDirty = true
+                }
             }
         }
     }
 
+    override fun update(deltaTime: Float) {
+        if (lightingDirty) {
+
+            recalculateLightMap()
+            lightingDirty = false
+        }
+    }
+
     private fun recalculateLightMap() {
+        lightSources.clear()
+        world.entities.each<Lamp> { entity, lamp ->
+            val lightSource =
+                if (entity.has<Player>()) {
+                    LightSource(
+                        location = Location(pos = entity.pos),
+                        color = Color(0.25f, 0.25f, 0.25f, 1f),
+                        falloff = 0.3f
+                    )
+                } else {
+                    LightSource(
+                        location = Location(pos = entity.pos),
+                        color = Color(0.25f, 0.25f, 0f, 1f),
+                        falloff = 0.11f
+                    )
+                }
+            lightSources.add(lightSource)
+        }
+
         val lightMaps = lightSources
             .map(::floodFillLight)
             .toList()
@@ -150,3 +188,10 @@ class Lighting(private val world: World) : EngineModule() {
         )
     }
 }
+
+// TODO: store r, g, and b directly instead of using Color, and add brightness
+private data class LightSource(
+    val location: Location,
+    val color: Color,
+    val falloff: Float
+)

@@ -8,8 +8,8 @@ import bke.iso.engine.loading.SimpleLoadingScreen
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Tags
+import bke.iso.engine.world.event.EntityCreated
 import bke.iso.game.GameState
 import bke.iso.game.entity.player.Player
 import com.badlogic.gdx.math.Vector3
@@ -29,7 +29,7 @@ class DoorModule(
     override fun handleEvent(event: Event) {
         if (event is OpenDoorEvent) {
             openDoor(event.entity, event.doorEntity)
-        } else if (event is Entities.CreatedEvent) {
+        } else if (event is EntityCreated) {
             if (event.entity.has<Door>()) {
                 setupDoor(event.entity)
             }

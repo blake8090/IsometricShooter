@@ -8,8 +8,8 @@ import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Entities
 import bke.iso.engine.world.entity.Description
+import bke.iso.engine.world.event.EntityCreated
 import com.badlogic.gdx.math.Vector3
 
 const val SHADOW_SPRITE_ALPHA = 0.5f
@@ -20,7 +20,7 @@ class ShadowModule(private val world: World) : Module {
     override val alwaysActive: Boolean = false
 
     override fun handleEvent(event: Event) {
-        if (event is Entities.CreatedEvent && event.entity.has<CastShadow>()) {
+        if (event is EntityCreated && event.entity.has<CastShadow>()) {
             createShadow(event.entity)
         }
     }
