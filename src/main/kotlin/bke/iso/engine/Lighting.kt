@@ -3,6 +3,7 @@ package bke.iso.engine
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.math.Location
+import bke.iso.engine.math.nextFloat
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entities
@@ -31,7 +32,8 @@ class Lighting(private val world: World) : EngineModule() {
     private val lightSources = Array<LightSource>()
     private val lightMap = ObjectMap<Location, Color>()
 
-    private val ambientLight = 0.25f
+    private val ambientLight = 0.1f
+
 
     override fun handleEvent(event: Event) {
         if (event is Entities.CreatedEvent) {
@@ -39,7 +41,7 @@ class Lighting(private val world: World) : EngineModule() {
                 lightSources.add(
                     LightSource(
                         location = Location(pos = event.entity.pos),
-                        color = Color(0.631f, 1f, 0.988f, 1f),
+                        color = Color(nextFloat(0f, 1f), nextFloat(0f, 1f), nextFloat(0f, 1f), 1f),
                         falloff = 0.11f
                     )
                 )
@@ -83,43 +85,41 @@ class Lighting(private val world: World) : EngineModule() {
     }
 
     private fun floodFillLight(source: LightSource): ObjectMap<Location, Color> {
-        val lightMap = ObjectMap<Location, Color>()
-        val queue = ArrayDeque<Pair<Location, Color>>()
+        // propagate a scalar intensity to preserve the color ratio
+        val intensityMap = ObjectMap<Location, Float>()
+        val queue = ArrayDeque<Pair<Location, Float>>()
 
-        val initialColor = source.color.cpy()
-        lightMap.put(source.location, initialColor)
-        queue.add(source.location to initialColor)
+        intensityMap.put(source.location, 1f)
+        queue.add(source.location to 1f)
 
         while (queue.isNotEmpty()) {
-            val (pos, currentColor) = queue.removeFirst()
+            val (pos, currentIntensity) = queue.removeFirst()
 
             for (neighbor in getNeighbors(pos)) {
-                val newColor = Color(
-                    (currentColor.r - source.falloff).coerceAtLeast(0f),
-                    (currentColor.g - source.falloff).coerceAtLeast(0f),
-                    (currentColor.b - source.falloff).coerceAtLeast(0f),
-                    currentColor.a
-                )
-
-                val hasAnyLight = newColor.r > 0f || newColor.g > 0f || newColor.b > 0f
-                if (!hasAnyLight) {
-                    continue
-                }
-
-                val existing = lightMap[neighbor]
-                val improved = existing == null ||
-                        newColor.r > existing.r ||
-                        newColor.g > existing.g ||
-                        newColor.b > existing.b
-
-                if (improved) {
-                    lightMap.put(neighbor, newColor)
-                    queue.add(neighbor to newColor)
+                val newIntensity = currentIntensity - source.falloff
+                if (newIntensity > 0f && intensityMap.get(neighbor, 0f) < newIntensity) {
+                    intensityMap.put(neighbor, newIntensity)
+                    queue.add(neighbor to newIntensity)
                 }
             }
         }
 
-        return lightMap
+        val colorMap = ObjectMap<Location, Color>()
+        for (entry in intensityMap) {
+            val pos = entry.key
+            val intensity = entry.value
+            colorMap.put(
+                pos,
+                Color(
+                    (source.color.r * intensity).coerceAtLeast(0f),
+                    (source.color.g * intensity).coerceAtLeast(0f),
+                    (source.color.b * intensity).coerceAtLeast(0f),
+                    source.color.a
+                )
+            )
+        }
+
+        return colorMap
     }
 
     fun getNeighbors(pos: Location): Array<Location> {
