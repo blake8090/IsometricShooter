@@ -14,6 +14,7 @@ import bke.iso.engine.core.EngineModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.core.Game
+import bke.iso.engine.lighting.Lighting
 import bke.iso.engine.loading.LoadActionCompleteEvent
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.os.Dialogs
@@ -57,7 +58,7 @@ class Engine(val game: Game) {
 
     val collisions: Collisions = Collisions(renderer, world)
     val physics: Physics = Physics(world, collisions)
-    val scenes = Scenes(assets, serializer, world, renderer)
+    val scenes = Scenes(assets, serializer, world, renderer, lighting)
 
     val loadingScreens = LoadingScreens(events)
 

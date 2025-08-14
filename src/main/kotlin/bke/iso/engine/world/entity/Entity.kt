@@ -31,6 +31,10 @@ class Entity(
     val components: MutableMap<KClass<out Component>, Component> = mutableMapOf()
 
     fun moveTo(x: Float, y: Float, z: Float) {
+        if (this.x == x && this.y == y && this.z == z) {
+            return
+        }
+
         this.x = x
         this.y = y
         this.z = if (abs(z) <= Z_CLAMP_THRESHOLD) {

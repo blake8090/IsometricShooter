@@ -7,4 +7,6 @@ data class EntityCreated(val entity: Entity) : Event
 
 data class EntityDeleted(val entity: Entity) : Event
 
+data class EntityMoved(val entity: Entity) : Event
+
 data class EntityGridLocationChanged(val entity: Entity) : Event

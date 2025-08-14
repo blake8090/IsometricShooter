@@ -29,7 +29,12 @@
       "text": "lamppost"
     },
     {
-      "type": "lamp"
+      type: "pointLight",
+      intensity: 1,
+      falloff: 0.1,
+      r: 1,
+      g: 1,
+      b: 0.5
     }
   ]
 }

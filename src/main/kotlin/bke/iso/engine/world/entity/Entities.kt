@@ -6,6 +6,7 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.engine.world.event.EntityDeleted
 import bke.iso.engine.world.event.EntityGridLocationChanged
+import bke.iso.engine.world.event.EntityMoved
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.OrderedSet
 import kotlin.math.ceil
@@ -53,6 +54,7 @@ class Entities(private val events: Events) {
         }
 
         entity.moveTo(x, y, z)
+        updateGrid(entity)
         events.fire(EntityCreated(entity))
         return entity
     }
@@ -145,5 +147,6 @@ class Entities(private val events: Events) {
 
     private fun onMove(entity: Entity) {
         updateGrid(entity)
+        events.fire(EntityMoved(entity))
     }
 }

@@ -1,6 +1,6 @@
 package bke.iso.engine.render.entity
 
-import bke.iso.engine.Lighting
+import bke.iso.engine.lighting.Lighting
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
