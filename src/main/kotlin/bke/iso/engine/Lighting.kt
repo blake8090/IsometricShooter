@@ -24,7 +24,7 @@ class Lamp : Component
 
 class Lighting(private val world: World) : EngineModule() {
     override val moduleName: String = "lighting"
-    override val updateWhileLoading: Boolean = false
+    override val updateWhileLoading: Boolean = true
     override val profilingEnabled: Boolean = true
 
     private val log = KotlinLogging.logger { }
@@ -76,13 +76,15 @@ class Lighting(private val world: World) : EngineModule() {
                 if (entity.has<Player>()) {
                     LightSource(
                         location = Location(pos = entity.pos),
-                        color = Color(0.25f, 0.25f, 0.25f, 1f),
-                        falloff = 0.3f
+                        color = Color(1f, 1f, 1f, 1f),
+                        intensity = 0.1f,
+                        falloff = 0.33f
                     )
                 } else {
                     LightSource(
                         location = Location(pos = entity.pos),
-                        color = Color(0.25f, 0.25f, 0f, 1f),
+                        color = Color(1f, 1f, 0.25f, 1f),
+                        intensity = 0.8f,
                         falloff = 0.11f
                     )
                 }
@@ -149,9 +151,9 @@ class Lighting(private val world: World) : EngineModule() {
             colorMap.put(
                 pos,
                 Color(
-                    (source.color.r * intensity).coerceAtLeast(0f),
-                    (source.color.g * intensity).coerceAtLeast(0f),
-                    (source.color.b * intensity).coerceAtLeast(0f),
+                    source.intensity * (source.color.r * intensity).coerceAtLeast(0f),
+                    source.intensity * (source.color.g * intensity).coerceAtLeast(0f),
+                    source.intensity * (source.color.b * intensity).coerceAtLeast(0f),
                     source.color.a
                 )
             )
@@ -193,5 +195,6 @@ class Lighting(private val world: World) : EngineModule() {
 private data class LightSource(
     val location: Location,
     val color: Color,
+    val intensity: Float,
     val falloff: Float
 )

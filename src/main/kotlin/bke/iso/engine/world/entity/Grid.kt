@@ -52,6 +52,10 @@ class Grid {
             return true
         }
 
+        if (previous.size != new.size) {
+            return true
+        }
+
         for (location in new) {
             if (!previous.contains(location)) {
                 return true
