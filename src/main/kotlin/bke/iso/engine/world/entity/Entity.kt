@@ -13,7 +13,9 @@ private const val Z_CLAMP_THRESHOLD = 0.00001f
 @Serializable
 class Entity(
     val id: String,
-    private val onMove: (Entity) -> Unit = {}
+    private val onMove: (Entity) -> Unit = {},
+    private val onComponentAdded: (Entity, Component) -> Unit = { _, _ -> },
+    private val onComponentRemoved: (Entity, Component) -> Unit = { _, _ -> },
 ) {
 
     var x: Float = 0f
@@ -55,6 +57,7 @@ class Entity(
 
     fun <T : Component> add(component: T) {
         components[component::class] = component
+        onComponentAdded.invoke(this, component)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -86,7 +89,10 @@ class Entity(
     }
 
     fun <T : Component> remove(componentType: KClass<T>) {
-        components.remove(componentType)
+        val component = components.remove(componentType)
+        if (component != null) {
+            onComponentRemoved.invoke(this, component)
+        }
     }
 
     /**

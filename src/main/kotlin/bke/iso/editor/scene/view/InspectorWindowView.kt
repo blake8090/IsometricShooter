@@ -1,13 +1,11 @@
 package bke.iso.editor.scene.view
 
-import bke.iso.editor.EditorModule
-import bke.iso.editor.entity.command.UpdateComponentPropertyCommand
 import bke.iso.editor.scene.EntityData
 import bke.iso.editor.scene.SceneEditor
-import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Events
+import bke.iso.engine.lighting.PointLight
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entity
@@ -139,20 +137,36 @@ class InspectorWindowView(
     }
 
     private fun drawControls(component: Component) {
-        for (memberProperty in component::class.memberProperties) {
-            when (memberProperty.returnType) {
-                typeOf<Float>() -> drawFloatControls(component, memberProperty)
-                typeOf<Float?>() -> drawFloatControls(component, memberProperty)
-                typeOf<Int>() -> drawIntControls(component, memberProperty)
-                typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
-                typeOf<String>() -> drawStringControls(component, memberProperty)
-                typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
-                typeOf<Color>() -> drawColorControls(component, memberProperty)
-                typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
-                typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
-                else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
+        if (component is PointLight) {
+            // do this manually to fix ordering...
+            drawFloatControls(component, getMemberProperty<PointLight>("intensity"))
+            drawFloatControls(component, getMemberProperty<PointLight>("falloff"))
+            drawFloatControls(component, getMemberProperty<PointLight>("r"))
+            drawFloatControls(component, getMemberProperty<PointLight>("g"))
+            drawFloatControls(component, getMemberProperty<PointLight>("b"))
+        } else {
+            for (memberProperty in component::class.memberProperties) {
+                when (memberProperty.returnType) {
+                    typeOf<Float>() -> drawFloatControls(component, memberProperty)
+                    typeOf<Float?>() -> drawFloatControls(component, memberProperty)
+                    typeOf<Int>() -> drawIntControls(component, memberProperty)
+                    typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
+                    typeOf<String>() -> drawStringControls(component, memberProperty)
+                    typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
+                    typeOf<Color>() -> drawColorControls(component, memberProperty)
+                    typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
+                    typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
+                    else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
+                }
             }
         }
+    }
+
+    private inline fun <reified T : Component> getMemberProperty(name: String): KProperty1<out Component, *> {
+        return T::class
+            .memberProperties
+            .firstOrNull { property -> property.name == name }
+            ?: throw IllegalArgumentException("No property $name in ${T::class.simpleName}")
     }
 
     private fun drawStringControls(component: Component, memberProperty: KProperty1<out Component, *>) {
@@ -167,12 +181,10 @@ class InspectorWindowView(
             if (memberProperty is KMutableProperty<*>) {
                 if (memberProperty.name != "texture" || assets.contains(value.toString(), Texture::class)) {
                     events.fire(
-                        EditorModule.ExecuteCommand(
-                            UpdateComponentPropertyCommand(
-                                component = component,
-                                property = memberProperty as KMutableProperty1,
-                                newValue = value.toString()
-                            )
+                        SceneEditor.PropertyUpdated(
+                            component,
+                            memberProperty as KMutableProperty1,
+                            value.toString()
                         )
                     )
                 }
@@ -185,27 +197,39 @@ class InspectorWindowView(
     }
 
     private fun drawFloatControls(component: Component, memberProperty: KProperty1<out Component, *>) {
+        val isMutable = memberProperty is KMutableProperty<*>
+
+        if (!isMutable) {
+            ImGui.beginDisabled()
+        }
+
         val value = ImFloat(get<Float>(memberProperty, component))
         if (ImGui.inputFloat(memberProperty.name, value)) {
-            val command =
-                UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
-            events.fire(EditorModule.ExecuteCommand(command))
+            if (isMutable) {
+                val event =
+                    SceneEditor.PropertyUpdated(component, memberProperty as KMutableProperty1, value.get())
+                events.fire(event)
+            }
+        }
+
+        if (!isMutable) {
+            ImGui.endDisabled()
         }
     }
 
     private fun drawBooleanControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         val value = ImBoolean(get<Boolean>(memberProperty, component))
         if (ImGui.checkbox(memberProperty.name, value)) {
-            val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
-            events.fire(EditorModule.ExecuteCommand(command))
+            val command = SceneEditor.PropertyUpdated(component, memberProperty as KMutableProperty1, value.get())
+            events.fire(command)
         }
     }
 
     private fun drawIntControls(component: Component, memberProperty: KProperty1<out Component, *>) {
         val value = ImInt(get<Int>(memberProperty, component))
         if (ImGui.inputInt(memberProperty.name, value)) {
-            val command = UpdateComponentPropertyCommand(component, memberProperty as KMutableProperty1, value.get())
-            events.fire(EditorModule.ExecuteCommand(command))
+            val command = SceneEditor.PropertyUpdated(component, memberProperty as KMutableProperty1, value.get())
+            events.fire(command)
         }
     }
 
@@ -217,8 +241,8 @@ class InspectorWindowView(
                 val float = ImFloat(vectorProperty.getter.call(vector) as Float)
                 if (ImGui.inputFloat("${vectorProperty.name}##vectorX", float)) {
                     val command =
-                        UpdateInstancePropertyCommand(vector, vectorProperty as KMutableProperty1, float.get())
-                    events.fire(EditorModule.ExecuteCommand(command))
+                        SceneEditor.PropertyUpdated(vector, vectorProperty as KMutableProperty1, float.get())
+                    events.fire(command)
                 }
             }
 

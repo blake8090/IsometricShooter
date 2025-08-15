@@ -15,7 +15,6 @@ import bke.iso.engine.render.occlusion.Occlusion
 import bke.iso.engine.render.withColor
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
-import bke.iso.game.weapon.system.Bullet
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
@@ -176,12 +175,6 @@ class OptimizedEntityRenderer(
         color.r = r
         color.g = g
         color.b = b
-
-        if (renderable.entity!!.has<Bullet>()) {
-            color.r = 1f
-            color.g = 1f
-            color.b = 1f
-        }
 
         batch.withColor(color) {
             batch.draw(

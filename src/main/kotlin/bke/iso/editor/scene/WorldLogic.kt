@@ -5,6 +5,8 @@ import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Events
+import bke.iso.engine.lighting.Lighting
+import bke.iso.engine.lighting.PointLight
 import bke.iso.engine.math.Location
 import bke.iso.engine.render.Occlude
 import bke.iso.engine.render.Sprite
@@ -27,6 +29,7 @@ class WorldLogic(
     private val world: World,
     private val assets: Assets,
     private val events: Events,
+    private val lighting: Lighting
 ) {
 
     private val log = KotlinLogging.logger { }
@@ -40,6 +43,7 @@ class WorldLogic(
         dataByReferenceEntity.clear()
         deletedReferenceEntities.clear()
         world.clear()
+        lighting.clear()
 
         for (record in scene.entities) {
             load(record)
@@ -133,6 +137,11 @@ class WorldLogic(
         if (sourceComponents.any { component -> component is Occlude }) {
             components.removeIf { c -> c::class == Occlude::class }
             components.add(Occlude())
+        }
+
+        sourceComponents.withFirstInstance<PointLight> { pointLight ->
+            components.removeIf { c -> c::class == PointLight::class }
+            components.add(pointLight.copy())
         }
     }
 

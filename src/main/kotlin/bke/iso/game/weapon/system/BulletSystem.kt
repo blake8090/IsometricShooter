@@ -6,6 +6,7 @@ import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.lighting.FullBright
 import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
@@ -97,7 +98,8 @@ class BulletSystem(
                 offsetY = 8f
             ),
             PhysicsBody(mode = PhysicsMode.GHOST),
-            Description("explosion")
+            Description("explosion"),
+            FullBright()
         )
         clampPosToCollisionSide(explosion, collision)
     }

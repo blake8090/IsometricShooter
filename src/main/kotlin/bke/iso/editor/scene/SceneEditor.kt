@@ -8,6 +8,7 @@ import bke.iso.editor.scene.command.AssignBuildingCommand
 import bke.iso.editor.scene.command.DeleteTagCommand
 import bke.iso.editor.scene.command.DisableComponentOverrideCommand
 import bke.iso.editor.scene.command.EnableComponentOverrideCommand
+import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
 import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.editor.scene.view.SceneEditorView
@@ -32,6 +33,7 @@ import com.badlogic.gdx.utils.Array
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.encodeToString
 import java.io.File
+import kotlin.reflect.KMutableProperty1
 
 class SceneEditor(private val engine: Engine) : BaseEditor() {
 
@@ -48,7 +50,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     private var drawGridForeground = false
 
     private val cameraLogic = CameraLogic(engine.input, world, renderer, this)
-    private val worldLogic = WorldLogic(world, engine.assets, engine.events)
+    private val worldLogic = WorldLogic(world, engine.assets, engine.events, engine.lighting)
     private val toolLogic =
         ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
 
@@ -83,6 +85,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         }
 
 //        renderer.occlusion.resetStrategies()
+        renderer.bgColor = Color.GRAY
         // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
 
@@ -309,6 +312,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                     event.templateComponent
                 )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
+                worldLogic.refreshComponents(event.referenceEntity)
             }
 
             is ComponentOverrideDisabled -> {
@@ -318,6 +322,17 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                     event.componentOverride
                 )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
+                worldLogic.refreshComponents(event.referenceEntity)
+            }
+
+            is PropertyUpdated<*> -> {
+                val command = UpdateInstancePropertyCommand(
+                    instance = event.component,
+                    property = event.property,
+                    newValue = event.newValue
+                )
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+                selectedEntity?.let(worldLogic::refreshComponents)
             }
         }
     }
@@ -402,6 +417,12 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val referenceEntity: Entity,
         val template: EntityTemplate,
         val componentOverride: Component
+    ) : Event
+
+    data class PropertyUpdated<T : Any>(
+        val component: T,
+        val property: KMutableProperty1<out T, *>,
+        val newValue: Any
     ) : Event
 
     data class ViewData(

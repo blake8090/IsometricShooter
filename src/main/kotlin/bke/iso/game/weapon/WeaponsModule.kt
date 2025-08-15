@@ -4,6 +4,7 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Module
+import bke.iso.engine.lighting.FullBright
 import bke.iso.engine.math.nextFloat
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.physics.PhysicsBody
@@ -134,7 +135,8 @@ class WeaponsModule(
             ),
             DebugSettings().apply {
                 zAxis = false
-            }
+            },
+            FullBright()
         )
     }
 

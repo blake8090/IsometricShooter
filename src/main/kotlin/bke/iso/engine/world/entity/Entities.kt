@@ -3,6 +3,7 @@ package bke.iso.engine.world.entity
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
+import bke.iso.engine.world.event.EntityComponentAdded
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.engine.world.event.EntityDeleted
 import bke.iso.engine.world.event.EntityGridLocationChanged
@@ -47,7 +48,12 @@ class Entities(private val events: Events) {
         z: Float,
         vararg components: Component
     ): Entity {
-        val entity = Entity(id, this::onMove)
+        val entity = Entity(
+            id,
+            this::onMove,
+            this::onComponentAdded,
+            this::onComponentRemoved
+        )
 
         for (component in components) {
             entity.add(component)
@@ -148,5 +154,13 @@ class Entities(private val events: Events) {
     private fun onMove(entity: Entity) {
         updateGrid(entity)
         events.fire(EntityMoved(entity))
+    }
+
+    private fun onComponentAdded(entity: Entity, component: Component) {
+        events.fire(EntityComponentAdded(entity, component))
+    }
+
+    private fun onComponentRemoved(entity: Entity, component: Component) {
+        events.fire(EntityComponentAdded(entity, component))
     }
 }

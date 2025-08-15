@@ -6,6 +6,8 @@ import bke.iso.engine.math.Location
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.event.EntityComponentAdded
+import bke.iso.engine.world.event.EntityComponentRemoved
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.engine.world.event.EntityDeleted
 import bke.iso.engine.world.event.EntityMoved
@@ -16,7 +18,7 @@ private typealias LightMap = ObjectMap<Location, Triple<Float, Float, Float>>
 
 private data class LightSource(
     val intensity: Float = 0f,
-    val falloff: Float = 0.1f,
+    val falloff: Float = 0f,
     val r: Float = 0f,
     val g: Float = 0f,
     val b: Float = 0f
@@ -47,6 +49,18 @@ class Lighting(private val world: World) : EngineModule() {
             is EntityMoved -> {
                 if (event.entity.has<PointLight>()) {
                     recalculateDynamicLightMap(event.entity)
+                }
+            }
+
+            is EntityComponentAdded -> {
+                if (event.component is PointLight) {
+                    update(event.entity)
+                }
+            }
+
+            is EntityComponentRemoved -> {
+                if (event.component is PointLight) {
+                    update(event.entity)
                 }
             }
         }
@@ -87,7 +101,7 @@ class Lighting(private val world: World) : EngineModule() {
         while (queue.isNotEmpty()) {
             val (pos, currentIntensity) = queue.removeFirst()
             for (neighbor in getNeighbors(pos)) {
-                val newIntensity = currentIntensity - source.falloff
+                val newIntensity = currentIntensity - source.falloff.coerceAtLeast(0.05f)
                 if (newIntensity > 0f && intensityMap.get(neighbor, 0f) < newIntensity) {
                     intensityMap.put(neighbor, newIntensity)
                     queue.add(neighbor to newIntensity)
@@ -123,7 +137,27 @@ class Lighting(private val world: World) : EngineModule() {
         dynamicLights.clear()
     }
 
+    fun update(entity: Entity) {
+        val light = entity.get<PointLight>() ?: return
+
+        val source =
+            LightSource(
+                light.intensity,
+                light.falloff,
+                light.r,
+                light.g,
+                light.b
+            )
+
+        dynamicLights.put(entity, DynamicLight(source))
+        recalculateDynamicLightMap(entity)
+    }
+
     fun getColor(entity: Entity): Triple<Float, Float, Float> {
+        if (entity.has<FullBright>()) {
+            return Triple(1f, 1f, 1f)
+        }
+
         var r = ambientLight
         var g = ambientLight
         var b = ambientLight
