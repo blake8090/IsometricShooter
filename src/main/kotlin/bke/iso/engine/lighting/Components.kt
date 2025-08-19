@@ -12,7 +12,7 @@ data class PointLight(
     var intensity: Float = 0f,
     var falloff: Float = 0.1f,
     @Contextual
-    var color: Color
+    var color: Color = Color.WHITE
 ) : Component
 
 @Serializable
