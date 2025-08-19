@@ -28,7 +28,6 @@ class InspectorWindowView(
     private val componentEditorView = ComponentEditorView(events, assets)
 
     fun draw(pos: ImVec2, size: ImVec2, data: SceneEditor.ViewData) {
-        ImGui.showDemoWindow()
         ImGui.setNextWindowPos(pos)
         ImGui.setNextWindowSize(size)
         ImGui.begin("Inspector##inspector")
