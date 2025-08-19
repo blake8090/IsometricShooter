@@ -1,9 +1,11 @@
 package bke.iso.editor.entity
 
 import bke.iso.editor.EditorModule
+import bke.iso.editor.component.ComponentEditorView
 import bke.iso.editor.core.BaseEditor
 import bke.iso.editor.entity.command.AddComponentCommand
 import bke.iso.editor.entity.command.DeleteComponentCommand
+import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.entity.EntityTemplate
@@ -11,6 +13,7 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
+import bke.iso.engine.lighting.FullBright
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
@@ -32,7 +35,7 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
     private val log = KotlinLogging.logger { }
 
     private val cameraLogic = CameraLogic(engine.input, renderer)
-    private val view = EntityModeView(engine.events, engine.assets)
+    private val view = EntityEditorView(engine.events, engine.assets)
 
     private var gridWidth = 5
     private var gridLength = 5
@@ -49,6 +52,7 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
     override fun start() {
         engine.ui.pushView(view)
         engine.rendererManager.setActiveRenderer(renderer)
+        renderer.bgColor = Color.GRAY
         cameraLogic.start()
 
         with(engine.input.keyMouse) {
@@ -116,14 +120,22 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
                 selectedComponent = event.component
             }
 
-            is SelectedComponentDeleted -> {
-                val component = selectedComponent ?: return
-                val command = DeleteComponentCommand(components, component)
+            is NewComponentTypeAdded -> {
+                val command = AddComponentCommand(components, event.componentType, ::refreshComponents)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
-            is NewComponentTypeAdded -> {
-                val command = AddComponentCommand(components, referenceEntity, event.componentType)
+            is ComponentDeleted -> {
+                val command = DeleteComponentCommand(components, event.component, ::refreshComponents)
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
+
+            is ComponentEditorView.PropertyUpdated<*> -> {
+                val command = UpdateInstancePropertyCommand(
+                    instance = event.component,
+                    property = event.property,
+                    newValue = event.newValue
+                )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
         }
@@ -136,12 +148,18 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
         components.clear()
         components.addAll(template.components)
 
-        referenceEntity.components.clear()
-        components.withFirstInstance<Sprite>(referenceEntity::add)
-        components.withFirstInstance<Collider>(referenceEntity::add)
+        refreshComponents()
 
         commands.reset()
         log.info { "Loaded entity template: '${file.canonicalPath}'" }
+    }
+
+    private fun refreshComponents() {
+        referenceEntity.components.clear()
+        components.withFirstInstance<Sprite>(referenceEntity::add)
+        components.withFirstInstance<Collider>(referenceEntity::add)
+        // hack to disable lighting - right now multiple renderers share the same lighting!
+        referenceEntity.add(FullBright())
     }
 
     private fun saveTemplate() {
@@ -160,7 +178,7 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
 
     data class ComponentSelected(val component: Component) : Event
 
-    class SelectedComponentDeleted : Event
+    data class ComponentDeleted(val component: Component) : Event
 
     data class NewComponentTypeAdded(val componentType: KClass<out Component>) : Event
 

@@ -1,17 +1,14 @@
 package bke.iso.editor.entity.command
 
 import bke.iso.editor.core.EditorCommand
-import bke.iso.engine.collision.Collider
-import bke.iso.engine.render.Sprite
-import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 data class AddComponentCommand(
     val components: MutableList<Component>,
-    val referenceEntity: Entity,
-    val componentType: KClass<out Component>
+    val componentType: KClass<out Component>,
+    val onActionCompleted: () -> Unit
 ) : EditorCommand() {
 
     override val name = "AddComponent"
@@ -22,10 +19,7 @@ data class AddComponentCommand(
         val newComponent = componentType.createInstance()
         components.add(newComponent)
         addedComponent = newComponent
-
-        if (newComponent is Sprite || newComponent is Collider) {
-            referenceEntity.add(newComponent)
-        }
+        onActionCompleted.invoke()
     }
 
     override fun undo() {
@@ -33,6 +27,6 @@ data class AddComponentCommand(
             "Expected an added component"
         }
         components.remove(component)
-        referenceEntity.remove(component::class)
+        onActionCompleted.invoke()
     }
 }
