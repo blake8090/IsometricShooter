@@ -8,6 +8,7 @@ import bke.iso.editor.scene.command.AssignBuildingCommand
 import bke.iso.editor.scene.command.DeleteTagCommand
 import bke.iso.editor.scene.command.DisableComponentOverrideCommand
 import bke.iso.editor.scene.command.EnableComponentOverrideCommand
+import bke.iso.editor.scene.command.SetAmbientLightCommand
 import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
 import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
@@ -162,7 +163,9 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 selectedBuilding = selectedBuilding,
                 messageBarText = getMessageBarText(),
                 selectedAssetDirectory = selectedAssetDirectory,
-                entityTemplatesInDirectory = entityTemplatesInDirectory
+                entityTemplatesInDirectory = entityTemplatesInDirectory,
+
+                ambientLight = engine.lighting.ambientLight
             )
     }
 
@@ -334,6 +337,11 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 engine.events.fire(EditorModule.ExecuteCommand(command))
                 selectedEntity?.let(worldLogic::refreshComponents)
             }
+
+            is AmbientLightUpdated -> {
+                val command = SetAmbientLightCommand(engine.lighting, event.color)
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
         }
     }
 
@@ -425,6 +433,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val newValue: Any
     ) : Event
 
+    data class AmbientLightUpdated(val color: Color) : Event
+
     data class ViewData(
         val selectedEntity: Entity? = null,
         val selectedEntityData: EntityData? = null,
@@ -438,6 +448,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val selectedBuilding: String?,
         val messageBarText: String,
         val selectedAssetDirectory: File? = null,
-        val entityTemplatesInDirectory: Array<EntityTemplate>
+        val entityTemplatesInDirectory: Array<EntityTemplate>,
+
+        val ambientLight: Color
     )
 }

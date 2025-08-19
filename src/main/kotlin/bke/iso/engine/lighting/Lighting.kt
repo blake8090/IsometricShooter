@@ -11,6 +11,7 @@ import bke.iso.engine.world.event.EntityComponentRemoved
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.engine.world.event.EntityDeleted
 import bke.iso.engine.world.event.EntityMoved
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectMap
 
@@ -34,9 +35,9 @@ class Lighting(private val world: World) : EngineModule() {
     override val updateWhileLoading: Boolean = true
     override val profilingEnabled: Boolean = true
 
-    private val dynamicLights = ObjectMap<Entity, DynamicLight>()
+    var ambientLight: Color = Color.WHITE
 
-    private val ambientLight = 0.06f
+    private val dynamicLights = ObjectMap<Entity, DynamicLight>()
 
     override fun handleEvent(event: Event) {
         when (event) {
@@ -73,9 +74,9 @@ class Lighting(private val world: World) : EngineModule() {
             LightSource(
                 light.intensity,
                 light.falloff,
-                light.r,
-                light.g,
-                light.b
+                light.color.r,
+                light.color.g,
+                light.color.b
             )
 
         dynamicLights.put(entity, DynamicLight(source))
@@ -144,9 +145,9 @@ class Lighting(private val world: World) : EngineModule() {
             LightSource(
                 light.intensity,
                 light.falloff,
-                light.r,
-                light.g,
-                light.b
+                light.color.r,
+                light.color.g,
+                light.color.b
             )
 
         dynamicLights.put(entity, DynamicLight(source))
@@ -158,9 +159,9 @@ class Lighting(private val world: World) : EngineModule() {
             return Triple(1f, 1f, 1f)
         }
 
-        var r = ambientLight
-        var g = ambientLight
-        var b = ambientLight
+        var r = ambientLight.r
+        var g = ambientLight.g
+        var b = ambientLight.b
 
         val location = Location(entity.x, entity.y, entity.z)
         var maxR = 0f

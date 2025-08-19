@@ -34,6 +34,10 @@ class Scenes(
             if (scene.backgroundColor != null) {
                 renderer.bgColor = scene.backgroundColor
             }
+
+            if (scene.ambientLight != null) {
+                lighting.ambientLight = scene.ambientLight
+            }
         }
 
         log.info { "Loaded scene '$name' in $time ms" }

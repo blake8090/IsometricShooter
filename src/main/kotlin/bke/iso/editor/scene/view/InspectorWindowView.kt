@@ -5,7 +5,6 @@ import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.core.Events
-import bke.iso.engine.lighting.PointLight
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entity
@@ -32,19 +31,21 @@ import kotlin.reflect.typeOf
 
 class InspectorWindowView(
     private val assets: Assets,
-    private val events: Events
+    private val events: Events,
 ) {
 
     private val log = KotlinLogging.logger { }
 
     private val inputTextLength = 50
-
     private val componentOverrideColor = ImColor.rgb(50, 129, 168)
+    private val colorByLabel = mutableMapOf<String, FloatArray>()
 
     fun draw(pos: ImVec2, size: ImVec2, data: SceneEditor.ViewData) {
         ImGui.setNextWindowPos(pos)
         ImGui.setNextWindowSize(size)
         ImGui.begin("Inspector##inspector")
+
+        drawSceneProperties(data)
 
         ImGui.beginDisabled(data.selectedEntity == null)
 
@@ -60,6 +61,26 @@ class InspectorWindowView(
 
         ImGui.endDisabled()
         ImGui.end()
+    }
+
+    private fun drawSceneProperties(data: SceneEditor.ViewData) {
+        ImGui.separatorText("Scene Properties")
+
+        if (ImGui.treeNodeEx("Ambient Light", ImGuiTreeNodeFlags.DefaultOpen)) {
+            val label = "##sceneColorEdit"
+
+            val color = data.ambientLight
+            val selectedColor = colorByLabel.getOrPut(label, { floatArrayOf(color.r, color.g, color.b, color.a) })
+            val refColor = floatArrayOf(color.r, color.g, color.b, color.a)
+            ImGui.colorPicker4(label, selectedColor, refColor)
+
+            if (ImGui.button("Apply")) {
+                val newColor = Color(selectedColor[0], selectedColor[1], selectedColor[2], selectedColor[3])
+                events.fire(SceneEditor.AmbientLightUpdated(newColor))
+            }
+
+            ImGui.treePop()
+        }
     }
 
     private fun drawMainProperties(entity: Entity, data: SceneEditor.ViewData) {
@@ -137,27 +158,18 @@ class InspectorWindowView(
     }
 
     private fun drawControls(component: Component) {
-        if (component is PointLight) {
-            // do this manually to fix ordering...
-            drawFloatControls(component, getMemberProperty<PointLight>("intensity"))
-            drawFloatControls(component, getMemberProperty<PointLight>("falloff"))
-            drawFloatControls(component, getMemberProperty<PointLight>("r"))
-            drawFloatControls(component, getMemberProperty<PointLight>("g"))
-            drawFloatControls(component, getMemberProperty<PointLight>("b"))
-        } else {
-            for (memberProperty in component::class.memberProperties) {
-                when (memberProperty.returnType) {
-                    typeOf<Float>() -> drawFloatControls(component, memberProperty)
-                    typeOf<Float?>() -> drawFloatControls(component, memberProperty)
-                    typeOf<Int>() -> drawIntControls(component, memberProperty)
-                    typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
-                    typeOf<String>() -> drawStringControls(component, memberProperty)
-                    typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
-                    typeOf<Color>() -> drawColorControls(component, memberProperty)
-                    typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
-                    typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
-                    else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
-                }
+        for (memberProperty in component::class.memberProperties) {
+            when (memberProperty.returnType) {
+                typeOf<Float>() -> drawFloatControls(component, memberProperty)
+                typeOf<Float?>() -> drawFloatControls(component, memberProperty)
+                typeOf<Int>() -> drawIntControls(component, memberProperty)
+                typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
+                typeOf<String>() -> drawStringControls(component, memberProperty)
+                typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
+                typeOf<Color>() -> drawColorControls(component, memberProperty)
+                typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
+                typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
+                else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
             }
         }
     }
@@ -250,14 +262,22 @@ class InspectorWindowView(
         }
     }
 
-    private fun drawColorControls(component: Component, memberProperty: KProperty1<out Component, *>) {
-        if (ImGui.treeNodeEx(memberProperty.name, ImGuiTreeNodeFlags.DefaultOpen)) {
-            val color = get<Color>(memberProperty, component)
-            // TODO: enable changes
-            ImGui.inputFloat("r##${memberProperty.name}", ImFloat(color.r))
-            ImGui.inputFloat("g##${memberProperty.name}", ImFloat(color.g))
-            ImGui.inputFloat("b##${memberProperty.name}", ImFloat(color.b))
-            ImGui.inputFloat("a##${memberProperty.name}", ImFloat(color.a))
+    private fun drawColorControls(component: Component, property: KProperty1<out Component, *>) {
+        if (ImGui.treeNodeEx(property.name, ImGuiTreeNodeFlags.DefaultOpen)) {
+            val color = get<Color>(property, component)
+
+            val label = "##${component.hashCode()}${property.name}colorEdit"
+            val selectedColor = colorByLabel.getOrPut(label, { floatArrayOf(color.r, color.g, color.b, color.a) })
+            val refColor = floatArrayOf(color.r, color.g, color.b, color.a)
+            ImGui.colorPicker4(label, selectedColor, refColor)
+
+            if (ImGui.button("Apply")) {
+                val newColor = Color(selectedColor[0], selectedColor[1], selectedColor[2], selectedColor[3])
+                val command =
+                    SceneEditor.PropertyUpdated(component, property as KMutableProperty1, newColor)
+                events.fire(command)
+            }
+
             ImGui.treePop()
         }
     }

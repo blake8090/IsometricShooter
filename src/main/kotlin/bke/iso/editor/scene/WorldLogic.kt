@@ -17,6 +17,7 @@ import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Description
 import bke.iso.engine.world.entity.Tile
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -47,6 +48,12 @@ class WorldLogic(
 
         for (record in scene.entities) {
             load(record)
+        }
+
+        if (scene.ambientLight != null) {
+            lighting.ambientLight = scene.ambientLight
+        } else {
+            lighting.ambientLight = Color.WHITE
         }
 
         events.fire(SceneEditor.SceneLoaded())
@@ -94,7 +101,11 @@ class WorldLogic(
             }
             .toList()
 
-        return Scene("1", entities)
+        return Scene(
+            version = "1",
+            entities = entities,
+            ambientLight = lighting.ambientLight
+        )
     }
 
     fun getReferenceEntities() =

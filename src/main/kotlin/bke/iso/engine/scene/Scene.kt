@@ -11,7 +11,9 @@ data class Scene(
     val version: String,
     val entities: List<EntityRecord>,
     @Contextual
-    val backgroundColor: Color? = null
+    val backgroundColor: Color? = null,
+    @Contextual
+    val ambientLight: Color? = null
 )
 
 @Serializable
