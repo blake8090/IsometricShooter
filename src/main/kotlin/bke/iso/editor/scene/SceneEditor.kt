@@ -2,6 +2,7 @@ package bke.iso.editor.scene
 
 import bke.iso.editor.EditorModule
 import bke.iso.editor.color
+import bke.iso.editor.component.ComponentEditorView
 import bke.iso.editor.core.BaseEditor
 import bke.iso.editor.scene.command.AddTagCommand
 import bke.iso.editor.scene.command.AssignBuildingCommand
@@ -34,7 +35,6 @@ import com.badlogic.gdx.utils.Array
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.encodeToString
 import java.io.File
-import kotlin.reflect.KMutableProperty1
 
 class SceneEditor(private val engine: Engine) : BaseEditor() {
 
@@ -328,7 +328,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 worldLogic.refreshComponents(event.referenceEntity)
             }
 
-            is PropertyUpdated<*> -> {
+            is ComponentEditorView.PropertyUpdated<*> -> {
                 val command = UpdateInstancePropertyCommand(
                     instance = event.component,
                     property = event.property,
@@ -425,12 +425,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val referenceEntity: Entity,
         val template: EntityTemplate,
         val componentOverride: Component
-    ) : Event
-
-    data class PropertyUpdated<T : Any>(
-        val component: T,
-        val property: KMutableProperty1<out T, *>,
-        val newValue: Any
     ) : Event
 
     data class AmbientLightUpdated(val color: Color) : Event
