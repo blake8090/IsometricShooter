@@ -11,18 +11,20 @@ import imgui.ImGui
 import imgui.ImVec2
 import imgui.flag.ImGuiTreeNodeFlags
 import imgui.flag.ImGuiWindowFlags
+import kotlin.reflect.KClass
 
 class EntityEditorView(
     private val events: Events,
     assets: Assets,
 ) : ImGuiView() {
 
-    private val componentEditorView = ComponentEditorView(events, assets)
-    private var showDemoWindow = false
-
-    private var openSelectComponentPopup = false
-
     lateinit var viewData: EntityEditor.ViewData
+    var validateComponentType: (KClass<out Component>) -> Boolean = { true }
+
+    private val componentEditorView = ComponentEditorView(events, assets)
+
+    private var showDemoWindow = false
+    private var openSelectComponentPopup = false
 
     override fun create() {}
 
@@ -30,7 +32,7 @@ class EntityEditorView(
 
     override fun drawImGui() {
         drawMainMenuBar()
-        drawComponentEditor(viewData)
+        drawComponentWindow(viewData)
         drawSelectComponentPopup(viewData)
 
         if (showDemoWindow) {
@@ -82,18 +84,20 @@ class EntityEditorView(
 
     private fun drawSelectComponentPopup(viewData: EntityEditor.ViewData) {
         if (openSelectComponentPopup) {
-            ImGui.openPopup("Component Types##selectComponentPopup")
+            ImGui.openPopup("Add Component##selectComponentPopup")
             openSelectComponentPopup = false
         }
 
-        if (ImGui.beginPopupModal("Component Types##selectComponentPopup", null, ImGuiWindowFlags.AlwaysAutoResize)) {
+        if (ImGui.beginPopupModal("Add Component##selectComponentPopup", null, ImGuiWindowFlags.AlwaysAutoResize)) {
             ImGui.text("Select a component type to add.")
             if (ImGui.beginListBox("##components")) {
                 for (componentType in viewData.componentTypes.sortedBy { type -> type.simpleName }) {
+                    ImGui.beginDisabled(validateComponentType.invoke(componentType))
                     if (ImGui.selectable("${componentType.simpleName}", false)) {
                         events.fire(EntityEditor.NewComponentTypeAdded(componentType))
                         ImGui.closeCurrentPopup()
                     }
+                    ImGui.endDisabled()
                 }
                 ImGui.endListBox()
             }
@@ -106,7 +110,7 @@ class EntityEditorView(
         }
     }
 
-    private fun drawComponentEditor(viewData: EntityEditor.ViewData) {
+    private fun drawComponentWindow(viewData: EntityEditor.ViewData) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
         size.x *= 0.15f
         val pos = ImVec2(ImGui.getMainViewport().workPos)
@@ -114,7 +118,7 @@ class EntityEditorView(
 
         ImGui.setNextWindowPos(pos)
         ImGui.setNextWindowSize(size)
-        ImGui.begin("Component Editor")
+        ImGui.begin("Components")
 
         if (ImGui.button("Add")) {
             openSelectComponentPopup = true

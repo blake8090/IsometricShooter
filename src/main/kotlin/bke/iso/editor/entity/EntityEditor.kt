@@ -36,6 +36,9 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
 
     private val cameraLogic = CameraLogic(engine.input, renderer)
     private val view = EntityEditorView(engine.events, engine.assets)
+        .apply {
+            validateComponentType = ::validateComponentType
+        }
 
     private var gridWidth = 5
     private var gridLength = 5
@@ -170,6 +173,11 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
         file.writeText(content)
 
         log.info { "Saved entity template: '$name'" }
+    }
+
+    private fun validateComponentType(type: KClass<out Component>): Boolean {
+        val currentTypes = components.map { component -> component::class }
+        return currentTypes.contains(type)
     }
 
     class OpenClicked : Event
