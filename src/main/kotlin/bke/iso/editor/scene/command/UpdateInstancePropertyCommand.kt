@@ -3,7 +3,6 @@ package bke.iso.editor.scene.command
 import bke.iso.editor.core.EditorCommand
 import kotlin.reflect.KMutableProperty1
 
-// TODO: figure out a way to refresh the entity's components
 class UpdateInstancePropertyCommand<T : Any>(
     private val instance: T,
     private val property: KMutableProperty1<out T, *>,
