@@ -74,6 +74,19 @@ class SceneEditorView(
                 ImGui.endMenu()
             }
 
+            if (ImGui.beginMenu("Mode")) {
+                ImGui.menuItem("Scene Editor", true)
+                if (ImGui.menuItem("Entity Editor", false)) {
+                    events.fire(EditorModule.EntityEditorSelected())
+                }
+                ImGui.beginDisabled()
+                ImGui.menuItem("Particle Editor", false)
+                ImGui.menuItem("Animation Editor", false)
+                ImGui.menuItem("Weapon Editor", false)
+                ImGui.endDisabled()
+                ImGui.endMenu()
+            }
+
             if (ImGui.beginMenu("View")) {
 //                if (ImGui.menuItem("Show Grid", viewData.showGrid)) {
 
@@ -117,19 +130,6 @@ class SceneEditorView(
                         events.fire(SceneEditor.BuildingDeleted(building))
                     }
                 }
-                ImGui.endMenu()
-            }
-
-            if (ImGui.beginMenu("Mode")) {
-                ImGui.menuItem("Scene Editor", true)
-                if (ImGui.menuItem("Entity Editor", false)) {
-                    events.fire(EditorModule.EntityEditorSelected())
-                }
-                ImGui.beginDisabled()
-                ImGui.menuItem("Particle Editor", false)
-                ImGui.menuItem("Animation Editor", false)
-                ImGui.menuItem("Weapon Editor", false)
-                ImGui.endDisabled()
                 ImGui.endMenu()
             }
 
