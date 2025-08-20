@@ -85,8 +85,8 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
 
         renderer.fgShapes.addPoint(referenceEntity.pos, 1.25f, Color.RED)
         referenceEntity.getCollisionBox()?.let { box ->
-            renderer.fgShapes.addBox(box, 1f, Color.CYAN)
-            renderer.fgShapes.addPoint(box.pos, 1.5f, Color.CYAN)
+            renderer.fgShapes.addBox(box, 0.375f, Color.CYAN)
+            renderer.fgShapes.addPoint(box.pos, 1.0f, Color.CYAN)
         }
 
         drawGrid()
