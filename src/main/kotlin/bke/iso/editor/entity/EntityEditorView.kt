@@ -112,7 +112,7 @@ class EntityEditorView(
 
     private fun drawComponentWindow(viewData: EntityEditor.ViewData) {
         val size = ImVec2(ImGui.getMainViewport().workSize)
-        size.x *= 0.15f
+        size.x *= 0.2f
         val pos = ImVec2(ImGui.getMainViewport().workPos)
         pos.x = ImGui.getMainViewport().workSizeX - size.x
 

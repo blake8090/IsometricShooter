@@ -167,7 +167,7 @@ class ComponentEditorView(
             map.forEach { (key, value) ->
                 ImGui.beginGroup()
 
-                ImGui.text("Key")
+                ImGui.text("Key  ")
                 ImGui.sameLine()
                 ImGui.inputText("##${property.name}-$key", ImString(key))
 
@@ -191,11 +191,11 @@ class ComponentEditorView(
             ImGui.spacing()
             ImGui.text("Add New Entry:")
 
-            ImGui.text("New Key")
+            ImGui.text("Key  ")
             ImGui.sameLine()
             ImGui.inputText("##newKey", newKeyText)
 
-            ImGui.text("New Value")
+            ImGui.text("Value")
             ImGui.sameLine()
             ImGui.inputText("##newValue", newValueText)
 
