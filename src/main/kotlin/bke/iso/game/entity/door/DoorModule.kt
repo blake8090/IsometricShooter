@@ -8,7 +8,7 @@ import bke.iso.engine.loading.SimpleLoadingScreen
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Tags
+import bke.iso.engine.world.entity.Properties
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.game.GameState
 import bke.iso.game.entity.player.Player
@@ -39,23 +39,19 @@ class DoorModule(
     private fun setupDoor(entity: Entity) {
         log.debug { "setting up door $entity" }
 
-        val sceneTag = findSceneTag(entity)
-        if (sceneTag != null) {
-            val sceneName = sceneTag.substringAfter(":")
-            entity.add(DoorChangeSceneAction(sceneName))
-            log.debug { "set up door $entity with action: change scene to '$sceneName'" }
+        val scene = getProperty(entity, "scene")
+        if (scene != null) {
+            entity.add(DoorChangeSceneAction(scene))
+            log.debug { "set up door $entity with action: change scene to '$scene'" }
         } else {
             entity.add(DoorOpenAction())
             log.debug { "set up door $entity with action: open" }
         }
     }
 
-    private fun findSceneTag(entity: Entity): String? {
-        val tags = entity.get<Tags>() ?: return null
-
-        return tags.tags.firstOrNull { tag ->
-            tag.startsWith("scene")
-        }
+    private fun getProperty(entity: Entity, key: String): String? {
+        val property = entity.get<Properties>() ?: return null
+        return property.values[key]
     }
 
     fun getNearestDoor(pos: Vector3, range: Float): Entity? {

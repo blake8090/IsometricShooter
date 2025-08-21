@@ -4074,10 +4074,10 @@
             "template": "graybox-door-side",
             "componentOverrides": [
                 {
-                    "type": "tags",
-                    "tags": [
-                        "scene:mission-01-interior.scene"
-                    ]
+                    "type": "properties",
+                    "values": {
+                        "scene": "mission-01-interior.scene"
+                    }
                 }
             ]
         },

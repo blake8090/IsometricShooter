@@ -2639,11 +2639,11 @@
             "building": "hallway2",
             "componentOverrides": [
                 {
-                    "type": "tags",
-                    "tags": [
-                        "min:-2",
-                        "max:0"
-                    ]
+                    "type": "properties",
+                    "values": {
+                        "min": "-2",
+                        "max": "0"
+                    }
                 }
             ]
         },

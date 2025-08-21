@@ -6,7 +6,6 @@ import bke.iso.engine.Engine
 import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
 import bke.iso.engine.state.State
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Tags
 import bke.iso.game.entity.FlyingTurretSystem
 import bke.iso.game.entity.RollingTurretSystem
 import bke.iso.game.entity.shadow.ShadowSystem
@@ -216,10 +215,6 @@ class GameState(override val engine: Engine) : State() {
             "mission-01-start.scene" -> initMission1StartScene()
             "mission-01-roof.scene" -> initMission1RoofScene()
             "mission-01-interior.scene" -> initMission1InteriorScene()
-        }
-
-        engine.world.entities.each<Tags> { entity, tags ->
-            log.debug { "Entity $entity has tags ${tags.tags}" }
         }
     }
 

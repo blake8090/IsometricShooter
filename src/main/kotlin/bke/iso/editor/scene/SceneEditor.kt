@@ -8,9 +8,7 @@ import bke.iso.editor.core.command.AddComponentCommand
 import bke.iso.editor.core.command.DeleteComponentCommand
 import bke.iso.editor.core.command.PutMapEntryCommand
 import bke.iso.editor.core.command.RemoveMapEntryCommand
-import bke.iso.editor.scene.command.AddTagCommand
 import bke.iso.editor.scene.command.AssignBuildingCommand
-import bke.iso.editor.scene.command.DeleteTagCommand
 import bke.iso.editor.scene.command.SetAmbientLightCommand
 import bke.iso.editor.core.command.UpdatePropertyCommand
 import bke.iso.editor.scene.tool.ToolLogic
@@ -28,7 +26,6 @@ import bke.iso.engine.math.Box
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
-import bke.iso.engine.world.entity.Tags
 import bke.iso.engine.world.event.EntityCreated
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -110,8 +107,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         for (buildingName in world.buildings.getAll()) {
             drawBuilding(buildingName)
         }
-
-        engine.world.entities.each<Tags>(::drawEntityTags)
 
         drawComponentOverrideHints()
 
@@ -206,15 +201,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
     }
 
-    private fun drawEntityTags(entity: Entity, tags: Tags) {
-        if (tags.tags.isEmpty() || selectedEntity == entity) {
-            return
-        }
-        entity.getCollisionBox()?.let { box ->
-            engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
-        }
-    }
-
     private fun drawComponentOverrideHints() {
         for (referenceEntity in worldLogic.getReferenceEntities()) {
             val data = worldLogic.getData(referenceEntity)
@@ -268,16 +254,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             is HideWallsToggled -> toggleHideWalls()
             is HideUpperLayersToggled -> hideUpperLayers = !hideUpperLayers
             is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
-
-            is TagAdded -> {
-                val command = AddTagCommand(event.entity, event.tag)
-                engine.events.fire(EditorModule.ExecuteCommand(command))
-            }
-
-            is TagDeleted -> {
-                val command = DeleteTagCommand(event.entity, event.tag)
-                engine.events.fire(EditorModule.ExecuteCommand(command))
-            }
 
             is BuildingAssigned -> {
                 val command = AssignBuildingCommand(event.entity, event.building, worldLogic)
@@ -427,8 +403,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     class HideUpperLayersToggled : Event
     class HighlightSelectedLayerToggled : Event
 
-    class TagAdded(val entity: Entity, val tag: String) : Event
-    data class TagDeleted(val entity: Entity, val tag: String) : Event
+//    class TagAdded(val entity: Entity, val tag: String) : Event
+//    data class TagDeleted(val entity: Entity, val tag: String) : Event
 
     data class BuildingAssigned(val entity: Entity, val building: String?) : Event
     data class BuildingSelected(val building: String) : Event

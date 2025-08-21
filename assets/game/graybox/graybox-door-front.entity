@@ -1,34 +1,34 @@
 {
-  name: "graybox-door-front",
-  components: [
+  "name": "graybox-door-front",
+  "components": [
     {
-      type: "sprite",
-      texture: "gb-door-front.png",
-      offsetX: 0.0,
-      offsetY: 16.0,
-      alpha: 1.0,
-      scale: 1.0
+      "type": "sprite",
+      "texture": "gb-door-front.png",
+      "offsetY": 16.0
     },
     {
-      type: "collider",
-      size: {
-        x: 1,
-        y: 0.5,
-        z: 2.0
+      "type": "collider",
+      "size": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
       }
     },
     {
-      type: "debugSettings"
+      "type": "debugSettings"
     },
     {
-      type: "description",
-      text: "graybox-door-front"
+      "type": "description",
+      "text": "graybox-door-front"
     },
     {
-      type: "occlude"
+      "type": "occlude"
     },
     {
-      type: "door"
+      "type": "door"
+    },
+    {
+      "type": "properties"
     }
   ]
 }

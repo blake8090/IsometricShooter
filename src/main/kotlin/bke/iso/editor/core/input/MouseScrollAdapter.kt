@@ -1,4 +1,4 @@
-package bke.iso.editor.input
+package bke.iso.editor.core.input
 
 import com.badlogic.gdx.InputAdapter
 

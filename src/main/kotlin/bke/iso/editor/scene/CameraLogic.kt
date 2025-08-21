@@ -1,7 +1,7 @@
 package bke.iso.editor.scene
 
-import bke.iso.editor.input.MouseDragAdapter
-import bke.iso.editor.input.MouseScrollAdapter
+import bke.iso.editor.core.input.MouseDragAdapter
+import bke.iso.editor.core.input.MouseScrollAdapter
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.input.ButtonState

@@ -1,7 +1,7 @@
 package bke.iso.editor.entity
 
-import bke.iso.editor.input.MouseDragAdapter
-import bke.iso.editor.input.MouseScrollAdapter
+import bke.iso.editor.core.input.MouseDragAdapter
+import bke.iso.editor.core.input.MouseScrollAdapter
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.render.Renderer

@@ -1,36 +1,36 @@
 {
-  name: "platform",
-  components: [
-    {
-      type: "sprite",
-      texture: "platform.png",
-      offsetX: 0.0,
-      offsetY: 32.0,
-      alpha: 1.0,
-      scale: 1.0
-    },
-    {
-      type: "elevator",
-      speed: 1
-    },
-    {
-      type: "collider",
-      size: {
-        x: 2.0,
-        y: 1.0,
-        z: 0.125
-      }
-    },
-    {
-      type: "physicsBody",
-      mode: "KINEMATIC"
-    },
-    {
-      type: "debugSettings"
-    },
-    {
-      type: "description",
-      text: "moving platform"
-    }
-  ]
+    "name": "platform",
+    "components": [
+        {
+            "type": "sprite",
+            "texture": "platform.png",
+            "offsetY": 32.0
+        },
+        {
+            "type": "elevator",
+            "speed": 1.0
+        },
+        {
+            "type": "collider",
+            "size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 0.125
+            }
+        },
+        {
+            "type": "physicsBody",
+            "mode": "KINEMATIC"
+        },
+        {
+            "type": "debugSettings"
+        },
+        {
+            "type": "description",
+            "text": "moving platform"
+        },
+        {
+            "type": "properties"
+        }
+    ]
 }

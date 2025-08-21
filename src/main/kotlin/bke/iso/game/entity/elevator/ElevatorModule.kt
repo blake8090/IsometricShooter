@@ -6,7 +6,7 @@ import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.world.entity.Entity
-import bke.iso.engine.world.entity.Tags
+import bke.iso.engine.world.entity.Properties
 import bke.iso.engine.world.event.EntityCreated
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -41,14 +41,14 @@ class ElevatorModule(private val collisions: Collisions) : Module {
             return
         }
 
-        var minZ = getTagValue(elevatorEntity, "min")
+        var minZ = getFloatProperty(elevatorEntity, "min")
         if (minZ == null) {
             log.warn { "Cannot start elevator $elevatorEntity - tag 'min' not found!" }
             return
         }
         minZ -= elevatorEntity.getCollisionBox()!!.size.z
 
-        var maxZ = getTagValue(elevatorEntity, "max")
+        var maxZ = getFloatProperty(elevatorEntity, "max")
         if (maxZ == null) {
             log.warn { "Cannot start elevator $elevatorEntity - tag 'max' not found!" }
             return
@@ -72,14 +72,9 @@ class ElevatorModule(private val collisions: Collisions) : Module {
         }
     }
 
-    private fun getTagValue(entity: Entity, prefix: String): Float? {
-        return entity
-            .get<Tags>()
-            ?.tags
-            ?.firstOrNull { tag -> tag.startsWith(prefix) }
-            ?.substringAfter(":")
-            ?.toFloat()
-            ?: return null
+    private fun getFloatProperty(entity: Entity, key: String): Float? {
+        val property = entity.get<Properties>() ?: return null
+        return property.values[key]?.toFloat()
     }
 
     fun findElevatorUnderneath(entity: Entity): Entity? =

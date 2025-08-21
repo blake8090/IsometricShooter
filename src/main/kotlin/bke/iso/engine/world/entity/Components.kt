@@ -10,10 +10,6 @@ interface Component
 data class Description(val text: String = "") : Component
 
 @Serializable
-@SerialName("tags")
-data class Tags(val tags: List<String> = emptyList()) : Component
-
-@Serializable
 @SerialName("properties")
 data class Properties(val values: MutableMap<String, String> = mutableMapOf()) : Component
 
