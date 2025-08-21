@@ -1,4 +1,4 @@
-package bke.iso.editor.core
+package bke.iso.editor.core.command
 
 abstract class EditorCommand {
     abstract val name: String

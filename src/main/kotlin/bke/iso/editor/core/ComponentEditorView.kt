@@ -1,4 +1,4 @@
-package bke.iso.editor.component
+package bke.iso.editor.core
 
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.core.Event
@@ -34,6 +34,9 @@ class ComponentEditorView(
     private val inputTextLength = 50
     private val selectedColorByLabel = mutableMapOf<String, FloatArray>()
 
+    private val newKeyText = ImString("", inputTextLength)
+    private val newValueText = ImString("", inputTextLength)
+
     fun draw(component: Component) {
         for (memberProperty in component::class.memberProperties) {
             when (memberProperty.returnType) {
@@ -46,6 +49,7 @@ class ComponentEditorView(
                 typeOf<Color>() -> drawColorControls(component, memberProperty)
                 typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
                 typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
+                typeOf<MutableMap<String, String>>() -> drawMutableMapControls(component, memberProperty)
                 else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
             }
         }
@@ -150,9 +154,63 @@ class ComponentEditorView(
         }
     }
 
-    private fun drawPhysicsModeControls(component: Component, memberProperty: ComponentProperty) {
-        val value = get<PhysicsMode>(memberProperty, component)
-        ImGui.inputText(memberProperty.name, ImString(value.toString()))
+    private fun drawPhysicsModeControls(component: Component, property: ComponentProperty) {
+        val value = get<PhysicsMode>(property, component)
+        ImGui.inputText(property.name, ImString(value.toString()))
+    }
+
+    private fun drawMutableMapControls(component: Component, property: ComponentProperty) {
+        if (ImGui.treeNodeEx(property.name, ImGuiTreeNodeFlags.DefaultOpen)) {
+            val map = get<MutableMap<String, String>>(property, component)
+
+            val removedKeys = mutableSetOf<String>()
+            map.forEach { (key, value) ->
+                ImGui.beginGroup()
+
+                ImGui.text("Key")
+                ImGui.sameLine()
+                ImGui.inputText("##${property.name}-$key", ImString(key))
+
+                val valueString = ImString(value, inputTextLength)
+                ImGui.text("Value")
+                ImGui.sameLine()
+                ImGui.inputText("##${property.name}-$value", valueString)
+
+                if (ImGui.button("Delete##$key")) {
+                    removedKeys.add(key)
+                }
+
+                ImGui.endGroup()
+                ImGui.separator()
+            }
+
+            for (key in removedKeys) {
+                events.fire(MapEntryRemoved(map, key))
+            }
+
+            ImGui.spacing()
+            ImGui.text("Add New Entry:")
+
+            ImGui.text("New Key")
+            ImGui.sameLine()
+            ImGui.inputText("##newKey", newKeyText)
+
+            ImGui.text("New Value")
+            ImGui.sameLine()
+            ImGui.inputText("##newValue", newValueText)
+
+            if (ImGui.button("Add Entry")) {
+                val newKey = newKeyText.get()
+                val newValue = newValueText.get()
+                if (newKey.isNotEmpty() && newValue.isNotEmpty()) {
+                    events.fire(MapEntryAdded(map, newKey, newValue))
+                    newKeyText.set("")
+                    newValueText.set("")
+                }
+            }
+
+            ImGui.treePop()
+        }
     }
 
     private inline fun <reified T : Any> get(property: ComponentProperty, instance: Component): T {
@@ -163,5 +221,16 @@ class ComponentEditorView(
         val component: T,
         val property: KMutableProperty1<out T, *>,
         val newValue: Any
+    ) : Event
+
+    data class MapEntryAdded<Key : Any, Value : Any>(
+        val map: MutableMap<Key, Value>,
+        val key: Key,
+        val value: Value
+    ) : Event
+
+    data class MapEntryRemoved<Key : Any, Value : Any>(
+        val map: MutableMap<Key, Value>,
+        val key: String
     ) : Event
 }

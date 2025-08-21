@@ -1,6 +1,6 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.core.command.EditorCommand
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.getCollisionBox

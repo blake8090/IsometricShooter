@@ -1,6 +1,6 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.core.command.EditorCommand
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toWorld
@@ -54,7 +54,6 @@ abstract class BaseTool {
             .filter { collision -> collision.box.min.z == pointerPos.z }
             .minByOrNull { collision -> getDistance(pointerPos, collision.box) }
             ?.entity
-            ?: return null
     }
 
     private fun getDistance(point: Vector3, box: Box): Float {

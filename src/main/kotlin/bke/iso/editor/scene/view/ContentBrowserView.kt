@@ -100,7 +100,7 @@ class ContentBrowserView(
                 .firstNotNullOfOrNull { component -> component as? Sprite }
                 ?: continue
 
-            if (imageButton(sprite.texture)) {
+            if (imageButton(template.name, sprite.texture)) {
                 log.debug { "Selected entity template ${template.name}" }
                 events.fire(SceneEditor.EntityTemplateSelected(template))
             }
@@ -115,11 +115,11 @@ class ContentBrowserView(
         }
     }
 
-    private fun imageButton(texture: String): Boolean {
+    private fun imageButton(templateName: String, texture: String): Boolean {
         val tex = assets.get<Texture>(texture)
         val texId = (tex as GLTexture).textureObjectHandle
         return ImGui.imageButton(
-            /* strId = */ texture,
+            /* strId = */ "$templateName-$texture",
             /* userTextureId = */ texId.toLong(),
             /* size = */ ImVec2(tex.width.toFloat(), tex.height.toFloat())
         )

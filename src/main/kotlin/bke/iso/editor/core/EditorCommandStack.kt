@@ -1,5 +1,6 @@
 package bke.iso.editor.core
 
+import bke.iso.editor.core.command.EditorCommand
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class EditorCommandStack {

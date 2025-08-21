@@ -1,7 +1,7 @@
 package bke.iso.editor
 
 import bke.iso.editor.core.BaseEditor
-import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.core.command.EditorCommand
 import bke.iso.editor.entity.EntityEditor
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.Engine

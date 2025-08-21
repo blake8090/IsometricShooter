@@ -1,5 +1,6 @@
 package bke.iso.editor.core
 
+import bke.iso.editor.core.command.EditorCommand
 import bke.iso.engine.core.Event
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.World

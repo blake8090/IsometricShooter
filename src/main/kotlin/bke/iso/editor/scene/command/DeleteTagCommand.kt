@@ -1,6 +1,6 @@
 package bke.iso.editor.scene.command
 
-import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.core.command.EditorCommand
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tags
 

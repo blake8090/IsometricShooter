@@ -1,6 +1,6 @@
 package bke.iso.editor.scene.view
 
-import bke.iso.editor.component.ComponentEditorView
+import bke.iso.editor.core.ComponentEditorView
 import bke.iso.editor.scene.EntityData
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.engine.asset.Assets

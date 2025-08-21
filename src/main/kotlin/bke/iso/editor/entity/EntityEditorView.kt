@@ -1,7 +1,7 @@
 package bke.iso.editor.entity
 
 import bke.iso.editor.EditorModule
-import bke.iso.editor.component.ComponentEditorView
+import bke.iso.editor.core.ComponentEditorView
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events

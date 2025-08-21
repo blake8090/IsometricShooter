@@ -2,15 +2,17 @@ package bke.iso.editor.scene
 
 import bke.iso.editor.EditorModule
 import bke.iso.editor.color
-import bke.iso.editor.component.ComponentEditorView
+import bke.iso.editor.core.ComponentEditorView
 import bke.iso.editor.core.BaseEditor
+import bke.iso.editor.core.command.AddComponentCommand
+import bke.iso.editor.core.command.DeleteComponentCommand
+import bke.iso.editor.core.command.PutMapEntryCommand
+import bke.iso.editor.core.command.RemoveMapEntryCommand
 import bke.iso.editor.scene.command.AddTagCommand
 import bke.iso.editor.scene.command.AssignBuildingCommand
 import bke.iso.editor.scene.command.DeleteTagCommand
-import bke.iso.editor.scene.command.DisableComponentOverrideCommand
-import bke.iso.editor.scene.command.EnableComponentOverrideCommand
 import bke.iso.editor.scene.command.SetAmbientLightCommand
-import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
+import bke.iso.editor.core.command.UpdatePropertyCommand
 import bke.iso.editor.scene.tool.ToolLogic
 import bke.iso.editor.scene.tool.ToolSelection
 import bke.iso.editor.scene.view.SceneEditorView
@@ -148,6 +150,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             ViewData(
                 selectedEntity = selectedEntity,
                 selectedEntityData =
+                    // TODO: fix crash when undoing create entity command for selected entity
                     if (selectedEntity != null) {
                         worldLogic.getData(selectedEntity!!)
                     } else {
@@ -308,28 +311,19 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             }
 
             is ComponentOverrideEnabled -> {
-                val command = EnableComponentOverrideCommand(
-                    engine.serializer,
-                    worldLogic,
-                    event.referenceEntity,
-                    event.templateComponent
-                )
-                engine.events.fire(EditorModule.ExecuteCommand(command))
-                worldLogic.refreshComponents(event.referenceEntity)
+                overrideComponent(event.referenceEntity, event.templateComponent)
             }
 
             is ComponentOverrideDisabled -> {
-                val command = DisableComponentOverrideCommand(
-                    worldLogic,
-                    event.referenceEntity,
-                    event.componentOverride
-                )
+                val data = worldLogic.getData(event.referenceEntity)
+                val command = DeleteComponentCommand(data.componentOverrides, event.componentOverride) {
+                    worldLogic.refreshComponents(event.referenceEntity)
+                }
                 engine.events.fire(EditorModule.ExecuteCommand(command))
-                worldLogic.refreshComponents(event.referenceEntity)
             }
 
             is ComponentEditorView.PropertyUpdated<*> -> {
-                val command = UpdateInstancePropertyCommand(
+                val command = UpdatePropertyCommand(
                     instance = event.component,
                     property = event.property,
                     newValue = event.newValue
@@ -338,11 +332,39 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 selectedEntity?.let(worldLogic::refreshComponents)
             }
 
+            is ComponentEditorView.MapEntryAdded<*, *> -> {
+                val command = PutMapEntryCommand(event.map as MutableMap<Any, Any>, event.key, event.value)
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
+
+            is ComponentEditorView.MapEntryRemoved<*, *> -> {
+                val command = RemoveMapEntryCommand(event.map as MutableMap<Any, Any>, event.key)
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
+
             is AmbientLightUpdated -> {
                 val command = SetAmbientLightCommand(engine.lighting, event.color)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
         }
+    }
+
+    private fun overrideComponent(referenceEntity: Entity, templateComponent: Component) {
+        val data = worldLogic.getData(referenceEntity)
+
+        check(data.componentOverrides.none { c -> c::class == templateComponent::class }) {
+            "EntityData for reference entity $referenceEntity already has component override for ${templateComponent::class.simpleName}"
+        }
+
+        val command = AddComponentCommand(data.componentOverrides, copy(templateComponent)) {
+            worldLogic.refreshComponents(referenceEntity)
+        }
+        engine.events.fire(EditorModule.ExecuteCommand(command))
+    }
+
+    private inline fun <reified T : Component> copy(component: T): T {
+        val content = engine.serializer.write(component)
+        return engine.serializer.read<T>(content)
     }
 
     private fun openScene() {

@@ -1,6 +1,6 @@
 package bke.iso.editor.scene.tool
 
-import bke.iso.editor.core.EditorCommand
+import bke.iso.editor.core.command.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.PaintRoomCommand
 import bke.iso.engine.asset.entity.EntityTemplate

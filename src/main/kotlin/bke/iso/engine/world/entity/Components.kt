@@ -14,5 +14,9 @@ data class Description(val text: String = "") : Component
 data class Tags(val tags: List<String> = emptyList()) : Component
 
 @Serializable
+@SerialName("properties")
+data class Properties(val values: MutableMap<String, String> = mutableMapOf()) : Component
+
+@Serializable
 @SerialName("tile")
 class Tile : Component

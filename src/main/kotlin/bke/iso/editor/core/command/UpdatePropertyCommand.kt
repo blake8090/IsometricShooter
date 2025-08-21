@@ -1,15 +1,14 @@
-package bke.iso.editor.scene.command
+package bke.iso.editor.core.command
 
-import bke.iso.editor.core.EditorCommand
 import kotlin.reflect.KMutableProperty1
 
-class UpdateInstancePropertyCommand<T : Any>(
+class UpdatePropertyCommand<T : Any>(
     private val instance: T,
     private val property: KMutableProperty1<out T, *>,
     private val newValue: Any
 ) : EditorCommand() {
 
-    override val name = "UpdateInstancePropertyCommand-${instance::class.simpleName}"
+    override val name = "UpdatePropertyCommand"
 
     private var previousValue: Any? = null
 

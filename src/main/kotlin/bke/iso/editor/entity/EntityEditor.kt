@@ -1,11 +1,13 @@
 package bke.iso.editor.entity
 
 import bke.iso.editor.EditorModule
-import bke.iso.editor.component.ComponentEditorView
+import bke.iso.editor.core.ComponentEditorView
 import bke.iso.editor.core.BaseEditor
-import bke.iso.editor.entity.command.AddComponentCommand
-import bke.iso.editor.entity.command.DeleteComponentCommand
-import bke.iso.editor.scene.command.UpdateInstancePropertyCommand
+import bke.iso.editor.core.command.AddComponentCommand
+import bke.iso.editor.core.command.DeleteComponentCommand
+import bke.iso.editor.core.command.PutMapEntryCommand
+import bke.iso.editor.core.command.RemoveMapEntryCommand
+import bke.iso.editor.core.command.UpdatePropertyCommand
 import bke.iso.editor.withFirstInstance
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.entity.EntityTemplate
@@ -25,6 +27,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.Serializable
 import org.reflections.Reflections
 import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.hasAnnotation
 
 class EntityEditor(private val engine: Engine) : BaseEditor() {
@@ -124,7 +127,8 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
             }
 
             is NewComponentTypeAdded -> {
-                val command = AddComponentCommand(components, event.componentType, ::refreshComponents)
+                val component = event.componentType.createInstance()
+                val command = AddComponentCommand(components, component, ::refreshComponents)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
 
@@ -134,11 +138,21 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
             }
 
             is ComponentEditorView.PropertyUpdated<*> -> {
-                val command = UpdateInstancePropertyCommand(
+                val command = UpdatePropertyCommand(
                     instance = event.component,
                     property = event.property,
                     newValue = event.newValue
                 )
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
+
+            is ComponentEditorView.MapEntryAdded<*, *> -> {
+                val command = PutMapEntryCommand(event.map as MutableMap<Any, Any>, event.key, event.value)
+                engine.events.fire(EditorModule.ExecuteCommand(command))
+            }
+
+            is ComponentEditorView.MapEntryRemoved<*, *> -> {
+                val command = RemoveMapEntryCommand(event.map as MutableMap<Any, Any>, event.key)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
         }
