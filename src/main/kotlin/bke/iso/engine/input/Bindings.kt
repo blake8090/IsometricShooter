@@ -14,7 +14,7 @@ enum class ButtonState {
     RELEASED
 }
 
-data class CompositeBinding<T : ButtonBinding>(
+data class CompositeButtonBinding<T : ButtonBinding>(
     val negativeBinding: T,
     val positiveBinding: T
 ) : Binding()
@@ -44,7 +44,7 @@ class Bindings {
         previousFrame.putAll(currentFrame)
         currentFrame.clear()
         for ((_, binding) in bindingByAction) {
-            if (binding is CompositeBinding<*>) {
+            if (binding is CompositeButtonBinding<*>) {
                 currentFrame[binding.negativeBinding.code] = isButtonDown(binding.negativeBinding)
                 currentFrame[binding.positiveBinding.code] = isButtonDown(binding.positiveBinding)
             } else if (binding is ButtonBinding) {
@@ -57,7 +57,7 @@ class Bindings {
         when (val binding = bindingByAction[action]) {
             is ButtonBinding -> pollButtonBinding(binding)
 
-            is CompositeBinding<*> -> pollCompositeBinding(binding)
+            is CompositeButtonBinding<*> -> pollCompositeBinding(binding)
 
             is AxisBinding -> getAxis(binding)
 
@@ -71,7 +71,7 @@ class Bindings {
             0f
         }
 
-    private fun pollCompositeBinding(binding: CompositeBinding<*>): Float {
+    private fun pollCompositeBinding(binding: CompositeButtonBinding<*>): Float {
         val negative = pollButtonBinding(binding.negativeBinding)
         val positive = pollButtonBinding(binding.positiveBinding)
         return if (negative != 0f) {

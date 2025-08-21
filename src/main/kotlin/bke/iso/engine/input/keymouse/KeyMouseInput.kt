@@ -3,7 +3,7 @@ package bke.iso.engine.input.keymouse
 import bke.iso.engine.input.Bindings
 import bke.iso.engine.input.ButtonBinding
 import bke.iso.engine.input.ButtonState
-import bke.iso.engine.input.CompositeBinding
+import bke.iso.engine.input.CompositeButtonBinding
 import com.badlogic.gdx.Gdx
 
 class KeyMouseInput {
@@ -29,7 +29,7 @@ class KeyMouseInput {
         positiveKey: Int,
         positiveState: ButtonState
     ) {
-        bindings[action] = CompositeBinding(
+        bindings[action] = CompositeButtonBinding(
             KeyBinding(negativeKey, negativeState),
             KeyBinding(positiveKey, positiveState)
         )
