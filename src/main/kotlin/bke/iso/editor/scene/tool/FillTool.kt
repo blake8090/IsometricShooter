@@ -6,6 +6,7 @@ import bke.iso.editor.scene.command.FillEntityCommand
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.ceil
 import bke.iso.engine.math.floor
 import bke.iso.engine.render.Renderer
 import com.badlogic.gdx.Gdx
@@ -42,9 +43,12 @@ class FillTool(
     }
 
     override fun draw() {
+        val pos = Vector3(pointerPos).floor()
         if (dragging) {
-            val pos = Vector3(pointerPos).floor()
             renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
+        } else {
+            val end = Vector3(pointerPos).ceil()
+            renderer.fgShapes.addBox(Box.fromMinMax(pos, end), 1f, Color.RED)
         }
     }
 

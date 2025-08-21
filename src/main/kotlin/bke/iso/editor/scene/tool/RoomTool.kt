@@ -6,6 +6,7 @@ import bke.iso.editor.scene.command.PaintRoomCommand
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.ceil
 import bke.iso.engine.math.floor
 import bke.iso.engine.render.Renderer
 import com.badlogic.gdx.Gdx
@@ -39,12 +40,13 @@ class RoomTool(
     }
 
     override fun draw() {
-        if (!dragging) {
-            return
-        }
-
         val pos = Vector3(pointerPos).floor()
-        renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
+        if (dragging) {
+            renderer.fgShapes.addBox(Box.fromMinMax(start, pos), 1f, Color.RED)
+        } else {
+            val end = Vector3(pointerPos).ceil()
+            renderer.fgShapes.addBox(Box.fromMinMax(pos, end), 1f, Color.RED)
+        }
     }
 
     private fun startDragging(pointerPos: Vector3) {
