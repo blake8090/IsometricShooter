@@ -3,7 +3,7 @@ package bke.iso.editor.scene
 import bke.iso.editor.core.input.MouseDragAdapter
 import bke.iso.editor.core.input.MouseScrollAdapter
 import bke.iso.engine.collision.Collider
-import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.toWorld
@@ -20,6 +20,7 @@ class CameraLogic(
     world: World,
     private val renderer: Renderer,
     private val sceneEditor: SceneEditor,
+    private val collisionBoxes: CollisionBoxes
 ) {
 
     private val mouseScrollAdapter = MouseScrollAdapter()
@@ -72,7 +73,7 @@ class CameraLogic(
             renderer.zoomCamera(cameraZoomIncrements * y.sign)
         }
 
-        cameraEntity.getCollisionBox()?.let { box ->
+        collisionBoxes[cameraEntity]?.let { box ->
             renderer.fgShapes.addBox(box, 1f, Color.CYAN)
         }
 

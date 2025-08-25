@@ -1,7 +1,7 @@
 package bke.iso.engine.world.entity
 
 import bke.iso.engine.math.Location
-import bke.iso.engine.collision.Collider
+import bke.iso.engine.math.Box
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -11,9 +11,8 @@ class EntityTest : StringSpec({
 
     "should return locations" {
         val entity = Entity("")
-        entity.add(Collider(Vector3(1f, 1f, 1f)))
 
-        val locations = entity.getLocations()
+        val locations = entity.getLocations(null)
         locations.shouldContainExactlyInAnyOrder(
             Location(0, 0, 0)
         )
@@ -23,7 +22,7 @@ class EntityTest : StringSpec({
         val entity = Entity("")
         entity.moveTo(-1.5f, -2.01f, -0.5f)
 
-        val locations = entity.getLocations()
+        val locations = entity.getLocations(null)
         locations.shouldContainExactlyInAnyOrder(
             Location(-2, -3, -1)
         )
@@ -31,15 +30,9 @@ class EntityTest : StringSpec({
 
     "should return locations with both positive and negative coordinates" {
         val entity = Entity("")
-        entity.add(
-            Collider(
-                size = Vector3(1f, 1f, 1f),
-                // center box on entity's position
-                offset = Vector3(-0.5f, -0.5f, -0.5f)
-            )
-        )
+        val collisionBox = Box(pos = Vector3(), size = Vector3(1f, 1f, 1f))
 
-        entity.getLocations().shouldContainExactlyInAnyOrder(
+        entity.getLocations(collisionBox).shouldContainExactlyInAnyOrder(
             Location(0, 0, 0),
             Location(0, -1, 0),
             Location(-1, 0, 0),
@@ -75,11 +68,9 @@ class EntityTest : StringSpec({
         val entity = Entity("test")
         entity.moveTo(0f, 0f, 0f)
 
-        // Add a collider with size (1,1,1) and offset (0,0,0)
-        // This should only overlap location (0,0,0)
-        entity.add(Collider(Vector3(1f, 1f, 1f), Vector3(0f, 0f, 0f)))
+        val collisionBox = Box.fromMinMax(Vector3(0f, 0f, 0f), Vector3(1f, 1f, 1f))
 
-        val locations = entity.getLocations()
+        val locations = entity.getLocations(collisionBox)
         locations.size.shouldBe(1)
         locations.shouldContainExactlyInAnyOrder(Location(0, 0, 0))
     }
@@ -88,11 +79,9 @@ class EntityTest : StringSpec({
         val entity = Entity("test")
         entity.moveTo(0.5f, 0.5f, 0f)
 
-        // Add a collider with size (1,1,1) and offset (0,0,0)
-        // This should overlap locations (0,0,0), (0,1,0), (1,0,0), (1,1,0)
-        entity.add(Collider(Vector3(1f, 1f, 1f), Vector3(0f, 0f, 0f)))
+        val collisionBox = Box.fromMinMax(Vector3(0.5f, 0.5f, 0f), Vector3(1.5f, 1.5f, 1f))
 
-        val locations = entity.getLocations()
+        val locations = entity.getLocations(collisionBox)
         locations.size.shouldBe(4)
         locations.shouldContainExactlyInAnyOrder(
             Location(0, 0, 0),
@@ -106,11 +95,9 @@ class EntityTest : StringSpec({
         val entity = Entity("test")
         entity.moveTo(0f, 0f, 0f)
 
-        // Add a collider with size (1,1,1) and offset (0,0,0)
-        // This should only overlap location (0,0,0)
-        entity.add(Collider(Vector3(1f, 1f, 1.25f), Vector3(0f, 0f, 0f)))
+        val collisionBox = Box.fromMinMax(Vector3(0f, 0f, 0f), Vector3(1f, 1f, 1.25f))
 
-        val locations = entity.getLocations()
+        val locations = entity.getLocations(collisionBox)
         locations.size.shouldBe(2)
         locations.shouldContainExactlyInAnyOrder(
             Location(0, 0, 0),

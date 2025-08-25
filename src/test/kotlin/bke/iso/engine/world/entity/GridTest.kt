@@ -1,20 +1,26 @@
 package bke.iso.engine.world.entity
 
-import bke.iso.engine.collision.Collider
+import bke.iso.engine.collision.CollisionBoxes
+import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
 
 class GridTest : StringSpec({
+
+    val collisionBoxes = mockk<CollisionBoxes>()
+    every { collisionBoxes[any()] } returns null
 
     "should return all entities" {
         val entity = Entity("1")
         val entity2 = Entity("2")
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity)
         grid.update(entity2)
 
@@ -32,7 +38,7 @@ class GridTest : StringSpec({
         entity2.moveTo(1f, 1f, 0f)
         entity3.moveTo(2f, 1f, 0f)
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity)
         grid.update(entity2)
         grid.update(entity3)
@@ -49,7 +55,7 @@ class GridTest : StringSpec({
         entity.moveTo(1f, 1f, 0f)
         entity2.moveTo(1f, 1f, 0f)
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity)
         grid.update(entity2)
 
@@ -66,9 +72,10 @@ class GridTest : StringSpec({
 
     "should return entity spanning multiple locations" {
         val entity = Entity("1")
-        entity.add(Collider(size = Vector3(2f, 2f, 1f)))
+        val collisionBox = Box.fromMinMax(Vector3(0f, 0f, 0f), Vector3(2f, 2f, 1f))
+        every { collisionBoxes[entity] } returns collisionBox
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity)
 
         grid[Location(0, 0, 0)].shouldContainExactly(entity)
@@ -84,7 +91,7 @@ class GridTest : StringSpec({
         entity.moveTo(1f, 1f, 0f)
         entity2.moveTo(1f, 1f, 0f)
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity)
         grid.update(entity2)
         grid.delete(entity)
@@ -98,7 +105,7 @@ class GridTest : StringSpec({
 
         entity.moveTo(1f, 1f, 1f)
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity) shouldBe true
 
         entity.moveTo(1f, 1f, 1f)
@@ -110,7 +117,7 @@ class GridTest : StringSpec({
 
         entity.moveTo(1f, 1f, 1f)
 
-        val grid = Grid()
+        val grid = Grid(collisionBoxes)
         grid.update(entity) shouldBe true
 
         entity.moveTo(1f, 1f, 2f)

@@ -4,7 +4,7 @@ import bke.iso.engine.lighting.Lighting
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
-import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.Sprite
@@ -40,7 +40,8 @@ class OptimizedEntityRenderer(
     private val debug: DebugRenderer,
     private val occlusion: Occlusion,
     private val camera: OrthographicCamera,
-    private val lighting: Lighting
+    private val lighting: Lighting,
+    private val collisionBoxes: CollisionBoxes
 ) {
 
     private val pool = object : Pool<EntityRenderable>() {
@@ -224,7 +225,7 @@ class OptimizedEntityRenderer(
             tempPos.add(diffX / 2f, diffY / 2f)
         }
 
-        val bounds = entity.getCollisionBox() ?: Box.fromMinMax(worldPos, worldPos)
+        val bounds = collisionBoxes[entity] ?: Box.fromMinMax(worldPos, worldPos)
 
         val renderable = pool.obtain()
         renderable.entity = entity

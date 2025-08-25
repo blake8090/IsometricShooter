@@ -3,8 +3,8 @@ package bke.iso.editor.scene.tool
 import bke.iso.editor.core.command.EditorCommand
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.editor.scene.command.DeleteEntityCommand
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tile
@@ -14,6 +14,7 @@ class EraserTool(
     override val collisions: Collisions,
     private val worldLogic: WorldLogic,
     private val renderer: Renderer,
+    private val collisionBoxes: CollisionBoxes
 ) : BaseTool() {
 
     private var previousType: Type? = null
@@ -26,8 +27,13 @@ class EraserTool(
     override fun draw() {
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
-        val collisionBox = highlightedEntity?.getCollisionBox()
-        collisionBox?.let { renderer.fgShapes.addBox(it, 1f, Color.RED) }
+        highlightedEntity?.let(this::drawCollisionBox)
+    }
+
+    private fun drawCollisionBox(entity: Entity) {
+        collisionBoxes[entity]?.let { box ->
+            renderer.fgShapes.addBox(box, 1f, Color.RED)
+        }
     }
 
     override fun performAction(): EditorCommand? {

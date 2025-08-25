@@ -1,6 +1,6 @@
 package bke.iso.game.occlusion
 
-import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.entity.EntityRenderable
 import bke.iso.engine.render.occlusion.OcclusionStrategy
@@ -9,7 +9,10 @@ import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Tile
 import bke.iso.game.entity.door.Door
 
-class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrategy() {
+class BuildingWallOcclusionStrategy(
+    private val world: World,
+    private val collisionBoxes: CollisionBoxes
+) : OcclusionStrategy() {
 
 
     override fun firstPass(renderable: EntityRenderable, targetRenderable: EntityRenderable?) {
@@ -32,7 +35,7 @@ class BuildingWallOcclusionStrategy(private val world: World) : OcclusionStrateg
             return false
         }
 
-        val box = entity.getCollisionBox() ?: return false
+        val box = collisionBoxes[entity] ?: return false
         return box.max.x >= buildingBounds.max.x || box.min.y <= buildingBounds.min.y
     }
 

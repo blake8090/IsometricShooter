@@ -1,6 +1,6 @@
 package bke.iso.engine.render.debug
 
-import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.shape.ShapeArray
@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 
-class DebugCategory {
+class DebugCategory(private val collisionBoxes: CollisionBoxes) {
 
     var enabled = false
     val shapes = ShapeArray()
@@ -45,7 +45,7 @@ class DebugCategory {
         val settings = entity.get<DebugSettings>() ?: return
         if (settings.collisionBox) {
             val color = if (settings.collisionBoxSelected) Color.PURPLE else settings.collisionBoxColor
-            entity.getCollisionBox()?.let { box ->
+            collisionBoxes[entity]?.let { box ->
                 addBox(box, 1f, color)
             }
             settings.collisionBoxSelected = false

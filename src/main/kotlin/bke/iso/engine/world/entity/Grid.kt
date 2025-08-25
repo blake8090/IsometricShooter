@@ -1,12 +1,13 @@
 package bke.iso.engine.world.entity
 
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.Location
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.OrderedSet
 
-class Grid {
+class Grid(private val collisionBoxes: CollisionBoxes) {
 
     val entities = OrderedSet<Entity>()
 
@@ -31,7 +32,7 @@ class Grid {
         }
 
         val previousLocations = locationsByEntity[entity]
-        val newLocations = entity.getLocations()
+        val newLocations = entity.getLocations(collisionBoxes[entity])
 
         if (!locationsChanged(previousLocations, newLocations)) {
             return false

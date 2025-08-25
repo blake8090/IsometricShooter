@@ -18,7 +18,6 @@ import bke.iso.engine.Engine
 import bke.iso.engine.asset.BASE_PATH
 import bke.iso.engine.asset.font.FontOptions
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
@@ -49,10 +48,19 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     private var gridLength = 20
     private var drawGridForeground = false
 
-    private val cameraLogic = CameraLogic(engine.input, world, renderer, this)
+    private val cameraLogic = CameraLogic(engine.input, world, renderer, this, engine.collisionBoxes)
     private val worldLogic = WorldLogic(world, engine.assets, engine.events, engine.lighting)
     private val toolLogic =
-        ToolLogic(this, engine.input, engine.collisions, engine.renderer, engine.events, world, worldLogic)
+        ToolLogic(
+            this,
+            engine.input,
+            engine.collisions,
+            engine.renderer,
+            engine.events,
+            world,
+            worldLogic,
+            engine.collisionBoxes
+        )
 
     private val view = SceneEditorView(engine.assets, engine.events)
 
@@ -197,7 +205,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
     private fun drawSelectedEntity() {
         val entity = selectedEntity ?: return
-        val collisionBox = entity.getCollisionBox() ?: Box(entity.pos, Vector3(1f, 1f, 1f))
+        val collisionBox = engine.collisionBoxes[entity] ?: Box(entity.pos, Vector3(1f, 1f, 1f))
         renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
     }
 
@@ -206,7 +214,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             val data = worldLogic.getData(referenceEntity)
 
             if (selectedEntity != referenceEntity && data.componentOverrides.isNotEmpty()) {
-                referenceEntity.getCollisionBox()?.let { box ->
+                engine.collisionBoxes[referenceEntity]?.let { box ->
                     engine.renderer.fgShapes.addBox(box, 1f, color(46, 125, 50))
                 }
             }

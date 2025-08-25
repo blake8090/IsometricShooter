@@ -3,6 +3,7 @@ package bke.iso.engine.render
 import bke.iso.engine.lighting.Lighting
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.debug.DebugRenderer
 import bke.iso.engine.render.entity.OptimizedEntityRenderer
@@ -34,9 +35,10 @@ const val VIRTUAL_HEIGHT = 540f
 
 class Renderer(
     private val world: World,
-    private val assets: Assets,
-    private val lighting: Lighting,
-    events: Events
+    assets: Assets,
+    lighting: Lighting,
+    events: Events,
+    collisionBoxes: CollisionBoxes
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -60,7 +62,7 @@ class Renderer(
 
     val pointer = PointerRenderer(camera, batch)
 
-    val debug: DebugRenderer = DebugRenderer()
+    val debug: DebugRenderer = DebugRenderer(collisionBoxes)
     val bgShapes: ShapeArray = ShapeArray()
     val fgShapes: ShapeArray = ShapeArray()
     private val shapeRenderer = ShapeRenderer(batch)
@@ -69,14 +71,16 @@ class Renderer(
 
     val occlusion = Occlusion(world)
 
-    private val gameObjectRenderer = OptimizedEntityRenderer(
-        assets,
-        events,
-        debug,
-        occlusion,
-        camera,
-        lighting
-    )
+    private val gameObjectRenderer =
+        OptimizedEntityRenderer(
+            assets,
+            events,
+            debug,
+            occlusion,
+            camera,
+            lighting,
+            collisionBoxes
+        )
 
     private val textRenderer = TextRenderer()
 

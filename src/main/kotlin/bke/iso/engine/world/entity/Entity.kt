@@ -1,7 +1,7 @@
 package bke.iso.engine.world.entity
 
+import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
-import bke.iso.engine.collision.getCollisionBox
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
@@ -106,16 +106,16 @@ class Entity(
      * For a box with min (0.5, 0.5, 0) and max (1.5, 1.5, 1), the returned locations would be:
      * (0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 0)
      */
-    fun getLocations(): Set<Location> {
+    fun getLocations(collisionBox: Box?): Set<Location> {
         val locations = mutableSetOf<Location>()
         locations.add(Location(pos))
-        locations.addAll(getCollisionBoxLocations())
+        if (collisionBox != null) {
+            locations.addAll(getCollisionBoxLocations(collisionBox))
+        }
         return locations
     }
 
-    private fun getCollisionBoxLocations(): Set<Location> {
-        val box = getCollisionBox() ?: return emptySet()
-
+    private fun getCollisionBoxLocations(box: Box): Set<Location> {
         // Use floor for min and ceil for max to properly handle fractional positions
         // This ensures we only include locations that the box actually overlaps
         val minX = floor(box.min.x).toInt()

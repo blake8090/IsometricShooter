@@ -7,8 +7,8 @@ import bke.iso.editor.withFirstInstance
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.asset.entity.has
 import bke.iso.engine.collision.Collider
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.floor
@@ -26,7 +26,8 @@ class BrushTool(
     override val collisions: Collisions,
     world: World,
     private val worldLogic: WorldLogic,
-    private val renderer: Renderer
+    private val renderer: Renderer,
+    private val collisionBoxes: CollisionBoxes
 ) : BaseTool() {
 
     private val log = KotlinLogging.logger { }
@@ -65,8 +66,7 @@ class BrushTool(
     }
 
     private fun getBox() =
-        brushEntity
-            .getCollisionBox()
+        collisionBoxes[brushEntity]
             ?: Box.fromMinMax(
                 brushEntity.pos,
                 brushEntity.pos.add(1f, 1f, 1f)

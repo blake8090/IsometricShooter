@@ -1,10 +1,11 @@
 package bke.iso.engine.render.debug
 
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.render.shape.ShapeRenderer
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.OrderedMap
 
-class DebugRenderer {
+class DebugRenderer(private val collisionBoxes: CollisionBoxes) {
 
     private var enabled = false
     private val categories = OrderedMap<String, DebugCategory>()
@@ -40,7 +41,7 @@ class DebugRenderer {
 
     fun category(name: String): DebugCategory {
         if (!categories.containsKey(name)) {
-            categories.put(name, DebugCategory())
+            categories.put(name, DebugCategory(collisionBoxes))
         }
         return categories.get(name)
     }

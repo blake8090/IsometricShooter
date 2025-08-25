@@ -1,11 +1,11 @@
 package bke.iso.engine.world
 
-import bke.iso.engine.collision.getCollisionBox
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.Box
 import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 
-class Buildings {
+class Buildings(private val collisionBoxes: CollisionBoxes) {
 
     private val objectsByBuilding = mutableMapOf<String, MutableSet<Entity>>()
     private val buildingByObject = mutableMapOf<Entity, String>()
@@ -35,7 +35,7 @@ class Buildings {
 
     private fun regenerateBounds(buildingName: String) {
         val boxes = objectsByBuilding[buildingName]
-            ?.mapNotNull(Entity::getCollisionBox)
+            ?.mapNotNull(collisionBoxes::get)
             ?: emptyList()
 
         if (boxes.isEmpty()) {

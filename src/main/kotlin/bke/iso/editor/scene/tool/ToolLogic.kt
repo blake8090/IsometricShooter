@@ -4,6 +4,7 @@ import bke.iso.editor.core.command.EditorCommand
 import bke.iso.editor.scene.SceneEditor
 import bke.iso.editor.scene.WorldLogic
 import bke.iso.engine.asset.entity.EntityTemplate
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.Events
 import bke.iso.engine.input.ButtonState
@@ -29,14 +30,15 @@ class ToolLogic(
     private val renderer: Renderer,
     events: Events,
     world: World,
-    worldLogic: WorldLogic
+    worldLogic: WorldLogic,
+    collisionBoxes: CollisionBoxes
 ) {
 
     private val log = KotlinLogging.logger { }
 
-    private val pointerTool = PointerTool(collisions, renderer, events)
-    private val brushTool = BrushTool(collisions, world, worldLogic, renderer)
-    private val eraserTool = EraserTool(collisions, worldLogic, renderer)
+    private val pointerTool = PointerTool(collisions, renderer, events, collisionBoxes)
+    private val brushTool = BrushTool(collisions, world, worldLogic, renderer, collisionBoxes)
+    private val eraserTool = EraserTool(collisions, worldLogic, renderer, collisionBoxes)
     private val fillTool = FillTool(collisions, renderer, worldLogic)
     private val roomTool = RoomTool(collisions, renderer, worldLogic)
 

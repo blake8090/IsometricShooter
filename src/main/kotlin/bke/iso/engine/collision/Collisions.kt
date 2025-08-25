@@ -21,7 +21,8 @@ import kotlin.math.sign
 
 class Collisions(
     private val renderer: Renderer,
-    private val world: World
+    private val world: World,
+    private val collisionBoxes: CollisionBoxes
 ) : EngineModule() {
 
     override val moduleName = "collisions"
@@ -50,7 +51,7 @@ class Collisions(
             .mapNotNullTo(mutableSetOf()) { entity -> checkCollision(point, entity) }
 
     private fun checkCollision(point: Vector3, entity: Entity): PointCollision? {
-        val box = entity.getCollisionBox()
+        val box = collisionBoxes[entity]
         return if (box == null || !box.contains(point)) {
             null
         } else {
@@ -68,7 +69,7 @@ class Collisions(
     }
 
     private fun checkCollision(box: Box, other: Entity): Collision? {
-        val otherBox = other.getCollisionBox()
+        val otherBox = collisionBoxes[other]
         return if (otherBox == null || !otherBox.intersects(box)) {
             null
         } else {
@@ -103,7 +104,7 @@ class Collisions(
     }
 
     private fun checkLineCollision(start: Vector3, end: Vector3, ray: Ray, entity: Entity): SegmentCollision? {
-        val box = entity.getCollisionBox() ?: return null
+        val box = collisionBoxes[entity] ?: return null
 
         val points = ObjectSet<Vector3>()
         for (face in box.getFaces()) {
@@ -136,7 +137,7 @@ class Collisions(
     }
 
     fun predictCollisions(entity: Entity, delta: Vector3): Set<PredictedCollision> {
-        val box = entity.getCollisionBox() ?: return emptySet()
+        val box = collisionBoxes[entity] ?: return emptySet()
 
         // broad-phase: instead of iterating through every object, only check entities within general area of movement
         val px = ceil(abs(delta.x))
@@ -171,7 +172,7 @@ class Collisions(
     }
 
     private fun predictCollision(box: Box, delta: Vector3, entity: Entity): PredictedCollision? {
-        val collisionBox = entity.getCollisionBox() ?: return null
+        val collisionBox = collisionBoxes[entity] ?: return null
         val sweptCollision = sweepTest(box, collisionBox, delta) ?: return null
 
         return PredictedCollision(
@@ -212,11 +213,4 @@ class Collisions(
             else -> CollisionSide.CORNER
         }
 
-}
-
-fun Entity.getCollisionBox(): Box? {
-    val collider = get<Collider>() ?: return null
-    val min = pos.add(collider.offset)
-    val max = Vector3(min).add(collider.size)
-    return Box.fromMinMax(min, max)
 }

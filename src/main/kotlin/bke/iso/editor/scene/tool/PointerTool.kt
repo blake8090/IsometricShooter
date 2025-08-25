@@ -2,8 +2,8 @@ package bke.iso.editor.scene.tool
 
 import bke.iso.editor.core.command.EditorCommand
 import bke.iso.editor.scene.SceneEditor
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.render.Renderer
@@ -14,7 +14,8 @@ import com.badlogic.gdx.math.Vector3
 class PointerTool(
     override val collisions: Collisions,
     private val renderer: Renderer,
-    private val events: Events
+    private val events: Events,
+    private val collisionBoxes: CollisionBoxes
 ) : BaseTool() {
 
     private var highlighted: Entity? = null
@@ -27,7 +28,7 @@ class PointerTool(
         renderer.fgShapes.addPoint(pointerPos, 1f, Color.RED)
 
         highlighted?.let { entity ->
-            val collisionBox = entity.getCollisionBox() ?: Box(entity.pos, Vector3(1f, 1f, 1f))
+            val collisionBox = collisionBoxes[entity] ?: Box(entity.pos, Vector3(1f, 1f, 1f))
             renderer.fgShapes.addBox(collisionBox, 1f, Color.WHITE)
         }
     }

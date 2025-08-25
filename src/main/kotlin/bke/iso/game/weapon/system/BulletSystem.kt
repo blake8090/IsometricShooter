@@ -3,9 +3,9 @@ package bke.iso.game.weapon.system
 import bke.iso.engine.state.System
 import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collision
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.lighting.FullBright
 import bke.iso.engine.math.nextFloat
 import bke.iso.engine.physics.PhysicsBody
@@ -24,7 +24,8 @@ private const val MAX_BULLET_DISTANCE = 50f
 class BulletSystem(
     private val world: World,
     private val combatModule: CombatModule,
-    private val collisions: Collisions
+    private val collisions: Collisions,
+    private val collisionBoxes: CollisionBoxes
 ) : System {
 
     private val log = KotlinLogging.logger {}
@@ -106,10 +107,10 @@ class BulletSystem(
 
     // TODO: make this a util
     private fun clampPosToCollisionSide(entity: Entity, collision: Collision) {
-        val box = checkNotNull(entity.getCollisionBox()) {
+        val box = checkNotNull(collisionBoxes[entity]) {
             "Expected collision box for $entity"
         }
-        val otherBox = checkNotNull(collision.entity.getCollisionBox()) {
+        val otherBox = checkNotNull(collisionBoxes[collision.entity]) {
             "Expected collision box for ${collision.entity}"
         }
 

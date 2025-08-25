@@ -62,7 +62,7 @@ class GameState(override val engine: Engine) : State() {
     )
     private val shadowModule = ShadowModule(engine.world)
     private val playerDataModule = PlayerDataModule(engine.world)
-    private val elevatorModule = ElevatorModule(engine.collisions)
+    private val elevatorModule = ElevatorModule(engine.collisions, engine.collisionBoxes)
     private val editorModule = EditorModule(engine)
 
     private var editorEnabled = false
@@ -135,7 +135,8 @@ class GameState(override val engine: Engine) : State() {
         BulletSystem(
             engine.world,
             combatModule,
-            engine.collisions
+            engine.collisions,
+            engine.collisionBoxes
         ),
         ExplosionSystem(engine.world),
         ShadowSystem(
@@ -243,7 +244,7 @@ class GameState(override val engine: Engine) : State() {
     private fun initMission1InteriorScene() {
         engine.renderer.occlusion.apply {
             resetStrategies()
-            addStrategy(BuildingWallOcclusionStrategy(engine.world))
+            addStrategy(BuildingWallOcclusionStrategy(engine.world, engine.collisionBoxes))
             addStrategy(FloorOcclusionStrategy(floorHeight = 2f))
             removeStrategy(BuildingLayerOcclusionStrategy::class)
         }

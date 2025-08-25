@@ -12,7 +12,6 @@ import bke.iso.editor.withFirstInstance
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.collision.Collider
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.lighting.FullBright
@@ -32,8 +31,8 @@ import kotlin.reflect.full.hasAnnotation
 
 class EntityEditor(private val engine: Engine) : BaseEditor() {
 
-    override val world = World(engine.events)
-    override val renderer = Renderer(world, engine.assets, engine.lighting, engine.events)
+    override val world = World(engine.events, engine.collisionBoxes)
+    override val renderer = Renderer(world, engine.assets, engine.lighting, engine.events, engine.collisionBoxes)
 
     private val log = KotlinLogging.logger { }
 
@@ -87,7 +86,7 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
         }
 
         renderer.fgShapes.addPoint(referenceEntity.pos, 1.25f, Color.RED)
-        referenceEntity.getCollisionBox()?.let { box ->
+        engine.collisionBoxes[referenceEntity]?.let { box ->
             renderer.fgShapes.addBox(box, 0.375f, Color.CYAN)
             renderer.fgShapes.addPoint(box.pos, 1.0f, Color.CYAN)
         }

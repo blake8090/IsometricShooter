@@ -1,5 +1,6 @@
 package bke.iso.engine.world.entity
 
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
@@ -14,9 +15,12 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.reflect.KClass
 
-class Entities(private val events: Events) {
+class Entities(
+    private val events: Events,
+    collisionBoxes: CollisionBoxes
+) {
 
-    private val grid = Grid()
+    private val grid = Grid(collisionBoxes)
     private val entityIdLength = 12
     private val entityIdSymbols: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 

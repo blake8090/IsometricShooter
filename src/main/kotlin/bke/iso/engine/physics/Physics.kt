@@ -1,9 +1,9 @@
 package bke.iso.engine.physics
 
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.collision.CollisionSide
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.collision.PredictedCollision
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.World
@@ -15,7 +15,8 @@ const val DEFAULT_GRAVITY: Float = -12f
 
 class Physics(
     private val world: World,
-    private val collisions: Collisions
+    private val collisions: Collisions,
+    private val collisionBoxes: CollisionBoxes
 ) : EngineModule() {
 
     private val log = KotlinLogging.logger {}
@@ -114,7 +115,7 @@ class Physics(
         otherBody.velocity.z = body.velocity.z
         otherBody.forces.add(Vector3(0f, 0f, body.velocity.z))
 
-        val box = checkNotNull(entity.getCollisionBox()) {
+        val box = checkNotNull(collisionBoxes[entity]) {
             "Expected collision box for $entity"
         }
         // make sure object doesn't clip through the platform next frame
@@ -122,10 +123,10 @@ class Physics(
     }
 
     private fun clampPosToCollisionSide(entity: Entity, collision: PredictedCollision) {
-        val box = checkNotNull(entity.getCollisionBox()) {
+        val box = checkNotNull(collisionBoxes[entity]) {
             "Expected collision box for $entity"
         }
-        val otherBox = checkNotNull(collision.entity.getCollisionBox()) {
+        val otherBox = checkNotNull(collisionBoxes[collision.entity]) {
             "Expected collision box for ${collision.entity}"
         }
 

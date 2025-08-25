@@ -1,8 +1,8 @@
 package bke.iso.game.entity.elevator
 
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.core.Event
 import bke.iso.engine.collision.Collisions
-import bke.iso.engine.collision.getCollisionBox
 import bke.iso.engine.core.Module
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.world.entity.Entity
@@ -10,7 +10,10 @@ import bke.iso.engine.world.entity.Properties
 import bke.iso.engine.world.event.EntityCreated
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class ElevatorModule(private val collisions: Collisions) : Module {
+class ElevatorModule(
+    private val collisions: Collisions,
+    private val collisionBoxes: CollisionBoxes
+) : Module {
 
     override val alwaysActive: Boolean = false
 
@@ -23,7 +26,7 @@ class ElevatorModule(private val collisions: Collisions) : Module {
     }
 
     private fun setupElevator(entity: Entity) {
-        val box = checkNotNull(entity.getCollisionBox()) {
+        val box = checkNotNull(collisionBoxes[entity]) {
             "Expected collision box for $entity"
         }
 
@@ -46,14 +49,14 @@ class ElevatorModule(private val collisions: Collisions) : Module {
             log.warn { "Cannot start elevator $elevatorEntity - tag 'min' not found!" }
             return
         }
-        minZ -= elevatorEntity.getCollisionBox()!!.size.z
+        minZ -= collisionBoxes[elevatorEntity]!!.size.z
 
         var maxZ = getFloatProperty(elevatorEntity, "max")
         if (maxZ == null) {
             log.warn { "Cannot start elevator $elevatorEntity - tag 'max' not found!" }
             return
         }
-        maxZ -= elevatorEntity.getCollisionBox()!!.size.z
+        maxZ -= collisionBoxes[elevatorEntity]!!.size.z
 
         val elevator = checkNotNull(elevatorEntity.get<Elevator>()) {
             "Expected Elevator component for $elevatorEntity"

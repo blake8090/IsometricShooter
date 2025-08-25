@@ -7,6 +7,7 @@ import bke.iso.engine.asset.shader.ShaderFileAssetCache
 import bke.iso.engine.asset.texture.TextureAssetCache
 import bke.iso.engine.asset.config.ConfigAssetCache
 import bke.iso.engine.asset.shader.ShaderInfoAssetCache
+import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.os.Files
 import bke.iso.engine.input.Input
 import bke.iso.engine.collision.Collisions
@@ -50,14 +51,16 @@ class Engine(val game: Game) {
     val serializer = Serializer()
     val assets: Assets = Assets(files, systemInfo)
 
-    val world: World = World(events)
+    val collisionBoxes = CollisionBoxes()
+
+    val world: World = World(events, collisionBoxes)
 
     val lighting = Lighting(world)
-    val renderer: Renderer = Renderer(world, assets, lighting, events)
+    val renderer: Renderer = Renderer(world, assets, lighting, events, collisionBoxes)
     val rendererManager = RendererManager(renderer)
 
-    val collisions: Collisions = Collisions(renderer, world)
-    val physics: Physics = Physics(world, collisions)
+    val collisions: Collisions = Collisions(renderer, world, collisionBoxes)
+    val physics: Physics = Physics(world, collisions, collisionBoxes)
     val scenes = Scenes(assets, serializer, world, renderer, lighting)
 
     val loadingScreens = LoadingScreens(events)
@@ -72,7 +75,8 @@ class Engine(val game: Game) {
         rendererManager,
         ui,
         loadingScreens,
-        lighting
+        lighting,
+        collisionBoxes
     )
     private val glProfiler = GLProfiler(Gdx.graphics)
     private val profiler = Profiler(ui, input, glProfiler)
