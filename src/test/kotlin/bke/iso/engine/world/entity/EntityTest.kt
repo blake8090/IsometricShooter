@@ -15,14 +15,7 @@ class EntityTest : StringSpec({
 
         val locations = entity.getLocations()
         locations.shouldContainExactlyInAnyOrder(
-            Location(0, 0, 0),
-            Location(0, 1, 0),
-            Location(1, 0, 0),
-            Location(1, 1, 0),
-            Location(0, 0, 1),
-            Location(0, 1, 1),
-            Location(1, 0, 1),
-            Location(1, 1, 1)
+            Location(0, 0, 0)
         )
     }
 
@@ -38,25 +31,23 @@ class EntityTest : StringSpec({
 
     "should return locations with both positive and negative coordinates" {
         val entity = Entity("")
-        entity.moveTo(1f,  0f, 0f)
         entity.add(
             Collider(
-                Vector3(1f, 1f, 1f),
+                size = Vector3(1f, 1f, 1f),
                 // center box on entity's position
-                Vector3(-0.5f, -0.5f, -0.5f)
+                offset = Vector3(-0.5f, -0.5f, -0.5f)
             )
         )
 
-        val locations = entity.getLocations()
-        locations.shouldContainExactlyInAnyOrder(
-            Location(1, 0, 0),
-            Location(1, -1, 0),
+        entity.getLocations().shouldContainExactlyInAnyOrder(
             Location(0, 0, 0),
             Location(0, -1, 0),
-            Location(1, 0, -1),
-            Location(1, -1, -1),
+            Location(-1, 0, 0),
+            Location(-1, -1, 0),
             Location(0, 0, -1),
             Location(0, -1, -1),
+            Location(-1, 0, -1),
+            Location(-1, -1, -1),
         )
     }
 
@@ -78,5 +69,52 @@ class EntityTest : StringSpec({
 
         entity.move(0f, 0f, dz)
         entity.z.shouldBe(0f)
+    }
+
+    "getLocations should only return locations that collision box overlaps" {
+        val entity = Entity("test")
+        entity.moveTo(0f, 0f, 0f)
+
+        // Add a collider with size (1,1,1) and offset (0,0,0)
+        // This should only overlap location (0,0,0)
+        entity.add(Collider(Vector3(1f, 1f, 1f), Vector3(0f, 0f, 0f)))
+
+        val locations = entity.getLocations()
+        locations.size.shouldBe(1)
+        locations.shouldContainExactlyInAnyOrder(Location(0, 0, 0))
+    }
+
+    "getLocations should handle fractional collision box positions" {
+        val entity = Entity("test")
+        entity.moveTo(0.5f, 0.5f, 0f)
+
+        // Add a collider with size (1,1,1) and offset (0,0,0)
+        // This should overlap locations (0,0,0), (0,1,0), (1,0,0), (1,1,0)
+        entity.add(Collider(Vector3(1f, 1f, 1f), Vector3(0f, 0f, 0f)))
+
+        val locations = entity.getLocations()
+        locations.size.shouldBe(4)
+        locations.shouldContainExactlyInAnyOrder(
+            Location(0, 0, 0),
+            Location(0, 1, 0),
+            Location(1, 0, 0),
+            Location(1, 1, 0)
+        )
+    }
+
+    "getLocations should handle z axis" {
+        val entity = Entity("test")
+        entity.moveTo(0f, 0f, 0f)
+
+        // Add a collider with size (1,1,1) and offset (0,0,0)
+        // This should only overlap location (0,0,0)
+        entity.add(Collider(Vector3(1f, 1f, 1.25f), Vector3(0f, 0f, 0f)))
+
+        val locations = entity.getLocations()
+        locations.size.shouldBe(2)
+        locations.shouldContainExactlyInAnyOrder(
+            Location(0, 0, 0),
+            Location(0, 0, 1)
+        )
     }
 })

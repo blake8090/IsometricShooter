@@ -66,14 +66,15 @@ class GridTest : StringSpec({
 
     "should return entity spanning multiple locations" {
         val entity = Entity("1")
-        entity.add(Collider(size = Vector3(0f, 2f, 0f)))
+        entity.add(Collider(size = Vector3(2f, 2f, 1f)))
 
         val grid = Grid()
         grid.update(entity)
 
         grid[Location(0, 0, 0)].shouldContainExactly(entity)
         grid[Location(0, 1, 0)].shouldContainExactly(entity)
-        grid[Location(0, 2, 0)].shouldContainExactly(entity)
+        grid[Location(1, 0, 0)].shouldContainExactly(entity)
+        grid[Location(1, 1, 0)].shouldContainExactly(entity)
     }
 
     "should delete entity" {

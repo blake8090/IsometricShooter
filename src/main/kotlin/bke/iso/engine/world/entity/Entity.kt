@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
 import kotlin.math.floor
+import kotlin.math.ceil
 import kotlin.reflect.KClass
 
 private const val Z_CLAMP_THRESHOLD = 0.00001f
@@ -100,11 +101,10 @@ class Entity(
      *
      * For example: An entity is positioned at (0, 0, 0) with a bounding box of size 1.
      * The box's minimum is therefore (0, 0, 0) and the maximum is (1, 1, 1).
+     * Since the box only overlaps the (0, 0, 0) location, only that location is returned.
      *
-     * The returned locations would be the following:
-     *
-     * (0, 0, 0) (0, 1, 0) (1, 0, 0) (1, 1, 0)
-     * (0, 0, 1) (0, 1, 1) (1, 0, 1) (1, 1, 1)
+     * For a box with min (0.5, 0.5, 0) and max (1.5, 1.5, 1), the returned locations would be:
+     * (0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 0)
      */
     fun getLocations(): Set<Location> {
         val locations = mutableSetOf<Location>()
@@ -116,18 +116,20 @@ class Entity(
     private fun getCollisionBoxLocations(): Set<Location> {
         val box = getCollisionBox() ?: return emptySet()
 
+        // Use floor for min and ceil for max to properly handle fractional positions
+        // This ensures we only include locations that the box actually overlaps
         val minX = floor(box.min.x).toInt()
         val minY = floor(box.min.y).toInt()
         val minZ = floor(box.min.z).toInt()
 
-        val maxX = floor(box.max.x).toInt()
-        val maxY = floor(box.max.y).toInt()
-        val maxZ = floor(box.max.z).toInt()
+        val maxX = ceil(box.max.x).toInt()
+        val maxY = ceil(box.max.y).toInt()
+        val maxZ = ceil(box.max.z).toInt()
 
         val locations = mutableSetOf<Location>()
-        for (x in minX..maxX) {
-            for (y in minY..maxY) {
-                for (z in minZ..maxZ) {
+        for (x in minX until maxX) {
+            for (y in minY until maxY) {
+                for (z in minZ until maxZ) {
                     locations.add(Location(x, y, z))
                 }
             }
