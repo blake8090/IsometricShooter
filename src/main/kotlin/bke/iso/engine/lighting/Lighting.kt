@@ -48,6 +48,7 @@ class Lighting(private val world: World) : EngineModule() {
             }
 
             is EntityMoved -> {
+                // TODO: track light source position and only update if light source grid location has changed
                 if (event.entity.has<PointLight>()) {
                     recalculateDynamicLightMap(event.entity)
                 }
@@ -92,23 +93,8 @@ class Lighting(private val world: World) : EngineModule() {
     }
 
     private fun floodFillLight(location: Location, source: LightSource): LightMap {
-        // propagate a scalar intensity to preserve the color ratio
         val intensityMap = ObjectMap<Location, Float>()
-        val queue = ArrayDeque<Pair<Location, Float>>()
-
-        intensityMap.put(location, 1f)
-        queue.add(location to 1f)
-
-        while (queue.isNotEmpty()) {
-            val (pos, currentIntensity) = queue.removeFirst()
-            for (neighbor in getNeighbors(pos)) {
-                val newIntensity = currentIntensity - source.falloff.coerceAtLeast(0.05f)
-                if (newIntensity > 0f && intensityMap.get(neighbor, 0f) < newIntensity) {
-                    intensityMap.put(neighbor, newIntensity)
-                    queue.add(neighbor to newIntensity)
-                }
-            }
-        }
+        floodFillRecursive(location, source, source.intensity, intensityMap)
 
         val colorMap = LightMap()
         for (entry in intensityMap) {
@@ -121,6 +107,30 @@ class Lighting(private val world: World) : EngineModule() {
             colorMap.put(pos, Triple(r, g, b))
         }
         return colorMap
+    }
+
+    private fun floodFillRecursive(
+        location: Location,
+        source: LightSource,
+        intensity: Float,
+        intensityMap: ObjectMap<Location, Float>
+    ) {
+        // if intensity is too low, or we've already visited this location with a higher intensity, stop
+        if (intensity <= 0f || intensityMap.get(location, 0f) >= intensity) {
+            return
+        }
+
+        intensityMap.put(location, intensity)
+        val nextIntensity = intensity - source.falloff
+
+        // no more light to propagate
+        if (nextIntensity <= 0f) {
+            return
+        }
+
+        for (neighbor in getNeighbors(location)) {
+            floodFillRecursive(neighbor, source, nextIntensity, intensityMap)
+        }
     }
 
     private fun getNeighbors(pos: Location): Array<Location> {
