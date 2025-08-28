@@ -51,8 +51,8 @@
     },
     {
       type: "pointLight",
-      intensity: 0.2,
-      falloff: 0.3,
+      intensity: 0.45,
+      falloff: 0.1125,
       color: {
         r: 1,
         g: 1,

@@ -85,6 +85,7 @@ class Engine(val game: Game) {
         private set
 
     fun start() {
+        lighting.collisions = collisions
         glProfiler.enable()
         systemInfo.logInfo()
 

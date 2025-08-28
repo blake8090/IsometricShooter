@@ -1,17 +1,21 @@
 package bke.iso.engine.lighting
 
+import bke.iso.engine.collision.Collisions
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.math.Location
+import bke.iso.engine.render.Occlude
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Entity
+import bke.iso.engine.world.entity.Tile
 import bke.iso.engine.world.event.EntityComponentAdded
 import bke.iso.engine.world.event.EntityComponentRemoved
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.engine.world.event.EntityDeleted
 import bke.iso.engine.world.event.EntityMoved
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectMap
 
@@ -37,7 +41,18 @@ class Lighting(private val world: World) : EngineModule() {
 
     var ambientLight: Color = Color.WHITE
 
+    // TODO: hack to avoid circular references.. or maybe this should be a pattern?
+    lateinit var collisions: Collisions
+
+    private val tempStart = Vector3()
+    private val tempEnd = Vector3()
+
     private val dynamicLights = ObjectMap<Entity, DynamicLight>()
+
+
+    // Cache for line-of-sight calculations
+    private val lineOfSightCache = mutableMapOf<Pair<Location, Location>, Boolean>()
+    private val lastLightSourcePositions = mutableMapOf<Entity, Location>()
 
     override fun handleEvent(event: Event) {
         when (event) {
@@ -94,7 +109,9 @@ class Lighting(private val world: World) : EngineModule() {
 
     private fun floodFillLight(location: Location, source: LightSource): LightMap {
         val intensityMap = ObjectMap<Location, Float>()
-        floodFillRecursive(location, source, source.intensity, intensityMap)
+        val blockedMap = mutableMapOf<Location, Boolean>()
+        val visitedMap = mutableMapOf<Location, Boolean>()
+        floodFillRecursive(location, location, source, source.intensity, intensityMap, blockedMap, visitedMap)
 
         val colorMap = LightMap()
         for (entry in intensityMap) {
@@ -110,10 +127,13 @@ class Lighting(private val world: World) : EngineModule() {
     }
 
     private fun floodFillRecursive(
+        start: Location,
         location: Location,
         source: LightSource,
         intensity: Float,
-        intensityMap: ObjectMap<Location, Float>
+        intensityMap: ObjectMap<Location, Float>,
+        blockedMap: MutableMap<Location, Boolean>,
+        visitedMap: MutableMap<Location, Boolean>
     ) {
         // if intensity is too low, or we've already visited this location with a higher intensity, stop
         if (intensity <= 0f || intensityMap.get(location, 0f) >= intensity) {
@@ -122,14 +142,60 @@ class Lighting(private val world: World) : EngineModule() {
 
         intensityMap.put(location, intensity)
         val nextIntensity = intensity - source.falloff
+        visitedMap.put(location, true)
 
         // no more light to propagate
         if (nextIntensity <= 0f) {
             return
         }
 
+
+
+
+        if (start != location) {
+//            val blocked = blockedMap.getOrPut(location) {
+//                collisions.checkLineCollisions(start.toVector3(), location.toVector3())
+//                    .any { it.entity.has<Occlude>() }
+//            }
+            val blocked = blockedMap.getOrPut(location) { isLineOfSightBlocked(start, location) }
+
+            if (blocked) {
+                return
+            }
+        }
+
+
+
         for (neighbor in getNeighbors(location)) {
-            floodFillRecursive(neighbor, source, nextIntensity, intensityMap)
+            floodFillRecursive(start, neighbor, source, nextIntensity, intensityMap, blockedMap, visitedMap)
+        }
+    }
+
+//    private fun isLineOfSightBlocked(start: Location, end: Location): Boolean {
+//        // Reuse Vector3 objects to avoid allocation
+//        tempStart.set(start.x.toFloat(), start.y.toFloat(), start.z.toFloat())
+//        tempEnd.set(end.x.toFloat(), end.y.toFloat(), end.z.toFloat())
+//
+//        // Use a more efficient collision check
+//        return collisions.checkLineCollisions(tempStart, tempEnd)
+//            .any { collision ->
+//                // Cache the entity reference to avoid repeated lookups
+//                val entity = collision.entity
+//                entity.has<Occlude>()
+//            }
+//    }
+
+    private fun isLineOfSightBlocked(start: Location, end: Location): Boolean {
+        val key = if (start.x < end.x && start.y < end.y && start.z < end.z) start to end else end to start
+
+        return lineOfSightCache.getOrPut(key) {
+            // Only do the expensive collision check once per line
+            // Very important to add 0.01f to the z value so the line doesn't get caught on its own tile
+            val startVec = Vector3(start.x.toFloat(), start.y.toFloat(), start.z.toFloat() + 0.01f)
+            val endVec = Vector3(end.x.toFloat(), end.y.toFloat(), end.z.toFloat() + 0.01f)
+
+            collisions.checkLineCollisions(startVec, endVec)
+                .any { it.entity.has<Occlude>() || it.entity.has<Tile>() }
         }
     }
 
