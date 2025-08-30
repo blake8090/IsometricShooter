@@ -2,6 +2,8 @@ package bke.iso.engine.collision
 
 import bke.iso.engine.core.EngineModule
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.Location
+import bke.iso.engine.math.floor
 import bke.iso.engine.render.DebugSettings
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.world.entity.Entity
@@ -93,7 +95,10 @@ class Collisions(
         val ray = Ray(start, direction)
 
         val collisions = Array<SegmentCollision>()
-        for (entity in world.entities.findAllIn(area)) {
+        val entities = traceRay3D(start, end)
+            .flatMap { location -> world.entities.findAllAt(location.toVector3()) }
+
+        for (entity in entities) {
             val collision = checkLineCollision(start, end, ray, entity)
             if (collision != null) {
                 collisions.add(collision)
@@ -125,6 +130,84 @@ class Collisions(
             distanceEnd = end.dst(box.pos),
             points = points
         )
+    }
+
+    /**
+     * Traces a ray from start to end using an improved 3D DDA algorithm.
+     * This version ensures no grid tiles are skipped by using a more robust stepping approach.
+     *
+     * @param start The starting position of the ray
+     * @param end The ending position of the ray
+     * @return List of grid Locations that the ray intersects, including start and end
+     */
+    private fun traceRay3D(start: Vector3, end: Vector3): List<Location> {
+        val dir = end.cpy().sub(start)
+        val step = Vector3(sign(dir.x), sign(dir.y), sign(dir.z))
+
+        val tDelta = Vector3(
+            if (dir.x != 0f) abs(1f / dir.x) else Float.POSITIVE_INFINITY,
+            if (dir.y != 0f) abs(1f / dir.y) else Float.POSITIVE_INFINITY,
+            if (dir.z != 0f) abs(1f / dir.z) else Float.POSITIVE_INFINITY
+        )
+
+        val voxel = start.cpy().floor()
+        val endVoxel = end.cpy().floor()
+
+        // handle NaN problem: if direction is 0, set tMax to infinity
+        val tMax = Vector3(
+            if (dir.x == 0f) {
+                Float.POSITIVE_INFINITY
+            } else if (dir.x > 0) {
+                (voxel.x + 1 - start.x) * tDelta.x
+            } else {
+                (start.x - voxel.x) * tDelta.x
+            },
+
+            if (dir.y == 0f) {
+                Float.POSITIVE_INFINITY
+            } else if (dir.y > 0) {
+                (voxel.y + 1 - start.y) * tDelta.y
+            } else {
+                (start.y - voxel.y) * tDelta.y
+            },
+
+            if (dir.z == 0f) {
+                Float.POSITIVE_INFINITY
+            } else if (dir.z > 0) {
+                (voxel.z + 1 - start.z) * tDelta.z
+            } else {
+                (start.z - voxel.z) * tDelta.z
+            }
+        )
+
+        val results = mutableListOf<Location>()
+        results.add(Location(voxel))
+
+        // safety guard: max iterations = sum of distances + 1
+        val maxSteps = (abs(endVoxel.x - voxel.x) +
+                abs(endVoxel.y - voxel.y) +
+                abs(endVoxel.z - voxel.z) + 1).toInt()
+
+        var steps = 0
+        while (voxel != endVoxel && steps < maxSteps) {
+            if (tMax.x < tMax.y) {
+                if (tMax.x < tMax.z) {
+                    voxel.x += step.x; tMax.x += tDelta.x
+                } else {
+                    voxel.z += step.z; tMax.z += tDelta.z
+                }
+            } else {
+                if (tMax.y < tMax.z) {
+                    voxel.y += step.y; tMax.y += tDelta.y
+                } else {
+                    voxel.z += step.z; tMax.z += tDelta.z
+                }
+            }
+            results.add(Location(voxel))
+            steps++
+        }
+
+        return results
     }
 
     private fun findIntersection(ray: Ray, box: BoundingBox): Vector3? {
