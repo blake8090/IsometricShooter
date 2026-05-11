@@ -46,13 +46,13 @@ dependencies {
     api("io.github.spair:imgui-java-natives-macos:1.89.0")
     api("io.github.spair:imgui-java-natives-windows:1.89.0")
 
-    implementation("ch.qos.logback:logback-classic:1.5.12")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
-    implementation("org.apache.commons:commons-lang3:3.17.0")
+    implementation("org.apache.commons:commons-lang3:3.18.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
