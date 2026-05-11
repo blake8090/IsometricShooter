@@ -5,7 +5,7 @@ import io.github.fourlastor.construo.task.jvm.RoastTask
 plugins {
     kotlin("jvm") version "2.3.20"
     kotlin("plugin.serialization") version "2.3.20"
-    id("io.gitlab.arturbosch.detekt").version("1.23.8")
+    id("dev.detekt").version("2.0.0-alpha.3")
     id("io.github.fourlastor.construo") version "2.1.0"
     application
 }
@@ -21,29 +21,30 @@ repositories {
     }
 }
 
-// TODO: re-enable when ready
 detekt {
+    toolVersion = "2.0.0-alpha.3"
+    config.setFrom(file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    // TODO: re-enable when config file has been updated!
     ignoreFailures = true
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.8")
-
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.20")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     implementation("org.reflections:reflections:0.10.2")
 
-    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.0")
-    implementation("com.badlogicgames.gdx:gdx-platform:1.12.0:natives-desktop")
-    implementation("com.badlogicgames.gdx:gdx-freetype:1.12.0")
-    implementation("com.badlogicgames.gdx:gdx-freetype-platform:1.12.0:natives-desktop")
-    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-core:2.2.3")
-    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-desktop:2.2.3")
-    implementation("io.github.libktx:ktx-async:1.12.0-rc1")
+    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:1.14.0")
+    implementation("com.badlogicgames.gdx:gdx-platform:1.14.0:natives-desktop")
+    implementation("com.badlogicgames.gdx:gdx-freetype:1.14.0")
+    implementation("com.badlogicgames.gdx:gdx-freetype-platform:1.14.0:natives-desktop")
+    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-core:2.2.4")
+    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-desktop:2.2.4")
+    implementation("io.github.libktx:ktx-async:1.13.1-rc1")
     implementation("space.earlygrey:shapedrawer:2.6.0")
 
-    implementation("org.lwjgl:lwjgl-nfd:3.3.2")
-    runtimeOnly("org.lwjgl:lwjgl-nfd:3.3.2:natives-windows")
+    implementation("org.lwjgl:lwjgl-nfd:3.4.1")
+    runtimeOnly("org.lwjgl:lwjgl-nfd:3.4.1:natives-windows")
 
     api("io.github.spair:imgui-java-binding:1.89.0")
     api("io.github.spair:imgui-java-lwjgl3:1.89.0")
