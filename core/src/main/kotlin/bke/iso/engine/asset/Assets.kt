@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.reflect.KClass
 
+// TODO: we'll need to somehow configure this when distributing with Construo
 const val BASE_PATH = "."
 
 class Assets(private val files: Files, systemInfo: SystemInfo) {
