@@ -5,11 +5,13 @@ package bke.iso.lwjgl3
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import bke.iso.App
+import bke.iso.configureLogging
 import bke.iso.game.IsometricShooter
 
 /** Launches the desktop (LWJGL3) application. */
 fun main() {
     val game = IsometricShooter()
+    configureLogging("${game.gameDataPath}/main.log")
 
     // This handles macOS support and helps on Windows.
     if (StartupHelper.startNewJvmIfRequired())
