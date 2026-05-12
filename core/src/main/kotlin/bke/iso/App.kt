@@ -12,6 +12,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ktx.async.KtxAsync
 import java.io.File
+import kotlin.system.exitProcess
 
 @Serializable
 data class AppConfig(
@@ -84,5 +85,10 @@ class App(private val game: Game) : ApplicationAdapter() {
             Lwjgl3ApplicationConfiguration.getDisplayMode().height,
             true
         )
+    }
+
+    fun handleUncaughtException(e: Throwable) {
+        log.error(e) { "Uncaught exception" }
+        exitProcess(-1)
     }
 }

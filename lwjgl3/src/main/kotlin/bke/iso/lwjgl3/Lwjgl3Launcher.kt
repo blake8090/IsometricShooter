@@ -11,12 +11,18 @@ import bke.iso.game.IsometricShooter
 /** Launches the desktop (LWJGL3) application. */
 fun main() {
     val game = IsometricShooter()
+    val app = App(game)
+
+    Thread.currentThread().setUncaughtExceptionHandler { _, e ->
+        app.handleUncaughtException(e)
+    }
+
     configureLogging("${game.gameDataPath}/main.log")
 
     // This handles macOS support and helps on Windows.
     if (StartupHelper.startNewJvmIfRequired())
         return
-    Lwjgl3Application(App(game), Lwjgl3ApplicationConfiguration().apply {
+    Lwjgl3Application(app, Lwjgl3ApplicationConfiguration().apply {
         setTitle("IsometricShooter")
         //// Vsync limits the frames per second to what your hardware can display, and helps eliminate
         //// screen tearing. This setting doesn't always work on Linux, so the line after is a safeguard.
