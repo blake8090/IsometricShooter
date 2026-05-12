@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.reflect.KClass
 
-const val BASE_PATH = "assets"
+const val BASE_PATH = "."
 
 class Assets(private val files: Files, systemInfo: SystemInfo) {
 
