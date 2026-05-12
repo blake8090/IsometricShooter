@@ -1,0 +1,58 @@
+plugins {
+  id 'org.jetbrains.kotlin.plugin.serialization' version '2.3.21'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+dependencies {
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
+  implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
+  implementation("com.badlogicgames.gdx-controllers:gdx-controllers-core:2.2.4")
+  implementation("com.badlogicgames.gdx-controllers:gdx-controllers-desktop:2.2.4")
+
+  api "io.github.libktx:ktx-async:$ktxVersion"
+  api "io.github.libktx:ktx-collections:$ktxVersion"
+  api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
+  api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+
+  implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.20")
+  implementation("org.reflections:reflections:0.10.2")
+
+  implementation("ch.qos.logback:logback-classic:1.5.32")
+  implementation("org.slf4j:slf4j-api:2.0.16")
+  implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
+
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+  implementation("org.apache.commons:commons-lang3:3.18.0")
+
+  implementation("org.lwjgl:lwjgl-nfd:3.4.1")
+  runtimeOnly("org.lwjgl:lwjgl-nfd:3.4.1:natives-windows")
+
+  api("io.github.spair:imgui-java-binding:1.89.0")
+  api("io.github.spair:imgui-java-lwjgl3:1.89.0")
+  api("io.github.spair:imgui-java-natives-linux:1.89.0")
+  api("io.github.spair:imgui-java-natives-macos:1.89.0")
+  api("io.github.spair:imgui-java-natives-windows:1.89.0")
+
+  testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
+  testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+  testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+  testImplementation("io.mockk:mockk:1.13.13")
+
+  if (enableGraalNative == 'true') {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+}
+
+test {
+  useJUnitPlatform()
+}
+
+jar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
