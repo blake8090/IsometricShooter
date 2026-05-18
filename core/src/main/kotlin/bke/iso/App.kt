@@ -7,6 +7,7 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -16,10 +17,28 @@ import kotlin.system.exitProcess
 
 @Serializable
 data class AppConfig(
+    val displaySettings: DisplaySettings,
     val vsyncEnabled: Boolean,
-    val windowWidth: Int,
-    val windowHeight: Int,
-    val fullscreen: Boolean
+    val limitFPS: Boolean
+)
+
+@Serializable
+enum class WindowMode {
+    @SerialName("windowed")
+    WINDOWED,
+
+    @SerialName("fullscreen")
+    FULLSCREEN,
+
+    @SerialName("borderless")
+    BORDERLESS
+}
+
+@Serializable
+data class DisplaySettings(
+    val windowMode: WindowMode,
+    val resolutionWidth: Int,
+    val resolutionHeight: Int
 )
 
 class App(private val game: Game) : ApplicationAdapter() {
@@ -47,7 +66,7 @@ class App(private val game: Game) : ApplicationAdapter() {
         engine.resize(width, height)
     }
 
-    fun getConfig(): Lwjgl3ApplicationConfiguration {
+    fun getConfig(): AppConfig {
         val format = Json {
             isLenient = true
             prettyPrint = true
@@ -66,26 +85,19 @@ class App(private val game: Game) : ApplicationAdapter() {
                 defaultConfig
             }
 
-        return Lwjgl3ApplicationConfiguration().apply {
-            setTitle(game.windowTitle)
-            useVsync(config.vsyncEnabled)
-
-            if (config.fullscreen) {
-                setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode())
-            } else {
-                setWindowedMode(config.windowWidth, config.windowHeight)
-            }
-        }
+        return config
     }
 
-    private fun createDefaultConfig(): AppConfig {
-        return AppConfig(
-            true,
-            Lwjgl3ApplicationConfiguration.getDisplayMode().width,
-            Lwjgl3ApplicationConfiguration.getDisplayMode().height,
-            true
+    private fun createDefaultConfig() =
+        AppConfig(
+            displaySettings = DisplaySettings(
+                windowMode = WindowMode.FULLSCREEN,
+                resolutionWidth = Lwjgl3ApplicationConfiguration.getDisplayMode().width,
+                resolutionHeight = Lwjgl3ApplicationConfiguration.getDisplayMode().height,
+            ),
+            vsyncEnabled = true,
+            limitFPS = true
         )
-    }
 
     fun handleUncaughtException(e: Throwable) {
         log.error(e) { "Uncaught exception" }

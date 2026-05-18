@@ -2,11 +2,12 @@
 
 package bke.iso.lwjgl3
 
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import bke.iso.App
+import bke.iso.WindowMode
 import bke.iso.configureLogging
 import bke.iso.game.IsometricShooter
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 
 /** Launches the desktop (LWJGL3) application. */
 fun main() {
@@ -22,20 +23,42 @@ fun main() {
     // This handles macOS support and helps on Windows.
     if (StartupHelper.startNewJvmIfRequired())
         return
+
+    val config = app.getConfig()
     Lwjgl3Application(app, Lwjgl3ApplicationConfiguration().apply {
-        setTitle("IsometricShooter")
+        val displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode()
+
+        setTitle(game.windowTitle)
         //// Vsync limits the frames per second to what your hardware can display, and helps eliminate
         //// screen tearing. This setting doesn't always work on Linux, so the line after is a safeguard.
-        useVsync(true)
+        useVsync(config.vsyncEnabled)
         //// Limits FPS to the refresh rate of the currently active monitor, plus 1 to try to match fractional
         //// refresh rates. The Vsync setting above should limit the actual FPS to match the monitor.
-        setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1)
+        if (config.limitFPS) {
+            setForegroundFPS(displayMode.refreshRate + 1)
+        }
         //// If you remove the above line and set Vsync to false, you can get unlimited FPS0, which can be
         //// useful for testing performance, but can also be very stressful to some hardware.
         //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
 
+        val w = config.displaySettings.resolutionWidth
+        val h = config.displaySettings.resolutionHeight
+        when (config.displaySettings.windowMode) {
+            WindowMode.WINDOWED -> {
+                setWindowedMode(w, h)
+            }
 
-        setWindowedMode(1920, 1080)
+            // TODO: use resolution width & height to find appropriate fullscreen DisplayMode
+            WindowMode.FULLSCREEN -> {
+                setFullscreenMode(displayMode)
+            }
+
+            WindowMode.BORDERLESS -> {
+                setDecorated(false)
+                setWindowedMode(w, h)
+            }
+        }
+
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .
         setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
