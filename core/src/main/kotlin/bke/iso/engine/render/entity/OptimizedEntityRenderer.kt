@@ -87,8 +87,9 @@ class OptimizedEntityRenderer(
     }
 
     private fun addRenderable(entity: Entity) {
-        val renderable = getRenderable(entity)
-        if (renderable == null || !inFrustum(renderable)) {
+        val renderable = getRenderable(entity) ?: return
+        if (!inFrustum(renderable)) {
+            pool.free(renderable)
             return
         }
 
