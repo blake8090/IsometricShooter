@@ -55,6 +55,7 @@ class Physics(
         val predictCollisions = collisions.predictCollisions(entity, delta)
         // TODO: how to resolve multiple collisions to avoid objects falling out of the world?
         val collision = predictCollisions
+            .asSequence()
             .sortedWith(compareBy(PredictedCollision::collisionTime, PredictedCollision::distance))
             .firstOrNull { collision -> getPhysicsMode(collision.entity) != PhysicsMode.GHOST }
 

@@ -1,6 +1,5 @@
 package bke.iso.engine.os
 
-import bke.iso.engine.asset.BASE_PATH
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.util.nfd.NFDFilterItem
@@ -32,7 +31,7 @@ class Dialogs {
                 .spec(stack.UTF8(extension))
 
             val pathPointer = stack.mallocPointer(1)
-            val defaultPath = Path(BASE_PATH)
+            val defaultPath = Path("")
                 .toAbsolutePath()
                 .toString()
             val result = NativeFileDialog.NFD_OpenDialog(pathPointer, filters, defaultPath)
@@ -74,7 +73,7 @@ class Dialogs {
 
             val pathPointer = stack.mallocPointer(1)
             // TODO: investigate why default path setting does not work
-            val defaultPath = Path(BASE_PATH)
+            val defaultPath = Path("")
                 .toAbsolutePath()
                 .toString()
             val result = NativeFileDialog.NFD_SaveDialog(pathPointer, filters, defaultPath, "untitled")
