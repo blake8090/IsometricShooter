@@ -5,11 +5,17 @@ import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.math.collision.Segment
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Pool
-import com.badlogic.gdx.utils.Pools
+import com.badlogic.gdx.utils.PoolManager
 import kotlin.math.max
 import kotlin.math.min
 
 private const val PRECISION_ERROR_THRESHOLD = 0.0001f
+
+object BoundingBoxPools {
+    val manager = PoolManager().apply {
+        addPool { BoundingBoxP() }
+    }
+}
 
 data class Box(
     /**
@@ -58,27 +64,27 @@ data class Box(
 
         val faces = Array<BoundingBoxP>()
 
-        val top = Pools.obtain(BoundingBoxP::class.java)
+        val top = BoundingBoxPools.manager.obtain(BoundingBoxP::class.java)
         top.set(Vector3(min.x, min.y, max.z), Vector3(max.x, max.y, max.z))
         faces.add(top)
 
-        val bottom = Pools.obtain(BoundingBoxP::class.java)
+        val bottom = BoundingBoxPools.manager.obtain(BoundingBoxP::class.java)
         bottom.set(Vector3(min.x, min.y, min.z), Vector3(max.x, max.y, min.z))
         faces.add(bottom)
 
-        val left = Pools.obtain(BoundingBoxP::class.java)
+        val left = BoundingBoxPools.manager.obtain(BoundingBoxP::class.java)
         left.set(Vector3(min.x, min.y, min.z), Vector3(min.x, max.y, max.z))
         faces.add(left)
 
-        val right = Pools.obtain(BoundingBoxP::class.java)
+        val right = BoundingBoxPools.manager.obtain(BoundingBoxP::class.java)
         right.set(Vector3(max.x, min.y, min.z), Vector3(max.x, max.y, max.z))
         faces.add(right)
 
-        val front = Pools.obtain(BoundingBoxP::class.java)
+        val front = BoundingBoxPools.manager.obtain(BoundingBoxP::class.java)
         front.set(Vector3(min.x, min.y, min.z), Vector3(max.x, min.y, max.z))
         faces.add(front)
 
-        val back = Pools.obtain(BoundingBoxP::class.java)
+        val back = BoundingBoxPools.manager.obtain(BoundingBoxP::class.java)
         back.set(Vector3(min.x, max.y, min.z), Vector3(max.x, max.y, max.z))
         faces.add(back)
 
@@ -87,11 +93,11 @@ data class Box(
 
     fun intersects(box: Box): Boolean {
         return min.x < box.max.x - PRECISION_ERROR_THRESHOLD &&
-                max.x > box.min.x + PRECISION_ERROR_THRESHOLD &&
-                min.y < box.max.y - PRECISION_ERROR_THRESHOLD &&
-                max.y > box.min.y + PRECISION_ERROR_THRESHOLD &&
-                min.z < box.max.z &&
-                max.z > box.min.z
+            max.x > box.min.x + PRECISION_ERROR_THRESHOLD &&
+            min.y < box.max.y - PRECISION_ERROR_THRESHOLD &&
+            max.y > box.min.y + PRECISION_ERROR_THRESHOLD &&
+            min.z < box.max.z &&
+            max.z > box.min.z
     }
 
     fun getOverlapArea(box: Box): Float {
@@ -119,11 +125,11 @@ data class Box(
 
     fun contains(point: Vector3): Boolean =
         min.x <= point.x &&
-                max.x >= point.x &&
-                min.y <= point.y &&
-                max.y >= point.y &&
-                min.z <= point.z &&
-                max.z >= point.z
+            max.x >= point.x &&
+            min.y <= point.y &&
+            max.y >= point.y &&
+            min.z <= point.z &&
+            max.z >= point.z
 
     companion object {
         fun fromMinMax(min: Vector3, max: Vector3): Box {

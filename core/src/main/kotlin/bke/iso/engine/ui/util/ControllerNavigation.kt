@@ -5,9 +5,15 @@ import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.utils.Pools
+import com.badlogic.gdx.utils.PoolManager
 import com.studiohartman.jamepad.ControllerButton
 import io.github.oshai.kotlinlogging.KotlinLogging
+
+object InputEventPools {
+    val manager = PoolManager().apply {
+        addPool { InputEvent() }
+    }
+}
 
 class ControllerNavigation : ControllerAdapter() {
 
@@ -39,7 +45,7 @@ class ControllerNavigation : ControllerAdapter() {
         }
 
     private fun fireEvent(actor: Actor, type: InputEvent.Type, code: Int? = null): Boolean {
-        val event = Pools.obtain(InputEvent::class.java)
+        val event = InputEventPools.manager.obtain(InputEvent::class.java)
         event.type = type
         event.pointer = -1 // -1 is always used on desktop
         if (code != null) {
@@ -48,7 +54,7 @@ class ControllerNavigation : ControllerAdapter() {
         log.debug { "Firing event $event on actor $actor" }
         actor.fire(event)
         val handled = event.isHandled
-        Pools.free(event)
+        InputEventPools.manager.free(event)
         return handled
     }
 

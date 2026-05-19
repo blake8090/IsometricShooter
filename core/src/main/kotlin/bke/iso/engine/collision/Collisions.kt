@@ -1,6 +1,7 @@
 package bke.iso.engine.collision
 
 import bke.iso.engine.core.EngineModule
+import bke.iso.engine.math.BoundingBoxPools
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.floor
@@ -16,7 +17,6 @@ import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.collision.Segment
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectSet
-import com.badlogic.gdx.utils.Pools
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sign
@@ -117,7 +117,7 @@ class Collisions(
             if (point != null) {
                 points.add(point)
             }
-            Pools.free(face)
+            BoundingBoxPools.manager.free(face)
         }
 
         if (points.isEmpty) {
