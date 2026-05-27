@@ -8,15 +8,12 @@ import bke.iso.editor.core.command.DeleteComponentCommand
 import bke.iso.editor.core.command.PutMapEntryCommand
 import bke.iso.editor.core.command.RemoveMapEntryCommand
 import bke.iso.editor.core.command.UpdatePropertyCommand
-import bke.iso.editor.withFirstInstance
 import bke.iso.engine.Engine
 import bke.iso.engine.asset.entity.EntityTemplate
-import bke.iso.engine.collision.Collider
 import bke.iso.engine.core.Event
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.lighting.FullBright
 import bke.iso.engine.render.Renderer
-import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
 import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.Input
@@ -172,8 +169,7 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
 
     private fun refreshComponents() {
         referenceEntity.components.clear()
-        components.withFirstInstance<Sprite>(referenceEntity::add)
-        components.withFirstInstance<Collider>(referenceEntity::add)
+        components.forEach(referenceEntity::add)
         // hack to disable lighting - right now multiple renderers share the same lighting!
         referenceEntity.add(FullBright())
     }
