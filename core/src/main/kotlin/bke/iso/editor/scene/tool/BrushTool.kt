@@ -12,6 +12,8 @@ import bke.iso.engine.collision.Collisions
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.math.floor
+import bke.iso.engine.pathfinding.Pathing
+import bke.iso.engine.pathfinding.PathingType
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
@@ -33,7 +35,7 @@ class BrushTool(
     private val log = KotlinLogging.logger { }
 
     private val brushSprite = Sprite(alpha = 0f)
-    private val brushEntity = world.entities.create(Vector3(), brushSprite)
+    private val brushEntity = world.entities.create(Vector3(), brushSprite, Pathing(PathingType.IGNORE))
     private var selectedTemplate: EntityTemplate? = null
 
     override fun update() {

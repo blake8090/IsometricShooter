@@ -7,6 +7,8 @@ import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.input.Input
 import bke.iso.engine.math.toWorld
+import bke.iso.engine.pathfinding.Pathing
+import bke.iso.engine.pathfinding.PathingType
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.World
@@ -39,7 +41,8 @@ class CameraLogic(
             Collider(
                 size = Vector3(0.5f, 0.5f, 1f),
                 offset = Vector3(-0.25f, -0.25f, 0f),
-            )
+            ),
+            Pathing(PathingType.IGNORE)
         )
 
     fun start() {

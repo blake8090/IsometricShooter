@@ -3,7 +3,6 @@ package bke.iso.editor.core
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
-import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.world.entity.Component
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -15,10 +14,12 @@ import imgui.type.ImFloat
 import imgui.type.ImInt
 import imgui.type.ImString
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
 import kotlin.reflect.cast
+import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.typeOf
 
@@ -41,17 +42,28 @@ class ComponentEditorView(
         for (memberProperty in component::class.memberProperties) {
             ImGui.pushID(memberProperty.name)
             try {
-                when (memberProperty.returnType) {
-                    typeOf<Float>() -> drawFloatControls(component, memberProperty)
-                    typeOf<Float?>() -> drawFloatControls(component, memberProperty)
-                    typeOf<Int>() -> drawIntControls(component, memberProperty)
-                    typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
-                    typeOf<String>() -> drawStringControls(component, memberProperty)
-                    typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
-                    typeOf<Color>() -> drawColorControls(component, memberProperty)
-                    typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
-                    typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
-                    typeOf<MutableMap<String, String>>() -> drawMutableMapControls(component, memberProperty)
+                val propertyClass = memberProperty.returnType.classifier as? KClass<*>
+                when {
+                    propertyClass?.isSubclassOf(Enum::class) == true -> drawEnumControls(
+                        component,
+                        memberProperty,
+                        propertyClass
+                    )
+
+                    memberProperty.returnType == typeOf<Float>() -> drawFloatControls(component, memberProperty)
+                    memberProperty.returnType == typeOf<Float?>() -> drawFloatControls(component, memberProperty)
+                    memberProperty.returnType == typeOf<Int>() -> drawIntControls(component, memberProperty)
+                    memberProperty.returnType == typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
+                    memberProperty.returnType == typeOf<String>() -> drawStringControls(component, memberProperty)
+                    memberProperty.returnType == typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
+                    memberProperty.returnType == typeOf<Color>() -> drawColorControls(component, memberProperty)
+                    memberProperty.returnType == typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
+                    memberProperty.returnType == typeOf<MutableMap<String, String>>() ->
+                        drawMutableMapControls(
+                            component,
+                            memberProperty
+                        )
+
                     else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
                 }
             } finally {
@@ -159,9 +171,32 @@ class ComponentEditorView(
         }
     }
 
-    private fun drawPhysicsModeControls(component: Component, property: ComponentProperty) {
-        val value = get<PhysicsMode>(property, component)
-        ImGui.inputText(property.name, ImString(value.toString()))
+    private fun drawEnumControls(component: Component, property: ComponentProperty, enumClass: KClass<*>) {
+        val isMutable = property is KMutableProperty<*>
+
+        if (!isMutable) {
+            ImGui.beginDisabled()
+        }
+
+        val value = property.getter.call(component) as Enum<*>
+        if (ImGui.beginCombo(property.name, value.name)) {
+            val constants = enumClass.java.enumConstants
+            for (constant in constants) {
+                val enumValue = constant as Enum<*>
+                val selected = enumValue.name == value.name
+                if (ImGui.selectable(enumValue.name, selected) && property is KMutableProperty<*>) {
+                    events.fire(PropertyUpdated(component, property as KMutableProperty1, enumValue))
+                }
+                if (selected) {
+                    ImGui.setItemDefaultFocus()
+                }
+            }
+            ImGui.endCombo()
+        }
+
+        if (!isMutable) {
+            ImGui.endDisabled()
+        }
     }
 
     private fun drawMutableMapControls(component: Component, property: ComponentProperty) {

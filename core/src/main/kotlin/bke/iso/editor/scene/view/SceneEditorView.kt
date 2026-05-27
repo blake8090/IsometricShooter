@@ -200,6 +200,9 @@ class SceneEditorView(
         ImGui.sameLine()
         imageButton("highlight-layer.png")
         ImGui.sameLine()
+        if (ImGui.button("Generate NavMesh")) {
+            events.fire(SceneEditor.GenerateNavMeshClicked())
+        }
 
         ImGui.end()
     }

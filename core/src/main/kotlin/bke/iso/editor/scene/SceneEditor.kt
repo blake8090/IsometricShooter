@@ -22,6 +22,7 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
+import bke.iso.engine.pathfinding.DebugCategories
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
@@ -71,6 +72,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
     private var selectedEntity: Entity? = null
     private var selectedBuilding: String? = null
+    private var navMeshMessage: String? = null
 
     private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
@@ -96,6 +98,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.bgColor = Color.GRAY
         // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
+        renderer.debug.enableCategories(DebugCategories.NAVMESH)
 
         // show all assets by default
         selectAssetDirectory(File(BASE_PATH))
@@ -111,6 +114,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
         drawGrid()
         drawSelectedEntity()
+        drawNavMesh()
 
         for (buildingName in world.buildings.getAll()) {
             drawBuilding(buildingName)
@@ -209,6 +213,10 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.fgShapes.addBox(collisionBox, 1f, Color.RED)
     }
 
+    private fun drawNavMesh() {
+        engine.pathfinding.drawDebug(renderer.debug)
+    }
+
     private fun drawComponentOverrideHints() {
         for (referenceEntity in worldLogic.getReferenceEntities()) {
             val data = worldLogic.getData(referenceEntity)
@@ -239,12 +247,17 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.drawText(name, buildingFont, box.pos)
     }
 
-    private fun getMessageBarText(): String =
-        if (selectedBuilding.isNullOrBlank()) {
+    private fun getMessageBarText(): String {
+        navMeshMessage?.let {
+            return it
+        }
+
+        return if (selectedBuilding.isNullOrBlank()) {
             "No building selected"
         } else {
             "Editing building $selectedBuilding"
         }
+    }
 
     override fun handleEvent(event: Event) {
         when (event) {
@@ -262,6 +275,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
             is HideWallsToggled -> toggleHideWalls()
             is HideUpperLayersToggled -> hideUpperLayers = !hideUpperLayers
             is HighlightSelectedLayerToggled -> highlightSelectedLayer = !highlightSelectedLayer
+            is GenerateNavMeshClicked -> generateNavMesh()
 
             is BuildingAssigned -> {
                 val command = AssignBuildingCommand(event.entity, event.building, worldLogic)
@@ -387,6 +401,14 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         }
     }
 
+    private fun generateNavMesh() {
+        val result = engine.pathfinding.generateNavMesh(world)
+        navMeshMessage = result.message
+        if (result.success) {
+            renderer.debug.enable()
+        }
+    }
+
     private fun selectAssetDirectory(dir: File) {
         selectedAssetDirectory = dir
         entityTemplatesInDirectory.clear()
@@ -412,6 +434,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     class HideWallsToggled : Event
     class HideUpperLayersToggled : Event
     class HighlightSelectedLayerToggled : Event
+    class GenerateNavMeshClicked : Event
 
 //    class TagAdded(val entity: Entity, val tag: String) : Event
 //    data class TagDeleted(val entity: Entity, val tag: String) : Event

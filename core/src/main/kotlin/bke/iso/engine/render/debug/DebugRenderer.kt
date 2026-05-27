@@ -19,7 +19,7 @@ class DebugRenderer(private val collisionBoxes: CollisionBoxes) {
         }
     }
 
-    private fun enable() {
+    fun enable() {
         enabled = true
         for (name in enabledCategories) {
             categories[name]?.enabled = true
@@ -35,13 +35,20 @@ class DebugRenderer(private val collisionBoxes: CollisionBoxes) {
 
     fun enableCategories(vararg names: String) {
         for (name in names) {
-            enabledCategories.add(name)
+            if (!enabledCategories.contains(name, false)) {
+                enabledCategories.add(name)
+            }
+            if (enabled) {
+                category(name).enabled = true
+            }
         }
     }
 
     fun category(name: String): DebugCategory {
         if (!categories.containsKey(name)) {
-            categories.put(name, DebugCategory(collisionBoxes))
+            val category = DebugCategory(collisionBoxes)
+            category.enabled = enabled && enabledCategories.contains(name, false)
+            categories.put(name, category)
         }
         return categories.get(name)
     }

@@ -30,6 +30,9 @@ dependencies {
 
   implementation("org.apache.commons:commons-lang3:3.18.0")
 
+  implementation("org.recast4j:recast:1.5.11")
+  implementation("org.recast4j:detour:1.5.11")
+
   implementation("org.lwjgl:lwjgl-nfd:3.4.1")
   runtimeOnly("org.lwjgl:lwjgl-nfd:3.4.1:natives-windows")
 

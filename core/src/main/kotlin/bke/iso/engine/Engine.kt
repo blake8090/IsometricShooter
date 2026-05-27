@@ -20,6 +20,7 @@ import bke.iso.engine.loading.LoadActionCompleteEvent
 import bke.iso.engine.loading.LoadingScreens
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.os.SystemInfo
+import bke.iso.engine.pathfinding.Pathfinding
 import bke.iso.engine.physics.Physics
 import bke.iso.engine.profiler.Profiler
 import bke.iso.engine.render.Renderer
@@ -52,6 +53,7 @@ class Engine(val game: Game) {
     val assets: Assets = Assets(files, systemInfo)
 
     val collisionBoxes = CollisionBoxes()
+    val pathfinding = Pathfinding(collisionBoxes)
 
     val world: World = World(events, collisionBoxes)
 
