@@ -156,27 +156,31 @@ class OptimizedEntityRenderer(
 
         var shaderSet = false
 
-        // fill should always override tint
+        // Fill used as an intentionally unlit hit flash that overrides both tint and lighting.
+        // The alpha is therefore always set to 1f.
         if (fillColor != null) {
             batch.shader = assets.shaders["color"]
             batch.shader.setUniformf(
                 "u_color",
-                fillColor.r * 255,
-                fillColor.g * 255,
-                fillColor.b * 255,
-                255f
+                fillColor.r,
+                fillColor.g,
+                fillColor.b,
+                1f
             )
             shaderSet = true
-        } else if (tintColor != null) {
-            color.r = tintColor.r
-            color.g = tintColor.g
-            color.b = tintColor.b
-        }
+        } else {
+            val (r, g, b) = lighting.getColor(renderable.entity!!)
 
-        val (r, g, b) = lighting.getColor(renderable.entity!!)
-        color.r = r
-        color.g = g
-        color.b = b
+            if (tintColor != null) {
+                color.r = tintColor.r * r
+                color.g = tintColor.g * g
+                color.b = tintColor.b * b
+            } else {
+                color.r = r
+                color.g = g
+                color.b = b
+            }
+        }
 
         batch.withColor(color) {
             batch.draw(
