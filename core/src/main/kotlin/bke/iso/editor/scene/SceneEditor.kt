@@ -310,10 +310,12 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 val command = UpdatePropertyCommand(
                     instance = event.component,
                     property = event.property,
-                    newValue = event.newValue
+                    newValue = event.newValue,
+                    onActionCompleted = {
+                        selectedEntity?.let(worldLogic::refreshComponents)
+                    }
                 )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
-                selectedEntity?.let(worldLogic::refreshComponents)
             }
 
             is ComponentEditorView.MapEntryAdded<*, *> -> {

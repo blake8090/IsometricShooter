@@ -137,7 +137,8 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
                 val command = UpdatePropertyCommand(
                     instance = event.component,
                     property = event.property,
-                    newValue = event.newValue
+                    newValue = event.newValue,
+                    onActionCompleted = ::refreshComponents
                 )
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
@@ -172,6 +173,9 @@ class EntityEditor(private val engine: Engine) : BaseEditor() {
         components.forEach(referenceEntity::add)
         // hack to disable lighting - right now multiple renderers share the same lighting!
         referenceEntity.add(FullBright())
+
+        // Collider edits can change the entity's occupied grid cells without moving it.
+        world.entities.updateGrid(referenceEntity)
     }
 
     private fun saveTemplate() {

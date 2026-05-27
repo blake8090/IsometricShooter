@@ -5,6 +5,7 @@ import bke.iso.engine.core.Events
 import bke.iso.engine.math.Box
 import bke.iso.engine.math.Location
 import bke.iso.engine.world.event.EntityComponentAdded
+import bke.iso.engine.world.event.EntityComponentRemoved
 import bke.iso.engine.world.event.EntityCreated
 import bke.iso.engine.world.event.EntityDeleted
 import bke.iso.engine.world.event.EntityGridLocationChanged
@@ -165,6 +166,6 @@ class Entities(
     }
 
     private fun onComponentRemoved(entity: Entity, component: Component) {
-        events.fire(EntityComponentAdded(entity, component))
+        events.fire(EntityComponentRemoved(entity, component))
     }
 }
