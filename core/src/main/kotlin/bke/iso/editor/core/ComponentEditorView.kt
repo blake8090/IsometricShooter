@@ -39,18 +39,23 @@ class ComponentEditorView(
 
     fun draw(component: Component) {
         for (memberProperty in component::class.memberProperties) {
-            when (memberProperty.returnType) {
-                typeOf<Float>() -> drawFloatControls(component, memberProperty)
-                typeOf<Float?>() -> drawFloatControls(component, memberProperty)
-                typeOf<Int>() -> drawIntControls(component, memberProperty)
-                typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
-                typeOf<String>() -> drawStringControls(component, memberProperty)
-                typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
-                typeOf<Color>() -> drawColorControls(component, memberProperty)
-                typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
-                typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
-                typeOf<MutableMap<String, String>>() -> drawMutableMapControls(component, memberProperty)
-                else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
+            ImGui.pushID(memberProperty.name)
+            try {
+                when (memberProperty.returnType) {
+                    typeOf<Float>() -> drawFloatControls(component, memberProperty)
+                    typeOf<Float?>() -> drawFloatControls(component, memberProperty)
+                    typeOf<Int>() -> drawIntControls(component, memberProperty)
+                    typeOf<Boolean>() -> drawBooleanControls(component, memberProperty)
+                    typeOf<String>() -> drawStringControls(component, memberProperty)
+                    typeOf<Vector3>() -> drawVector3Controls(component, memberProperty)
+                    typeOf<Color>() -> drawColorControls(component, memberProperty)
+                    typeOf<PhysicsMode>() -> drawPhysicsModeControls(component, memberProperty)
+                    typeOf<MutableList<Vector3>>() -> {} // TODO: figure out how to handle these
+                    typeOf<MutableMap<String, String>>() -> drawMutableMapControls(component, memberProperty)
+                    else -> log.warn { "Could not generate controls for component ${component::class.simpleName} - property ${memberProperty.name} - KType ${memberProperty.returnType}" }
+                }
+            } finally {
+                ImGui.popID()
             }
         }
     }
@@ -124,7 +129,7 @@ class ComponentEditorView(
 
             for (vectorProperty in Vector3::class.memberProperties) {
                 val float = ImFloat(vectorProperty.getter.call(vector) as Float)
-                if (ImGui.inputFloat("${vectorProperty.name}##vectorX", float)) {
+                if (ImGui.inputFloat(vectorProperty.name, float)) {
                     val command = PropertyUpdated(vector, vectorProperty as KMutableProperty1, float.get())
                     events.fire(command)
                 }
@@ -138,7 +143,7 @@ class ComponentEditorView(
         if (ImGui.treeNodeEx(property.name, ImGuiTreeNodeFlags.DefaultOpen)) {
             val color = get<Color>(property, component)
 
-            val label = "##${component.hashCode()}${property.name}colorEdit"
+            val label = "##${System.identityHashCode(component)}${property.name}colorEdit"
             val selectedColor = selectedColorByLabel
                 .getOrPut(label, { floatArrayOf(color.r, color.g, color.b, color.a) })
             val refColor = floatArrayOf(color.r, color.g, color.b, color.a)

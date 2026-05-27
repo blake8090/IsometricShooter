@@ -115,36 +115,51 @@ class InspectorWindowView(
     }
 
     private fun drawTemplateComponent(entity: Entity, component: Component) {
-        if (ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", false)) {
-            events.fire(SceneEditor.ComponentOverrideEnabled(entity, component))
-        }
-        ImGui.setItemTooltip("Override Component")
-        ImGui.sameLine()
+        ImGui.pushID(componentId("template", component))
+        try {
+            if (ImGui.checkbox("##inspectorComponentOverride", false)) {
+                events.fire(SceneEditor.ComponentOverrideEnabled(entity, component))
+            }
+            ImGui.setItemTooltip("Override Component")
+            ImGui.sameLine()
 
-        if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
-            ImGui.beginDisabled()
-            ImGui.indent()
-            componentEditorView.draw(component)
-            ImGui.unindent()
-            ImGui.endDisabled()
+            if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
+                ImGui.beginDisabled()
+                ImGui.indent()
+                componentEditorView.draw(component)
+                ImGui.unindent()
+                ImGui.endDisabled()
+            }
+        } finally {
+            ImGui.popID()
         }
     }
 
     private fun drawComponentOverride(entity: Entity, template: EntityTemplate, component: Component) {
-        if (ImGui.checkbox("##inspectorComponentOverride-${component::class.simpleName}", true)) {
-            events.fire(SceneEditor.ComponentOverrideDisabled(entity, template, component))
-        }
-        ImGui.setItemTooltip("Override Component")
-        ImGui.sameLine()
+        ImGui.pushID(componentId("override", component))
+        try {
+            if (ImGui.checkbox("##inspectorComponentOverride", true)) {
+                events.fire(SceneEditor.ComponentOverrideDisabled(entity, template, component))
+            }
+            ImGui.setItemTooltip("Override Component")
+            ImGui.sameLine()
 
-        ImGui.pushStyleColor(ImGuiCol.Header, componentOverrideColor)
-        val open = ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)
-        ImGui.popStyleColor()
+            ImGui.pushStyleColor(ImGuiCol.Header, componentOverrideColor)
+            val open = ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)
+            ImGui.popStyleColor()
 
-        if (open) {
-            ImGui.indent()
-            componentEditorView.draw(component)
-            ImGui.unindent()
+            if (open) {
+                ImGui.indent()
+                componentEditorView.draw(component)
+                ImGui.unindent()
+            }
+        } finally {
+            ImGui.popID()
         }
+    }
+
+    private fun componentId(prefix: String, component: Component): String {
+        val componentType = component::class.qualifiedName ?: component::class.simpleName ?: component.toString()
+        return "$prefix-$componentType"
     }
 }

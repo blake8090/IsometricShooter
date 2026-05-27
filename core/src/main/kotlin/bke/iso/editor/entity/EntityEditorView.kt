@@ -126,15 +126,20 @@ class EntityEditorView(
 
         val deletedComponents = mutableListOf<Component>()
         for (component in viewData.components) {
-            if (ImGui.button("X##$component")) {
-                deletedComponents.add(component)
-            }
+            ImGui.pushID(component::class.qualifiedName ?: component::class.simpleName ?: component.toString())
+            try {
+                if (ImGui.button("X")) {
+                    deletedComponents.add(component)
+                }
 
-            ImGui.sameLine()
-            if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
-                ImGui.indent()
-                componentEditorView.draw(component)
-                ImGui.unindent()
+                ImGui.sameLine()
+                if (ImGui.collapsingHeader(component::class.simpleName, ImGuiTreeNodeFlags.DefaultOpen)) {
+                    ImGui.indent()
+                    componentEditorView.draw(component)
+                    ImGui.unindent()
+                }
+            } finally {
+                ImGui.popID()
             }
         }
 
