@@ -22,7 +22,7 @@ import bke.iso.engine.core.Event
 import bke.iso.engine.imGuiWantsToCaptureInput
 import bke.iso.engine.input.ButtonState
 import bke.iso.engine.math.Box
-import bke.iso.engine.pathfinding.DebugCategories
+import bke.iso.engine.pathfinding.NAVMESH_DEBUG_CATEGORY
 import bke.iso.engine.scene.Scene
 import bke.iso.engine.world.entity.Entity
 import bke.iso.engine.world.entity.Component
@@ -98,7 +98,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.bgColor = Color.GRAY
         // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
-        renderer.debug.enableCategories(DebugCategories.NAVMESH)
+        renderer.debug.enableCategories(NAVMESH_DEBUG_CATEGORY)
 
         // show all assets by default
         selectAssetDirectory(File(BASE_PATH))

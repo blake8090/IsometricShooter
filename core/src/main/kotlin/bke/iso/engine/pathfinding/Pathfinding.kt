@@ -29,6 +29,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
+const val NAVMESH_DEBUG_CATEGORY = "navmesh"
+
 private const val WALKABLE_AREA = 1
 private const val WALKABLE_FLAG = 1
 private const val DEFAULT_VERTS_PER_POLY = 6
@@ -97,12 +99,11 @@ data class NavMeshSourceGeometry(
     }
 }
 
-class Pathfinding(
-    private val collisionBoxes: CollisionBoxes,
-    private val config: PathfindingConfig = PathfindingConfig()
-) {
+class Pathfinding(private val collisionBoxes: CollisionBoxes) {
 
     private val log = KotlinLogging.logger {}
+
+    private val config = PathfindingConfig()
 
     var lastResult: NavMeshGenerationResult? = null
         private set
@@ -151,7 +152,7 @@ class Pathfinding(
      */
     fun drawDebug(debugRenderer: DebugRenderer) {
         val result = lastResult ?: return
-        val category = debugRenderer.category(DebugCategories.NAVMESH)
+        val category = debugRenderer.category(NAVMESH_DEBUG_CATEGORY)
         for (line in result.debugLines) {
             category.addLine(line.start, line.end, 1f, Color.CYAN)
         }
@@ -288,7 +289,7 @@ class Pathfinding(
             geomProvider.getMeshBoundsMax()
         )
         val recastResult = RecastBuilder().build(geomProvider, builderConfig)
-        val polyMesh = recastResult.getMesh()
+        val polyMesh = recastResult.mesh
         if (polyMesh.npolys == 0) {
             log.warn { "Recast generated zero navmesh polygons from ${formatStats(geometry.stats)}" }
             return NavMeshGenerationResult(
@@ -301,7 +302,7 @@ class Pathfinding(
             )
         }
 
-        val meshData = createMeshData(polyMesh, recastResult.getMeshDetail())
+        val meshData = createMeshData(polyMesh, recastResult.meshDetail)
         if (meshData == null) {
             log.warn { "Detour did not create mesh data from ${polyMesh.npolys} Recast polygons" }
             return NavMeshGenerationResult(
@@ -424,7 +425,7 @@ class Pathfinding(
     private fun createDebugLines(meshData: MeshData): List<NavMeshDebugLine> {
         val lines = mutableListOf<NavMeshDebugLine>()
         for (poly in meshData.polys) {
-            if (poly.getType() != Poly.DT_POLYTYPE_GROUND) {
+            if (poly.type != Poly.DT_POLYTYPE_GROUND) {
                 continue
             }
 
