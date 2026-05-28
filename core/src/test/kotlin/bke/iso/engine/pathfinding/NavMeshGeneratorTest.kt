@@ -4,8 +4,8 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.core.Events
 import bke.iso.engine.serialization.Serializer
-import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.World
+import bke.iso.engine.world.entity.Component
 import bke.iso.engine.world.entity.Tile
 import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
@@ -14,7 +14,7 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 
-class PathfindingTest : StringSpec({
+class NavMeshGeneratorTest : StringSpec({
 
     fun createWorld(collisionBoxes: CollisionBoxes): World {
         val events = Events { event -> collisionBoxes.handleEvent(event) }
@@ -22,10 +22,10 @@ class PathfindingTest : StringSpec({
     }
 
     "coordinate conversion should round trip between world and recast axes" {
-        val pathfinding = Pathfinding(CollisionBoxes())
+        val generator = NavMeshGenerator(CollisionBoxes())
         val worldPos = Vector3(3f, 4f, 2f)
 
-        pathfinding.toWorld(pathfinding.toRecast(worldPos)).shouldBe(worldPos)
+        generator.toWorld(generator.toRecast(worldPos)).shouldBe(worldPos)
     }
 
     "pathing component should serialize without conflicting with the component type discriminator" {
@@ -42,7 +42,7 @@ class PathfindingTest : StringSpec({
     "pathing inference should use tiles and zero-height colliders as walkable and other colliders as blockers" {
         val collisionBoxes = CollisionBoxes()
         val world = createWorld(collisionBoxes)
-        val pathfinding = Pathfinding(collisionBoxes)
+        val generator = NavMeshGenerator(collisionBoxes)
 
         val tile = world.entities.create(
             id = "tile",
@@ -68,15 +68,15 @@ class PathfindingTest : StringSpec({
             Collider(size = Vector3(1f, 1f, 1f))
         )
 
-        pathfinding.resolvePathingType(tile, collisionBoxes[tile]!!).shouldBe(PathingType.WALKABLE)
-        pathfinding.resolvePathingType(blocker, collisionBoxes[blocker]!!).shouldBe(PathingType.BLOCKER)
-        pathfinding.resolvePathingType(ignored, collisionBoxes[ignored]!!).shouldBe(PathingType.IGNORE)
+        generator.resolvePathingType(tile, collisionBoxes[tile]!!).shouldBe(PathingType.WALKABLE)
+        generator.resolvePathingType(blocker, collisionBoxes[blocker]!!).shouldBe(PathingType.BLOCKER)
+        generator.resolvePathingType(ignored, collisionBoxes[ignored]!!).shouldBe(PathingType.IGNORE)
     }
 
     "geometry extraction should create walkable top-face triangles and blocker volumes" {
         val collisionBoxes = CollisionBoxes()
         val world = createWorld(collisionBoxes)
-        val pathfinding = Pathfinding(collisionBoxes)
+        val generator = NavMeshGenerator(collisionBoxes)
 
         world.entities.create(
             id = "floor",
@@ -94,7 +94,7 @@ class PathfindingTest : StringSpec({
             Collider(size = Vector3(1f, 1f, 1f))
         )
 
-        val geometry = pathfinding.extractGeometry(world)
+        val geometry = generator.extractGeometry(world, PathfindingConfig())
 
         // One rectangular top face is stored as four 3D vertices: 4 vertices * 3 floats.
         geometry.vertices.size.shouldBe(12)
@@ -111,7 +111,7 @@ class PathfindingTest : StringSpec({
     "generate navmesh should return polygons and debug lines for a small world" {
         val collisionBoxes = CollisionBoxes()
         val world = createWorld(collisionBoxes)
-        val pathfinding = Pathfinding(collisionBoxes)
+        val generator = NavMeshGenerator(collisionBoxes)
 
         world.entities.create(
             id = "floor",
@@ -129,7 +129,7 @@ class PathfindingTest : StringSpec({
             Collider(size = Vector3(1f, 1f, 1f))
         )
 
-        val result = pathfinding.generateNavMesh(world)
+        val result = generator.generateNavMesh(world, PathfindingConfig())
 
         result.success.shouldBeTrue()
         result.stats.polygonCount.shouldBeGreaterThan(0)
