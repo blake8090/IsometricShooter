@@ -26,7 +26,7 @@ import kotlin.math.abs
 @Serializable
 @SerialName("flyingTurret")
 data class FlyingTurret(
-    var targetHeight: Float? = null,
+    var targetHeight: Float = 0f,
     var state: FlyingTurretState = FlyingTurretState.IDLE,
     var movementTimer: Float = 0f
 ) : Component
