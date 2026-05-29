@@ -72,7 +72,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
     private var selectedEntity: Entity? = null
     private var selectedBuilding: String? = null
-    private var navMeshMessage: String? = null
 
     private val buildingFont = engine.assets.fonts[FontOptions("roboto.ttf", 12f, Color.WHITE)]
 
@@ -98,10 +97,12 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         renderer.bgColor = Color.GRAY
         // TODO: set a var instead of passing this - can make everything private
         renderer.occlusion.addStrategy(UpperLayerOcclusionStrategy(this))
-        renderer.debug.enableCategories(NAVMESH_DEBUG_CATEGORY)
 
         // show all assets by default
         selectAssetDirectory(File(BASE_PATH))
+
+        renderer.debug.enableCategories(NAVMESH_DEBUG_CATEGORY)
+        renderer.debug.enable()
     }
 
     override fun stop() {
@@ -248,10 +249,6 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     }
 
     private fun getMessageBarText(): String {
-        navMeshMessage?.let {
-            return it
-        }
-
         return if (selectedBuilding.isNullOrBlank()) {
             "No building selected"
         } else {
@@ -402,11 +399,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     }
 
     private fun generateNavMesh() {
-        val result = engine.pathfinding.generateNavMesh(world)
-        navMeshMessage = result.message
-        if (result.success) {
-            renderer.debug.enable()
-        }
+        engine.pathfinding.generateNavMesh(world)
     }
 
     private fun selectAssetDirectory(dir: File) {
