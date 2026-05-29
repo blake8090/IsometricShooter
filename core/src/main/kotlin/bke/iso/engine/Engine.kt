@@ -63,7 +63,7 @@ class Engine(val game: Game) {
 
     val collisions: Collisions = Collisions(renderer, world, collisionBoxes)
     val physics: Physics = Physics(world, collisions, collisionBoxes)
-    val scenes = Scenes(assets, serializer, world, renderer, lighting)
+    val scenes = Scenes(assets, serializer, world, renderer, lighting, pathfinding)
 
     val loadingScreens = LoadingScreens(events)
 

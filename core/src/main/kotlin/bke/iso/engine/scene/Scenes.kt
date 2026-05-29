@@ -3,6 +3,7 @@ package bke.iso.engine.scene
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.asset.entity.EntityTemplate
 import bke.iso.engine.lighting.Lighting
+import bke.iso.engine.pathfinding.Pathfinding
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.serialization.Serializer
 import bke.iso.engine.world.entity.Component
@@ -15,7 +16,8 @@ class Scenes(
     private val serializer: Serializer,
     private val world: World,
     private val renderer: Renderer,
-    private val lighting: Lighting
+    private val lighting: Lighting,
+    private val pathfinding: Pathfinding
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -26,6 +28,7 @@ class Scenes(
         val time = measureTimeMillis {
             world.clear()
             lighting.clear()
+            pathfinding.clear()
 
             for (record in scene.entities) {
                 load(record)

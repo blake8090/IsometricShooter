@@ -387,6 +387,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         selectedEntity = null
         selectedBuilding = null
 
+        engine.pathfinding.clear()
         worldLogic.loadScene(scene)
         log.info { "Loaded scene: '${file.canonicalPath}'" }
     }
