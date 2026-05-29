@@ -78,6 +78,9 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     private var selectedAssetDirectory: File? = null
     private val entityTemplatesInDirectory: Array<EntityTemplate> = Array()
 
+    private var selectedNavMeshProfile: String? = null
+    private val availableNavMeshProfiles: Array<String> = Array()
+
     override fun start() {
         engine.ui.pushView(view)
         cameraLogic.start()
@@ -100,6 +103,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
         // show all assets by default
         selectAssetDirectory(File(BASE_PATH))
+
+        engine.pathfinding.getProfileNames().forEach(availableNavMeshProfiles::add)
 
         renderer.debug.enableCategories(NAVMESH_DEBUG_CATEGORY)
         renderer.debug.enable()
@@ -176,6 +181,9 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 selectedAssetDirectory = selectedAssetDirectory,
                 entityTemplatesInDirectory = entityTemplatesInDirectory,
 
+                selectedNavMeshProfile = selectedNavMeshProfile,
+                availableNavMeshProfiles = availableNavMeshProfiles,
+
                 ambientLight = engine.lighting.ambientLight
             )
     }
@@ -215,7 +223,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     }
 
     private fun drawNavMesh() {
-        engine.pathfinding.drawDebug(renderer.debug)
+        val profile = selectedNavMeshProfile ?: return
+        engine.pathfinding.drawNavMesh(profile, renderer.debug)
     }
 
     private fun drawComponentOverrideHints() {
@@ -343,6 +352,10 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
                 val command = SetAmbientLightCommand(engine.lighting, event.color)
                 engine.events.fire(EditorModule.ExecuteCommand(command))
             }
+
+            is NavMeshProfileSelected -> {
+                selectedNavMeshProfile = event.profile
+            }
         }
     }
 
@@ -399,7 +412,7 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
     }
 
     private fun generateNavMesh() {
-        engine.pathfinding.generateNavMesh(world)
+        engine.pathfinding.generateNavMeshes(world)
     }
 
     private fun selectAssetDirectory(dir: File) {
@@ -453,6 +466,8 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
 
     data class AmbientLightUpdated(val color: Color) : Event
 
+    data class NavMeshProfileSelected(val profile: String?) : Event
+
     data class ViewData(
         val selectedEntity: Entity? = null,
         val selectedEntityData: EntityData? = null,
@@ -467,6 +482,9 @@ class SceneEditor(private val engine: Engine) : BaseEditor() {
         val messageBarText: String,
         val selectedAssetDirectory: File? = null,
         val entityTemplatesInDirectory: Array<EntityTemplate>,
+
+        val selectedNavMeshProfile: String?,
+        val availableNavMeshProfiles: Array<String>,
 
         val ambientLight: Color
     )

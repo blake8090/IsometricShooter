@@ -133,6 +133,26 @@ class SceneEditorView(
                 ImGui.endMenu()
             }
 
+            if (ImGui.beginMenu("Navigation")) {
+                if (ImGui.menuItem("Generate NavMesh")) {
+                    events.fire(SceneEditor.GenerateNavMeshClicked())
+                }
+
+                if (ImGui.beginMenu("Display NavMesh")) {
+                    if (ImGui.menuItem("Hidden", viewData.selectedNavMeshProfile == null)) {
+                        events.fire(SceneEditor.NavMeshProfileSelected(null))
+                    }
+
+                    for (name in viewData.availableNavMeshProfiles) {
+                        if (ImGui.menuItem(name, viewData.selectedNavMeshProfile == name)) {
+                            events.fire(SceneEditor.NavMeshProfileSelected(name))
+                        }
+                    }
+                    ImGui.endMenu()
+                }
+                ImGui.endMenu()
+            }
+
             ImGui.endMainMenuBar()
         }
     }

@@ -53,7 +53,7 @@ class Engine(val game: Game) {
     val assets: Assets = Assets(files, systemInfo)
 
     val collisionBoxes = CollisionBoxes()
-    val pathfinding = Pathfinding(collisionBoxes)
+    val pathfinding = Pathfinding(assets, collisionBoxes)
 
     val world: World = World(events, collisionBoxes)
 

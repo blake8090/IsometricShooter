@@ -37,15 +37,6 @@ private const val DEFAULT_EDGE_MAX_ERROR = 1.3f
 private const val DEFAULT_DETAIL_SAMPLE_DIST = 6f
 private const val DEFAULT_DETAIL_SAMPLE_MAX_ERROR = 1f
 
-data class PathfindingConfig(
-    val cellSize: Float = 0.1f,
-    val cellHeight: Float = 0.05f,
-    val agentHeight: Float = 1.5f,
-    val agentRadius: Float = 0.2f,
-    val agentMaxClimb: Float = 0.5f,
-    val agentMaxSlope: Float = 45f
-)
-
 data class NavMeshDebugLine(
     val start: Vector3,
     val end: Vector3
@@ -67,8 +58,7 @@ data class NavMeshGenerationResult(
     val navMesh: NavMesh?,
     val meshData: MeshData?,
     val stats: NavMeshSourceStats,
-    val debugLines: List<NavMeshDebugLine>,
-    val message: String
+    val debugLines: List<NavMeshDebugLine>
 )
 
 data class NavMeshSourceGeometry(
@@ -81,9 +71,9 @@ data class NavMeshSourceGeometry(
         if (this === other) return true
         if (other !is NavMeshSourceGeometry) return false
         return vertices.contentEquals(other.vertices) &&
-            triangles.contentEquals(other.triangles) &&
-            convexVolumes == other.convexVolumes &&
-            stats == other.stats
+                triangles.contentEquals(other.triangles) &&
+                convexVolumes == other.convexVolumes &&
+                stats == other.stats
     }
 
     override fun hashCode(): Int {
@@ -102,35 +92,38 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
     /**
      * Builds a complete Recast/Detour navmesh from the current world.
      */
-    fun generateNavMesh(world: World, config: PathfindingConfig): NavMeshGenerationResult {
-        log.info { "Generating navmesh" }
-        log.debug { "Navmesh config: $config" }
+    fun generateNavMesh(
+        world: World,
+        config: PathfindingConfig,
+        profile: PathfindingProfile
+    ): NavMeshGenerationResult {
+        log.info { "Navmesh[${profile.name}] generating" }
+        log.debug { "Navmesh[${profile.name}] config: $config" }
 
         lateinit var result: NavMeshGenerationResult
         val elapsedMillis = measureTimeMillis {
             result =
                 try {
-                    generate(world, config)
+                    generate(world, config, profile)
                 } catch (e: RuntimeException) {
-                    log.error(e) { "Navmesh generation threw an exception" }
+                    log.error(e) { "Navmesh[${profile.name}] generation threw an exception" }
                     NavMeshGenerationResult(
                         success = false,
                         navMesh = null,
                         meshData = null,
                         stats = NavMeshSourceStats(),
-                        debugLines = emptyList(),
-                        message = "Navmesh generation failed: ${e.message ?: e::class.simpleName}"
+                        debugLines = emptyList()
                     )
                 }
         }
 
         if (result.success) {
             log.info {
-                "Generated navmesh in ${elapsedMillis}ms: ${formatStats(result.stats)}"
+                "Navmesh[${profile.name}] generated in ${elapsedMillis}ms"
             }
         } else {
             log.warn {
-                "Navmesh generation failed in ${elapsedMillis}ms: ${result.message}; ${formatStats(result.stats)}"
+                "Navmesh[${profile.name}] generation failed in ${elapsedMillis}ms"
             }
         }
 
@@ -186,7 +179,6 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
                 convexVolumeCount = volumes.size
             )
         )
-        log.debug { "Extracted navmesh source geometry: ${formatStats(geometry.stats)}" }
         return geometry
     }
 
@@ -220,27 +212,31 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
     /**
      * Runs the Recast build, converts the result into a Detour NavMesh, and extracts debug edges.
      */
-    private fun generate(world: World, config: PathfindingConfig): NavMeshGenerationResult {
+    private fun generate(
+        world: World,
+        config: PathfindingConfig,
+        profile: PathfindingProfile
+    ): NavMeshGenerationResult {
         val geometry = extractGeometry(world, config)
         if (geometry.triangles.isEmpty()) {
-            log.warn { "No walkable triangles were extracted for navmesh generation" }
+            log.warn { "Navmesh[${profile.name}] generation failed: No walkable geometry found" }
             return NavMeshGenerationResult(
                 success = false,
                 navMesh = null,
                 meshData = null,
                 stats = geometry.stats,
-                debugLines = emptyList(),
-                message = "Navmesh generation failed: no walkable geometry found"
+                debugLines = emptyList()
             )
         }
+        log.info { "Navmesh[${profile.name}] source geometry extracted: ${formatStats(geometry.stats)}" }
 
         val geomProvider = WorldInputGeomProvider(
             geometry.vertices,
             geometry.triangles,
             geometry.convexVolumes
         )
-        log.debug {
-            "Navmesh source bounds: min=${
+        log.info {
+            "Navmesh[${profile.name}] source bounds: min=${
                 geomProvider.getMeshBoundsMin().contentToString()
             }, max=${geomProvider.getMeshBoundsMax().contentToString()}"
         }
@@ -248,10 +244,10 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
             PartitionType.WATERSHED,
             config.cellSize,
             config.cellHeight,
-            config.agentHeight,
-            config.agentRadius,
-            config.agentMaxClimb,
-            config.agentMaxSlope,
+            profile.height,
+            profile.radius,
+            profile.maxClimb,
+            profile.maxSlope,
             DEFAULT_REGION_MIN_SIZE,
             DEFAULT_REGION_MERGE_SIZE,
             DEFAULT_EDGE_MAX_LEN,
@@ -276,12 +272,11 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
                 navMesh = null,
                 meshData = null,
                 stats = geometry.stats,
-                debugLines = emptyList(),
-                message = "Navmesh generation failed: no polygons generated"
+                debugLines = emptyList()
             )
         }
 
-        val meshData = createMeshData(polyMesh, recastResult.meshDetail, config)
+        val meshData = createMeshData(polyMesh, recastResult.meshDetail, config, profile)
         if (meshData == null) {
             log.warn { "Detour did not create mesh data from ${polyMesh.npolys} Recast polygons" }
             return NavMeshGenerationResult(
@@ -289,8 +284,7 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
                 navMesh = null,
                 meshData = null,
                 stats = geometry.stats.copy(polygonCount = polyMesh.npolys),
-                debugLines = emptyList(),
-                message = "Navmesh generation failed: Detour mesh data was not created"
+                debugLines = emptyList()
             )
         }
 
@@ -305,15 +299,14 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
             navMesh = navMesh,
             meshData = meshData,
             stats = stats,
-            debugLines = debugLines,
-            message = "Generated navmesh: ${stats.triangleCount} source tris, ${stats.polygonCount} polys, ${stats.debugLineCount} debug lines"
+            debugLines = debugLines
         )
     }
 
     private fun formatStats(stats: NavMeshSourceStats): String =
         "entities=${stats.entityCount}, walkable=${stats.walkableCount}, blockers=${stats.blockerCount}, " +
-            "ignored=${stats.ignoredCount}, sourceTris=${stats.triangleCount}, volumes=${stats.convexVolumeCount}, " +
-            "polys=${stats.polygonCount}, debugLines=${stats.debugLineCount}"
+                "ignored=${stats.ignoredCount}, sourceTris=${stats.triangleCount}, volumes=${stats.convexVolumeCount}, " +
+                "polys=${stats.polygonCount}, debugLines=${stats.debugLineCount}"
 
     /**
      * Adds two triangles for the top face of a box, which gives Recast a walkable surface.
@@ -372,7 +365,8 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
     private fun createMeshData(
         polyMesh: PolyMesh,
         detailMesh: PolyMeshDetail,
-        config: PathfindingConfig
+        config: PathfindingConfig,
+        profile: PathfindingProfile
     ): MeshData? {
         for (i in 0 until polyMesh.npolys) {
             polyMesh.flags[i] = WALKABLE_FLAG
@@ -391,9 +385,9 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
         params.detailVertsCount = detailMesh.nverts
         params.detailTris = detailMesh.tris
         params.detailTriCount = detailMesh.ntris
-        params.walkableHeight = config.agentHeight
-        params.walkableRadius = config.agentRadius
-        params.walkableClimb = config.agentMaxClimb
+        params.walkableHeight = profile.height
+        params.walkableRadius = profile.radius
+        params.walkableClimb = profile.maxClimb
         params.bmin = polyMesh.bmin
         params.bmax = polyMesh.bmax
         params.cs = config.cellSize
