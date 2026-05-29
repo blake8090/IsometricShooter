@@ -3,6 +3,8 @@ package bke.iso.game
 import bke.iso.editor.EditorModule
 import bke.iso.engine.core.Event
 import bke.iso.engine.Engine
+import bke.iso.engine.pathfinding.NAVMESH_DEBUG_CATEGORY
+import bke.iso.engine.pathfinding.PathResult
 import bke.iso.engine.render.occlusion.BuildingLayerOcclusionStrategy
 import bke.iso.engine.state.State
 import bke.iso.engine.world.entity.Entity
@@ -34,6 +36,8 @@ import bke.iso.game.weapon.WeaponsModule
 import bke.iso.game.weapon.system.ExplosionSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class GameState(override val engine: Engine) : State() {
@@ -64,6 +68,8 @@ class GameState(override val engine: Engine) : State() {
     private val playerDataModule = PlayerDataModule(engine.world)
     private val elevatorModule = ElevatorModule(engine.collisions, engine.collisionBoxes)
     private val editorModule = EditorModule(engine)
+
+    private val lastWaypoints = mutableListOf<Vector3>()
 
     private var editorEnabled = false
 
@@ -165,11 +171,13 @@ class GameState(override val engine: Engine) : State() {
         engine.renderer.pointer.set(crosshair)
 
         engine.renderer.debug.enableCategories(
+            "pathfinding",
+            NAVMESH_DEBUG_CATEGORY
 //            "vision",
 //            "turret",
-            "collisions", // TODO: use constants instead
-            "render",
-            "weapon"
+//            "collisions", // TODO: use constants instead
+//            "render",
+//            "weapon"
         )
     }
 
@@ -187,6 +195,17 @@ class GameState(override val engine: Engine) : State() {
                 engine.events.fire(EditorModule.SceneEditorSelected())
                 editorEnabled = true
                 engine.events.fire(Engine.GamePaused())
+            }
+        }
+
+        engine.pathfinding.drawNavMesh("default", engine.renderer.debug)
+        if (lastWaypoints.isNotEmpty()) {
+            for (i in 0 until lastWaypoints.size - 1) {
+                val start = lastWaypoints[i]
+                val end = lastWaypoints[i + 1]
+                engine.renderer.debug.category("pathfinding").addPoint(start, 3f, Color.PURPLE)
+                engine.renderer.debug.category("pathfinding").addPoint(end, 3f, Color.PURPLE)
+                engine.renderer.debug.category("pathfinding").addLine(start, end, 1f, Color.PURPLE)
             }
         }
     }
@@ -230,8 +249,18 @@ class GameState(override val engine: Engine) : State() {
     }
 
     private fun initMission1StartScene() {
+        engine.pathfinding.generateNavMeshes(engine.world)
+
         engine.world.entities.each<Player> { entity, _ ->
             weaponsModule.equip(entity, "pistol")
+
+            val start = entity.pos
+            val end = Vector3(-5f, 10f, 0f)
+            val result = engine.pathfinding.findPath("default", start, end)
+            if (result is PathResult.Success) {
+                lastWaypoints.clear()
+                lastWaypoints.addAll(result.waypoints)
+            }
         }
     }
 

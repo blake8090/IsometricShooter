@@ -15,6 +15,18 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 
 class NavMeshGeneratorTest : StringSpec({
+    fun createConfig(): PathfindingConfig =
+        PathfindingConfig(
+            profiles = listOf(
+                PathfindingProfile(
+                    name = "default",
+                    height = 1.5f,
+                    radius = 0.2f,
+                    maxClimb = 0.5f,
+                    maxSlope = 45f
+                )
+            )
+        )
 
     fun createWorld(collisionBoxes: CollisionBoxes): World {
         val events = Events { event -> collisionBoxes.handleEvent(event) }
@@ -94,7 +106,7 @@ class NavMeshGeneratorTest : StringSpec({
             Collider(size = Vector3(1f, 1f, 1f))
         )
 
-        val geometry = generator.extractGeometry(world, PathfindingConfig())
+        val geometry = generator.extractGeometry(world, createConfig())
 
         // One rectangular top face is stored as four 3D vertices: 4 vertices * 3 floats.
         geometry.vertices.size.shouldBe(12)
@@ -112,6 +124,7 @@ class NavMeshGeneratorTest : StringSpec({
         val collisionBoxes = CollisionBoxes()
         val world = createWorld(collisionBoxes)
         val generator = NavMeshGenerator(collisionBoxes)
+        val config = createConfig()
 
         world.entities.create(
             id = "floor",
@@ -129,7 +142,7 @@ class NavMeshGeneratorTest : StringSpec({
             Collider(size = Vector3(1f, 1f, 1f))
         )
 
-        val result = generator.generateNavMesh(world, PathfindingConfig())
+        val result = generator.generateNavMesh(world, config, config.profiles.single())
 
         result.success.shouldBeTrue()
         result.stats.polygonCount.shouldBeGreaterThan(0)

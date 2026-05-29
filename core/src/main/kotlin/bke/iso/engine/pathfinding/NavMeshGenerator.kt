@@ -71,9 +71,9 @@ data class NavMeshSourceGeometry(
         if (this === other) return true
         if (other !is NavMeshSourceGeometry) return false
         return vertices.contentEquals(other.vertices) &&
-                triangles.contentEquals(other.triangles) &&
-                convexVolumes == other.convexVolumes &&
-                stats == other.stats
+            triangles.contentEquals(other.triangles) &&
+            convexVolumes == other.convexVolumes &&
+            stats == other.stats
     }
 
     override fun hashCode(): Int {
@@ -305,8 +305,8 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
 
     private fun formatStats(stats: NavMeshSourceStats): String =
         "entities=${stats.entityCount}, walkable=${stats.walkableCount}, blockers=${stats.blockerCount}, " +
-                "ignored=${stats.ignoredCount}, sourceTris=${stats.triangleCount}, volumes=${stats.convexVolumeCount}, " +
-                "polys=${stats.polygonCount}, debugLines=${stats.debugLineCount}"
+            "ignored=${stats.ignoredCount}, sourceTris=${stats.triangleCount}, volumes=${stats.convexVolumeCount}, " +
+            "polys=${stats.polygonCount}, debugLines=${stats.debugLineCount}"
 
     /**
      * Adds two triangles for the top face of a box, which gives Recast a walkable surface.
