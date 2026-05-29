@@ -11,21 +11,23 @@ import com.badlogic.gdx.math.Vector3
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.floats.shouldBeLessThan
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 
 class NavMeshGeneratorTest : StringSpec({
-    fun createConfig(): PathfindingConfig =
+    fun createProfile(name: String = "default", radius: Float = 0.2f): PathfindingProfile =
+        PathfindingProfile(
+            name = name,
+            height = 1.5f,
+            radius = radius,
+            maxClimb = 0.5f,
+            maxSlope = 45f
+        )
+
+    fun createConfig(profile: PathfindingProfile = createProfile()): PathfindingConfig =
         PathfindingConfig(
-            profiles = listOf(
-                PathfindingProfile(
-                    name = "default",
-                    height = 1.5f,
-                    radius = 0.2f,
-                    maxClimb = 0.5f,
-                    maxSlope = 45f
-                )
-            )
+            profiles = listOf(profile)
         )
 
     fun createWorld(collisionBoxes: CollisionBoxes): World {
@@ -106,7 +108,9 @@ class NavMeshGeneratorTest : StringSpec({
             Collider(size = Vector3(1f, 1f, 1f))
         )
 
-        val geometry = generator.extractGeometry(world, createConfig())
+        val config = createConfig()
+        val profile = config.profiles.single()
+        val geometry = generator.extractGeometry(world, config, profile)
 
         // One rectangular top face is stored as four 3D vertices: 4 vertices * 3 floats.
         geometry.vertices.size.shouldBe(12)
@@ -114,10 +118,57 @@ class NavMeshGeneratorTest : StringSpec({
         geometry.triangles.size.shouldBe(6)
         // The blocker is not triangulated as a surface; it becomes one convex carving volume.
         geometry.convexVolumes.size.shouldBe(1)
+        val padding = profile.radius + config.cellSize
+        geometry.convexVolumes.single().verts.toList().shouldBe(
+            listOf(
+                0.5f - padding, 0f, 0.5f - padding,
+                1.5f + padding, 0f, 0.5f - padding,
+                1.5f + padding, 0f, 1.5f + padding,
+                0.5f - padding, 0f, 1.5f + padding
+            )
+        )
         geometry.stats.walkableCount.shouldBe(1)
         geometry.stats.blockerCount.shouldBe(1)
         geometry.stats.triangleCount.shouldBe(2)
         geometry.stats.convexVolumeCount.shouldBe(1)
+    }
+
+    "blocker volume padding should grow with profile radius" {
+        val collisionBoxes = CollisionBoxes()
+        val world = createWorld(collisionBoxes)
+        val generator = NavMeshGenerator(collisionBoxes)
+        val smallProfile = createProfile(name = "small", radius = 0.2f)
+        val largeProfile = createProfile(name = "large", radius = 1f)
+
+        world.entities.create(
+            id = "floor",
+            x = 0f,
+            y = 0f,
+            z = 0f,
+            Tile(),
+            Collider(size = Vector3(10f, 10f, 0f))
+        )
+        world.entities.create(
+            id = "blocker",
+            x = 4.5f,
+            y = 4.5f,
+            z = 0f,
+            Collider(size = Vector3(1f, 1f, 1f))
+        )
+
+        val smallConfig = createConfig(smallProfile)
+        val largeConfig = createConfig(largeProfile)
+        val smallGeometry = generator.extractGeometry(world, smallConfig, smallProfile)
+        val largeGeometry = generator.extractGeometry(world, largeConfig, largeProfile)
+        val smallPadding = smallProfile.radius + smallConfig.cellSize
+        val largePadding = largeProfile.radius + largeConfig.cellSize
+
+        smallGeometry.convexVolumes.single().verts[0].shouldBe(4.5f - smallPadding)
+        largeGeometry.convexVolumes.single().verts[0].shouldBe(4.5f - largePadding)
+        largeGeometry.convexVolumes.single().verts[0].shouldBeLessThan(smallGeometry.convexVolumes.single().verts[0])
+
+        generator.generateNavMesh(world, smallConfig, smallProfile).success.shouldBeTrue()
+        generator.generateNavMesh(world, largeConfig, largeProfile).success.shouldBeTrue()
     }
 
     "generate navmesh should return polygons and debug lines for a small world" {

@@ -133,7 +133,11 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
     /**
      * Converts world entities into the raw triangle mesh and blocker volumes that Recast consumes.
      */
-    internal fun extractGeometry(world: World, config: PathfindingConfig): NavMeshSourceGeometry {
+    internal fun extractGeometry(
+        world: World,
+        config: PathfindingConfig,
+        profile: PathfindingProfile
+    ): NavMeshSourceGeometry {
         val vertices = mutableListOf<Float>()
         val triangles = mutableListOf<Int>()
         val volumes = mutableListOf<ConvexVolume>()
@@ -159,7 +163,7 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
 
                 PathingType.BLOCKER -> {
                     blockerCount++
-                    volumes.add(createBlockerVolume(box, config))
+                    volumes.add(createBlockerVolume(box, config, profile))
                 }
 
                 PathingType.IGNORE -> ignoredCount++
@@ -217,7 +221,7 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
         config: PathfindingConfig,
         profile: PathfindingProfile
     ): NavMeshGenerationResult {
-        val geometry = extractGeometry(world, config)
+        val geometry = extractGeometry(world, config, profile)
         if (geometry.triangles.isEmpty()) {
             log.warn { "Navmesh[${profile.name}] generation failed: No walkable geometry found" }
             return NavMeshGenerationResult(
@@ -344,13 +348,26 @@ class NavMeshGenerator(private val collisionBoxes: CollisionBoxes) {
     /**
      * Creates a vertical footprint that tells Recast to remove walkable spans inside a blocker.
      */
-    private fun createBlockerVolume(box: Box, config: PathfindingConfig): ConvexVolume {
+    private fun createBlockerVolume(
+        box: Box,
+        config: PathfindingConfig,
+        profile: PathfindingProfile
+    ): ConvexVolume {
+        // recast4j applies convex volumes after radius erosion, so blocker cuts need agent padding here.
+        // TODO: cellSize is added here to guard against pathways being too small, right now it's a bit aggressive.
+        //  We need to tweak this to make sure we're not cutting away too much space.
+        val blockerPadding = profile.radius + config.cellSize
+        val minX = box.min.x - blockerPadding
+        val maxX = box.max.x + blockerPadding
+        val minY = box.min.y - blockerPadding
+        val maxY = box.max.y + blockerPadding
+
         val volume = ConvexVolume()
         volume.verts = floatArrayOf(
-            box.min.x, box.min.z, box.min.y,
-            box.max.x, box.min.z, box.min.y,
-            box.max.x, box.min.z, box.max.y,
-            box.min.x, box.min.z, box.max.y
+            minX, box.min.z, minY,
+            maxX, box.min.z, minY,
+            maxX, box.min.z, maxY,
+            minX, box.min.z, maxY
         )
         volume.hmin = box.min.z - config.cellHeight
         volume.hmax = box.max.z + config.cellHeight
