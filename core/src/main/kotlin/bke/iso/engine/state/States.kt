@@ -19,16 +19,20 @@ class States(private val engine: Engine) : EngineModule() {
 
     private var currentState: State = EmptyState(engine)
 
-    override fun update(deltaTime: Float) {
-        currentState.update(deltaTime)
-    }
-
     override fun handleEvent(event: Event) {
         currentState.handleEvent(event)
     }
 
     override fun onFrameEnd(deltaTime: Float) {
         currentState.onFrameEnd()
+    }
+
+    fun updatePrePhysics(deltaTime: Float) {
+        currentState.updatePrePhysics(deltaTime)
+    }
+
+    fun updatePostPhysics(deltaTime: Float) {
+        currentState.updatePostPhysics(deltaTime)
     }
 
     fun <T : State> setState(type: KClass<T>) {

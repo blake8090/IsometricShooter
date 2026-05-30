@@ -157,8 +157,8 @@ class Entities(
     }
 
     private fun onMove(entity: Entity) {
-        updateGrid(entity)
         events.fire(EntityMoved(entity))
+        updateGrid(entity)
     }
 
     private fun onComponentAdded(entity: Entity, component: Component) {

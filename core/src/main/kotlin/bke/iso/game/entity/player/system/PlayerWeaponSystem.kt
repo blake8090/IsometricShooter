@@ -28,7 +28,7 @@ class PlayerWeaponSystem(
 
     private var previousTriggerState = false
 
-    override fun update(deltaTime: Float) {
+    override fun updatePrePhysics(deltaTime: Float) {
         world.entities.each { entity: Entity, _: Player ->
             update(entity)
         }

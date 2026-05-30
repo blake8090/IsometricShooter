@@ -29,12 +29,12 @@ class Collisions(
 
     override val moduleName = "collisions"
     override val updateWhileLoading = false
-    override val profilingEnabled = true
+    override val profilingEnabled = false
 
     private val previousCollisions = mutableMapOf<Entity, MutableSet<Collision>>()
     private val currentCollisions = mutableMapOf<Entity, MutableSet<Collision>>()
 
-    override fun update(deltaTime: Float) {
+    override fun onFrameEnd(deltaTime: Float) {
         previousCollisions.clear()
         previousCollisions.putAll(currentCollisions)
         currentCollisions.clear()
@@ -185,8 +185,8 @@ class Collisions(
 
         // safety guard: max iterations = sum of distances + 1
         val maxSteps = (abs(endVoxel.x - voxel.x) +
-                abs(endVoxel.y - voxel.y) +
-                abs(endVoxel.z - voxel.z) + 1).toInt()
+            abs(endVoxel.y - voxel.y) +
+            abs(endVoxel.z - voxel.z) + 1).toInt()
 
         var steps = 0
         while (voxel != endVoxel && steps < maxSteps) {

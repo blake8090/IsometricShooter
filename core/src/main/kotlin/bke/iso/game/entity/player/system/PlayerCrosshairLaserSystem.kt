@@ -28,7 +28,7 @@ class PlayerCrosshairLaserSystem(
     private val weaponsModule: WeaponsModule
 ) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each<Player> { entity, _ ->
             update(entity)
         }

@@ -38,13 +38,22 @@ class PlayerSystem(
 
     private val log = KotlinLogging.logger {}
 
-    override fun update(deltaTime: Float) {
+    override fun updatePrePhysics(deltaTime: Float) {
         world.entities.each<Player> { entity, player ->
             updatePlayer(entity, player)
 
             input.onAction("toggleDebug") {
                 renderer.debug.toggle()
             }
+        }
+    }
+
+    override fun updatePostPhysics(deltaTime: Float) {
+        world.entities.each<Player> { entity, player ->
+            for (collision in collisions.getCollisions(entity)) {
+                handleCollision(entity, collision)
+            }
+            renderer.setCameraPos(entity.pos)
         }
     }
 
@@ -63,12 +72,6 @@ class PlayerSystem(
 
         val direction = input.pollAxes(actionX = "moveX", actionY = "moveY", CONTROLLER_DEADZONE)
         move(playerEntity, player, direction)
-
-        renderer.setCameraPos(playerEntity.pos)
-
-        for (collision in collisions.getCollisions(playerEntity)) {
-            handleCollision(playerEntity, collision)
-        }
 
         input.onAction("useMedkit") {
             useMedkit(playerEntity)

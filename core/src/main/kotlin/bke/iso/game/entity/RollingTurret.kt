@@ -48,13 +48,23 @@ class RollingTurretSystem(
     private val weaponsModule: WeaponsModule
 ) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePrePhysics(deltaTime: Float) {
         world.entities.each { entity: Entity, rollingTurret: RollingTurret ->
             if (!entity.has<Inventory>()) {
                 weaponsModule.equip(entity, "turret")
                 entity.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
             }
             update(entity, rollingTurret, deltaTime)
+        }
+    }
+
+    override fun updatePostPhysics(deltaTime: Float) {
+        world.entities.each { entity: Entity, rollingTurret: RollingTurret ->
+            if (!entity.has<Inventory>()) {
+                weaponsModule.equip(entity, "turret")
+                entity.add(RangedWeaponOffset(0f, 0f, GUN_HEIGHT))
+            }
+            updatePostPhysics(entity, rollingTurret)
         }
     }
 
@@ -66,7 +76,17 @@ class RollingTurretSystem(
                 RollingTurretState.MOVE -> setShootState(entity, rollingTurret)
                 RollingTurretState.SHOOT -> setMoveState(entity, rollingTurret)
             }
-        } else {
+        }
+//        } else {
+//            when (rollingTurret.state) {
+//                RollingTurretState.MOVE -> runMoveState(entity)
+//                RollingTurretState.SHOOT -> runShootState(entity)
+//            }
+//        }
+    }
+
+    private fun updatePostPhysics(entity: Entity, rollingTurret: RollingTurret) {
+        if (rollingTurret.timer != 0f) {
             when (rollingTurret.state) {
                 RollingTurretState.MOVE -> runMoveState(entity)
                 RollingTurretState.SHOOT -> runShootState(entity)

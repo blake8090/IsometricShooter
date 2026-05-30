@@ -30,7 +30,7 @@ class BulletSystem(
 
     private val log = KotlinLogging.logger {}
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each<Bullet> { entity, bullet ->
             update(entity, bullet)
         }
@@ -58,8 +58,8 @@ class BulletSystem(
             true
         } else {
             entity.id != bullet.shooterId
-                    && !entity.has<Bullet>()
-                    && !entity.has<Explosion>()
+                && !entity.has<Bullet>()
+                && !entity.has<Explosion>()
         }
 
     private fun handleCollision(bulletEntity: Entity, bullet: Bullet, collision: Collision) {

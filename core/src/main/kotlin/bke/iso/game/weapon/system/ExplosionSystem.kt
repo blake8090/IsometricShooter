@@ -8,7 +8,7 @@ import kotlin.math.max
 
 class ExplosionSystem(private val world: World) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each { entity: Entity, explosion: Explosion ->
             explosion.timer = max(0f, explosion.timer - deltaTime)
 

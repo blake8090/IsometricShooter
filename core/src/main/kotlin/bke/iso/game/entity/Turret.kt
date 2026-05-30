@@ -31,7 +31,7 @@ class TurretSystem(
     private val weaponsModule: WeaponsModule
 ) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePrePhysics(deltaTime: Float) {
         world.entities.each<Turret> { entity, _ ->
             update(entity)
         }

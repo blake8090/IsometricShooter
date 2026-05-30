@@ -18,7 +18,7 @@ class ShadowSystem(
     private val collisions: Collisions
 ) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each { entity: Entity, shadow: Shadow ->
             update(entity, shadow)
         }

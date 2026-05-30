@@ -17,7 +17,7 @@ class WeaponSystem(
 
     private val log = KotlinLogging.logger {}
 
-    override fun update(deltaTime: Float) {
+    override fun updatePrePhysics(deltaTime: Float) {
         world.entities.each { _: Entity, inventory: Inventory ->
             update(inventory, deltaTime)
         }

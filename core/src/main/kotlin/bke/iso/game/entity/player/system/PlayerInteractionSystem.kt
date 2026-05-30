@@ -20,7 +20,7 @@ class PlayerInteractionSystem(
     private val doorModule: DoorModule,
     private val elevatorModule: ElevatorModule
 ) : System {
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each<Player> { entity, _ ->
             update(entity)
         }

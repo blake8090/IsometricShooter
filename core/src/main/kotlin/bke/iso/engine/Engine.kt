@@ -69,16 +69,16 @@ class Engine(val game: Game) {
 
 
     private val modules = listOf(
-        collisions,
-        physics,
+        collisionBoxes,
         input,
+        physics,
         states,
         world,
+        lighting,
+        collisions,
         rendererManager,
         ui,
         loadingScreens,
-        lighting,
-        collisionBoxes
     )
     private val glProfiler = GLProfiler(Gdx.graphics)
     private val profiler = Profiler(ui, input, glProfiler)
@@ -114,15 +114,21 @@ class Engine(val game: Game) {
 
     fun update(deltaTime: Float) {
         glProfiler.reset()
-        updateModule(collisions, deltaTime)
-        updateModule(physics, deltaTime)
         updateModule(input, deltaTime)
 
         if (!loadingScreens.isLoading()) {
             renderer.pointer.update(deltaTime)
         }
 
-        updateModule(states, deltaTime)
+        // TODO: fix profiling
+        if (canUpdate(states)) {
+            states.updatePrePhysics(deltaTime)
+        }
+        updateModule(physics, deltaTime)
+        if (canUpdate(states)) {
+            states.updatePostPhysics(deltaTime)
+        }
+
         updateModule(world, deltaTime)
         updateModule(lighting, deltaTime)
         updateModule(rendererManager, deltaTime)
@@ -135,6 +141,7 @@ class Engine(val game: Game) {
 
         updateModule(loadingScreens, deltaTime)
 
+        // TODO: we need explicit ordering here to make sure we avoid weird bugs!
         for (module in modules) {
             module.onFrameEnd(deltaTime)
         }
@@ -201,7 +208,9 @@ class Engine(val game: Game) {
             // this fixes an issue where the camera is in the wrong location when the loading screen is transitioning out.
             is LoadActionCompleteEvent -> {
                 log.debug { "--- Running state for 1 frame --- " }
-                updateModule(states, Gdx.graphics.deltaTime, true)
+                if (canUpdate(states, true)) {
+                    states.updatePostPhysics(Gdx.graphics.deltaTime)
+                }
                 log.debug { "--- End state --- " }
             }
         }

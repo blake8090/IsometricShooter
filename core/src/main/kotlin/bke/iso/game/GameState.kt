@@ -181,8 +181,8 @@ class GameState(override val engine: Engine) : State() {
         )
     }
 
-    override fun update(deltaTime: Float) {
-        super.update(deltaTime)
+    override fun updatePostPhysics(deltaTime: Float) {
+        super.updatePostPhysics(deltaTime)
 
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             if (editorEnabled) {

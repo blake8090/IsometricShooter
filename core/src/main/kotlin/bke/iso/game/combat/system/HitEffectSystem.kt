@@ -7,7 +7,7 @@ import bke.iso.engine.world.entity.Entity
 
 class HitEffectSystem(private val world: World) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each { entity: Entity, hitEffect: HitEffect ->
             hitEffect.elapsedTime += deltaTime
 

@@ -7,7 +7,7 @@ import bke.iso.engine.world.entity.Entity
 
 class ElevatorSystem(private val world: World) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each<ElevatorTask> { entity, elevatorTask ->
             update(entity, elevatorTask)
         }

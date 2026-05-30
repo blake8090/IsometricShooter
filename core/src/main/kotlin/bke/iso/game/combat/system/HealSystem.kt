@@ -13,7 +13,7 @@ class HealSystem(
     private val events: Events
 ) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each<HealEffect> { entity, healEffect ->
             update(entity, healEffect, deltaTime)
         }

@@ -5,7 +5,8 @@ import bke.iso.engine.Engine
 import bke.iso.engine.core.Module
 
 interface System {
-    fun update(deltaTime: Float)
+    fun updatePrePhysics(deltaTime: Float) {}
+    fun updatePostPhysics(deltaTime: Float) {}
 }
 
 abstract class State {
@@ -22,10 +23,18 @@ abstract class State {
 
     open suspend fun load() {}
 
-    open fun update(deltaTime: Float) {
+    open fun updatePrePhysics(deltaTime: Float) {
         if (!engine.gamePaused) {
             for (system in systems) {
-                system.update(deltaTime)
+                system.updatePrePhysics(deltaTime)
+            }
+        }
+    }
+
+    open fun updatePostPhysics(deltaTime: Float) {
+        if (!engine.gamePaused) {
+            for (system in systems) {
+                system.updatePostPhysics(deltaTime)
             }
         }
 

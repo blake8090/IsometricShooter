@@ -54,17 +54,21 @@ class FlyingTurretSystem(
     private val weaponsModule: WeaponsModule
 ) : System {
 
-    override fun update(deltaTime: Float) {
+    override fun updatePrePhysics(deltaTime: Float) {
         world.entities.each<FlyingTurret> { entity, flyingTurret ->
-            update(entity, flyingTurret, deltaTime)
+            if (flyingTurret.state == FlyingTurretState.IDLE) {
+                setClimbState(entity, flyingTurret)
+            } else if (flyingTurret.state == FlyingTurretState.CLIMB) {
+                runClimbState(entity, flyingTurret)
+            }
         }
     }
 
-    private fun update(entity: Entity, flyingTurret: FlyingTurret, deltaTime: Float) {
-        when (flyingTurret.state) {
-            FlyingTurretState.IDLE -> setClimbState(entity, flyingTurret)
-            FlyingTurretState.CLIMB -> runClimbState(entity, flyingTurret)
-            FlyingTurretState.WANDER -> runWanderState(entity, flyingTurret, deltaTime)
+    override fun updatePostPhysics(deltaTime: Float) {
+        world.entities.each<FlyingTurret> { entity, flyingTurret ->
+            if (flyingTurret.state == FlyingTurretState.WANDER) {
+                runWanderState(entity, flyingTurret, deltaTime)
+            }
         }
     }
 
@@ -84,7 +88,7 @@ class FlyingTurretSystem(
 
         // snap to target height to avoid shimmering
         if (abs(targetHeight - entity.z) <= 0.01f) {
-            entity.pos.z = targetHeight
+            entity.moveTo(entity.x, entity.y, targetHeight)
             setWanderState(flyingTurret, body)
         } else if (entity.z > targetHeight) {
             body.velocity.z = -1f
