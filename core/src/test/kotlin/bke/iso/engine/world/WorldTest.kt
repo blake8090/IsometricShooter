@@ -16,6 +16,7 @@ class WorldTest : StringSpec({
 
     val collisionBoxes = mockk<CollisionBoxes>()
     every { collisionBoxes[any()] } returns null
+    every { collisionBoxes.invalidate(any()) } returns Unit
 
     "should return all objects in area" {
         val world = World(events, collisionBoxes)

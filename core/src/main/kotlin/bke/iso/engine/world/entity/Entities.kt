@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
 
 class Entities(
     private val events: Events,
-    collisionBoxes: CollisionBoxes
+    private val collisionBoxes: CollisionBoxes
 ) {
 
     private val grid = Grid(collisionBoxes)
@@ -157,8 +157,9 @@ class Entities(
     }
 
     private fun onMove(entity: Entity) {
-        events.fire(EntityMoved(entity))
+        collisionBoxes.invalidate(entity)
         updateGrid(entity)
+        events.fire(EntityMoved(entity))
     }
 
     private fun onComponentAdded(entity: Entity, component: Component) {

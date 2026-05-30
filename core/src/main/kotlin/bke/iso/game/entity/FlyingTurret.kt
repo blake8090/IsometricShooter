@@ -66,8 +66,10 @@ class FlyingTurretSystem(
 
     override fun updatePostPhysics(deltaTime: Float) {
         world.entities.each<FlyingTurret> { entity, flyingTurret ->
-            if (flyingTurret.state == FlyingTurretState.WANDER) {
-                runWanderState(entity, flyingTurret, deltaTime)
+            when (flyingTurret.state) {
+                FlyingTurretState.IDLE -> {}
+                FlyingTurretState.CLIMB -> finishClimbState(entity, flyingTurret)
+                FlyingTurretState.WANDER -> runWanderState(entity, flyingTurret, deltaTime)
             }
         }
     }
@@ -86,15 +88,28 @@ class FlyingTurretSystem(
             "Expected $entity to have a PhysicsBody"
         }
 
-        // snap to target height to avoid shimmering
-        if (abs(targetHeight - entity.z) <= 0.01f) {
-            entity.moveTo(entity.x, entity.y, targetHeight)
-            setWanderState(flyingTurret, body)
-        } else if (entity.z > targetHeight) {
+        if (entity.z > targetHeight) {
             body.velocity.z = -1f
         } else if (entity.z < targetHeight) {
             body.velocity.z = 1f
         }
+    }
+
+    private fun finishClimbState(entity: Entity, flyingTurret: FlyingTurret) {
+        val targetHeight = checkNotNull(flyingTurret.targetHeight) {
+            "Expected $entity to have a targetHeight"
+        }
+
+        if (abs(targetHeight - entity.z) > 0.01f) {
+            return
+        }
+
+        val body = checkNotNull(entity.get<PhysicsBody>()) {
+            "Expected $entity to have a PhysicsBody"
+        }
+
+        entity.moveTo(entity.x, entity.y, targetHeight)
+        setWanderState(flyingTurret, body)
     }
 
     private fun setWanderState(flyingTurret: FlyingTurret, body: PhysicsBody) {

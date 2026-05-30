@@ -30,7 +30,7 @@ class CollisionBoxes : EngineModule() {
     override fun handleEvent(event: Event) {
         when (event) {
             is EntityCreated -> {
-                invalidateBox(event.entity)
+                invalidate(event.entity)
             }
 
             is EntityDeleted -> {
@@ -39,24 +39,24 @@ class CollisionBoxes : EngineModule() {
             }
 
             is EntityMoved -> {
-                invalidateBox(event.entity)
+                invalidate(event.entity)
             }
 
             is EntityComponentAdded -> {
                 if (event.component is Collider) {
-                    invalidateBox(event.entity)
+                    invalidate(event.entity)
                 }
             }
 
             is EntityComponentRemoved -> {
                 if (event.component is Collider) {
-                    invalidateBox(event.entity)
+                    invalidate(event.entity)
                 }
             }
         }
     }
 
-    private fun invalidateBox(entity: Entity) {
+    fun invalidate(entity: Entity) {
         valid.put(entity, false)
     }
 
