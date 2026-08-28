@@ -152,7 +152,12 @@ class WorldLogic(
 
         sourceComponents.withFirstInstance<PointLight> { pointLight ->
             components.removeIf { c -> c::class == PointLight::class }
-            components.add(pointLight.copy())
+            components.add(
+                pointLight.copy(
+                    color = Color(pointLight.color),
+                    offset = Vector3(pointLight.offset)
+                )
+            )
         }
     }
 

@@ -1,11 +1,15 @@
 package bke.iso.engine.render.entity
 
 import bke.iso.engine.lighting.Lighting
+import bke.iso.engine.lighting.FullBright
+import bke.iso.engine.lighting.PointLight
 import bke.iso.engine.core.Event
 import bke.iso.engine.core.Events
 import bke.iso.engine.asset.Assets
 import bke.iso.engine.collision.CollisionBoxes
 import bke.iso.engine.math.Box
+import bke.iso.engine.math.TILE_SIZE_X
+import bke.iso.engine.math.TILE_SIZE_Y
 import bke.iso.engine.math.toScreen
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.render.SpriteFillColor
@@ -18,11 +22,17 @@ import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.OrderedMap
 import com.badlogic.gdx.utils.Pool
 import kotlin.math.floor
+
+private const val MAX_PIXEL_LIGHTS = 16
+private const val SQRT_TWO = 1.41421356237f
+private const val PIXEL_LIGHTING_SHADER = "pixel-lighting"
 
 /**
  * This renderer has massive performance gains due to grouping renderables by rows (y-axis)
@@ -50,10 +60,27 @@ class OptimizedEntityRenderer(
 
     private val tempEvent = DrawEntityEvent(null)
     private val tempPos = Vector2()
+    private val tempLightPos = Vector3()
+    private val tempLightScreenPos = Vector2()
+
+    private val lightPositionRadii = FloatArray(MAX_PIXEL_LIGHTS * 4)
+    private val lightColorIntensities = FloatArray(MAX_PIXEL_LIGHTS * 4)
+    private val lightCandidates = Array<LightCandidate>(false, MAX_PIXEL_LIGHTS)
+    private val lightCandidatePool = object : Pool<LightCandidate>() {
+        override fun newObject() = LightCandidate()
+    }
 
     private val renderablesByRow = OrderedMap<Float, Array<EntityRenderable>>()
 
     fun draw(batch: PolygonSpriteBatch, world: World) {
+        // Game shaders are loaded after the main menu is already rendering, so use the default unlit shader until
+        // the pixel-lighting shader becomes available.
+        val lightingShader = assets.shaders[PIXEL_LIGHTING_SHADER]
+        batch.shader = lightingShader
+        if (lightingShader != null) {
+            configureLightingShader(lightingShader)
+        }
+
         for (entity in world.entities) {
             addRenderable(entity)
         }
@@ -74,7 +101,7 @@ class OptimizedEntityRenderer(
             }
 
             for (renderable in renderables) {
-                draw(renderable, batch)
+                draw(renderable, batch, lightingShader)
             }
         }
 
@@ -84,6 +111,80 @@ class OptimizedEntityRenderer(
 
         renderablesByRow.clear()
         occlusion.endFrame()
+        batch.shader = null
+    }
+
+    private fun configureLightingShader(shader: ShaderProgram) {
+        lightCandidatePool.freeAll(lightCandidates)
+        lightCandidates.clear()
+
+        lighting.forEachPointLight { entity: Entity, pointLight: PointLight ->
+            if (pointLight.intensity <= 0f || pointLight.radius <= 0f) {
+                return@forEachPointLight
+            }
+
+            tempLightPos
+                .set(entity.x, entity.y, entity.z)
+                .add(pointLight.offset)
+            toScreen(tempLightPos.x, tempLightPos.y, tempLightPos.z, tempLightScreenPos)
+
+            val radiusX = pointLight.radius * TILE_SIZE_X / SQRT_TWO
+            val radiusY = pointLight.radius * TILE_SIZE_Y / SQRT_TWO
+            if (!camera.frustum.boundsInFrustum(
+                    tempLightScreenPos.x,
+                    tempLightScreenPos.y,
+                    0f,
+                    radiusX,
+                    radiusY,
+                    0f
+                )
+            ) {
+                return@forEachPointLight
+            }
+
+            val candidate = lightCandidatePool.obtain()
+            candidate.entityId = entity.id
+            candidate.x = tempLightScreenPos.x
+            candidate.y = tempLightScreenPos.y
+            candidate.radiusX = radiusX
+            candidate.radiusY = radiusY
+            candidate.r = pointLight.color.r
+            candidate.g = pointLight.color.g
+            candidate.b = pointLight.color.b
+            candidate.intensity = pointLight.intensity
+            candidate.distanceToCamera2 = tempLightScreenPos.dst2(camera.position.x, camera.position.y)
+            lightCandidates.add(candidate)
+        }
+
+        lightCandidates.sort(LIGHT_CANDIDATE_COMPARATOR)
+        val lightCount = minOf(lightCandidates.size, MAX_PIXEL_LIGHTS)
+
+        for (i in 0..<lightCount) {
+            val candidate = lightCandidates[i]
+            val offset = i * 4
+
+            lightPositionRadii[offset] = candidate.x
+            lightPositionRadii[offset + 1] = candidate.y
+            lightPositionRadii[offset + 2] = candidate.radiusX
+            lightPositionRadii[offset + 3] = candidate.radiusY
+
+            lightColorIntensities[offset] = candidate.r
+            lightColorIntensities[offset + 1] = candidate.g
+            lightColorIntensities[offset + 2] = candidate.b
+            lightColorIntensities[offset + 3] = candidate.intensity
+        }
+
+        shader.setUniformf(
+            "u_ambientLight",
+            lighting.ambientLight.r,
+            lighting.ambientLight.g,
+            lighting.ambientLight.b
+        )
+        shader.setUniformi("u_lightCount", lightCount)
+        if (lightCount > 0) {
+            shader.setUniform4fv("u_lightPositionRadii[0]", lightPositionRadii, 0, lightCount * 4)
+            shader.setUniform4fv("u_lightColorIntensity[0]", lightColorIntensities, 0, lightCount * 4)
+        }
     }
 
     private fun addRenderable(entity: Entity) {
@@ -134,14 +235,18 @@ class OptimizedEntityRenderer(
         }
     }
 
-    private fun draw(renderable: EntityRenderable, batch: PolygonSpriteBatch) {
+    private fun draw(
+        renderable: EntityRenderable,
+        batch: PolygonSpriteBatch,
+        lightingShader: ShaderProgram?
+    ) {
         if (renderable.visited) {
             return
         }
         renderable.visited = true
 
         for (data in renderable.behind) {
-            draw(data, batch)
+            draw(data, batch, lightingShader)
         }
 
         occlusion.secondPass(renderable)
@@ -154,7 +259,7 @@ class OptimizedEntityRenderer(
         val fillColor = renderable.fillColor
         val tintColor = renderable.tintColor
 
-        var shaderSet = false
+        var shaderChanged = false
 
         // Fill used as an intentionally unlit hit flash that overrides both tint and lighting.
         // The alpha is therefore always set to 1f.
@@ -167,18 +272,15 @@ class OptimizedEntityRenderer(
                 fillColor.b,
                 1f
             )
-            shaderSet = true
+            shaderChanged = true
+        } else if (renderable.entity!!.has<FullBright>()) {
+            batch.shader = null
+            shaderChanged = true
         } else {
-            val (r, g, b) = lighting.getColor(renderable.entity!!)
-
             if (tintColor != null) {
-                color.r = tintColor.r * r
-                color.g = tintColor.g * g
-                color.b = tintColor.b * b
-            } else {
-                color.r = r
-                color.g = g
-                color.b = b
+                color.r = tintColor.r
+                color.g = tintColor.g
+                color.b = tintColor.b
             }
         }
 
@@ -196,9 +298,9 @@ class OptimizedEntityRenderer(
                 /* rotation = */ renderable.rotation
             )
 
-            // changing the shader even to null is expensive, so only do it for entities that actually switched shaders
-            if (shaderSet) {
-                batch.shader = null
+            // Changing shaders flushes the batch, so only switch for intentionally unlit entities.
+            if (shaderChanged) {
+                batch.shader = lightingShader
             }
         }
 
@@ -275,4 +377,28 @@ class OptimizedEntityRenderer(
         var entity: Entity? = null,
         var batch: PolygonSpriteBatch? = null
     ) : Event
+
+    private class LightCandidate {
+        var entityId: String = ""
+        var x: Float = 0f
+        var y: Float = 0f
+        var radiusX: Float = 0f
+        var radiusY: Float = 0f
+        var r: Float = 0f
+        var g: Float = 0f
+        var b: Float = 0f
+        var intensity: Float = 0f
+        var distanceToCamera2: Float = 0f
+    }
+
+    companion object {
+        private val LIGHT_CANDIDATE_COMPARATOR = Comparator<LightCandidate> { a, b ->
+            val distanceComparison = a.distanceToCamera2.compareTo(b.distanceToCamera2)
+            if (distanceComparison != 0) {
+                distanceComparison
+            } else {
+                a.entityId.compareTo(b.entityId)
+            }
+        }
+    }
 }

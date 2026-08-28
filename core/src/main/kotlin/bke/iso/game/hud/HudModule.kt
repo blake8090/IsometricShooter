@@ -117,14 +117,20 @@ class HudModule(
         val pos = toScreen(entity.pos)
             .sub(healthBar.offsetX, healthBar.offsetY)
 
-        batch.withColor(Color.RED) {
-            batch.draw(pixel, pos.x, pos.y, healthBarWidth, healthBarHeight)
-        }
+        val previousShader = batch.shader
+        batch.shader = null
+        try {
+            batch.withColor(Color.RED) {
+                batch.draw(pixel, pos.x, pos.y, healthBarWidth, healthBarHeight)
+            }
 
-        batch.withColor(Color.GREEN) {
-            val ratio = health.value / health.maxValue
-            val width = healthBarWidth * ratio
-            batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
+            batch.withColor(Color.GREEN) {
+                val ratio = health.value / health.maxValue
+                val width = healthBarWidth * ratio
+                batch.draw(pixel, pos.x, pos.y, width, healthBarHeight)
+            }
+        } finally {
+            batch.shader = previousShader
         }
     }
 }

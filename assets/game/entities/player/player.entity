@@ -52,12 +52,17 @@
     {
       type: "pointLight",
       intensity: 0.45,
-      falloff: 0.1125,
+      radius: 4,
       color: {
         r: 1,
         g: 1,
         b: 1,
         a: 1
+      },
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0.8
       }
     }
   ]
