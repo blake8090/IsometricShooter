@@ -35,7 +35,13 @@ class Physics(
         val delta = Vector3()
 
         if (body.mode == PhysicsMode.DYNAMIC) {
+            if (body.mass > 0f) {
+                body.velocity.mulAdd(body.pendingImpulse, 1f / body.mass)
+                body.pendingImpulse.setZero()
+            }
+
             body.velocity.z += DEFAULT_GRAVITY * deltaTime
+
             for (force in body.forces) {
                 force.scl(deltaTime)
                 delta.add(force)

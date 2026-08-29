@@ -18,12 +18,16 @@ class Movement(private val world: World) : EngineModule() {
     override fun update(deltaTime: Float) {
         world.entities.each<MovementIntent> { entity, intent ->
             val direction = Vector3(intent.direction)
-            update(entity, direction, deltaTime)
+            move(entity, direction, deltaTime)
             entity.remove<MovementIntent>()
+        }
+
+        world.entities.each<JumpIntent> { entity, _ ->
+            jump(entity)
         }
     }
 
-    private fun update(entity: Entity, direction: Vector3, deltaTime: Float) {
+    private fun move(entity: Entity, direction: Vector3, deltaTime: Float) {
         val properties = entity.get<MovementProperties>() ?: return
         val body = entity.get<PhysicsBody>() ?: return
         if (body.mode == PhysicsMode.SOLID) {
@@ -96,5 +100,13 @@ class Movement(private val world: World) : EngineModule() {
         } else {
             current + sign(delta) * amount
         }
+    }
+
+    private fun jump(entity: Entity) {
+        val jump = entity.get<JumpProperties>() ?: return
+        val body = entity.get<PhysicsBody>() ?: return
+
+        body.applyVelocityChange(Vector3(0f, 0f, jump.speed))
+        entity.remove<JumpIntent>()
     }
 }

@@ -6,6 +6,7 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.input.Input
+import bke.iso.engine.movement.JumpIntent
 import bke.iso.engine.movement.MovementIntent
 import bke.iso.engine.movement.MovementProperties
 import bke.iso.engine.render.Renderer
@@ -95,7 +96,9 @@ class PlayerSystem(
 
         playerEntity.add(MovementIntent(direction))
 
-        // TODO: add jumping
+        input.onAction("jump") {
+            playerEntity.add(JumpIntent())
+        }
     }
 
     private fun handleCollision(playerEntity: Entity, collision: Collision) {

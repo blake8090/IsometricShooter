@@ -23,3 +23,11 @@ data class MovementProperties(
 data class MovementIntent(
     var direction: Vector3 = Vector3()
 ) : Component
+
+@Serializable
+@SerialName("jumpProperties")
+data class JumpProperties(
+    val speed: Float = 5f
+) : Component
+
+class JumpIntent : Component

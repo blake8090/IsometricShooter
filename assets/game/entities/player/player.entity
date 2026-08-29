@@ -66,6 +66,10 @@
       acceleration: 1.0,
       deceleration: 1.0,
       mode: "INSTANT"
+    },
+    {
+      type: "jumpProperties",
+      speed: 5
     }
   ]
 }

@@ -7,8 +7,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("playerConfig")
 data class PlayerConfig(
-    val jumpForce: Float,
-    val baseMovementSpeed: Float,
     val crouchSpeedModifier: Float,
     val runSpeedModifier: Float
 ) : Config

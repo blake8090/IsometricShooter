@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 /**
  * Defines an entity's movement behavior as well as interactions with Colliders.
@@ -29,5 +30,26 @@ data class PhysicsBody(
     @Contextual
     val velocity: Vector3 = Vector3(),
     val mass: Float = 1f,
-    val forces: MutableList<@Contextual Vector3> = mutableListOf()
-) : Component
+    val forces: MutableList<@Contextual Vector3> = mutableListOf(),
+) : Component {
+
+    @Contextual
+    @Transient
+    val pendingImpulse: Vector3 = Vector3()
+
+    /**
+     * Queues a one-time impulse. Physics converts it to velocity using `impulse / mass`,
+     * so heavier bodies receive a smaller velocity change.
+     */
+    fun applyImpulse(impulse: Vector3) {
+        pendingImpulse.add(impulse)
+    }
+
+    /**
+     * Queues a direct velocity change independent of mass, useful for effects such as jumping
+     * that should behave consistently across bodies.
+     */
+    fun applyVelocityChange(deltaVelocity: Vector3) {
+        pendingImpulse.mulAdd(deltaVelocity, mass)
+    }
+}
