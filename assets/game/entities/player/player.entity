@@ -59,6 +59,13 @@
         b: 1,
         a: 1
       }
+    },
+    {
+      type: "movementProperties",
+      maxSpeed: 3.0,
+      acceleration: 1.0,
+      deceleration: 1.0,
+      mode: "INSTANT"
     }
   ]
 }

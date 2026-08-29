@@ -6,7 +6,8 @@ import bke.iso.engine.collision.Collider
 import bke.iso.engine.collision.Collision
 import bke.iso.engine.collision.Collisions
 import bke.iso.engine.input.Input
-import bke.iso.engine.physics.PhysicsBody
+import bke.iso.engine.movement.MovementIntent
+import bke.iso.engine.movement.MovementProperties
 import bke.iso.engine.render.Renderer
 import bke.iso.engine.render.Sprite
 import bke.iso.engine.world.entity.Entity
@@ -20,7 +21,6 @@ import bke.iso.game.combat.CombatModule
 import bke.iso.game.weapon.system.RangedWeaponOffset
 import bke.iso.game.weapon.system.WeaponPickup
 import bke.iso.game.weapon.WeaponsModule
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -71,47 +71,31 @@ class PlayerSystem(
         }
 
         val direction = input.pollAxes(actionX = "moveX", actionY = "moveY", CONTROLLER_DEADZONE)
-        move(playerEntity, player, direction)
+        move(playerEntity, player, Vector3(direction, 0f))
 
         input.onAction("useMedkit") {
             useMedkit(playerEntity)
         }
     }
 
-    private fun move(playerEntity: Entity, player: Player, direction: Vector2) {
+    private fun move(playerEntity: Entity, player: Player, direction: Vector3) {
         val playerConfig = configs.get<PlayerConfig>("player.cfg")
 
-        val horizontalSpeed = getHorizontalSpeed(player, playerConfig)
-        val movement = Vector3(
-            direction.x * horizontalSpeed,
-            direction.y * horizontalSpeed,
-            0f
-        )
+        val movement = playerEntity.get<MovementProperties>() ?: return
+        movement.speedMultiplier = when {
+            player.state == PlayerState.CROUCH -> playerConfig.crouchSpeedModifier
+            input.poll("run") == 1f -> playerConfig.runSpeedModifier
+            else -> 1f
+        }
 
         // makes up actually move up
         if (input.isUsingController()) {
-            movement.rotate(Vector3.Z, 45f)
+            direction.rotate(Vector3.Z, 45f)
         }
 
-        val body = checkNotNull(playerEntity.get<PhysicsBody>()) {
-            "Expected $playerEntity to have a PhysicsBody"
-        }
-        body.forces.add(movement)
-        input.onAction("jump") {
-            body.velocity.z = playerConfig.jumpForce
-        }
-    }
+        playerEntity.add(MovementIntent(direction))
 
-    private fun getHorizontalSpeed(player: Player, playerConfig: PlayerConfig): Float {
-        var speed = playerConfig.baseMovementSpeed
-
-        if (player.state == PlayerState.CROUCH) {
-            speed *= playerConfig.crouchSpeedModifier
-        } else if (input.poll("run") == 1f) {
-            speed *= playerConfig.runSpeedModifier
-        }
-
-        return speed
+        // TODO: add jumping
     }
 
     private fun handleCollision(playerEntity: Entity, collision: Collision) {

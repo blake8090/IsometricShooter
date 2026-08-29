@@ -18,6 +18,7 @@ import bke.iso.engine.core.Game
 import bke.iso.engine.lighting.Lighting
 import bke.iso.engine.loading.LoadActionCompleteEvent
 import bke.iso.engine.loading.LoadingScreens
+import bke.iso.engine.movement.Movement
 import bke.iso.engine.os.Dialogs
 import bke.iso.engine.os.SystemInfo
 import bke.iso.engine.pathfinding.Pathfinding
@@ -63,6 +64,7 @@ class Engine(val game: Game) {
 
     val collisions: Collisions = Collisions(renderer, world, collisionBoxes)
     val physics: Physics = Physics(world, collisions, collisionBoxes)
+    val movement: Movement = Movement(world)
     val scenes = Scenes(assets, serializer, world, renderer, lighting, pathfinding)
 
     val loadingScreens = LoadingScreens(events)
@@ -71,8 +73,9 @@ class Engine(val game: Game) {
     private val modules = listOf(
         collisionBoxes,
         input,
-        physics,
         states,
+        movement,
+        physics,
         world,
         lighting,
         collisions,
@@ -124,6 +127,7 @@ class Engine(val game: Game) {
         if (canUpdate(states)) {
             states.updatePrePhysics(deltaTime)
         }
+        updateModule(movement, deltaTime)
         updateModule(physics, deltaTime)
         if (canUpdate(states)) {
             states.updatePostPhysics(deltaTime)
