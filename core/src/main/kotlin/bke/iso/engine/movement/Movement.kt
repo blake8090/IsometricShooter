@@ -1,6 +1,7 @@
 package bke.iso.engine.movement
 
 import bke.iso.engine.core.EngineModule
+import bke.iso.engine.physics.GroundContact
 import bke.iso.engine.physics.PhysicsBody
 import bke.iso.engine.physics.PhysicsMode
 import bke.iso.engine.world.World
@@ -24,6 +25,7 @@ class Movement(private val world: World) : EngineModule() {
 
         world.entities.each<JumpIntent> { entity, _ ->
             jump(entity)
+            entity.remove<JumpIntent>()
         }
     }
 
@@ -106,7 +108,8 @@ class Movement(private val world: World) : EngineModule() {
         val jump = entity.get<JumpProperties>() ?: return
         val body = entity.get<PhysicsBody>() ?: return
 
+        entity.get<GroundContact>() ?: return
         body.applyVelocityChange(Vector3(0f, 0f, jump.speed))
-        entity.remove<JumpIntent>()
+        entity.remove<GroundContact>()
     }
 }

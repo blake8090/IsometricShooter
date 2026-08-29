@@ -1,6 +1,7 @@
 package bke.iso.engine.physics
 
 import bke.iso.engine.world.entity.Component
+import bke.iso.engine.world.entity.Entity
 import com.badlogic.gdx.math.Vector3
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
@@ -53,3 +54,7 @@ data class PhysicsBody(
         pendingImpulse.mulAdd(deltaVelocity, mass)
     }
 }
+
+data class GroundContact(
+    var support: Entity
+) : Component

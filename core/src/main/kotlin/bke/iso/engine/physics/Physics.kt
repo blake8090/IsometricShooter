@@ -54,10 +54,11 @@ class Physics(
             body.velocity.y * deltaTime,
             body.velocity.z * deltaTime
         )
-        move(entity, body, delta)
+        val groundSupport = move(entity, body, delta)
+        updateGroundContact(entity, groundSupport)
     }
 
-    private fun move(entity: Entity, body: PhysicsBody, delta: Vector3) {
+    private fun move(entity: Entity, body: PhysicsBody, delta: Vector3): Entity? {
         val predictCollisions = collisions.predictCollisions(entity, delta)
         // TODO: how to resolve multiple collisions to avoid objects falling out of the world?
         val collision = predictCollisions
@@ -67,17 +68,29 @@ class Physics(
 
         if (collision == null) {
             entity.move(delta)
-            return
+            return null
         }
 
-        when (body.mode) {
+        return when (body.mode) {
             PhysicsMode.DYNAMIC -> solveDynamicContact(entity, body, delta, collision)
-            PhysicsMode.KINEMATIC -> solveKinematicContact(entity, body, delta, collision)
-            else -> entity.move(delta)
+            PhysicsMode.KINEMATIC -> {
+                solveKinematicContact(entity, body, delta, collision)
+                null
+            }
+
+            else -> {
+                entity.move(delta)
+                null
+            }
         }
     }
 
-    private fun solveDynamicContact(entity: Entity, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
+    private fun solveDynamicContact(
+        entity: Entity,
+        body: PhysicsBody,
+        delta: Vector3,
+        collision: PredictedCollision
+    ): Entity? {
         // move to the position where the collision occurred
         val collisionDelta = Vector3(delta).scl(collision.collisionTime)
         entity.move(collisionDelta)
@@ -103,10 +116,30 @@ class Physics(
             delta.y - (delta.y * abs(collision.hitNormal.y)),
             delta.z - (delta.z * abs(collision.hitNormal.z))
         )
-        move(entity, body, newDelta)
+        val remainingGroundSupport = move(entity, body, newDelta)
+
+        return if (collision.side == CollisionSide.TOP) {
+            collision.entity
+        } else {
+            remainingGroundSupport
+        }
     }
 
-    private fun solveKinematicContact(entity: Entity, body: PhysicsBody, delta: Vector3, collision: PredictedCollision) {
+    private fun updateGroundContact(entity: Entity, support: Entity?) {
+        val contact = entity.get<GroundContact>()
+        when {
+            support == null && contact != null -> entity.remove<GroundContact>()
+            support != null && contact == null -> entity.add(GroundContact(support))
+            support != null && contact?.support != support -> contact?.support = support
+        }
+    }
+
+    private fun solveKinematicContact(
+        entity: Entity,
+        body: PhysicsBody,
+        delta: Vector3,
+        collision: PredictedCollision
+    ) {
         entity.move(delta)
 
         // bit of a hack to make vertical moving platforms work.
