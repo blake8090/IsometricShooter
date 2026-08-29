@@ -85,7 +85,7 @@ class Movement(private val world: World) : EngineModule() {
 
     private fun getPlanarDirection(direction: Vector3): Vector3 {
         val planarDirection = Vector3(direction.x, direction.y, 0f)
-        if (!planarDirection.isZero) {
+        if (planarDirection.len2() > 1f) {
             planarDirection.nor()
         }
         return planarDirection
